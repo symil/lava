@@ -3,7 +3,9 @@ name = "foo"
 version = "0.1.0"
 authors = ["Ytawo <milan.sylvain@gmail.com>"]
 build = "build.rs"
-links = "bar"
+links = "fnbwhkbgk"
+# rustc-link-lib = "vulkan"
+# rustc-link-search = "/home/ytawo/vulkan/x86_64/lib"
 
 [dependencies]
 
