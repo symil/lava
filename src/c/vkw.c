@@ -44,6 +44,7 @@ RsResult vk_create_instance() {
         .ptr = instance
     };
     
+    // printf("%zu\n", sizeof(VkInstance));
     // printf("Result from C: %lu\n", result.vk_result);
 
     return result;
@@ -54,26 +55,17 @@ void vk_destroy_instance(VkInstance *instance) {
     free(instance);
 }
 
-// void get_physical_devices(VkInstance *instance) {
-//     uint32_t count = 0;
-//     vkEnumeratePhysicalDevices(instance, &count, NULL);
-
-//     VkPhysicalDevice* devices = malloc(count * sizeof(VkPhysicalDevice));
-//     vkEnumeratePhysicalDevices(instance, &count, devices);
-// }
-
-char* get_first_device_name(VkInstance *instance) {
+VkPhysicalDeviceProperties* get_first_device(VkInstance *instance) {
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(*instance, &count, NULL);
 
     VkPhysicalDevice* devices = malloc(count * sizeof(VkPhysicalDevice));
     vkEnumeratePhysicalDevices(*instance, &count, devices);
     
-    VkPhysicalDeviceProperties properties;
-    vkGetPhysicalDeviceProperties(devices[0], &properties);
+    VkPhysicalDeviceProperties* first_properties = malloc(sizeof(VkPhysicalDeviceProperties));
+    vkGetPhysicalDeviceProperties(devices[0], first_properties);
  
-    char* name = malloc(VK_MAX_PHYSICAL_DEVICE_NAME_SIZE);
-    strcpy(name, properties.deviceName);
-    
-    return name;
+    printf("From C   : %s\n", first_properties->deviceName);
+
+    return first_properties;
 }

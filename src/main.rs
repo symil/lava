@@ -4,9 +4,10 @@
 
 use std::*;
 use std::ffi::*;
+use std::ffi::*;
 
 mod vk_types;
-use vk_types::vk_bool32::RawVkBool32;
+use vk_types::vk_physical_device_properties::*;
 
 #[repr(C)]
 struct VkResult {
@@ -62,32 +63,19 @@ extern {
     fn add_one(x: u32) -> u32;
     fn vk_create_instance() -> VkResult;
     fn vk_destroy_instance(instance: *mut VkInstance);
-    fn get_first_device_name(instance: *mut VkInstance) -> *mut i8;
+    fn get_first_device(instance: *mut VkInstance) -> *mut RawVkPhysicalDeviceProperties;
 }
 
 fn main() {
     unsafe {
-        // println!("Result from Rust: {}", result.vk_result)
+        let instance = vk_create_instance().ptr;
+        let raw_properties = &*get_first_device(instance);
+        let properties = VkPhysicalDeviceProperties::from(raw_properties);
         
-        // if get_kind() as bool {
-        //     println!("Yes");
-        // } else {
-        //     println!("No");
-        // }
-        // println!("Value: {}", get_kind());
+        println!("From Rust: {}", properties.device_name);
         
-        // let result = vk_create_instance();
-        // let instance = result.ptr;    
-        // let str_ptr = get_first_device_name(instance);
-        // let c_name = CString::from_raw(str_ptr);
-        // let name = c_name.into_string().unwrap();
-        
-        // println!("{}", name);
-        
-        // vk_destroy_instance(instance);
+        vk_destroy_instance(instance);
     }
-    let a : RawVkBool32 = 32;
-    println!("{}", bool::from(a));
 
     println!("Bye!");
 }
