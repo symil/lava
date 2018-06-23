@@ -5,21 +5,18 @@
 #include <string.h>
 #include <vulkan/vulkan.h>
 
-uint32_t add_one(uint32_t x) {
-    return x + 1;
-}
-
-int32_t get_kind() {
-    return 1;
-}
+typedef struct {
+    void*   vk_handler;
+    int32_t vk_result;
+} VkCreateHandlerResult;
 
 typedef struct {
-    int64_t vk_result;
-    void *ptr;
-} RsResult;
+    void*   ptr;
+    size_t  length;
+} VecInfo;
 
-RsResult vk_create_instance() {
-    VkInstance *instance = malloc(sizeof(VkInstance));
+VkCreateHandlerResult vk_create_instance() {
+    VkInstance instance;
     
     VkApplicationInfo app_info = {
         .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
@@ -37,35 +34,41 @@ RsResult vk_create_instance() {
         .enabledExtensionCount = 0
     };
     
-    VkResult vk_result = vkCreateInstance(&create_info, NULL, instance);
+    VkResult vk_result = vkCreateInstance(&create_info, NULL, &instance);
     
-    RsResult result = {
+    VkCreateHandlerResult result = {
         .vk_result = vk_result,
-        .ptr = instance
+        .vk_handler = instance
     };
-    
-    // printf("%zu\n", sizeof(VkInstance));
-    // printf("Result from C: %lu\n", result.vk_result);
 
     return result;
 }
 
-void vk_destroy_instance(VkInstance *instance) {
-    vkDestroyInstance(*instance, NULL);
-    free(instance);
+void vk_destroy_instance(VkInstance instance) {
+    vkDestroyInstance(instance, NULL);
 }
 
-VkPhysicalDeviceProperties* get_first_device(VkInstance *instance) {
+VecInfo vk_get_physical_device_list(VkInstance instance) {
     uint32_t count = 0;
-    vkEnumeratePhysicalDevices(*instance, &count, NULL);
+    vkEnumeratePhysicalDevices(instance, &count, NULL);
 
     VkPhysicalDevice* devices = malloc(count * sizeof(VkPhysicalDevice));
-    vkEnumeratePhysicalDevices(*instance, &count, devices);
-    
-    VkPhysicalDeviceProperties* first_properties = malloc(sizeof(VkPhysicalDeviceProperties));
-    vkGetPhysicalDeviceProperties(devices[0], first_properties);
- 
-    printf("From C   : %s\n", first_properties->deviceName);
+    vkEnumeratePhysicalDevices(instance, &count, devices);
 
-    return first_properties;
+    VecInfo result = {
+        .ptr = devices,
+        .length = count
+    };
+    
+    return result;
+}
+
+VkPhysicalDeviceProperties* vk_get_physical_device_properties(VkPhysicalDevice physical_device) {
+    VkPhysicalDeviceProperties* properties = malloc(sizeof(VkPhysicalDeviceProperties));
+    vkGetPhysicalDeviceProperties(physical_device, properties);
+
+    // printf("From C   : %s\n", properties->deviceName);
+    // printf("From C   : %u\n", properties->deviceID);
+
+    return properties;
 }

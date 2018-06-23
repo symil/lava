@@ -59,6 +59,7 @@ pub struct RawVkPhysicalDeviceFeatures {
     inherited_queries: u32
 }
 
+#[derive(Debug)]
 pub struct VkPhysicalDeviceFeatures {
     pub robust_buffer_access: bool,
     pub full_draw_index_uint32: bool,

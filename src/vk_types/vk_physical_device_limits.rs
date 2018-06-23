@@ -110,6 +110,7 @@ pub struct RawVkPhysicalDeviceLimits {
     non_coherent_atom_size: u64
 }
 
+#[derive(Debug)]
 pub struct VkPhysicalDeviceLimits {
     pub max_image_dimension1_d: u32,
     pub max_image_dimension2_d: u32,

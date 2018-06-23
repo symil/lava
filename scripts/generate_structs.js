@@ -8,7 +8,7 @@ const ROOT = path.join(__dirname, '..');
 const DST_STRUCT_DIR = path.join(ROOT, 'src', 'vk_types');
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
 const VULKAN_H = fs.readFileSync(path.join(__dirname, `vulkan.h`), 'utf8');
-const TYPES_TO_GENERATE = ['VkPhysicalDeviceProperties', 'VkPhysicalDeviceFeatures'];
+const TYPES_TO_GENERATE = ['VkResult', 'VkPhysicalDeviceProperties', 'VkPhysicalDeviceFeatures'];
 
 const PRIMITIVE_TYPE = {
     uint32_t: 'u32',
@@ -36,10 +36,24 @@ function generateTypes(types) {
     types.forEach(generateType);
 }
 
-function writeVkType({name, useDelaractions, rawDefinition, trueDefinition, fromDefinition}) {
+function generateType(name) {
+    if (PRIMITIVE_TYPE[name] || alreadyGenerated.has(name)) {
+        return;
+    }
+
+    alreadyGenerated.add(name);
+
+    const generated = generateVkResult(name) || generateStruct(name) || generateEnum(name);
+
+    if (!generated) {
+        throw new Error(`cannot find type ${name}`);
+    }
+}
+
+function writeVkType(name, blocks) {
     const moduleName = cToRustVarName(name);
     const filePath = path.join(DST_STRUCT_DIR, `${moduleName}.rs`);
-    const fileContent = [useDelaractions, rawDefinition, trueDefinition, fromDefinition].filter(x => x).join('\n\n');
+    const fileContent = blocks.join('\n\n');
 
     const rootFileName = path.join(DST_STRUCT_DIR, 'mod.rs');
     const existingRootContent = fs.existsSync(rootFileName) ? fs.readFileSync(rootFileName, 'utf8') : '';
@@ -111,7 +125,7 @@ function generateStruct(name) {
             usedTypes.add('std::string::String');
             usedTypes.add('std::ffi::CStr');
 
-            fieldConvertion = `unsafe { String::from_utf8_unchecked((&${sourceField}).to_vec()) }`
+            fieldConvertion = `unsafe { String::from_utf8_unchecked((&value.device_name).to_vec().into_iter().filter(|x| *x != 0).collect()) }`
         } else if (rustPrimitiveType) {
             if (type === 'VkBool32') {
                 fieldConvertion = `${sourceField} != 0`
@@ -137,6 +151,7 @@ function generateStruct(name) {
     ].join('\n');
 
     const trueDefinition = [
+        `#[derive(Debug)]`,
         `pub struct ${trueTypeName} {`,
         trueDefLines.map(line => `    ${line}`).join(',\n'),
         `}`
@@ -152,7 +167,7 @@ function generateStruct(name) {
         `}`
     ].join('\n');
 
-    writeVkType({name, useDelaractions, rawDefinition, trueDefinition, fromDefinition});
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromDefinition]);
 
     return true;
 }
@@ -169,6 +184,7 @@ function generateEnum(name) {
 
     const trueDefFields = [];
     const fromLines = [];
+    const formatLines = [];
 
     match[1].split('\n').forEach(line => {
         const match = line.match(/^\s*([A-Z_]+)\s*=\s*(-?\d+),?$/);
@@ -186,11 +202,16 @@ function generateEnum(name) {
 
         trueDefFields.push(rustValue);
         fromLines.push(`${valueInt} => ${trueTypeName}::${rustValue}`);
+        formatLines.push(`${trueTypeName}::${rustValue} => write!(f, "${rustValue}")`);
     });
 
-    const useDelaractions = 'use std::convert::From;';
+    const useDelaractions = [
+        'std::convert::From',
+        'std::fmt::*'
+    ].map(l => `use ${l};`).join('\n');
 
     const trueDefinition = [
+        `#[derive(Debug)]`,
         `#[derive(PartialEq)]`,
         `pub enum ${trueTypeName} {`,
         trueDefFields.map(l => `    ${l}`).join(',\n'),
@@ -208,7 +229,46 @@ function generateEnum(name) {
         `}`
     ].join('\n');
 
-    writeVkType({name, useDelaractions, rawDefinition, trueDefinition, fromDefinition});
+    const formatDefinition = [
+        `impl Display for ${trueTypeName} {`,
+        `    fn fmt(&self, f: &mut Formatter) -> Result {`,
+        `        match self {`,
+        formatLines.map(line => `            ${line}`).join(',\n'),
+        `        }`,
+        `    }`,
+        `}`
+    ].join('\n');
+
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromDefinition, formatDefinition]);
+
+    return true;
+}
+
+function generateVkResult(name) {
+    if (name !== 'VkResult') return false;
+
+    const match = VULKAN_H.match(new RegExp(`typedef enum VkResult\\s+{\n([^}]+)\n}`, 'm'));
+    const trueDefFields = match[1].split('\n').map(line => {
+        const match = line.match(/^\s*([A-Z_]+)\s*=\s*(-?\d+),?$/);
+
+        if (!match) return null;
+
+        const valueName = match[1];
+        const valueInt = match[2];
+        const rustValue = cToRustEnumValue(valueName.substring(3));
+
+        return `${rustValue} = ${valueInt}`;
+    }).filter(x => x);
+
+    const trueDefinition = [
+        `#[derive(PartialEq)]`,
+        `#[repr(i32)]`,
+        `pub enum VkResult {`,
+        trueDefFields.map(line => `    ${line}`).join(',\n'),
+        `}`
+    ].join('\n');
+
+    writeVkType(name, [trueDefinition]);
 
     return true;
 }
@@ -221,20 +281,6 @@ function findConstant(name) {
     }
 
     return match[1];
-}
-
-function generateType(name) {
-    if (PRIMITIVE_TYPE[name] || alreadyGenerated.has(name)) {
-        return;
-    }
-
-    alreadyGenerated.add(name);
-
-    const generated = generateStruct(name) || generateEnum(name);
-
-    if (!generated) {
-        throw new Error(`cannot find type ${name}`);
-    }
 }
 
 function cToRustVarName(name) {
