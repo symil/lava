@@ -2,7 +2,6 @@
 
 const path = require('path');
 const fs = require('fs');
-const rimraf = require('rimraf');
 
 const ROOT = path.join(__dirname, '..');
 const DST_STRUCT_DIR = path.join(ROOT, 'src', 'vk_types');
@@ -28,8 +27,6 @@ const PRIMITIVE_TYPE = {
 
 const alreadyGenerated = new Set();
 
-rimraf.sync(DST_STRUCT_DIR);
-fs.mkdirSync(DST_STRUCT_DIR);
 generateTypes(TYPES_TO_GENERATE);
 
 function generateTypes(types) {
@@ -57,7 +54,7 @@ function writeVkType(name, blocks) {
 
     const rootFileName = path.join(DST_STRUCT_DIR, 'mod.rs');
     const existingRootContent = fs.existsSync(rootFileName) ? fs.readFileSync(rootFileName, 'utf8') : '';
-    const newRootContent = `${existingRootContent}pub mod ${moduleName};\n`
+    const newRootContent = `${existingRootContent}mod ${moduleName};\npub use self::${moduleName}::*;\n\n`
 
     fs.writeFileSync(filePath, fileContent, 'utf8');
     fs.writeFileSync(rootFileName, newRootContent, 'utf8');

@@ -7,18 +7,14 @@ use std::ffi::*;
 use std::fmt;
 
 mod vk_types;
-use vk_types::vk_physical_device_properties::*;
-use vk_types::vk_result::*;
+use vk_types::*;
 
-type VkHandler = usize;
-type VkInstance = VkHandler;
-type VkPhysicalDevice = VkHandler;
+mod vkw_instance;
+use vkw_instance::*;
 
-#[repr(C)]
-struct VkCreateHandlerResult {
-    handler: VkHandler,
-    result: VkResult
-}
+// type VkHandler = usize;
+// type VkInstance = VkHandler;
+// type VkPhysicalDevice = VkHandler;
 
 #[repr(C)]
 struct VecInfo<T> {
@@ -26,12 +22,12 @@ struct VecInfo<T> {
     length: usize
 }
 
-extern {
-    fn vk_create_instance() -> VkCreateHandlerResult;
-    fn vk_destroy_instance(instance: VkInstance);
-    fn vk_get_physical_device_list(instance: VkInstance) -> VecInfo<VkPhysicalDevice>;
-    fn vk_get_physical_device_properties(device: VkPhysicalDevice) -> *mut RawVkPhysicalDeviceProperties;
-}
+// extern {
+//     fn vk_create_instance() -> VkCreateHandlerResult;
+//     fn vk_destroy_instance(instance: VkInstance);
+//     fn vk_get_physical_device_list(instance: VkInstance) -> VecInfo<VkPhysicalDevice>;
+//     fn vk_get_physical_device_properties(device: VkPhysicalDevice) -> *mut RawVkPhysicalDeviceProperties;
+// }
 
 fn display_properties(value: &VkPhysicalDeviceProperties) {
     println!("API version   : {:#?}", value.api_version);
@@ -43,23 +39,21 @@ fn display_properties(value: &VkPhysicalDeviceProperties) {
 }
 
 fn main() {
-    unsafe {
-        let instance = vk_create_instance().handler;
-        let vec_info = vk_get_physical_device_list(instance);
-        let physical_devices = Vec::from_raw_parts(vec_info.ptr, vec_info.length, vec_info.length);
+    // unsafe {
+    //     let instance = vk_create_instance().handler;
+    //     let vec_info = vk_get_physical_device_list(instance);
+    //     let physical_devices = Vec::from_raw_parts(vec_info.ptr, vec_info.length, vec_info.length);
 
-        let raw_properties_0 = vk_get_physical_device_properties(physical_devices[0]);
-        let properties_0 = VkPhysicalDeviceProperties::from(&*raw_properties_0);
+    //     let raw_properties_0 = vk_get_physical_device_properties(physical_devices[0]);
+    //     let properties_0 = VkPhysicalDeviceProperties::from(&*raw_properties_0);
 
-        let raw_properties_1 = vk_get_physical_device_properties(physical_devices[1]);
-        let properties_1 = VkPhysicalDeviceProperties::from(&*raw_properties_1);
-
-        display_properties(&properties_0);
-        println!("");
-        display_properties(&properties_1);
+    //     let raw_properties_1 = vk_get_physical_device_properties(physical_devices[1]);
+    //     let properties_1 = VkPhysicalDeviceProperties::from(&*raw_properties_1);
         
-        vk_destroy_instance(instance);
-    }
+    //     vk_destroy_instance(instance);
+    // }
+
+    let instance = VkwInstance::create();
 
     println!("Bye!");
 }
