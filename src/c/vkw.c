@@ -1,10 +1,16 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <vulkan/vulkan.h>
 
 uint32_t add_one(uint32_t x) {
     return x + 1;
+}
+
+int32_t get_kind() {
+    return 1;
 }
 
 typedef struct {
@@ -38,11 +44,14 @@ RsResult vk_create_instance() {
         .ptr = instance
     };
     
+    // printf("Result from C: %lu\n", result.vk_result);
+
     return result;
 }
 
 void vk_destroy_instance(VkInstance *instance) {
     vkDestroyInstance(*instance, NULL);
+    free(instance);
 }
 
 // void get_physical_devices(VkInstance *instance) {
@@ -52,3 +61,19 @@ void vk_destroy_instance(VkInstance *instance) {
 //     VkPhysicalDevice* devices = malloc(count * sizeof(VkPhysicalDevice));
 //     vkEnumeratePhysicalDevices(instance, &count, devices);
 // }
+
+char* get_first_device_name(VkInstance *instance) {
+    uint32_t count = 0;
+    vkEnumeratePhysicalDevices(*instance, &count, NULL);
+
+    VkPhysicalDevice* devices = malloc(count * sizeof(VkPhysicalDevice));
+    vkEnumeratePhysicalDevices(*instance, &count, devices);
+    
+    VkPhysicalDeviceProperties properties;
+    vkGetPhysicalDeviceProperties(devices[0], &properties);
+ 
+    char* name = malloc(VK_MAX_PHYSICAL_DEVICE_NAME_SIZE);
+    strcpy(name, properties.deviceName);
+    
+    return name;
+}

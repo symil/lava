@@ -1,3 +1,5 @@
-
 /target
 **/*.rs.bk
+package-lock.json
+node_modules
+vulkan.h
