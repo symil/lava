@@ -1,3 +1,6 @@
+mod vk_structure_type;
+pub use self::vk_structure_type::*;
+
 mod vk_result;
 pub use self::vk_result::*;
 

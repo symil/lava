@@ -1,13 +1,15 @@
+use vk::*;
+
 pub type VkHandler = usize;
 
 #[repr(C)]
 pub struct VecInfo<T> {
-    ptr: *mut T,
-    length: usize
+    pub ptr: *mut T,
+    pub length: usize
 }
 
 #[repr(C)]
 pub struct VkCreateHandlerResult {
-    handler: VkHandler,
-    code: VkResult
+    pub handler: VkHandler,
+    pub code: VkResult
 }

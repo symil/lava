@@ -1,39 +1,25 @@
 use std::convert::From;
-use std::fmt::*;
 
 pub type RawVkPhysicalDeviceType = i32;
 
-#[derive(Debug)]
-#[derive(PartialEq)]
+#[repr(i32)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPhysicalDeviceType {
-    Other,
-    IntegratedGpu,
-    DiscreteGpu,
-    VirtualGpu,
-    Cpu
+    Other = 0,
+    IntegratedGpu = 1,
+    DiscreteGpu = 2,
+    VirtualGpu = 3,
+    Cpu = 4
 }
 
-impl<'a> From<&'a RawVkPhysicalDeviceType> for VkPhysicalDeviceType {
-    fn from(value: &'a RawVkPhysicalDeviceType) -> Self {
-        match value {
-            0 => VkPhysicalDeviceType::Other,
-            1 => VkPhysicalDeviceType::IntegratedGpu,
-            2 => VkPhysicalDeviceType::DiscreteGpu,
-            3 => VkPhysicalDeviceType::VirtualGpu,
-            4 => VkPhysicalDeviceType::Cpu,
-            _ => panic!("Vulkan wrapper error: unable to convert int32 {} into VkPhysicalDeviceType value", value)
-        }
+impl<'a> From<&'a i32> for VkPhysicalDeviceType {
+    fn from(value: &'a i32) -> Self {
+        unsafe { *((value as *const i32) as *const VkPhysicalDeviceType) }
     }
 }
 
-impl Display for VkPhysicalDeviceType {
-    fn fmt(&self, f: &mut Formatter) -> Result {
-        match self {
-            VkPhysicalDeviceType::Other => write!(f, "Other"),
-            VkPhysicalDeviceType::IntegratedGpu => write!(f, "IntegratedGpu"),
-            VkPhysicalDeviceType::DiscreteGpu => write!(f, "DiscreteGpu"),
-            VkPhysicalDeviceType::VirtualGpu => write!(f, "VirtualGpu"),
-            VkPhysicalDeviceType::Cpu => write!(f, "Cpu")
-        }
+impl<'a> From<&'a VkPhysicalDeviceType> for i32 {
+    fn from(value: &'a VkPhysicalDeviceType) -> Self {
+        *value as i32
     }
 }

@@ -1,5 +1,9 @@
-#[derive(PartialEq)]
+use std::convert::From;
+
+pub type RawVkResult = i32;
+
 #[repr(i32)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkResult {
     Success = 0,
     NotReady = 1,
@@ -26,4 +30,16 @@ pub enum VkResult {
     ErrorIncompatibleDisplayKhr = -1000003001,
     ErrorValidationFailedExt = -1000011001,
     ErrorInvalidShaderNv = -1000012000
+}
+
+impl<'a> From<&'a i32> for VkResult {
+    fn from(value: &'a i32) -> Self {
+        unsafe { *((value as *const i32) as *const VkResult) }
+    }
+}
+
+impl<'a> From<&'a VkResult> for i32 {
+    fn from(value: &'a VkResult) -> Self {
+        *value as i32
+    }
 }

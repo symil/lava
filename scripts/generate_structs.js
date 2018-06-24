@@ -2,12 +2,14 @@
 
 const path = require('path');
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const ROOT = path.join(__dirname, '..');
-const DST_STRUCT_DIR = path.join(ROOT, 'src', 'vk_types');
+const DST_DIR_NAME = 'vk';
+const DST_DIR_PATH = path.join(ROOT, 'src', DST_DIR_NAME);
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
 const VULKAN_H = fs.readFileSync(path.join(__dirname, `vulkan.h`), 'utf8');
-const TYPES_TO_GENERATE = ['VkResult', 'VkPhysicalDeviceProperties', 'VkPhysicalDeviceFeatures'];
+const TYPES_TO_GENERATE = ['VkStructureType', 'VkResult', 'VkPhysicalDeviceProperties', 'VkPhysicalDeviceFeatures'];
 
 const PRIMITIVE_TYPE = {
     uint32_t: 'u32',
@@ -27,6 +29,8 @@ const PRIMITIVE_TYPE = {
 
 const alreadyGenerated = new Set();
 
+rimraf.sync(DST_DIR_PATH);
+fs.mkdirSync(DST_DIR_PATH);
 generateTypes(TYPES_TO_GENERATE);
 
 function generateTypes(types) {
@@ -40,7 +44,7 @@ function generateType(name) {
 
     alreadyGenerated.add(name);
 
-    const generated = generateVkResult(name) || generateStruct(name) || generateEnum(name);
+    const generated = generateStruct(name) || generateEnum(name);
 
     if (!generated) {
         throw new Error(`cannot find type ${name}`);
@@ -49,10 +53,10 @@ function generateType(name) {
 
 function writeVkType(name, blocks) {
     const moduleName = cToRustVarName(name);
-    const filePath = path.join(DST_STRUCT_DIR, `${moduleName}.rs`);
+    const filePath = path.join(DST_DIR_PATH, `${moduleName}.rs`);
     const fileContent = blocks.join('\n\n');
 
-    const rootFileName = path.join(DST_STRUCT_DIR, 'mod.rs');
+    const rootFileName = path.join(DST_DIR_PATH, 'mod.rs');
     const existingRootContent = fs.existsSync(rootFileName) ? fs.readFileSync(rootFileName, 'utf8') : '';
     const newRootContent = `${existingRootContent}mod ${moduleName};\npub use self::${moduleName}::*;\n\n`
 
@@ -71,7 +75,8 @@ function generateStruct(name) {
     const usedTypes = new Set();
     const rawDefLines = [];
     const trueDefLines = [];
-    const fromLines = []
+    const fromRawToTrueLines = [];
+    const fromTrueToRawLines = [];
 
     usedTypes.add('std::convert::From');
 
@@ -116,26 +121,26 @@ function generateStruct(name) {
         trueDefLines.push(`pub ${rustName}: ${trueRustType}`);
 
         const sourceField = `value.${rustName}`;
-        let fieldConvertion;
+        let rawToTrueFieldConversion;
 
         if (isString) {
             usedTypes.add('std::string::String');
             usedTypes.add('std::ffi::CStr');
 
-            fieldConvertion = `unsafe { String::from_utf8_unchecked((&value.device_name).to_vec().into_iter().filter(|x| *x != 0).collect()) }`
+            rawToTrueFieldConversion = `unsafe { String::from_utf8_unchecked((&value.device_name).to_vec().into_iter().filter(|x| *x != 0).collect()) }`
         } else if (rustPrimitiveType) {
             if (type === 'VkBool32') {
-                fieldConvertion = `${sourceField} != 0`
+                rawToTrueFieldConversion = `${sourceField} != 0`
             } else {
-                fieldConvertion = sourceField;
+                rawToTrueFieldConversion = sourceField;
             }
         } else {
-            usedTypes.add(`vk_types::${cToRustVarName(trueRustType)}::*`);
+            usedTypes.add(`${DST_DIR_NAME}::${cToRustVarName(trueRustType)}::*`);
 
-            fieldConvertion = `${trueRustType}::from(&${sourceField})`;
+            rawToTrueFieldConversion = `${trueRustType}::from(&${sourceField})`;
         }
 
-        fromLines.push(`${rustName}: ${fieldConvertion}`);
+        fromRawToTrueLines.push(`${rustName}: ${rawToTrueFieldConversion}`);
     });
 
     const useDelaractions = Array.from(usedTypes.values()).map(str => `use ${str};`).join('\n');
@@ -158,7 +163,7 @@ function generateStruct(name) {
         `impl<'a> From<&'a ${rawTypeName}> for ${trueTypeName} {`,
         `    fn from(value: &'a ${rawTypeName}) -> Self {`,
         `        ${trueTypeName} {`,
-        fromLines.map(line => `            ${line}`).join(',\n'),
+        fromRawToTrueLines.map(line => `            ${line}`).join(',\n'),
         `        }`,
         `    }`,
         `}`
@@ -177,7 +182,11 @@ function generateEnum(name) {
     const rawTypeName = toRawTypeName(name);
     const rawDefinition = `pub type ${rawTypeName} = i32;`;
     const trueTypeName = toTrueTypeName(name);
-    const enumPrefix = name.replace(/[a-z]+/g, str => `${str.toUpperCase()}_`);
+    let enumPrefix = name.replace(/[a-z]+/g, str => `${str.toUpperCase()}_`);
+
+    if (name === 'VkResult') {
+        enumPrefix = 'VK_';
+    }
 
     const trueDefFields = [];
     const fromLines = [];
@@ -197,75 +206,40 @@ function generateEnum(name) {
 
         const rustValue = cToRustEnumValue(valueName.substring(enumPrefix.length));
 
-        trueDefFields.push(rustValue);
+        trueDefFields.push(`${rustValue} = ${valueInt}`);
         fromLines.push(`${valueInt} => ${trueTypeName}::${rustValue}`);
         formatLines.push(`${trueTypeName}::${rustValue} => write!(f, "${rustValue}")`);
     });
 
     const useDelaractions = [
         'std::convert::From',
-        'std::fmt::*'
     ].map(l => `use ${l};`).join('\n');
 
     const trueDefinition = [
-        `#[derive(Debug)]`,
-        `#[derive(PartialEq)]`,
+        `#[repr(i32)]`,
+        `#[derive(Debug, PartialEq, Copy, Clone)]`,
         `pub enum ${trueTypeName} {`,
         trueDefFields.map(l => `    ${l}`).join(',\n'),
         `}`
     ].join('\n');
 
-    const fromDefinition = [
-        `impl<'a> From<&'a ${rawTypeName}> for ${trueTypeName} {`,
-        `    fn from(value: &'a ${rawTypeName}) -> Self {`,
-        `        match value {`,
-        fromLines.map(line => `            ${line},`).join('\n'),
-        `            _ => panic!("Vulkan wrapper error: unable to convert int32 {} into ${trueTypeName} value", value)`,
-        `        }`,
+    const fromRawToTrueDefinition = [
+        `impl<'a> From<&'a i32> for ${trueTypeName} {`,
+        `    fn from(value: &'a i32) -> Self {`,
+        `        unsafe { *((value as *const i32) as *const ${trueTypeName}) }`,
         `    }`,
         `}`
     ].join('\n');
 
-    const formatDefinition = [
-        `impl Display for ${trueTypeName} {`,
-        `    fn fmt(&self, f: &mut Formatter) -> Result {`,
-        `        match self {`,
-        formatLines.map(line => `            ${line}`).join(',\n'),
-        `        }`,
+    const fromTrueToRawDefinition = [
+        `impl<'a> From<&'a ${trueTypeName}> for i32 {`,
+        `    fn from(value: &'a ${trueTypeName}) -> Self {`,
+        `        *value as i32`,
         `    }`,
         `}`
     ].join('\n');
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromDefinition, formatDefinition]);
-
-    return true;
-}
-
-function generateVkResult(name) {
-    if (name !== 'VkResult') return false;
-
-    const match = VULKAN_H.match(new RegExp(`typedef enum VkResult\\s+{\n([^}]+)\n}`, 'm'));
-    const trueDefFields = match[1].split('\n').map(line => {
-        const match = line.match(/^\s*([A-Z_]+)\s*=\s*(-?\d+),?$/);
-
-        if (!match) return null;
-
-        const valueName = match[1];
-        const valueInt = match[2];
-        const rustValue = cToRustEnumValue(valueName.substring(3));
-
-        return `${rustValue} = ${valueInt}`;
-    }).filter(x => x);
-
-    const trueDefinition = [
-        `#[derive(PartialEq)]`,
-        `#[repr(i32)]`,
-        `pub enum VkResult {`,
-        trueDefFields.map(line => `    ${line}`).join(',\n'),
-        `}`
-    ].join('\n');
-
-    writeVkType(name, [trueDefinition]);
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
 
     return true;
 }

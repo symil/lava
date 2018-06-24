@@ -1,9 +1,9 @@
 use std::convert::From;
-use vk_types::vk_physical_device_type::*;
+use vk::vk_physical_device_type::*;
 use std::string::String;
 use std::ffi::CStr;
-use vk_types::vk_physical_device_limits::*;
-use vk_types::vk_physical_device_sparse_properties::*;
+use vk::vk_physical_device_limits::*;
+use vk::vk_physical_device_sparse_properties::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceProperties {
