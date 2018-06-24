@@ -15,26 +15,10 @@ typedef struct {
     size_t  length;
 } VecInfo;
 
-VkCreateHandlerResult vk_create_instance() {
+VkCreateHandlerResult vk_create_instance(const VkInstanceCreateInfo* create_info) {
     VkInstance instance;
     
-    VkApplicationInfo app_info = {
-        .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-        .pApplicationName = "Hello Triangle",
-        .applicationVersion = VK_MAKE_VERSION(1, 0, 0),
-        .pEngineName = "No Engine",
-        .engineVersion = VK_MAKE_VERSION(1, 0, 0),
-        .apiVersion = VK_API_VERSION_1_0
-    };
-    
-    VkInstanceCreateInfo create_info = {
-        .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-        .pApplicationInfo = &app_info,
-        .enabledLayerCount = 0,
-        .enabledExtensionCount = 0
-    };
-    
-    VkResult vk_result = vkCreateInstance(&create_info, NULL, &instance);
+    VkResult vk_result = vkCreateInstance(create_info, NULL, &instance);
     
     VkCreateHandlerResult result = {
         .vk_result = vk_result,

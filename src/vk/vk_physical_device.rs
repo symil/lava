@@ -1,6 +1,5 @@
 use std::*;
 use vk::*;
-use wrapper::utils::*;
 
 pub struct VkPhysicalDevice {
     _handler: VkHandler

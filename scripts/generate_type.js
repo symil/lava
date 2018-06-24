@@ -2,14 +2,13 @@
 
 const path = require('path');
 const fs = require('fs');
-const rimraf = require('rimraf');
 
 const ROOT = path.join(__dirname, '..');
 const DST_DIR_NAME = 'vk';
 const DST_DIR_PATH = path.join(ROOT, 'src', DST_DIR_NAME);
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
 const VULKAN_H = fs.readFileSync(path.join(__dirname, `vulkan.h`), 'utf8');
-const TYPES_TO_GENERATE = ['VkStructureType', 'VkResult', 'VkPhysicalDeviceProperties', 'VkPhysicalDeviceFeatures'];
+const TYPES_TO_GENERATE = process.argv.slice(2);
 
 const PRIMITIVE_TYPE = {
     uint32_t: 'u32',
@@ -27,10 +26,6 @@ const PRIMITIVE_TYPE = {
     VkSampleCountFlags: 'u32'
 };
 
-const alreadyGenerated = new Set();
-
-rimraf.sync(DST_DIR_PATH);
-fs.mkdirSync(DST_DIR_PATH);
 generateTypes(TYPES_TO_GENERATE);
 
 function generateTypes(types) {
@@ -38,15 +33,7 @@ function generateTypes(types) {
 }
 
 function generateType(name) {
-    if (PRIMITIVE_TYPE[name] || alreadyGenerated.has(name)) {
-        return;
-    }
-
-    alreadyGenerated.add(name);
-
-    const generated = generateStruct(name) || generateEnum(name);
-
-    if (!generated) {
+    if (!generateStruct(name) && !generateEnum(name)) {
         throw new Error(`cannot find type ${name}`);
     }
 }
@@ -56,12 +43,7 @@ function writeVkType(name, blocks) {
     const filePath = path.join(DST_DIR_PATH, `${moduleName}.rs`);
     const fileContent = blocks.join('\n\n');
 
-    const rootFileName = path.join(DST_DIR_PATH, 'mod.rs');
-    const existingRootContent = fs.existsSync(rootFileName) ? fs.readFileSync(rootFileName, 'utf8') : '';
-    const newRootContent = `${existingRootContent}mod ${moduleName};\npub use self::${moduleName}::*;\n\n`
-
     fs.writeFileSync(filePath, fileContent, 'utf8');
-    fs.writeFileSync(rootFileName, newRootContent, 'utf8');
 }
 
 function generateStruct(name) {
