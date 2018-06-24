@@ -49,10 +49,29 @@ VecInfo vk_get_physical_device_list(VkInstance instance) {
 
 VkPhysicalDeviceProperties* vk_get_physical_device_properties(VkPhysicalDevice physical_device) {
     VkPhysicalDeviceProperties* properties = malloc(sizeof(VkPhysicalDeviceProperties));
+
     vkGetPhysicalDeviceProperties(physical_device, properties);
 
-    // printf("From C   : %s\n", properties->deviceName);
-    // printf("From C   : %u\n", properties->deviceID);
-
     return properties;
+}
+
+VecInfo vk_get_physical_device_queue_family_properties(VkPhysicalDevice physical_device) {
+    uint32_t count = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &count, NULL);
+
+    VkQueueFamilyProperties* properties = malloc(count * sizeof(VkPhysicalDevice));
+    vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &count, properties);
+
+    VecInfo result = {
+        .ptr = properties,
+        .length = count
+    };
+    
+    return result;
+}
+
+void display_strings(size_t len, const char** strings) {
+    for (size_t i = 0; i < len; ++i) {
+        printf("%s\n", strings[i]);
+    }
 }

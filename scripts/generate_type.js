@@ -22,8 +22,7 @@ const PRIMITIVE_TYPE = {
     double: 'f64',
     size_t: 'usize',
     VkBool32: 'u32',
-    VkDeviceSize: 'u64',
-    VkSampleCountFlags: 'u32'
+    VkDeviceSize: 'u64'
 };
 
 generateTypes(TYPES_TO_GENERATE);
@@ -46,6 +45,14 @@ function writeVkType(name, blocks) {
     fs.writeFileSync(filePath, fileContent, 'utf8');
 }
 
+function getPrimitiveType(type) {
+    if (type.endsWith('Flags')) {
+        return 'u32';
+    }
+
+    return PRIMITIVE_TYPE[type];
+}
+
 function generateStruct(name) {
     const match = VULKAN_H.match(new RegExp(`typedef struct ${name} {\n([^}]+)\n}`, 'm'));
 
@@ -64,7 +71,7 @@ function generateStruct(name) {
 
     match[1].split('\n').forEach(line => {
         let [type, name] = line.split(' ').filter(x => x);
-        let rustPrimitiveType = PRIMITIVE_TYPE[type];
+        let rustPrimitiveType = getPrimitiveType(type);
         let isPrimitiveType = !!rustPrimitiveType;
         let rawRustType = isPrimitiveType ? rustPrimitiveType : toRawTypeName(type);
         let trueRustType = isPrimitiveType ? rustPrimitiveType : toTrueTypeName(type);
@@ -74,8 +81,6 @@ function generateStruct(name) {
         if (type === 'VkBool32') {
             trueRustType = 'bool';
         }
-
-        generateType(type);
 
         name = name.substring(0, name.length - 1);
 
@@ -236,8 +241,12 @@ function findConstant(name) {
     return match[1];
 }
 
-function cToRustVarName(name) {
-    return name.replace(/[A-Z]+/g, str => `_${str.toLowerCase()}`).replace(/__/g, '_').replace(/^_/, '');
+function cToRustVarName(name) {    
+    return name
+        .replace(/[A-Z]+/g, str => `_${str.toLowerCase()}`)
+        .replace(/__/g, '_')
+        .replace(/^_/, '')
+        .replace(/(\d)_d$/, '_$1d');
 }
 
 function cToRustEnumValue(name) {

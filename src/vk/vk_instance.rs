@@ -78,9 +78,8 @@ impl VkInstance {
     pub fn get_physical_devices(&self) -> Vec<VkPhysicalDevice> {
         unsafe {
             let result = vk_get_physical_device_list(self._handler);
-            let handler_vec = result.to_vec();
 
-            handler_vec.into_iter().map(|handler| VkPhysicalDevice::from_handler(handler)).collect()
+            result.to_vec().into_iter().map(|handler| VkPhysicalDevice::from_handler(handler)).collect()
         }
     }
 }

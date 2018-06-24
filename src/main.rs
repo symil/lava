@@ -3,6 +3,7 @@
 #![allow(unused_variables)]
 
 use std::*;
+use std::os::raw::c_char;
 use std::ffi::*;
 use std::fmt;
 
@@ -10,6 +11,7 @@ mod vk;
 use vk::*;
 
 mod utils;
+use utils::*;
 
 fn display_properties(value: &VkPhysicalDeviceProperties) {
     println!("API version   : {:#?}", value.api_version);
@@ -25,8 +27,10 @@ fn main() {
     let physical_devices = instance.get_physical_devices();
     
     let properties = physical_devices[0].get_properties();
+    let queue_families = physical_devices[0].get_queue_family_properties();
+    let queue_family = &queue_families[0];
 
-    display_properties(&properties);
+    println!("{:#?}", queue_family);
 
     println!("Bye!");
 }
