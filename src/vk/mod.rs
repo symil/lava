@@ -1,5 +1,6 @@
 mod utils;
 mod vk_application_info;
+mod vk_device_queue_create_flags;
 mod vk_extent_3d;
 mod vk_instance;
 mod vk_instance_creation_info;
@@ -16,6 +17,7 @@ mod vk_structure_type;
 
 pub use self::utils::*;
 pub use self::vk_application_info::*;
+pub use self::vk_device_queue_create_flags::*;
 pub use self::vk_extent_3d::*;
 pub use self::vk_instance::*;
 pub use self::vk_instance_creation_info::*;

@@ -7,7 +7,7 @@ const ROOT = path.join(__dirname, '..');
 const DST_DIR_NAME = 'vk';
 const DST_DIR_PATH = path.join(ROOT, 'src', DST_DIR_NAME);
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
-const VULKAN_H = fs.readFileSync(path.join(__dirname, `vulkan.h`), 'utf8');
+const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, `include`, `vulkan`, `vulkan_core.h`), 'utf8');
 const TYPES_TO_GENERATE = process.argv.slice(2);
 
 const PRIMITIVE_TYPE = {
@@ -257,10 +257,6 @@ function generateBitFlags(name) {
         };
     }).filter(({value}) => value !== '0x7FFFFFFF');
 
-    if (name === 'VkQueueFlags') {
-        fields.push({ name: 'VK_QUEUE_PROTECTED_BIT', value: '0x00000010'});
-    }
-
     fields.forEach(field => field.rustName = cToRustVarName(strip(field.name, prefix, suffix)));
 
     const useDelaractions = [
@@ -286,7 +282,15 @@ function generateBitFlags(name) {
         `}`
     ].join('\n');
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition]);
+    const fromTrueToRawDefinition = [
+        `impl<'a> From<&'a ${trueTypeName}> for u32 {`,
+        `    fn from(value: &'a ${trueTypeName}) -> Self {`,
+        fields.map(field => `        if value.${field.rustName} { ${field.value} } else { 0 }`).join(' +\n'),
+        `    }`,
+        `}`
+    ].join('\n');
+
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
 
     return true;
 }
