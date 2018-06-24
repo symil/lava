@@ -285,7 +285,7 @@ function generateBitFlags(name) {
     const fromTrueToRawDefinition = [
         `impl<'a> From<&'a ${trueTypeName}> for u32 {`,
         `    fn from(value: &'a ${trueTypeName}) -> Self {`,
-        fields.map(field => `        if value.${field.rustName} { ${field.value} } else { 0 }`).join(' +\n'),
+        fields.map(field => `        (if value.${field.rustName} { ${field.value} } else { 0 })`).join(' +\n'),
         `    }`,
         `}`
     ].join('\n');

@@ -27,10 +27,10 @@ impl<'a> From<&'a u32> for VkQueueFlags {
 
 impl<'a> From<&'a VkQueueFlags> for u32 {
     fn from(value: &'a VkQueueFlags) -> Self {
-        if value.graphics { 0x00000001 } else { 0 } +
-        if value.compute { 0x00000002 } else { 0 } +
-        if value.transfer { 0x00000004 } else { 0 } +
-        if value.sparse_binding { 0x00000008 } else { 0 } +
-        if value.protected { 0x00000010 } else { 0 }
+        (if value.graphics { 0x00000001 } else { 0 }) +
+        (if value.compute { 0x00000002 } else { 0 }) +
+        (if value.transfer { 0x00000004 } else { 0 }) +
+        (if value.sparse_binding { 0x00000008 } else { 0 }) +
+        (if value.protected { 0x00000010 } else { 0 })
     }
 }

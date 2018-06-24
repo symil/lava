@@ -58,9 +58,9 @@ impl VkInstance {
                 p_next: ptr::null(),
                 flags: 0,
                 p_application_info: &raw_app_info as *const RawVkApplicationInfo,
-                enabled_layer_count: enabled_layers.len() as u32,
+                enabled_layer_count: enabled_layers.len(),
                 pp_enabled_layer_names: enabled_layers.as_ptr(),
-                enabled_extension_count: enabled_extensions.len() as u32,
+                enabled_extension_count: enabled_extensions.len(),
                 pp_enabled_extension_names: enabled_extensions.as_ptr()
             };
 

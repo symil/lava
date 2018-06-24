@@ -23,7 +23,7 @@ impl CharPP {
         self.pointers.as_ptr()
     }
 
-    pub fn len(&self) -> usize {
-        self.pointers.len()
+    pub fn len(&self) -> u32 {
+        self.pointers.len() as u32
     }
 }
