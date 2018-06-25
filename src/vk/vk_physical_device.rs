@@ -1,3 +1,4 @@
+use std::vec::Vec;
 use std::*;
 use vk::*;
 
@@ -14,22 +15,32 @@ impl VkPhysicalDevice {
 
     pub fn get_properties(&self) -> VkPhysicalDeviceProperties {
         unsafe {
-            let raw_properties = vk_get_physical_device_properties(self._handler);
+            let mut raw_properties : RawVkPhysicalDeviceProperties = mem::uninitialized();
+            let ptr = &mut raw_properties as *mut RawVkPhysicalDeviceProperties;
 
-            VkPhysicalDeviceProperties::from(&*raw_properties)
+            vkGetPhysicalDeviceProperties(self._handler, ptr);
+
+            VkPhysicalDeviceProperties::from(&raw_properties)
         }
     }
 
     pub fn get_queue_family_properties(&self) -> Vec<VkQueueFamilyProperties>{
         unsafe {
-            let result = vk_get_physical_device_queue_family_properties(self._handler);
+            let mut count : u32 = 0;
+            let count_ptr = &mut count as *mut u32;
+            let mut queue_family_vec : Vec<RawVkQueueFamilyProperties> = Vec::new();
 
-            result.to_vec().into_iter().map(|raw_properties| VkQueueFamilyProperties::from(&raw_properties)).collect()
+            vkGetPhysicalDeviceQueueFamilyProperties(self._handler, count_ptr, ptr::null_mut());
+            queue_family_vec.reserve(count as usize);
+            queue_family_vec.set_len(count as usize);
+            vkGetPhysicalDeviceQueueFamilyProperties(self._handler, count_ptr, queue_family_vec.as_mut_ptr());
+
+            queue_family_vec.into_iter().map(|raw_properties| VkQueueFamilyProperties::from(&raw_properties)).collect()
         }
     }
 }
 
 extern {
-    fn vk_get_physical_device_properties(device: VkHandler) -> *const RawVkPhysicalDeviceProperties;
-    fn vk_get_physical_device_queue_family_properties(device: VkHandler) -> VecInfo<RawVkQueueFamilyProperties>;
+    fn vkGetPhysicalDeviceProperties(physical_device: VkHandler, ptr: *mut RawVkPhysicalDeviceProperties);
+    fn vkGetPhysicalDeviceQueueFamilyProperties(physical_device: VkHandler, count: *mut u32, ptr: *mut RawVkQueueFamilyProperties);
 }

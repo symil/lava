@@ -25,13 +25,17 @@ pub enum VkResult {
     ErrorTooManyObjects = -10,
     ErrorFormatNotSupported = -11,
     ErrorFragmentedPool = -12,
+    ErrorOutOfPoolMemory = -1000069000,
+    ErrorInvalidExternalHandle = -1000072003,
     ErrorSurfaceLostKhr = -1000000000,
     ErrorNativeWindowInUseKhr = -1000000001,
     SuboptimalKhr = 1000001003,
     ErrorOutOfDateKhr = -1000001004,
     ErrorIncompatibleDisplayKhr = -1000003001,
     ErrorValidationFailedExt = -1000011001,
-    ErrorInvalidShaderNv = -1000012000
+    ErrorInvalidShaderNv = -1000012000,
+    ErrorFragmentationExt = -1000161000,
+    ErrorNotPermittedExt = -1000174001
 }
 
 impl<'a> From<&'a i32> for VkResult {

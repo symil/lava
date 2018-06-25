@@ -30,7 +30,8 @@ fn main() {
     let queue_families = physical_devices[0].get_queue_family_properties();
     let queue_family = &queue_families[0];
 
-    println!("{:#?}", queue_family);
+    // println!("{:#?}", queue_family);
+    display_properties(&properties);
 
     println!("Bye!");
 }

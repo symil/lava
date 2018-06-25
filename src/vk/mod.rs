@@ -1,4 +1,5 @@
 mod utils;
+mod vk_allocator;
 mod vk_application_info;
 mod vk_device_queue_create_flags;
 mod vk_extent_3d;
@@ -16,6 +17,7 @@ mod vk_result;
 mod vk_structure_type;
 
 pub use self::utils::*;
+pub use self::vk_allocator::*;
 pub use self::vk_application_info::*;
 pub use self::vk_device_queue_create_flags::*;
 pub use self::vk_extent_3d::*;

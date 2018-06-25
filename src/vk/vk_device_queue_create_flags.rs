@@ -19,6 +19,6 @@ impl<'a> From<&'a u32> for VkDeviceQueueCreateFlags {
 
 impl<'a> From<&'a VkDeviceQueueCreateFlags> for u32 {
     fn from(value: &'a VkDeviceQueueCreateFlags) -> Self {
-        if value.protected { 0x00000001 } else { 0 }
+        (if value.protected { 0x00000001 } else { 0 })
     }
 }

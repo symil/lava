@@ -8,7 +8,22 @@ const DST_DIR_NAME = 'vk';
 const DST_DIR_PATH = path.join(ROOT, 'src', DST_DIR_NAME);
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
 const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, `include`, `vulkan`, `vulkan_core.h`), 'utf8');
+const ARGV = process.argv.slice(2);
 const TYPES_TO_GENERATE = process.argv.slice(2);
+
+const ALL_GENERATED_TYPES = [
+    'VkDeviceQueueCreateFlags',
+    'VkExtent3D',
+    'VkPhysicalDeviceFeatures',
+    'VkPhysicalDeviceLimits',
+    'VkPhysicalDeviceProperties',
+    'VkPhysicalDeviceSparseProperties',
+    'VkPhysicalDeviceType',
+    'VkQueueFamilyProperties',
+    'VkQueueFlags',
+    'VkResult',
+    'VkStructureType'
+];
 
 const PRIMITIVE_TYPE = {
     uint32_t: 'u32',
@@ -26,10 +41,13 @@ const PRIMITIVE_TYPE = {
     VkSampleCountFlags: 'u32'
 };
 
-generateTypes(TYPES_TO_GENERATE);
 
-function generateTypes(types) {
-    types.forEach(generateType);
+main(ARGV);
+
+function main(argv) {
+    const typesToGenerate = argv.includes('--all') ? ALL_GENERATED_TYPES : argv;
+
+    typesToGenerate.forEach(generateType);
     refreshModRoot();
 }
 

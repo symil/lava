@@ -64,22 +64,34 @@ impl VkInstance {
                 pp_enabled_extension_names: enabled_extensions.as_ptr()
             };
 
-            let result = vk_create_instance(&raw_instance_create_info as *const RawVkInstanceCreateInfo);
+            let mut handler : VkHandler = 0;
 
-            match result.code {
+            let handler_ptr = &mut handler as *mut VkHandler;
+            let create_info_ptr = &raw_instance_create_info as *const RawVkInstanceCreateInfo;
+
+            let result = vkCreateInstance(create_info_ptr, VkAllocator::null(), handler_ptr);
+
+            match result {
                 VkResult::Success => Ok(VkInstance {
-                    _handler: result.handler
+                    _handler: handler
                 }),
-                _ => Err(result.code)
+                _ => Err(result)
             }
         }
     }
 
     pub fn get_physical_devices(&self) -> Vec<VkPhysicalDevice> {
         unsafe {
-            let result = vk_get_physical_device_list(self._handler);
+            let mut count : u32 = 0;
+            let count_ptr = &mut count as *mut u32;
+            let mut handler_vec : Vec<VkHandler> = Vec::new();
 
-            result.to_vec().into_iter().map(|handler| VkPhysicalDevice::from_handler(handler)).collect()
+            vkEnumeratePhysicalDevices(self._handler, count_ptr, ptr::null_mut());
+            handler_vec.reserve(count as usize);
+            handler_vec.set_len(count as usize);
+            vkEnumeratePhysicalDevices(self._handler, count_ptr, handler_vec.as_mut_ptr());
+
+            handler_vec.into_iter().map(|handler| VkPhysicalDevice::from_handler(handler)).collect()
         }
     }
 }
@@ -87,13 +99,13 @@ impl VkInstance {
 impl ops::Drop for VkInstance {
     fn drop(&mut self) {
         unsafe {
-            vk_destroy_instance(self._handler);
+            vkDestroyInstance(self._handler, VkAllocator::null());
         }
     }
 }
 
 extern {
-    fn vk_create_instance(create_info: *const RawVkInstanceCreateInfo) -> VkCreateHandlerResult;
-    fn vk_destroy_instance(instance: VkHandler);
-    fn vk_get_physical_device_list(instance: VkHandler) -> VecInfo<VkHandler>;
+    fn vkCreateInstance(create_info: *const RawVkInstanceCreateInfo, allocator: *const VkAllocator, instance: *mut VkHandler) -> VkResult;
+    fn vkDestroyInstance(instance: VkHandler, allocator: *const VkAllocator);
+    fn vkEnumeratePhysicalDevices(instance: VkHandler, count: *mut u32, ptr: *mut VkHandler);
 }
