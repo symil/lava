@@ -12,7 +12,7 @@ pub struct RawVkQueueFamilyProperties {
     min_image_transfer_granularity: RawVkExtent3D
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct VkQueueFamilyProperties {
     pub queue_flags: VkQueueFlags,
     pub queue_count: u32,

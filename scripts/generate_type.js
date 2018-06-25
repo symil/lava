@@ -158,7 +158,7 @@ function generateStruct(name) {
     ].join('\n');
 
     const trueDefinition = [
-        `#[derive(Debug)]`,
+        `#[derive(Debug, Default)]`,
         `pub struct ${trueTypeName} {`,
         trueDefLines.map(line => `    ${line}`).join(',\n'),
         `}`
@@ -197,10 +197,10 @@ function generateEnum(name) {
     const fromLines = [];
     const formatLines = [];
 
-    match[1].split('\n').forEach(line => {
+    const fields = match[1].split('\n').map(line => {
         const match = line.match(/^\s*([A-Z_]+)\s*=\s*(-?\d+),?$/);
 
-        if (!match) return;
+        if (!match) return null;
 
         const valueName = match[1];
         const valueInt = match[2];
@@ -211,13 +211,18 @@ function generateEnum(name) {
 
         const rustValue = cToRustEnumValue(valueName.substring(enumPrefix.length));
 
+        return { rustValue, valueInt };
+    }).filter(x => x);
+
+    fields.forEach(({rustValue, valueInt}) => {
         trueDefFields.push(`${rustValue} = ${valueInt}`);
         fromLines.push(`${valueInt} => ${trueTypeName}::${rustValue}`);
         formatLines.push(`${trueTypeName}::${rustValue} => write!(f, "${rustValue}")`);
-    });
+    })
 
     const useDelaractions = [
         'std::convert::From',
+        'std::default::Default'
     ].map(l => `use ${l};`).join('\n');
 
     const trueDefinition = [
@@ -244,7 +249,15 @@ function generateEnum(name) {
         `}`
     ].join('\n');
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
+    const defaultDefinition = [
+        `impl Default for ${trueTypeName} {`,
+        `    fn default() -> Self {`,
+        `        ${trueTypeName}::${fields[0].rustValue}`,
+        `    }`,
+        `}`
+    ].join('\n');
+
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition, defaultDefinition]);
 
     return true;
 }
@@ -284,7 +297,7 @@ function generateBitFlags(name) {
     const rawDefinition = `pub type ${rawTypeName} = u32;`;
 
     const trueDefinition = [
-        `#[derive(Debug)]`,
+        `#[derive(Debug, Default)]`,
         `pub struct ${trueTypeName} {`,
         fields.map(field => `    pub ${field.rustName}: bool`).join(',\n'),
         `}`
@@ -353,11 +366,7 @@ function toTrueTypeName(name) {
 
 function refreshModRoot() {
     const filePath = path.join(DST_DIR_PATH, 'mod.rs');
-    const moduleNames = ['utils'].concat(
-        fs.readdirSync(DST_DIR_PATH)
-        .filter(name => name.startsWith('vk_'))
-        .map(str => str.replace('.rs', ''))
-    );
+    const moduleNames = fs.readdirSync(DST_DIR_PATH).filter(name => name !== 'mod.rs').map(str => str.replace('.rs', ''));
     const content = [
         ...moduleNames.map(name => `mod ${name};`),
         ``,

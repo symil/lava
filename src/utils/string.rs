@@ -2,28 +2,46 @@ use std::vec::Vec;
 use std::string::String;
 use std::ffi::CString;
 use std::os::raw::c_char;
+use std::*;
+use utils::*;
 
-pub struct CharPP {
-    c_strings: Vec<CString>,
-    pointers: Vec<*const c_char>
+pub fn copy_as_c_string(s: &String) -> *mut void {
+    unsafe {
+        let str_len = s.len();
+        let new_str = calloc(1, str_len + 1);
+        memcpy(new_str, s.as_ptr() as *const void, str_len);
+
+        new_str
+    }
 }
 
-impl CharPP {
-    pub fn new(strings: &Vec<String>) -> CharPP {
-        let c_strings : Vec<CString> = strings.into_iter().map(|s| CString::new(s.as_str()).unwrap()).collect();
-        let pointers : Vec<*const c_char> = (&c_strings).into_iter().map(|s| s.as_ptr()).collect();
+pub fn free_c_string(ptr: *mut void) {
+    unsafe {
+        free(ptr);
+    }
+}
 
-        CharPP {
-            c_strings: c_strings,
-            pointers: pointers
+pub fn copy_as_c_string_array(strings: &Vec<String>) -> *mut *mut void {
+    unsafe {
+        let array_len = strings.len();
+        let c_array = calloc(array_len + 1, mem::size_of::<usize>()) as *mut *mut void;
+
+        for (i, s) in strings.iter().enumerate() {
+            let str_copy = copy_as_c_string(s);
+            *(c_array.offset(i as isize)) = str_copy;
         }
-    }
 
-    pub fn as_ptr(&self) -> *const *const c_char {
-        self.pointers.as_ptr()
+        c_array
     }
+}
 
-    pub fn len(&self) -> u32 {
-        self.pointers.len() as u32
+pub fn free_c_string_array(c_strings: *mut *mut void) {
+    unsafe {
+        let mut ptr : *mut *mut void = c_strings;
+
+        while !(*ptr).is_null() {
+            free(*ptr);
+            ptr = ptr.offset(1);
+        }
     }
 }

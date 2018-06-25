@@ -11,7 +11,7 @@ pub struct RawVkPhysicalDeviceSparseProperties {
     residency_non_resident_strict: u32
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct VkPhysicalDeviceSparseProperties {
     pub residency_standard2_dblock_shape: bool,
     pub residency_standard2_dmultisample_block_shape: bool,

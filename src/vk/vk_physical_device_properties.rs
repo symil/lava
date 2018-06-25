@@ -20,7 +20,7 @@ pub struct RawVkPhysicalDeviceProperties {
     sparse_properties: RawVkPhysicalDeviceSparseProperties
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct VkPhysicalDeviceProperties {
     pub api_version: u32,
     pub driver_version: u32,

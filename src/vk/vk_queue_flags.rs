@@ -4,7 +4,7 @@ use std::convert::From;
 
 pub type RawVkQueueFlags = u32;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct VkQueueFlags {
     pub graphics: bool,
     pub compute: bool,

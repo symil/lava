@@ -4,7 +4,7 @@ use std::convert::From;
 
 pub type RawVkDeviceQueueCreateFlags = u32;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct VkDeviceQueueCreateFlags {
     pub protected: bool
 }

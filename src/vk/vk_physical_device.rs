@@ -24,7 +24,7 @@ impl VkPhysicalDevice {
         }
     }
 
-    pub fn get_queue_family_properties(&self) -> Vec<VkQueueFamilyProperties>{
+    pub fn get_queue_family_properties(&self) -> Vec<VkQueueFamilyProperties> {
         unsafe {
             let mut count : u32 = 0;
             let count_ptr = &mut count as *mut u32;
@@ -38,9 +38,10 @@ impl VkPhysicalDevice {
             queue_family_vec.into_iter().map(|raw_properties| VkQueueFamilyProperties::from(&raw_properties)).collect()
         }
     }
-}
 
-extern {
-    fn vkGetPhysicalDeviceProperties(physical_device: VkHandler, ptr: *mut RawVkPhysicalDeviceProperties);
-    fn vkGetPhysicalDeviceQueueFamilyProperties(physical_device: VkHandler, count: *mut u32, ptr: *mut RawVkQueueFamilyProperties);
+    // pub fn create_logical_device(&self) -> VkDevice {
+    //     unsafe {
+
+    //     }
+    // }
 }
