@@ -33,7 +33,7 @@ impl VkPhysicalDevice {
         }
     }
 
-    pub fn get_queue_family_properties(&self) -> Vec<VkQueueFamilyProperties> {
+    pub fn get_queue_families(&self) -> Vec<VkQueueFamilyProperties> {
         unsafe {
             let mut count : u32 = 0;
             let count_ptr = &mut count as *mut u32;

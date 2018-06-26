@@ -25,6 +25,10 @@ impl VkDevice {
             }
         }
     }
+
+    pub fn get_queue(&self, queue_family_index: usize, queue_index: usize) -> VkQueue {
+        VkQueue::from_device(self, queue_family_index, queue_index)
+    }
 }
 
 impl Drop for VkDevice {

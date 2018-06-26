@@ -28,9 +28,10 @@ fn main() {
     let physical_device = &physical_devices[0];
     
     let properties = physical_device.get_properties();
-    let queue_families = physical_device.get_queue_family_properties();
+    let queue_families = physical_device.get_queue_families();
     let queue_family = &queue_families[0];
-    let device = physical_device.create_logical_device(&Default::default()).unwrap();
+    let device = physical_device.create_logical_device(&VkDeviceCreateInfo::default()).unwrap();
+    let queue = device.get_queue(0, 0);
 
     println!("{:#?}", queue_family);
     display_properties(&properties);
