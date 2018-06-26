@@ -26,9 +26,3 @@ impl<'a> From<&'a VkPhysicalDeviceType> for i32 {
         *value as i32
     }
 }
-
-impl Default for VkPhysicalDeviceType {
-    fn default() -> Self {
-        VkPhysicalDeviceType::Other
-    }
-}

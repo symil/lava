@@ -50,9 +50,3 @@ impl<'a> From<&'a VkResult> for i32 {
         *value as i32
     }
 }
-
-impl Default for VkResult {
-    fn default() -> Self {
-        VkResult::Success
-    }
-}

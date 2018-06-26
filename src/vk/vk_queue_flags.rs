@@ -34,3 +34,9 @@ impl<'a> From<&'a VkQueueFlags> for u32 {
         (if value.protected { 0x00000010 } else { 0 })
     }
 }
+
+impl VkQueueFlags {
+    pub fn none() -> Self {
+        VkQueueFlags::default()
+    }
+}

@@ -22,7 +22,10 @@ const ALL_GENERATED_TYPES = [
     'VkQueueFamilyProperties',
     'VkQueueFlags',
     'VkResult',
-    'VkStructureType'
+    'VkStructureType',
+    'VkBufferCreateFlags',
+    'VkBufferUsageFlags',
+    'VkSharingMode'
 ];
 
 const PRIMITIVE_TYPE = {
@@ -164,10 +167,13 @@ function generateStruct(name) {
         `}`
     ].join('\n');
 
+    const hasDefaultTrait = name === 'VkPhysicalDeviceFeatures';
+
     const trueDefinition = [
-        `#[derive(Debug, Default)]`,
+        `#[derive(Debug${hasDefaultTrait ? ', Default' : ''})]`,
         `pub struct ${trueTypeName} {`,
-        trueDefLines.map(line => `    ${line}`).join(',\n'),
+        trueDefLines.map(line => `    ${line},`).join('\n'),
+        `    pub _index: usize,`,
         `}`
     ].join('\n');
 
@@ -175,7 +181,8 @@ function generateStruct(name) {
         `impl<'a> From<&'a ${rawTypeName}> for ${trueTypeName} {`,
         `    fn from(value: &'a ${rawTypeName}) -> Self {`,
         `        ${trueTypeName} {`,
-        fromRawToTrueLines.map(line => `            ${line}`).join(',\n'),
+        fromRawToTrueLines.map(line => `            ${line},`).join('\n'),
+        `            _index: 0,`,
         `        }`,
         `    }`,
         `}`
@@ -191,7 +198,15 @@ function generateStruct(name) {
         `}`
     ].join('\n');
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
+    const noneDefinition = !hasDefaultTrait ? null : [
+        `impl ${trueTypeName} {`,
+        `    pub fn none() -> Self {`,
+        `        ${trueTypeName}::default()`,
+        `    }`,
+        `}`
+    ].join('\n');
+
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition, noneDefinition]);
 
     return true;
 }
@@ -274,7 +289,7 @@ function generateEnum(name) {
         `}`
     ].join('\n');
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition, defaultDefinition]);
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
 
     return true;
 }
@@ -338,7 +353,15 @@ function generateBitFlags(name) {
         `}`
     ].join('\n');
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
+    const noneDefinition = [
+        `impl ${trueTypeName} {`,
+        `    pub fn none() -> Self {`,
+        `        ${trueTypeName}::default()`,
+        `    }`,
+        `}`
+    ].join('\n');
+
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition, noneDefinition]);
 
     return true;
 }

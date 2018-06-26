@@ -22,3 +22,9 @@ impl<'a> From<&'a VkDeviceQueueCreateFlags> for u32 {
         (if value.protected { 0x00000001 } else { 0 })
     }
 }
+
+impl VkDeviceQueueCreateFlags {
+    pub fn none() -> Self {
+        VkDeviceQueueCreateFlags::default()
+    }
+}

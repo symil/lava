@@ -33,10 +33,10 @@ pub struct VkDeviceCreateInfo {
 impl Default for VkDeviceCreateInfo {
     fn default() -> Self {
         VkDeviceCreateInfo {
-            queue_create_infos: vec![Default::default()],
+            queue_create_infos: vec![VkDeviceQueueCreateInfo::default()],
             enabled_layer_names: Vec::new(),
             enabled_extension_names: Vec::new(),
-            enabled_features: Default::default()
+            enabled_features: VkPhysicalDeviceFeatures::none()
         }
     }
 }

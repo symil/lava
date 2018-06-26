@@ -12,12 +12,13 @@ pub struct RawVkQueueFamilyProperties {
     min_image_transfer_granularity: RawVkExtent3D
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct VkQueueFamilyProperties {
     pub queue_flags: VkQueueFlags,
     pub queue_count: u32,
     pub timestamp_valid_bits: u32,
-    pub min_image_transfer_granularity: VkExtent3D
+    pub min_image_transfer_granularity: VkExtent3D,
+    pub _index: usize,
 }
 
 impl<'a> From<&'a RawVkQueueFamilyProperties> for VkQueueFamilyProperties {
@@ -26,7 +27,8 @@ impl<'a> From<&'a RawVkQueueFamilyProperties> for VkQueueFamilyProperties {
             queue_flags: VkQueueFlags::from(&value.queue_flags),
             queue_count: value.queue_count,
             timestamp_valid_bits: value.timestamp_valid_bits,
-            min_image_transfer_granularity: VkExtent3D::from(&value.min_image_transfer_granularity)
+            min_image_transfer_granularity: VkExtent3D::from(&value.min_image_transfer_granularity),
+            _index: 0,
         }
     }
 }
@@ -41,3 +43,4 @@ impl<'a> From<&'a VkQueueFamilyProperties> for RawVkQueueFamilyProperties {
         }
     }
 }
+

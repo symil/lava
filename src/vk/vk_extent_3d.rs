@@ -9,11 +9,12 @@ pub struct RawVkExtent3D {
     depth: u32
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct VkExtent3D {
     pub width: u32,
     pub height: u32,
-    pub depth: u32
+    pub depth: u32,
+    pub _index: usize,
 }
 
 impl<'a> From<&'a RawVkExtent3D> for VkExtent3D {
@@ -21,7 +22,8 @@ impl<'a> From<&'a RawVkExtent3D> for VkExtent3D {
         VkExtent3D {
             width: value.width,
             height: value.height,
-            depth: value.depth
+            depth: value.depth,
+            _index: 0,
         }
     }
 }
@@ -35,3 +37,4 @@ impl<'a> From<&'a VkExtent3D> for RawVkExtent3D {
         }
     }
 }
+

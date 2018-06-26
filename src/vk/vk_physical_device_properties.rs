@@ -20,7 +20,7 @@ pub struct RawVkPhysicalDeviceProperties {
     sparse_properties: RawVkPhysicalDeviceSparseProperties
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct VkPhysicalDeviceProperties {
     pub api_version: u32,
     pub driver_version: u32,
@@ -30,7 +30,8 @@ pub struct VkPhysicalDeviceProperties {
     pub device_name: String,
     pub pipeline_cache_uuid: [u8; 16],
     pub limits: VkPhysicalDeviceLimits,
-    pub sparse_properties: VkPhysicalDeviceSparseProperties
+    pub sparse_properties: VkPhysicalDeviceSparseProperties,
+    pub _index: usize,
 }
 
 impl<'a> From<&'a RawVkPhysicalDeviceProperties> for VkPhysicalDeviceProperties {
@@ -44,7 +45,8 @@ impl<'a> From<&'a RawVkPhysicalDeviceProperties> for VkPhysicalDeviceProperties 
             device_name: unsafe { String::from_utf8_unchecked((&value.device_name).to_vec().into_iter().filter(|x| *x != 0).collect()) },
             pipeline_cache_uuid: value.pipeline_cache_uuid,
             limits: VkPhysicalDeviceLimits::from(&value.limits),
-            sparse_properties: VkPhysicalDeviceSparseProperties::from(&value.sparse_properties)
+            sparse_properties: VkPhysicalDeviceSparseProperties::from(&value.sparse_properties),
+            _index: 0,
         }
     }
 }
@@ -64,3 +66,4 @@ impl<'a> From<&'a VkPhysicalDeviceProperties> for RawVkPhysicalDeviceProperties 
         }
     }
 }
+

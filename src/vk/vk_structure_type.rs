@@ -216,9 +216,3 @@ impl<'a> From<&'a VkStructureType> for i32 {
         *value as i32
     }
 }
-
-impl Default for VkStructureType {
-    fn default() -> Self {
-        VkStructureType::ApplicationInfo
-    }
-}
