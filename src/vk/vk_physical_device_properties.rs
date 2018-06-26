@@ -4,6 +4,7 @@ use std::convert::From;
 use vk::vk_physical_device_type::*;
 use std::string::String;
 use std::ffi::CStr;
+use std::os::raw::c_char;
 use vk::vk_physical_device_limits::*;
 use vk::vk_physical_device_sparse_properties::*;
 
@@ -14,7 +15,7 @@ pub struct RawVkPhysicalDeviceProperties {
     vendor_id: u32,
     device_id: u32,
     device_type: RawVkPhysicalDeviceType,
-    device_name: [u8; 256],
+    device_name: [i8; 256],
     pipeline_cache_uuid: [u8; 16],
     limits: RawVkPhysicalDeviceLimits,
     sparse_properties: RawVkPhysicalDeviceSparseProperties
@@ -42,7 +43,7 @@ impl<'a> From<&'a RawVkPhysicalDeviceProperties> for VkPhysicalDeviceProperties 
             vendor_id: value.vendor_id,
             device_id: value.device_id,
             device_type: VkPhysicalDeviceType::from(&value.device_type),
-            device_name: unsafe { String::from_utf8_unchecked((&value.device_name).to_vec().into_iter().filter(|x| *x != 0).collect()) },
+            device_name: unsafe { String::from_utf8_unchecked(CStr::from_ptr(&value.device_name as *const c_char).to_bytes().to_vec()) },
             pipeline_cache_uuid: value.pipeline_cache_uuid,
             limits: VkPhysicalDeviceLimits::from(&value.limits),
             sparse_properties: VkPhysicalDeviceSparseProperties::from(&value.sparse_properties),

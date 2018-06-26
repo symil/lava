@@ -112,8 +112,9 @@ function generateStruct(name) {
         if (isString) {
             usedTypes.add('std::string::String');
             usedTypes.add('std::ffi::CStr');
+            usedTypes.add('std::os::raw::c_char');
 
-            rawToTrueFieldConversion = `unsafe { String::from_utf8_unchecked((&value.device_name).to_vec().into_iter().filter(|x| *x != 0).collect()) }`;
+            rawToTrueFieldConversion = `unsafe { String::from_utf8_unchecked(CStr::from_ptr(&${sourceField} as *const c_char).to_bytes().to_vec()) }`;
             trueToRawFieldConversion = `[0; ${constantValue}]`; // TODO: actually convert the string into [u8, N]
         } else if (rustPrimitiveType) {
             if (type === 'VkBool32') {
