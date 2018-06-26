@@ -34,9 +34,6 @@ function writeTemplate(name, blocks) {
     const filePath = path.join(DST_DIR_PATH, `${moduleName}.rs`);
     const fileContent = blocks.map(b => Array.isArray(b) ? b.join('\n') : b).join('\n\n');
 
-    console.log(fileContent);
-
-    return;
     if (!FORCE && fs.existsSync(filePath)) {
         throw new Error(`error: file "${filePath}" already exists (-f to ignore)`);
     }
