@@ -3,47 +3,23 @@
 const path = require('path');
 const fs = require('fs');
 
-const ROOT = path.join(__dirname, '..');
-const DST_DIR_NAME = 'vk';
-const DST_DIR_PATH = path.join(ROOT, 'src', DST_DIR_NAME);
-const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
-const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, `include`, `vulkan`, `vulkan_core.h`), 'utf8');
 const ARGV = process.argv.slice(2);
-const TYPES_TO_GENERATE = process.argv.slice(2);
 
-const ALL_GENERATED_TYPES = [
-    'VkDeviceQueueCreateFlags',
-    'VkExtent3D',
-    'VkPhysicalDeviceFeatures',
-    'VkPhysicalDeviceLimits',
-    'VkPhysicalDeviceProperties',
-    'VkPhysicalDeviceSparseProperties',
-    'VkPhysicalDeviceType',
-    'VkQueueFamilyProperties',
-    'VkQueueFlags',
-    'VkResult',
-    'VkStructureType',
-    'VkBufferCreateFlags',
-    'VkBufferUsageFlags',
-    'VkSharingMode'
-];
+const {
+    DST_DIR_NAME,
+    DST_DIR_PATH,
+    VULKAN_H,
+    PRIMITIVE_TYPE,
+    ALL_GENERATED_TYPES
+} = require('./constants');
 
-const PRIMITIVE_TYPE = {
-    uint32_t: 'u32',
-    uint16_t: 'u16',
-    uint8_t: 'u8',
-    int32_t: 'i32',
-    int16_t: 'i16',
-    int8_t: 'i8',
-    char: 'u8',
-    float: 'f32',
-    double: 'f64',
-    size_t: 'usize',
-    VkBool32: 'u32',
-    VkDeviceSize: 'u64',
-    VkSampleCountFlags: 'u32'
-};
-
+const {
+    cToRustVarName,
+    capitalizeVarName,
+    cToRustEnumValue,
+    toRawTypeName,
+    toTrueTypeName
+} = require('./utils');
 
 main(ARGV);
 
@@ -378,30 +354,6 @@ function findConstant(name) {
     }
 
     return match[1];
-}
-
-function cToRustVarName(name) {    
-    return name
-        .replace(/[A-Z]+/g, str => `_${str.toLowerCase()}`)
-        .replace(/__/g, '_')
-        .replace(/^_/, '')
-        .replace(/(\d)_d$/, '_$1d');
-}
-
-function capitalizeVarName(name) {
-    return name.replace(/[A-Z]/g, '_$&').toUpperCase().substring(1);
-}
-
-function cToRustEnumValue(name) {
-    return `_${name}`.toLowerCase().replace(/_[a-z]/g, str => str.charAt(1).toUpperCase());
-}
-
-function toRawTypeName(name) {
-    return `Raw${name}`;
-}
-
-function toTrueTypeName(name) {
-    return name;
 }
 
 function refreshModRoot() {
