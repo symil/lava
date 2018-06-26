@@ -5,10 +5,10 @@ use std::convert::From;
 use std::ops::Drop;
 use std::*;
 use vk::*;
-use utils::*;
+use libc::*;
 
 pub struct VkInstance {
-    _handler: VkHandler
+    pub _handler: VkHandler
 }
 
 impl VkInstance {
@@ -22,27 +22,14 @@ impl VkInstance {
             let result = vkCreateInstance(create_info_ptr, VkAllocator::null(), handler_ptr);
 
             match result {
-                VkResult::Success => Ok(VkInstance {
-                    _handler: handler
-                }),
+                VkResult::Success => Ok(VkInstance { _handler: handler }),
                 _ => Err(result)
             }
         }
     }
 
     pub fn get_physical_devices(&self) -> Vec<VkPhysicalDevice> {
-        unsafe {
-            let mut count : u32 = 0;
-            let count_ptr = &mut count as *mut u32;
-            let mut handler_vec : Vec<VkHandler> = Vec::new();
-
-            vkEnumeratePhysicalDevices(self._handler, count_ptr, ptr::null_mut());
-            handler_vec.reserve(count as usize);
-            handler_vec.set_len(count as usize);
-            vkEnumeratePhysicalDevices(self._handler, count_ptr, handler_vec.as_mut_ptr());
-
-            handler_vec.into_iter().map(|handler| VkPhysicalDevice::from_handler(handler)).collect()
-        }
+        VkPhysicalDevice::get_list(self)
     }
 }
 

@@ -10,8 +10,8 @@ use std::fmt;
 mod vk;
 use vk::*;
 
-mod utils;
-use utils::*;
+mod libc;
+use libc::*;
 
 fn display_properties(value: &VkPhysicalDeviceProperties) {
     println!("API version   : {:#?}", value.api_version);
@@ -23,12 +23,14 @@ fn display_properties(value: &VkPhysicalDeviceProperties) {
 }
 
 fn main() {
-    let instance = VkInstance::create(&VkInstanceCreateInfo::default()).unwrap();
+    let instance = VkInstance::create(&Default::default()).unwrap();
     let physical_devices = instance.get_physical_devices();
+    let physical_device = &physical_devices[0];
     
-    let properties = physical_devices[0].get_properties();
-    let queue_families = physical_devices[0].get_queue_family_properties();
+    let properties = physical_device.get_properties();
+    let queue_families = physical_device.get_queue_family_properties();
     let queue_family = &queue_families[0];
+    let device = physical_device.create_logical_device(&Default::default()).unwrap();
 
     println!("{:#?}", queue_family);
     display_properties(&properties);

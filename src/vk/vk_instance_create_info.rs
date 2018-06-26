@@ -6,7 +6,7 @@ use std::ffi::CString;
 use std::ops::Drop;
 use std::ptr;
 use vk::*;
-use utils::*;
+use libc::*;
 
 #[repr(C)]
 pub struct RawVkInstanceCreateInfo {
@@ -39,25 +39,29 @@ impl<'a> Default for VkInstanceCreateInfo {
 
 impl<'a> From<&'a VkInstanceCreateInfo> for RawVkInstanceCreateInfo {
     fn from(v: &'a VkInstanceCreateInfo) -> Self {
-        let raw_app_info_boxed = Box::from(RawVkApplicationInfo::from(&v.application_info));
+        unsafe {
+            let raw_app = RawVkApplicationInfo::from(&v.application_info);
 
-        RawVkInstanceCreateInfo {
-            s_type: VkStructureType::InstanceCreateInfo,
-            p_next: ptr::null(),
-            flags: 0,
-            p_application_info: Box::into_raw(raw_app_info_boxed),
-            enabled_layer_count: v.enabled_layers.len() as u32,
-            pp_enabled_layer_names: copy_as_c_string_array(&v.enabled_layers),
-            enabled_extension_count: v.enabled_extensions.len() as u32,
-            pp_enabled_extension_names: copy_as_c_string_array(&v.enabled_extensions)
+            RawVkInstanceCreateInfo {
+                s_type: VkStructureType::InstanceCreateInfo,
+                p_next: ptr::null(),
+                flags: 0,
+                p_application_info: copy_as_c_ptr(raw_app),
+                enabled_layer_count: v.enabled_layers.len() as u32,
+                pp_enabled_layer_names: copy_as_c_string_array(&v.enabled_layers),
+                enabled_extension_count: v.enabled_extensions.len() as u32,
+                pp_enabled_extension_names: copy_as_c_string_array(&v.enabled_extensions)
+            }
         }
     }
 }
 
 impl Drop for RawVkInstanceCreateInfo {
     fn drop(&mut self) {
-        unsafe { Box::from_raw(self.p_application_info); }
-        free_c_string_array(self.pp_enabled_layer_names);
-        free_c_string_array(self.pp_enabled_extension_names);
+        unsafe {
+            free_c_ptr(self.p_application_info);
+            free_c_string_array(self.pp_enabled_layer_names);
+            free_c_string_array(self.pp_enabled_extension_names);
+        }
     }
 }

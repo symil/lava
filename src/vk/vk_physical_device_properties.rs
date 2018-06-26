@@ -48,3 +48,19 @@ impl<'a> From<&'a RawVkPhysicalDeviceProperties> for VkPhysicalDeviceProperties 
         }
     }
 }
+
+impl<'a> From<&'a VkPhysicalDeviceProperties> for RawVkPhysicalDeviceProperties {
+    fn from(value: &'a VkPhysicalDeviceProperties) -> Self {
+        RawVkPhysicalDeviceProperties {
+            api_version: value.api_version,
+            driver_version: value.driver_version,
+            vendor_id: value.vendor_id,
+            device_id: value.device_id,
+            device_type: RawVkPhysicalDeviceType::from(&value.device_type),
+            device_name: [0; 256],
+            pipeline_cache_uuid: value.pipeline_cache_uuid,
+            limits: RawVkPhysicalDeviceLimits::from(&value.limits),
+            sparse_properties: RawVkPhysicalDeviceSparseProperties::from(&value.sparse_properties)
+        }
+    }
+}

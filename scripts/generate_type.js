@@ -95,6 +95,7 @@ function generateStruct(name) {
         let trueRustType = isPrimitiveType ? rustPrimitiveType : toTrueTypeName(type);
         let isArray = name.includes('[');
         let isString = false;
+        let constantValue = 0;
 
         if (type === 'VkBool32') {
             trueRustType = 'bool';
@@ -108,8 +109,8 @@ function generateStruct(name) {
             const start = name.indexOf('[');
             const end = name.indexOf(']');
             const constantName = name.substring(start + 1, end);
-            const constantValue = isNaN(+constantName) ? findConstant(constantName) : constantName;
 
+            constantValue = isNaN(+constantName) ? findConstant(constantName) : constantName;
             name = name.substring(0, start);
             rawRustType = `[${rawRustType}; ${constantValue}]`;
 
@@ -127,25 +128,31 @@ function generateStruct(name) {
 
         const sourceField = `value.${rustName}`;
         let rawToTrueFieldConversion;
+        let trueToRawFieldConversion;
 
         if (isString) {
             usedTypes.add('std::string::String');
             usedTypes.add('std::ffi::CStr');
 
-            rawToTrueFieldConversion = `unsafe { String::from_utf8_unchecked((&value.device_name).to_vec().into_iter().filter(|x| *x != 0).collect()) }`
+            rawToTrueFieldConversion = `unsafe { String::from_utf8_unchecked((&value.device_name).to_vec().into_iter().filter(|x| *x != 0).collect()) }`;
+            trueToRawFieldConversion = `[0; ${constantValue}]`; // TODO: actually convert the string into [u8, N]
         } else if (rustPrimitiveType) {
             if (type === 'VkBool32') {
-                rawToTrueFieldConversion = `${sourceField} != 0`
+                rawToTrueFieldConversion = `${sourceField} != 0`;
+                trueToRawFieldConversion=  `if ${sourceField} { 1 } else { 0 }`;
             } else {
                 rawToTrueFieldConversion = sourceField;
+                trueToRawFieldConversion = sourceField;
             }
         } else {
             usedTypes.add(`${DST_DIR_NAME}::${cToRustVarName(trueRustType)}::*`);
 
             rawToTrueFieldConversion = `${trueRustType}::from(&${sourceField})`;
+            trueToRawFieldConversion = `${rawRustType}::from(&${sourceField})`;
         }
 
         fromRawToTrueLines.push(`${rustName}: ${rawToTrueFieldConversion}`);
+        fromTrueToRawLines.push(`${rustName}: ${trueToRawFieldConversion}`);
     });
 
     const useDelaractions = Array.from(usedTypes.values()).map(str => `use ${str};`).join('\n');
@@ -164,7 +171,7 @@ function generateStruct(name) {
         `}`
     ].join('\n');
 
-    const fromDefinition = [
+    const fromRawToTrueDefinition = [
         `impl<'a> From<&'a ${rawTypeName}> for ${trueTypeName} {`,
         `    fn from(value: &'a ${rawTypeName}) -> Self {`,
         `        ${trueTypeName} {`,
@@ -174,7 +181,17 @@ function generateStruct(name) {
         `}`
     ].join('\n');
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromDefinition]);
+    const fromTrueToRawDefinition = [
+        `impl<'a> From<&'a ${trueTypeName}> for ${rawTypeName} {`,
+        `    fn from(value: &'a ${trueTypeName}) -> Self {`,
+        `        ${rawTypeName} {`,
+        fromTrueToRawLines.map(line => `            ${line}`).join(',\n'),
+        `        }`,
+        `    }`,
+        `}`
+    ].join('\n');
+
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
 
     return true;
 }

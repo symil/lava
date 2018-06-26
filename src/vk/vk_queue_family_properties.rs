@@ -30,3 +30,14 @@ impl<'a> From<&'a RawVkQueueFamilyProperties> for VkQueueFamilyProperties {
         }
     }
 }
+
+impl<'a> From<&'a VkQueueFamilyProperties> for RawVkQueueFamilyProperties {
+    fn from(value: &'a VkQueueFamilyProperties) -> Self {
+        RawVkQueueFamilyProperties {
+            queue_flags: RawVkQueueFlags::from(&value.queue_flags),
+            queue_count: value.queue_count,
+            timestamp_valid_bits: value.timestamp_valid_bits,
+            min_image_transfer_granularity: RawVkExtent3D::from(&value.min_image_transfer_granularity)
+        }
+    }
+}

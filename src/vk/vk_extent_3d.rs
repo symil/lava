@@ -25,3 +25,13 @@ impl<'a> From<&'a RawVkExtent3D> for VkExtent3D {
         }
     }
 }
+
+impl<'a> From<&'a VkExtent3D> for RawVkExtent3D {
+    fn from(value: &'a VkExtent3D) -> Self {
+        RawVkExtent3D {
+            width: value.width,
+            height: value.height,
+            depth: value.depth
+        }
+    }
+}

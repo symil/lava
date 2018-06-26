@@ -6,4 +6,6 @@ extern {
     pub fn vkEnumeratePhysicalDevices(instance: VkHandler, count: *mut u32, ptr: *mut VkHandler);
     pub fn vkGetPhysicalDeviceProperties(physical_device: VkHandler, ptr: *mut RawVkPhysicalDeviceProperties);
     pub fn vkGetPhysicalDeviceQueueFamilyProperties(physical_device: VkHandler, count: *mut u32, ptr: *mut RawVkQueueFamilyProperties);
+    pub fn vkCreateDevice(physical_device: VkHandler, create_info: *const RawVkDeviceCreateInfo, allocator: *const VkAllocator, device: *mut VkHandler) -> VkResult;
+    pub fn vkDestroyDevice(device: VkHandler, allocator: *const VkAllocator);
 }

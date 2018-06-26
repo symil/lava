@@ -31,3 +31,15 @@ impl<'a> From<&'a RawVkPhysicalDeviceSparseProperties> for VkPhysicalDeviceSpars
         }
     }
 }
+
+impl<'a> From<&'a VkPhysicalDeviceSparseProperties> for RawVkPhysicalDeviceSparseProperties {
+    fn from(value: &'a VkPhysicalDeviceSparseProperties) -> Self {
+        RawVkPhysicalDeviceSparseProperties {
+            residency_standard2_dblock_shape: if value.residency_standard2_dblock_shape { 1 } else { 0 },
+            residency_standard2_dmultisample_block_shape: if value.residency_standard2_dmultisample_block_shape { 1 } else { 0 },
+            residency_standard3_dblock_shape: if value.residency_standard3_dblock_shape { 1 } else { 0 },
+            residency_aligned_mip_size: if value.residency_aligned_mip_size { 1 } else { 0 },
+            residency_non_resident_strict: if value.residency_non_resident_strict { 1 } else { 0 }
+        }
+    }
+}

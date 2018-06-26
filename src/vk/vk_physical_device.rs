@@ -3,13 +3,22 @@ use std::*;
 use vk::*;
 
 pub struct VkPhysicalDevice {
-    _handler: VkHandler
+    pub _handler: VkHandler
 }
 
 impl VkPhysicalDevice {
-    pub fn from_handler(handler: VkHandler) -> VkPhysicalDevice {
-        VkPhysicalDevice {
-            _handler: handler
+    pub fn get_list(instance: &VkInstance) -> Vec<VkPhysicalDevice> {
+        unsafe {
+            let mut count : u32 = 0;
+            let count_ptr = &mut count as *mut u32;
+            let mut handler_vec : Vec<VkHandler> = Vec::new();
+
+            vkEnumeratePhysicalDevices(instance._handler, count_ptr, ptr::null_mut());
+            handler_vec.reserve(count as usize);
+            handler_vec.set_len(count as usize);
+            vkEnumeratePhysicalDevices(instance._handler, count_ptr, handler_vec.as_mut_ptr());
+
+            handler_vec.into_iter().map(|handler| VkPhysicalDevice { _handler: handler }).collect()
         }
     }
 
@@ -39,9 +48,7 @@ impl VkPhysicalDevice {
         }
     }
 
-    // pub fn create_logical_device(&self) -> VkDevice {
-    //     unsafe {
-
-    //     }
-    // }
+    pub fn create_logical_device(&self, create_info: &VkDeviceCreateInfo) -> Result<VkDevice, VkResult> {
+        VkDevice::new(self, create_info)
+    }
 }

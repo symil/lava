@@ -1,4 +1,4 @@
-use utils::void;
+use libc::void;
 
 extern {
     pub fn malloc(size: usize) -> *mut void;
