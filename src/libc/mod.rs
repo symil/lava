@@ -1,7 +1,7 @@
 mod memory;
-mod bindings_libc;
+mod c_bindings;
 
-pub use self::bindings_libc::*;
+pub use self::c_bindings::*;
 pub use self::memory::*;
 
 #[allow(non_camel_case_types)]

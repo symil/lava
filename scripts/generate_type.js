@@ -9,8 +9,7 @@ const {
     DST_DIR_NAME,
     DST_DIR_PATH,
     VULKAN_H,
-    PRIMITIVE_TYPE,
-    ALL_GENERATED_TYPES
+    PRIMITIVE_TYPE
 } = require('./constants');
 
 const {
@@ -20,6 +19,28 @@ const {
     toRawTypeName,
     toTrueTypeName
 } = require('./utils');
+
+const ALL_GENERATED_TYPES = [
+    'VkDeviceQueueCreateFlags',
+    'VkExtent3D',
+    'VkPhysicalDeviceFeatures',
+    'VkPhysicalDeviceLimits',
+    'VkPhysicalDeviceProperties',
+    'VkPhysicalDeviceSparseProperties',
+    'VkPhysicalDeviceType',
+    'VkQueueFamilyProperties',
+    'VkQueueFlags',
+    'VkResult',
+    'VkStructureType',
+    'VkBufferCreateFlags',
+    'VkBufferUsageFlags',
+    'VkSharingMode',
+    'VkMemoryType',
+    'VkMemoryPropertyFlags',
+    'VkMemoryHeap',
+    'VkMemoryHeapFlags',
+    'VkPhysicalDeviceMemoryProperties'
+];
 
 main(ARGV);
 
