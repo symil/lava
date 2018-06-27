@@ -32,6 +32,16 @@ fn main() {
     let queue_family = &queue_families[0];
     let device = physical_device.create_logical_device(&Default::default()).expect("Unable to initialize VkDevice");
     let queue = device.get_queue(&queue_family, 0);
+    let buffer = device.create_buffer(&VkBufferCreateInfo {
+        size: 128,
+        flags: VkBufferCreateFlags::none(),
+        usage: VkBufferUsageFlags {
+            vertex_buffer: true,
+            ..VkBufferUsageFlags::none()
+        },
+        sharing_mode: VkSharingMode::Exclusive,
+        queue_families: Vec::new()
+    }).expect("Unable to create VkBuffer");
 
     println!("{:#?}", queue_family);
     display_properties(&properties);

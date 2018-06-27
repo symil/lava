@@ -76,6 +76,7 @@ function partialGenerateStruct(name) {
         'std::default::Default',
         'std::convert::From',
         'std::ops::Drop',
+        'std::ptr',
         'libc::*',
         'vk::*'
     ].map(str => `use ${str};`);
@@ -105,7 +106,9 @@ function partialGenerateStruct(name) {
         `impl<'a> From<&'a ${trueTypeName}> for ${rawTypeName} {`,
         `    fn from(v: &'a ${trueTypeName}) -> Self {`,
         `        unsafe {`,
-        ...fields.map(({type, name}) => `            ${name}: ${typeToDefaultValue(type, trueTypeName)},`),
+        `            ${rawTypeName} {`,
+        ...fields.map(({type, name}) => `                ${name}: ${typeToDefaultValue(type, trueTypeName)},`),
+        `            }`,
         `        }`,
         `    }`,
         `}`
@@ -113,20 +116,20 @@ function partialGenerateStruct(name) {
 
     const dropImpl = [
         `impl Drop for ${rawTypeName} {`,
-        `    fn drop(&mut self) -> Self {`,
+        `    fn drop(&mut self) {`,
         `        unsafe {`,
-        ...fields.filter(({type}) => type.includes('*mut')).map(({name, type}) => `            ${typeToFreeFunction(type)}(self.${name});`),
+        ...fields.filter(({type}) => type.includes('*mut')).map(({name, type}) => `            ${typeToFreeFunction(type, name)}(self.${name});`),
         `        }`,
         `    }`,
         `}`
-    ]
+    ];
 
     writeTemplate(name, [usages, rawDefinition, trueDefinition, defaultImpl, rawFromTrueImpl, dropImpl]);
 }
 
 function typeToDefaultValue(type, structName) {
     if (type === 'VkStructureType') {
-        return `VkStructureType::${structName}`;
+        return `VkStructureType::${structName.substr(2)}`;
     } else if (type.includes('*const')) {
         return 'ptr::null()';
     } else if (type.includes('*mut')) {
@@ -136,11 +139,13 @@ function typeToDefaultValue(type, structName) {
     }
 }
 
-function typeToFreeFunction(type) {
+function typeToFreeFunction(type, name) {
     if (type === '*mut *mut i8') {
         return 'free_c_string_array';
     } else if (type === '*mut i8') {
         return 'free_c_string';
+    } else if (name.endsWith('s')) {
+        return 'free_c_array';
     } else {
         return 'free_c_ptr';
     }

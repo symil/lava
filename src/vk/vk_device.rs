@@ -29,6 +29,10 @@ impl VkDevice {
     pub fn get_queue(&self, queue_family: &VkQueueFamilyProperties, queue_index: usize) -> VkQueue {
         VkQueue::from_device(self, queue_family, queue_index)
     }
+
+    pub fn create_buffer(&self, create_info: &VkBufferCreateInfo) -> Result<VkBuffer, VkResult> {
+        VkBuffer::new(self, create_info)
+    }
 }
 
 impl Drop for VkDevice {

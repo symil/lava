@@ -9,4 +9,6 @@ extern {
     pub fn vkCreateDevice(physical_device: VkHandler, create_info: *const RawVkDeviceCreateInfo, allocator: *const VkAllocator, device: *mut VkHandler) -> VkResult;
     pub fn vkDestroyDevice(device: VkHandler, allocator: *const VkAllocator);
     pub fn vkGetDeviceQueue(device: VkHandler, queue_family_index: u32, queue_index: u32, queue: *mut VkHandler);
+    pub fn vkCreateBuffer(device: VkHandler, create_info: *const RawVkBufferCreateInfo, allocator: *const VkAllocator, buffer: *mut VkHandler) -> VkResult;
+    pub fn vkDestroyBuffer(device: VkHandler, buffer: VkHandler, allocator: *const VkAllocator);
 }

@@ -3,6 +3,7 @@
 use std::default::Default;
 use std::convert::From;
 use std::ops::Drop;
+use std::ptr;
 use libc::*;
 use vk::*;
 
@@ -19,11 +20,21 @@ pub struct RawVkBufferCreateInfo {
 }
 
 pub struct VkBufferCreateInfo {
+    pub flags: VkBufferCreateFlags,
+    pub size: usize,
+    pub usage: VkBufferUsageFlags,
+    pub sharing_mode: VkSharingMode,
+    pub queue_families: Vec<usize>
 }
 
 impl Default for VkBufferCreateInfo {
     fn default() -> Self {
         VkBufferCreateInfo {
+            flags: VkBufferCreateFlags::none(),
+            size: 0,
+            usage: VkBufferUsageFlags::none(),
+            sharing_mode: VkSharingMode::Exclusive,
+            queue_families: Vec::new()
         }
     }
 }
@@ -31,22 +42,24 @@ impl Default for VkBufferCreateInfo {
 impl<'a> From<&'a VkBufferCreateInfo> for RawVkBufferCreateInfo {
     fn from(v: &'a VkBufferCreateInfo) -> Self {
         unsafe {
-            s_type: VkStructureType::VkBufferCreateInfo,
-            p_next: ptr::null(),
-            flags: 0,
-            size: 0,
-            usage: 0,
-            sharing_mode: 0,
-            queue_family_index_count: 0,
-            p_queue_family_indices: ptr::null_mut(),
+            RawVkBufferCreateInfo {
+                s_type: VkStructureType::BufferCreateInfo,
+                p_next: ptr::null(),
+                flags: From::from(&v.flags),
+                size: v.size as u64,
+                usage: From::from(&v.usage),
+                sharing_mode: From::from(&v.sharing_mode),
+                queue_family_index_count: v.queue_families.len() as u32,
+                p_queue_family_indices: copy_as_c_array(&v.queue_families.iter().map(|index| *index as u32).collect()),
+            }
         }
     }
 }
 
 impl Drop for RawVkBufferCreateInfo {
-    fn drop(&mut self) -> Self {
+    fn drop(&mut self) {
         unsafe {
-            free_c_ptr(self.p_queue_family_indices);
+            free_c_array(self.p_queue_family_indices);
         }
     }
 }
