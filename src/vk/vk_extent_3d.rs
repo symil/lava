@@ -3,6 +3,7 @@
 use std::convert::From;
 
 #[repr(C)]
+#[derive(Clone, Copy, Default)]
 pub struct RawVkExtent3D {
     width: u32,
     height: u32,

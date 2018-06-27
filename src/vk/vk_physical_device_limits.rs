@@ -3,6 +3,7 @@
 use std::convert::From;
 
 #[repr(C)]
+#[derive(Clone, Copy, Default)]
 pub struct RawVkPhysicalDeviceLimits {
     max_image_dimension_1d: u32,
     max_image_dimension_2d: u32,

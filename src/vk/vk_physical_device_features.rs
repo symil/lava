@@ -3,6 +3,7 @@
 use std::convert::From;
 
 #[repr(C)]
+#[derive(Clone, Copy, Default)]
 pub struct RawVkPhysicalDeviceFeatures {
     robust_buffer_access: u32,
     full_draw_index_uint32: u32,

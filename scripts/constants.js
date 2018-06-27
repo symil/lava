@@ -44,7 +44,7 @@ const ALL_GENERATED_TYPES = [
     'VkMemoryPropertyFlags',
     'VkMemoryHeap',
     'VkMemoryHeapFlags',
-    // 'VkPhysicalDeviceMemoryProperties'
+    'VkPhysicalDeviceMemoryProperties'
 ];
 
 module.exports = {

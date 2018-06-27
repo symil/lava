@@ -58,3 +58,14 @@ pub unsafe fn copy_as_c_array<T>(v: &Vec<T>) -> *mut T {
 pub unsafe fn free_c_array<T>(ptr: *mut T) {
     free(ptr as *mut void);
 }
+
+pub unsafe fn vec_from_c_ptr<T : Copy>(length: usize, ptr: *const T) -> Vec<T> {
+    let mut result : Vec<T> = Vec::with_capacity(length);
+    result.set_len(length);
+
+    for i in 0..length {
+        result[i] = *(ptr.offset(i as isize));
+    }
+
+    result
+}

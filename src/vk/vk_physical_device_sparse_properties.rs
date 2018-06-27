@@ -3,6 +3,7 @@
 use std::convert::From;
 
 #[repr(C)]
+#[derive(Clone, Copy, Default)]
 pub struct RawVkPhysicalDeviceSparseProperties {
     residency_standard2_dblock_shape: u32,
     residency_standard2_dmultisample_block_shape: u32,

@@ -66,14 +66,32 @@ function generateStruct(name) {
 
     usedTypes.add('std::convert::From');
 
-    match[1].split('\n').forEach(line => {
-        let [type, name] = line.split(' ').filter(x => x);
+    const fields = match[1].split('\n').map(line => {
+        const match = line.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;\s*$/);
+
+        if (!match) {
+            throw new Error(`unexpected line for struct ${name}: "${line}"`);
+        }
+
+        return {
+            type: match[1].trim(),
+            name: match[2],
+            arraySize: match[3]
+        };
+    });
+
+    const paramName = 'value';
+    let allowDefaultTraitOnRaw = true;
+
+    fields.forEach((field, index) => {
+        let {type, name, arraySize} = field;
         let rustPrimitiveType = getPrimitiveType(type);
         let isPrimitiveType = !!rustPrimitiveType;
         let rawRustType = isPrimitiveType ? rustPrimitiveType : toRawTypeName(type);
         let trueRustType = isPrimitiveType ? rustPrimitiveType : toTrueTypeName(type);
-        let originalRustType = trueRustType;
-        let isArray = name.includes('[');
+        let originalRawType = rawRustType;
+        let originalTrueType = trueRustType;
+        let isArray = !!arraySize;
         let isString = false;
         let constantValue = 0;
 
@@ -81,38 +99,40 @@ function generateStruct(name) {
             trueRustType = 'bool';
         }
 
-        name = name.substring(0, name.length - 1);
+        const prevField = fields[index - 1];
+        const nextField = fields[index + 1];
+        const isVecCount = areCountAndArray(field, nextField);
+        const isVec = areCountAndArray(prevField, field);
 
         if (isArray) {
             isString = type === 'char';
-
-            const start = name.indexOf('[');
-            const end = name.indexOf(']');
-            const constantName = name.substring(start + 1, end);
-
-            constantValue = isNaN(+constantName) ? findConstant(constantName) : constantName;
-            name = name.substring(0, start);
+            isArray = !isString;
+            constantValue = isNaN(+arraySize) ? findConstant(arraySize) : arraySize;
             rawRustType = `[${rawRustType}; ${constantValue}]`;
 
             if (isString) {
+                allowDefaultTraitOnRaw = false;
                 trueRustType = 'String';
+            } else if (isVec) {
+                trueRustType = `Vec<${trueRustType}>`;
             } else {
                 trueRustType = `[${trueRustType}; ${constantValue}]`;
             }
         }
 
-        // if (name.endsWith('Count') && trueRustType === 'u32') {
-        //     return;
-        // }
-
         let rustName = cToRustVarName(name);
 
         rawDefLines.push(`${rustName}: ${rawRustType}`);
-        trueDefLines.push(`pub ${rustName}: ${trueRustType}`);
 
-        const sourceField = `value.${rustName}`;
-        let rawToTrueFieldConversion;
-        let trueToRawFieldConversion;
+        if (!isVecCount) {
+            trueDefLines.push(`pub ${rustName}: ${trueRustType}`);
+        }
+
+        const sourceField = `${paramName}.${rustName}`;
+        const sourcePrevField = prevField && `${paramName}.${cToRustVarName(prevField.name)}`;
+        const sourceNextField = nextField && `${paramName}.${cToRustVarName(nextField.name)}`;
+        let rawToTrueFieldConversion = null
+        let trueToRawFieldConversion = null;
 
         if (isString) {
             usedTypes.add('std::string::String');
@@ -121,6 +141,15 @@ function generateStruct(name) {
 
             rawToTrueFieldConversion = `unsafe { String::from_utf8_unchecked(CStr::from_ptr(&${sourceField} as *const c_char).to_bytes().to_vec()) }`;
             trueToRawFieldConversion = `[0; ${constantValue}]`; // TODO: actually convert the string into [u8, N]
+        } else if (isVecCount) {
+            trueToRawFieldConversion = `${sourceNextField}.len() as u32`;
+        } else if (isVec) {
+            usedTypes.add('std::vec::Vec');
+            usedTypes.add('libc::vec_from_c_ptr');
+            usedTypes.add(`${DST_DIR_NAME}::*`);
+
+            rawToTrueFieldConversion = `unsafe { vec_from_c_ptr(${sourcePrevField} as usize, &${sourceField}[0] as *const ${originalRawType}).iter().map(|r| ${originalTrueType}::from(r)).collect() }`;
+            trueToRawFieldConversion = `[${isPrimitiveType ? '0' : 'Default::default()'}; ${constantValue}]`; // TODO
         } else if (rustPrimitiveType) {
             if (type === 'VkBool32') {
                 rawToTrueFieldConversion = `${sourceField} != 0`;
@@ -130,20 +159,26 @@ function generateStruct(name) {
                 trueToRawFieldConversion = sourceField;
             }
         } else {
-            usedTypes.add(`${DST_DIR_NAME}::${cToRustVarName(originalRustType)}::*`);
+            usedTypes.add(`${DST_DIR_NAME}::*`);
 
             rawToTrueFieldConversion = `${trueRustType}::from(&${sourceField})`;
             trueToRawFieldConversion = `${rawRustType}::from(&${sourceField})`;
         }
 
-        fromRawToTrueLines.push(`${rustName}: ${rawToTrueFieldConversion}`);
-        fromTrueToRawLines.push(`${rustName}: ${trueToRawFieldConversion}`);
+        if (rawToTrueFieldConversion) {
+            fromRawToTrueLines.push(`${rustName}: ${rawToTrueFieldConversion}`);
+        }
+
+        if (trueToRawFieldConversion) {
+            fromTrueToRawLines.push(`${rustName}: ${trueToRawFieldConversion}`);
+        }
     });
 
     const useDelaractions = Array.from(usedTypes.values()).map(str => `use ${str};`).join('\n');
 
     const rawDefinition = [
         `#[repr(C)]`,
+        `#[derive(Clone, Copy${allowDefaultTraitOnRaw ? ', Default' : ''})]`,
         `pub struct ${rawTypeName} {`,
         rawDefLines.map(line => `    ${line}`).join(',\n'),
         `}`
@@ -344,6 +379,10 @@ function generateBitFlags(name) {
     writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition, noneDefinition]);
 
     return true;
+}
+
+function areCountAndArray(field1, field2) {
+    return field1 && field2 && field1.name.endsWith('Count') && field1.name.substring(0, field1.name.length - 'Count'.length) + 's' === field2.name;
 }
 
 function strip(str, prefix, suffix) {
