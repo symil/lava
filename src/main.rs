@@ -31,7 +31,7 @@ fn main() {
     let queue_families = physical_device.get_queue_families();
     let queue_family = &queue_families[0];
     let device = physical_device.create_logical_device(&Default::default()).expect("Unable to initialize VkDevice");
-    let queue = device.get_queue(&queue_family, 0);
+    let queue = device.get_queue(0, 0);
     let buffer = device.create_buffer(&VkBufferCreateInfo {
         size: 128,
         flags: VkBufferCreateFlags::none(),

@@ -39,7 +39,12 @@ const ALL_GENERATED_TYPES = [
     'VkStructureType',
     'VkBufferCreateFlags',
     'VkBufferUsageFlags',
-    'VkSharingMode'
+    'VkSharingMode',
+    'VkMemoryType',
+    'VkMemoryPropertyFlags',
+    'VkMemoryHeap',
+    'VkMemoryHeapFlags',
+    // 'VkPhysicalDeviceMemoryProperties'
 ];
 
 module.exports = {

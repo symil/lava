@@ -219,8 +219,7 @@ pub struct VkPhysicalDeviceLimits {
     pub standard_sample_locations: bool,
     pub optimal_buffer_copy_offset_alignment: u64,
     pub optimal_buffer_copy_row_pitch_alignment: u64,
-    pub non_coherent_atom_size: u64,
-    pub _index: usize,
+    pub non_coherent_atom_size: u64
 }
 
 impl<'a> From<&'a RawVkPhysicalDeviceLimits> for VkPhysicalDeviceLimits {
@@ -331,8 +330,7 @@ impl<'a> From<&'a RawVkPhysicalDeviceLimits> for VkPhysicalDeviceLimits {
             standard_sample_locations: value.standard_sample_locations != 0,
             optimal_buffer_copy_offset_alignment: value.optimal_buffer_copy_offset_alignment,
             optimal_buffer_copy_row_pitch_alignment: value.optimal_buffer_copy_row_pitch_alignment,
-            non_coherent_atom_size: value.non_coherent_atom_size,
-            _index: 0,
+            non_coherent_atom_size: value.non_coherent_atom_size
         }
     }
 }

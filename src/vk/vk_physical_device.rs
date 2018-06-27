@@ -46,12 +46,7 @@ impl VkPhysicalDevice {
             queue_family_vec.set_len(count as usize);
             vkGetPhysicalDeviceQueueFamilyProperties(self._handler, count_ptr, queue_family_vec.as_mut_ptr());
 
-            queue_family_vec.iter().enumerate().map(|(index, raw_properties)| {
-                let mut queue_family = VkQueueFamilyProperties::from(raw_properties);
-                queue_family._index = index;
-
-                queue_family
-            }).collect()
+            queue_family_vec.iter().enumerate().map(|(index, raw_properties)| VkQueueFamilyProperties::from(raw_properties)).collect()
         }
     }
 

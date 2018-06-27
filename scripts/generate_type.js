@@ -72,6 +72,7 @@ function generateStruct(name) {
         let isPrimitiveType = !!rustPrimitiveType;
         let rawRustType = isPrimitiveType ? rustPrimitiveType : toRawTypeName(type);
         let trueRustType = isPrimitiveType ? rustPrimitiveType : toTrueTypeName(type);
+        let originalRustType = trueRustType;
         let isArray = name.includes('[');
         let isString = false;
         let constantValue = 0;
@@ -100,6 +101,10 @@ function generateStruct(name) {
             }
         }
 
+        // if (name.endsWith('Count') && trueRustType === 'u32') {
+        //     return;
+        // }
+
         let rustName = cToRustVarName(name);
 
         rawDefLines.push(`${rustName}: ${rawRustType}`);
@@ -125,7 +130,7 @@ function generateStruct(name) {
                 trueToRawFieldConversion = sourceField;
             }
         } else {
-            usedTypes.add(`${DST_DIR_NAME}::${cToRustVarName(trueRustType)}::*`);
+            usedTypes.add(`${DST_DIR_NAME}::${cToRustVarName(originalRustType)}::*`);
 
             rawToTrueFieldConversion = `${trueRustType}::from(&${sourceField})`;
             trueToRawFieldConversion = `${rawRustType}::from(&${sourceField})`;
@@ -149,8 +154,7 @@ function generateStruct(name) {
     const trueDefinition = [
         `#[derive(Debug${hasDefaultTrait ? ', Default' : ''})]`,
         `pub struct ${trueTypeName} {`,
-        trueDefLines.map(line => `    ${line},`).join('\n'),
-        `    pub _index: usize,`,
+        trueDefLines.map(line => `    ${line}`).join(',\n'),
         `}`
     ].join('\n');
 
@@ -158,8 +162,7 @@ function generateStruct(name) {
         `impl<'a> From<&'a ${rawTypeName}> for ${trueTypeName} {`,
         `    fn from(value: &'a ${rawTypeName}) -> Self {`,
         `        ${trueTypeName} {`,
-        fromRawToTrueLines.map(line => `            ${line},`).join('\n'),
-        `            _index: 0,`,
+        fromRawToTrueLines.map(line => `            ${line}`).join(',\n'),
         `        }`,
         `    }`,
         `}`
@@ -285,7 +288,7 @@ function generateBitFlags(name) {
     const suffix = '_BIT';
 
     const fields = match[1].split('\n').map(line => {
-        const match = line.match(/^\s*([A-Z_]+)\s*=\s*(0x[\dA-F]{8}),?\s*$/);
+        const match = line.match(/^\s*([A-Z_]+)\s*=\s*(0x[\dA-F]{8})|([A-Z_]+),?\s*$/);
 
         if (!match) {
             throw new Error(`for enum ${name}: unexpected field "${line}"`);
@@ -293,9 +296,9 @@ function generateBitFlags(name) {
 
         return {
             name: match[1],
-            value: match[2]
+            value: match[2] || match[3]
         };
-    }).filter(({value}) => value !== '0x7FFFFFFF');
+    }).filter(({value}) => value !== '0x7FFFFFFF' && value.startsWith('0x'));
 
     fields.forEach(field => field.rustName = cToRustVarName(strip(field.name, prefix, suffix)));
 

@@ -13,8 +13,7 @@ pub struct RawVkExtent3D {
 pub struct VkExtent3D {
     pub width: u32,
     pub height: u32,
-    pub depth: u32,
-    pub _index: usize,
+    pub depth: u32
 }
 
 impl<'a> From<&'a RawVkExtent3D> for VkExtent3D {
@@ -22,8 +21,7 @@ impl<'a> From<&'a RawVkExtent3D> for VkExtent3D {
         VkExtent3D {
             width: value.width,
             height: value.height,
-            depth: value.depth,
-            _index: 0,
+            depth: value.depth
         }
     }
 }

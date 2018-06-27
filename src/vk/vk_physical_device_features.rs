@@ -117,8 +117,7 @@ pub struct VkPhysicalDeviceFeatures {
     pub sparse_residency16_samples: bool,
     pub sparse_residency_aliased: bool,
     pub variable_multisample_rate: bool,
-    pub inherited_queries: bool,
-    pub _index: usize,
+    pub inherited_queries: bool
 }
 
 impl<'a> From<&'a RawVkPhysicalDeviceFeatures> for VkPhysicalDeviceFeatures {
@@ -178,8 +177,7 @@ impl<'a> From<&'a RawVkPhysicalDeviceFeatures> for VkPhysicalDeviceFeatures {
             sparse_residency16_samples: value.sparse_residency16_samples != 0,
             sparse_residency_aliased: value.sparse_residency_aliased != 0,
             variable_multisample_rate: value.variable_multisample_rate != 0,
-            inherited_queries: value.inherited_queries != 0,
-            _index: 0,
+            inherited_queries: value.inherited_queries != 0
         }
     }
 }

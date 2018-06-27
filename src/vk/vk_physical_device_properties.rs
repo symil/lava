@@ -31,8 +31,7 @@ pub struct VkPhysicalDeviceProperties {
     pub device_name: String,
     pub pipeline_cache_uuid: [u8; 16],
     pub limits: VkPhysicalDeviceLimits,
-    pub sparse_properties: VkPhysicalDeviceSparseProperties,
-    pub _index: usize,
+    pub sparse_properties: VkPhysicalDeviceSparseProperties
 }
 
 impl<'a> From<&'a RawVkPhysicalDeviceProperties> for VkPhysicalDeviceProperties {
@@ -46,8 +45,7 @@ impl<'a> From<&'a RawVkPhysicalDeviceProperties> for VkPhysicalDeviceProperties 
             device_name: unsafe { String::from_utf8_unchecked(CStr::from_ptr(&value.device_name as *const c_char).to_bytes().to_vec()) },
             pipeline_cache_uuid: value.pipeline_cache_uuid,
             limits: VkPhysicalDeviceLimits::from(&value.limits),
-            sparse_properties: VkPhysicalDeviceSparseProperties::from(&value.sparse_properties),
-            _index: 0,
+            sparse_properties: VkPhysicalDeviceSparseProperties::from(&value.sparse_properties)
         }
     }
 }
