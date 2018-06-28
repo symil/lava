@@ -13,6 +13,9 @@ use vk::*;
 mod libc;
 use libc::*;
 
+mod wrapper;
+use wrapper::*;
+
 fn display_properties(value: &VkPhysicalDeviceProperties) {
     println!("API version   : {:#?}", value.api_version);
     println!("Driver version: {:#?}", value.driver_version);
@@ -23,7 +26,7 @@ fn display_properties(value: &VkPhysicalDeviceProperties) {
 }
 
 fn main() {
-    let instance = VkInstance::create(&Default::default()).unwrap();
+    let instance = Instance::create(&Default::default()).unwrap();
     let physical_devices = instance.get_physical_devices();
     let physical_device = &physical_devices[0];
     

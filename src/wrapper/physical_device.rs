@@ -1,24 +1,25 @@
 use std::vec::Vec;
 use std::*;
 use vk::*;
+use wrapper::*;
 
-pub struct VkPhysicalDevice {
-    pub _handler: VkHandler
+pub struct PhysicalDevice {
+    _handler: VkPhysicalDevice
 }
 
-impl VkPhysicalDevice {
-    pub fn get_list(instance: &VkInstance) -> Vec<VkPhysicalDevice> {
+impl PhysicalDevice {
+    pub fn get_list(instance: VkInstance) -> Vec<Self> {
         unsafe {
             let mut count : u32 = 0;
             let count_ptr = &mut count as *mut u32;
-            let mut handler_vec : Vec<VkHandler> = Vec::new();
+            let mut handler_vec : Vec<VkPhysicalDevice> = Vec::new();
 
-            vkEnumeratePhysicalDevices(instance._handler, count_ptr, ptr::null_mut());
+            vkEnumeratePhysicalDevices(instance, count_ptr, ptr::null_mut());
             handler_vec.reserve(count as usize);
             handler_vec.set_len(count as usize);
-            vkEnumeratePhysicalDevices(instance._handler, count_ptr, handler_vec.as_mut_ptr());
+            vkEnumeratePhysicalDevices(instance, count_ptr, handler_vec.as_mut_ptr());
 
-            handler_vec.into_iter().map(|handler| VkPhysicalDevice { _handler: handler }).collect()
+            handler_vec.into_iter().map(|handler| PhysicalDevice { _handler: handler }).collect()
         }
     }
 
@@ -50,7 +51,7 @@ impl VkPhysicalDevice {
         }
     }
 
-    pub fn create_logical_device(&self, create_info: &VkDeviceCreateInfo) -> Result<VkDevice, VkResult> {
-        VkDevice::new(self, create_info)
+    pub fn create_logical_device(&self, create_info: &VkDeviceCreateInfo) -> Result<Device, VkResult> {
+        Device::new(self._handler, create_info)
     }
 }
