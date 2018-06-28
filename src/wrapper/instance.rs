@@ -17,7 +17,7 @@ impl Instance {
         unsafe {
             let raw_instance_create_info = RawVkInstanceCreateInfo::from(create_info);
             let mut handler : VkInstance = 0;
-            let handler_ptr = &mut handler as *mut VkHandler;
+            let handler_ptr = &mut handler as *mut VkHandle;
             let create_info_ptr = &raw_instance_create_info as *const RawVkInstanceCreateInfo;
 
             let result = vkCreateInstance(create_info_ptr, VkAllocator::null(), handler_ptr);
