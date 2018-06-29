@@ -39,4 +39,14 @@ impl VkQueueFlags {
     pub fn none() -> Self {
         VkQueueFlags::default()
     }
+
+    pub fn all() -> Self {
+        VkQueueFlags {
+            graphics: true,
+            compute: true,
+            transfer: true,
+            sparse_binding: true,
+            protected: true
+        }
+    }
 }

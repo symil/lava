@@ -30,4 +30,11 @@ impl VkMemoryHeapFlags {
     pub fn none() -> Self {
         VkMemoryHeapFlags::default()
     }
+
+    pub fn all() -> Self {
+        VkMemoryHeapFlags {
+            device_local: true,
+            multi_instance: true
+        }
+    }
 }

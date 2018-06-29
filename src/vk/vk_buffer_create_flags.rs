@@ -36,4 +36,13 @@ impl VkBufferCreateFlags {
     pub fn none() -> Self {
         VkBufferCreateFlags::default()
     }
+
+    pub fn all() -> Self {
+        VkBufferCreateFlags {
+            sparse_binding: true,
+            sparse_residency: true,
+            sparse_aliased: true,
+            protected: true
+        }
+    }
 }

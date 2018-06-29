@@ -389,15 +389,21 @@ function generateBitFlags(name) {
         `}`
     ].join('\n');
 
-    const noneDefinition = [
+    const noneAndAllDefinition = [
         `impl ${trueTypeName} {`,
         `    pub fn none() -> Self {`,
         `        ${trueTypeName}::default()`,
         `    }`,
+        ``,
+        `    pub fn all() -> Self {`,
+        `        ${trueTypeName} {`,
+        fields.map(field => `            ${field.rustName}: true`).join(',\n'),
+        `        }`,
+        `    }`,
         `}`
     ].join('\n');
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition, noneDefinition]);
+    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition, noneAndAllDefinition]);
 
     return true;
 }

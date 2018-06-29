@@ -42,4 +42,15 @@ impl VkMemoryPropertyFlags {
     pub fn none() -> Self {
         VkMemoryPropertyFlags::default()
     }
+
+    pub fn all() -> Self {
+        VkMemoryPropertyFlags {
+            device_local: true,
+            host_visible: true,
+            host_coherent: true,
+            host_cached: true,
+            lazily_allocated: true,
+            protected: true
+        }
+    }
 }

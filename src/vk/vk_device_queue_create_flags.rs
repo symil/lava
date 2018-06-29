@@ -27,4 +27,10 @@ impl VkDeviceQueueCreateFlags {
     pub fn none() -> Self {
         VkDeviceQueueCreateFlags::default()
     }
+
+    pub fn all() -> Self {
+        VkDeviceQueueCreateFlags {
+            protected: true
+        }
+    }
 }

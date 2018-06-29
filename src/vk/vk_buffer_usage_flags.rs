@@ -51,4 +51,18 @@ impl VkBufferUsageFlags {
     pub fn none() -> Self {
         VkBufferUsageFlags::default()
     }
+
+    pub fn all() -> Self {
+        VkBufferUsageFlags {
+            transfer_src: true,
+            transfer_dst: true,
+            uniform_texel_buffer: true,
+            storage_texel_buffer: true,
+            uniform_buffer: true,
+            storage_buffer: true,
+            index_buffer: true,
+            vertex_buffer: true,
+            indirect_buffer: true
+        }
+    }
 }
