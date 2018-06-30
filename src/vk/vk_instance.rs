@@ -13,49 +13,45 @@ pub struct VkInstance {
 }
 
 impl VkInstance {
+    pub fn handle(&self) -> RawVkInstance {
+        self._handle
+    }
+
     pub fn create(create_info: &VkInstanceCreateInfo) -> Result<Self, VkResult> {
         unsafe {
             let raw_instance_create_info = RawVkInstanceCreateInfo::from(create_info);
-            let mut handler : RawVkInstance = 0;
-            let handler_ptr = &mut handler as *mut RawVkInstance;
-            let create_info_ptr = &raw_instance_create_info as *const RawVkInstanceCreateInfo;
-
-            let result = vkCreateInstance(create_info_ptr, VkAllocator::null(), handler_ptr);
-
-            match result {
-                VkResult::Success => Ok(VkInstance { _handle: handler }),
-                _ => Err(result)
-            }
+            let raw_create_info_ptr = &raw_instance_create_info as *const RawVkInstanceCreateInfo;
+            vk_call_retrieve_single(|ptr| vkCreateInstance(raw_create_info_ptr, VkAllocator::null(), ptr), |x| {})
         }
     }
 
-    pub fn get_supported_extensions(&self) -> Vec<VkExtensionProperties> {
+    pub fn get_supported_extensions(&self) -> Result<Vec<VkExtensionProperties>, VkResult> {
         unsafe {
-            let mut count : u32 = 0;
-            let mut vector : Vec<RawVkExtensionProperties> = Vec::new();
-
-            vkEnumerateInstanceExtensionProperties(ptr::null(), &mut count as *mut u32, ptr::null_mut());
-            vector.reserve(count as usize);
-            vector.set_len(count as usize);
-            vkEnumerateInstanceExtensionProperties(ptr::null(), &mut count as *mut u32, vector.as_mut_ptr());
-
-            vector.iter().map(|raw| From::from(raw)).collect()
+            vk_call_retrieve_list(|count, ptr| vkEnumerateInstanceExtensionProperties(ptr::null(), count, ptr))
         }
     }
 
     pub fn get_physical_devices(&self) -> Result<Vec<VkPhysicalDevice>, VkResult> {
-        VkPhysicalDevice::get_list(self._handle)
+        VkPhysicalDevice::get_list(self)
     }
 
-    pub fn create_surface_from_glfw(&self, window: *mut RawGlfwWindow) -> Result<VkSurface, VkResult> {
-        VkSurface::from_glfw(self._handle, window)
+    pub fn create_surface_from_glfw(&self, window: &GlfwWindow) -> Result<VkSurface, VkResult> {
+        VkSurface::from_glfw(self, window)
     }
 }
 
-impl ops::Drop for VkInstance {
+impl Drop for VkInstance {
     fn drop(&mut self) {
         unsafe {
             vkDestroyInstance(self._handle, VkAllocator::null());
+        }
+    }
+}
+
+impl<'a> From<&'a RawVkInstance> for VkInstance {
+    fn from(raw: &'a RawVkInstance) -> Self {
+        Self {
+            _handle: *raw
         }
     }
 }

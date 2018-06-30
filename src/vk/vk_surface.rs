@@ -8,19 +8,12 @@ pub struct VkSurface {
 }
 
 impl VkSurface {
-    pub fn from_glfw(vk_instance: RawVkInstance, window: *mut RawGlfwWindow) -> Result<Self, VkResult> {
+    pub fn from_glfw(vk_instance: &VkInstance, window: &GlfwWindow) -> Result<Self, VkResult> {
         unsafe {
-            let mut handle : RawVkSurface = 0;
-            let ptr = &mut handle as *mut RawVkSurface;
-            let result = glfwCreateWindowSurface(vk_instance, window, VkAllocator::null(), ptr);
-
-            match result {
-                VkResult::Success => Ok(VkSurface {
-                    _handle: handle,
-                    _instance: vk_instance
-                }),
-                _ => Err(result)
-            }
+            vk_call_retrieve_single(
+                |ptr| glfwCreateWindowSurface(vk_instance.handle(), window.handle(), VkAllocator::null(), ptr),
+                |surface: &mut VkSurface| surface._instance = vk_instance.handle()
+            )
         }
     }
 
@@ -33,6 +26,15 @@ impl Drop for VkSurface {
     fn drop(&mut self) {
         unsafe {
             vkDestroySurfaceKHR(self._instance, self._handle, VkAllocator::null());
+        }
+    }
+}
+
+impl<'a> From<&'a RawVkInstance> for VkSurface {
+    fn from(raw: &'a RawVkInstance) -> Self {
+        Self {
+            _handle: *raw,
+            _instance: VK_NULL_HANDLE
         }
     }
 }

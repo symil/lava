@@ -25,19 +25,19 @@ impl VkSwapchain {
     }
 }
 
-impl<'a> From<&'a RawVkSwapchain> for VkSwapchain {
-    fn from(raw: &'a RawVkSwapchain) -> Self {
-        VkSwapchain {
-            _handle: *raw,
-            _device: VK_NULL_HANDLE
-        }
-    }
-}
-
 impl Drop for VkSwapchain {
     fn drop(&mut self) {
         unsafe {
             vkDestroySwapchainKHR(self._device, self._handle, VkAllocator::null());
+        }
+    }
+}
+
+impl<'a> From<&'a RawVkSwapchain> for VkSwapchain {
+    fn from(raw: &'a RawVkSwapchain) -> Self {
+        Self {
+            _handle: *raw,
+            _device: VK_NULL_HANDLE
         }
     }
 }

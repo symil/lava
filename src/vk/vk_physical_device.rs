@@ -7,18 +7,14 @@ pub struct VkPhysicalDevice {
     _handle: RawVkPhysicalDevice
 }
 
-impl<'a> From<&'a RawVkPhysicalDevice> for VkPhysicalDevice {
-    fn from(raw: &'a RawVkPhysicalDevice) -> Self {
-        VkPhysicalDevice {
-            _handle: *raw
-        }
-    }
-}
-
 impl VkPhysicalDevice {
-    pub fn get_list(instance: RawVkInstance) -> Result<Vec<Self>, VkResult> {
+    pub fn handle(&self) -> RawVkPhysicalDevice {
+        self._handle
+    }
+
+    pub fn get_list(instance: &VkInstance) -> Result<Vec<Self>, VkResult> {
         unsafe {
-            vk_call_retrieve_list(|count, ptr| vkEnumeratePhysicalDevices(instance, count, ptr))
+            vk_call_retrieve_list(|count, ptr| vkEnumeratePhysicalDevices(instance.handle(), count, ptr))
         }
     }
 
@@ -71,6 +67,14 @@ impl VkPhysicalDevice {
     }
 
     pub fn create_logical_device(&self, create_info: &VkDeviceCreateInfo) -> Result<VkDevice, VkResult> {
-        VkDevice::new(self._handle, create_info)
+        VkDevice::new(self, create_info)
+    }
+}
+
+impl<'a> From<&'a RawVkPhysicalDevice> for VkPhysicalDevice {
+    fn from(raw: &'a RawVkPhysicalDevice) -> Self {
+        Self {
+            _handle: *raw
+        }
     }
 }

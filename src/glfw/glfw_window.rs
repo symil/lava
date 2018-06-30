@@ -31,7 +31,7 @@ impl GlfwWindow {
         }
     }
 
-    pub fn as_raw(&self) -> *mut RawGlfwWindow {
+    pub fn handle(&self) -> *mut RawGlfwWindow {
         self._window
     }
 }

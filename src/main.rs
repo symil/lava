@@ -38,7 +38,7 @@ fn main() {
         enabled_extensions: required_extensions
     }).expect("Failed to create VkInstance");
 
-    let surface = instance.create_surface_from_glfw(window.as_raw()).expect("Failed to create VkSurface");
+    let surface = instance.create_surface_from_glfw(&window).expect("Failed to create VkSurface");
 
     let physical_devices = instance.get_physical_devices().expect("Failed to retrieve physical devices");
     let physical_device = &physical_devices[0];
@@ -57,7 +57,7 @@ fn main() {
     }).expect("Failed to create Buffer");
 
     let is_surface_supported = physical_device.does_support_surface(0, &surface).unwrap();
-    let instance_supported_extensions : Vec<String> = instance.get_supported_extensions().into_iter().map(|ext| ext.extension_name).collect();
+    let instance_supported_extensions : Vec<String> = instance.get_supported_extensions().unwrap().into_iter().map(|ext| ext.extension_name).collect();
     let device_supported_extensions : Vec<String> = physical_device.get_supported_extensions().expect("Failed to retrieve device extensions").into_iter().map(|ext| ext.extension_name).collect();
     let capabilities = physical_device.get_surface_capabilities(&surface).expect("Failed to retrieve surface capabilities");
     let surface_present_modes = physical_device.get_surface_present_modes(&surface).expect("Failed to retrieve present modes");
