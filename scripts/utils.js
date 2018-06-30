@@ -17,11 +17,17 @@ function cToRustEnumValue(name) {
 }
 
 function toRawTypeName(name) {
-    return `Raw${name}`;
+    return `Raw${formatVkTypeName(name)}`;
 }
 
 function toTrueTypeName(name) {
-    return name;
+    return formatVkTypeName(name);
+}
+
+function formatVkTypeName(name) {
+    return name
+        .replace(/KHR$/, '')
+        .replace(/FlagBits$/, 'Flags');
 }
 
 module.exports = {
@@ -29,5 +35,6 @@ module.exports = {
     capitalizeVarName,
     cToRustEnumValue,
     toRawTypeName,
-    toTrueTypeName
+    toTrueTypeName,
+    formatVkTypeName
 };

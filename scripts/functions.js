@@ -15,7 +15,8 @@ const {
     capitalizeVarName,
     cToRustEnumValue,
     toRawTypeName,
-    toTrueTypeName
+    toTrueTypeName,
+    formatVkTypeName
 } = require('./utils');
 
 const FILE_NAME = 'c_bindings';
@@ -24,6 +25,8 @@ const FUNCTIONS_TO_GENERATE = [
     'vkCreateInstance',
     'vkDestroyInstance',
     'vkEnumeratePhysicalDevices',
+    'vkEnumerateInstanceExtensionProperties',
+    'vkGetPhysicalDeviceFeatures',
     'vkGetPhysicalDeviceProperties',
     'vkGetPhysicalDeviceQueueFamilyProperties',
     'vkCreateDevice',
@@ -32,7 +35,8 @@ const FUNCTIONS_TO_GENERATE = [
     'vkCreateBuffer',
     'vkDestroyBuffer',
     'vkGetPhysicalDeviceSurfaceSupportKHR',
-    'vkDestroySurfaceKHR'
+    'vkDestroySurfaceKHR',
+    'vkEnumerateDeviceExtensionProperties'
 ];
 
 main();
@@ -79,10 +83,14 @@ function getRustType(type) {
     } else if (type.endsWith('*')) {
         const isConst = type.startsWith('const ');
         const typeName = type.substring(isConst ? 'count '.length : 0, type.length - 1)
-        const targetTypeName = PRIMITIVE_TYPE[typeName] || `Raw${typeName}`;
+        const targetTypeName = getRustTypeName(typeName);
 
         return `*${isConst ? 'const' : 'mut'} ${targetTypeName}`;
     } else {
-        return PRIMITIVE_TYPE[type] || `Raw${type}`;
+        return getRustTypeName(type);
     }
+}
+
+function getRustTypeName(type) {
+    return PRIMITIVE_TYPE[type] || `Raw${formatVkTypeName(type)}`;
 }

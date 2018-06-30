@@ -14,7 +14,8 @@ const {
     capitalizeVarName,
     cToRustEnumValue,
     toRawTypeName,
-    toTrueTypeName
+    toTrueTypeName,
+    formatVkTypeName
 } = require('./utils');
 
 main();
@@ -29,7 +30,7 @@ function writeHandles() {
 
     const fileContent = [
         'use vk::VkHandle;',
-        handlers.map(type => `pub type Raw${type} = VkHandle;`).join('\n')
+        handlers.map(type => `pub type Raw${formatVkTypeName(type)} = VkHandle;`).join('\n')
     ].join('\n\n');
     const filePath = path.join(DST_DIR_PATH, 'vk_handles.rs');
 

@@ -38,9 +38,8 @@ fn main() {
     let surface = instance.create_surface_from_glfw(window.as_raw()).expect("Failed to create VkSurface");
 
     let physical_devices = instance.get_physical_devices();
-
     let physical_device = &physical_devices[0];
-    
+    let features = physical_device.get_features();
     let properties = physical_device.get_properties();
     let queue_families = physical_device.get_queue_families();
     let queue_family = &queue_families[0];
@@ -54,8 +53,17 @@ fn main() {
         queue_families: Vec::new()
     }).expect("Unable to create Buffer");
 
-    println!("{:#?}", queue_family);
-    display_properties(&properties);
+    let is_surface_supported = physical_device.does_support_surface(0, &surface).unwrap();
+    let instance_supported_extensions : Vec<String> = instance.get_supported_extensions().into_iter().map(|ext| ext.extension_name).collect();
+    let device_supported_extensions : Vec<String> = physical_device.get_supported_extensions().into_iter().map(|ext| ext.extension_name).collect();
+
+    // println!("Surface supported: {}", is_surface_supported);
+    // println!("Extensions supported: {:#?}", available_extensions);
+    println!("Extensions supported by device: {:#?}", device_supported_extensions);
+    // println!("{:#?}", features);
+    // println!("{:#?}", queue_family);
+    // println!("{:#?}", properties);
+    // display_properties(&properties);
 
 
     window.start_loop();

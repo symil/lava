@@ -29,6 +29,20 @@ impl VkInstance {
         }
     }
 
+    pub fn get_supported_extensions(&self) -> Vec<VkExtensionProperties> {
+        unsafe {
+            let mut count : u32 = 0;
+            let mut vector : Vec<RawVkExtensionProperties> = Vec::new();
+
+            vkEnumerateInstanceExtensionProperties(ptr::null(), &mut count as *mut u32, ptr::null_mut());
+            vector.reserve(count as usize);
+            vector.set_len(count as usize);
+            vkEnumerateInstanceExtensionProperties(ptr::null(), &mut count as *mut u32, vector.as_mut_ptr());
+
+            vector.iter().map(|raw| From::from(raw)).collect()
+        }
+    }
+
     pub fn get_physical_devices(&self) -> Vec<VkPhysicalDevice> {
         VkPhysicalDevice::get_list(self._handle)
     }
