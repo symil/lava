@@ -13,9 +13,6 @@ use vk::*;
 mod libc;
 use libc::*;
 
-mod wrapper;
-use wrapper::*;
-
 mod glfw;
 use glfw::*;
 
@@ -29,7 +26,7 @@ fn display_properties(value: &VkPhysicalDeviceProperties) {
 }
 
 fn main() {
-    // let instance = Instance::create(&Default::default()).unwrap();
+    // let instance = VkInstance::create(&Default::default()).unwrap();
     // let physical_devices = instance.get_physical_devices();
     // let physical_device = &physical_devices[0];
     
@@ -49,23 +46,10 @@ fn main() {
     // println!("{:#?}", queue_family);
     // display_properties(&properties);
 
-    unsafe {
-        glfwInit();
+    let glfw = GlfwInstance::new();
+    let window = glfw.create_window(800, 600, "Vulkan");
 
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-        let title = CString::new("Vulkan").unwrap();
-        let window = glfwCreateWindow(800, 600, title.as_ptr(), ptr::null_mut(), ptr::null_mut());
-
-        while glfwWindowShouldClose(window) == 0 {
-            glfwPollEvents();
-        }
-
-        glfwDestroyWindow(window);
-        glfwTerminate();
-    }
-
+    window.start_loop();
 
     println!("Bye!");
 }

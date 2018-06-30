@@ -29,10 +29,9 @@ function writeHandles() {
 
     const fileContent = [
         'use vk::VkHandle;',
-        handlers.map(type => `pub type Raw${type} = VkHandle;`).join('\n'),
-        handlers.map(type => `pub type ${type} = VkHandle;`).join('\n')
+        handlers.map(type => `pub type Raw${type} = VkHandle;`).join('\n')
     ].join('\n\n');
-    const filePath = path.join(DST_DIR_PATH, 'vk_handlers.rs');
+    const filePath = path.join(DST_DIR_PATH, 'vk_handles.rs');
 
     fs.writeFileSync(filePath, fileContent, 'utf8');
 }

@@ -3,11 +3,11 @@ use std::ffi::*;
 use std::*;
 use glfw::*;
 
-pub struct Window {
-    _window: *mut GlfwWindow
+pub struct GlfwWindow {
+    _window: *mut RawGlfwWindow
 }
 
-impl Window {
+impl GlfwWindow {
     pub fn new(width: u32, height: u32, title: &str) -> Self {
         unsafe {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -16,14 +16,22 @@ impl Window {
             let c_string = CString::new(title).unwrap();
             let window = glfwCreateWindow(width as i32, height as i32, c_string.as_ptr(), ptr::null_mut(), ptr::null_mut());
 
-            Window {
+            GlfwWindow {
                 _window: window
+            }
+        }
+    }
+
+    pub fn start_loop(&self) {
+        unsafe {
+            while glfwWindowShouldClose(self._window) == 0 {
+                glfwPollEvents();
             }
         }
     }
 }
 
-impl Drop for Window {
+impl Drop for GlfwWindow {
     fn drop(&mut self) {
         unsafe {
             glfwDestroyWindow(self._window);

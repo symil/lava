@@ -1,16 +1,16 @@
 use os::raw::c_char;
 use libc::void;
 
-pub type GlfwMonitor = void;
-pub type GlfwWindow = void;
+pub type RawGlfwMonitor = void;
+pub type RawGlfwWindow = void;
 
 extern {
     pub fn glfwInit();
     pub fn glfwTerminate();
-    pub fn glfwCreateWindow(width: i32, height: i32, title: *const c_char, monitor: *mut GlfwMonitor, share: *mut GlfwWindow) -> *mut GlfwWindow;
-    pub fn glfwDestroyWindow(window: *mut GlfwWindow);
+    pub fn glfwCreateWindow(width: i32, height: i32, title: *const c_char, monitor: *mut RawGlfwMonitor, share: *mut RawGlfwWindow) -> *mut RawGlfwWindow;
+    pub fn glfwDestroyWindow(window: *mut RawGlfwWindow);
     pub fn glfwWindowHint(hint: i32, value: i32);
-    pub fn glfwWindowShouldClose(window: *mut GlfwWindow) -> i32;
+    pub fn glfwWindowShouldClose(window: *mut RawGlfwWindow) -> i32;
     pub fn glfwPollEvents();
 }
 
