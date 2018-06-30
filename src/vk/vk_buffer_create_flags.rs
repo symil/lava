@@ -4,7 +4,7 @@ use std::convert::From;
 
 pub type RawVkBufferCreateFlags = u32;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct VkBufferCreateFlags {
     pub sparse_binding: bool,
     pub sparse_residency: bool,

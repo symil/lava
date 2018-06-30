@@ -4,7 +4,7 @@ use std::convert::From;
 
 pub type RawVkBufferUsageFlags = u32;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct VkBufferUsageFlags {
     pub transfer_src: bool,
     pub transfer_dst: bool,

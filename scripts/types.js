@@ -21,40 +21,12 @@ const {
     formatVkTypeName
 } = require('./utils');
 
-const ALL_GENERATED_TYPES = [
-    'VkDeviceQueueCreateFlags',
-    'VkExtent3D',
-    'VkPhysicalDeviceFeatures',
-    'VkPhysicalDeviceLimits',
-    'VkPhysicalDeviceProperties',
-    'VkPhysicalDeviceSparseProperties',
-    'VkPhysicalDeviceType',
-    'VkQueueFamilyProperties',
-    'VkQueueFlags',
-    'VkResult',
-    'VkStructureType',
-    'VkBufferCreateFlags',
-    'VkBufferUsageFlags',
-    'VkSharingMode',
-    'VkMemoryType',
-    'VkMemoryPropertyFlags',
-    'VkMemoryHeap',
-    'VkMemoryHeapFlags',
-    'VkPhysicalDeviceMemoryProperties',
-    'VkExtensionProperties',
-    'VkSurfaceCapabilitiesKHR',
-    'VkExtent2D',
-    'VkSurfaceTransformFlagsKHR',
-    'VkCompositeAlphaFlagsKHR',
-    'VkImageUsageFlags'
-];
+const TYPES_TO_GENERATE = require('./lists').TYPES_TO_GENERATE;
 
-main(ARGV);
+main();
 
-function main(argv) {
-    const typesToGenerate = argv.includes('--all') ? ALL_GENERATED_TYPES : argv;
-
-    typesToGenerate.forEach(generateType);
+function main() {
+    TYPES_TO_GENERATE.forEach(generateType);
     refreshModRoot();
 }
 
@@ -69,7 +41,7 @@ function writeVkType(name, blocks) {
 
     const moduleName = cToRustVarName(formatVkTypeName(name));
     const filePath = path.join(DST_DIR_PATH, `${moduleName}.rs`);
-    const fileContent = blocks.join('\n\n');
+    const fileContent = blocks.map(b => Array.isArray(b) ? b.join('\n') : b).join('\n\n');
 
     fs.writeFileSync(filePath, fileContent, 'utf8');
 }
@@ -254,6 +226,13 @@ function generateStruct(name) {
     return true;
 }
 
+function getEnumPrefixAndSuffix(name) {
+    const prefix = name.replace(/KHR$/, '').replace(/[a-z]+/g, str => `${str.toUpperCase()}_`);
+    const suffix = name.endsWith('KHR') ? '_KHR' : '';
+    
+    return { prefix, suffix };
+}
+
 function generateEnum(name) {
     const match = VULKAN_H.match(new RegExp(`typedef enum ${name}\\s+{\n([^}]+)\n}`, 'm'));
 
@@ -262,29 +241,37 @@ function generateEnum(name) {
     const rawTypeName = toRawTypeName(name);
     const rawDefinition = `pub type ${rawTypeName} = i32;`;
     const trueTypeName = toTrueTypeName(name);
-    let enumPrefix = name.replace(/[a-z]+/g, str => `${str.toUpperCase()}_`);
+    const enumPrefixSuffix = getEnumPrefixAndSuffix(name);
 
     if (name === 'VkResult') {
-        enumPrefix = 'VK_';
+        enumPrefixSuffix.prefix = 'VK_';
     }
-
+    
+    const { prefix, suffix } = enumPrefixSuffix;
     const trueDefFields = [];
     const fromLines = [];
     const formatLines = [];
 
     const fields = match[1].split('\n').map(line => {
-        const match = line.match(/^\s*([A-Z_]+)\s*=\s*(-?\d+),?$/);
+        const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(-?\d+),?$/);
 
         if (!match) return null;
 
         const valueName = match[1];
         const valueInt = match[2];
 
-        if (!valueName.startsWith(enumPrefix)) {
-            throw new Error(`enum value ${valueName} does not start with prefix ${enumPrefix}`);
+        if (valueName.endsWith('_EXT')) return null;
+
+        if (!valueName.startsWith(prefix)) {
+            throw new Error(`enum value ${valueName} does not start with prefix ${prefix}`);
         }
 
-        const rustValue = cToRustEnumValue(valueName.substring(enumPrefix.length));
+        if (suffix && !valueName.endsWith(suffix)) {
+            throw new Error(`enum value ${valueName} does not end with suffix ${suffix}`);
+        }
+
+        const stripped = valueName.substring(prefix.length, suffix ? valueName.indexOf(suffix) : valueName.length);
+        const rustValue = (name === 'VkFormat' && stripped !== 'UNDEFINED') ? stripped : cToRustEnumValue(stripped);
 
         return { rustValue, valueInt };
     }).filter(x => x);
@@ -298,7 +285,9 @@ function generateEnum(name) {
     const useDelaractions = [
         'std::convert::From',
         'std::default::Default'
-    ].map(l => `use ${l};`).join('\n');
+    ].map(l => `use ${l};`);
+
+    const macros = name === 'VkFormat' ? `#[allow(non_camel_case_types)]` : null;
 
     const trueDefinition = [
         `#[repr(i32)]`,
@@ -306,7 +295,7 @@ function generateEnum(name) {
         `pub enum ${trueTypeName} {`,
         trueDefFields.map(l => `    ${l}`).join(',\n'),
         `}`
-    ].join('\n');
+    ];
 
     const fromRawToTrueDefinition = [
         `impl<'a> From<&'a i32> for ${trueTypeName} {`,
@@ -314,7 +303,7 @@ function generateEnum(name) {
         `        unsafe { *((value as *const i32) as *const ${trueTypeName}) }`,
         `    }`,
         `}`
-    ].join('\n');
+    ];
 
     const fromTrueToRawDefinition = [
         `impl<'a> From<&'a ${trueTypeName}> for i32 {`,
@@ -322,7 +311,7 @@ function generateEnum(name) {
         `        *value as i32`,
         `    }`,
         `}`
-    ].join('\n');
+    ];
 
     const defaultDefinition = [
         `impl Default for ${trueTypeName} {`,
@@ -330,9 +319,9 @@ function generateEnum(name) {
         `        ${trueTypeName}::${fields[0].rustValue}`,
         `    }`,
         `}`
-    ].join('\n');
+    ];
 
-    writeVkType(name, [useDelaractions, rawDefinition, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
+    writeVkType(name, [useDelaractions, rawDefinition, macros, trueDefinition, fromRawToTrueDefinition, fromTrueToRawDefinition]);
 
     return true;
 }
@@ -372,7 +361,7 @@ function generateBitFlags(name) {
     const rawDefinition = `pub type ${rawTypeName} = u32;`;
 
     const trueDefinition = [
-        `#[derive(Debug, Default)]`,
+        `#[derive(Debug, Default, Copy, Clone)]`,
         `pub struct ${trueTypeName} {`,
         fields.map(field => `    pub ${field.rustName}: bool`).join(',\n'),
         `}`

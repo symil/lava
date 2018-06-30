@@ -4,7 +4,7 @@ use std::convert::From;
 
 pub type RawVkCompositeAlphaFlags = u32;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct VkCompositeAlphaFlags {
     pub opaque: bool,
     pub pre_multiplied: bool,

@@ -13,7 +13,7 @@ function capitalizeVarName(name) {
 }
 
 function cToRustEnumValue(name) {
-    return `_${name}`.toLowerCase().replace(/_[a-z]/g, str => str.charAt(1).toUpperCase());
+    return `_${name}`.toLowerCase().replace(/_[0-9a-z]/g, str => str.charAt(1).toUpperCase());
 }
 
 function toRawTypeName(name) {

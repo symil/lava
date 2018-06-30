@@ -5,6 +5,8 @@ use std::default::Default;
 
 pub type RawVkResult = i32;
 
+
+
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkResult {
@@ -33,10 +35,7 @@ pub enum VkResult {
     SuboptimalKhr = 1000001003,
     ErrorOutOfDateKhr = -1000001004,
     ErrorIncompatibleDisplayKhr = -1000003001,
-    ErrorValidationFailedExt = -1000011001,
-    ErrorInvalidShaderNv = -1000012000,
-    ErrorFragmentationExt = -1000161000,
-    ErrorNotPermittedExt = -1000174001
+    ErrorInvalidShaderNv = -1000012000
 }
 
 impl<'a> From<&'a i32> for VkResult {

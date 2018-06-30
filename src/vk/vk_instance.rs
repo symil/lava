@@ -43,7 +43,7 @@ impl VkInstance {
         }
     }
 
-    pub fn get_physical_devices(&self) -> Vec<VkPhysicalDevice> {
+    pub fn get_physical_devices(&self) -> Result<Vec<VkPhysicalDevice>, VkResult> {
         VkPhysicalDevice::get_list(self._handle)
     }
 

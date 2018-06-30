@@ -16,4 +16,8 @@ extern {
     pub fn vkDestroyBuffer(device: RawVkDevice, buffer: RawVkBuffer, p_allocator: *const VkAllocator);
     pub fn vkDestroySurfaceKHR(instance: RawVkInstance, surface: RawVkSurface, p_allocator: *const VkAllocator);
     pub fn vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: RawVkSurface, p_supported: *mut u32) -> VkResult;
+    pub fn vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurface, p_surface_capabilities: *mut RawVkSurfaceCapabilities) -> VkResult;
+    pub fn vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurface, p_present_mode_count: *mut u32, p_present_modes: *mut RawVkPresentMode) -> VkResult;
+    pub fn vkCreateSwapchainKHR(device: RawVkDevice, p_create_info: *const RawVkSwapchainCreateInfo, p_allocator: *const VkAllocator, p_swapchain: *mut RawVkSwapchain) -> VkResult;
+    pub fn vkDestroySwapchainKHR(device: RawVkDevice, swapchain: RawVkSwapchain, p_allocator: *const VkAllocator);
 }

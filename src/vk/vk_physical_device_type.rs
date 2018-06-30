@@ -5,6 +5,8 @@ use std::default::Default;
 
 pub type RawVkPhysicalDeviceType = i32;
 
+
+
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPhysicalDeviceType {

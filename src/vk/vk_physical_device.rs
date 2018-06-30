@@ -1,3 +1,4 @@
+use std::convert::From;
 use std::vec::Vec;
 use std::*;
 use vk::*;
@@ -6,19 +7,18 @@ pub struct VkPhysicalDevice {
     _handle: RawVkPhysicalDevice
 }
 
+impl<'a> From<&'a RawVkPhysicalDevice> for VkPhysicalDevice {
+    fn from(raw: &'a RawVkPhysicalDevice) -> Self {
+        VkPhysicalDevice {
+            _handle: *raw
+        }
+    }
+}
+
 impl VkPhysicalDevice {
-    pub fn get_list(instance: RawVkInstance) -> Vec<Self> {
+    pub fn get_list(instance: RawVkInstance) -> Result<Vec<Self>, VkResult> {
         unsafe {
-            let mut count : u32 = 0;
-            let count_ptr = &mut count as *mut u32;
-            let mut handler_vec : Vec<RawVkPhysicalDevice> = Vec::new();
-
-            vkEnumeratePhysicalDevices(instance, count_ptr, ptr::null_mut());
-            handler_vec.reserve(count as usize);
-            handler_vec.set_len(count as usize);
-            vkEnumeratePhysicalDevices(instance, count_ptr, handler_vec.as_mut_ptr());
-
-            handler_vec.into_iter().map(|handler| VkPhysicalDevice { _handle: handler }).collect()
+            vk_call_retrieve_list(|count, ptr| vkEnumeratePhysicalDevices(instance, count, ptr))
         }
     }
 
@@ -34,53 +34,39 @@ impl VkPhysicalDevice {
         }
     }
 
-    pub fn get_supported_extensions(&self) -> Vec<VkExtensionProperties> {
+    pub fn get_surface_capabilities(&self, surface: &VkSurface) -> Result<VkSurfaceCapabilities, VkResult> {
         unsafe {
-            let mut count : u32 = 0;
-            let mut vector : Vec<RawVkExtensionProperties> = Vec::new();
+            vk_call_retrieve_single(|ptr| vkGetPhysicalDeviceSurfaceCapabilitiesKHR(self._handle, surface.handle(), ptr), |x| {})
+        }
+    }
 
-            vkEnumerateDeviceExtensionProperties(self._handle, ptr::null(), &mut count as *mut u32, ptr::null_mut());
-            vector.reserve(count as usize);
-            vector.set_len(count as usize);
-            vkEnumerateDeviceExtensionProperties(self._handle, ptr::null(), &mut count as *mut u32, vector.as_mut_ptr());
+    pub fn get_surface_present_modes(&self, surface: &VkSurface) -> Result<Vec<VkPresentMode>, VkResult> {
+        unsafe {
+            vk_call_retrieve_list(|count, ptr| vkGetPhysicalDeviceSurfacePresentModesKHR(self._handle, surface.handle(), count, ptr))
+        }
+    }
 
-            vector.iter().map(|raw| From::from(raw)).collect()
+    pub fn get_supported_extensions(&self) -> Result<Vec<VkExtensionProperties>, VkResult> {
+        unsafe {
+            vk_call_retrieve_list(|count, ptr| vkEnumerateDeviceExtensionProperties(self._handle, ptr::null(), count, ptr))
         }
     }
 
     pub fn get_properties(&self) -> VkPhysicalDeviceProperties {
         unsafe {
-            let mut raw_properties : RawVkPhysicalDeviceProperties = mem::uninitialized();
-            let ptr = &mut raw_properties as *mut RawVkPhysicalDeviceProperties;
-
-            vkGetPhysicalDeviceProperties(self._handle, ptr);
-
-            VkPhysicalDeviceProperties::from(&raw_properties)
+            vk_call_retrieve_single_unchecked(|ptr| vkGetPhysicalDeviceProperties(self._handle, ptr), |x| {})
         }
     }
 
     pub fn get_features(&self) -> VkPhysicalDeviceFeatures {
         unsafe {
-            let mut raw_features : RawVkPhysicalDeviceFeatures = mem::uninitialized();
-
-            vkGetPhysicalDeviceFeatures(self._handle, &mut raw_features as *mut RawVkPhysicalDeviceFeatures);
-
-            VkPhysicalDeviceFeatures::from(&raw_features)
+            vk_call_retrieve_single_unchecked(|ptr| vkGetPhysicalDeviceFeatures(self._handle, ptr), |x| {})
         }
     }
 
     pub fn get_queue_families(&self) -> Vec<VkQueueFamilyProperties> {
         unsafe {
-            let mut count : u32 = 0;
-            let count_ptr = &mut count as *mut u32;
-            let mut queue_family_vec : Vec<RawVkQueueFamilyProperties> = Vec::new();
-
-            vkGetPhysicalDeviceQueueFamilyProperties(self._handle, count_ptr, ptr::null_mut());
-            queue_family_vec.reserve(count as usize);
-            queue_family_vec.set_len(count as usize);
-            vkGetPhysicalDeviceQueueFamilyProperties(self._handle, count_ptr, queue_family_vec.as_mut_ptr());
-
-            queue_family_vec.iter().enumerate().map(|(index, raw_properties)| VkQueueFamilyProperties::from(raw_properties)).collect()
+            vk_call_retrieve_list_unchecked(|count, ptr| vkGetPhysicalDeviceQueueFamilyProperties(self._handle, count, ptr))
         }
     }
 

@@ -4,7 +4,7 @@ use std::convert::From;
 
 pub type RawVkMemoryHeapFlags = u32;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct VkMemoryHeapFlags {
     pub device_local: bool,
     pub multi_instance: bool

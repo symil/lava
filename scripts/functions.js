@@ -20,24 +20,7 @@ const {
 } = require('./utils');
 
 const FILE_NAME = 'c_bindings';
-
-const FUNCTIONS_TO_GENERATE = [
-    'vkCreateInstance',
-    'vkDestroyInstance',
-    'vkEnumeratePhysicalDevices',
-    'vkEnumerateInstanceExtensionProperties',
-    'vkGetPhysicalDeviceFeatures',
-    'vkGetPhysicalDeviceProperties',
-    'vkGetPhysicalDeviceQueueFamilyProperties',
-    'vkCreateDevice',
-    'vkDestroyDevice',
-    'vkGetDeviceQueue',
-    'vkCreateBuffer',
-    'vkDestroyBuffer',
-    'vkGetPhysicalDeviceSurfaceSupportKHR',
-    'vkDestroySurfaceKHR',
-    'vkEnumerateDeviceExtensionProperties'
-];
+const FUNCTIONS_TO_GENERATE = require('./lists').FUNCTIONS_TO_GENERATE;
 
 main();
 

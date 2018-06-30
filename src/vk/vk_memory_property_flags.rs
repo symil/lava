@@ -4,7 +4,7 @@ use std::convert::From;
 
 pub type RawVkMemoryPropertyFlags = u32;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct VkMemoryPropertyFlags {
     pub device_local: bool,
     pub host_visible: bool,

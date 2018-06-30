@@ -4,7 +4,7 @@ use std::convert::From;
 
 pub type RawVkSurfaceTransformFlags = u32;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct VkSurfaceTransformFlags {
     pub identity: bool,
     pub rotate_90: bool,
