@@ -31,6 +31,7 @@ mod vk_queue_flags;
 mod vk_result;
 mod vk_sharing_mode;
 mod vk_structure_type;
+mod vk_surface;
 
 pub use self::c_bindings::*;
 pub use self::utils::*;
@@ -65,3 +66,4 @@ pub use self::vk_queue_flags::*;
 pub use self::vk_result::*;
 pub use self::vk_sharing_mode::*;
 pub use self::vk_structure_type::*;
+pub use self::vk_surface::*;

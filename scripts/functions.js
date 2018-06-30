@@ -30,7 +30,9 @@ const FUNCTIONS_TO_GENERATE = [
     'vkDestroyDevice',
     'vkGetDeviceQueue',
     'vkCreateBuffer',
-    'vkDestroyBuffer'
+    'vkDestroyBuffer',
+    'vkGetPhysicalDeviceSurfaceSupportKHR',
+    'vkDestroySurfaceKHR'
 ];
 
 main();

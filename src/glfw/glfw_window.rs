@@ -2,6 +2,7 @@ use std::ops::Drop;
 use std::ffi::*;
 use std::*;
 use glfw::*;
+use vk::*;
 
 pub struct GlfwWindow {
     _window: *mut RawGlfwWindow
@@ -28,6 +29,10 @@ impl GlfwWindow {
                 glfwPollEvents();
             }
         }
+    }
+
+    pub fn as_raw(&self) -> *mut RawGlfwWindow {
+        self._window
     }
 }
 

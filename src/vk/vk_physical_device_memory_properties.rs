@@ -23,8 +23,8 @@ pub struct VkPhysicalDeviceMemoryProperties {
 impl<'a> From<&'a RawVkPhysicalDeviceMemoryProperties> for VkPhysicalDeviceMemoryProperties {
     fn from(value: &'a RawVkPhysicalDeviceMemoryProperties) -> Self {
         VkPhysicalDeviceMemoryProperties {
-            memory_types: unsafe { vec_from_c_ptr(value.memory_type_count as usize, &value.memory_types[0] as *const RawVkMemoryType).iter().map(|r| VkMemoryType::from(r)).collect() },
-            memory_heaps: unsafe { vec_from_c_ptr(value.memory_heap_count as usize, &value.memory_heaps[0] as *const RawVkMemoryHeap).iter().map(|r| VkMemoryHeap::from(r)).collect() }
+            memory_types: unsafe { vec_from_c_ptr(value.memory_type_count, &value.memory_types[0] as *const RawVkMemoryType).iter().map(|r| VkMemoryType::from(r)).collect() },
+            memory_heaps: unsafe { vec_from_c_ptr(value.memory_heap_count, &value.memory_heaps[0] as *const RawVkMemoryHeap).iter().map(|r| VkMemoryHeap::from(r)).collect() }
         }
     }
 }

@@ -169,7 +169,7 @@ function generateStruct(name) {
             usedTypes.add('libc::vec_from_c_ptr');
             usedTypes.add(`${DST_DIR_NAME}::*`);
 
-            rawToTrueFieldConversion = `unsafe { vec_from_c_ptr(${sourcePrevField} as usize, &${sourceField}[0] as *const ${originalRawType}).iter().map(|r| ${originalTrueType}::from(r)).collect() }`;
+            rawToTrueFieldConversion = `unsafe { vec_from_c_ptr(${sourcePrevField}, &${sourceField}[0] as *const ${originalRawType}).iter().map(|r| ${originalTrueType}::from(r)).collect() }`;
             trueToRawFieldConversion = `[${isPrimitiveType ? '0' : 'Default::default()'}; ${constantValue}]`; // TODO
         } else if (rustPrimitiveType) {
             if (type === 'VkBool32') {

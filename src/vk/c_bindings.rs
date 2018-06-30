@@ -11,4 +11,6 @@ extern {
     pub fn vkGetDeviceQueue(device: RawVkDevice, queue_family_index: u32, queue_index: u32, p_queue: *mut RawVkQueue);
     pub fn vkCreateBuffer(device: RawVkDevice, p_create_info: *const RawVkBufferCreateInfo, p_allocator: *const VkAllocator, p_buffer: *mut RawVkBuffer) -> VkResult;
     pub fn vkDestroyBuffer(device: RawVkDevice, buffer: RawVkBuffer, p_allocator: *const VkAllocator);
+    pub fn vkDestroySurfaceKHR(instance: RawVkInstance, surface: RawVkSurfaceKHR, p_allocator: *const VkAllocator);
+    pub fn vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: RawVkSurfaceKHR, p_supported: *mut u32) -> VkResult;
 }
