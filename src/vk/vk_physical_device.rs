@@ -20,8 +20,8 @@ impl VkPhysicalDevice {
 
     pub fn does_support_surface(&self, queue_family_index: usize, surface: &VkSurface) -> Result<bool, VkResult> {
         unsafe {
-            let mut supported : VkBool32 = 0;
-            let result = vkGetPhysicalDeviceSurfaceSupportKHR(self._handle, queue_family_index as u32, surface.handle(), &mut supported as *mut VkBool32);
+            let mut supported : u32 = 0;
+            let result = vkGetPhysicalDeviceSurfaceSupportKHR(self._handle, queue_family_index as u32, surface.handle(), &mut supported as *mut u32);
 
             match result {
                 VkResult::Success => Ok(supported > 0),

@@ -48,8 +48,8 @@ impl Drop for VkInstance {
     }
 }
 
-impl<'a> From<&'a RawVkInstance> for VkInstance {
-    fn from(raw: &'a RawVkInstance) -> Self {
+impl VkFrom<RawVkInstance> for VkInstance {
+    fn from(raw: &RawVkInstance) -> Self {
         Self {
             _handle: *raw
         }

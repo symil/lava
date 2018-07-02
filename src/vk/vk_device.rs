@@ -45,8 +45,8 @@ impl Drop for VkDevice {
     }
 }
 
-impl<'a> From<&'a RawVkDevice> for VkDevice {
-    fn from(raw: &'a RawVkDevice) -> Self {
+impl VkFrom<RawVkDevice> for VkDevice {
+    fn from(raw: &RawVkDevice) -> Self {
         Self {
             _handle: *raw
         }

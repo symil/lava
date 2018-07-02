@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 
-Array.prototype.last = function() {
-    return this[this.length - 1];
-};
-
 const { parseType, parseFunction } = require('./parse');
 
 const PRIMITIVE_TYPES = {
@@ -20,38 +16,58 @@ const PRIMITIVE_TYPES = {
     void: 'void'
 };
 
+const META_TYPE_TO_BUILD_FUNC = {
+    handle: buildHandle
+};
+
 const SCHEMA = {
     VkInstance: {
-        new: {
-            static: true,
-            cMethod: 'vkCreateInstance'
-        },
-        // getSupportedExtensions: {
-        //     args: [],
-        //     methodName: 'vkEnumerateInstanceExtensionProperties',
-        //     params: {
-        //         pLayerName: null
-        //     }
-        // }
+
     },
     VkBuffer: {
-        new: {
-            static: true,
-            cMethod: 'vkCreateBuffer'
-        }
+        new: 'vkCreateBuffer',
+        drop: 'vkDestroyBuffer'
+    },
+    VkPhysicalDevice: {
+        // getList: 'vkEnumeratePhysicalDevices',
+        // getSurfaceCapabilities: 'vkGetPhysicalDeviceSurfaceCapabilitiesKHR',
+        // doesSupportSurface: 'vkGetPhysicalDeviceSurfaceSupportKHR',
+        // getSurfacePresentModes: 'vkGetPhysicalDeviceSurfacePresentModesKHR',
+        createLogicalDevice: 'VkDevice::new'
+    },
+    VkDevice: {
+        new: 'vkCreateDevice'
     }
 };
 
-function writeType(typeName) {
-    const { type, fields } = parseType(typeName);
+const DEFINITIONS = {};
 
-    if (type === 'handle') {
+buildType('VkPhysicalDevice');
 
-    }
+function methodToStr(method) {
+    const { name, args, returnType, body } = method;
+
+    return blockToStr([
+        `fn ${name}(${args.map(({name, type}) => (name ? `${name}: `: '') + type).join(', ')})` + (returnType ? ` -> ${returnType}` : ''),
+            body
+    ]);
 }
-generateHandle('VkBuffer', SCHEMA['VkBuffer']);
 
-function generateHandle(typeName, definition = {}) {
+function buildType(typeName) {
+    if (DEFINITIONS[typeName]) {
+        return;
+    }
+
+    const cDef = parseType(typeName);
+    const metaType = cDef.type;
+    const rawInfo = metaType === 'handle' ? (SCHEMA[typeName] || {}) : cDef;
+    const definition = META_TYPE_TO_BUILD_FUNC[metaType](typeName, rawInfo);
+
+    definition.metaType = metaType;
+    DEFINITIONS[typeName] = definition;
+}
+
+function buildHandle(typeName, rawInfo) {
     const uses = [
         `std::convert::From`,
         `std::ops::Drop`,
@@ -61,135 +77,227 @@ function generateHandle(typeName, definition = {}) {
     ];
 
     const rawTypeName = toRawTypeName(typeName);
-    const trueTypeName = toTrueTypeName(typeName);
-    const additionalFields = [];
-    const fields = [{name: '_handle', type: rawTypeName}];
+    const wrappedTypeName = toWrappedTypeName(typeName);
+    const fields = [];
+    const rawDefinition = { type: 'typedef', target: 'RawVkHandle' };
+    const wrappedDefinition = { type: 'struct', fields: fields };
+    const methods = [];
+    const externFunctions = [];
+    let wrappedDropMethod = null;
+    let rawDropMethod = null;
+    let fromWrappedToRaw = null;
+    let fromRawToWrapped = null;
 
-    const output = {};
-
-    const methods = Object.entries(definition).filter(([key]) => !key.startsWith('_'));
-
-    if (methods.length) {
-        const methodDefinitions = methods.map(([methodName, def]) => {
-            let statements = [];
-            let returnType = null;
-            let methodArguments = [];
-            let unsafe = false;
-
-            if (!def.static) {
-                methodArguments.push('&self');
-            }
-
-            if (def.cMethod) {
-                unsafe = true;
-
-                const cMethod = parseFunction(def.cMethod);
-                const defArgs = def.cMethod.args;
-                const cMethodArgs = cMethod.args;
-                const lastArg = cMethodArgs[cMethodArgs.length - 1];
-                const beforeLastArg = cMethodArgs[cMethodArgs.length - 2];
-                const createSomething = lastArg.isPointer && !lastArg.isConst;
-                const createList = createSomething && beforeLastArg.isPointer && !beforeLastArg.isConst && beforeLastArg.typeName === 'uint32_t';
-                const returnVkResult = cMethod.returnType === 'VkResult';
-                const argsForCMethod = cMethodArgs.map((arg, index) => {
-                    if (createSomething && index === cMethodArgs.length - 1) {
-                        return 'ptr';
-                    } else if (createList && index === cMethodArgs.length - 2) {
-                        return 'count';
-                    } else if (arg.name === 'pAllocator') {
-                        return 'null()';
-                    } else {
-                        const rawArgType = toRawTypeName(arg.typeName);
-                        const trueArgType = toTrueTypeName(arg.typeName);
-
-                        if (arg.isPointer && arg.isConst) {
-                            // Structure that needs to be passed to the rust method
-        
-                            const rustArgName = toSnakeCase(arg.name.substring(1));
-                            const rawVarName = `raw_${rustArgName}`;
-                            const ptrVarName = `${rawVarName}_ptr`;
-        
-                            statements.push(
-                                `let mut ${rawVarName} = ${rawArgType}::from(${rustArgName});`,
-                                `let ${ptrVarName} = &mut ${rawVarName} as *mut ${rawArgType};`
-                            );
-        
-                            methodArguments.push(`${rustArgName}: &${trueArgType}`);
-        
-                            return ptrVarName;
-                        } else if (!arg.isPointer) {
-                            const rustArgName = toSnakeCase(arg.name);
-
-                            methodArguments.push(`${rustArgName}: &${trueArgType}`);
-
-                            return `${rustArgName}.handle()`;
-                        }
-                    }
-
-                    return '<missing>';
-                });
+    fields.push({name: '_handle', type: rawTypeName});
     
-                if (createSomething) {
-                    returnType = toTrueTypeName(lastArg.typeName);
-    
-                    if (createList) {
-                        returnType = `Vec<${returnType}>`;
-                    }
-    
-                    if (returnVkResult) {
-                        returnType = `Result<${returnType}, VkResult>`;
-                    }
-    
-                    const vkWrapperCallName = `vk_call_retrieve_${createList ? 'list' : 'single'}${returnVkResult ? '' : '_unchecked'}`;
-                    const lambdaArgs = createList ? '|count, ptr|' : '|ptr|';
-                    const callback = `|x| {}`;
-                    statements.push(`${vkWrapperCallName}(${lambdaArgs} ${cMethod.name}(${argsForCMethod.join(', ')}), ${callback})`);
-                } else {
-                    throw new Error(`method ${cMethod.name} does not seem to retrieve anything`);
+    methods.push({
+        name: 'handle',
+        args: [{type: '&self'}],
+        returnType: rawTypeName,
+        body: ['self._handle']
+    });
+
+    if (rawInfo.drop) {
+        const cMethodName = rawInfo.drop;
+        const cMethod = parseFunction(cMethodName);
+        const cArgs = cMethod.args.map(arg => {
+            if (arg.name === 'pAllocator') {
+                return 'null()';
+            } else {
+                const rawArgType = toRawTypeName(arg.typeName);
+                let field = fields.find(({type}) => type === rawArgType);
+
+                if (!field) {
+                    field = {name: `_${arg.name}`, type: rawArgType};
+                    fields.push(field);
                 }
+
+                return `self.${field.name}`;
             }
-
-            const functionPrototype = `pub fn ${toSnakeCase(methodName)}(${methodArguments.join(', ')})${returnType ? ` -> ${returnType}` : ''}`;
-            const body = unsafe ? ['unsafe', statements] : statements;
-
-            const functionDef = [
-                functionPrototype, body
-            ];
-
-            console.log(blockToStr(functionDef));
         });
+        const body = ['unsafe', [`${cMethodName}(${cArgs.join(', ')});`]];
+
+        dropMethod = {
+            name: 'drop',
+            args: [{type: '&mut self'}],
+            returnType: null,
+            body: body
+        };
     }
 
-    output.rawDefinition = `pub type ${rawTypeName}`;
+    Object.entries(rawInfo).forEach(([methodName, def]) => {
+        if (methodName === 'drop') {
+            return;
+        }
 
-    output.trueDefinition = [
-        `pub struct ${trueTypeName}`,
-        fields.map(({name, type}) => `${name}: ${type}`)
-    ];
+        let statements = [];
+        let returnType = null;
+        let methodArguments = [];
+        let static = false;
+        let unsafe = false;
+        let setAdditionalFields = [];
 
-    output.fromRawToTrue = [
-        `impl<'a> From<&'a ${rawTypeName}> for ${trueTypeName}`, [
-            `fn from(raw: &'a ${rawTypeName}) -> Self`, [
-                `Self`, 
-                    fields.map(({name}) => `${name}: ${name === '_handle' ? '*raw' : 'VK_NULL_HANDLE'},`)
-            ]
-        ]
-    ];
+        if (!def.includes('::')) {
+            const cMethod = parseFunction(def);
+            const cMethodArgs = cMethod.args;
+            const lastArg = cMethodArgs[cMethodArgs.length - 1];
+            const instanceVarName = toSnakeCase(lastArg.typeName.substring(2));
+            const beforeLastArg = cMethodArgs[cMethodArgs.length - 2];
+            const createSomething = lastArg.isPointer && !lastArg.isConst;
+            const createList = createSomething && beforeLastArg.isPointer && !beforeLastArg.isConst && beforeLastArg.typeName === 'uint32_t';
+            const isConstructor = createSomething && lastArg.typeName === typeName;
+            const returnVkResult = cMethod.returnType === 'VkResult';
+            const argsForCMethod = cMethodArgs.map((arg, index) => {
+                if (createSomething && index === cMethodArgs.length - 1) {
+                    return 'ptr';
+                } else if (createList && index === cMethodArgs.length - 2) {
+                    return 'count';
+                } else if (arg.name === 'pAllocator') {
+                    return 'null()';
+                } else {
+                    const rawArgType = toRawTypeName(arg.typeName);
+                    const wrappedArgType = toWrappedTypeName(arg.typeName);
+    
+                    if (arg.isPointer && arg.isConst) {
+                        // Structure that needs to be passed to the rust method
+    
+                        const rustArgName = toSnakeCase(arg.name.substring(1));
+                        const rawVarName = `raw_${rustArgName}`;
+                        const ptrVarName = `${rawVarName}_ptr`;
+    
+                        statements.push(
+                            `let mut ${rawVarName} = ${rawArgType}::from(${rustArgName});`, // TODO: properly convert VkBool32
+                            `let ${ptrVarName} = &mut ${rawVarName} as *mut ${rawArgType};`
+                        );
+    
+                        methodArguments.push({
+                            name: rustArgName,
+                            type: `&${wrappedArgType}`
+                        });
+    
+                        return ptrVarName;
+                    } else if (!arg.isPointer) {
+                        if (arg.typeName.startsWith('Vk')) {
+                            const field = fields.find(({type}) => type === rawArgType);
+    
+                            if (field && !isConstructor) {
+                                return `self.${field.name}`;
+                            } else {
+                                const rustArgName = toSnakeCase(arg.name);
+                                const handleName = `${rustArgName}_handle`;
+    
+                                statements.push(`let ${handleName} = ${rustArgName}.handle();`);
+                                methodArguments.push({ name: rustArgName, type: `&${wrappedArgType}` });
+    
+                                if (isConstructor && field) {
+                                    setAdditionalFields.push(`${instanceVarName}.${field.name} = ${handleName};`);
+                                }
+    
+    
+                                return handleName;
+                            }
+                        } else {
+                            const rustArgName = toSnakeCase(arg.name);
+                            const convertToUsize = rustArgName.endsWith('_index') && wrappedArgType === 'u32';
+                            const rustArgType = convertToUsize ? 'usize' : wrappedArgType;
+                            methodArguments.push({ name: rustArgName, type: rustArgType });
+    
+                            return rustArgName + (convertToUsize ? ' as u32' : '');
+                        }
+                    }
+                }
+    
+                return '<missing>';
+            });
+    
+            unsafe = true;
 
-    output.fromTrueToRaw = [
-        `impl<'a> From<&'a ${trueTypeName}> for ${rawTypeName}`, [
-            `fn from(value: &'a ${trueTypeName}) -> Self`, [
-                `value._handle`
-            ]
-        ]
-    ];
+            if (isConstructor) {
+                static = true;
+            }
+    
+            if (createSomething) {
+                returnType = toWrappedTypeName(lastArg.typeName);
+    
+                if (createList) {
+                    returnType = `Vec<${returnType}>`;
+                }
+    
+                if (returnVkResult) {
+                    returnType = `Result<${returnType}, VkResult>`;
+                }
+    
+                const vkWrapperCallName = `vk_call_retrieve_${createList ? 'list' : 'single'}${returnVkResult ? '' : '_unchecked'}`;
+                const lambdaArgs = createList ? '|count, ptr|' : '|ptr|';
+                const callback = `|${instanceVarName}| { ${setAdditionalFields.join(' ')} }`;
+                statements.push(`${vkWrapperCallName}(\n    ${lambdaArgs} ${cMethod.name}(${argsForCMethod.join(', ')}),\n    ${callback}\n)`);
+            } else {
+                throw new Error(`method ${cMethod.name} does not seem to retrieve anything`);
+            }
+        } else {
+            const [targetTypeName, targetMethodName] = def.split('::');
+
+            buildType(targetTypeName);
+
+            const rustTargetMethodName = toSnakeCase(targetMethodName);
+            const targetMethod = DEFINITIONS[targetTypeName].methods.find(m => m.name === rustTargetMethodName);
+            const targetCallArgs = [];
+
+            targetMethod.args.forEach(({type, name}) => {
+                if (type === `&${wrappedTypeName}`) {
+                    targetCallArgs.push('self');
+                } else {
+                    targetCallArgs.push(name);
+                    methodArguments.push({name, type});
+                }
+            });
+
+            returnType = targetMethod.returnType
+            statements.push(`${targetTypeName}::${rustTargetMethodName}(${targetCallArgs.join(', ')})`);
+        }
+
+        if (!static) {
+            methodArguments.unshift({type: '&self'});
+        }
+        
+        const method = {
+            name: toSnakeCase(methodName),
+            args: methodArguments,
+            returnType: returnType,
+            body: unsafe ? ['unsafe', statements] : statements
+        };
+
+        methods.push(method);
+    });
+
+    fromWrappedToRaw = {
+        name: 'from',
+        args: [{name: 'value', type: `&${wrappedTypeName}`}],
+        returnType: 'Self',
+        body: [ `value._handle` ]
+    };
+
+    fromRawToWrapped = {
+        name: 'from',
+        args: [{name: 'value', type: `&${rawTypeName}`}],
+        returnType: 'Self',
+        body: fields.map(({name}) => `${name}: ${name === '_handle' ? '*raw' : 'VK_NULL_HANDLE'},`)
+    }
+
+    methods.forEach(method => console.log(methodToStr(method)));
+
+    return { rawTypeName, wrappedTypeName, uses, rawDefinition, wrappedDefinition, methods, rawDropMethod, wrappedDropMethod, externFunctions, fromRawToWrapped, fromWrappedToRaw };
 }
 
 function toRawTypeName(typeName) {
     return PRIMITIVE_TYPES[typeName] || `Raw${typeName}`;
 }
 
-function toTrueTypeName(typeName) {
+function toWrappedTypeName(typeName) {
+    if (typeName === 'VkBool32') {
+        return 'bool';
+    }
+
     return PRIMITIVE_TYPES[typeName] || typeName;
 }
 
@@ -198,7 +306,7 @@ function blockToStr(block, indent) {
     let result;
 
     if (typeof block === 'string') {
-        result = `\n${spaces}${block} `;
+        result = `\n${block.split('\n').map(line => `${spaces}${line}`).join('\n')} `;
     } else {
         result = `{${block.map(b => blockToStr(b, inc(indent))).join('')}\n${spaces}}`
     }
@@ -221,5 +329,7 @@ function indentToSpaces(indent) {
 }
 
 function toSnakeCase(str) {
-    return str.split(/(?=[A-Z])/).join('_').toLowerCase();
+    return str
+        .replace(/[A-Z0-9]+/g, str => str.charAt(0) + str.substring(1).toLowerCase())
+        .split(/(?=[A-Z])/).join('_').toLowerCase();
 }

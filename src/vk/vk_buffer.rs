@@ -34,8 +34,8 @@ impl Drop for VkBuffer {
     }
 }
 
-impl<'a> From<&'a RawVkBuffer> for VkBuffer {
-    fn from(raw: &'a RawVkBuffer) -> Self {
+impl VkFrom<RawVkBuffer> for VkBuffer {
+    fn from(raw: &RawVkBuffer) -> Self {
         Self {
             _handle: *raw,
             _device: VK_NULL_HANDLE
