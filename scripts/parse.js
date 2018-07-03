@@ -31,30 +31,28 @@ function parseType(name) {
     throw new Error(`unable to parse type ${name}`);
 }
 
-function parseStruct(typeName) {
-    const match = VULKAN_H.match(new RegExp(`typedef struct ${typeName} {\n([^}]+)\n}`, 'm'));
+function parseStruct(structName) {
+    const match = VULKAN_H.match(new RegExp(`typedef struct ${structName} {\n([^}]+)\n}`, 'm'));
 
     if (!match) {
         return null;
     }
 
     return match[1].split('\n').map(line => {
-        const match = line.match(/\s*([\w* ]+)\s+(\w+);\s*$/);
+        const match = line.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;\s*$/);
 
         if (!match) {
-            throw new Error(`unexpected line for struct ${typeName}: "${line}"`);
+            throw new Error(`unexpected line for struct ${structName}: "${line}"`);
         }
 
         const name = match[2].trim();
-        const type = match[1].trim();
+        const fullType = match[1].trim();
+        const typeName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
+        const isPointer = fullType.endsWith('*');
+        const isConst = fullType.startsWith('const ');
+        const arraySize = parseConstant(match[3]);
 
-        const typeInfo = {
-            name: type.replace(/(?:const )?(\w+)\*?/, '$1'),
-            isPointer: type.endsWith('*'),
-            isConst: type.startsWith('const ')
-        };
-
-        return { name, type, typeInfo };
+        return { name, fullType, typeName, isPointer, isConst, arraySize };
     });
 }
 
@@ -81,6 +79,8 @@ function parseBitFlags(typeName) {
     const bitsFlagTypeName = typeName.replace('Flags', 'FlagBits');
     const match = VULKAN_H.match(new RegExp(`typedef enum ${bitsFlagTypeName}\\s+{\n([^}]+)\n}`, 'm'));
 
+    // TODO: check for empty flags
+
     if (!match) {
         return null;
     }
@@ -103,6 +103,10 @@ function parseHandle(typeName) {
     const match = VULKAN_H.match(new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}\\)`, 'm'));
 
     return match ? {} : null;
+}
+
+function isHandle(typeName) {
+    return new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}\\)`, 'm').test(VULKAN_H);
 }
 
 function parseFunction(name) {
@@ -130,6 +134,10 @@ function parseFunction(name) {
 }
 
 function parseConstant(name) {
+    if (!name) {
+        return null;
+    }
+
     if (!isNaN(+name)) {
         return name;
     }
@@ -147,3 +155,4 @@ parseFunction('vkCreateInstance');
 
 exports.parseType = parseType;
 exports.parseFunction = parseFunction;
+exports.isHandle = isHandle;

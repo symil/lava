@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { parseType, parseFunction } = require('./parse');
+const { parseType, parseFunction, isHandle } = require('./parse');
 
 const PRIMITIVE_TYPES = {
     uint32_t: 'u32',
@@ -13,11 +13,12 @@ const PRIMITIVE_TYPES = {
     float: 'f32',
     double: 'f64',
     size_t: 'usize',
-    void: 'void'
+    void: 'c_void'
 };
 
 const META_TYPE_TO_BUILD_FUNC = {
-    handle: buildHandle
+    handle: buildHandle,
+    struct: buildStruct
 };
 
 const SCHEMA = {
@@ -42,7 +43,9 @@ const SCHEMA = {
 
 const DEFINITIONS = {};
 
-buildType('VkPhysicalDevice');
+// buildType('VkPhysicalDeviceProperties');
+// buildType('VkInstanceCreateInfo');
+buildType('VkSwapchainCreateInfoKHR');
 
 function methodToStr(method) {
     const { name, args, returnType, body } = method;
@@ -67,12 +70,159 @@ function buildType(typeName) {
     DEFINITIONS[typeName] = definition;
 }
 
-function buildHandle(typeName, rawInfo) {
+function buildStruct(typeName, parsed) {
+    const rawTypeName = toRawTypeName(typeName);
+    const wrappedTypeName = toWrappedTypeName(typeName);
+
     const uses = [
-        `std::convert::From`,
         `std::ops::Drop`,
         `std::vec::Vec`,
         `std::ptr::null`,
+        `vk::VkFrom`,
+        `vk::RawVkHandle`,
+        'libc::*'
+    ];
+
+    let lifetimeIdCounter = 0;
+    const srcVar = 'value';
+    const lifetimeIds = [];
+    const rawFields = [];
+    const wrappedFields = [];
+    const fromRawToWrappedFields = [];
+    const fromWrappedToRawFields = [];
+
+    parsed.fields.forEach((field, index) => {
+        const prevField = parsed.fields[index - 1];
+        const nextField = parsed.fields[index + 1];
+
+        const rustFieldName = getRustFieldName(field);
+        const rawRustFieldType = getRawRustFieldType(field);
+        const isCount = areCountAndArray(field, nextField);
+        const isArrayPtr = areCountAndArray(prevField, field);
+        const isStaticArray = !!field.arraySize;
+        const isPointer = field.isPointer;
+        const isTypeChar = field.typeName === 'char';
+        const isPrimitiveType = !!PRIMITIVE_TYPES[field.typeName];
+        const isHandleType = isHandle(field.typeName);
+        const representIndex = doesFieldRepresentIndex(field);
+
+        rawFields.push({ name: rustFieldName, type: rawRustFieldType });
+
+        if (field.name === 'sType') {
+            fromWrappedToRawFields.push(`${rustFieldName}: VkFrom::from(&VkStructure::${typeName.substring(2)})`);
+        } else if (field.name === 'pNext') {
+            fromWrappedToRawFields.push(`${rustFieldName}: null()`);
+        } else if (isCount) {
+            const vecFieldName = getRustFieldName(nextField);
+            fromWrappedToRawFields.push(`${rustFieldName}: ${srcVar}.${vecFieldName}.len() as u32`);
+        } else {
+            const src = `${srcVar}.${rustFieldName}`;
+            const ref = isHandleType ? '' : '&';
+            const wrappedToRawCollectionConversion = isPrimitiveType
+                ? (representIndex ? `.iter().map(|x| x as u32).collect()` : '')
+                : `.iter().map(|x| VkFrom::from(x)).collect()`;
+            const rawToWrappedSingleEltConversion = isPrimitiveType
+                ? (representIndex ? `${src} as u32` : src)
+                : `VkFrom::from(${ref}${src})`;
+            const wrappedTypeName = representIndex ? 'usize' : toWrappedTypeName(field.typeName);
+            let wrappedFieldType = null;
+
+            if (isArrayPtr) {
+                if (isStringArray(field)) {
+                    wrappedFieldType = `Vec<String>`;
+                    fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_string_array(&${src})`);
+                } else {
+                    wrappedFieldType = `Vec<${wrappedTypeName}>`;
+                    fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_array(&${src}${wrappedToRawCollectionConversion})`);
+                }
+            } else if (isPointer) {
+                if (isTypeChar) {
+                    wrappedFieldType = 'String';
+                    fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_string(&${src})`);
+                } else {
+                    if (isHandleType) {
+                        const lifetimeId = String.fromCharCode('a'.charCodeAt(0) + lifetimeIdCounter++);
+                        lifetimeIds.push(lifetimeId);
+                        wrappedFieldType = `&'${lifetimeId} ${wrappedTypeName}`
+                    } else {
+                        wrappedFieldType = wrappedTypeName;
+                    }
+                    fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_ptr(&${rawToWrappedSingleEltConversion})`);
+                }
+            } else if (isStaticArray) {
+                if (isTypeChar) {
+                    wrappedFieldType = 'String';
+                    fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_string(&${src} as *const c_char)`);
+                } else {
+                    wrappedFieldType = `[${wrappedTypeName}, ${arraySize}]`;
+                    fromWrappedToRawFields.push(`${rustFieldName}: ${src}${wrappedToRawCollectionConversion}`);
+                }
+            } else {
+                if (isHandleType) {
+                    const lifetimeId = String.fromCharCode('a'.charCodeAt(0) + lifetimeIdCounter++);
+                    lifetimeIds.push(lifetimeId);
+                    wrappedFieldType = `&'${lifetimeId} ${wrappedTypeName}`
+                } else {
+                    wrappedFieldType = wrappedTypeName;
+                }
+                fromWrappedToRawFields.push(`${rustFieldName}: ${rawToWrappedSingleEltConversion}`);
+            }
+
+            wrappedFields.push({ name: rustFieldName, type: wrappedFieldType });
+        }
+    });
+
+    const fromWrappedToRaw = [rawTypeName, fromWrappedToRawFields.map(x => `${x},`)];
+
+    // console.log(blockToStr(fromWrappedToRaw));
+    console.log(blockToStr([rawTypeName, rawFields.map(({name, type}) => `${name}: ${type},`)]));
+    console.log(blockToStr([wrappedTypeName, wrappedFields.map(({name, type}) => `${name}: ${type},`)]));
+
+    return {};
+}
+
+function doesFieldRepresentIndex(field) {
+    return field.typeName === 'uint32_t' && /Index|Indices/.test(field.name);
+}
+
+function isStringArray(field) {
+    return field.fullType === 'const char* const*';
+}
+
+function getRawRustFieldType(field) {
+    const { name, typeName, isPointer, arraySize } = field;
+
+    if (name === 'pNext') {
+        return `*const c_void`;
+    } else if (isStringArray(field)) {
+        return `*mut *mut c_char`;
+    } else {
+        const rawTypeName = toRawTypeName(typeName);
+
+        if (isPointer) {
+            return `*mut ${rawTypeName}`;
+        } else if (arraySize) {
+            return `[${rawTypeName}, ${arraySize}]`;
+        } else {
+            return rawTypeName;
+        }
+    }
+}
+
+function getRustFieldName({name}) {
+    return toSnakeCase(name.replace(/^(p{1,2}|s)[A-Z]/, str => str[str.length - 1]));
+}
+
+function areCountAndArray(field1, field2) {
+    return field1 && field2 && field1.name.endsWith('Count') && field1.fullType === 'uint32_t' && field2.isPointer && field2.typeName !== 'char';
+}
+
+function buildHandle(typeName, rawInfo) {
+    const uses = [
+        `std::ops::Drop`,
+        `std::vec::Vec`,
+        `std::ptr::null`,
+        `vk::VkFrom`,
         `vk::RawVkHandle`
     ];
 
@@ -116,13 +266,15 @@ function buildHandle(typeName, rawInfo) {
             }
         });
         const body = ['unsafe', [`${cMethodName}(${cArgs.join(', ')});`]];
-
+        
         dropMethod = {
             name: 'drop',
             args: [{type: '&mut self'}],
             returnType: null,
             body: body
         };
+
+        externFunctions.push(cMethod);
     }
 
     Object.entries(rawInfo).forEach(([methodName, def]) => {
@@ -210,6 +362,8 @@ function buildHandle(typeName, rawInfo) {
                 return '<missing>';
             });
     
+            externFunctions.push(cMethod);
+
             unsafe = true;
 
             if (isConstructor) {
@@ -274,7 +428,7 @@ function buildHandle(typeName, rawInfo) {
         name: 'from',
         args: [{name: 'value', type: `&${wrappedTypeName}`}],
         returnType: 'Self',
-        body: [ `value._handle` ]
+        body: [`value._handle`]
     };
 
     fromRawToWrapped = {
@@ -298,7 +452,7 @@ function toWrappedTypeName(typeName) {
         return 'bool';
     }
 
-    return PRIMITIVE_TYPES[typeName] || typeName;
+    return PRIMITIVE_TYPES[typeName] || typeName.replace('FlagBits', 'Flags');
 }
 
 function blockToStr(block, indent) {
