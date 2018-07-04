@@ -1,9 +1,9 @@
 use os::raw::c_char;
-use libc::void;
+use libc::c_void;
 use vk::*;
 
-pub type RawGlfwMonitor = void;
-pub type RawGlfwWindow = void;
+pub type RawGlfwMonitor = c_void;
+pub type RawGlfwWindow = c_void;
 
 extern {
     pub fn glfwInit();
@@ -13,7 +13,7 @@ extern {
     pub fn glfwWindowHint(hint: i32, value: i32);
     pub fn glfwWindowShouldClose(window: *mut RawGlfwWindow) -> i32;
     pub fn glfwPollEvents();
-    pub fn glfwCreateWindowSurface(vk_instance: RawVkInstance, window: *mut RawGlfwWindow, allocator: *const VkAllocator, surface: *mut RawVkSurface) -> VkResult;
+    pub fn glfwCreateWindowSurface(vk_instance: RawVkInstance, window: *mut RawGlfwWindow, allocator: *const c_void, surface: *mut RawVkSurface) -> RawVkResult;
     pub fn glfwGetRequiredInstanceExtensions(count: *mut u32) -> *const *const c_char;
 }
 

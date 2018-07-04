@@ -5,4 +5,4 @@ pub use self::c_bindings::*;
 pub use self::memory::*;
 
 #[allow(non_camel_case_types)]
-pub type void = i8;
+pub type c_void = i8;

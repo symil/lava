@@ -11,15 +11,26 @@ pub unsafe fn copy_as_string(ptr: *const c_char) -> String {
     String::from_utf8_unchecked(CStr::from_ptr(ptr).to_bytes().to_vec())
 }
 
+pub unsafe fn copy_as_string_vec(count: u32, strings: *const *const c_char) -> Vec<String> {
+    let mut result : Vec<String> = Vec::new();
+
+    for i in 0..count as usize {
+        let ptr = *(strings.offset(i as isize));
+        result.push(copy_as_string(ptr));
+    }
+
+    result
+}
+
 pub unsafe fn copy_as_c_string(s: &String) -> *mut c_char {
     let str_len = s.len();
     let new_str = calloc(1, str_len + 1);
-    memcpy(new_str, s.as_ptr() as *const void, str_len);
+    memcpy(new_str, s.as_ptr() as *const c_void, str_len);
 
     new_str
 }
 
-pub unsafe fn free_c_string(ptr: *mut void) {
+pub unsafe fn free_c_string(ptr: *mut c_void) {
     free(ptr);
 }
 
@@ -55,13 +66,13 @@ pub unsafe fn free_c_ptr<T>(ptr: *mut T) {
 pub unsafe fn copy_as_c_array<T>(v: &Vec<T>) -> *mut T {
     let byte_len = v.len() * mem::size_of::<usize>();
     let ptr = malloc(byte_len);
-    memcpy(ptr, v.as_ptr() as *const void, byte_len);
+    memcpy(ptr, v.as_ptr() as *const c_void, byte_len);
 
     ptr as *mut T
 }
 
 pub unsafe fn free_c_array<T>(ptr: *mut T) {
-    free(ptr as *mut void);
+    free(ptr as *mut c_void);
 }
 
 pub unsafe fn vec_from_c_ptr<T : Copy>(length: u32, ptr: *const T) -> Vec<T> {
