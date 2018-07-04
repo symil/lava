@@ -17,19 +17,20 @@ const PRIMITIVE_TYPES = {
     float: 'f32',
     double: 'f64',
     size_t: 'usize',
-    void: 'c_void'
+    void: 'c_void',
+    VkAllocationCallbacks: 'c_void'
 };
 
 const META_TYPE_TO_BUILD_FUNC = {
     handle: buildHandle,
     struct: buildStruct,
     enum: buildEnum,
-    bitFlags: buildBitFlags
+    flags: buildBitFlags
 };
 
 const SCHEMA = {
     VkInstance: {
-        // new: 'vkCreateInstance',
+        new: 'vkCreateInstance',
         drop: 'vkDestroyInstance'
     },
     VkBuffer: {
@@ -53,7 +54,9 @@ const DEFINITIONS = {};
 main();
 
 function main() {
-    buildType('VkResult');
+    // buildType('VkResult');
+    // buildType('VkInstance');
+    buildType('VkBufferCreateFlags');
 
     Object.entries(DEFINITIONS).forEach(([typeName, typeDefinition]) => {
         const fileContent = generateTypeFileContent(typeName, typeDefinition);
@@ -124,19 +127,29 @@ function typeToBlock(typeName, definition) {
     } else if (metaType === 'struct') {
         const header = definition.reprC ? '#[repr(C)]\n' : '';
 
-        return [`${header}pub struct ${typeName}`, definition.fields.map(({name, type}) => `${name}: ${type},`)];
+        return [`${header}pub struct ${typeName}`, definition.fields.map(({name, type, public}) => `${public ? 'pub ' : ''}${name}: ${type},`)];
     } else if (metaType === 'enum') {
-        const header = '#[repr(i32)]\n';
+        const header = ['#[repr(i32)]', '#[derive(Debug, PartialEq, Copy, Clone)]'].join('\n');
         
-        return [`${header}pub enum ${typeName}`, definition.fields.map(({name, value}) => `${name} = ${value},`)];
+        return [`${header}\npub enum ${typeName}`, definition.fields.map(({name, value}) => `${name} = ${value},`)];
     }
 }
 
 function generateTypeFileContent(typeName, definition) {
     const { rawTypeName, wrappedTypeName, uses, rawDefinition, wrappedDefinition, methods, rawDropMethod, wrappedDropMethod, externFunctions, fromRawToWrapped, fromWrappedToRaw } = definition;
 
+    const baseUses = [];
+
+    if (fromRawToWrapped || fromWrappedToRaw) {
+        baseUses.push('vk::VkFrom');
+    }
+
+    if (rawDropMethod || wrappedDropMethod) {
+        baseUses.push(`std::ops::Drop`);
+    }
+
     const blocks = [
-        uses ? uses.map(use => `use ${use};`).join('\n') : '',
+        baseUses.concat(uses || []).map(use => `use ${use};`).join('\n'),
         typeToBlock(rawTypeName, rawDefinition),
         typeToBlock(wrappedTypeName, wrappedDefinition),
         methods ? [`impl ${wrappedTypeName}`].concat(methods.map(methodToBlock)) : '',
@@ -331,7 +344,7 @@ function findEnumPrefix(typeName) {
         return 'VK_';
     }
 
-    return typeName.replace(/[A-Z]+/, `_$&`).toUpperCase().substring(1);
+    return typeName.replace(/[A-Z]+/g, `_$&`).toUpperCase().substring(1);
 }
 
 function buildEnum(typeName, rawInfo) {
@@ -351,19 +364,51 @@ function buildEnum(typeName, rawInfo) {
         })
     };
 
-    return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition };
+    const fromWrappedToRaw = {
+        name: 'from',
+        args: [{name: 'value', type: `&${wrappedTypeName}`}],
+        returnType: 'Self',
+        body: [`*value as i32`]
+    };
+
+    const fromRawToWrapped = {
+        name: 'from',
+        args: [{name: 'value', type: `&${rawTypeName}`}],
+        returnType: 'Self',
+        body: [`unsafe`, [`*((value as *const i32) as *const ${wrappedTypeName})`]]
+    };
+
+    return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition, fromWrappedToRaw, fromRawToWrapped };
 }
 
 function buildBitFlags(typeName, rawInfo) {
+    const rawTypeName = toRawTypeName(typeName);
+    const wrappedTypeName = toWrappedTypeName(typeName);
+    const rawDefinition = { type: 'typedef', target: 'u32' };
 
+    const prefix = typeName
+        .substring(0, typeName.indexOf('Flags'))
+        .replace(/[a-z]+/g, `$&_`).toUpperCase();
+
+    const fields = rawInfo.fields.map(({name, value}) => {
+        return {
+            name: name.substring(prefix.length).replace('_BIT', '').toLowerCase(),
+            value: value
+        };
+    });
+
+    const wrappedDefinition = {
+        type: 'struct',
+        fields: fields.map(({name}) => ({ name: name, type: 'bool', public: true }))
+    };
+
+    return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition };
 }
 
 function buildHandle(typeName, rawInfo) {
     const uses = [
-        `std::ops::Drop`,
         `std::vec::Vec`,
         `std::ptr::null`,
-        `vk::VkFrom`,
         `vk::RawVkHandle`,
         `libc::c_void`
     ];
@@ -397,6 +442,8 @@ function buildHandle(typeName, rawInfo) {
             if (arg.name === 'pAllocator') {
                 return 'null()';
             } else {
+                buildType(arg.typeName);
+
                 const rawArgType = toRawTypeName(arg.typeName);
                 let field = fields.find(({type}) => type === rawArgType);
 
@@ -443,6 +490,8 @@ function buildHandle(typeName, rawInfo) {
             const isConstructor = createSomething && lastArg.typeName === typeName;
             const returnVkResult = cMethod.returnType === 'VkResult';
             const argsForCMethod = cMethodArgs.map((arg, index) => {
+                buildType(arg.typeName);
+
                 if (createSomething && index === cMethodArgs.length - 1) {
                     return 'ptr';
                 } else if (createList && index === cMethodArgs.length - 2) {
@@ -588,10 +637,6 @@ function buildHandle(typeName, rawInfo) {
 }
 
 function toRawTypeName(typeName) {
-    if (typeName === 'VkAllocationCallbacks') {
-        return 'c_void';
-    }
-
     return PRIMITIVE_TYPES[typeName] || `Raw${typeName}`;
 }
 

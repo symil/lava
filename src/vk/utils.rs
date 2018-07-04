@@ -1,5 +1,4 @@
 use std::*;
-use std::option::Option;
 use std::vec::Vec;
 use std::convert::*;
 use vk::VkResult;
@@ -8,7 +7,7 @@ use vk::RawVkResult;
 pub type RawVkHandle = usize;
 pub const VK_NULL_HANDLE : RawVkHandle = 0;
 
-const VK_SUCCESS : RawVkResult = VkFrom::from(VkResult::Success);
+const VK_SUCCESS : RawVkResult = 0;
 
 pub trait VkFrom<T> {
     fn from(&T) -> Self;
@@ -18,7 +17,7 @@ pub fn vk_make_version(version: &[u32; 3]) -> u32 {
     (((version[0]) << 22) | ((version[1]) << 12) | (version[2]))
 }
 
-pub unsafe fn vk_call_retrieve_list<T, U, F>(vk_func: F) -> Result<Vec<U>, RawVkResult>
+pub unsafe fn vk_call_retrieve_list<T, U, F>(vk_func: F) -> Result<Vec<U>, VkResult>
     where
         U: VkFrom<T>,
         F: Fn(*mut u32, *mut T) -> RawVkResult
@@ -35,7 +34,7 @@ pub unsafe fn vk_call_retrieve_list<T, U, F>(vk_func: F) -> Result<Vec<U>, RawVk
 
             Ok(vector.iter().map(|raw| VkFrom::from(raw)).collect())
         },
-        _ => Err(result)
+        _ => Err(VkFrom::from(&result))
     }
 }
 
@@ -47,7 +46,7 @@ pub unsafe fn vk_call_retrieve_list_unchecked<T, U, F>(vk_func: F) -> Vec<U>
     vk_call_retrieve_list(|count, ptr| { vk_func(count, ptr); VK_SUCCESS }).unwrap()
 }
 
-pub unsafe fn vk_call_retrieve_single<T, U, F, C>(vk_func: F, callback: C) -> Result<U, RawVkResult>
+pub unsafe fn vk_call_retrieve_single<T, U, F, C>(vk_func: F, callback: C) -> Result<U, VkResult>
     where
         U: VkFrom<T>,
         F: Fn(*mut T) -> RawVkResult,
@@ -57,12 +56,12 @@ pub unsafe fn vk_call_retrieve_single<T, U, F, C>(vk_func: F, callback: C) -> Re
     let result = vk_func(&mut raw as *mut T);
 
     match result {
-        VkResult::Success => {
+        VK_SUCCESS => {
             let mut value = VkFrom::from(&raw);
             callback(&mut value);
             Ok(value)
         },
-        _ => Err(result)
+        _ => Err(VkFrom::from(&result))
     }
 }
 
@@ -72,7 +71,7 @@ pub unsafe fn vk_call_retrieve_single_unchecked<T, U, F, C>(vk_func: F, callback
         F: Fn(*mut T),
         C: Fn(&mut U)
 {
-    vk_call_retrieve_single(|ptr| { vk_func(ptr); VkResult::Success }, callback).unwrap()
+    vk_call_retrieve_single(|ptr| { vk_func(ptr); VK_SUCCESS }, callback).unwrap()
 }
 
 pub fn to_vk_bool(value: bool) -> u32 {

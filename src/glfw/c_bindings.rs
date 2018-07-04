@@ -13,7 +13,7 @@ extern {
     pub fn glfwWindowHint(hint: i32, value: i32);
     pub fn glfwWindowShouldClose(window: *mut RawGlfwWindow) -> i32;
     pub fn glfwPollEvents();
-    pub fn glfwCreateWindowSurface(vk_instance: RawVkInstance, window: *mut RawGlfwWindow, allocator: *const c_void, surface: *mut RawVkSurface) -> RawVkResult;
+    // pub fn glfwCreateWindowSurface(vk_instance: RawVkInstance, window: *mut RawGlfwWindow, allocator: *const c_void, surface: *mut RawVkSurface) -> RawVkResult;
     pub fn glfwGetRequiredInstanceExtensions(count: *mut u32) -> *const *const c_char;
 }
 
