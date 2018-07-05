@@ -17,11 +17,11 @@ pub struct RawVkApplicationInfo {
 }
 
 pub struct VkApplicationInfo {
-    application_name: String,
-    application_version: [u32; 3],
-    engine_name: String,
-    engine_version: [u32; 3],
-    api_version: [u32; 3],
+    pub application_name: String,
+    pub application_version: [u32; 3],
+    pub engine_name: String,
+    pub engine_version: [u32; 3],
+    pub api_version: [u32; 3],
 }
 
 impl VkFrom<VkApplicationInfo> for RawVkApplicationInfo {

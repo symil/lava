@@ -29,7 +29,18 @@ const WINDOW_WIDTH : u32 = 800;
 const WINDOW_HEIGHT : u32 = 600;
 
 fn main() {
-    
+    let instance = VkInstance::new(&VkInstanceCreateInfo {
+        flags: VkInstanceCreateFlags { },
+        application_info: VkApplicationInfo {
+            application_name: String::from("foo"),
+            application_version: [0, 1, 0],
+            engine_name: String::from("engine"),
+            engine_version: [0, 1, 0],
+            api_version: [1, 0, 0]
+        },
+        enabled_layer_names: Vec::new(),
+        enabled_extension_names: Vec::new()
+    });
 
     // let glfw = GlfwInstance::new();
     // let required_extensions = glfw.get_required_vulkan_extensions().unwrap();

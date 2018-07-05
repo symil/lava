@@ -264,7 +264,7 @@ function buildStruct(typeName, parsed) {
         } else if (representVersion) {
             fromWrappedToRawFields.push(`${rustFieldName}: vk_make_version(&${srcVar}.${rustFieldName})`);
             fromRawToWrappedFields.push(`${rustFieldName}: vk_from_version(${srcVar}.${rustFieldName})`);
-            wrappedFields.push({ name: rustFieldName, type: '[u32; 3]' });
+            wrappedFields.push({ name: rustFieldName, type: '[u32; 3]', public: true });
         } else {
             const src = `${srcVar}.${rustFieldName}`;
             const ref = isHandleType ? '' : '&';
@@ -333,7 +333,7 @@ function buildStruct(typeName, parsed) {
                 fromRawToWrappedFields.push(`${rustFieldName}: ${rawToWrappedSingleEltConversion}`);
             }
 
-            wrappedFields.push({ name: rustFieldName, type: wrappedFieldType });
+            wrappedFields.push({ name: rustFieldName, type: wrappedFieldType, public: true });
         }
     });
 

@@ -18,10 +18,10 @@ pub struct RawVkInstanceCreateInfo {
 }
 
 pub struct VkInstanceCreateInfo {
-    flags: VkInstanceCreateFlags,
-    application_info: VkApplicationInfo,
-    enabled_layer_names: Vec<String>,
-    enabled_extension_names: Vec<String>,
+    pub flags: VkInstanceCreateFlags,
+    pub application_info: VkApplicationInfo,
+    pub enabled_layer_names: Vec<String>,
+    pub enabled_extension_names: Vec<String>,
 }
 
 impl VkFrom<VkInstanceCreateInfo> for RawVkInstanceCreateInfo {
