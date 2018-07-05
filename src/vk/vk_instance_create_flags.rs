@@ -5,6 +5,7 @@ use std::os::raw::c_char;
 
 pub type RawVkInstanceCreateFlags = u32;
 
+#[derive(Debug)]
 pub struct VkInstanceCreateFlags {
 }
 

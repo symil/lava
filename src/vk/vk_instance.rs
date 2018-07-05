@@ -10,6 +10,7 @@ use libc::c_void;
 
 pub type RawVkInstance = RawVkHandle;
 
+#[derive(Debug)]
 pub struct VkInstance {
     _handle: RawVkInstance,
 }
@@ -27,6 +28,15 @@ impl VkInstance {
             vk_call_retrieve_single(
                 |ptr| vkCreateInstance(raw_create_info_ptr, null(), ptr),
                 |instance| {  }
+            )
+        }
+    }
+    
+    pub fn get_supported_extensions(&self) -> Result<Vec<VkExtensionProperties>, VkResult> {
+        unsafe {
+            vk_call_retrieve_list(
+                |count, ptr| vkEnumerateInstanceExtensionProperties(null(), count, ptr),
+                |extension_properties| {  }
             )
         }
     }
@@ -60,4 +70,5 @@ impl Drop for VkInstance {
 extern {
     fn vkDestroyInstance(instance: RawVkInstance, p_allocator: *const c_void);
     fn vkCreateInstance(p_create_info: *const RawVkInstanceCreateInfo, p_allocator: *const c_void, p_instance: *mut RawVkInstance)-> RawVkResult;
+    fn vkEnumerateInstanceExtensionProperties(p_layer_name: *const c_char, p_property_count: *mut u32, p_properties: *mut RawVkExtensionProperties)-> RawVkResult;
 }

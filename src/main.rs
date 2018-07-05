@@ -40,7 +40,14 @@ fn main() {
         },
         enabled_layer_names: Vec::new(),
         enabled_extension_names: Vec::new()
-    });
+    }).expect("Failed to create instance");
+
+    let instance_supported_extensions : Vec<String> = instance
+        .get_supported_extensions()
+        .expect("Failed to retrieve instance extensions")
+        .into_iter().map(|ext| ext.extension_name).collect();
+
+    println!("{:#?}", instance_supported_extensions);
 
     // let glfw = GlfwInstance::new();
     // let required_extensions = glfw.get_required_vulkan_extensions().unwrap();

@@ -25,10 +25,11 @@ pub fn vk_from_version(value: u32) -> [u32; 3] {
     ]
 }
 
-pub unsafe fn vk_call_retrieve_list<T, U, F>(vk_func: F) -> Result<Vec<U>, VkResult>
+pub unsafe fn vk_call_retrieve_list<T, U, F, C>(vk_func: F, callback: C) -> Result<Vec<U>, VkResult>
     where
         U: VkFrom<T>,
-        F: Fn(*mut u32, *mut T) -> RawVkResult
+        F: Fn(*mut u32, *mut T) -> RawVkResult,
+        C: Fn(&mut U)
 {
     let mut count : u32 = 0;
     let mut vector : Vec<T> = Vec::new();
@@ -40,18 +41,23 @@ pub unsafe fn vk_call_retrieve_list<T, U, F>(vk_func: F) -> Result<Vec<U>, VkRes
             vector.set_len(count as usize);
             vk_func(&mut count as *mut u32, vector.as_mut_ptr());
 
-            Ok(vector.iter().map(|raw| VkFrom::vk_from(raw)).collect())
+            Ok(vector.iter().map(|raw| {
+                let mut value = VkFrom::vk_from(raw);
+                callback(&mut value);
+                value
+            }).collect())
         },
         _ => Err(VkFrom::vk_from(&result))
     }
 }
 
-pub unsafe fn vk_call_retrieve_list_unchecked<T, U, F>(vk_func: F) -> Vec<U>
+pub unsafe fn vk_call_retrieve_list_unchecked<T, U, F, C>(vk_func: F, callback: C) -> Vec<U>
     where
         U: VkFrom<T>,
-        F: Fn(*mut u32, *mut T)
+        F: Fn(*mut u32, *mut T),
+        C: Fn(&mut U)
 {
-    vk_call_retrieve_list(|count, ptr| { vk_func(count, ptr); VK_SUCCESS }).unwrap()
+    vk_call_retrieve_list(|count, ptr| { vk_func(count, ptr); VK_SUCCESS }, callback).unwrap()
 }
 
 pub unsafe fn vk_call_retrieve_single<T, U, F, C>(vk_func: F, callback: C) -> Result<U, VkResult>

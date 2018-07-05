@@ -17,6 +17,7 @@ pub struct RawVkInstanceCreateInfo {
     enabled_extension_names: *mut *mut c_char,
 }
 
+#[derive(Debug)]
 pub struct VkInstanceCreateInfo {
     pub flags: VkInstanceCreateFlags,
     pub application_info: VkApplicationInfo,

@@ -16,6 +16,7 @@ pub struct RawVkApplicationInfo {
     api_version: u32,
 }
 
+#[derive(Debug)]
 pub struct VkApplicationInfo {
     pub application_name: String,
     pub application_version: [u32; 3],

@@ -7,6 +7,7 @@ const { parseType, parseFunction, isHandle } = require('./parse_vulkan_h');
 const ROOT = path.join(__dirname, '..');
 const DST_DIR_NAME = 'vk';
 const DST_DIR_PATH = path.join(ROOT, 'src', DST_DIR_NAME);
+const SCHEMA = require('./schema');
 
 const PRIMITIVE_TYPES = {
     uint32_t: 'u32',
@@ -23,6 +24,20 @@ const PRIMITIVE_TYPES = {
     VkAllocationCallbacks: 'c_void'
 };
 
+const UNSAFE_FUNCTIONS = [
+    'copy_as_string',
+    'copy_as_string_vec',
+    'copy_as_c_string',
+    'free_c_string',
+    'copy_as_c_string_array',
+    'free_c_string_array',
+    'copy_as_c_ptr',
+    'free_c_ptr',
+    'copy_as_c_array',
+    'free_c_array',
+    'vec_from_c_ptr'
+];
+
 const META_TYPE_TO_BUILD_FUNC = {
     handle: buildHandle,
     struct: buildStruct,
@@ -31,36 +46,12 @@ const META_TYPE_TO_BUILD_FUNC = {
     special: buildSpecial
 };
 
-const SCHEMA = {
-    VkInstance: {
-        new: 'vkCreateInstance',
-        drop: 'vkDestroyInstance'
-    },
-    VkBuffer: {
-        // new: 'vkCreateBuffer',
-        // drop: 'vkDestroyBuffer'
-    },
-    VkPhysicalDevice: {
-        // getList: 'vkEnumeratePhysicalDevices',
-        // getSurfaceCapabilities: 'vkGetPhysicalDeviceSurfaceCapabilitiesKHR',
-        // doesSupportSurface: 'vkGetPhysicalDeviceSurfaceSupportKHR',
-        // getSurfacePresentModes: 'vkGetPhysicalDeviceSurfacePresentModesKHR',
-        // createLogicalDevice: 'VkDevice::new'
-    },
-    VkDevice: {
-        // new: 'vkCreateDevice'
-    }
-};
-
 const DEFINITIONS = {};
 
 main();
 
 function main() {
-    // buildType('VkResult');
     buildType('VkInstance');
-    // buildType('VkBufferCreateFlags');
-    // buildType('VkInstanceCreateInfo');
 
     if (!fs.existsSync(DST_DIR_PATH)) {
         fs.mkdirSync(DST_DIR_PATH);
@@ -114,11 +105,11 @@ function writeVkType(name, blocks) {
 }
 
 function methodToBlock(method) {
-    const { name, args, returnType, body, public } = method;
+    const { name, args, returnType, body, public, unsafe } = method;
 
     return [
         `\n${public ? 'pub ' : ''}fn ${name}(${args.map(({name, type}) => (name ? `${name}: `: '') + type).join(', ')})` + (returnType ? ` -> ${returnType}` : ''),
-            body
+        unsafe ? [`unsafe`, body] : body
     ];
 }
 
@@ -142,9 +133,11 @@ function typeToBlock(typeName, definition) {
     if (metaType === 'typedef') {
         return `pub type ${typeName} = ${definition.target};`;
     } else if (metaType === 'struct') {
-        const header = definition.reprC ? '#[repr(C)]\n' : '';
+        const headers = [
+            definition.reprC ? '#[repr(C)]' : `#[derive(Debug)]`
+        ];
 
-        return [`${header}pub struct ${typeName}`, definition.fields.map(({name, type, public}) => `${public ? 'pub ' : ''}${name}: ${type},`)];
+        return [`${headers.join('\n')}\npub struct ${typeName}`, definition.fields.map(({name, type, public}) => `${public ? 'pub ' : ''}${name}: ${type},`)];
     } else if (metaType === 'enum') {
         const header = ['#[repr(i32)]', '#[derive(Debug, PartialEq, Copy, Clone)]'].join('\n');
         
@@ -244,6 +237,7 @@ function buildStruct(typeName, parsed) {
         const rawRustFieldType = getRawRustFieldType(field);
         const isCount = areCountAndArray(field, nextField);
         const isArrayPtr = areCountAndArray(prevField, field);
+        const arraySize = field.arraySize;
         const isStaticArray = !!field.arraySize;
         const isPointer = field.isPointer;
         const isTypeChar = field.typeName === 'char';
@@ -317,7 +311,7 @@ function buildStruct(typeName, parsed) {
                     fromWrappedToRawFields.push(`${rustFieldName}: [0; ${arraySize}]`);
                     fromRawToWrappedFields.push(`${rustFieldName}: copy_as_string(&${src} as *const c_char)`);
                 } else {
-                    wrappedFieldType = `[${wrappedTypeName}, ${arraySize}]`;
+                    wrappedFieldType = `[${wrappedTypeName}; ${arraySize}]`;
                     fromWrappedToRawFields.push(`${rustFieldName}: ${src}${wrappedToRawCollectionConversion}`);
                     fromRawToWrappedFields.push(`${rustFieldName}: ${src}${rawToWrappedCollectionConversion}`);
                 }
@@ -344,21 +338,24 @@ function buildStruct(typeName, parsed) {
         name: 'vk_from',
         args: [{name: 'value', type: `&${wrappedTypeName}`}],
         returnType: 'Self',
-        body: [`unsafe`, [`Self`, fromWrappedToRawFields.map(x => `${x},`)]]
+        body: [`Self`, fromWrappedToRawFields.map(x => `${x},`)],
+        unsafe: fromWrappedToRawFields.some(containsUnsafeFunction)
     };
 
     const fromRawToWrapped = {
         name: 'vk_from',
         args: [{name: 'value', type: `&${rawTypeName}`}],
         returnType: 'Self',
-        body: [`unsafe`, [`Self`, fromRawToWrappedFields.map(x => `${x},`)]]
+        body: [`Self`, fromRawToWrappedFields.map(x => `${x},`)],
+        unsafe: fromRawToWrappedFields.some(containsUnsafeFunction)
     };
 
     const rawDropMethod = !dropStatements.length ? null : {
         name: 'drop',
         args: [{type: '&mut self'}],
         returnType: null,
-        body: ['unsafe', dropStatements]
+        body: dropStatements,
+        unsafe: dropStatements.some(containsUnsafeFunction)
     };
 
     return {
@@ -366,8 +363,12 @@ function buildStruct(typeName, parsed) {
         rawTypeName, wrappedTypeName,
         rawDefinition, wrappedDefinition,
         fromRawToWrapped, fromWrappedToRaw,
-        rawDropMethod
+        rawDropMethod // <- TODO
     };
+}
+
+function containsUnsafeFunction(str) {
+    return UNSAFE_FUNCTIONS.some(func => str.includes(func));
 }
 
 function doesRepresentVersion(field) {
@@ -395,7 +396,7 @@ function getRawRustFieldType(field) {
         if (isPointer) {
             return `*mut ${rawTypeName}`;
         } else if (arraySize) {
-            return `[${rawTypeName}, ${arraySize}]`;
+            return `[${rawTypeName}; ${arraySize}]`;
         } else {
             return rawTypeName;
         }
@@ -446,7 +447,8 @@ function buildEnum(typeName, rawInfo) {
         name: 'vk_from',
         args: [{name: 'value', type: `&${rawTypeName}`}],
         returnType: 'Self',
-        body: [`unsafe`, [`*((value as *const i32) as *const ${wrappedTypeName})`]]
+        body: [`*((value as *const i32) as *const ${wrappedTypeName})`],
+        unsafe: true
     };
 
     return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition, fromWrappedToRaw, fromRawToWrapped };
@@ -540,13 +542,14 @@ function buildHandle(typeName, rawInfo) {
                 return `self.${field.name}`;
             }
         });
-        const body = ['unsafe', [`${cMethodName}(${cArgs.join(', ')});`]];
+        const body = [`${cMethodName}(${cArgs.join(', ')});`];
         
         wrappedDropMethod = {
             name: 'drop',
             args: [{type: '&mut self'}],
             returnType: null,
-            body: body
+            body: body,
+            unsafe: true
         };
 
         externFunctions.push(cMethod);
@@ -583,7 +586,7 @@ function buildHandle(typeName, rawInfo) {
                     return 'ptr';
                 } else if (createList && index === cMethodArgs.length - 2) {
                     return 'count';
-                } else if (arg.name === 'pAllocator') {
+                } else if (arg.name === 'pAllocator' || arg.name === 'pLayerName') {
                     return 'null()';
                 } else {
                     const rawArgType = toRawTypeName(arg.typeName);
@@ -697,8 +700,9 @@ function buildHandle(typeName, rawInfo) {
             name: toSnakeCase(methodName),
             args: methodArguments,
             returnType: returnType,
-            body: unsafe ? ['unsafe', statements] : statements,
-            public: true
+            body: statements,
+            public: true,
+            unsafe: unsafe
         };
 
         methods.push(method);
