@@ -2,21 +2,34 @@ const SCHEMA = {
     VkInstance: {
         new: 'vkCreateInstance',
         drop: 'vkDestroyInstance',
-        getSupportedExtensions: 'vkEnumerateInstanceExtensionProperties'
-    },
-    VkBuffer: {
-        // new: 'vkCreateBuffer',
-        // drop: 'vkDestroyBuffer'
+        getSupportedExtensions: 'vkEnumerateInstanceExtensionProperties',
+        getPhysicalDevices: 'VkPhysicalDevice::getList'
     },
     VkPhysicalDevice: {
-        // getList: 'vkEnumeratePhysicalDevices',
-        // getSurfaceCapabilities: 'vkGetPhysicalDeviceSurfaceCapabilitiesKHR',
-        // doesSupportSurface: 'vkGetPhysicalDeviceSurfaceSupportKHR',
-        // getSurfacePresentModes: 'vkGetPhysicalDeviceSurfacePresentModesKHR',
-        // createLogicalDevice: 'VkDevice::new'
+        getList: 'vkEnumeratePhysicalDevices',
+        getSupportedExtensions: 'vkEnumerateDeviceExtensionProperties',
+        getProperties: 'vkGetPhysicalDeviceProperties',
+        getFeatures: 'vkGetPhysicalDeviceFeatures',
+        getQueueFamilies: 'vkGetPhysicalDeviceQueueFamilyProperties',
+        createLogicalDevice: 'VkDevice::new'
     },
     VkDevice: {
-        // new: 'vkCreateDevice'
+        new: 'vkCreateDevice',
+        drop: 'vkDestroyDevice',
+        getQueue: 'VkQueue::get',
+        createBuffer: 'VkBuffer::new',
+        createSwapchain: 'VkSwapchainKHR::new'
+    },
+    VkQueue: {
+        get: 'vkGetDeviceQueue'
+    },
+    VkBuffer: {
+        new: 'vkCreateBuffer',
+        drop: 'vkDestroyBuffer'
+    },
+    VkSwapchainKHR: {
+        new: 'vkCreateSwapchainKHR',
+        drop: 'vkDestroySwapchainKHR'
     }
 };
 

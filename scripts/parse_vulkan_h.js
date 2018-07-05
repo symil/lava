@@ -36,7 +36,7 @@ function parseType(name) {
 }
 
 function parseStruct(structName) {
-    const match = VULKAN_H.match(new RegExp(`typedef struct ${structName} {\n([^}]+)\n}`, 'm'));
+    const match = VULKAN_H.match(new RegExp(`typedef struct ${structName} {\n([^}]+)\n}`, 'mi'));
 
     if (!match) {
         return null;
@@ -61,7 +61,7 @@ function parseStruct(structName) {
 }
 
 function parseEnum(typeName) {
-    const match = VULKAN_H.match(new RegExp(`typedef enum ${typeName}\\s+{\n([^}]+)\n}`, 'm'));
+    const match = VULKAN_H.match(new RegExp(`typedef enum ${typeName}\\s+{\n([^}]+)\n}`, 'mi'));
 
     if (!match) {
         return null;
@@ -81,7 +81,7 @@ function parseEnum(typeName) {
 
 function parseBitFlags(typeName) {
     const bitsFlagTypeName = typeName.replace('Flags', 'FlagBits');
-    const match = VULKAN_H.match(new RegExp(`typedef enum ${bitsFlagTypeName}\\s+{\n([^}]+)\n}`, 'm'));
+    const match = VULKAN_H.match(new RegExp(`typedef enum ${bitsFlagTypeName}\\s+{\n([^}]+)\n}`, 'mi'));
 
     if (!match) {
         return typeName.includes('Flags') ? [] : null;
@@ -102,13 +102,13 @@ function parseBitFlags(typeName) {
 }
 
 function parseHandle(typeName) {
-    const match = VULKAN_H.match(new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}\\)`, 'm'));
+    const match = VULKAN_H.match(new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}\\)`, 'mi'));
 
     return match ? {} : null;
 }
 
 function isHandle(typeName) {
-    return new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}\\)`, 'm').test(VULKAN_H);
+    return new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}\\)`, 'mi').test(VULKAN_H);
 }
 
 function parseFunction(name) {
