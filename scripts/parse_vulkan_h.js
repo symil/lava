@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
-const VULKAN_H = require('./constants').VULKAN_H;
+const path = require('path');
+const fs = require('fs');
+
+const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
+const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, `include`, `vulkan`, `vulkan_core.h`), 'utf8');
 
 const POSSIBLE_TYPES = {
     struct: parseStruct,
@@ -79,10 +83,8 @@ function parseBitFlags(typeName) {
     const bitsFlagTypeName = typeName.replace('Flags', 'FlagBits');
     const match = VULKAN_H.match(new RegExp(`typedef enum ${bitsFlagTypeName}\\s+{\n([^}]+)\n}`, 'm'));
 
-    // TODO: check for empty flags
-
     if (!match) {
-        return null;
+        return typeName.includes('Flags') ? [] : null;
     }
 
     return match[1].split('\n').map(line => {

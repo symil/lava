@@ -2,9 +2,11 @@
 
 const path = require('path');
 const fs = require('fs');
+const { parseType, parseFunction, isHandle } = require('./parse_vulkan_h');
 
-const { parseType, parseFunction, isHandle } = require('./parse');
-const { DST_DIR_PATH } = require('./constants');
+const ROOT = path.join(__dirname, '..');
+const DST_DIR_NAME = 'vk';
+const DST_DIR_PATH = path.join(ROOT, 'src', DST_DIR_NAME);
 
 const PRIMITIVE_TYPES = {
     uint32_t: 'u32',
@@ -25,7 +27,8 @@ const META_TYPE_TO_BUILD_FUNC = {
     handle: buildHandle,
     struct: buildStruct,
     enum: buildEnum,
-    flags: buildBitFlags
+    flags: buildBitFlags,
+    special: buildSpecial
 };
 
 const SCHEMA = {
@@ -55,15 +58,29 @@ main();
 
 function main() {
     // buildType('VkResult');
-    // buildType('VkInstance');
-    buildType('VkBufferCreateFlags');
+    buildType('VkInstance');
+    // buildType('VkBufferCreateFlags');
+    // buildType('VkInstanceCreateInfo');
+
+    if (!fs.existsSync(DST_DIR_PATH)) {
+        fs.mkdirSync(DST_DIR_PATH);
+    }
 
     Object.entries(DEFINITIONS).forEach(([typeName, typeDefinition]) => {
         const fileContent = generateTypeFileContent(typeName, typeDefinition);
         writeVkType(typeName, fileContent);
     });
 
+
+    writeVkUtils(DST_DIR_PATH);
     refreshModRs(DST_DIR_PATH);
+}
+
+function writeVkUtils(dirPath) {
+    const fileContent = fs.readFileSync(path.join(__dirname, 'static', 'vk_utils.rs'), 'utf8');
+    const targetFilePath = path.join(dirPath, 'utils.rs');
+    
+    fs.writeFileSync(targetFilePath, fileContent, 'utf8');
 }
 
 function refreshModRs(dirPath) {
@@ -91,7 +108,7 @@ function writeVkType(name, blocks) {
         }
     }).filter(x => !!x).join('\n\n');
 
-    console.log(fileContent);
+    // console.log(fileContent);
 
     fs.writeFileSync(filePath, fileContent, 'utf8');
 }
@@ -100,7 +117,7 @@ function methodToBlock(method) {
     const { name, args, returnType, body, public } = method;
 
     return [
-        `${public ? 'pub ' : ''}fn ${name}(${args.map(({name, type}) => (name ? `${name}: `: '') + type).join(', ')})` + (returnType ? ` -> ${returnType}` : ''),
+        `\n${public ? 'pub ' : ''}fn ${name}(${args.map(({name, type}) => (name ? `${name}: `: '') + type).join(', ')})` + (returnType ? ` -> ${returnType}` : ''),
             body
     ];
 }
@@ -138,11 +155,7 @@ function typeToBlock(typeName, definition) {
 function generateTypeFileContent(typeName, definition) {
     const { rawTypeName, wrappedTypeName, uses, rawDefinition, wrappedDefinition, methods, rawDropMethod, wrappedDropMethod, externFunctions, fromRawToWrapped, fromWrappedToRaw } = definition;
 
-    const baseUses = [];
-
-    if (fromRawToWrapped || fromWrappedToRaw) {
-        baseUses.push('vk::VkFrom');
-    }
+    const baseUses = ['vk::*', 'std::os::raw::c_char'];
 
     if (rawDropMethod || wrappedDropMethod) {
         baseUses.push(`std::ops::Drop`);
@@ -152,9 +165,9 @@ function generateTypeFileContent(typeName, definition) {
         baseUses.concat(uses || []).map(use => `use ${use};`).join('\n'),
         typeToBlock(rawTypeName, rawDefinition),
         typeToBlock(wrappedTypeName, wrappedDefinition),
-        methods ? [`impl ${wrappedTypeName}`].concat(methods.map(methodToBlock)) : '',
-        fromRawToWrapped ? [`impl VkFrom<${rawTypeName}> for ${wrappedTypeName}`, methodToBlock(fromRawToWrapped)] : '',
+        methods ? [`impl ${wrappedTypeName}`, flatten(methods.map(methodToBlock))] : '',
         fromWrappedToRaw ? [`impl VkFrom<${wrappedTypeName}> for ${rawTypeName}`, methodToBlock(fromWrappedToRaw)] : '',
+        fromRawToWrapped ? [`impl VkFrom<${rawTypeName}> for ${wrappedTypeName}`, methodToBlock(fromRawToWrapped)] : '',
         rawDropMethod ? [`impl Drop for ${rawTypeName}`, methodToBlock(rawDropMethod)] : '',
         wrappedDropMethod ? [`impl Drop for ${wrappedTypeName}`, methodToBlock(wrappedDropMethod)] : '',
         externFunctions ? [`extern`, externFunctions.map(externalMethodToBlock)] : ''
@@ -164,7 +177,7 @@ function generateTypeFileContent(typeName, definition) {
 }
 
 function buildType(typeName) {
-    if (typeName in PRIMITIVE_TYPES || typeName in DEFINITIONS) {
+    if (typeName in PRIMITIVE_TYPES || typeName in DEFINITIONS || typeName === 'char const*') {
         return;
     }
 
@@ -179,16 +192,36 @@ function buildType(typeName) {
     DEFINITIONS[typeName] = definition;
 }
 
+function buildSpecial(typeName) {
+    let rawTypeName, wrappedTypeName;
+    let rawDefinition, wrappedDefinition;
+    let fromRawToWrapped, fromWrappedToRaw;
+
+    if (typeName === 'VkBool32') {
+        rawTypeName = 'RawVkBool32';
+        wrappedTypeName = 'VkBool32';
+        rawDefinition = { type: 'typedef', target: 'u32' };
+        wrappedDefinition = { type: 'typedef', target: 'bool' };
+        fromRawToWrapped = { name: 'vk_from', args: [{name: 'value', type: '&RawVkBool32'}], returnType: 'Self', body: [`*value != 0`] };
+        fromWrappedToRaw = { name: 'vk_from', args: [{name: 'value', type: '&VkBool32'}], returnType: 'Self', body: [`if *value { 1 } else { 0 }`] };
+    } else if (typeName === 'VkDeviceSize') {
+        rawTypeName = 'RawVkDeviceSize';
+        wrappedTypeName = 'VkDeviceSize';
+        rawDefinition = { type: 'typedef', target: 'u64' };
+        wrappedDefinition = { type: 'typedef', target: 'u64' };
+        fromRawToWrapped = { name: 'vk_from', args: [{name: 'value', type: '&RawVkDeviceSize'}], returnType: 'Self', body: [`*value`] };
+        fromWrappedToRaw = { name: 'vk_from', args: [{name: 'value', type: '&VkDeviceSize'}], returnType: 'Self', body: [`*value`] };
+    }
+
+    return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition, fromRawToWrapped, fromWrappedToRaw };
+}
+
 function buildStruct(typeName, parsed) {
     const rawTypeName = toRawTypeName(typeName);
     const wrappedTypeName = toWrappedTypeName(typeName);
 
     const uses = [
-        `std::ops::Drop`,
-        `std::vec::Vec`,
         `std::ptr::null`,
-        `vk::VkFrom`,
-        `vk::RawVkHandle`,
         'libc::*'
     ];
 
@@ -202,6 +235,8 @@ function buildStruct(typeName, parsed) {
     const dropStatements = [];
 
     parsed.fields.forEach((field, index) => {
+        buildType(field.typeName);
+
         const prevField = parsed.fields[index - 1];
         const nextField = parsed.fields[index + 1];
 
@@ -215,31 +250,36 @@ function buildStruct(typeName, parsed) {
         const isPrimitiveType = !!PRIMITIVE_TYPES[field.typeName];
         const isHandleType = isHandle(field.typeName);
         const representIndex = doesFieldRepresentIndex(field);
+        const representVersion = doesRepresentVersion(field);
 
         rawFields.push({ name: rustFieldName, type: rawRustFieldType });
 
         if (field.name === 'sType') {
-            fromWrappedToRawFields.push(`${rustFieldName}: VkFrom::from(&VkStructure::${typeName.substring(2)})`);
+            fromWrappedToRawFields.push(`${rustFieldName}: VkFrom::vk_from(&VkStructureType::${typeName.substring(2)})`);
         } else if (field.name === 'pNext') {
             fromWrappedToRawFields.push(`${rustFieldName}: null()`);
         } else if (isCount) {
             const vecFieldName = getRustFieldName(nextField);
             fromWrappedToRawFields.push(`${rustFieldName}: ${srcVar}.${vecFieldName}.len() as u32`);
+        } else if (representVersion) {
+            fromWrappedToRawFields.push(`${rustFieldName}: vk_make_version(&${srcVar}.${rustFieldName})`);
+            fromRawToWrappedFields.push(`${rustFieldName}: vk_from_version(${srcVar}.${rustFieldName})`);
+            wrappedFields.push({ name: rustFieldName, type: '[u32; 3]' });
         } else {
             const src = `${srcVar}.${rustFieldName}`;
             const ref = isHandleType ? '' : '&';
             const wrappedToRawCollectionConversion = isPrimitiveType
                 ? (representIndex ? `.iter().map(|x| x as u32).collect()` : '')
-                : `.iter().map(|x| VkFrom::from(x)).collect()`;
+                : `.iter().map(|x| VkFrom::vk_from(x)).collect()`;
             const wrappedToRawSingleEltConversion = isPrimitiveType
                 ? (representIndex ? `${src} as u32` : src)
-                : `VkFrom::from(${ref}${src})`;
+                : `VkFrom::vk_from(${ref}${src})`;
             const rawToWrappedCollectionConversion = isPrimitiveType
                 ? (representIndex ? `.iter().map(|x| x as usize).collect()` : '')
-                : `.iter().map(|x| VkFrom::from(x)).collect()`;
+                : `.iter().map(|x| VkFrom::vk_from(x)).collect()`;
             const rawToWrappedSingleEltConversion = isPrimitiveType
                 ? (representIndex ? `${src} as usize` : src)
-                : `VkFrom::from(&${src})`;
+                : `VkFrom::vk_from(&${isPointer ? `(*${src})` : src})`;
             const wrappedTypeName = representIndex ? 'usize' : toWrappedTypeName(field.typeName);
             let wrappedFieldType = null;
 
@@ -249,7 +289,7 @@ function buildStruct(typeName, parsed) {
                 if (isStringArray(field)) {
                     wrappedFieldType = `Vec<String>`;
                     fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_string_array(&${src})`);
-                    fromRawToWrappedFields.push(`${rustFieldName}: copy_as_string_array(${countVar}, ${src})`);
+                    fromRawToWrappedFields.push(`${rustFieldName}: copy_as_string_vec(${countVar}, ${src} as ${rawRustFieldType.replace(/\*mut /g, '*const ')})`);
                 } else {
                     wrappedFieldType = `Vec<${wrappedTypeName}>`;
                     fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_array(&${src}${wrappedToRawCollectionConversion})`);
@@ -268,8 +308,8 @@ function buildStruct(typeName, parsed) {
                     } else {
                         wrappedFieldType = wrappedTypeName;
                     }
-                    fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_ptr(&${wrappedToRawSingleEltConversion})`);
-                    fromRawToWrappedFields.push(`${rustFieldName}: *${rawToWrappedSingleEltConversion}`);
+                    fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_ptr(${wrappedToRawSingleEltConversion})`);
+                    fromRawToWrappedFields.push(`${rustFieldName}: ${rawToWrappedSingleEltConversion}`);
                 }
             } else if (isStaticArray) {
                 if (isTypeChar) {
@@ -297,10 +337,41 @@ function buildStruct(typeName, parsed) {
         }
     });
 
-    const fromWrappedToRaw = [rawTypeName, fromWrappedToRawFields.map(x => `${x},`)];
-    const fromRawToWrapped = [wrappedTypeName, fromRawToWrappedFields.map(x => `${x},`)];
+    const rawDefinition = { type: 'struct', reprC: true, fields: rawFields };
+    const wrappedDefinition = { type: 'struct', reprC: false, fields: wrappedFields };
 
-    return {};
+    const fromWrappedToRaw = {
+        name: 'vk_from',
+        args: [{name: 'value', type: `&${wrappedTypeName}`}],
+        returnType: 'Self',
+        body: [`unsafe`, [`Self`, fromWrappedToRawFields.map(x => `${x},`)]]
+    };
+
+    const fromRawToWrapped = {
+        name: 'vk_from',
+        args: [{name: 'value', type: `&${rawTypeName}`}],
+        returnType: 'Self',
+        body: [`unsafe`, [`Self`, fromRawToWrappedFields.map(x => `${x},`)]]
+    };
+
+    const rawDropMethod = !dropStatements.length ? null : {
+        name: 'drop',
+        args: [{type: '&mut self'}],
+        returnType: null,
+        body: ['unsafe', dropStatements]
+    };
+
+    return {
+        uses,
+        rawTypeName, wrappedTypeName,
+        rawDefinition, wrappedDefinition,
+        fromRawToWrapped, fromWrappedToRaw,
+        rawDropMethod
+    };
+}
+
+function doesRepresentVersion(field) {
+    return field.typeName === 'uint32_t' && /Version$/.test(field.name);
 }
 
 function doesFieldRepresentIndex(field) {
@@ -332,7 +403,7 @@ function getRawRustFieldType(field) {
 }
 
 function getRustFieldName({name}) {
-    return toSnakeCase(name.replace(/^(p{1,2}|s)[A-Z]/, str => str[str.length - 1]));
+    return toSnakeCase(name.replace(/^(p{1,2})[A-Z]/, str => str[str.length - 1]));
 }
 
 function areCountAndArray(field1, field2) {
@@ -365,14 +436,14 @@ function buildEnum(typeName, rawInfo) {
     };
 
     const fromWrappedToRaw = {
-        name: 'from',
+        name: 'vk_from',
         args: [{name: 'value', type: `&${wrappedTypeName}`}],
         returnType: 'Self',
         body: [`*value as i32`]
     };
 
     const fromRawToWrapped = {
-        name: 'from',
+        name: 'vk_from',
         args: [{name: 'value', type: `&${rawTypeName}`}],
         returnType: 'Self',
         body: [`unsafe`, [`*((value as *const i32) as *const ${wrappedTypeName})`]]
@@ -402,7 +473,21 @@ function buildBitFlags(typeName, rawInfo) {
         fields: fields.map(({name}) => ({ name: name, type: 'bool', public: true }))
     };
 
-    return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition };
+    const fromWrappedToRaw = {
+        name: 'vk_from',
+        args: [{name: 'value', type: `&${wrappedTypeName}`}],
+        returnType: 'Self',
+        body: [['0'].concat(fields.map(({name, value}) => ` + (if value.${name} { ${value} } else { 0 })`))]
+    }
+
+    const fromRawToWrapped = {
+        name: 'vk_from',
+        args: [{name: 'value', type: `&${rawTypeName}`}],
+        returnType: 'Self',
+        body: [`Self`, fields.map(({name, value}) => `${name}: (value & ${value}) > 0,`)]
+    }
+
+    return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition, fromWrappedToRaw, fromRawToWrapped };
 }
 
 function buildHandle(typeName, rawInfo) {
@@ -481,6 +566,10 @@ function buildHandle(typeName, rawInfo) {
 
         if (!def.includes('::')) {
             const cMethod = parseFunction(def);
+
+            buildType(cMethod.returnType);
+            cMethod.args.forEach((arg => buildType(arg.typeName)));
+
             const cMethodArgs = cMethod.args;
             const lastArg = cMethodArgs[cMethodArgs.length - 1];
             const instanceVarName = toSnakeCase(lastArg.typeName.substring(2));
@@ -490,8 +579,6 @@ function buildHandle(typeName, rawInfo) {
             const isConstructor = createSomething && lastArg.typeName === typeName;
             const returnVkResult = cMethod.returnType === 'VkResult';
             const argsForCMethod = cMethodArgs.map((arg, index) => {
-                buildType(arg.typeName);
-
                 if (createSomething && index === cMethodArgs.length - 1) {
                     return 'ptr';
                 } else if (createList && index === cMethodArgs.length - 2) {
@@ -510,7 +597,7 @@ function buildHandle(typeName, rawInfo) {
                         const ptrVarName = `${rawVarName}_ptr`;
     
                         statements.push(
-                            `let mut ${rawVarName} = ${rawArgType}::from(${rustArgName});`, // TODO: properly convert VkBool32
+                            `let mut ${rawVarName} = ${rawArgType}::vk_from(${rustArgName});`, // TODO: properly convert VkBool32
                             `let ${ptrVarName} = &mut ${rawVarName} as *mut ${rawArgType};`
                         );
     
@@ -618,14 +705,14 @@ function buildHandle(typeName, rawInfo) {
     });
 
     fromWrappedToRaw = {
-        name: 'from',
+        name: 'vk_from',
         args: [{name: 'value', type: `&${wrappedTypeName}`}],
         returnType: 'Self',
         body: [`value._handle`]
     };
 
     fromRawToWrapped = {
-        name: 'from',
+        name: 'vk_from',
         args: [{name: 'value', type: `&${rawTypeName}`}],
         returnType: 'Self',
         body: ['Self', fields.map(({name}) => `${name}: ${name === '_handle' ? '*value' : 'VK_NULL_HANDLE'},`)]
@@ -683,4 +770,20 @@ function toSnakeCase(str) {
 
 function toPascalCase(str) {
     return str.split('_').map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()).join('');
+}
+
+function flatten(array) {
+    const result = [];
+
+    for (let i = 0; i < array.length; ++i) {
+        const elt = array[i];
+
+        if (Array.isArray(elt)) {
+            elt.forEach(x => result.push(x));
+        } else {
+            result.push(elt);
+        }
+    }
+
+    return result;
 }
