@@ -18,10 +18,10 @@ impl VkFrom<VkBufferCreateFlags> for RawVkBufferCreateFlags {
     
     fn vk_from(value: &VkBufferCreateFlags) -> Self { {
             0
-             + (if value.sparse_binding { 0x00000001 } else { 0 })
-             + (if value.sparse_residency { 0x00000002 } else { 0 })
-             + (if value.sparse_aliased { 0x00000004 } else { 0 })
-             + (if value.protected { 0x00000008 } else { 0 })
+            + (if value.sparse_binding { 0x00000001 } else { 0 })
+            + (if value.sparse_residency { 0x00000002 } else { 0 })
+            + (if value.sparse_aliased { 0x00000004 } else { 0 })
+            + (if value.protected { 0x00000008 } else { 0 })
         }
     }
 }

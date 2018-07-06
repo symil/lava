@@ -9,7 +9,6 @@ use libc::c_void;
 pub type RawVkPhysicalDevice = RawVkHandle;
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkPhysicalDevice {
     _handle: RawVkPhysicalDevice,
 }

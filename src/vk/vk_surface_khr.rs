@@ -9,7 +9,6 @@ use libc::c_void;
 pub type RawVkSurfaceKHR = RawVkHandle;
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkSurfaceKHR {
     _handle: RawVkSurfaceKHR,
 }

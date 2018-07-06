@@ -10,7 +10,6 @@ use libc::c_void;
 pub type RawVkBuffer = RawVkHandle;
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkBuffer {
     _handle: RawVkBuffer,
     _device: RawVkDevice,

@@ -22,14 +22,14 @@ impl VkFrom<VkImageUsageFlags> for RawVkImageUsageFlags {
     
     fn vk_from(value: &VkImageUsageFlags) -> Self { {
             0
-             + (if value.transfer_src { 0x00000001 } else { 0 })
-             + (if value.transfer_dst { 0x00000002 } else { 0 })
-             + (if value.sampled { 0x00000004 } else { 0 })
-             + (if value.storage { 0x00000008 } else { 0 })
-             + (if value.color_attachment { 0x00000010 } else { 0 })
-             + (if value.depth_stencil_attachment { 0x00000020 } else { 0 })
-             + (if value.transient_attachment { 0x00000040 } else { 0 })
-             + (if value.input_attachment { 0x00000080 } else { 0 })
+            + (if value.transfer_src { 0x00000001 } else { 0 })
+            + (if value.transfer_dst { 0x00000002 } else { 0 })
+            + (if value.sampled { 0x00000004 } else { 0 })
+            + (if value.storage { 0x00000008 } else { 0 })
+            + (if value.color_attachment { 0x00000010 } else { 0 })
+            + (if value.depth_stencil_attachment { 0x00000020 } else { 0 })
+            + (if value.transient_attachment { 0x00000040 } else { 0 })
+            + (if value.input_attachment { 0x00000080 } else { 0 })
         }
     }
 }

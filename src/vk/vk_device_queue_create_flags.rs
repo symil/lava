@@ -15,7 +15,7 @@ impl VkFrom<VkDeviceQueueCreateFlags> for RawVkDeviceQueueCreateFlags {
     
     fn vk_from(value: &VkDeviceQueueCreateFlags) -> Self { {
             0
-             + (if value.protected { 0x00000001 } else { 0 })
+            + (if value.protected { 0x00000001 } else { 0 })
         }
     }
 }

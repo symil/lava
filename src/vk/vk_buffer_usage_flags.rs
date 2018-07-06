@@ -23,15 +23,15 @@ impl VkFrom<VkBufferUsageFlags> for RawVkBufferUsageFlags {
     
     fn vk_from(value: &VkBufferUsageFlags) -> Self { {
             0
-             + (if value.transfer_src { 0x00000001 } else { 0 })
-             + (if value.transfer_dst { 0x00000002 } else { 0 })
-             + (if value.uniform_texel_buffer { 0x00000004 } else { 0 })
-             + (if value.storage_texel_buffer { 0x00000008 } else { 0 })
-             + (if value.uniform_buffer { 0x00000010 } else { 0 })
-             + (if value.storage_buffer { 0x00000020 } else { 0 })
-             + (if value.index_buffer { 0x00000040 } else { 0 })
-             + (if value.vertex_buffer { 0x00000080 } else { 0 })
-             + (if value.indirect_buffer { 0x00000100 } else { 0 })
+            + (if value.transfer_src { 0x00000001 } else { 0 })
+            + (if value.transfer_dst { 0x00000002 } else { 0 })
+            + (if value.uniform_texel_buffer { 0x00000004 } else { 0 })
+            + (if value.storage_texel_buffer { 0x00000008 } else { 0 })
+            + (if value.uniform_buffer { 0x00000010 } else { 0 })
+            + (if value.storage_buffer { 0x00000020 } else { 0 })
+            + (if value.index_buffer { 0x00000040 } else { 0 })
+            + (if value.vertex_buffer { 0x00000080 } else { 0 })
+            + (if value.indirect_buffer { 0x00000100 } else { 0 })
         }
     }
 }

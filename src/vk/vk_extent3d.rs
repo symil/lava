@@ -14,7 +14,6 @@ pub struct RawVkExtent3D {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkExtent3D {
     pub width: u32,
     pub height: u32,

@@ -21,16 +21,15 @@ pub struct RawVkSwapchainCreateInfoKHR {
     image_sharing_mode: RawVkSharingMode,
     queue_family_index_count: u32,
     queue_family_indices: *mut u32,
-    pre_transform: RawVkSurfaceTransformFlagBitsKHR,
-    composite_alpha: RawVkCompositeAlphaFlagBitsKHR,
+    pre_transform: RawVkSurfaceTransformFlagsKHR,
+    composite_alpha: RawVkCompositeAlphaFlagsKHR,
     present_mode: RawVkPresentModeKHR,
     clipped: RawVkBool32,
     old_swapchain: RawVkSwapchainKHR,
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
-pub struct VkSwapchainCreateInfoKHR {
+pub struct VkSwapchainCreateInfoKHR<'a,'b> {
     pub flags: VkSwapchainCreateFlagsKHR,
     pub surface: &'a VkSurfaceKHR,
     pub min_image_count: u32,
@@ -48,12 +47,12 @@ pub struct VkSwapchainCreateInfoKHR {
     pub old_swapchain: &'b VkSwapchainKHR,
 }
 
-impl VkFrom<VkSwapchainCreateInfoKHR> for RawVkSwapchainCreateInfoKHR {
+impl<'a,'b> VkFrom<VkSwapchainCreateInfoKHR<'a,'b>> for RawVkSwapchainCreateInfoKHR {
     
     fn vk_from(value: &VkSwapchainCreateInfoKHR) -> Self {
         unsafe {
             Self {
-                s_type: VkFrom::vk_from(&VkStructureType::SwapchainCreateInfoKHR),
+                s_type: VkFrom::vk_from(&VkStructureType::SwapchainCreateInfoKhr),
                 next: null(),
                 flags: VkFrom::vk_from(&value.flags),
                 surface: VkFrom::vk_from(value.surface),
@@ -71,31 +70,6 @@ impl VkFrom<VkSwapchainCreateInfoKHR> for RawVkSwapchainCreateInfoKHR {
                 present_mode: VkFrom::vk_from(&value.present_mode),
                 clipped: VkFrom::vk_from(&value.clipped),
                 old_swapchain: VkFrom::vk_from(value.old_swapchain),
-            }
-        }
-    }
-}
-
-impl VkFrom<RawVkSwapchainCreateInfoKHR> for VkSwapchainCreateInfoKHR {
-    
-    fn vk_from(value: &RawVkSwapchainCreateInfoKHR) -> Self {
-        unsafe {
-            Self {
-                flags: VkFrom::vk_from(&value.flags),
-                surface: VkFrom::vk_from(&value.surface),
-                min_image_count: value.min_image_count,
-                image_format: VkFrom::vk_from(&value.image_format),
-                image_color_space: VkFrom::vk_from(&value.image_color_space),
-                image_extent: VkFrom::vk_from(&value.image_extent),
-                image_array_layers: value.image_array_layers,
-                image_usage: VkFrom::vk_from(&value.image_usage),
-                image_sharing_mode: VkFrom::vk_from(&value.image_sharing_mode),
-                queue_family_indices: vec_from_c_ptr(value.queue_family_index_count, value.queue_family_indices).iter().map(|x| *x as usize).collect(),
-                pre_transform: VkFrom::vk_from(&value.pre_transform),
-                composite_alpha: VkFrom::vk_from(&value.composite_alpha),
-                present_mode: VkFrom::vk_from(&value.present_mode),
-                clipped: VkFrom::vk_from(&value.clipped),
-                old_swapchain: VkFrom::vk_from(&value.old_swapchain),
             }
         }
     }

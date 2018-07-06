@@ -19,7 +19,6 @@ pub struct RawVkInstanceCreateInfo {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkInstanceCreateInfo {
     pub flags: VkInstanceCreateFlags,
     pub application_info: VkApplicationInfo,
@@ -40,20 +39,6 @@ impl VkFrom<VkInstanceCreateInfo> for RawVkInstanceCreateInfo {
                 enabled_layer_names: copy_as_c_string_array(&value.enabled_layer_names),
                 enabled_extension_count: value.enabled_extension_names.len() as u32,
                 enabled_extension_names: copy_as_c_string_array(&value.enabled_extension_names),
-            }
-        }
-    }
-}
-
-impl VkFrom<RawVkInstanceCreateInfo> for VkInstanceCreateInfo {
-    
-    fn vk_from(value: &RawVkInstanceCreateInfo) -> Self {
-        unsafe {
-            Self {
-                flags: VkFrom::vk_from(&value.flags),
-                application_info: VkFrom::vk_from(&(*value.application_info)),
-                enabled_layer_names: copy_as_string_vec(value.enabled_layer_count, value.enabled_layer_names as *const *const c_char),
-                enabled_extension_names: copy_as_string_vec(value.enabled_extension_count, value.enabled_extension_names as *const *const c_char),
             }
         }
     }

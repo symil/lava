@@ -13,7 +13,6 @@ pub struct RawVkExtent2D {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkExtent2D {
     pub width: u32,
     pub height: u32,

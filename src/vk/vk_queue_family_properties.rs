@@ -15,7 +15,6 @@ pub struct RawVkQueueFamilyProperties {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkQueueFamilyProperties {
     pub queue_flags: VkQueueFlags,
     pub queue_count: u32,

@@ -50,7 +50,7 @@ fn main() {
     let physical_devices = instance.get_physical_devices().expect("Failed to retrieve physical devices");
     let physical_device = &physical_devices[0];
 
-    // println!("{:#?}", instance_supported_extensions);
+    println!("{:#?}", instance_supported_extensions);
 
     // let glfw = GlfwInstance::new();
     // let required_extensions = glfw.get_required_vulkan_extensions().unwrap();

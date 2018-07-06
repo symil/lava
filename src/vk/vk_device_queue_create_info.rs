@@ -17,7 +17,6 @@ pub struct RawVkDeviceQueueCreateInfo {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkDeviceQueueCreateInfo {
     pub flags: VkDeviceQueueCreateFlags,
     pub queue_family_index: usize,
@@ -35,19 +34,6 @@ impl VkFrom<VkDeviceQueueCreateInfo> for RawVkDeviceQueueCreateInfo {
                 queue_family_index: value.queue_family_index as u32,
                 queue_count: value.queue_priorities.len() as u32,
                 queue_priorities: copy_as_c_array(&value.queue_priorities),
-            }
-        }
-    }
-}
-
-impl VkFrom<RawVkDeviceQueueCreateInfo> for VkDeviceQueueCreateInfo {
-    
-    fn vk_from(value: &RawVkDeviceQueueCreateInfo) -> Self {
-        unsafe {
-            Self {
-                flags: VkFrom::vk_from(&value.flags),
-                queue_family_index: value.queue_family_index as usize,
-                queue_priorities: vec_from_c_ptr(value.queue_count, value.queue_priorities),
             }
         }
     }

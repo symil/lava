@@ -20,7 +20,6 @@ pub struct RawVkPhysicalDeviceProperties {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkPhysicalDeviceProperties {
     pub api_version: [u32; 3],
     pub driver_version: [u32; 3],

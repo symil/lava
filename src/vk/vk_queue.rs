@@ -9,7 +9,6 @@ use libc::c_void;
 pub type RawVkQueue = RawVkHandle;
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkQueue {
     _handle: RawVkQueue,
 }

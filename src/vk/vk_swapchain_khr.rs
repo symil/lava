@@ -10,7 +10,6 @@ use libc::c_void;
 pub type RawVkSwapchainKHR = RawVkHandle;
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkSwapchainKHR {
     _handle: RawVkSwapchainKHR,
     _device: RawVkDevice,

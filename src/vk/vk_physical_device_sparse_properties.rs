@@ -16,7 +16,6 @@ pub struct RawVkPhysicalDeviceSparseProperties {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkPhysicalDeviceSparseProperties {
     pub residency_standard2dblock_shape: bool,
     pub residency_standard2dmultisample_block_shape: bool,

@@ -117,7 +117,6 @@ pub struct RawVkPhysicalDeviceLimits {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkPhysicalDeviceLimits {
     pub max_image_dimension1d: u32,
     pub max_image_dimension2d: u32,

@@ -66,7 +66,6 @@ pub struct RawVkPhysicalDeviceFeatures {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkPhysicalDeviceFeatures {
     pub robust_buffer_access: bool,
     pub full_draw_index_uint32: bool,

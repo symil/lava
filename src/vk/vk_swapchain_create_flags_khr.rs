@@ -16,8 +16,8 @@ impl VkFrom<VkSwapchainCreateFlagsKHR> for RawVkSwapchainCreateFlagsKHR {
     
     fn vk_from(value: &VkSwapchainCreateFlagsKHR) -> Self { {
             0
-             + (if value.split_instance_bind_regions_khr { 0x00000001 } else { 0 })
-             + (if value.protected_khr { 0x00000002 } else { 0 })
+            + (if value.split_instance_bind_regions_khr { 0x00000001 } else { 0 })
+            + (if value.protected_khr { 0x00000002 } else { 0 })
         }
     }
 }

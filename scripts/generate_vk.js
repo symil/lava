@@ -52,6 +52,7 @@ main();
 
 function main() {
     buildType('VkInstance');
+    // buildType('VkCompositeAlphaFlagsKhr');
 
     if (!fs.existsSync(DST_DIR_PATH)) {
         fs.mkdirSync(DST_DIR_PATH);
@@ -134,11 +135,16 @@ function typeToBlock(typeName, definition) {
         return `pub type ${typeName} = ${definition.target};`;
     } else if (metaType === 'struct') {
         const headers = [
-            definition.reprC ? '#[repr(C)]' : `#[derive(Debug)]`,
-            '#[derive(Copy, Clone)]'
+            definition.reprC ? '#[repr(C)]' : `#[derive(Debug)]`
         ];
 
-        return [`${headers.join('\n')}\npub struct ${typeName}`, definition.fields.map(({name, type, public}) => `${public ? 'pub ' : ''}${name}: ${type},`)];
+        if (definition.copiable) {
+            headers.push('#[derive(Copy, Clone)]');
+        }
+
+        const lifetimes = lifetimesToStr(definition.lifetimes);
+
+        return [`${headers.join('\n')}\npub struct ${typeName}${lifetimes}`, definition.fields.map(({name, type, public}) => `${public ? 'pub ' : ''}${name}: ${type},`)];
     } else if (metaType === 'enum') {
         const header = [
             '#[repr(i32)]',
@@ -158,15 +164,17 @@ function generateTypeFileContent(typeName, definition) {
         baseUses.push(`std::ops::Drop`);
     }
 
+    const lt = lifetimesToStr(wrappedDefinition.lifetimes);
+
     const blocks = [
         baseUses.concat(uses || []).map(use => `use ${use};`).join('\n'),
         typeToBlock(rawTypeName, rawDefinition),
         typeToBlock(wrappedTypeName, wrappedDefinition),
         methods ? [`impl ${wrappedTypeName}`, flatten(methods.map(methodToBlock))] : '',
-        fromWrappedToRaw ? [`impl VkFrom<${wrappedTypeName}> for ${rawTypeName}`, methodToBlock(fromWrappedToRaw)] : '',
-        fromRawToWrapped ? [`impl VkFrom<${rawTypeName}> for ${wrappedTypeName}`, methodToBlock(fromRawToWrapped)] : '',
+        fromWrappedToRaw ? [`impl${lt} VkFrom<${wrappedTypeName}${lt}> for ${rawTypeName}`, methodToBlock(fromWrappedToRaw)] : '',
+        fromRawToWrapped ? [`impl${lt} VkFrom<${rawTypeName}> for ${wrappedTypeName}${lt}`, methodToBlock(fromRawToWrapped)] : '',
         rawDropMethod ? [`impl Drop for ${rawTypeName}`, methodToBlock(rawDropMethod)] : '',
-        wrappedDropMethod ? [`impl Drop for ${wrappedTypeName}`, methodToBlock(wrappedDropMethod)] : '',
+        wrappedDropMethod ? [`impl${lt} Drop for ${wrappedTypeName}${lt}`, methodToBlock(wrappedDropMethod)] : '',
         externFunctions ? [`extern`, externFunctions.map(externalMethodToBlock)] : ''
     ];
 
@@ -174,6 +182,8 @@ function generateTypeFileContent(typeName, definition) {
 }
 
 function buildType(typeName) {
+    typeName = formatCTypeName(typeName);
+
     if (typeName in PRIMITIVE_TYPES || typeName in DEFINITIONS || typeName === 'char const*') {
         return;
     }
@@ -212,6 +222,31 @@ function buildSpecial(typeName) {
     return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition, fromRawToWrapped, fromWrappedToRaw };
 }
 
+function createLifetimeIdCounter() {
+    return {
+        _list: [],
+        list() {
+            return this._list;
+        },
+        next() {
+            const lifetimeId = String.fromCharCode('a'.charCodeAt(0) + this._list.length);
+            this._list.push(lifetimeId);
+
+            return lifetimeId;
+        }
+    };
+}
+
+function lifetimesToStr(list) {
+    return (list && list.length) ? `<${list.map(x => `'${x}`)}>` : '';
+}
+
+function formatStructureTypeName(str) {
+    return str
+        .substring(2)
+        .replace(/[A-Z]+$/, str => str.charAt(0) + str.substring(1).toLowerCase());
+}
+
 function buildStruct(typeName, parsed) {
     const rawTypeName = toRawTypeName(typeName);
     const wrappedTypeName = toWrappedTypeName(typeName);
@@ -221,14 +256,14 @@ function buildStruct(typeName, parsed) {
         'libc::*'
     ];
 
-    let lifetimeIdCounter = 0;
+    const lifetimeIdCounter = createLifetimeIdCounter();
     const srcVar = 'value';
-    const lifetimeIds = [];
     const rawFields = [];
     const wrappedFields = [];
     const fromRawToWrappedFields = [];
     const fromWrappedToRawFields = [];
     const dropStatements = [];
+    const disableRawToWrapped = parsed.fields.some(arg => arg.isPointer);
 
     parsed.fields.forEach((field, index) => {
         buildType(field.typeName);
@@ -252,7 +287,7 @@ function buildStruct(typeName, parsed) {
         rawFields.push({ name: rustFieldName, type: rawRustFieldType });
 
         if (field.name === 'sType') {
-            fromWrappedToRawFields.push(`${rustFieldName}: VkFrom::vk_from(&VkStructureType::${typeName.substring(2)})`);
+            fromWrappedToRawFields.push(`${rustFieldName}: VkFrom::vk_from(&VkStructureType::${formatStructureTypeName(typeName)})`);
         } else if (field.name === 'pNext') {
             fromWrappedToRawFields.push(`${rustFieldName}: null()`);
         } else if (isCount) {
@@ -299,8 +334,7 @@ function buildStruct(typeName, parsed) {
                     fromRawToWrappedFields.push(`${rustFieldName}: copy_as_string(${src})`)
                 } else {
                     if (isHandleType) {
-                        const lifetimeId = String.fromCharCode('a'.charCodeAt(0) + lifetimeIdCounter++);
-                        lifetimeIds.push(lifetimeId);
+                        const lifetimeId = lifetimeIdCounter.next();
                         wrappedFieldType = `&'${lifetimeId} ${wrappedTypeName}`
                     } else {
                         wrappedFieldType = wrappedTypeName;
@@ -320,8 +354,7 @@ function buildStruct(typeName, parsed) {
                 }
             } else {
                 if (isHandleType) {
-                    const lifetimeId = String.fromCharCode('a'.charCodeAt(0) + lifetimeIdCounter++);
-                    lifetimeIds.push(lifetimeId);
+                    const lifetimeId = lifetimeIdCounter.next();
                     wrappedFieldType = `&'${lifetimeId} ${wrappedTypeName}`
                 } else {
                     wrappedFieldType = wrappedTypeName;
@@ -334,23 +367,27 @@ function buildStruct(typeName, parsed) {
         }
     });
 
-    const rawDefinition = { type: 'struct', reprC: true, fields: rawFields };
-    const wrappedDefinition = { type: 'struct', reprC: false, fields: wrappedFields };
+    const lifetimes = lifetimeIdCounter.list();
+
+    const rawDefinition = { type: 'struct', reprC: true, fields: rawFields, copiable: true };
+    const wrappedDefinition = { type: 'struct', reprC: false, fields: wrappedFields, lifetimes: lifetimes };
 
     const fromWrappedToRaw = {
         name: 'vk_from',
         args: [{name: 'value', type: `&${wrappedTypeName}`}],
         returnType: 'Self',
         body: [`Self`, fromWrappedToRawFields.map(x => `${x},`)],
-        unsafe: fromWrappedToRawFields.some(containsUnsafeFunction)
+        unsafe: fromWrappedToRawFields.some(containsUnsafeFunction),
+        lifetimes: lifetimes
     };
 
-    const fromRawToWrapped = {
+    const fromRawToWrapped = disableRawToWrapped ? null : {
         name: 'vk_from',
         args: [{name: 'value', type: `&${rawTypeName}`}],
         returnType: 'Self',
         body: [`Self`, fromRawToWrappedFields.map(x => `${x},`)],
-        unsafe: fromRawToWrappedFields.some(containsUnsafeFunction)
+        unsafe: fromRawToWrappedFields.some(containsUnsafeFunction),
+        lifetimes: lifetimes
     };
 
     const rawDropMethod = !dropStatements.length ? null : {
@@ -432,16 +469,14 @@ function buildEnum(typeName, rawInfo) {
     const rawDefinition = { type: 'typedef', target: 'i32' };
 
     const prefix = findEnumPrefix(typeName);
+    const fields = rawInfo.fields.map(({name, value}) => {
+        return {
+            name: toPascalCase(name.substring(prefix.length)),
+            value: value
+        };
+    });
 
-    const wrappedDefinition = {
-        type: 'enum',
-        fields: rawInfo.fields.map(({name, value}) => {
-            return {
-                name: toPascalCase(name.substring(prefix.length)),
-                value: value
-            };
-        })
-    };
+    const wrappedDefinition = { type: 'enum', fields: fields };
 
     const fromWrappedToRaw = {
         name: 'vk_from',
@@ -481,6 +516,7 @@ function buildBitFlags(typeName, rawInfo) {
 
     const wrappedDefinition = {
         type: 'struct',
+        copiable: true,
         fields: fields.map(({name}) => ({ name: name, type: 'bool', public: true }))
     };
 
@@ -488,7 +524,7 @@ function buildBitFlags(typeName, rawInfo) {
         name: 'vk_from',
         args: [{name: 'value', type: `&${wrappedTypeName}`}],
         returnType: 'Self',
-        body: [['0'].concat(fields.map(({name, value}) => ` + (if value.${name} { ${value} } else { 0 })`))]
+        body: [['0'].concat(fields.map(({name, value}) => `+ (if value.${name} { ${value} } else { 0 })`))]
     }
 
     const fromRawToWrapped = {
@@ -736,8 +772,13 @@ function buildHandle(typeName, rawInfo) {
     return { rawTypeName, wrappedTypeName, uses, rawDefinition, wrappedDefinition, methods, rawDropMethod, wrappedDropMethod, externFunctions, fromRawToWrapped, fromWrappedToRaw };
 }
 
+
+function formatCTypeName(typeName) {
+    return typeName.replace('FlagBits', 'Flags');
+}
+
 function toRawTypeName(typeName) {
-    return PRIMITIVE_TYPES[typeName] || `Raw${typeName}`;
+    return PRIMITIVE_TYPES[typeName] || `Raw${formatCTypeName(typeName)}`;
 }
 
 function toWrappedTypeName(typeName) {
@@ -745,7 +786,7 @@ function toWrappedTypeName(typeName) {
         return 'bool';
     }
 
-    return PRIMITIVE_TYPES[typeName] || typeName.replace('FlagBits', 'Flags');
+    return PRIMITIVE_TYPES[typeName] || formatCTypeName(typeName);
 }
 
 function blockToStr(block, indent) {

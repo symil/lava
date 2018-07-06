@@ -18,7 +18,6 @@ pub struct RawVkApplicationInfo {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkApplicationInfo {
     pub application_name: String,
     pub application_version: [u32; 3],
@@ -39,21 +38,6 @@ impl VkFrom<VkApplicationInfo> for RawVkApplicationInfo {
                 engine_name: copy_as_c_string(&value.engine_name),
                 engine_version: vk_make_version(&value.engine_version),
                 api_version: vk_make_version(&value.api_version),
-            }
-        }
-    }
-}
-
-impl VkFrom<RawVkApplicationInfo> for VkApplicationInfo {
-    
-    fn vk_from(value: &RawVkApplicationInfo) -> Self {
-        unsafe {
-            Self {
-                application_name: copy_as_string(value.application_name),
-                application_version: vk_from_version(value.application_version),
-                engine_name: copy_as_string(value.engine_name),
-                engine_version: vk_from_version(value.engine_version),
-                api_version: vk_from_version(value.api_version),
             }
         }
     }

@@ -13,7 +13,6 @@ pub struct RawVkExtensionProperties {
 }
 
 #[derive(Debug)]
-#[derive(Copy, Clone)]
 pub struct VkExtensionProperties {
     pub extension_name: String,
     pub spec_version: [u32; 3],

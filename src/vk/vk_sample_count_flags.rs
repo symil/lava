@@ -21,13 +21,13 @@ impl VkFrom<VkSampleCountFlags> for RawVkSampleCountFlags {
     
     fn vk_from(value: &VkSampleCountFlags) -> Self { {
             0
-             + (if value.bit1 { 0x00000001 } else { 0 })
-             + (if value.bit2 { 0x00000002 } else { 0 })
-             + (if value.bit4 { 0x00000004 } else { 0 })
-             + (if value.bit8 { 0x00000008 } else { 0 })
-             + (if value.bit16 { 0x00000010 } else { 0 })
-             + (if value.bit32 { 0x00000020 } else { 0 })
-             + (if value.bit64 { 0x00000040 } else { 0 })
+            + (if value.bit1 { 0x00000001 } else { 0 })
+            + (if value.bit2 { 0x00000002 } else { 0 })
+            + (if value.bit4 { 0x00000004 } else { 0 })
+            + (if value.bit8 { 0x00000008 } else { 0 })
+            + (if value.bit16 { 0x00000010 } else { 0 })
+            + (if value.bit32 { 0x00000020 } else { 0 })
+            + (if value.bit64 { 0x00000040 } else { 0 })
         }
     }
 }
