@@ -165,7 +165,7 @@ pub enum VkStructureType {
     Win32KeyedMutexAcquireReleaseInfoKhr = 1000075000,
     ImportSemaphoreWin32HandleInfoKhr = 1000078000,
     ExportSemaphoreWin32HandleInfoKhr = 1000078001,
-    D3d12FenceSubmitInfoKhr = 1000078002,
+    D3D12FenceSubmitInfoKhr = 1000078002,
     SemaphoreGetWin32HandleInfoKhr = 1000078003,
     ImportSemaphoreFdInfoKhr = 1000079000,
     SemaphoreGetFdInfoKhr = 1000079001,

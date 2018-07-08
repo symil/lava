@@ -870,7 +870,9 @@ function toSnakeCase(str) {
 }
 
 function toPascalCase(str) {
-    return str.split('_').map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()).join('');
+    return str.split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()).join('')
+    .replace(/\d[a-z](?=\d)/g, str => str[0] + str[1].toUpperCase());
 }
 
 function flatten(array) {
