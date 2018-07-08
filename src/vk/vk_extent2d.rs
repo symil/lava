@@ -6,7 +6,6 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Debug)]
 pub struct RawVkExtent2D {
     width: u32,
     height: u32,

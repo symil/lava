@@ -95,7 +95,7 @@ fn main() {
         flags: VkSwapchainCreateFlagsKHR::none(),
         surface: &surface,
         min_image_count: 2,
-        image_format: VkFormat::B8g8r8Unorm,
+        image_format: VkFormat::B8g8r8a8Unorm,
         image_color_space: VkColorSpaceKHR::SrgbNonlinearKhr,
         image_extent: VkExtent2D {
             width: WINDOW_WIDTH,

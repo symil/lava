@@ -43,7 +43,6 @@ impl VkFrom<VkSurfaceKHR> for RawVkSurfaceKHR {
 impl VkFrom<RawVkSurfaceKHR> for VkSurfaceKHR {
     
     fn vk_from(value: &RawVkSurfaceKHR) -> Self {
-        println!("Surface: {}", value);
         Self {
             _handle: *value,
             _instance: VK_NULL_HANDLE,
