@@ -33,6 +33,15 @@ impl VkSwapchainKHR {
             )
         }
     }
+    
+    pub fn get_images(&self) -> Result<Vec<VkImage>, VkResult> {
+        unsafe {
+            vk_call_retrieve_list(
+                |count, ptr| vkGetSwapchainImagesKHR(self._device, self._handle, count, ptr),
+                |image : &mut VkImage| {  }
+            )
+        }
+    }
 }
 
 impl VkFrom<VkSwapchainKHR> for RawVkSwapchainKHR {
@@ -64,4 +73,5 @@ impl Drop for VkSwapchainKHR {
 extern {
     fn vkDestroySwapchainKHR(device: RawVkDevice, swapchain: RawVkSwapchainKHR, p_allocator: *const c_void);
     fn vkCreateSwapchainKHR(device: RawVkDevice, p_create_info: *const RawVkSwapchainCreateInfoKHR, p_allocator: *const c_void, p_swapchain: *mut RawVkSwapchainKHR)-> RawVkResult;
+    fn vkGetSwapchainImagesKHR(device: RawVkDevice, swapchain: RawVkSwapchainKHR, p_swapchain_image_count: *mut u32, p_swapchain_images: *mut RawVkImage)-> RawVkResult;
 }

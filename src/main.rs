@@ -116,8 +116,32 @@ fn main() {
         present_mode: VkPresentModeKHR::FifoKhr,
         clipped: false,
         old_swapchain: None
-    });
+    }).expect("Failed to create VkSwapchain");
 
+    let images = swapchain.get_images().expect("Failed to retrieve images from swapchain");
+
+    let image_view = device.create_image_view(&VkImageViewCreateInfo {
+        flags: VkFlags::none(),
+        image: &images[0],
+        view_type: VkImageViewType::_2d,
+        format: VkFormat::B8G8R8A8Unorm,
+        components: VkComponentMapping {
+            r: VkComponentSwizzle::Identity,
+            g: VkComponentSwizzle::Identity,
+            b: VkComponentSwizzle::Identity,
+            a: VkComponentSwizzle::Identity
+        },
+        subresource_range: VkImageSubresourceRange {
+            aspect_mask: VkImageAspectFlags {
+                color: true,
+                ..VkFlags::none()
+            },
+            base_mip_level: 0,
+            level_count: 1,
+            base_array_layer: 0,
+            layer_count: 1
+        }
+    }).expect("Failed to create VkImageView");
 
     window.start_loop();
 

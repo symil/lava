@@ -71,7 +71,7 @@ impl<'a, 'b> VkFrom<VkSwapchainCreateInfoKHR<'a, 'b>> for RawVkSwapchainCreateIn
                 clipped: VkFrom::vk_from(&value.clipped),
                 old_swapchain: match value.old_swapchain {
                     Some(raw) => VkFrom::vk_from(raw),
-                    None => 0
+                    None => VK_NULL_HANDLE
                 },
             }
         }

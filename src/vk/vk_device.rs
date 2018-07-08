@@ -44,6 +44,10 @@ impl VkDevice {
     pub fn create_swapchain(&self, create_info: &VkSwapchainCreateInfoKHR) -> Result<VkSwapchainKHR, VkResult> {
         VkSwapchainKHR::new(self, create_info)
     }
+    
+    pub fn create_image_view(&self, create_info: &VkImageViewCreateInfo) -> Result<VkImageView, VkResult> {
+        VkImageView::new(self, create_info)
+    }
 }
 
 impl VkFrom<VkDevice> for RawVkDevice {

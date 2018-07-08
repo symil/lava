@@ -23,7 +23,8 @@ const SCHEMA = {
         drop: 'vkDestroyDevice',
         getQueue: 'VkQueue::get',
         createBuffer: 'VkBuffer::new',
-        createSwapchain: 'VkSwapchainKHR::new'
+        createSwapchain: 'VkSwapchainKHR::new',
+        createImageView: 'VkImageView::new'
     },
     VkQueue: {
         get: 'vkGetDeviceQueue'
@@ -38,7 +39,12 @@ const SCHEMA = {
     },
     VkSwapchainKHR: {
         new: 'vkCreateSwapchainKHR',
-        drop: 'vkDestroySwapchainKHR'
+        drop: 'vkDestroySwapchainKHR',
+        getImages: 'vkGetSwapchainImagesKHR'
+    },
+    VkImageView: {
+        new: 'vkCreateImageView',
+        drop: 'vkDestroyImageView'
     }
 };
 
