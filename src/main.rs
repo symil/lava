@@ -107,7 +107,7 @@ fn main() {
             ..VkImageUsageFlags::none()
         },
         image_sharing_mode: VkSharingMode::Exclusive,
-        queue_family_indices: vec![0],
+        queue_family_indices: vec![],
         pre_transform: capabilities.current_transform.clone(),
         composite_alpha: VkCompositeAlphaFlagsKHR {
             opaque_khr: true,
