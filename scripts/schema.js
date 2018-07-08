@@ -3,7 +3,9 @@ const SCHEMA = {
         new: 'vkCreateInstance',
         drop: 'vkDestroyInstance',
         getSupportedExtensions: 'vkEnumerateInstanceExtensionProperties',
-        getPhysicalDevices: 'VkPhysicalDevice::getList'
+        getPhysicalDevices: 'VkPhysicalDevice::getList',
+        createSurfaceFromGlfw: 'VkSurfaceKHR::fromGlfw',
+        getLayerProperties: 'vkEnumerateInstanceLayerProperties'
     },
     VkPhysicalDevice: {
         getList: 'vkEnumeratePhysicalDevices',
@@ -11,7 +13,10 @@ const SCHEMA = {
         getProperties: 'vkGetPhysicalDeviceProperties',
         getFeatures: 'vkGetPhysicalDeviceFeatures',
         getQueueFamilies: 'vkGetPhysicalDeviceQueueFamilyProperties',
-        createLogicalDevice: 'VkDevice::new'
+        createLogicalDevice: 'VkDevice::new',
+        doesSupportSurface: 'vkGetPhysicalDeviceSurfaceSupportKHR',
+        getSurfaceCapabilities: 'vkGetPhysicalDeviceSurfaceCapabilitiesKHR',
+        getSurfacePresentModes: 'vkGetPhysicalDeviceSurfacePresentModesKHR'
     },
     VkDevice: {
         new: 'vkCreateDevice',
@@ -26,6 +31,10 @@ const SCHEMA = {
     VkBuffer: {
         new: 'vkCreateBuffer',
         drop: 'vkDestroyBuffer'
+    },
+    VkSurfaceKHR: {
+        fromGlfw: 'glfwCreateWindowSurface',
+        drop: 'vkDestroySurfaceKHR'
     },
     VkSwapchainKHR: {
         new: 'vkCreateSwapchainKHR',

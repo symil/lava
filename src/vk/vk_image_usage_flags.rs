@@ -18,6 +18,35 @@ pub struct VkImageUsageFlags {
     pub input_attachment: bool,
 }
 
+impl VkFlags for VkImageUsageFlags {
+    
+    fn none() -> Self {
+        Self {
+            transfer_src: false,
+            transfer_dst: false,
+            sampled: false,
+            storage: false,
+            color_attachment: false,
+            depth_stencil_attachment: false,
+            transient_attachment: false,
+            input_attachment: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            transfer_src: true,
+            transfer_dst: true,
+            sampled: true,
+            storage: true,
+            color_attachment: true,
+            depth_stencil_attachment: true,
+            transient_attachment: true,
+            input_attachment: true,
+        }
+    }
+}
+
 impl VkFrom<VkImageUsageFlags> for RawVkImageUsageFlags {
     
     fn vk_from(value: &VkImageUsageFlags) -> Self { {
@@ -38,14 +67,14 @@ impl VkFrom<RawVkImageUsageFlags> for VkImageUsageFlags {
     
     fn vk_from(value: &RawVkImageUsageFlags) -> Self {
         Self {
-            transfer_src: (value & 0x00000001) > 0,
-            transfer_dst: (value & 0x00000002) > 0,
-            sampled: (value & 0x00000004) > 0,
-            storage: (value & 0x00000008) > 0,
-            color_attachment: (value & 0x00000010) > 0,
-            depth_stencil_attachment: (value & 0x00000020) > 0,
-            transient_attachment: (value & 0x00000040) > 0,
-            input_attachment: (value & 0x00000080) > 0,
+            transfer_src: (value & 0x00000001) != 0,
+            transfer_dst: (value & 0x00000002) != 0,
+            sampled: (value & 0x00000004) != 0,
+            storage: (value & 0x00000008) != 0,
+            color_attachment: (value & 0x00000010) != 0,
+            depth_stencil_attachment: (value & 0x00000020) != 0,
+            transient_attachment: (value & 0x00000040) != 0,
+            input_attachment: (value & 0x00000080) != 0,
         }
     }
 }

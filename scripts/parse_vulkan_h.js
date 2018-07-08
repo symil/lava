@@ -16,6 +16,40 @@ const POSSIBLE_TYPES = {
 
 const SPECIAL_TYPES = ['VkBool32', 'VkDeviceSize'];
 
+const GLFW_FUNCTIONS = {
+    glfwCreateWindowSurface: {
+        name: 'glfwCreateWindowSurface',
+        returnType: 'VkResult',
+        args: [
+            {
+                name: 'instance',
+                fullType: 'VkInstance',
+                typeName: 'VkInstance',
+                isPointer: false,
+                isConst: false
+            },  {
+                name: 'window',
+                fullType: 'GLFWWindow*',
+                typeName: 'GLFWWindow',
+                isPointer: true,
+                isConst: false
+            }, {
+                name: 'allocator',
+                fullType: 'const VkAllocationCallbacks*',
+                typeName: 'VkAllocationCallbacks',
+                isPointer: true,
+                isConst: true
+            }, {
+                name: 'surface',
+                fullType: 'VkSurfaceKHR*',
+                typeName: 'VkSurfaceKHR',
+                isPointer: true,
+                isConst: false
+            }
+        ]
+    }
+};
+
 function parseSpecial(typeName) {
     return SPECIAL_TYPES.includes(typeName) ? {} : null;
 }
@@ -112,6 +146,10 @@ function isHandle(typeName) {
 }
 
 function parseFunction(name) {
+    if (name.startsWith('glfw')) {
+        return GLFW_FUNCTIONS[name];
+    }
+
     const match = VULKAN_H.match(new RegExp(`\nVKAPI_ATTR (VkResult|void) VKAPI_CALL ${name}\\(([^;]+)\\)`, 'm'));
 
     if (!match) {

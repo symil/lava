@@ -17,6 +17,33 @@ pub struct VkSampleCountFlags {
     pub bit64: bool,
 }
 
+impl VkFlags for VkSampleCountFlags {
+    
+    fn none() -> Self {
+        Self {
+            bit1: false,
+            bit2: false,
+            bit4: false,
+            bit8: false,
+            bit16: false,
+            bit32: false,
+            bit64: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            bit1: true,
+            bit2: true,
+            bit4: true,
+            bit8: true,
+            bit16: true,
+            bit32: true,
+            bit64: true,
+        }
+    }
+}
+
 impl VkFrom<VkSampleCountFlags> for RawVkSampleCountFlags {
     
     fn vk_from(value: &VkSampleCountFlags) -> Self { {
@@ -36,13 +63,13 @@ impl VkFrom<RawVkSampleCountFlags> for VkSampleCountFlags {
     
     fn vk_from(value: &RawVkSampleCountFlags) -> Self {
         Self {
-            bit1: (value & 0x00000001) > 0,
-            bit2: (value & 0x00000002) > 0,
-            bit4: (value & 0x00000004) > 0,
-            bit8: (value & 0x00000008) > 0,
-            bit16: (value & 0x00000010) > 0,
-            bit32: (value & 0x00000020) > 0,
-            bit64: (value & 0x00000040) > 0,
+            bit1: (value & 0x00000001) != 0,
+            bit2: (value & 0x00000002) != 0,
+            bit4: (value & 0x00000004) != 0,
+            bit8: (value & 0x00000008) != 0,
+            bit16: (value & 0x00000010) != 0,
+            bit32: (value & 0x00000020) != 0,
+            bit64: (value & 0x00000040) != 0,
         }
     }
 }

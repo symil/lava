@@ -14,6 +14,27 @@ pub struct VkBufferCreateFlags {
     pub protected: bool,
 }
 
+impl VkFlags for VkBufferCreateFlags {
+    
+    fn none() -> Self {
+        Self {
+            sparse_binding: false,
+            sparse_residency: false,
+            sparse_aliased: false,
+            protected: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            sparse_binding: true,
+            sparse_residency: true,
+            sparse_aliased: true,
+            protected: true,
+        }
+    }
+}
+
 impl VkFrom<VkBufferCreateFlags> for RawVkBufferCreateFlags {
     
     fn vk_from(value: &VkBufferCreateFlags) -> Self { {
@@ -30,10 +51,10 @@ impl VkFrom<RawVkBufferCreateFlags> for VkBufferCreateFlags {
     
     fn vk_from(value: &RawVkBufferCreateFlags) -> Self {
         Self {
-            sparse_binding: (value & 0x00000001) > 0,
-            sparse_residency: (value & 0x00000002) > 0,
-            sparse_aliased: (value & 0x00000004) > 0,
-            protected: (value & 0x00000008) > 0,
+            sparse_binding: (value & 0x00000001) != 0,
+            sparse_residency: (value & 0x00000002) != 0,
+            sparse_aliased: (value & 0x00000004) != 0,
+            protected: (value & 0x00000008) != 0,
         }
     }
 }

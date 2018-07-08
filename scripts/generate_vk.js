@@ -59,8 +59,10 @@ function main() {
     }
 
     Object.entries(DEFINITIONS).forEach(([typeName, typeDefinition]) => {
-        const fileContent = generateTypeFileContent(typeName, typeDefinition);
-        writeVkType(typeName, fileContent);
+        if (typeDefinition) {
+            const fileContent = generateTypeFileContent(typeName, typeDefinition);
+            writeVkType(typeName, fileContent);
+        }
     });
 
 
@@ -156,7 +158,7 @@ function typeToBlock(typeName, definition) {
 }
 
 function generateTypeFileContent(typeName, definition) {
-    const { rawTypeName, wrappedTypeName, uses, rawDefinition, wrappedDefinition, methods, rawDropMethod, wrappedDropMethod, externFunctions, fromRawToWrapped, fromWrappedToRaw } = definition;
+    const { rawTypeName, wrappedTypeName, uses, rawDefinition, wrappedDefinition, methods, rawDropMethod, wrappedDropMethod, externFunctions, fromRawToWrapped, fromWrappedToRaw, flagsMethods } = definition;
 
     const baseUses = ['vk::*', 'std::os::raw::c_char'];
 
@@ -167,15 +169,16 @@ function generateTypeFileContent(typeName, definition) {
     const lt = lifetimesToStr(wrappedDefinition.lifetimes);
 
     const blocks = [
-        baseUses.concat(uses || []).map(use => `use ${use};`).join('\n'),
+        baseUses.concat(Array.from(uses || [])).map(use => `use ${use};`).join('\n'),
         typeToBlock(rawTypeName, rawDefinition),
         typeToBlock(wrappedTypeName, wrappedDefinition),
-        methods ? [`impl ${wrappedTypeName}`, flatten(methods.map(methodToBlock))] : '',
+        methods && methods.length ? [`impl ${wrappedTypeName}`, flatten(methods.map(methodToBlock))] : '',
+        flagsMethods && flagsMethods.length ? [`impl VkFlags for ${wrappedTypeName}`, flatten(flagsMethods.map(methodToBlock))] : '',
         fromWrappedToRaw ? [`impl${lt} VkFrom<${wrappedTypeName}${lt}> for ${rawTypeName}`, methodToBlock(fromWrappedToRaw)] : '',
         fromRawToWrapped ? [`impl${lt} VkFrom<${rawTypeName}> for ${wrappedTypeName}${lt}`, methodToBlock(fromRawToWrapped)] : '',
         rawDropMethod ? [`impl Drop for ${rawTypeName}`, methodToBlock(rawDropMethod)] : '',
         wrappedDropMethod ? [`impl${lt} Drop for ${wrappedTypeName}${lt}`, methodToBlock(wrappedDropMethod)] : '',
-        externFunctions ? [`extern`, externFunctions.map(externalMethodToBlock)] : ''
+        externFunctions && externFunctions.length ? [`extern`, externFunctions.map(externalMethodToBlock)] : ''
     ];
 
     return blocks;
@@ -184,7 +187,7 @@ function generateTypeFileContent(typeName, definition) {
 function buildType(typeName) {
     typeName = formatCTypeName(typeName);
 
-    if (typeName in PRIMITIVE_TYPES || typeName in DEFINITIONS || typeName === 'char const*') {
+    if (!typeName.startsWith('Vk') || typeName === 'VkAllocationCallbacks' || typeName in DEFINITIONS) {
         return;
     }
 
@@ -238,7 +241,7 @@ function createLifetimeIdCounter() {
 }
 
 function lifetimesToStr(list) {
-    return (list && list.length) ? `<${list.map(x => `'${x}`)}>` : '';
+    return (list && list.length) ? `<${list.map(x => `'${x}`).join(', ')}>` : '';
 }
 
 function formatStructureTypeName(str) {
@@ -322,16 +325,19 @@ function buildStruct(typeName, parsed) {
                     wrappedFieldType = `Vec<String>`;
                     fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_string_array(&${src})`);
                     fromRawToWrappedFields.push(`${rustFieldName}: copy_as_string_vec(${countVar}, ${src} as ${rawRustFieldType.replace(/\*mut /g, '*const ')})`);
+                    dropStatements.push(`free_c_string_array(self.${rustFieldName});`);
                 } else {
                     wrappedFieldType = `Vec<${wrappedTypeName}>`;
                     fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_array(&${src}${wrappedToRawCollectionConversion})`);
                     fromRawToWrappedFields.push(`${rustFieldName}: vec_from_c_ptr(${countVar}, ${src})${rawToWrappedCollectionConversion}`);
+                    dropStatements.push(`free_c_array(self.${rustFieldName});`);
                 }
             } else if (isPointer) {
                 if (isTypeChar) {
                     wrappedFieldType = 'String';
                     fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_string(&${src})`);
                     fromRawToWrappedFields.push(`${rustFieldName}: copy_as_string(${src})`)
+                    dropStatements.push(`free_c_string(self.${rustFieldName});`);
                 } else {
                     if (isHandleType) {
                         const lifetimeId = lifetimeIdCounter.next();
@@ -341,6 +347,7 @@ function buildStruct(typeName, parsed) {
                     }
                     fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_ptr(${wrappedToRawSingleEltConversion})`);
                     fromRawToWrappedFields.push(`${rustFieldName}: ${rawToWrappedSingleEltConversion}`);
+                    dropStatements.push(`free_c_ptr(self.${rustFieldName});`);
                 }
             } else if (isStaticArray) {
                 if (isTypeChar) {
@@ -359,7 +366,13 @@ function buildStruct(typeName, parsed) {
                 } else {
                     wrappedFieldType = wrappedTypeName;
                 }
-                fromWrappedToRawFields.push(`${rustFieldName}: ${wrappedToRawSingleEltConversion}`);
+                if (field.name.startsWith('old')) {
+                    wrappedFieldType = `Option<${wrappedFieldType}>`;
+                    fromWrappedToRawFields.push(`${rustFieldName}: match ${src} {\n    Some(raw) => ${wrappedToRawSingleEltConversion.replace(src, 'raw')},\n    None => 0\n}`);
+                } else {
+                    fromWrappedToRawFields.push(`${rustFieldName}: ${wrappedToRawSingleEltConversion}`);
+                }
+
                 fromRawToWrappedFields.push(`${rustFieldName}: ${rawToWrappedSingleEltConversion}`);
             }
 
@@ -367,9 +380,15 @@ function buildStruct(typeName, parsed) {
         }
     });
 
+    const flagsMethods = [];
+
+    if (wrappedFields.every(({type}) => type === 'bool')) {
+        flagsMethods.push(...getNoneAndAllMethods(wrappedFields));
+    }
+
     const lifetimes = lifetimeIdCounter.list();
 
-    const rawDefinition = { type: 'struct', reprC: true, fields: rawFields, copiable: true };
+    const rawDefinition = { type: 'struct', reprC: true, fields: rawFields };
     const wrappedDefinition = { type: 'struct', reprC: false, fields: wrappedFields, lifetimes: lifetimes };
 
     const fromWrappedToRaw = {
@@ -403,7 +422,7 @@ function buildStruct(typeName, parsed) {
         rawTypeName, wrappedTypeName,
         rawDefinition, wrappedDefinition,
         fromRawToWrapped, fromWrappedToRaw,
-        rawDropMethod // <- TODO
+        rawDropMethod, flagsMethods
     };
 }
 
@@ -531,18 +550,38 @@ function buildBitFlags(typeName, rawInfo) {
         name: 'vk_from',
         args: [{name: 'value', type: `&${rawTypeName}`}],
         returnType: 'Self',
-        body: [`Self`, fields.map(({name, value}) => `${name}: (value & ${value}) > 0,`)]
+        body: [`Self`, fields.map(({name, value}) => `${name}: (value & ${value}) != 0,`)]
     }
 
-    return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition, fromWrappedToRaw, fromRawToWrapped };
+    const flagsMethods = getNoneAndAllMethods(fields);
+
+    return { rawTypeName, wrappedTypeName, rawDefinition, wrappedDefinition, fromWrappedToRaw, fromRawToWrapped, flagsMethods };
+}
+
+function getNoneAndAllMethods(fields) {
+    return [
+        {
+            name: 'none',
+            args: [],
+            returnType: 'Self',
+            body: [`Self`, fields.map(({name}) => `${name}: false,`)]
+        },
+        {
+            name: 'all',
+            args: [],
+            returnType: 'Self',
+            body: [`Self`, fields.map(({name}) => `${name}: true,`)]
+        }
+    ];
 }
 
 function buildHandle(typeName, rawInfo) {
-    const uses = [
+    const uses = new Set([
         `std::vec::Vec`,
         `std::ptr::null`,
-        `libc::c_void`
-    ];
+        `libc::c_void`,
+        `glfw::*`
+    ]);
 
     const rawTypeName = toRawTypeName(typeName);
     const wrappedTypeName = toWrappedTypeName(typeName);
@@ -570,7 +609,7 @@ function buildHandle(typeName, rawInfo) {
         const cMethodName = rawInfo.drop;
         const cMethod = parseFunction(cMethodName);
         const cArgs = cMethod.args.map(arg => {
-            if (arg.name === 'pAllocator') {
+            if (arg.typeName === 'VkAllocationCallbacks') {
                 return 'null()';
             } else {
                 buildType(arg.typeName);
@@ -630,8 +669,15 @@ function buildHandle(typeName, rawInfo) {
                     return 'ptr';
                 } else if (createList && index === cMethodArgs.length - 2) {
                     return 'count';
-                } else if (arg.name === 'pAllocator' || arg.name === 'pLayerName') {
+                } else if (arg.typeName === 'VkAllocationCallbacks' || arg.name === 'pLayerName') {
                     return 'null()';
+                } else if (arg.typeName === 'GLFWWindow' && arg.isPointer) {
+                    methodArguments.push({
+                        name: 'glfw_window',
+                        type: `&GlfwWindow`
+                    });
+
+                    return `glfw_window.handle()`;
                 } else {
                     const rawArgType = toRawTypeName(arg.typeName);
                     const wrappedArgType = toWrappedTypeName(arg.typeName);
@@ -774,7 +820,7 @@ function buildHandle(typeName, rawInfo) {
 
 
 function formatCTypeName(typeName) {
-    return typeName.replace('FlagBits', 'Flags');
+    return typeName.replace('FlagBits', 'Flags').replace('GLFW', 'Glfw');
 }
 
 function toRawTypeName(typeName) {

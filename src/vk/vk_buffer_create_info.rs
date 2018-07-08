@@ -2,11 +2,11 @@
 
 use vk::*;
 use std::os::raw::c_char;
+use std::ops::Drop;
 use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkBufferCreateInfo {
     s_type: RawVkStructureType,
     next: *const c_void,
@@ -41,6 +41,15 @@ impl VkFrom<VkBufferCreateInfo> for RawVkBufferCreateInfo {
                 queue_family_index_count: value.queue_family_indices.len() as u32,
                 queue_family_indices: copy_as_c_array(&value.queue_family_indices.iter().map(|x| *x as u32).collect()),
             }
+        }
+    }
+}
+
+impl Drop for RawVkBufferCreateInfo {
+    
+    fn drop(&mut self) {
+        unsafe {
+            free_c_array(self.queue_family_indices);
         }
     }
 }

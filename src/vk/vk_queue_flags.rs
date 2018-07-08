@@ -15,6 +15,29 @@ pub struct VkQueueFlags {
     pub protected: bool,
 }
 
+impl VkFlags for VkQueueFlags {
+    
+    fn none() -> Self {
+        Self {
+            graphics: false,
+            compute: false,
+            transfer: false,
+            sparse_binding: false,
+            protected: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            graphics: true,
+            compute: true,
+            transfer: true,
+            sparse_binding: true,
+            protected: true,
+        }
+    }
+}
+
 impl VkFrom<VkQueueFlags> for RawVkQueueFlags {
     
     fn vk_from(value: &VkQueueFlags) -> Self { {
@@ -32,11 +55,11 @@ impl VkFrom<RawVkQueueFlags> for VkQueueFlags {
     
     fn vk_from(value: &RawVkQueueFlags) -> Self {
         Self {
-            graphics: (value & 0x00000001) > 0,
-            compute: (value & 0x00000002) > 0,
-            transfer: (value & 0x00000004) > 0,
-            sparse_binding: (value & 0x00000008) > 0,
-            protected: (value & 0x00000010) > 0,
+            graphics: (value & 0x00000001) != 0,
+            compute: (value & 0x00000002) != 0,
+            transfer: (value & 0x00000004) != 0,
+            sparse_binding: (value & 0x00000008) != 0,
+            protected: (value & 0x00000010) != 0,
         }
     }
 }

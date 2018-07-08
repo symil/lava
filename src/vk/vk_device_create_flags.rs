@@ -10,6 +10,19 @@ pub type RawVkDeviceCreateFlags = u32;
 pub struct VkDeviceCreateFlags {
 }
 
+impl VkFlags for VkDeviceCreateFlags {
+    
+    fn none() -> Self {
+        Self {
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+        }
+    }
+}
+
 impl VkFrom<VkDeviceCreateFlags> for RawVkDeviceCreateFlags {
     
     fn vk_from(value: &VkDeviceCreateFlags) -> Self { {

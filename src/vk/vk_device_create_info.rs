@@ -2,11 +2,11 @@
 
 use vk::*;
 use std::os::raw::c_char;
+use std::ops::Drop;
 use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkDeviceCreateInfo {
     s_type: RawVkStructureType,
     next: *const c_void,
@@ -45,6 +45,18 @@ impl VkFrom<VkDeviceCreateInfo> for RawVkDeviceCreateInfo {
                 enabled_extension_names: copy_as_c_string_array(&value.enabled_extension_names),
                 enabled_features: copy_as_c_ptr(VkFrom::vk_from(&value.enabled_features)),
             }
+        }
+    }
+}
+
+impl Drop for RawVkDeviceCreateInfo {
+    
+    fn drop(&mut self) {
+        unsafe {
+            free_c_array(self.queue_create_infos);
+            free_c_string_array(self.enabled_layer_names);
+            free_c_string_array(self.enabled_extension_names);
+            free_c_ptr(self.enabled_features);
         }
     }
 }

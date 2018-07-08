@@ -12,6 +12,23 @@ pub struct VkSwapchainCreateFlagsKHR {
     pub protected_khr: bool,
 }
 
+impl VkFlags for VkSwapchainCreateFlagsKHR {
+    
+    fn none() -> Self {
+        Self {
+            split_instance_bind_regions_khr: false,
+            protected_khr: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            split_instance_bind_regions_khr: true,
+            protected_khr: true,
+        }
+    }
+}
+
 impl VkFrom<VkSwapchainCreateFlagsKHR> for RawVkSwapchainCreateFlagsKHR {
     
     fn vk_from(value: &VkSwapchainCreateFlagsKHR) -> Self { {
@@ -26,8 +43,8 @@ impl VkFrom<RawVkSwapchainCreateFlagsKHR> for VkSwapchainCreateFlagsKHR {
     
     fn vk_from(value: &RawVkSwapchainCreateFlagsKHR) -> Self {
         Self {
-            split_instance_bind_regions_khr: (value & 0x00000001) > 0,
-            protected_khr: (value & 0x00000002) > 0,
+            split_instance_bind_regions_khr: (value & 0x00000001) != 0,
+            protected_khr: (value & 0x00000002) != 0,
         }
     }
 }

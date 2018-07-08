@@ -2,11 +2,11 @@
 
 use vk::*;
 use std::os::raw::c_char;
+use std::ops::Drop;
 use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkApplicationInfo {
     s_type: RawVkStructureType,
     next: *const c_void,
@@ -39,6 +39,16 @@ impl VkFrom<VkApplicationInfo> for RawVkApplicationInfo {
                 engine_version: vk_make_version(&value.engine_version),
                 api_version: vk_make_version(&value.api_version),
             }
+        }
+    }
+}
+
+impl Drop for RawVkApplicationInfo {
+    
+    fn drop(&mut self) {
+        unsafe {
+            free_c_string(self.application_name);
+            free_c_string(self.engine_name);
         }
     }
 }

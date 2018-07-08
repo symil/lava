@@ -6,7 +6,6 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkQueueFamilyProperties {
     queue_flags: RawVkQueueFlags,
     queue_count: u32,

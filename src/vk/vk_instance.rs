@@ -6,6 +6,7 @@ use std::ops::Drop;
 use std::vec::Vec;
 use std::ptr::null;
 use libc::c_void;
+use glfw::*;
 
 pub type RawVkInstance = RawVkHandle;
 
@@ -43,6 +44,19 @@ impl VkInstance {
     pub fn get_physical_devices(&self) -> Result<Vec<VkPhysicalDevice>, VkResult> {
         VkPhysicalDevice::get_list(self)
     }
+    
+    pub fn create_surface_from_glfw(&self, glfw_window: &GlfwWindow) -> Result<VkSurfaceKHR, VkResult> {
+        VkSurfaceKHR::from_glfw(self, glfw_window)
+    }
+    
+    pub fn get_layer_properties(&self) -> Result<Vec<VkLayerProperties>, VkResult> {
+        unsafe {
+            vk_call_retrieve_list(
+                |count, ptr| vkEnumerateInstanceLayerProperties(count, ptr),
+                |layer_properties : &mut VkLayerProperties| {  }
+            )
+        }
+    }
 }
 
 impl VkFrom<VkInstance> for RawVkInstance {
@@ -74,4 +88,5 @@ extern {
     fn vkDestroyInstance(instance: RawVkInstance, p_allocator: *const c_void);
     fn vkCreateInstance(p_create_info: *const RawVkInstanceCreateInfo, p_allocator: *const c_void, p_instance: *mut RawVkInstance)-> RawVkResult;
     fn vkEnumerateInstanceExtensionProperties(p_layer_name: *const c_char, p_property_count: *mut u32, p_properties: *mut RawVkExtensionProperties)-> RawVkResult;
+    fn vkEnumerateInstanceLayerProperties(p_property_count: *mut u32, p_properties: *mut RawVkLayerProperties)-> RawVkResult;
 }

@@ -6,7 +6,6 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkPhysicalDeviceProperties {
     api_version: u32,
     driver_version: u32,

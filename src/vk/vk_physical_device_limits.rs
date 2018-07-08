@@ -6,7 +6,6 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkPhysicalDeviceLimits {
     max_image_dimension1d: u32,
     max_image_dimension2d: u32,

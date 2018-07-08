@@ -6,7 +6,6 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkPhysicalDeviceSparseProperties {
     residency_standard2dblock_shape: RawVkBool32,
     residency_standard2dmultisample_block_shape: RawVkBool32,
@@ -22,6 +21,29 @@ pub struct VkPhysicalDeviceSparseProperties {
     pub residency_standard3dblock_shape: bool,
     pub residency_aligned_mip_size: bool,
     pub residency_non_resident_strict: bool,
+}
+
+impl VkFlags for VkPhysicalDeviceSparseProperties {
+    
+    fn none() -> Self {
+        Self {
+            residency_standard2dblock_shape: false,
+            residency_standard2dmultisample_block_shape: false,
+            residency_standard3dblock_shape: false,
+            residency_aligned_mip_size: false,
+            residency_non_resident_strict: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            residency_standard2dblock_shape: true,
+            residency_standard2dmultisample_block_shape: true,
+            residency_standard3dblock_shape: true,
+            residency_aligned_mip_size: true,
+            residency_non_resident_strict: true,
+        }
+    }
 }
 
 impl VkFrom<VkPhysicalDeviceSparseProperties> for RawVkPhysicalDeviceSparseProperties {

@@ -6,6 +6,7 @@ use std::ops::Drop;
 use std::vec::Vec;
 use std::ptr::null;
 use libc::c_void;
+use glfw::*;
 
 pub type RawVkSwapchainKHR = RawVkHandle;
 

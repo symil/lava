@@ -2,11 +2,11 @@
 
 use vk::*;
 use std::os::raw::c_char;
+use std::ops::Drop;
 use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkSwapchainCreateInfoKHR {
     s_type: RawVkStructureType,
     next: *const c_void,
@@ -29,7 +29,7 @@ pub struct RawVkSwapchainCreateInfoKHR {
 }
 
 #[derive(Debug)]
-pub struct VkSwapchainCreateInfoKHR<'a,'b> {
+pub struct VkSwapchainCreateInfoKHR<'a, 'b> {
     pub flags: VkSwapchainCreateFlagsKHR,
     pub surface: &'a VkSurfaceKHR,
     pub min_image_count: u32,
@@ -44,10 +44,10 @@ pub struct VkSwapchainCreateInfoKHR<'a,'b> {
     pub composite_alpha: VkCompositeAlphaFlagsKHR,
     pub present_mode: VkPresentModeKHR,
     pub clipped: bool,
-    pub old_swapchain: &'b VkSwapchainKHR,
+    pub old_swapchain: Option<&'b VkSwapchainKHR>,
 }
 
-impl<'a,'b> VkFrom<VkSwapchainCreateInfoKHR<'a,'b>> for RawVkSwapchainCreateInfoKHR {
+impl<'a, 'b> VkFrom<VkSwapchainCreateInfoKHR<'a, 'b>> for RawVkSwapchainCreateInfoKHR {
     
     fn vk_from(value: &VkSwapchainCreateInfoKHR) -> Self {
         unsafe {
@@ -69,8 +69,20 @@ impl<'a,'b> VkFrom<VkSwapchainCreateInfoKHR<'a,'b>> for RawVkSwapchainCreateInfo
                 composite_alpha: VkFrom::vk_from(&value.composite_alpha),
                 present_mode: VkFrom::vk_from(&value.present_mode),
                 clipped: VkFrom::vk_from(&value.clipped),
-                old_swapchain: VkFrom::vk_from(value.old_swapchain),
+                old_swapchain: match value.old_swapchain {
+                    Some(raw) => VkFrom::vk_from(raw),
+                    None => 0
+                },
             }
+        }
+    }
+}
+
+impl Drop for RawVkSwapchainCreateInfoKHR {
+    
+    fn drop(&mut self) {
+        unsafe {
+            free_c_array(self.queue_family_indices);
         }
     }
 }

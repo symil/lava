@@ -11,6 +11,21 @@ pub struct VkDeviceQueueCreateFlags {
     pub protected: bool,
 }
 
+impl VkFlags for VkDeviceQueueCreateFlags {
+    
+    fn none() -> Self {
+        Self {
+            protected: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            protected: true,
+        }
+    }
+}
+
 impl VkFrom<VkDeviceQueueCreateFlags> for RawVkDeviceQueueCreateFlags {
     
     fn vk_from(value: &VkDeviceQueueCreateFlags) -> Self { {
@@ -24,7 +39,7 @@ impl VkFrom<RawVkDeviceQueueCreateFlags> for VkDeviceQueueCreateFlags {
     
     fn vk_from(value: &RawVkDeviceQueueCreateFlags) -> Self {
         Self {
-            protected: (value & 0x00000001) > 0,
+            protected: (value & 0x00000001) != 0,
         }
     }
 }

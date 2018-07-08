@@ -14,6 +14,27 @@ pub struct VkCompositeAlphaFlagsKHR {
     pub inherit_khr: bool,
 }
 
+impl VkFlags for VkCompositeAlphaFlagsKHR {
+    
+    fn none() -> Self {
+        Self {
+            opaque_khr: false,
+            pre_multiplied_khr: false,
+            post_multiplied_khr: false,
+            inherit_khr: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            opaque_khr: true,
+            pre_multiplied_khr: true,
+            post_multiplied_khr: true,
+            inherit_khr: true,
+        }
+    }
+}
+
 impl VkFrom<VkCompositeAlphaFlagsKHR> for RawVkCompositeAlphaFlagsKHR {
     
     fn vk_from(value: &VkCompositeAlphaFlagsKHR) -> Self { {
@@ -30,10 +51,10 @@ impl VkFrom<RawVkCompositeAlphaFlagsKHR> for VkCompositeAlphaFlagsKHR {
     
     fn vk_from(value: &RawVkCompositeAlphaFlagsKHR) -> Self {
         Self {
-            opaque_khr: (value & 0x00000001) > 0,
-            pre_multiplied_khr: (value & 0x00000002) > 0,
-            post_multiplied_khr: (value & 0x00000004) > 0,
-            inherit_khr: (value & 0x00000008) > 0,
+            opaque_khr: (value & 0x00000001) != 0,
+            pre_multiplied_khr: (value & 0x00000002) != 0,
+            post_multiplied_khr: (value & 0x00000004) != 0,
+            inherit_khr: (value & 0x00000008) != 0,
         }
     }
 }

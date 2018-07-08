@@ -5,6 +5,7 @@ use std::os::raw::c_char;
 use std::vec::Vec;
 use std::ptr::null;
 use libc::c_void;
+use glfw::*;
 
 pub type RawVkPhysicalDevice = RawVkHandle;
 
@@ -68,6 +69,36 @@ impl VkPhysicalDevice {
     pub fn create_logical_device(&self, create_info: &VkDeviceCreateInfo) -> Result<VkDevice, VkResult> {
         VkDevice::new(self, create_info)
     }
+    
+    pub fn does_support_surface(&self, queue_family_index: usize, surface: &VkSurfaceKHR) -> Result<bool, VkResult> {
+        unsafe {
+            let surface_handle = surface.handle();
+            vk_call_retrieve_single(
+                |ptr| vkGetPhysicalDeviceSurfaceSupportKHR(self._handle, queue_family_index as u32, surface_handle, ptr),
+                |bool32 : &mut bool| {  }
+            )
+        }
+    }
+    
+    pub fn get_surface_capabilities(&self, surface: &VkSurfaceKHR) -> Result<VkSurfaceCapabilitiesKHR, VkResult> {
+        unsafe {
+            let surface_handle = surface.handle();
+            vk_call_retrieve_single(
+                |ptr| vkGetPhysicalDeviceSurfaceCapabilitiesKHR(self._handle, surface_handle, ptr),
+                |surface_capabilities_khr : &mut VkSurfaceCapabilitiesKHR| {  }
+            )
+        }
+    }
+    
+    pub fn get_surface_present_modes(&self, surface: &VkSurfaceKHR) -> Result<Vec<VkPresentModeKHR>, VkResult> {
+        unsafe {
+            let surface_handle = surface.handle();
+            vk_call_retrieve_list(
+                |count, ptr| vkGetPhysicalDeviceSurfacePresentModesKHR(self._handle, surface_handle, count, ptr),
+                |present_mode_khr : &mut VkPresentModeKHR| {  }
+            )
+        }
+    }
 }
 
 impl VkFrom<VkPhysicalDevice> for RawVkPhysicalDevice {
@@ -92,4 +123,7 @@ extern {
     fn vkGetPhysicalDeviceProperties(physical_device: RawVkPhysicalDevice, p_properties: *mut RawVkPhysicalDeviceProperties);
     fn vkGetPhysicalDeviceFeatures(physical_device: RawVkPhysicalDevice, p_features: *mut RawVkPhysicalDeviceFeatures);
     fn vkGetPhysicalDeviceQueueFamilyProperties(physical_device: RawVkPhysicalDevice, p_queue_family_property_count: *mut u32, p_queue_family_properties: *mut RawVkQueueFamilyProperties);
+    fn vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: RawVkSurfaceKHR, p_supported: *mut RawVkBool32)-> RawVkResult;
+    fn vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurfaceKHR, p_surface_capabilities: *mut RawVkSurfaceCapabilitiesKHR)-> RawVkResult;
+    fn vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurfaceKHR, p_present_mode_count: *mut u32, p_present_modes: *mut RawVkPresentModeKHR)-> RawVkResult;
 }

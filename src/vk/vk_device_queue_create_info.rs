@@ -2,11 +2,11 @@
 
 use vk::*;
 use std::os::raw::c_char;
+use std::ops::Drop;
 use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkDeviceQueueCreateInfo {
     s_type: RawVkStructureType,
     next: *const c_void,
@@ -35,6 +35,15 @@ impl VkFrom<VkDeviceQueueCreateInfo> for RawVkDeviceQueueCreateInfo {
                 queue_count: value.queue_priorities.len() as u32,
                 queue_priorities: copy_as_c_array(&value.queue_priorities),
             }
+        }
+    }
+}
+
+impl Drop for RawVkDeviceQueueCreateInfo {
+    
+    fn drop(&mut self) {
+        unsafe {
+            free_c_array(self.queue_priorities);
         }
     }
 }

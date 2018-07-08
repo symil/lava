@@ -6,7 +6,6 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
 pub struct RawVkExtensionProperties {
     extension_name: [c_char; 256],
     spec_version: u32,

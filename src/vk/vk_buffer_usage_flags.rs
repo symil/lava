@@ -19,6 +19,37 @@ pub struct VkBufferUsageFlags {
     pub indirect_buffer: bool,
 }
 
+impl VkFlags for VkBufferUsageFlags {
+    
+    fn none() -> Self {
+        Self {
+            transfer_src: false,
+            transfer_dst: false,
+            uniform_texel_buffer: false,
+            storage_texel_buffer: false,
+            uniform_buffer: false,
+            storage_buffer: false,
+            index_buffer: false,
+            vertex_buffer: false,
+            indirect_buffer: false,
+        }
+    }
+    
+    fn all() -> Self {
+        Self {
+            transfer_src: true,
+            transfer_dst: true,
+            uniform_texel_buffer: true,
+            storage_texel_buffer: true,
+            uniform_buffer: true,
+            storage_buffer: true,
+            index_buffer: true,
+            vertex_buffer: true,
+            indirect_buffer: true,
+        }
+    }
+}
+
 impl VkFrom<VkBufferUsageFlags> for RawVkBufferUsageFlags {
     
     fn vk_from(value: &VkBufferUsageFlags) -> Self { {
@@ -40,15 +71,15 @@ impl VkFrom<RawVkBufferUsageFlags> for VkBufferUsageFlags {
     
     fn vk_from(value: &RawVkBufferUsageFlags) -> Self {
         Self {
-            transfer_src: (value & 0x00000001) > 0,
-            transfer_dst: (value & 0x00000002) > 0,
-            uniform_texel_buffer: (value & 0x00000004) > 0,
-            storage_texel_buffer: (value & 0x00000008) > 0,
-            uniform_buffer: (value & 0x00000010) > 0,
-            storage_buffer: (value & 0x00000020) > 0,
-            index_buffer: (value & 0x00000040) > 0,
-            vertex_buffer: (value & 0x00000080) > 0,
-            indirect_buffer: (value & 0x00000100) > 0,
+            transfer_src: (value & 0x00000001) != 0,
+            transfer_dst: (value & 0x00000002) != 0,
+            uniform_texel_buffer: (value & 0x00000004) != 0,
+            storage_texel_buffer: (value & 0x00000008) != 0,
+            uniform_buffer: (value & 0x00000010) != 0,
+            storage_buffer: (value & 0x00000020) != 0,
+            index_buffer: (value & 0x00000040) != 0,
+            vertex_buffer: (value & 0x00000080) != 0,
+            indirect_buffer: (value & 0x00000100) != 0,
         }
     }
 }

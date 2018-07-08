@@ -5,6 +5,7 @@ use std::os::raw::c_char;
 use std::vec::Vec;
 use std::ptr::null;
 use libc::c_void;
+use glfw::*;
 
 pub type RawVkQueue = RawVkHandle;
 
