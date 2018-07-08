@@ -30,13 +30,12 @@ const WINDOW_HEIGHT : u32 = 600;
 
 const STANDARD_VALIDATION_LAYER : &str = "VK_LAYER_LUNARG_standard_validation";
 const DEBUG_REPORT_EXT : &str = "VK_EXT_debug_report";
+const SWAPCHAIN_EXT_NAME : &str = "VK_KHR_swapchain";
 
 fn main() {
     let glfw = GlfwInstance::new();
-    let mut required_extensions = glfw.get_required_vulkan_extensions().unwrap();    
+    let required_extensions = glfw.get_required_vulkan_extensions().unwrap();    
     let window = glfw.create_window(WINDOW_WIDTH, WINDOW_HEIGHT, "Vulkan");
-
-    required_extensions.push(String::from("VK_EXT_debug_report"));
 
     let instance = VkInstance::new(&VkInstanceCreateInfo {
         flags: VkInstanceCreateFlags { },
@@ -47,7 +46,7 @@ fn main() {
             engine_version: [0, 1, 0],
             api_version: [1, 0, 0]
         },
-        enabled_layer_names: vec![String::from(STANDARD_VALIDATION_LAYER)],
+        enabled_layer_names: vec![],
         enabled_extension_names: required_extensions
     }).expect("Failed to create VkInstance");
 
@@ -69,7 +68,7 @@ fn main() {
             }
         ],
         enabled_layer_names: vec![],
-        enabled_extension_names: vec![String::from("VK_KHR_swapchain")],
+        enabled_extension_names: vec![String::from(SWAPCHAIN_EXT_NAME)],
         enabled_features: VkPhysicalDeviceFeatures::none()
     }).expect("Failed to initialize VkDevice");
     let queue = device.get_queue(0, 0);
@@ -87,6 +86,10 @@ fn main() {
     let capabilities = physical_device.get_surface_capabilities(&surface).expect("Failed to retrieve surface capabilities");
     let surface_present_modes = physical_device.get_surface_present_modes(&surface).expect("Failed to retrieve present modes");
     let layers = instance.get_layer_properties().expect("Failed to retrieve layer properties");
+    let current_transform = capabilities.current_transform.clone();
+
+    // println!("{:#?}", capabilities);
+    // println!("{:#?}", current_transform);
 
     let swapchain = device.create_swapchain(&VkSwapchainCreateInfoKHR {
         flags: VkSwapchainCreateFlagsKHR::none(),
@@ -104,7 +107,7 @@ fn main() {
             ..VkImageUsageFlags::none()
         },
         image_sharing_mode: VkSharingMode::Exclusive,
-        queue_family_indices: Vec::new(),
+        queue_family_indices: vec![0],
         pre_transform: capabilities.current_transform.clone(),
         composite_alpha: VkCompositeAlphaFlagsKHR {
             opaque_khr: true,

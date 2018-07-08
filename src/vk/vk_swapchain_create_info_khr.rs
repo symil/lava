@@ -51,7 +51,7 @@ impl<'a, 'b> VkFrom<VkSwapchainCreateInfoKHR<'a, 'b>> for RawVkSwapchainCreateIn
     
     fn vk_from(value: &VkSwapchainCreateInfoKHR) -> Self {
         unsafe {
-            Self {
+            let value = Self {
                 s_type: VkFrom::vk_from(&VkStructureType::SwapchainCreateInfoKhr),
                 next: null(),
                 flags: VkFrom::vk_from(&value.flags),
@@ -73,7 +73,27 @@ impl<'a, 'b> VkFrom<VkSwapchainCreateInfoKHR<'a, 'b>> for RawVkSwapchainCreateIn
                     Some(raw) => VkFrom::vk_from(raw),
                     None => 0
                 },
-            }
+            };
+
+            println!("-----");
+            println!("flags: {:?}", value.flags);
+            println!("surface: {:?}", value.surface);
+            println!("min_image_count: {:?}", value.min_image_count);
+            println!("image_format: {:?}", value.image_format);
+            println!("image_color_space: {:?}", value.image_color_space);
+            println!("image_extent: {:?}", value.image_extent);
+            println!("image_array_layers: {:?}", value.image_array_layers);
+            println!("image_usage: {:?}", value.image_usage);
+            println!("image_sharing_mode: {:?}", value.image_sharing_mode);
+            println!("queue_family_index_count: {:?}", value.queue_family_index_count);
+            println!("queue_family_indices: {:?}", *value.queue_family_indices);
+            println!("pre_transform: {:?}", value.pre_transform);
+            println!("composite_alpha: {:?}", value.composite_alpha);
+            println!("present_mode: {:?}", value.present_mode);
+            println!("clipped: {:?}", value.clipped);
+            println!("old_swapchain: {:?}", value.old_swapchain);
+
+            value
         }
     }
 }
