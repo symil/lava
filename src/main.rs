@@ -28,14 +28,62 @@ use glfw::*;
 const WINDOW_WIDTH : u32 = 800;
 const WINDOW_HEIGHT : u32 = 600;
 
-const STANDARD_VALIDATION_LAYER : &str = "VK_LAYER_LUNARG_standard_validation";
-const DEBUG_REPORT_EXT : &str = "VK_EXT_debug_report";
-const SWAPCHAIN_EXT_NAME : &str = "VK_KHR_swapchain";
+const LAYER_STANDARD_VALIDATION : &str = "VK_LAYER_LUNARG_standard_validation";
+
+const EXT_DEBUG_REPORT : &str = "VK_EXT_debug_report";
+const EXT_SWAPCHAIN : &str = "VK_KHR_swapchain";
+
+type VkDebugReportCallbackEXT = usize;
+type DebugCallback = unsafe extern "C" fn(flags: u32, obj_type: i32, obj: u64, location: usize, code: i32, layer_prefix: *const c_char, msg: *const c_char, user_data: *mut c_void) -> RawVkBool32;
+type VkCreateDebugReportCallback = unsafe extern "C" fn(instance: RawVkInstance, create_info: *const VkDebugReportCallbackCreateInfoEXT, allocator: *const c_void, p_callback: *mut VkDebugReportCallbackEXT) -> RawVkResult;
+
+unsafe extern "C" fn test_debug_callback(flags: u32, obj_type: i32, obj: u64, location: usize, code: i32, layer_prefix: *const c_char, msg: *const c_char, user_data: *mut c_void) -> RawVkBool32 {
+    println!("{:?}", CStr::from_ptr(msg));
+
+    VK_FALSE
+}
+
+#[repr(C)]
+struct VkDebugReportCallbackCreateInfoEXT {
+    s_type: i32,
+    p_next: *const c_void,
+    flags: u32,
+    callback: DebugCallback,
+    user_data: *mut c_void
+}
+
+unsafe fn create_debug_report_callback_ext(instance: RawVkInstance, create_info: *const VkDebugReportCallbackCreateInfoEXT) -> Result<VkDebugReportCallbackEXT, RawVkResult> {
+    let ext_name = CString::new("vkCreateDebugReportCallbackEXT").unwrap().into_raw();
+    let func_ptr = vkGetInstanceProcAddr(instance, ext_name);
+
+    if !func_ptr.is_null() {
+        let func : VkCreateDebugReportCallback = mem::transmute(func_ptr);
+        let mut handle : VkDebugReportCallbackEXT = 0;
+        let handle_ptr = &mut handle as *mut VkDebugReportCallbackEXT;
+
+        func(instance, create_info, ptr::null(), handle_ptr);
+
+        println!("Exists!");
+        Ok(handle)
+    } else {
+        println!("Does not exist.");
+        Err(VkFrom::vk_from(&VkResult::ErrorExtensionNotPresent))
+    }
+}
+
+extern {
+    fn vkGetInstanceProcAddr(instance: RawVkInstance, name: *const c_char) -> *const c_void;
+}
 
 fn main() {
+    let mut required_extensions : Vec<String> = vec![];
+    let validation_layers = vec![String::from(LAYER_STANDARD_VALIDATION)];
+
     let glfw = GlfwInstance::new();
-    let required_extensions = glfw.get_required_vulkan_extensions().unwrap();    
     let window = glfw.create_window(WINDOW_WIDTH, WINDOW_HEIGHT, "Vulkan");
+
+    required_extensions.append(&mut glfw.get_required_vulkan_extensions().unwrap());
+    required_extensions.push(String::from(EXT_DEBUG_REPORT));
 
     let instance = VkInstance::new(&VkInstanceCreateInfo {
         flags: VkInstanceCreateFlags { },
@@ -46,9 +94,22 @@ fn main() {
             engine_version: [0, 1, 0],
             api_version: [1, 0, 0]
         },
-        enabled_layer_names: vec![],
+        enabled_layer_names: validation_layers.clone(),
         enabled_extension_names: required_extensions
     }).expect("Failed to create VkInstance");
+
+    unsafe {
+        let create_info = VkDebugReportCallbackCreateInfoEXT {
+            // s_type: VkFrom::vk_from(&VkStructureType::DebugReportCallbackCreateInfoExt),
+            s_type: 1000011000,
+            p_next: ptr::null(),
+            flags: 2 | 8,
+            callback: test_debug_callback,
+            user_data: ptr::null_mut()
+        };
+
+        create_debug_report_callback_ext(instance.handle(), &create_info as *const VkDebugReportCallbackCreateInfoEXT).expect("Failed to add validation layer");
+    }
 
     let surface = instance.create_surface_from_glfw(&window).expect("Failed to create VkSurface");
 
@@ -68,9 +129,10 @@ fn main() {
             }
         ],
         enabled_layer_names: vec![],
-        enabled_extension_names: vec![String::from(SWAPCHAIN_EXT_NAME)],
+        enabled_extension_names: vec![String::from(EXT_SWAPCHAIN)],
         enabled_features: VkPhysicalDeviceFeatures::none()
     }).expect("Failed to initialize VkDevice");
+
     let queue = device.get_queue(0, 0);
     let buffer = device.create_buffer(&VkBufferCreateInfo {
         size: 128,
