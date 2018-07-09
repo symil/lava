@@ -16,39 +16,10 @@ const POSSIBLE_TYPES = {
 
 const SPECIAL_TYPES = ['VkBool32', 'VkDeviceSize'];
 
-const GLFW_FUNCTIONS = {
-    glfwCreateWindowSurface: {
-        name: 'glfwCreateWindowSurface',
-        returnType: 'VkResult',
-        args: [
-            {
-                name: 'instance',
-                fullType: 'VkInstance',
-                typeName: 'VkInstance',
-                isPointer: false,
-                isConst: false
-            },  {
-                name: 'window',
-                fullType: 'GLFWWindow*',
-                typeName: 'GLFWWindow',
-                isPointer: true,
-                isConst: false
-            }, {
-                name: 'allocator',
-                fullType: 'const VkAllocationCallbacks*',
-                typeName: 'VkAllocationCallbacks',
-                isPointer: true,
-                isConst: true
-            }, {
-                name: 'surface',
-                fullType: 'VkSurfaceKHR*',
-                typeName: 'VkSurfaceKHR',
-                isPointer: true,
-                isConst: false
-            }
-        ]
-    }
-};
+const SPECIAL_FUNCTIONS = [
+    'VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window, const VkAllocationCallbacks* allocator, VkSurfaceKHR* surface);',
+    'VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback)'
+].join('\n');
 
 function parseSpecial(typeName) {
     return SPECIAL_TYPES.includes(typeName) ? {} : null;
@@ -146,11 +117,9 @@ function isHandle(typeName) {
 }
 
 function parseFunction(name) {
-    if (name.startsWith('glfw')) {
-        return GLFW_FUNCTIONS[name];
-    }
-
-    const match = VULKAN_H.match(new RegExp(`\nVKAPI_ATTR (VkResult|void) VKAPI_CALL ${name}\\(([^;]+)\\)`, 'm'));
+    const regexp = new RegExp(`(?:VKAPI_ATTR/\s+)?(VkResult|void)\\s+(?:VKAPI_CALL\\s+)?${name}\\s*\\(([^;]+)\\)`, 'm');
+    
+    const match = SPECIAL_FUNCTIONS.match(regexp) || VULKAN_H.match(regexp);
 
     if (!match) {
         throw new Error(`unable to parse function ${name}`);
@@ -158,10 +127,11 @@ function parseFunction(name) {
 
     const returnType = match[1];
 
-    const args = match[2].trim().split('\n').map(line => {
+    const args = match[2].trim().split(',').map(line => {
+        line = line.trim();
         const spaceIndex = line.lastIndexOf(' ');
 
-        const name = line.substring(spaceIndex + 1).replace(',', '');
+        const name = line.substring(spaceIndex + 1);
         const fullType = line.substring(0, spaceIndex).trim();
         const typeName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
         const isPointer = fullType.endsWith('*');
@@ -190,8 +160,6 @@ function parseConstant(name) {
 
     return match[1];
 }
-
-parseFunction('vkCreateInstance');
 
 exports.parseType = parseType;
 exports.parseFunction = parseFunction;

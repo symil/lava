@@ -99,6 +99,16 @@ impl VkPhysicalDevice {
             )
         }
     }
+    
+    pub fn get_surface_formats(&self, surface: &VkSurfaceKHR) -> Result<Vec<VkSurfaceFormatKHR>, VkResult> {
+        unsafe {
+            let surface_handle = surface.handle();
+            vk_call_retrieve_list(
+                |count, ptr| vkGetPhysicalDeviceSurfaceFormatsKHR(self._handle, surface_handle, count, ptr),
+                |surface_format_khr : &mut VkSurfaceFormatKHR| {  }
+            )
+        }
+    }
 }
 
 impl VkFrom<VkPhysicalDevice> for RawVkPhysicalDevice {
@@ -126,4 +136,5 @@ extern {
     fn vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: RawVkSurfaceKHR, p_supported: *mut RawVkBool32)-> RawVkResult;
     fn vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurfaceKHR, p_surface_capabilities: *mut RawVkSurfaceCapabilitiesKHR)-> RawVkResult;
     fn vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurfaceKHR, p_present_mode_count: *mut u32, p_present_modes: *mut RawVkPresentModeKHR)-> RawVkResult;
+    fn vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurfaceKHR, p_surface_format_count: *mut u32, p_surface_formats: *mut RawVkSurfaceFormatKHR)-> RawVkResult;
 }

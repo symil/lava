@@ -33,46 +33,8 @@ const LAYER_STANDARD_VALIDATION : &str = "VK_LAYER_LUNARG_standard_validation";
 const EXT_DEBUG_REPORT : &str = "VK_EXT_debug_report";
 const EXT_SWAPCHAIN : &str = "VK_KHR_swapchain";
 
-type VkDebugReportCallbackEXT = usize;
-type DebugCallback = unsafe extern "C" fn(flags: u32, obj_type: i32, obj: u64, location: usize, code: i32, layer_prefix: *const c_char, msg: *const c_char, user_data: *mut c_void) -> RawVkBool32;
-type VkCreateDebugReportCallback = unsafe extern "C" fn(instance: RawVkInstance, create_info: *const VkDebugReportCallbackCreateInfoEXT, allocator: *const c_void, p_callback: *mut VkDebugReportCallbackEXT) -> RawVkResult;
-
-unsafe extern "C" fn test_debug_callback(flags: u32, obj_type: i32, obj: u64, location: usize, code: i32, layer_prefix: *const c_char, msg: *const c_char, user_data: *mut c_void) -> RawVkBool32 {
-    println!("{:?}", CStr::from_ptr(msg));
-
-    VK_FALSE
-}
-
-#[repr(C)]
-struct VkDebugReportCallbackCreateInfoEXT {
-    s_type: i32,
-    p_next: *const c_void,
-    flags: u32,
-    callback: DebugCallback,
-    user_data: *mut c_void
-}
-
-unsafe fn create_debug_report_callback_ext(instance: RawVkInstance, create_info: *const VkDebugReportCallbackCreateInfoEXT) -> Result<VkDebugReportCallbackEXT, RawVkResult> {
-    let ext_name = CString::new("vkCreateDebugReportCallbackEXT").unwrap().into_raw();
-    let func_ptr = vkGetInstanceProcAddr(instance, ext_name);
-
-    if !func_ptr.is_null() {
-        let func : VkCreateDebugReportCallback = mem::transmute(func_ptr);
-        let mut handle : VkDebugReportCallbackEXT = 0;
-        let handle_ptr = &mut handle as *mut VkDebugReportCallbackEXT;
-
-        func(instance, create_info, ptr::null(), handle_ptr);
-
-        println!("Exists!");
-        Ok(handle)
-    } else {
-        println!("Does not exist.");
-        Err(VkFrom::vk_from(&VkResult::ErrorExtensionNotPresent))
-    }
-}
-
-extern {
-    fn vkGetInstanceProcAddr(instance: RawVkInstance, name: *const c_char) -> *const c_void;
+fn simple_debug_callback(msg: String) {
+    println!("{}", msg);
 }
 
 fn main() {
@@ -98,18 +60,14 @@ fn main() {
         enabled_extension_names: required_extensions
     }).expect("Failed to create VkInstance");
 
-    unsafe {
-        let create_info = VkDebugReportCallbackCreateInfoEXT {
-            // s_type: VkFrom::vk_from(&VkStructureType::DebugReportCallbackCreateInfoExt),
-            s_type: 1000011000,
-            p_next: ptr::null(),
-            flags: 2 | 8,
-            callback: test_debug_callback,
-            user_data: ptr::null_mut()
-        };
-
-        create_debug_report_callback_ext(instance.handle(), &create_info as *const VkDebugReportCallbackCreateInfoEXT).expect("Failed to add validation layer");
-    }
+    let debug_callback = instance.create_debug_callback(&VkDebugReportCallbackCreateInfo {
+        flags: VkDebugReportFlagsEXT {
+            warning_ext: true,
+            error_ext: true,
+            ..VkFlags::none()
+        },
+        callback: simple_debug_callback
+    }).expect("Faield to create debug callback");
 
     let surface = instance.create_surface_from_glfw(&window).expect("Failed to create VkSurface");
 
@@ -146,6 +104,7 @@ fn main() {
     let instance_supported_extensions : Vec<String> = instance.get_supported_extensions().unwrap().into_iter().map(|ext| ext.extension_name).collect();
     let device_supported_extensions : Vec<String> = physical_device.get_supported_extensions().expect("Failed to retrieve device extensions").into_iter().map(|ext| ext.extension_name).collect();
     let capabilities = physical_device.get_surface_capabilities(&surface).expect("Failed to retrieve surface capabilities");
+    let formats = physical_device.get_surface_formats(&surface);
     let surface_present_modes = physical_device.get_surface_present_modes(&surface).expect("Failed to retrieve present modes");
     let layers = instance.get_layer_properties().expect("Failed to retrieve layer properties");
     let current_transform = capabilities.current_transform.clone();

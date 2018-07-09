@@ -5,7 +5,8 @@ const SCHEMA = {
         getSupportedExtensions: 'vkEnumerateInstanceExtensionProperties',
         getPhysicalDevices: 'VkPhysicalDevice::getList',
         createSurfaceFromGlfw: 'VkSurfaceKHR::fromGlfw',
-        getLayerProperties: 'vkEnumerateInstanceLayerProperties'
+        getLayerProperties: 'vkEnumerateInstanceLayerProperties',
+        createDebugCallback: 'vkCreateDebugReportCallbackEXT'
     },
     VkPhysicalDevice: {
         getList: 'vkEnumeratePhysicalDevices',
@@ -16,7 +17,8 @@ const SCHEMA = {
         createLogicalDevice: 'VkDevice::new',
         doesSupportSurface: 'vkGetPhysicalDeviceSurfaceSupportKHR',
         getSurfaceCapabilities: 'vkGetPhysicalDeviceSurfaceCapabilitiesKHR',
-        getSurfacePresentModes: 'vkGetPhysicalDeviceSurfacePresentModesKHR'
+        getSurfacePresentModes: 'vkGetPhysicalDeviceSurfacePresentModesKHR',
+        getSurfaceFormats: 'vkGetPhysicalDeviceSurfaceFormatsKHR'
     },
     VkDevice: {
         new: 'vkCreateDevice',

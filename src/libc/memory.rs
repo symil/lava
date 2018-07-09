@@ -64,7 +64,7 @@ pub unsafe fn free_c_ptr<T>(ptr: *mut T) {
 }
 
 pub unsafe fn copy_as_c_array<T>(v: &Vec<T>) -> *mut T {
-    let byte_len = v.len() * mem::size_of::<usize>();
+    let byte_len = v.len() * mem::size_of::<T>();
     let ptr = malloc(byte_len);
     memcpy(ptr, v.as_ptr() as *const c_void, byte_len);
 

@@ -5,7 +5,7 @@ use std::convert::*;
 use libc::c_void;
 use vk::*;
 
-pub type RawVkHandle = usize;
+pub type RawVkHandle = u64;
 
 pub const VK_NULL_HANDLE : RawVkHandle = 0;
 pub const VK_SUCCESS : RawVkResult = 0;
@@ -99,5 +99,3 @@ pub unsafe fn vk_call_retrieve_single_unchecked<T, U, F, C>(vk_func: F, callback
 pub fn to_vk_bool(value: bool) -> u32 {
     if value { 1 } else { 0 }
 }
-
-type DebugCallback = fn(flags: u32, obj_type: i32, obj: u64, location: usize, code: i32, layer_prefix: *const c_char, msg: *const c_char, user_data: c_void) -> RawVkBool32;
