@@ -48,6 +48,7 @@ impl VkFrom<VkDebugReportCallbackCreateInfo> for RawVkDebugReportCallbackCreateI
 }
 
 type RawVkCreateDebugReportCallbackFunction = unsafe extern fn(RawVkInstance, *const RawVkDebugReportCallbackCreateInfo, *const c_void, *mut RawVkHandle) -> RawVkResult;
+type RawVkDestroyDebugReportCallbackFunction = unsafe extern fn(RawVkInstance, RawVkHandle, *const c_void);
 
 #[allow(non_snake_case)]
 pub unsafe extern fn vkCreateDebugReportCallbackEXT(instance: RawVkInstance, create_info: *const RawVkDebugReportCallbackCreateInfo, allocator: *const c_void, handle: *mut RawVkHandle) -> RawVkResult {
@@ -61,6 +62,21 @@ pub unsafe extern fn vkCreateDebugReportCallbackEXT(instance: RawVkInstance, cre
         func(instance, create_info, allocator, handle)
     } else {
         VkFrom::vk_from(&VkResult::ErrorExtensionNotPresent)
+    }
+}
+
+#[allow(non_snake_case)]
+pub unsafe extern fn vkDestroyDebugReportCallbackEXT(instance: RawVkInstance, callback: RawVkHandle, allocator: *const c_void) {
+    let ext_name = CString::new("vkDestroyDebugReportCallbackEXT").unwrap();
+    let ext_name_c_ptr = ext_name.as_ptr();
+    let func_ptr = vkGetInstanceProcAddr(instance, ext_name_c_ptr);
+
+    if !func_ptr.is_null() {
+        let func : RawVkDestroyDebugReportCallbackFunction = mem::transmute(func_ptr);
+
+        func(instance, callback, allocator);
+    } else {
+        println!("Something failed somewhere", );
     }
 }
 

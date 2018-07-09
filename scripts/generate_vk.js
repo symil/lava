@@ -17,7 +17,8 @@ const IGNORED_TYPES = [
 ];
 
 const IGNORED_EXTERN_FUNCTIONS = [
-    'vkCreateDebugReportCallbackEXT'
+    'vkCreateDebugReportCallbackEXT',
+    'vkDestroyDebugReportCallbackEXT'
 ];
 
 const PRIMITIVE_TYPES = {

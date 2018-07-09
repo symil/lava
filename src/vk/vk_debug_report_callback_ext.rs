@@ -2,6 +2,7 @@
 
 use vk::*;
 use std::os::raw::c_char;
+use std::ops::Drop;
 use std::vec::Vec;
 use std::ptr::null;
 use libc::c_void;
@@ -12,12 +13,25 @@ pub type RawVkDebugReportCallbackEXT = RawVkHandle;
 #[derive(Debug)]
 pub struct VkDebugReportCallbackEXT {
     _handle: RawVkDebugReportCallbackEXT,
+    _instance: RawVkInstance,
 }
 
 impl VkDebugReportCallbackEXT {
     
     pub fn handle(&self) -> RawVkDebugReportCallbackEXT {
         self._handle
+    }
+    
+    pub fn new(instance: &VkInstance, create_info: &VkDebugReportCallbackCreateInfo) -> Result<VkDebugReportCallbackEXT, VkResult> {
+        unsafe {
+            let instance_handle = instance.handle();
+            let mut raw_create_info = RawVkDebugReportCallbackCreateInfo::vk_from(create_info);
+            let raw_create_info_ptr = &mut raw_create_info as *mut RawVkDebugReportCallbackCreateInfo;
+            vk_call_retrieve_single(
+                |ptr| vkCreateDebugReportCallbackEXT(instance_handle, raw_create_info_ptr, null(), ptr),
+                |debug_report_callback_ext : &mut VkDebugReportCallbackEXT| { debug_report_callback_ext._instance = instance_handle; }
+            )
+        }
     }
 }
 
@@ -33,6 +47,16 @@ impl VkFrom<RawVkDebugReportCallbackEXT> for VkDebugReportCallbackEXT {
     fn vk_from(value: &RawVkDebugReportCallbackEXT) -> Self {
         Self {
             _handle: *value,
+            _instance: VK_NULL_HANDLE,
+        }
+    }
+}
+
+impl Drop for VkDebugReportCallbackEXT {
+    
+    fn drop(&mut self) {
+        unsafe {
+            vkDestroyDebugReportCallbackEXT(self._instance, self._handle, null());
         }
     }
 }

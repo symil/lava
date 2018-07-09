@@ -59,14 +59,7 @@ impl VkInstance {
     }
     
     pub fn create_debug_callback(&self, create_info: &VkDebugReportCallbackCreateInfo) -> Result<VkDebugReportCallbackEXT, VkResult> {
-        unsafe {
-            let mut raw_create_info = RawVkDebugReportCallbackCreateInfo::vk_from(create_info);
-            let raw_create_info_ptr = &mut raw_create_info as *mut RawVkDebugReportCallbackCreateInfo;
-            vk_call_retrieve_single(
-                |ptr| vkCreateDebugReportCallbackEXT(self._handle, raw_create_info_ptr, null(), ptr),
-                |debug_report_callback_ext : &mut VkDebugReportCallbackEXT| {  }
-            )
-        }
+        VkDebugReportCallbackEXT::new(self, create_info)
     }
 }
 
