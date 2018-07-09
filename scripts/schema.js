@@ -6,7 +6,7 @@ const SCHEMA = {
         getPhysicalDevices: 'VkPhysicalDevice::getList',
         createSurfaceFromGlfw: 'VkSurfaceKHR::fromGlfw',
         getLayerProperties: 'vkEnumerateInstanceLayerProperties',
-        createDebugCallback: 'VkDebugReportCallbackEXT::new'
+        createDebugCallback: 'VkDebugReportCallbackEXT::new ; store'
     },
     VkDebugReportCallbackEXT: {
         new: 'vkCreateDebugReportCallbackEXT',

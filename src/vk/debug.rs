@@ -70,14 +70,9 @@ pub unsafe extern fn vkDestroyDebugReportCallbackEXT(instance: RawVkInstance, ca
     let ext_name = CString::new("vkDestroyDebugReportCallbackEXT").unwrap();
     let ext_name_c_ptr = ext_name.as_ptr();
     let func_ptr = vkGetInstanceProcAddr(instance, ext_name_c_ptr);
+    let func : RawVkDestroyDebugReportCallbackFunction = mem::transmute(func_ptr);
 
-    if !func_ptr.is_null() {
-        let func : RawVkDestroyDebugReportCallbackFunction = mem::transmute(func_ptr);
-
-        func(instance, callback, allocator);
-    } else {
-        println!("Something failed somewhere", );
-    }
+    func(instance, callback, allocator);
 }
 
 extern {

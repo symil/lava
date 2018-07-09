@@ -60,8 +60,7 @@ const META_TYPE_TO_BUILD_FUNC = {
 
 const SPECIAL_TYPES_BUILD_FUNC = {
     VkBool32: buildVkBool32,
-    VkDeviceSize: buildVkDeviceSize,
-    PFN_vkDebugReportCallbackEXT: buildDebugReportCallback
+    VkDeviceSize: buildVkDeviceSize
 };
 
 const DEFINITIONS = {};
@@ -247,15 +246,6 @@ function buildVkDeviceSize() {
         rawDefinition: { type: 'typedef', target: 'u64' },
         wrappedDefinition: { type: 'typedef', target: 'u64' },
         fromRawToWrapped: { name: 'vk_from', args: [{name: 'value', type: '&u64'}], returnType: 'u64', body: [`*value`] }
-    };
-}
-
-function buildDebugReportCallback(typeName) {
-    return {
-        rawTypeName: toRawTypeName(typeName),
-        wrappedTypeName: toRawTypeName(typeName),
-        rawDefinition: { type: 'function', unsafe: true, extern: true, returnType: 'u32', argTypes: ['u32', 'i32', 'u64', 'usize', 'i32', '*const c_char', '*const c_char', '*mut c_void'] },
-        wrappedDefinition: { type: 'function', argTypes: 'String' }
     };
 }
 
@@ -689,15 +679,18 @@ function buildHandle(typeName, rawInfo) {
             return;
         }
 
+        const [target, option] = def.split(';').map(x => x.trim());
+
         let statements = [];
         let returnType = null;
         let methodArguments = [];
         let static = false;
+        let mutSelf = false;
         let unsafe = false;
         let setAdditionalFields = [];
 
-        if (!def.includes('::')) {
-            const cMethod = parseFunction(def);
+        if (!target.includes('::')) {
+            const cMethod = parseFunction(target);
 
             buildType(cMethod.returnType);
             cMethod.args.forEach((arg => buildType(arg.typeName)));
@@ -810,7 +803,7 @@ function buildHandle(typeName, rawInfo) {
                 throw new Error(`method ${cMethod.name} does not seem to retrieve anything`);
             }
         } else {
-            const [targetTypeName, targetMethodName] = def.split('::');
+            const [targetTypeName, targetMethodName] = target.split('::');
 
             buildType(targetTypeName);
 
@@ -831,8 +824,35 @@ function buildHandle(typeName, rawInfo) {
             statements.push(`${targetTypeName}::${rustTargetMethodName}(${targetCallArgs.join(', ')})`);
         }
 
+        if (option === 'store') {
+            const doesReturnResult = returnType.startsWith('Result');
+            const unwrappedReturnResult = doesReturnResult ? returnType.substring(returnType.indexOf('<') + 1, returnType.indexOf(',')) : returnType;
+            const fieldName = `_${toSnakeCase(unwrappedReturnResult.substring(2))}_list`;
+
+            uses.add('std::mem::ManuallyDrop');
+            mutSelf = true;
+            fields.push({name: fieldName, type: `ManuallyDrop<Vec<${unwrappedReturnResult}>>`});
+            returnType = doesReturnResult ? `Result<(), VkResult>` : null;
+
+            statements[statements.length - 1] = `let result = ${statements[statements.length - 1]};`;
+
+            if (doesReturnResult) {
+                statements.push(`match result`, [
+                    `Ok(value) => `, [
+                        `self.${fieldName}.push(value);`,
+                        `Ok(())`
+                    ],
+                    `Err(error) => Err(error)`
+                ]);
+            } else {
+                statements.push(`self.${fieldName}.push(value)`);
+            }
+
+            wrappedDropMethod.body.unshift(`ManuallyDrop::drop(&mut self.${fieldName});`);
+        }
+
         if (!static) {
-            methodArguments.unshift({type: '&self'});
+            methodArguments.unshift({type: mutSelf ? '&mut self': '&self'});
         }
         
         const method = {
@@ -858,7 +878,13 @@ function buildHandle(typeName, rawInfo) {
         name: 'vk_from',
         args: [{name: 'value', type: `&${rawTypeName}`}],
         returnType: 'Self',
-        body: ['Self', fields.map(({name}) => `${name}: ${name === '_handle' ? '*value' : 'VK_NULL_HANDLE'},`)]
+        body: ['Self', fields.map(({name, type}) => {
+            const isVec = type.includes('Vec');
+            const isMainHandle = name === '_handle';
+            const initValue = isMainHandle ? '*value' : (isVec ? 'ManuallyDrop::new(Vec::new())' : 'VK_NULL_HANDLE');
+
+            return `${name}: ${initValue},`
+        })]
     }
 
     // methods.forEach(method => console.log(methodToStr(method)));

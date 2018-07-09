@@ -47,7 +47,7 @@ fn main() {
     required_extensions.append(&mut glfw.get_required_vulkan_extensions().unwrap());
     required_extensions.push(String::from(EXT_DEBUG_REPORT));
 
-    let instance = VkInstance::new(&VkInstanceCreateInfo {
+    let mut instance = VkInstance::new(&VkInstanceCreateInfo {
         flags: VkInstanceCreateFlags { },
         application_info: VkApplicationInfo {
             application_name: String::from("foo"),
@@ -60,7 +60,7 @@ fn main() {
         enabled_extension_names: required_extensions
     }).expect("Failed to create VkInstance");
 
-    let debug_callback = instance.create_debug_callback(&VkDebugReportCallbackCreateInfo {
+    instance.create_debug_callback(&VkDebugReportCallbackCreateInfo {
         flags: VkDebugReportFlagsEXT {
             warning_ext: true,
             error_ext: true,

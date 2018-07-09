@@ -7,12 +7,14 @@ use std::vec::Vec;
 use std::ptr::null;
 use libc::c_void;
 use glfw::*;
+use std::mem::ManuallyDrop;
 
 pub type RawVkInstance = RawVkHandle;
 
 #[derive(Debug)]
 pub struct VkInstance {
     _handle: RawVkInstance,
+    _debug_report_callback_ext_list: ManuallyDrop<Vec<VkDebugReportCallbackEXT>>,
 }
 
 impl VkInstance {
@@ -58,8 +60,15 @@ impl VkInstance {
         }
     }
     
-    pub fn create_debug_callback(&self, create_info: &VkDebugReportCallbackCreateInfo) -> Result<VkDebugReportCallbackEXT, VkResult> {
-        VkDebugReportCallbackEXT::new(self, create_info)
+    pub fn create_debug_callback(&mut self, create_info: &VkDebugReportCallbackCreateInfo) -> Result<(), VkResult> {
+        let result = VkDebugReportCallbackEXT::new(self, create_info);
+        match result {
+            Ok(value) =>  {
+                self._debug_report_callback_ext_list.push(value);
+                Ok(())
+            }
+            Err(error) => Err(error)
+        }
     }
 }
 
@@ -75,6 +84,7 @@ impl VkFrom<RawVkInstance> for VkInstance {
     fn vk_from(value: &RawVkInstance) -> Self {
         Self {
             _handle: *value,
+            _debug_report_callback_ext_list: ManuallyDrop::new(Vec::new()),
         }
     }
 }
@@ -83,6 +93,7 @@ impl Drop for VkInstance {
     
     fn drop(&mut self) {
         unsafe {
+            ManuallyDrop::drop(&mut self._debug_report_callback_ext_list);
             vkDestroyInstance(self._handle, null());
         }
     }
