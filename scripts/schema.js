@@ -4,11 +4,11 @@ const SCHEMA = {
         drop: 'vkDestroyInstance',
         getSupportedExtensions: 'vkEnumerateInstanceExtensionProperties',
         getPhysicalDevices: 'VkPhysicalDevice::getList',
-        createSurfaceFromGlfw: 'VkSurfaceKHR::fromGlfw',
+        createSurfaceFromGlfw: 'VkSurface::fromGlfw',
         getLayerProperties: 'vkEnumerateInstanceLayerProperties',
-        createDebugCallback: 'VkDebugReportCallbackEXT::new ; store'
+        createDebugCallback: 'VkDebugReportCallback::new ; store'
     },
-    VkDebugReportCallbackEXT: {
+    VkDebugReportCallback: {
         new: 'vkCreateDebugReportCallbackEXT',
         drop: 'vkDestroyDebugReportCallbackEXT'
     },
@@ -29,7 +29,7 @@ const SCHEMA = {
         drop: 'vkDestroyDevice',
         getQueue: 'VkQueue::get',
         createBuffer: 'VkBuffer::new',
-        createSwapchain: 'VkSwapchainKHR::new',
+        createSwapchain: 'VkSwapchain::new',
         createImageView: 'VkImageView::new'
     },
     VkQueue: {
@@ -39,11 +39,11 @@ const SCHEMA = {
         new: 'vkCreateBuffer',
         drop: 'vkDestroyBuffer'
     },
-    VkSurfaceKHR: {
+    VkSurface: {
         fromGlfw: 'glfwCreateWindowSurface',
         drop: 'vkDestroySurfaceKHR'
     },
-    VkSwapchainKHR: {
+    VkSwapchain: {
         new: 'vkCreateSwapchainKHR',
         drop: 'vkDestroySwapchainKHR',
         getImages: 'vkGetSwapchainImagesKHR'

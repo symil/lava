@@ -28,15 +28,15 @@ pub enum VkResult {
     ErrorFragmentedPool = -12,
     ErrorOutOfPoolMemory = -1000069000,
     ErrorInvalidExternalHandle = -1000072003,
-    ErrorSurfaceLostKhr = -1000000000,
-    ErrorNativeWindowInUseKhr = -1000000001,
-    SuboptimalKhr = 1000001003,
-    ErrorOutOfDateKhr = -1000001004,
-    ErrorIncompatibleDisplayKhr = -1000003001,
-    ErrorValidationFailedExt = -1000011001,
+    ErrorSurfaceLost = -1000000000,
+    ErrorNativeWindowInUse = -1000000001,
+    Suboptimal = 1000001003,
+    ErrorOutOfDate = -1000001004,
+    ErrorIncompatibleDisplay = -1000003001,
+    ErrorValidationFailed = -1000011001,
     ErrorInvalidShaderNv = -1000012000,
-    ErrorFragmentationExt = -1000161000,
-    ErrorNotPermittedExt = -1000174001,
+    ErrorFragmentation = -1000161000,
+    ErrorNotPermitted = -1000174001,
 }
 
 impl VkFrom<VkResult> for RawVkResult {

@@ -3,11 +3,11 @@
 use vk::*;
 use std::os::raw::c_char;
 
-pub type RawVkDebugReportFlagsEXT = u32;
+pub type RawVkDebugReportFlags = u32;
 
 #[derive(Debug)]
 #[derive(Copy, Clone)]
-pub struct VkDebugReportFlagsEXT {
+pub struct VkDebugReportFlags {
     pub information: bool,
     pub warning: bool,
     pub performance_warning: bool,
@@ -15,7 +15,7 @@ pub struct VkDebugReportFlagsEXT {
     pub debug: bool,
 }
 
-impl VkFlags for VkDebugReportFlagsEXT {
+impl VkFlags for VkDebugReportFlags {
     
     fn none() -> Self {
         Self {
@@ -38,9 +38,9 @@ impl VkFlags for VkDebugReportFlagsEXT {
     }
 }
 
-impl VkFrom<VkDebugReportFlagsEXT> for RawVkDebugReportFlagsEXT {
+impl VkFrom<VkDebugReportFlags> for RawVkDebugReportFlags {
     
-    fn vk_from(value: &VkDebugReportFlagsEXT) -> Self { {
+    fn vk_from(value: &VkDebugReportFlags) -> Self { {
             0
             + (if value.information { 0x00000001 } else { 0 })
             + (if value.warning { 0x00000002 } else { 0 })
@@ -51,9 +51,9 @@ impl VkFrom<VkDebugReportFlagsEXT> for RawVkDebugReportFlagsEXT {
     }
 }
 
-impl VkFrom<RawVkDebugReportFlagsEXT> for VkDebugReportFlagsEXT {
+impl VkFrom<RawVkDebugReportFlags> for VkDebugReportFlags {
     
-    fn vk_from(value: &RawVkDebugReportFlagsEXT) -> Self {
+    fn vk_from(value: &RawVkDebugReportFlags) -> Self {
         Self {
             information: (value & 0x00000001) != 0,
             warning: (value & 0x00000002) != 0,

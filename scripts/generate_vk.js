@@ -68,7 +68,7 @@ const DEFINITIONS = {};
 main();
 
 function main() {
-    buildType('VkDebugReportFlagsEXT');
+    buildType('VkDebugReportFlags');
     // buildType('VkDebugReportObjectTypeEXT');
     // buildType('VkDebugReportCallbackCreateInfoEXT');
     buildType('VkInstance');

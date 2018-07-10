@@ -61,9 +61,9 @@ fn main() {
     }).expect("Failed to create VkInstance");
 
     instance.create_debug_callback(&VkDebugReportCallbackCreateInfo {
-        flags: VkDebugReportFlagsEXT {
-            warning_ext: true,
-            error_ext: true,
+        flags: VkDebugReportFlags {
+            warning: true,
+            error: true,
             ..VkFlags::none()
         },
         callback: simple_debug_callback
@@ -112,12 +112,12 @@ fn main() {
     // println!("{:#?}", capabilities);
     // println!("{:#?}", current_transform);
 
-    let swapchain = device.create_swapchain(&VkSwapchainCreateInfoKHR {
-        flags: VkSwapchainCreateFlagsKHR::none(),
+    let swapchain = device.create_swapchain(&VkSwapchainCreateInfo {
+        flags: VkSwapchainCreateFlags::none(),
         surface: &surface,
         min_image_count: 2,
         image_format: VkFormat::B8G8R8A8Unorm,
-        image_color_space: VkColorSpaceKHR::SrgbNonlinearKhr,
+        image_color_space: VkColorSpace::SrgbNonlinear,
         image_extent: VkExtent2D {
             width: WINDOW_WIDTH,
             height: WINDOW_HEIGHT
@@ -130,11 +130,11 @@ fn main() {
         image_sharing_mode: VkSharingMode::Exclusive,
         queue_family_indices: vec![],
         pre_transform: capabilities.current_transform.clone(),
-        composite_alpha: VkCompositeAlphaFlagsKHR {
-            opaque_khr: true,
-            ..VkCompositeAlphaFlagsKHR::none()
+        composite_alpha: VkCompositeAlphaFlags {
+            opaque: true,
+            ..VkCompositeAlphaFlags::none()
         },
-        present_mode: VkPresentModeKHR::FifoKhr,
+        present_mode: VkPresentMode::Fifo,
         clipped: false,
         old_swapchain: None
     }).expect("Failed to create VkSwapchain");

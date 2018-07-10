@@ -6,20 +6,20 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-pub struct RawVkSurfaceFormatKHR {
+pub struct RawVkSurfaceFormat {
     format: RawVkFormat,
-    color_space: RawVkColorSpaceKHR,
+    color_space: RawVkColorSpace,
 }
 
 #[derive(Debug)]
-pub struct VkSurfaceFormatKHR {
+pub struct VkSurfaceFormat {
     pub format: VkFormat,
-    pub color_space: VkColorSpaceKHR,
+    pub color_space: VkColorSpace,
 }
 
-impl VkFrom<VkSurfaceFormatKHR> for RawVkSurfaceFormatKHR {
+impl VkFrom<VkSurfaceFormat> for RawVkSurfaceFormat {
     
-    fn vk_from(value: &VkSurfaceFormatKHR) -> Self {
+    fn vk_from(value: &VkSurfaceFormat) -> Self {
         Self {
             format: VkFrom::vk_from(&value.format),
             color_space: VkFrom::vk_from(&value.color_space),
@@ -27,9 +27,9 @@ impl VkFrom<VkSurfaceFormatKHR> for RawVkSurfaceFormatKHR {
     }
 }
 
-impl VkFrom<RawVkSurfaceFormatKHR> for VkSurfaceFormatKHR {
+impl VkFrom<RawVkSurfaceFormat> for VkSurfaceFormat {
     
-    fn vk_from(value: &RawVkSurfaceFormatKHR) -> Self {
+    fn vk_from(value: &RawVkSurfaceFormat) -> Self {
         Self {
             format: VkFrom::vk_from(&value.format),
             color_space: VkFrom::vk_from(&value.color_space),

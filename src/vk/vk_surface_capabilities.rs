@@ -6,36 +6,36 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-pub struct RawVkSurfaceCapabilitiesKHR {
+pub struct RawVkSurfaceCapabilities {
     min_image_count: u32,
     max_image_count: u32,
     current_extent: RawVkExtent2D,
     min_image_extent: RawVkExtent2D,
     max_image_extent: RawVkExtent2D,
     max_image_array_layers: u32,
-    supported_transforms: RawVkSurfaceTransformFlagsKHR,
-    current_transform: RawVkSurfaceTransformFlagsKHR,
-    supported_composite_alpha: RawVkCompositeAlphaFlagsKHR,
+    supported_transforms: RawVkSurfaceTransformFlags,
+    current_transform: RawVkSurfaceTransformFlags,
+    supported_composite_alpha: RawVkCompositeAlphaFlags,
     supported_usage_flags: RawVkImageUsageFlags,
 }
 
 #[derive(Debug)]
-pub struct VkSurfaceCapabilitiesKHR {
+pub struct VkSurfaceCapabilities {
     pub min_image_count: u32,
     pub max_image_count: u32,
     pub current_extent: VkExtent2D,
     pub min_image_extent: VkExtent2D,
     pub max_image_extent: VkExtent2D,
     pub max_image_array_layers: u32,
-    pub supported_transforms: VkSurfaceTransformFlagsKHR,
-    pub current_transform: VkSurfaceTransformFlagsKHR,
-    pub supported_composite_alpha: VkCompositeAlphaFlagsKHR,
+    pub supported_transforms: VkSurfaceTransformFlags,
+    pub current_transform: VkSurfaceTransformFlags,
+    pub supported_composite_alpha: VkCompositeAlphaFlags,
     pub supported_usage_flags: VkImageUsageFlags,
 }
 
-impl VkFrom<VkSurfaceCapabilitiesKHR> for RawVkSurfaceCapabilitiesKHR {
+impl VkFrom<VkSurfaceCapabilities> for RawVkSurfaceCapabilities {
     
-    fn vk_from(value: &VkSurfaceCapabilitiesKHR) -> Self {
+    fn vk_from(value: &VkSurfaceCapabilities) -> Self {
         Self {
             min_image_count: value.min_image_count,
             max_image_count: value.max_image_count,
@@ -51,9 +51,9 @@ impl VkFrom<VkSurfaceCapabilitiesKHR> for RawVkSurfaceCapabilitiesKHR {
     }
 }
 
-impl VkFrom<RawVkSurfaceCapabilitiesKHR> for VkSurfaceCapabilitiesKHR {
+impl VkFrom<RawVkSurfaceCapabilities> for VkSurfaceCapabilities {
     
-    fn vk_from(value: &RawVkSurfaceCapabilitiesKHR) -> Self {
+    fn vk_from(value: &RawVkSurfaceCapabilities) -> Self {
         Self {
             min_image_count: value.min_image_count,
             max_image_count: value.max_image_count,

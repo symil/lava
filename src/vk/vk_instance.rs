@@ -14,7 +14,7 @@ pub type RawVkInstance = RawVkHandle;
 #[derive(Debug)]
 pub struct VkInstance {
     _handle: RawVkInstance,
-    _debug_report_callback_ext_list: ManuallyDrop<Vec<VkDebugReportCallbackEXT>>,
+    _debug_report_callback_list: ManuallyDrop<Vec<VkDebugReportCallback>>,
 }
 
 impl VkInstance {
@@ -47,8 +47,8 @@ impl VkInstance {
         VkPhysicalDevice::get_list(self)
     }
     
-    pub fn create_surface_from_glfw(&self, glfw_window: &GlfwWindow) -> Result<VkSurfaceKHR, VkResult> {
-        VkSurfaceKHR::from_glfw(self, glfw_window)
+    pub fn create_surface_from_glfw(&self, glfw_window: &GlfwWindow) -> Result<VkSurface, VkResult> {
+        VkSurface::from_glfw(self, glfw_window)
     }
     
     pub fn get_layer_properties(&self) -> Result<Vec<VkLayerProperties>, VkResult> {
@@ -61,10 +61,10 @@ impl VkInstance {
     }
     
     pub fn create_debug_callback(&mut self, create_info: &VkDebugReportCallbackCreateInfo) -> Result<(), VkResult> {
-        let result = VkDebugReportCallbackEXT::new(self, create_info);
+        let result = VkDebugReportCallback::new(self, create_info);
         match result {
             Ok(value) =>  {
-                self._debug_report_callback_ext_list.push(value);
+                self._debug_report_callback_list.push(value);
                 Ok(())
             }
             Err(error) => Err(error)
@@ -84,7 +84,7 @@ impl VkFrom<RawVkInstance> for VkInstance {
     fn vk_from(value: &RawVkInstance) -> Self {
         Self {
             _handle: *value,
-            _debug_report_callback_ext_list: ManuallyDrop::new(Vec::new()),
+            _debug_report_callback_list: ManuallyDrop::new(Vec::new()),
         }
     }
 }
@@ -93,7 +93,7 @@ impl Drop for VkInstance {
     
     fn drop(&mut self) {
         unsafe {
-            ManuallyDrop::drop(&mut self._debug_report_callback_ext_list);
+            ManuallyDrop::drop(&mut self._debug_report_callback_list);
             vkDestroyInstance(self._handle, null());
         }
     }

@@ -7,52 +7,52 @@ use std::ptr::null;
 use libc::*;
 
 #[repr(C)]
-pub struct RawVkSwapchainCreateInfoKHR {
+pub struct RawVkSwapchainCreateInfo {
     s_type: RawVkStructureType,
     next: *const c_void,
-    flags: RawVkSwapchainCreateFlagsKHR,
-    surface: RawVkSurfaceKHR,
+    flags: RawVkSwapchainCreateFlags,
+    surface: RawVkSurface,
     min_image_count: u32,
     image_format: RawVkFormat,
-    image_color_space: RawVkColorSpaceKHR,
+    image_color_space: RawVkColorSpace,
     image_extent: RawVkExtent2D,
     image_array_layers: u32,
     image_usage: RawVkImageUsageFlags,
     image_sharing_mode: RawVkSharingMode,
     queue_family_index_count: u32,
     queue_family_indices: *mut u32,
-    pre_transform: RawVkSurfaceTransformFlagsKHR,
-    composite_alpha: RawVkCompositeAlphaFlagsKHR,
-    present_mode: RawVkPresentModeKHR,
+    pre_transform: RawVkSurfaceTransformFlags,
+    composite_alpha: RawVkCompositeAlphaFlags,
+    present_mode: RawVkPresentMode,
     clipped: RawVkBool32,
-    old_swapchain: RawVkSwapchainKHR,
+    old_swapchain: RawVkSwapchain,
 }
 
 #[derive(Debug)]
-pub struct VkSwapchainCreateInfoKHR<'a, 'b> {
-    pub flags: VkSwapchainCreateFlagsKHR,
-    pub surface: &'a VkSurfaceKHR,
+pub struct VkSwapchainCreateInfo<'a, 'b> {
+    pub flags: VkSwapchainCreateFlags,
+    pub surface: &'a VkSurface,
     pub min_image_count: u32,
     pub image_format: VkFormat,
-    pub image_color_space: VkColorSpaceKHR,
+    pub image_color_space: VkColorSpace,
     pub image_extent: VkExtent2D,
     pub image_array_layers: u32,
     pub image_usage: VkImageUsageFlags,
     pub image_sharing_mode: VkSharingMode,
     pub queue_family_indices: Vec<usize>,
-    pub pre_transform: VkSurfaceTransformFlagsKHR,
-    pub composite_alpha: VkCompositeAlphaFlagsKHR,
-    pub present_mode: VkPresentModeKHR,
+    pub pre_transform: VkSurfaceTransformFlags,
+    pub composite_alpha: VkCompositeAlphaFlags,
+    pub present_mode: VkPresentMode,
     pub clipped: bool,
-    pub old_swapchain: Option<&'b VkSwapchainKHR>,
+    pub old_swapchain: Option<&'b VkSwapchain>,
 }
 
-impl<'a, 'b> VkFrom<VkSwapchainCreateInfoKHR<'a, 'b>> for RawVkSwapchainCreateInfoKHR {
+impl<'a, 'b> VkFrom<VkSwapchainCreateInfo<'a, 'b>> for RawVkSwapchainCreateInfo {
     
-    fn vk_from(value: &VkSwapchainCreateInfoKHR) -> Self {
+    fn vk_from(value: &VkSwapchainCreateInfo) -> Self {
         unsafe {
             Self {
-                s_type: VkFrom::vk_from(&VkStructureType::SwapchainCreateInfoKhr),
+                s_type: VkFrom::vk_from(&VkStructureType::SwapchainCreateInfo),
                 next: null(),
                 flags: VkFrom::vk_from(&value.flags),
                 surface: VkFrom::vk_from(value.surface),
@@ -78,7 +78,7 @@ impl<'a, 'b> VkFrom<VkSwapchainCreateInfoKHR<'a, 'b>> for RawVkSwapchainCreateIn
     }
 }
 
-impl Drop for RawVkSwapchainCreateInfoKHR {
+impl Drop for RawVkSwapchainCreateInfo {
     
     fn drop(&mut self) {
         unsafe {

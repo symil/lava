@@ -8,43 +8,43 @@ use std::ptr::null;
 use libc::c_void;
 use glfw::*;
 
-pub type RawVkDebugReportCallbackEXT = RawVkHandle;
+pub type RawVkDebugReportCallback = RawVkHandle;
 
 #[derive(Debug)]
-pub struct VkDebugReportCallbackEXT {
-    _handle: RawVkDebugReportCallbackEXT,
+pub struct VkDebugReportCallback {
+    _handle: RawVkDebugReportCallback,
     _instance: RawVkInstance,
 }
 
-impl VkDebugReportCallbackEXT {
+impl VkDebugReportCallback {
     
-    pub fn handle(&self) -> RawVkDebugReportCallbackEXT {
+    pub fn handle(&self) -> RawVkDebugReportCallback {
         self._handle
     }
     
-    pub fn new(instance: &VkInstance, create_info: &VkDebugReportCallbackCreateInfo) -> Result<VkDebugReportCallbackEXT, VkResult> {
+    pub fn new(instance: &VkInstance, create_info: &VkDebugReportCallbackCreateInfo) -> Result<VkDebugReportCallback, VkResult> {
         unsafe {
             let instance_handle = instance.handle();
             let mut raw_create_info = RawVkDebugReportCallbackCreateInfo::vk_from(create_info);
             let raw_create_info_ptr = &mut raw_create_info as *mut RawVkDebugReportCallbackCreateInfo;
             vk_call_retrieve_single(
                 |ptr| vkCreateDebugReportCallbackEXT(instance_handle, raw_create_info_ptr, null(), ptr),
-                |debug_report_callback_ext : &mut VkDebugReportCallbackEXT| { debug_report_callback_ext._instance = instance_handle; }
+                |debug_report_callback : &mut VkDebugReportCallback| { debug_report_callback._instance = instance_handle; }
             )
         }
     }
 }
 
-impl VkFrom<VkDebugReportCallbackEXT> for RawVkDebugReportCallbackEXT {
+impl VkFrom<VkDebugReportCallback> for RawVkDebugReportCallback {
     
-    fn vk_from(value: &VkDebugReportCallbackEXT) -> Self {
+    fn vk_from(value: &VkDebugReportCallback) -> Self {
         value._handle
     }
 }
 
-impl VkFrom<RawVkDebugReportCallbackEXT> for VkDebugReportCallbackEXT {
+impl VkFrom<RawVkDebugReportCallback> for VkDebugReportCallback {
     
-    fn vk_from(value: &RawVkDebugReportCallbackEXT) -> Self {
+    fn vk_from(value: &RawVkDebugReportCallback) -> Self {
         Self {
             _handle: *value,
             _instance: VK_NULL_HANDLE,
@@ -52,7 +52,7 @@ impl VkFrom<RawVkDebugReportCallbackEXT> for VkDebugReportCallbackEXT {
     }
 }
 
-impl Drop for VkDebugReportCallbackEXT {
+impl Drop for VkDebugReportCallback {
     
     fn drop(&mut self) {
         unsafe {

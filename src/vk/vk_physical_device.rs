@@ -70,7 +70,7 @@ impl VkPhysicalDevice {
         VkDevice::new(self, create_info)
     }
     
-    pub fn does_support_surface(&self, queue_family_index: usize, surface: &VkSurfaceKHR) -> Result<bool, VkResult> {
+    pub fn does_support_surface(&self, queue_family_index: usize, surface: &VkSurface) -> Result<bool, VkResult> {
         unsafe {
             let surface_handle = surface.handle();
             vk_call_retrieve_single(
@@ -80,32 +80,32 @@ impl VkPhysicalDevice {
         }
     }
     
-    pub fn get_surface_capabilities(&self, surface: &VkSurfaceKHR) -> Result<VkSurfaceCapabilitiesKHR, VkResult> {
+    pub fn get_surface_capabilities(&self, surface: &VkSurface) -> Result<VkSurfaceCapabilities, VkResult> {
         unsafe {
             let surface_handle = surface.handle();
             vk_call_retrieve_single(
                 |ptr| vkGetPhysicalDeviceSurfaceCapabilitiesKHR(self._handle, surface_handle, ptr),
-                |surface_capabilities_khr : &mut VkSurfaceCapabilitiesKHR| {  }
+                |surface_capabilities : &mut VkSurfaceCapabilities| {  }
             )
         }
     }
     
-    pub fn get_surface_present_modes(&self, surface: &VkSurfaceKHR) -> Result<Vec<VkPresentModeKHR>, VkResult> {
+    pub fn get_surface_present_modes(&self, surface: &VkSurface) -> Result<Vec<VkPresentMode>, VkResult> {
         unsafe {
             let surface_handle = surface.handle();
             vk_call_retrieve_list(
                 |count, ptr| vkGetPhysicalDeviceSurfacePresentModesKHR(self._handle, surface_handle, count, ptr),
-                |present_mode_khr : &mut VkPresentModeKHR| {  }
+                |present_mode : &mut VkPresentMode| {  }
             )
         }
     }
     
-    pub fn get_surface_formats(&self, surface: &VkSurfaceKHR) -> Result<Vec<VkSurfaceFormatKHR>, VkResult> {
+    pub fn get_surface_formats(&self, surface: &VkSurface) -> Result<Vec<VkSurfaceFormat>, VkResult> {
         unsafe {
             let surface_handle = surface.handle();
             vk_call_retrieve_list(
                 |count, ptr| vkGetPhysicalDeviceSurfaceFormatsKHR(self._handle, surface_handle, count, ptr),
-                |surface_format_khr : &mut VkSurfaceFormatKHR| {  }
+                |surface_format : &mut VkSurfaceFormat| {  }
             )
         }
     }
@@ -133,8 +133,8 @@ extern {
     fn vkGetPhysicalDeviceProperties(physical_device: RawVkPhysicalDevice, p_properties: *mut RawVkPhysicalDeviceProperties);
     fn vkGetPhysicalDeviceFeatures(physical_device: RawVkPhysicalDevice, p_features: *mut RawVkPhysicalDeviceFeatures);
     fn vkGetPhysicalDeviceQueueFamilyProperties(physical_device: RawVkPhysicalDevice, p_queue_family_property_count: *mut u32, p_queue_family_properties: *mut RawVkQueueFamilyProperties);
-    fn vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: RawVkSurfaceKHR, p_supported: *mut RawVkBool32)-> RawVkResult;
-    fn vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurfaceKHR, p_surface_capabilities: *mut RawVkSurfaceCapabilitiesKHR)-> RawVkResult;
-    fn vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurfaceKHR, p_present_mode_count: *mut u32, p_present_modes: *mut RawVkPresentModeKHR)-> RawVkResult;
-    fn vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurfaceKHR, p_surface_format_count: *mut u32, p_surface_formats: *mut RawVkSurfaceFormatKHR)-> RawVkResult;
+    fn vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: RawVkSurface, p_supported: *mut RawVkBool32)-> RawVkResult;
+    fn vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurface, p_surface_capabilities: *mut RawVkSurfaceCapabilities)-> RawVkResult;
+    fn vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurface, p_present_mode_count: *mut u32, p_present_modes: *mut RawVkPresentMode)-> RawVkResult;
+    fn vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device: RawVkPhysicalDevice, surface: RawVkSurface, p_surface_format_count: *mut u32, p_surface_formats: *mut RawVkSurfaceFormat)-> RawVkResult;
 }

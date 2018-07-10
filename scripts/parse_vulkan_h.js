@@ -16,33 +16,45 @@ const POSSIBLE_TYPES = {
 
 const SPECIAL_TYPES = ['VkBool32', 'VkDeviceSize'];
 
+const REMOVE_SUFFIXES = true;
+const SUFFIX = REMOVE_SUFFIXES ? `(?:KHR|EXT)?` : '';
+
 const SPECIAL_FUNCTIONS = [
     'VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window, const VkAllocationCallbacks* allocator, VkSurfaceKHR* surface);',
     'VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback);',
     'void vkDestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator);'
 ].join('\n');
 
-function parseSpecial(typeName) {
-    return SPECIAL_TYPES.includes(typeName) ? {} : null;
+function removeSuffix(str) {
+    if (REMOVE_SUFFIXES) {
+        return str.replace(/_?KHR$/, '').replace(/_?EXT$/, '');
+    } else {
+        return str;
+    }
 }
 
 function parseType(name) {
+    const typeName = removeSuffix(name);
     const entries = Object.entries(POSSIBLE_TYPES);
 
     for (let i = 0; i < entries.length; ++i) {
-        const [type, parseFunction] = entries[i];
-        const fields = parseFunction(name);
+        const [type, parsingFunction] = entries[i];
+        const fields = parsingFunction(typeName);
 
         if (fields) {
-            return { name, type, fields };
+            return { name: typeName, type, fields };
         }
     }
 
     throw new Error(`unable to parse type ${name}`);
 }
 
-function parseStruct(structName) {
-    const match = VULKAN_H.match(new RegExp(`typedef struct ${structName} {\n([^}]+)\n}`, 'mi'));
+function parseSpecial(typeName) {
+    return SPECIAL_TYPES.includes(typeName) ? {} : null;
+}
+
+function parseStruct(typeName) {
+    const match = VULKAN_H.match(new RegExp(`typedef struct ${typeName}${SUFFIX} {\n([^}]+)\n}`, 'mi'));
 
     if (!match) {
         return null;
@@ -52,12 +64,12 @@ function parseStruct(structName) {
         const match = line.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;\s*$/);
 
         if (!match) {
-            throw new Error(`unexpected line for struct ${structName}: "${line}"`);
+            throw new Error(`unexpected line for struct ${typeName}: "${line}"`);
         }
 
-        const name = match[2].trim();
+        const name = removeSuffix(match[2].trim());
         const fullType = match[1].trim();
-        const typeName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
+        const typeName = removeSuffix(fullType.replace(/(?:const )?(\w+)\*?/, '$1'));
         const isPointer = fullType.endsWith('*');
         const isConst = fullType.startsWith('const ');
         const arraySize = parseConstant(match[3]);
@@ -67,7 +79,7 @@ function parseStruct(structName) {
 }
 
 function parseEnum(typeName) {
-    const match = VULKAN_H.match(new RegExp(`typedef enum ${typeName}\\s+{\n([^}]+)\n}`, 'mi'));
+    const match = VULKAN_H.match(new RegExp(`typedef enum ${typeName}${SUFFIX}\\s+{\n([^}]+)\n}`, 'mi'));
 
     if (!match) {
         return null;
@@ -76,10 +88,10 @@ function parseEnum(typeName) {
     return match[1].split('\n').map(line => {
         const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(-?\d+),?$/);
 
-        if (!match) return null;
+        if (!match || match[1] === 'VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT') return null;
 
         return {
-            name: match[1].trim(),
+            name: removeSuffix(match[1].trim()),
             value: match[2].trim()
         };
     }).filter(x => x);
@@ -87,34 +99,42 @@ function parseEnum(typeName) {
 
 function parseBitFlags(typeName) {
     const bitsFlagTypeName = typeName.replace('Flags', 'FlagBits');
-    const match = VULKAN_H.match(new RegExp(`typedef enum ${bitsFlagTypeName}\\s+{\n([^}]+)\n}`, 'mi'));
+    const match = VULKAN_H.match(new RegExp(`typedef enum ${bitsFlagTypeName}${SUFFIX}\\s+{\n([^}]+)\n}`, 'mi'));
 
     if (!match) {
         return typeName.includes('Flags') ? [] : null;
     }
 
-    return match[1].split('\n').map(line => {
+    const fields = [];
+
+    match[1].split('\n').map(line => {
         const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(0x[\dA-F]{8})|([A-Z_]+),?\s*$/);
 
         if (!match) {
             throw new Error(`for enum ${typeName}: unexpected field "${line}"`);
         }
 
-        return {
-            name: match[1],
-            value: match[2] || match[3]
-        };
-    }).filter(({value}) => value !== '0x7FFFFFFF' && value.startsWith('0x'));
+        const value =  match[2] || match[3];
+
+        if (value !== '0x7FFFFFFF' && value.startsWith('0x')) {
+            fields.push({
+                name: removeSuffix(match[1]),
+                value: value
+            })
+        }
+    });
+
+    return fields;
 }
 
 function parseHandle(typeName) {
-    const match = VULKAN_H.match(new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}\\)`, 'mi'));
+    const match = VULKAN_H.match(new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}${SUFFIX}\\)`, 'mi'));
 
     return match ? {} : null;
 }
 
 function isHandle(typeName) {
-    return new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}\\)`, 'mi').test(VULKAN_H);
+    return new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}${SUFFIX}\\)`, 'mi').test(VULKAN_H);
 }
 
 function parseFunction(name) {
@@ -126,7 +146,7 @@ function parseFunction(name) {
         throw new Error(`unable to parse function ${name}`);
     }
 
-    const returnType = match[1];
+    const returnType = removeSuffix(match[1]);
 
     const args = match[2].trim().split(',').map(line => {
         line = line.trim();
@@ -134,7 +154,7 @@ function parseFunction(name) {
 
         const name = line.substring(spaceIndex + 1);
         const fullType = line.substring(0, spaceIndex).trim();
-        const typeName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
+        const typeName = removeSuffix(fullType.replace(/(?:const )?(\w+)\*?/, '$1'));
         const isPointer = fullType.endsWith('*');
         const isConst = fullType.startsWith('const ');
 

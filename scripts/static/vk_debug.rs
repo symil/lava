@@ -18,7 +18,7 @@ pub struct RawVkDebugReportCallbackCreateInfo {
 }
 
 pub struct VkDebugReportCallbackCreateInfo {
-    pub flags: VkDebugReportFlagsEXT,
+    pub flags: VkDebugReportFlags,
     pub callback: VkDebugCallback
 }
 
@@ -35,7 +35,7 @@ impl VkFrom<VkDebugReportCallbackCreateInfo> for RawVkDebugReportCallbackCreateI
     fn vk_from(value: &VkDebugReportCallbackCreateInfo) -> Self {
         unsafe {
             Self {
-                s_type: VkFrom::vk_from(&VkStructureType::DebugReportCallbackCreateInfoExt),
+                s_type: VkFrom::vk_from(&VkStructureType::DebugReportCallbackCreateInfo),
                 p_next: ptr::null(),
                 flags: VkFrom::vk_from(&value.flags),
                 callback: c_debug_callback,
