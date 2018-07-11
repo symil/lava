@@ -48,6 +48,14 @@ impl VkDevice {
     pub fn create_image_view(&self, create_info: &VkImageViewCreateInfo) -> Result<VkImageView, VkResult> {
         VkImageView::new(self, create_info)
     }
+    
+    pub fn create_shader_module(&self, create_info: &VkShaderModuleCreateInfo) -> Result<VkShaderModule, VkResult> {
+        VkShaderModule::new(self, create_info)
+    }
+    
+    pub fn create_pipeline_layout(&self, create_info: &VkPipelineLayoutCreateInfo) -> Result<VkPipelineLayout, VkResult> {
+        VkPipelineLayout::new(self, create_info)
+    }
 }
 
 impl VkFrom<VkDevice> for RawVkDevice {

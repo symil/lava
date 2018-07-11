@@ -164,6 +164,27 @@ fn main() {
         }
     }).expect("Failed to create VkImageView");
 
+    let vertex_spirv_bytes = include_bytes!("spirv/shader.vert.spv");
+    let fragment_spirv_bytes = include_bytes!("spirv/shader.frag.spv");
+
+    let vertex_shader_module = device.create_shader_module(&VkShaderModuleCreateInfo {
+        flags: VkFlags::none(),
+        code_size: vertex_spirv_bytes.len(),
+        code: (vertex_spirv_bytes as *const u8) as *const u32
+    });
+
+    let fragment_shader_module = device.create_shader_module(&VkShaderModuleCreateInfo {
+        flags: VkFlags::none(),
+        code_size: fragment_spirv_bytes.len(),
+        code: (fragment_spirv_bytes as *const u8) as *const u32
+    });
+
+    let pipeline_layout = device.create_pipeline_layout(&VkPipelineLayoutCreateInfo {
+        flags: VkFlags::none(),
+        set_layouts: Vec::new(),
+        push_constant_ranges: Vec::new()
+    });
+
     window.start_loop();
 
     println!("Bye!");

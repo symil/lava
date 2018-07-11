@@ -366,7 +366,7 @@ function buildStruct(typeName, parsed) {
                     fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_string(&${src})`);
                     fromRawToWrappedFields.push(`${rustFieldName}: copy_as_string(${src})`)
                     dropStatements.push(`free_c_string(self.${rustFieldName});`);
-                } else {
+                } else if (!isPrimitiveType) {
                     if (isHandleType) {
                         const lifetimeId = lifetimeIdCounter.next();
                         wrappedFieldType = `&'${lifetimeId} ${wrappedTypeName}`
@@ -376,6 +376,12 @@ function buildStruct(typeName, parsed) {
                     fromWrappedToRawFields.push(`${rustFieldName}: copy_as_c_ptr(${wrappedToRawSingleEltConversion})`);
                     fromRawToWrappedFields.push(`${rustFieldName}: ${rawToWrappedSingleEltConversion}`);
                     dropStatements.push(`free_c_ptr(self.${rustFieldName});`);
+                } else {
+                    const typeName = PRIMITIVE_TYPES[field.typeName];
+                    wrappedFieldType = `*const ${typeName}`;
+                    fromWrappedToRawFields.push(`${rustFieldName}: ${src}`);
+                    fromRawToWrappedFields.push(`${rustFieldName}: ${src}`);
+                    rawFields[rawFields.length - 1].type = rawFields[rawFields.length - 1].type.replace('mut', 'const');
                 }
             } else if (isStaticArray) {
                 if (isTypeChar) {

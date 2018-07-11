@@ -30,7 +30,13 @@ const SCHEMA = {
         getQueue: 'VkQueue::get',
         createBuffer: 'VkBuffer::new',
         createSwapchain: 'VkSwapchain::new',
-        createImageView: 'VkImageView::new'
+        createImageView: 'VkImageView::new',
+        createShaderModule: 'VkShaderModule::new',
+        createPipelineLayout: 'VkPipelineLayout::new'
+    },
+    VkShaderModule: {
+        new: 'vkCreateShaderModule',
+        drop: 'vkDestroyShaderModule'
     },
     VkQueue: {
         get: 'vkGetDeviceQueue'
@@ -51,6 +57,10 @@ const SCHEMA = {
     VkImageView: {
         new: 'vkCreateImageView',
         drop: 'vkDestroyImageView'
+    },
+    VkPipelineLayout: {
+        new: 'vkCreatePipelineLayout',
+        drop: 'vkDestroyPipelineLayout'
     }
 };
 
