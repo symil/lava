@@ -3,6 +3,8 @@
 const path = require('path');
 const fs = require('fs');
 
+const { removeSuffix } = require('./utils');
+
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
 const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, `include`, `vulkan`, `vulkan_core.h`), 'utf8');
 
@@ -24,14 +26,6 @@ const SPECIAL_FUNCTIONS = [
     'VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback);',
     'void vkDestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator);'
 ].join('\n');
-
-function removeSuffix(str) {
-    if (REMOVE_SUFFIXES) {
-        return str.replace(/_?KHR$/, '').replace(/_?EXT$/, '');
-    } else {
-        return str;
-    }
-}
 
 function parseType(name) {
     const typeName = removeSuffix(name);
