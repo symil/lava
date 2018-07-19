@@ -182,6 +182,32 @@ function parseConstant(name) {
     return match[1];
 }
 
+function parseFunctions() {
+    const regexp = /(?:VKAPI_ATTR\s+)?(VkResult|void)\s+(?:VKAPI_CALL\s+)?(\w+)\s*\(([^;]+)\)/gm;
+    const match = VULKAN_H.match(regexp);
+    const functions = match.map(str => {
+        const words = str.split(/\W+/g);
+        const type = words[1];
+        const name = words[3];
+        const args = str.substring(str.indexOf('(') + 1, str.indexOf(')')).split(',').map(x => x.trim()).map(argStr => {
+            const spaceIndex = argStr.lastIndexOf(' ');
+            const name = argStr.substring(spaceIndex + 1);
+            const fullType = argStr.substring(0, spaceIndex).trim();
+            const typeName = removeSuffix(fullType.replace(/(?:const )?(\w+)\*?/, '$1'));
+            const isPointer = fullType.endsWith('*');
+            const isConst = fullType.startsWith('const ');
+
+            return { name, fullType, typeName, isPointer, isConst };
+        });
+
+        return { name, type, args };
+    });
+
+    return functions;
+}
+
 exports.parseType = parseType;
 exports.parseFunction = parseFunction;
 exports.isHandle = isHandle;
+
+exports.parseFunctions = parseFunctions;
