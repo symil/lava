@@ -52,7 +52,7 @@ function getFullRawType(arg) {
     if (arg.fullType === 'const char* const*') {
         return `*const *const c_char`;
     } else if (arg.fullType === 'const char*') {
-        return `*const *c_char`;
+        return `*const c_char`;
     } else {
         const rawTypeName = getRawTypeName(arg.typeName);
 
@@ -129,13 +129,25 @@ function removeSuffix(str) {
     return str;
 }
 
+function cToRustVarName(name) {
+    return toSnakeCase(name.replace(/^(p{1,2})[A-Z]/, str => str[str.length - 1]));
+}
+
+function argToString(arg) {
+    return arg.name ? `${arg.name}: ${arg.type}` : arg.type;
+}
+
 module.exports = {
     toSnakeCase,
     toPascalCase,
     getRawTypeName,
     getWrappedTypeName,
+    getFullWrappedType,
+    getFullRawType,
     blockToString,
     isCount,
     isPlural,
-    removeSuffix
+    removeSuffix,
+    cToRustVarName,
+    argToString
 };
