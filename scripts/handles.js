@@ -53,30 +53,37 @@ class Handle {
             `use std::*;`,
             `use vk::*;`,
             ``,
-            `pub type ${rawTypeName} = u64;`,
+            `#[repr(C)]`,
+            `struct ${rawTypeName}(u64);`,
             ``,
             `pub struct ${wrappedTypeName}`, [
                 `_handle: ${rawTypeName},`,
                 this._parent ? `_parent: ${getRawTypeName(this._parent)}` : null
             ],
             ``,
-            `impl<'a> VkFrom<&'a ${wrappedTypeName}> for ${rawTypeName}`, [
-                `fn vk_from(value: &'a ${wrappedTypeName}) -> Self`, [
-                    `value.raw_handle()`
+            `impl ${rawTypeName}`, [
+                `fn vk_from_wrapped(value: &${wrappedTypeName}) -> Self`, [
+                    `Self(value.raw_handle())`
                 ]
             ],
             ``,
-            `impl VkFrom<${rawTypeName}> for ${wrappedTypeName}`, [
-                `fn vk_from(value: &'a ${wrappedTypeName}) -> Self`, [
+            `impl ${wrappedTypeName}`, [
+                `fn vk_from_raw(value: &${wrappedTypeName}) -> Self`, [
                     `Self`, [
-                        `_handle: value`,
+                        `_handle: value.0`,
                         this._parent ? `_parent: VK_NULL_HANDLE` : null
                     ]
-                ]
+                ],
+                ``,
+                `fn vk_default() -> Self`, [
+                    `Self`, [
+                        `_handle: VK_NULL_HANDLE`,
+                        this._parent ? `_parent: VK_NULL_HANDLE` : null
+                    ]
+                ],
+                ``,
+                ...this._methods.slice(0, 3).map(cFunction => this._methodToBlock(cFunction)).reduce((acc, f) => acc.concat([``, ...f]), [])
             ],
-            ``,
-            `impl ${wrappedTypeName}`,
-                this._methods.slice(0, 3).map(cFunction => this._methodToBlock(cFunction)).reduce((acc, f) => acc.concat([``, ...f]), []),
             ``,
             `extern`,
                 this._methods.map(cFunction => this._methodToExternDeclaration(cFunction))
@@ -125,7 +132,7 @@ class Handle {
                     methodArgs.push({name: methodArgName, type: wrappedArgType});
                 }
 
-                statements.push(`let ${functionArgName} : ${rawArgType} = VkFrom::vk_from(${wrappedValue});`);
+                statements.push(`let ${functionArgName} = ${rawArgType}::vk_from_wrapped(${wrappedValue});`);
 
                 return functionArgName;
             }
@@ -152,7 +159,7 @@ class Handle {
                     statements.push(
                         `let vk_result_1 = ${functionCall};`,
                         `if (vk_result_1 != VK_SUCCESS)`, [
-                            `return Err(VkResult::vk_from(vk_result_1))`
+                            `return Err(VkResult::vk_from_raw(vk_result_1))`
                         ]
                     )
                 } else {
@@ -171,7 +178,7 @@ class Handle {
                     statements.push(
                         `let vk_result_2 = ${functionCall};`,
                         `if (vk_result_2 != VK_SUCCESS)`, [
-                            `return Err(VkResult::vk_from(vk_result_2))`
+                            `return Err(VkResult::vk_from_raw(vk_result_2))`
                         ]
                     )
                 } else {
@@ -180,7 +187,7 @@ class Handle {
 
                 statements.push(
                     ``,
-                    `let wrapped_result = raw_result.iter().map(|raw| { ${createdWrappedTypeName}::vk_from(raw) }).collect();`,
+                    `let wrapped_result = raw_result.iter().map(|raw| { ${createdWrappedTypeName}::vk_from_raw(raw) }).collect();`,
                     `Ok(wrapped_result)`
                 );
 

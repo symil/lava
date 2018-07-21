@@ -52,7 +52,7 @@ function getFullRawType(arg) {
     if (arg.fullType === 'const char* const*') {
         return `*const *const c_char`;
     } else if (arg.fullType === 'const char*') {
-        return `*const c_char`;
+        return `*const RawVkString`;
     } else {
         const rawTypeName = getRawTypeName(arg.typeName);
 
@@ -135,6 +135,49 @@ function cToRustVarName(name) {
 
 function argToString(arg) {
     return arg.name ? `${arg.name}: ${arg.type}` : arg.type;
+}
+
+function isPrimitiveType(typeName) {
+    return !!PRIMITIVE_TYPES[typeName];
+}
+
+function convertToRaw(cArg, isArray) {
+    const argName = cToRustVarName(cArg.name);
+    const rawTypeName = getRawTypeName(cArg.typeName);
+    const wrappedTypeName = getWrappedTypeName(cArg.typeName);
+
+    if (arg.fullType === 'const char* const*') {
+        return `VkPtr::new_string_array(${argName})`;
+    } else if (arg.fullType === 'const char*') {
+        return `VkPtr::new_string(${argName})`;
+    } else {
+        const isPrimitiveType = isPrimitiveType(arg.typeName);
+        const isPointerArray = arg.isPointer && isArray;
+        const isPointerValue = arg.isPointer && !isArray;
+        const isStaticArray = !arg.isPointer && arg.arraySize;
+
+        if (isPrimitiveType) {
+            if (isPointerArray) {
+                return `VkPtr::new_array(${argName})`;
+            } else if (isPointerValue) {
+                return `VkPtr::new_value(${argName})`;
+            } else if (isStaticArray) {
+                return `${argName}.clone()`;
+            } else {
+                return argName;
+            }
+        } else {
+            if (isPointerArray) {
+                return `VkPtr::new_vk_array(${argName})`;
+            } else if (isPointerValue) {
+                return `VkPtr::new_vk_value(${argName})`;
+            } else if (isStaticArray) {
+                return `unsafe { let mut dst_array : [${rawTypeName}, ${arg.arraySize}] = mem::uninitialized(); vk_to_raw_array(${argName}, &mut dst_array); dst_array }`;
+            } else {
+                return `vk_to_raw_value(&${argName})`;
+            }
+        }
+    }
 }
 
 module.exports = {
