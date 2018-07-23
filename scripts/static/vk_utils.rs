@@ -106,15 +106,3 @@ impl VkRawType<str> for VkRawString {
 
     }
 }
-
-pub fn vk_make_version(version: &[u32; 3]) -> u32 {
-    (((version[0]) << 22) | ((version[1]) << 12) | (version[2]))
-}
-
-pub fn vk_from_version(value: u32) -> [u32; 3] {
-    [
-        value >> 22,
-        (value >> 12) % (1 << 10),
-        value % (1 << 12)
-    ]
-}

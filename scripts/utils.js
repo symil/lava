@@ -40,14 +40,6 @@ function toPascalCase(str) {
     .replace(/\d[a-z](?=\d)/g, str => str[0] + str[1].toUpperCase());
 }
 
-function getRawTypeName(name) {
-    return PRIMITIVE_TYPES[name] || `Raw${name}`;
-}
-
-function getWrappedTypeName(name) {
-    return PRIMITIVE_TYPES[name] || name;
-}
-
 function getFullRawType(arg) {
     if (arg.fullType === 'const char* const*') {
         return `*const *const c_char`;
@@ -88,7 +80,15 @@ function blockToString(block) {
     if (typeof block === 'string') {
         return block;
     } else {
-        return `${block[0]} ${_blockToString(block[1], 0)}`;
+        let result = block[0];
+
+        if (!result.endsWith(' ') && !result.endsWith('\n')) {
+            result += ' ';
+        }
+
+        result += _blockToString(block[1], 0);
+
+        return result;
     }
 }
 
@@ -99,7 +99,7 @@ function _blockToString(block, indent) {
         ? `\n${block.split('\n').map(line => `${spaces}${line}`).join('\n')}`
         : ` {${block.filter(x => x !== null).map(b => _blockToString(b, inc(indent))).join('')}\n${spaces}}`;
 
-    return result;
+    return result.replace(/(^|\n) {/g, '$1{');
 }
 
 function inc(value) {
@@ -116,7 +116,7 @@ function isCount(arg) {
     return arg && arg.isPointer && !arg.isConst && arg.typeName === 'uint32_t';
 }
 
-function areCountAndArray(field1, field2) {
+function areFieldsCountAndArray(field1, field2) {
     return isCount(field1) && field2 && field2.isPointer && field2.typeName !== 'char';
 }
 
@@ -134,107 +134,173 @@ function argToString(arg) {
     return arg.name ? `${arg.name}: ${arg.type}` : arg.type;
 }
 
-function createStaticArray(typeName, arraySize, argName, functionName) {
-    return `unsafe { let mut dst_array : [${typeName}, ${arraySize}] = mem::uninitialized(); ${functionName}(&${argName}, &mut dst_array); dst_array }`;
+function doesFieldRepresentVersion(field) {
+    return field.typeName === 'uint32_t' && /Version$/.test(field.name);
 }
 
-function getArgInformation(cArg, countArg) {
-    const rawTypeName = getRawTypeName(cArg.typeName);
-    const wrappedTypeName = getWrappedTypeName(cArg.typeName);
+function doesFieldRepresentIndex(field) {
+    return field.typeName === 'uint32_t' && /Index|Indices/.test(field.name);
+}
 
-    const arraySize = cArg.arraySize;
-    const isPrimitiveType = !!PRIMITIVE_TYPES[cArg.typeName];
-    const isHandleType = !isPrimitiveType && isHandle(cArg.typeName);
-    const isPointerArray = cArg.isPointer && countArg;
-    const isPointerValue = cArg.isPointer && !countArg;
-    const isStaticArray = !cArg.isPointer && arraySize;
+function createStaticArray(typeName, arraySize, varName, functionName) {
+    return `unsafe { let mut dst_array : [${typeName}, ${arraySize}] = mem::uninitialized(); ${functionName}(&${varName}, &mut dst_array); dst_array }`;
+}
+
+function getRawVkTypeName(cTypeName) {
+    return `Raw${cTypeName}`;
+}
+
+function getWrappedVkTypeName(cTypeName) {
+    return cTypeName;
+}
+
+function getFieldRawTypeName(field) {
+    return PRIMITIVE_TYPES[field.typeName] || getRawVkTypeName(field.typeName);
+}
+
+function getFieldWrappedTypeName(field) {
+    if (doesFieldRepresentVersion(field)) {
+        return `VkVersion`;
+    } else if (doesFieldRepresentIndex(field)) {
+        return `usize`;
+    }
+
+    return PRIMITIVE_TYPES[field.typeName] || getWrappedVkTypeName(field.typeName);
+}
+
+function getFieldInformation(field, prevField, nextField) {
+    // TODO: default values
+
+    const rawTypeName = getFieldRawTypeName(field);
+    const wrappedTypeName = getFieldWrappedTypeName(field);
+
+    const arraySize = field.arraySize;
+    const isPointerArray = field.isPointer && areFieldsCountAndArray(prevField, field);
+    const isPointerValue = field.isPointer && !isPointerArray;
+    const isStaticArray = !field.isPointer && arraySize;
+    const isPrimitiveType = rawTypeName !== wrappedTypeName;
+    const isHandleType = !isPrimitiveType && isHandle(field.typeName);
+    const isCount = areFieldsCountAndArray(field, nextField);
+
+    const varName = 'varName';
+    const prevVarName = 'prevVarName';
+    const nextVarName = 'nextVarName';
 
     let rawType = null;
     let wrappedType = null;
     let toRaw = null;
     let toWrapped = null;
+    let defValue = null;
 
-    if (cArg.fullType === 'const char* const*') {
+    if (field.fullType === 'const void*') {
+        rawType = `*const c_void`;
+        wrappedType = `*const c_void`;
+        toRaw = varName;
+        toWrapped = varName;
+        defValue = `ptr::null()`;
+    } else if (isCount) {
+        rawType = `u32`;
+        toRaw = `${nextVarName}.len() as u32`;
+    } else if (field.fullType === 'const char* const*') {
         rawType = `*const *const c_char`;
         wrappedType = `Vec<String>`;
-        toRaw = argName => `VkPtr::new_string_array(&${argName})`;
-        toWrapped = (argName, countArgName) => `vec![]`; // Should never be used
-    } else if (cArg.fullType === 'const char*') {
+        toRaw = `VkPtr::new_string_array(&${varName})`;
+        toWrapped = `Vec::new()`; // Should never be used
+        defValue = `Vec::new()`;
+    } else if (field.fullType === 'const char*') {
         rawType = `*const c_char`;
-        wrappedType = `String`;
-        toRaw = argName => `VkPtr::new_string(&${argName})`;
-        toWrapped = (argName, countArgName) => `""`; // Should never be used
-    } else if (cArg.fullType === 'char' && cArg.arraySize) {
+        wrappedType = `T : Deref<Target=str>`;
+        toRaw = `VkPtr::new_string(&${varName})`;
+        toWrapped = `""`; // Should never be used
+        defValue = `vk_null()`;
+    } else if (field.fullType === 'char' && field.arraySize) {
         rawType = `[c_char; ${arraySize}]`;
-        wrappedType = `String`;
-        toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'string_to_byte_array');
-        toWrapped = (argName, countArgName) => `new_string(&${argName}[0] as *const c_char)`
+        wrappedType = `T : Deref<Target=str>`;
+        toRaw = createStaticArray(rawTypeName, arraySize, varName, 'string_to_byte_array');
+        toWrapped = `new_string(&${varName}[0] as *const c_char)`;
+        defValue = `""`;
     } else if (isPrimitiveType) {
         if (isPointerArray) {
             rawType = `VkPtr<${rawTypeName}>`;
             wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
-            toRaw = argName => `VkPtr::new_array(&${argName})`;
-            toWrapped = (argName, countArgName) => `new_array(${countArgName}, ${argName})`;
+            toRaw = `VkPtr::new_array(&${varName})`;
+            toWrapped = `new_array(${prevVarName}, ${varName})`;
+            defValue = `Vec::new()`;
         } else if (isPointerValue) {
             rawType = `VkPtr<${rawTypeName}>`;
             wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
-            toRaw = argName => `VkPtr::new_value(${argName})`;
-            toWrapped = (argName, countArgName) => argName; // Should never be used
+            toRaw = `VkPtr::new_value(${varName})`;
+            toWrapped = varName; // Should never be used
+            defValue = `vk_null()`;
         } else if (isStaticArray) {
             rawType = `[${rawTypeName}; ${arraySize}]`;
-            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
-            toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'to_array');
-            toWrapped = (argName, countArgName) => `new_array(${countArgName}, &${argName}[0] as *const ${rawTypeName})`;
+            wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
+            toRaw = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
+            toWrapped = `new_array(${prevVarName}, &${varName}[0] as *const ${rawTypeName})`;
+            defValue = `Vec::new()`;
         } else {
             rawType = rawTypeName;
             wrappedType = wrappedTypeName;
-            toRaw = argName => argName;
-            toWrapped = (argName, countArgName) => argName;
+            toRaw = varName;
+            toWrapped = varName;
+            defValue = `0`;
         }
     } else {
         if (isPointerArray) {
             rawType = `VkPtr<${rawTypeName}>`;
             wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
-            toRaw = argName => `VkPtr::new_vk_array(&${argName})`;
-            toWrapped = (argName, countArgName) => `new_vk_array(${countArgName}, ${argName})`;
+            toRaw = `VkPtr::new_vk_array(&${varName})`;
+            toWrapped = `new_vk_array(${prevVarName}, ${varName})`;
+            defValue = `Vec::new()`;
         } else if (isPointerValue) {
             rawType = `VkPtr<${rawTypeName}>`;
             wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
-            toRaw = argName => `VkPtr::new_vk_value(&${argName})`;
-            toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(${argName}.as_ref().unwrap())`; // Pointer should never be null; if that happens, we should use an `Option`
+            toRaw = `VkPtr::new_vk_value(&${varName})`;
+            toWrapped = `${wrappedTypeName}::vk_from_raw(${varName}.as_ref().unwrap())`; // Pointer should never be null; if that happens, we should use an `Option`
+            defValue = `vk_null()`;
         } else if (isStaticArray) {
             rawType = `[${rawTypeName}; ${arraySize}]`;
-            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
-            toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'vk_to_raw_array');
-            toWrapped = (argName, countArgName) => `new_vk_array(${countArgName}, &${argName}[0] as *const ${rawTypeName})`;
+            wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
+            toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
+            toWrapped = `new_vk_array(${prevVarName}, &${varName}[0] as *const ${rawTypeName})`;
+            defValue = `Vec::new()`;
         } else if (isHandleType) {
             rawType = rawTypeName;
             wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
-            toRaw = argName => `vk_to_raw_value(&${argName})`;
-            toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(&${argName})`;
+            toRaw = `vk_to_raw_value(&${varName})`;
+            toWrapped = `${wrappedTypeName}::vk_from_raw(&${varName})`;
+            defValue = `vk_null()`;
         } else {
             rawType = rawTypeName;
             wrappedType = wrappedTypeName;
-            toRaw = argName => `vk_to_raw_value(&${argName})`;
-            toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(&${argName})`;
+            toRaw = `vk_to_raw_value(&${varName})`;
+            toWrapped = `${wrappedTypeName}::vk_from_raw(&${varName})`;
+            defValue = `${wrappedTypeName}::vk_default()`;
         }
     }
 
-    return { rawType, wrappedType, toRaw, toWrapped };
+    const toRawFunction = toRaw ? new Function(varName, prevVarName, nextVarName, `return '${toRaw}';`) : null;
+    const toWrappedFunction = toWrapped ? new Function(varName, prevVarName, nextVarName, `return '${toWrapped}';`) : null;
+
+    return {
+        rawType: rawType,
+        wrappedType: wrappedType,
+        toRaw: toRawFunction,
+        toWrapped: toWrappedFunction,
+        defValue: defValue
+    };
 }
 
 module.exports = {
     toSnakeCase,
     toPascalCase,
-    getRawTypeName,
-    getWrappedTypeName,
-    getFullWrappedType,
-    getFullRawType,
+    getRawVkTypeName,
+    getWrappedVkTypeName,
     blockToString,
     isCount,
-    areCountAndArray,
+    areFieldsCountAndArray,
     isPlural,
     cToRustVarName,
     argToString,
-    getArgInformation
+    getFieldInformation
 };

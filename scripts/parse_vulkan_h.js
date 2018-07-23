@@ -94,9 +94,9 @@ function parseStructs() {
     return match.map(str => {
         const structName = str.split(' ', 3)[2];
         const structNameInfo = parseName(structName);
-        const argsStr = str.substring(str.indexOf('{') + 2, str.indexOf('}') - 1);
+        const fieldsStr = str.substring(str.indexOf('{') + 2, str.indexOf('}') - 1);
 
-        const args = argsStr.split('\n').filter(x => x).map(line => {
+        const fields = fieldsStr.split('\n').filter(x => x).map(line => {
             const match = line.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;\s*$/);
 
             if (!match) {
@@ -119,7 +119,7 @@ function parseStructs() {
         return {
             name: structNameInfo.basename,
             extension: structNameInfo.extension,
-            args: args
+            fields: fields
         };
     });
 }

@@ -1,8 +1,8 @@
 const {
     toSnakeCase,
     toPascalCase,
-    getRawTypeName,
-    getWrappedTypeName,
+    getRawVkTypeName,
+    getWrappedVkTypeName,
     getFullWrappedType,
     getFullRawType,
     blockToString,
@@ -11,20 +11,22 @@ const {
     isPlural,
     cToRustVarName,
     argToString,
-    getArgInformation
+    getFieldInformation
 } = require('./utils');
 
 function generateVkStructDefinition(cDef) {
-    for (let i = 0; i < cDef.args.length; ++i) {
-        const arg = cDef.args[i];
-        const prevArg = cDef.args[i - 1];
-        const countArg = areCountAndArray(prevArg, arg) ? prevArg : null;
+    cDef.rawTypeName = getRawVkTypeName(cDef.name);
+    cDef.wrappedTypeName = getWrappedVkTypeName(cDef.name);
 
-        arg.info = getArgInformation(arg, countArg);
+    for (let i = 0; i < cDef.fields.length; ++i) {
+        const field = cDef.fields[i];
+        const prevField = cDef.fields[i - 1];
+        const nextField = cDef.fields[i + 1];
+
+        field.info = getFieldInformation(field, prevField, nextField);
     }
 
-    cDef.rawTypeName = getRawTypeName(cDef.name);
-    cDef.wrappedTypeName = getWrappedTypeName(cDef.name);
+    cDef.generics = replaceGenericTypes(cDef.fields);
 
     const uses = new Set([
         'std::string::String',
@@ -33,7 +35,8 @@ function generateVkStructDefinition(cDef) {
     ]);
 
     const blocks = [
-        generateRawStruct(cDef)
+        generateRawStruct(cDef),
+        generateWrappedStruct(cDef)
     ];
 
     return blocks.map(blockToString).join('\n\n');
@@ -42,7 +45,42 @@ function generateVkStructDefinition(cDef) {
 function generateRawStruct(cDef) {
     return [
         `pub struct ${cDef.rawTypeName}`,
-            cDef.args.map(arg => `${cToRustVarName(arg.name)}: ${arg.info.rawType},`)
+            cDef.fields.map(field => `${cToRustVarName(field.name)}: ${field.info.rawType},`)
+    ];
+}
+
+function replaceGenericTypes(fields) {
+    const startCode = 'A'.charCodeAt(0);
+    const letters = [];
+    const specs = [];
+    
+    for (let field of fields) {
+        if (field.info.wrappedType.startsWith('T : ')) {
+            const letter = String.fromCharCode(startCode + specs.length);
+            const typeSpec = field.info.wrappedType.replace('T : ', `${letter} : `);
+
+            field.info.wrappedType = letter;
+            letters.push(letter);
+            specs.push(typeSpec);
+        }
+    }
+
+    if (!letters.length) {
+        return { types: '', specs: '' };
+    }
+
+    return {
+        types: `<${letters.join(', ')}>`,
+        specs: `\n    where\n${specs.map(spec => `        ${spec},\n`).join('')}`
+    };
+}
+
+function generateWrappedStruct(def) {
+    const fields = def.fields.filter(field => field.info.wrappedType && field.name !== 'sType');
+    
+    return [
+        `pub struct ${def.wrappedTypeName}${def.generics.types}${def.generics.specs}`,
+            fields.map(field => `${cToRustVarName(field.name)}: ${field.info.wrappedType},`)
     ];
 }
 
