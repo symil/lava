@@ -1,3 +1,5 @@
+const { isHandle } = require('./parse_vulkan_h');
+
 const REMOVE_SUFFIXES = true;
 
 const PRIMITIVE_TYPES = {
@@ -142,64 +144,88 @@ function createStaticArray(typeName, arraySize, argName, functionName) {
 }
 
 function getArgInformation(cArg, countArg) {
-    /*
-        TODO:
-        - return typing information for raw and wrapped values
-        - handle the special case where the type is a handle
-    */
-
     const rawTypeName = getRawTypeName(cArg.typeName);
     const wrappedTypeName = getWrappedTypeName(cArg.typeName);
 
     const arraySize = arg.arraySize;
     const isPrimitiveType = !!PRIMITIVE_TYPES[arg.typeName];
+    const isHandleType = !isPrimitiveType && isHandle(cArg.typeName);
     const isPointerArray = arg.isPointer && countArg;
     const isPointerValue = arg.isPointer && !countArg;
     const isStaticArray = !arg.isPointer && arraySize;
 
+    let rawType = null;
+    let wrappedType = null;
     let toRaw = null;
     let toWrapped = null;
 
     if (arg.fullType === 'const char* const*') {
+        rawType = `*const *const c_char`;
+        wrappedType = `Vec<String>`;
         toRaw = argName => `VkPtr::new_string_array(&${argName})`;
         toWrapped = (argName, countArgName) => `vec![]`; // Should never happen
     } else if (arg.fullType === 'const char*') {
+        rawType = `*const c_char`;
+        wrappedType = `String`;
         toRaw = argName => `VkPtr::new_string(&${argName})`;
         toWrapped = (argName, countArgName) => `""`; // Should never happen
     } else if (arg.fullType === 'char' && arg.arraySize) {
+        rawType = `[c_char; ${arraySize}]`;
+        wrappedType = `String`;
         toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'string_to_byte_array');
         toWrapped = (argName, countArgName) => `new_string(&${argName}[0] as *const c_char)`
     } else if (isPrimitiveType) {
         if (isPointerArray) {
+            rawType = `VkPtr<${rawTypeName}>`;
+            wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
             toRaw = argName => `VkPtr::new_array(&${argName})`;
             toWrapped = (argName, countArgName) => `new_array(${countArgName}, ${argName})`;
         } else if (isPointerValue) {
+            rawType = `VkPtr<${rawTypeName}>`;
+            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
             toRaw = argName => `VkPtr::new_value(${argName})`;
             toWrapped = (argName, countArgName) => argName; // Should never happen
         } else if (isStaticArray) {
+            rawType = `[${rawTypeName}; ${arraySize}]`;
+            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
             toRaw = argName => `${argName}.clone()`;
             toWrapped = (argName, countArgName) => `new_array(${countArgName}, &${argName}[0] as *const ${rawTypeName})`;
         } else {
+            rawType = rawTypeName;
+            wrappedTypeName = wrappedTypeName;
             toRaw = argName => argName;
             toWrapped = (argName, countArgName) => argName;
         }
     } else {
         if (isPointerArray) {
+            rawType = `VkPtr<${rawTypeName}>`;
+            wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
             toRaw = argName => `VkPtr::new_vk_array(&${argName})`;
             toWrapped = (argName, countArgName) => `new_vk_array(${countArgName}, ${argName})`;
         } else if (isPointerValue) {
+            rawType = `VkPtr<${rawTypeName}>`;
+            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
             toRaw = argName => `VkPtr::new_vk_value(&${argName})`;
             toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(${argName}.as_ref().unwrap())`; // Pointer should never be null; if that happens, we should use an `Option`
         } else if (isStaticArray) {
+            rawType = `[${rawTypeName}; ${arraySize}]`;
+            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
             toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'vk_to_raw_array');
             toWrapped = (argName, countArgName) => `new_vk_array(${countArgName}, &${argName}[0] as *const ${rawTypeName})`;
+        } else if (isHandleType) {
+            rawType = rawTypeName;
+            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
+            toRaw = argName => `vk_to_raw_value(&${argName})`;
+            toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(&${argName})`;
         } else {
+            rawType = rawTypeName;
+            wrappedTypeName = wrappedTypeName;
             toRaw = argName => `vk_to_raw_value(&${argName})`;
             toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(&${argName})`;
         }
     }
 
-    return { toRaw, toWrapped };
+    return { rawType, wrappedType, toRaw, toWrapped };
 }
 
 module.exports = {
