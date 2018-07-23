@@ -1,7 +1,5 @@
 const { isHandle } = require('./parse_vulkan_h');
 
-const REMOVE_SUFFIXES = true;
-
 const PRIMITIVE_TYPES = {
     uint64_t: 'u64',
     uint32_t: 'u32',
@@ -86,19 +84,20 @@ function getFullWrappedType(arg) {
     }
 }
 
-function blockToString(block, indent) {
-    const spaces = indentToSpaces(indent);
-    let result;
-
+function blockToString(block) {
     if (typeof block === 'string') {
-        result = `\n${block.split('\n').map(line => `${spaces}${line}`).join('\n')}`;
+        return block;
     } else {
-        result = ` {${block.filter(x => x !== null).map(b => blockToString(b, inc(indent))).join('')}\n${spaces}}`
+        return `${block[0]} ${_blockToString(block[1], 0)}`;
     }
+}
 
-    if (indent === undefined) {
-        result = result.substring(2, result.length - 2).trim();
-    }
+function _blockToString(block, indent) {
+    const spaces = indentToSpaces(indent);
+    
+    const result = typeof block === 'string'
+        ? `\n${block.split('\n').map(line => `${spaces}${line}`).join('\n')}`
+        : ` {${block.filter(x => x !== null).map(b => _blockToString(b, inc(indent))).join('')}\n${spaces}}`;
 
     return result;
 }
@@ -117,22 +116,18 @@ function isCount(arg) {
     return arg && arg.isPointer && !arg.isConst && arg.typeName === 'uint32_t';
 }
 
+function areCountAndArray(field1, field2) {
+    return isCount(field1) && field2 && field2.isPointer && field2.typeName !== 'char';
+}
+
 function isPlural(arg) {
     return arg && !arg.typeName.endsWith('s') && arg.name.endsWith('s');
 }
 
-function removeSuffix(str) {
-    if (REMOVE_SUFFIXES) {
-        str = str
-            .replace(/_?KHR$/, '')
-            .replace(/_?EXT$/, '');
-    }
-
-    return str;
-}
-
 function cToRustVarName(name) {
-    return toSnakeCase(name.replace(/^(p{1,2})[A-Z]/, str => str[str.length - 1]));
+    name = name.replace(/^(p{1,2})[A-Z]/, str => str[str.length - 1]);
+
+    return toSnakeCase(name);
 }
 
 function argToString(arg) {
@@ -147,29 +142,29 @@ function getArgInformation(cArg, countArg) {
     const rawTypeName = getRawTypeName(cArg.typeName);
     const wrappedTypeName = getWrappedTypeName(cArg.typeName);
 
-    const arraySize = arg.arraySize;
-    const isPrimitiveType = !!PRIMITIVE_TYPES[arg.typeName];
+    const arraySize = cArg.arraySize;
+    const isPrimitiveType = !!PRIMITIVE_TYPES[cArg.typeName];
     const isHandleType = !isPrimitiveType && isHandle(cArg.typeName);
-    const isPointerArray = arg.isPointer && countArg;
-    const isPointerValue = arg.isPointer && !countArg;
-    const isStaticArray = !arg.isPointer && arraySize;
+    const isPointerArray = cArg.isPointer && countArg;
+    const isPointerValue = cArg.isPointer && !countArg;
+    const isStaticArray = !cArg.isPointer && arraySize;
 
     let rawType = null;
     let wrappedType = null;
     let toRaw = null;
     let toWrapped = null;
 
-    if (arg.fullType === 'const char* const*') {
+    if (cArg.fullType === 'const char* const*') {
         rawType = `*const *const c_char`;
         wrappedType = `Vec<String>`;
         toRaw = argName => `VkPtr::new_string_array(&${argName})`;
-        toWrapped = (argName, countArgName) => `vec![]`; // Should never happen
-    } else if (arg.fullType === 'const char*') {
+        toWrapped = (argName, countArgName) => `vec![]`; // Should never be used
+    } else if (cArg.fullType === 'const char*') {
         rawType = `*const c_char`;
         wrappedType = `String`;
         toRaw = argName => `VkPtr::new_string(&${argName})`;
-        toWrapped = (argName, countArgName) => `""`; // Should never happen
-    } else if (arg.fullType === 'char' && arg.arraySize) {
+        toWrapped = (argName, countArgName) => `""`; // Should never be used
+    } else if (cArg.fullType === 'char' && cArg.arraySize) {
         rawType = `[c_char; ${arraySize}]`;
         wrappedType = `String`;
         toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'string_to_byte_array');
@@ -184,15 +179,15 @@ function getArgInformation(cArg, countArg) {
             rawType = `VkPtr<${rawTypeName}>`;
             wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
             toRaw = argName => `VkPtr::new_value(${argName})`;
-            toWrapped = (argName, countArgName) => argName; // Should never happen
+            toWrapped = (argName, countArgName) => argName; // Should never be used
         } else if (isStaticArray) {
             rawType = `[${rawTypeName}; ${arraySize}]`;
             wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
-            toRaw = argName => `${argName}.clone()`;
+            toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'to_array');
             toWrapped = (argName, countArgName) => `new_array(${countArgName}, &${argName}[0] as *const ${rawTypeName})`;
         } else {
             rawType = rawTypeName;
-            wrappedTypeName = wrappedTypeName;
+            wrappedType = wrappedTypeName;
             toRaw = argName => argName;
             toWrapped = (argName, countArgName) => argName;
         }
@@ -219,7 +214,7 @@ function getArgInformation(cArg, countArg) {
             toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(&${argName})`;
         } else {
             rawType = rawTypeName;
-            wrappedTypeName = wrappedTypeName;
+            wrappedType = wrappedTypeName;
             toRaw = argName => `vk_to_raw_value(&${argName})`;
             toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(&${argName})`;
         }
@@ -237,8 +232,8 @@ module.exports = {
     getFullRawType,
     blockToString,
     isCount,
+    areCountAndArray,
     isPlural,
-    removeSuffix,
     cToRustVarName,
     argToString,
     getArgInformation

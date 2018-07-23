@@ -3,8 +3,6 @@
 const path = require('path');
 const fs = require('fs');
 
-const { removeSuffix } = require('./utils');
-
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
 const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, `include`, `vulkan`, `vulkan_core.h`), 'utf8');
 
@@ -26,6 +24,23 @@ const SPECIAL_FUNCTIONS = [
     'VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback);',
     'void vkDestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator);'
 ].join('\n');
+
+const EXTENSIONS = ['KHR', 'EXT', 'GOOGLE', 'NV', 'NVX', 'AMD'];
+
+function parseName(str) {
+    let extension = '';
+
+    for (let ext of EXTENSIONS) {
+        if (str.endsWith(ext)) {
+            extension = ext.toLowerCase();
+        }
+    }
+
+    return {
+        extension: extension,
+        basename: str.substring(0, str.length - extension.length)
+    };
+}
 
 function parseType(name) {
     const typeName = removeSuffix(name);
@@ -69,6 +84,43 @@ function parseStruct(typeName) {
         const arraySize = parseConstant(match[3]);
 
         return { name, fullType, typeName, isPointer, isConst, arraySize };
+    });
+}
+
+function parseStructs() {
+    const regexp = /typedef struct \w+ {\n([^}]+)\n}/gmi;
+    const match = VULKAN_H.match(regexp);
+
+    return match.map(str => {
+        const structName = str.split(' ', 3)[2];
+        const structNameInfo = parseName(structName);
+        const argsStr = str.substring(str.indexOf('{') + 2, str.indexOf('}') - 1);
+
+        const args = argsStr.split('\n').filter(x => x).map(line => {
+            const match = line.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;\s*$/);
+
+            if (!match) {
+                throw new Error(`unexpected line for struct ${structName}: "${line}"`);
+            }
+
+            const name = match[2].trim();
+            const fullType = match[1].trim();
+            const fieldName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
+            const fieldTypeNameInfo = parseName(fieldName);
+            const typeName = fieldTypeNameInfo.basename;
+            const extension = fieldTypeNameInfo.extension;
+            const isPointer = fullType.endsWith('*');
+            const isConst = fullType.startsWith('const ');
+            const arraySize = parseConstant(match[3]);
+
+            return { name, extension, fullType, typeName, isPointer, isConst, arraySize };
+        });
+
+        return {
+            name: structNameInfo.basename,
+            extension: structNameInfo.extension,
+            args: args
+        };
     });
 }
 
@@ -179,6 +231,7 @@ function parseConstant(name) {
 function parseFunctions() {
     const regexp = /(?:VKAPI_ATTR\s+)?(VkResult|void)\s+(?:VKAPI_CALL\s+)?(\w+)\s*\(([^;]+)\)/gm;
     const match = VULKAN_H.match(regexp);
+
     const functions = match.map(str => {
         const words = str.split(/\W+/g);
         const type = words[1];
@@ -200,8 +253,8 @@ function parseFunctions() {
     return functions;
 }
 
-exports.parseType = parseType;
-exports.parseFunction = parseFunction;
-exports.isHandle = isHandle;
-
-exports.parseFunctions = parseFunctions;
+module.exports = {
+    isHandle,
+    parseStructs,
+    parseFunctions
+};
