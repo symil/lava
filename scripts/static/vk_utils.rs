@@ -103,7 +103,7 @@ pub struct VkRawString {
 
 impl VkRawType<str> for VkRawString {
     vk_from_wrapped(value: &str) -> Self {
-        
+
     }
 }
 

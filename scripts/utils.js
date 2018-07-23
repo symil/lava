@@ -137,47 +137,69 @@ function argToString(arg) {
     return arg.name ? `${arg.name}: ${arg.type}` : arg.type;
 }
 
-function isPrimitiveType(typeName) {
-    return !!PRIMITIVE_TYPES[typeName];
+function createStaticArray(typeName, arraySize, argName, functionName) {
+    return `unsafe { let mut dst_array : [${typeName}, ${arraySize}] = mem::uninitialized(); ${functionName}(&${argName}, &mut dst_array); dst_array }`;
 }
 
-function convertToRaw(cArg, isArray) {
-    const argName = cToRustVarName(cArg.name);
+function getArgInformation(cArg, countArg) {
+    /*
+        TODO:
+        - return typing information for raw and wrapped values
+        - handle the special case where the type is a handle
+    */
+
     const rawTypeName = getRawTypeName(cArg.typeName);
     const wrappedTypeName = getWrappedTypeName(cArg.typeName);
 
-    if (arg.fullType === 'const char* const*') {
-        return `VkPtr::new_string_array(${argName})`;
-    } else if (arg.fullType === 'const char*') {
-        return `VkPtr::new_string(${argName})`;
-    } else {
-        const isPrimitiveType = isPrimitiveType(arg.typeName);
-        const isPointerArray = arg.isPointer && isArray;
-        const isPointerValue = arg.isPointer && !isArray;
-        const isStaticArray = !arg.isPointer && arg.arraySize;
+    const arraySize = arg.arraySize;
+    const isPrimitiveType = !!PRIMITIVE_TYPES[arg.typeName];
+    const isPointerArray = arg.isPointer && countArg;
+    const isPointerValue = arg.isPointer && !countArg;
+    const isStaticArray = !arg.isPointer && arraySize;
 
-        if (isPrimitiveType) {
-            if (isPointerArray) {
-                return `VkPtr::new_array(${argName})`;
-            } else if (isPointerValue) {
-                return `VkPtr::new_value(${argName})`;
-            } else if (isStaticArray) {
-                return `${argName}.clone()`;
-            } else {
-                return argName;
-            }
+    let toRaw = null;
+    let toWrapped = null;
+
+    if (arg.fullType === 'const char* const*') {
+        toRaw = argName => `VkPtr::new_string_array(&${argName})`;
+        toWrapped = (argName, countArgName) => `vec![]`; // Should never happen
+    } else if (arg.fullType === 'const char*') {
+        toRaw = argName => `VkPtr::new_string(&${argName})`;
+        toWrapped = (argName, countArgName) => `""`; // Should never happen
+    } else if (arg.fullType === 'char' && arg.arraySize) {
+        toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'string_to_byte_array');
+        toWrapped = (argName, countArgName) => `new_string(&${argName}[0] as *const c_char)`
+    } else if (isPrimitiveType) {
+        if (isPointerArray) {
+            toRaw = argName => `VkPtr::new_array(&${argName})`;
+            toWrapped = (argName, countArgName) => `new_array(${countArgName}, ${argName})`;
+        } else if (isPointerValue) {
+            toRaw = argName => `VkPtr::new_value(${argName})`;
+            toWrapped = (argName, countArgName) => argName; // Should never happen
+        } else if (isStaticArray) {
+            toRaw = argName => `${argName}.clone()`;
+            toWrapped = (argName, countArgName) => `new_array(${countArgName}, &${argName}[0] as *const ${rawTypeName})`;
         } else {
-            if (isPointerArray) {
-                return `VkPtr::new_vk_array(${argName})`;
-            } else if (isPointerValue) {
-                return `VkPtr::new_vk_value(${argName})`;
-            } else if (isStaticArray) {
-                return `unsafe { let mut dst_array : [${rawTypeName}, ${arg.arraySize}] = mem::uninitialized(); vk_to_raw_array(${argName}, &mut dst_array); dst_array }`;
-            } else {
-                return `vk_to_raw_value(&${argName})`;
-            }
+            toRaw = argName => argName;
+            toWrapped = (argName, countArgName) => argName;
+        }
+    } else {
+        if (isPointerArray) {
+            toRaw = argName => `VkPtr::new_vk_array(&${argName})`;
+            toWrapped = (argName, countArgName) => `new_vk_array(${countArgName}, ${argName})`;
+        } else if (isPointerValue) {
+            toRaw = argName => `VkPtr::new_vk_value(&${argName})`;
+            toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(${argName}.as_ref().unwrap())`; // Pointer should never be null; if that happens, we should use an `Option`
+        } else if (isStaticArray) {
+            toRaw = argName => createStaticArray(rawTypeName, arraySize, argName, 'vk_to_raw_array');
+            toWrapped = (argName, countArgName) => `new_vk_array(${countArgName}, &${argName}[0] as *const ${rawTypeName})`;
+        } else {
+            toRaw = argName => `vk_to_raw_value(&${argName})`;
+            toWrapped = (argName, countArgName) => `${wrappedTypeName}::vk_from_raw(&${argName})`;
         }
     }
+
+    return { toRaw, toWrapped };
 }
 
 module.exports = {
@@ -192,5 +214,6 @@ module.exports = {
     isPlural,
     removeSuffix,
     cToRustVarName,
-    argToString
+    argToString,
+    getArgInformation
 };
