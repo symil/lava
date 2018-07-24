@@ -1,5 +1,3 @@
-// Copied from `scripts/static/`
-
 use utils::vk_type::VkType;
 
 impl VkType<u32> for bool {

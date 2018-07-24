@@ -1,7 +1,21 @@
+use std::os::raw::c_char;
+use std::mem;
+use std::ptr;
+use utils::vk_type::VkType;
+use utils::vk_null::vk_is_null;
+
+#[allow(non_camel_case_types)]
+type c_void = u8;
+
+extern {
+    pub fn malloc(size: usize) -> *mut c_void;
+    pub fn free(ptr: *mut c_void);
+}
+
 const SIZE_OF_PTR : usize = mem::size_of::<*const u8>();
 
 #[repr(C)]
-struct VkPtr<R> {
+pub struct VkPtr<R> {
     ptr: *mut R
 }
 

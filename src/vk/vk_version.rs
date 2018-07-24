@@ -1,3 +1,5 @@
+// Copied from `scripts/static/`
+
 use utils::vk_type::VkType;
 
 #[derive(Debug)]

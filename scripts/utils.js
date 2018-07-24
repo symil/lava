@@ -80,15 +80,9 @@ function blockToString(block) {
     if (typeof block === 'string') {
         return block;
     } else {
-        let result = block[0];
+        const result = `${block[0]}${_blockToString(block[1], 0)}`;
 
-        if (!result.endsWith(' ') && !result.endsWith('\n')) {
-            result += ' ';
-        }
-
-        result += _blockToString(block[1], 0);
-
-        return result;
+        return result.replace(/\n {/g, '\n{');
     }
 }
 
@@ -99,7 +93,7 @@ function _blockToString(block, indent) {
         ? `\n${block.split('\n').map(line => `${spaces}${line}`).join('\n')}`
         : ` {${block.filter(x => x !== null).map(b => _blockToString(b, inc(indent))).join('')}\n${spaces}}`;
 
-    return result.replace(/(^|\n) {/g, '$1{');
+    return result;
 }
 
 function inc(value) {
@@ -168,23 +162,21 @@ function getFieldWrappedTypeName(field) {
     return PRIMITIVE_TYPES[field.typeName] || getWrappedVkTypeName(field.typeName);
 }
 
-function getFieldInformation(field, prevField, nextField) {
-    // TODO: default values
-
+function getFieldInformation(field, prevField, nextField, set) {
     const rawTypeName = getFieldRawTypeName(field);
     const wrappedTypeName = getFieldWrappedTypeName(field);
 
     const arraySize = field.arraySize;
     const isPointerArray = field.isPointer && areFieldsCountAndArray(prevField, field);
     const isPointerValue = field.isPointer && !isPointerArray;
-    const isStaticArray = !field.isPointer && arraySize;
-    const isPrimitiveType = rawTypeName !== wrappedTypeName;
+    const isStaticArray = !field.isPointer && !!arraySize;
+    const isPrimitiveType = rawTypeName === wrappedTypeName;
     const isHandleType = !isPrimitiveType && isHandle(field.typeName);
     const isCount = areFieldsCountAndArray(field, nextField);
 
-    const varName = 'varName';
-    const prevVarName = 'prevVarName';
-    const nextVarName = 'nextVarName';
+    const varName = '[varName]';
+    const prevVarName = '[prevVarName]';
+    const nextVarName = '[nextVarName]';
 
     let rawType = null;
     let wrappedType = null;
@@ -194,10 +186,10 @@ function getFieldInformation(field, prevField, nextField) {
 
     if (field.fullType === 'const void*') {
         rawType = `*const c_void`;
-        wrappedType = `*const c_void`;
-        toRaw = varName;
-        toWrapped = varName;
-        defValue = `ptr::null()`;
+        wrappedType = null;
+        toRaw = `ptr::null()`;
+        toWrapped = null;
+        defValue = null;
     } else if (isCount) {
         rawType = `u32`;
         toRaw = `${nextVarName}.len() as u32`;
@@ -211,7 +203,7 @@ function getFieldInformation(field, prevField, nextField) {
         rawType = `*const c_char`;
         wrappedType = `T : Deref<Target=str>`;
         toRaw = `VkPtr::new_string(&${varName})`;
-        toWrapped = `""`; // Should never be used
+        toWrapped = `new_string(${varName})`; // Should never be used
         defValue = `vk_null()`;
     } else if (field.fullType === 'char' && field.arraySize) {
         rawType = `[c_char; ${arraySize}]`;
@@ -279,16 +271,32 @@ function getFieldInformation(field, prevField, nextField) {
         }
     }
 
-    const toRawFunction = toRaw ? new Function(varName, prevVarName, nextVarName, `return '${toRaw}';`) : null;
-    const toWrappedFunction = toWrapped ? new Function(varName, prevVarName, nextVarName, `return '${toWrapped}';`) : null;
+    if (set) {
+        
+    }
 
     return {
         rawType: rawType,
         wrappedType: wrappedType,
-        toRaw: toRawFunction,
-        toWrapped: toWrappedFunction,
-        defValue: defValue
+        toRaw: stringToFunction(toRaw, varName, prevVarName, nextVarName),
+        toWrapped: stringToFunction(toWrapped, varName, prevVarName, nextVarName),
+        defaultValue: defValue,
+        varName: cToRustVarName(field.name)
     };
+}
+
+function stringToFunction(statement, varName, prevVarName, nextVarName) {
+    if (!statement) {
+        return null;
+    }
+
+    return new Function('varName', 'prevVarName', 'nextVarName', [
+        `var str = '${statement}';`,
+        `str = str.replace('${varName}', varName);`,
+        `str = str.replace('${prevVarName}', prevVarName);`,
+        `str = str.replace('${nextVarName}', nextVarName);`,
+        `return str;`
+    ].join('\n'));
 }
 
 module.exports = {

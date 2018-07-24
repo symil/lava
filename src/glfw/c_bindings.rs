@@ -1,9 +1,8 @@
 use os::raw::c_char;
-use libc::c_void;
 use vk::*;
 
-pub type RawGlfwMonitor = c_void;
-pub type RawGlfwWindow = c_void;
+pub type RawGlfwMonitor = u8;
+pub type RawGlfwWindow = u8;
 
 extern {
     pub fn glfwInit();

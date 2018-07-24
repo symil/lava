@@ -1,8 +1,8 @@
 use std::string::*;
 use std::vec::*;
 use std::ops::Drop;
+use utils::vk_convert::new_string;
 use glfw::*;
-use libc::*;
 
 static mut NB_INSTANCES : u32 = 0;
 
@@ -33,8 +33,13 @@ impl GlfwInstance {
             if names.is_null() {
                 None
             } else {
-                let c_string_vec = vec_from_c_ptr(count, names);
-                Some(c_string_vec.into_iter().map(|c_string| copy_as_string(c_string)).collect())
+                let mut string_vec : Vec<String> = Vec::new();
+
+                for i in 0..count as usize {
+                    string_vec.push(new_string(*names.add(i)))
+                }
+
+                Some(string_vec)
             }
         }
     }
