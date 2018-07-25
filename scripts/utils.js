@@ -80,24 +80,34 @@ function blockToString(block) {
     if (typeof block === 'string') {
         return block;
     } else {
-        const result = `${block[0]}${_blockToString(block[1], 0)}`;
-
-        return result.replace(/\n {/g, '\n{');
+        return _blocksToString(block);
     }
 }
 
-function _blockToString(block, indent) {
-    const spaces = indentToSpaces(indent);
-    
-    const result = typeof block === 'string'
-        ? `\n${block.split('\n').map(line => `${spaces}${line}`).join('\n')}`
-        : ` {${block.filter(x => x !== null).map(b => _blockToString(b, inc(indent))).join('')}\n${spaces}}`;
+function _blocksToString(blocks) {
+    let result = '';
+
+    let isFirst = true;
+
+    for (let block of blocks) {
+        if (typeof block === 'string') {
+            if (!isFirst) {
+                result += '\n';
+            }
+            result += block;
+            lastIsStr = true;
+        } else if (isFirst) {
+            result += _blocksToString(block);
+        } else {
+            result += ' {\n';
+            result += _blocksToString(block).split('\n').map(str => '    ' + str).join('\n');
+            result += '\n}';
+        }
+
+        isFirst = false;
+    }
 
     return result;
-}
-
-function inc(value) {
-    return value === undefined ? 0 : value + 1;
 }
 
 function indentToSpaces(indent) {
@@ -162,7 +172,7 @@ function getFieldWrappedTypeName(field) {
     return PRIMITIVE_TYPES[field.typeName] || getWrappedVkTypeName(field.typeName);
 }
 
-function getFieldInformation(field, prevField, nextField, set) {
+function getFieldInformation(field, prevField, nextField) {
     const rawTypeName = getFieldRawTypeName(field);
     const wrappedTypeName = getFieldWrappedTypeName(field);
 
@@ -269,10 +279,6 @@ function getFieldInformation(field, prevField, nextField, set) {
             toWrapped = `${wrappedTypeName}::vk_from_raw(&${varName})`;
             defValue = `${wrappedTypeName}::vk_default()`;
         }
-    }
-
-    if (set) {
-        
     }
 
     return {

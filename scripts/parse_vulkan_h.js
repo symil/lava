@@ -6,19 +6,6 @@ const fs = require('fs');
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
 const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, `include`, `vulkan`, `vulkan_core.h`), 'utf8');
 
-const POSSIBLE_TYPES = {
-    struct: parseStruct,
-    enum: parseEnum,
-    flags: parseBitFlags,
-    handle: parseHandle,
-    special: parseSpecial
-};
-
-const SPECIAL_TYPES = ['VkBool32', 'VkDeviceSize'];
-
-const REMOVE_SUFFIXES = true;
-const SUFFIX = REMOVE_SUFFIXES ? `(?:KHR|EXT)?` : '';
-
 const SPECIAL_FUNCTIONS = [
     'VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window, const VkAllocationCallbacks* allocator, VkSurfaceKHR* surface);',
     'VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback);',
@@ -40,51 +27,6 @@ function parseName(str) {
         extension: extension,
         basename: str.substring(0, str.length - extension.length)
     };
-}
-
-function parseType(name) {
-    const typeName = removeSuffix(name);
-    const entries = Object.entries(POSSIBLE_TYPES);
-
-    for (let i = 0; i < entries.length; ++i) {
-        const [type, parsingFunction] = entries[i];
-        const fields = parsingFunction(typeName);
-
-        if (fields) {
-            return { name: typeName, type, fields };
-        }
-    }
-
-    throw new Error(`unable to parse type ${name}`);
-}
-
-function parseSpecial(typeName) {
-    return SPECIAL_TYPES.includes(typeName) ? {} : null;
-}
-
-function parseStruct(typeName) {
-    const match = VULKAN_H.match(new RegExp(`typedef struct ${typeName}${SUFFIX} {\n([^}]+)\n}`, 'mi'));
-
-    if (!match) {
-        return null;
-    }
-
-    return match[1].split('\n').map(line => {
-        const match = line.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;\s*$/);
-
-        if (!match) {
-            throw new Error(`unexpected line for struct ${typeName}: "${line}"`);
-        }
-
-        const name = removeSuffix(match[2].trim());
-        const fullType = match[1].trim();
-        const typeName = removeSuffix(fullType.replace(/(?:const )?(\w+)\*?/, '$1'));
-        const isPointer = fullType.endsWith('*');
-        const isConst = fullType.startsWith('const ');
-        const arraySize = parseConstant(match[3]);
-
-        return { name, fullType, typeName, isPointer, isConst, arraySize };
-    });
 }
 
 function parseStructs() {
@@ -140,6 +82,46 @@ function parseEnum(typeName) {
             name: removeSuffix(match[1].trim()),
             value: match[2].trim()
         };
+    }).filter(x => x);
+}
+
+function removeExtensionSuffix(str, extension) {
+    if (str.endsWith(extension.toUpperCase())) {
+        str = str.substring(0, str.length - extension.length);
+    }
+
+    return str;
+}
+
+function parseEnums() {
+    const regexp = /typedef enum \w+ {\n([^}]+)\n}/gmi;
+    const match = VULKAN_H.match(regexp);
+
+    return match.map(str => {
+        const structName = str.split(' ', 3)[2];
+        const structNameInfo = parseName(structName);
+        const name = structNameInfo.basename;
+        const extension = structNameInfo.extension;
+        const fieldsStr = str.substring(str.indexOf('{') + 2, str.indexOf('}') - 1);
+
+        if (name.endsWith('FlagBits')) {
+            return null;
+        }
+
+        const fields = fieldsStr.split('\n').map(line => {
+            const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(-?\d+),?$/);
+
+            if (!match) {
+                return null;
+            }
+
+            return {
+                name: match[1].trim(),
+                value: match[2].trim()
+            };
+        }).filter(x => x);
+
+        return { name, extension, fields };
     }).filter(x => x);
 }
 
@@ -255,6 +237,7 @@ function parseFunctions() {
 
 module.exports = {
     isHandle,
+    parseEnums,
     parseStructs,
     parseFunctions
 };

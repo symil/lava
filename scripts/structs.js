@@ -31,17 +31,20 @@ function generateVkStructDefinition(cDef) {
     const uses = new Set([
         'std::string::String',
         'std::vec::Vec',
-        'std::ops::Deref'
+        'std::ops::Deref',
+        'utils::vk_convert::*',
+        'utils::vk_null::*',
+        'utils::vk_ptr::*',
+        'utils::vk_type::*'
     ]);
 
-    const blocks = [
+    return [
+        uses.map(str => `use ${str};`).join('\n'),
         genRawStructDeclaration(cDef),
         getWrappedStructDeclaration(cDef),
         genImplDeref(cDef),
         genImplVkType(cDef)
     ];
-
-    return blocks.map(blockToString).join('\n\n');
 }
 
 function startsWith(str, prefix) {
@@ -118,7 +121,7 @@ function genImplVkType(def) {
             `\nfn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`,
             rawFields.map((field, index) => `dst.${field.info.varName} = ${genConvertStatement('toRaw', 'src', rawFields, index)};`),
 
-            `\nfn vk_from_raw(src: ${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
+            `\nfn vk_from_raw(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName,
                 wrappedFields.map((field, index) => `${field.info.varName}: ${genConvertStatement('toWrapped', 'src', wrappedFields, index)},`)
             ],
