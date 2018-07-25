@@ -3,8 +3,9 @@
 const path = require('path');
 const fs = require('fs');
 
-const VULKAN_SDK_PATH = process.env.VULKAN_SDK;
-const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, `include`, `vulkan`, `vulkan_core.h`), 'utf8');
+const VULKAN_SDK_PATH = process.env.VULKAN_SDK || "C:\\VulkanSDK\\1.1.77.0";
+const INCLUDE_DIR_NAME = process.platform === 'win32' ? 'Include' : 'include';
+const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, INCLUDE_DIR_NAME, `vulkan`, `vulkan_core.h`), 'utf8');
 
 const SPECIAL_FUNCTIONS = [
     'VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window, const VkAllocationCallbacks* allocator, VkSurfaceKHR* surface);',
