@@ -45,6 +45,7 @@ function parseStructs() {
                 throw new Error(`unexpected line for struct ${structName}: "${line}"`);
             }
 
+            // const name = match[2].trim().replace('BitFlags', 'Flags');
             const name = match[2].trim();
             const fullType = match[1].trim();
             const fieldName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
@@ -142,33 +143,6 @@ function isHandle(typeName) {
     return new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}${SUFFIX}\\)`, 'mi').test(VULKAN_H);
 }
 
-function parseFunction(name) {
-    const regexp = new RegExp(`(?:VKAPI_ATTR/\s+)?(VkResult|void)\\s+(?:VKAPI_CALL\\s+)?${name}\\s*\\(([^;]+)\\)`, 'm');
-    
-    const match = SPECIAL_FUNCTIONS.match(regexp) || VULKAN_H.match(regexp);
-
-    if (!match) {
-        throw new Error(`unable to parse function ${name}`);
-    }
-
-    const returnType = removeSuffix(match[1]);
-
-    const args = match[2].trim().split(',').map(line => {
-        line = line.trim();
-        const spaceIndex = line.lastIndexOf(' ');
-
-        const name = line.substring(spaceIndex + 1);
-        const fullType = line.substring(0, spaceIndex).trim();
-        const typeName = removeSuffix(fullType.replace(/(?:const )?(\w+)\*?/, '$1'));
-        const isPointer = fullType.endsWith('*');
-        const isConst = fullType.startsWith('const ');
-
-        return { name, fullType, typeName, isPointer, isConst };
-    });
-
-    return { name, returnType, args };
-}
-
 function parseConstant(name) {
     if (!name) {
         return null;
@@ -215,6 +189,7 @@ function parseFunctions() {
 module.exports = {
     isHandle,
     parseEnums,
+    parseBitFlags,
     parseStructs,
     parseFunctions
 };
