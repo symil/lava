@@ -66,33 +66,6 @@ function parseStructs() {
     });
 }
 
-function parseEnum(typeName) {
-    const match = VULKAN_H.match(new RegExp(`typedef enum ${typeName}${SUFFIX}\\s+{\n([^}]+)\n}`, 'mi'));
-
-    if (!match) {
-        return null;
-    }
-
-    return match[1].split('\n').map(line => {
-        const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(-?\d+),?$/);
-
-        if (!match || match[1] === 'VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT') return null;
-
-        return {
-            name: removeSuffix(match[1].trim()),
-            value: match[2].trim()
-        };
-    }).filter(x => x);
-}
-
-function removeExtensionSuffix(str, extension) {
-    if (str.endsWith(extension.toUpperCase())) {
-        str = str.substring(0, str.length - extension.length);
-    }
-
-    return str;
-}
-
 function parseEnums() {
     const regexp = /typedef enum \w+ {\n([^}]+)\n}/gmi;
     const match = VULKAN_H.match(regexp);
@@ -125,7 +98,7 @@ function parseEnums() {
     }).filter(x => x);
 }
 
-function parseBitFlags(typeName) {
+function _parseBitFlags(typeName) {
     const bitsFlagTypeName = typeName.replace('Flags', 'FlagBits');
     const match = VULKAN_H.match(new RegExp(`typedef enum ${bitsFlagTypeName}${SUFFIX}\\s+{\n([^}]+)\n}`, 'mi'));
 
@@ -153,6 +126,10 @@ function parseBitFlags(typeName) {
     });
 
     return fields;
+}
+
+function parseBitFlags() {
+    const regexp = /typedef enum \w+BitFlags[A-Z]* {\n([^}]+)\n}/gmi;
 }
 
 function parseHandle(typeName) {
