@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkExternalFenceHandleTypeFlags> for VkExternalFenceHandleT
         if src.opaque_win32_kmt { *dst |= 0x00000004; }
         if src.sync_fd { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkExternalFenceHandleTypeFlags {
     
     fn vk_default() -> VkExternalFenceHandleTypeFlags {
         VkExternalFenceHandleTypeFlags {

@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineDepthStencilStateCreateFlags> for VkPipelineDept
     fn vk_to_raw(src: &VkPipelineDepthStencilStateCreateFlags, dst: &mut RawVkPipelineDepthStencilStateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineDepthStencilStateCreateFlags {
     
     fn vk_default() -> VkPipelineDepthStencilStateCreateFlags {
         VkPipelineDepthStencilStateCreateFlags {

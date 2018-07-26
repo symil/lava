@@ -38,6 +38,9 @@ impl VkWrappedType<RawVkColorSpace> for VkColorSpace {
     fn vk_to_raw(src: &VkColorSpace, dst: &mut RawVkColorSpace) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkColorSpace {
     
     fn vk_default() -> VkColorSpace {
         VkColorSpace::SrgbNonlinear

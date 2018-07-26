@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkSemaphoreCreateFlags> for VkSemaphoreCreateFlags {
     fn vk_to_raw(src: &VkSemaphoreCreateFlags, dst: &mut RawVkSemaphoreCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkSemaphoreCreateFlags {
     
     fn vk_default() -> VkSemaphoreCreateFlags {
         VkSemaphoreCreateFlags {

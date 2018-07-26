@@ -34,6 +34,9 @@ impl VkWrappedType<RawVkPrimitiveTopology> for VkPrimitiveTopology {
     fn vk_to_raw(src: &VkPrimitiveTopology, dst: &mut RawVkPrimitiveTopology) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkPrimitiveTopology {
     
     fn vk_default() -> VkPrimitiveTopology {
         VkPrimitiveTopology::PointList

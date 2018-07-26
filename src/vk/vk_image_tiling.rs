@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkImageTiling> for VkImageTiling {
     fn vk_to_raw(src: &VkImageTiling, dst: &mut RawVkImageTiling) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkImageTiling {
     
     fn vk_default() -> VkImageTiling {
         VkImageTiling::Optimal

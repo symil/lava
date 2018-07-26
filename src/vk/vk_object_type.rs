@@ -60,6 +60,9 @@ impl VkWrappedType<RawVkObjectType> for VkObjectType {
     fn vk_to_raw(src: &VkObjectType, dst: &mut RawVkObjectType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkObjectType {
     
     fn vk_default() -> VkObjectType {
         VkObjectType::Unknown

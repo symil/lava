@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkInternalAllocationType> for VkInternalAllocationType {
     fn vk_to_raw(src: &VkInternalAllocationType, dst: &mut RawVkInternalAllocationType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkInternalAllocationType {
     
     fn vk_default() -> VkInternalAllocationType {
         VkInternalAllocationType::Executable

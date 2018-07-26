@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkQueryResultFlags> for VkQueryResultFlags {
         if src.with_availability { *dst |= 0x00000004; }
         if src.partial { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkQueryResultFlags {
     
     fn vk_default() -> VkQueryResultFlags {
         VkQueryResultFlags {

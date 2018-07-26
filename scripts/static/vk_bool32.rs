@@ -10,7 +10,9 @@ impl VkWrappedType<u32> for bool {
     fn vk_to_raw(value: &bool, dst: &mut u32) {
         *dst = if *value { 1 } else { 0 }
     }
+}
 
+impl VkDefault for bool {
     fn vk_default() -> bool {
         false
     }

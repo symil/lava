@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateFlags> for VkDescriptorUpd
     fn vk_to_raw(src: &VkDescriptorUpdateTemplateCreateFlags, dst: &mut RawVkDescriptorUpdateTemplateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkDescriptorUpdateTemplateCreateFlags {
     
     fn vk_default() -> VkDescriptorUpdateTemplateCreateFlags {
         VkDescriptorUpdateTemplateCreateFlags {

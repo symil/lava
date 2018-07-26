@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkAttachmentDescriptionFlags> for VkAttachmentDescriptionF
         *dst = 0;
         if src.may_alias { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkAttachmentDescriptionFlags {
     
     fn vk_default() -> VkAttachmentDescriptionFlags {
         VkAttachmentDescriptionFlags {

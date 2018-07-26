@@ -28,6 +28,9 @@ impl VkWrappedType<RawVkPhysicalDeviceType> for VkPhysicalDeviceType {
     fn vk_to_raw(src: &VkPhysicalDeviceType, dst: &mut RawVkPhysicalDeviceType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkPhysicalDeviceType {
     
     fn vk_default() -> VkPhysicalDeviceType {
         VkPhysicalDeviceType::Other

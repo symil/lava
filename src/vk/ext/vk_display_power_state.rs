@@ -26,6 +26,9 @@ impl VkWrappedType<RawVkDisplayPowerState> for VkDisplayPowerState {
     fn vk_to_raw(src: &VkDisplayPowerState, dst: &mut RawVkDisplayPowerState) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkDisplayPowerState {
     
     fn vk_default() -> VkDisplayPowerState {
         VkDisplayPowerState::Off

@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineInputAssemblyStateCreateFlags> for VkPipelineInp
     fn vk_to_raw(src: &VkPipelineInputAssemblyStateCreateFlags, dst: &mut RawVkPipelineInputAssemblyStateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineInputAssemblyStateCreateFlags {
     
     fn vk_default() -> VkPipelineInputAssemblyStateCreateFlags {
         VkPipelineInputAssemblyStateCreateFlags {

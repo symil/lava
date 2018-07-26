@@ -31,6 +31,9 @@ impl VkWrappedType<RawVkIndirectCommandsTokenType> for VkIndirectCommandsTokenTy
     fn vk_to_raw(src: &VkIndirectCommandsTokenType, dst: &mut RawVkIndirectCommandsTokenType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkIndirectCommandsTokenType {
     
     fn vk_default() -> VkIndirectCommandsTokenType {
         VkIndirectCommandsTokenType::Pipeline

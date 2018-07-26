@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkSubpassDescriptionFlags> for VkSubpassDescriptionFlags {
         if src.per_view_attributes_nvx { *dst |= 0x00000001; }
         if src.per_view_position_x_only_nvx { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkSubpassDescriptionFlags {
     
     fn vk_default() -> VkSubpassDescriptionFlags {
         VkSubpassDescriptionFlags {

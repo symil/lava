@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkExternalMemoryFeatureFlags> for VkExternalMemoryFeatureF
         if src.exportable { *dst |= 0x00000002; }
         if src.importable { *dst |= 0x00000004; }
     }
+}
+
+impl VkDefault for VkExternalMemoryFeatureFlags {
     
     fn vk_default() -> VkExternalMemoryFeatureFlags {
         VkExternalMemoryFeatureFlags {

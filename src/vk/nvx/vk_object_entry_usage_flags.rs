@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkObjectEntryUsageFlags> for VkObjectEntryUsageFlags {
         if src.graphics { *dst |= 0x00000001; }
         if src.compute { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkObjectEntryUsageFlags {
     
     fn vk_default() -> VkObjectEntryUsageFlags {
         VkObjectEntryUsageFlags {

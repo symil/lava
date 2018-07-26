@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkSurfaceCounterFlags> for VkSurfaceCounterFlags {
         *dst = 0;
         if src.vblank { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkSurfaceCounterFlags {
     
     fn vk_default() -> VkSurfaceCounterFlags {
         VkSurfaceCounterFlags {

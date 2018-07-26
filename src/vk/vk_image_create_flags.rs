@@ -60,6 +60,9 @@ impl VkWrappedType<RawVkImageCreateFlags> for VkImageCreateFlags {
         if src.disjoint { *dst |= 0x00000200; }
         if src.sample_locations_compatible_depth_ext { *dst |= 0x00001000; }
     }
+}
+
+impl VkDefault for VkImageCreateFlags {
     
     fn vk_default() -> VkImageCreateFlags {
         VkImageCreateFlags {

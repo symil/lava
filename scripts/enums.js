@@ -33,7 +33,8 @@ function generateVkEnumDefinition(cDef) {
         genRawType(cDef),
         genWrappedType(cDef),
         genImplVkRawType(cDef),
-        genImplVkWrappedType(cDef)
+        genImplVkWrappedType(cDef),
+        genImplVkDefault(cDef),
     ];
 }
 
@@ -60,7 +61,7 @@ function genWrappedType(def) {
 function genImplVkRawType(def) {
     return [
         `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
-            `\nfn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
+            `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                 `unsafe`, [
                     `*((src as *const i32) as *const ${def.wrappedTypeName})`
                 ]
@@ -72,11 +73,17 @@ function genImplVkRawType(def) {
 function genImplVkWrappedType(def) {
     return [
         `impl VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}`, [
-            `\nfn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
+            `fn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
                 `*dst = *src as i32`
-            ],
+            ]
+        ]
+    ];
+}
 
-            `\nfn vk_default() -> ${def.wrappedTypeName}`, [
+function genImplVkDefault(def) {
+    return [
+        `impl VkDefault for ${def.wrappedTypeName}`, [
+            `fn vk_default() -> ${def.wrappedTypeName}`, [
                 `${def.wrappedTypeName}::${def.fields[0].rustName}`
             ]
         ]

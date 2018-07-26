@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineViewportStateCreateFlags> for VkPipelineViewport
     fn vk_to_raw(src: &VkPipelineViewportStateCreateFlags, dst: &mut RawVkPipelineViewportStateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineViewportStateCreateFlags {
     
     fn vk_default() -> VkPipelineViewportStateCreateFlags {
         VkPipelineViewportStateCreateFlags {

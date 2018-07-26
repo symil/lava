@@ -36,6 +36,9 @@ impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {
         if src.view_index_from_device_index { *dst |= 0x00000008; }
         if src.dispatch_base { *dst |= 0x00000010; }
     }
+}
+
+impl VkDefault for VkPipelineCreateFlags {
     
     fn vk_default() -> VkPipelineCreateFlags {
         VkPipelineCreateFlags {

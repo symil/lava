@@ -54,6 +54,9 @@ impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandl
         if src.host_allocation_ext { *dst |= 0x00000080; }
         if src.host_mapped_foreign_memory_ext { *dst |= 0x00000100; }
     }
+}
+
+impl VkDefault for VkExternalMemoryHandleTypeFlags {
     
     fn vk_default() -> VkExternalMemoryHandleTypeFlags {
         VkExternalMemoryHandleTypeFlags {

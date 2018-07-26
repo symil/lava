@@ -81,6 +81,9 @@ impl VkWrappedType<RawVkAccessFlags> for VkAccessFlags {
         if src.command_process_write_nvx { *dst |= 0x00040000; }
         if src.color_attachment_read_noncoherent_ext { *dst |= 0x00080000; }
     }
+}
+
+impl VkDefault for VkAccessFlags {
     
     fn vk_default() -> VkAccessFlags {
         VkAccessFlags {

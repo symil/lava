@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkExternalSemaphoreFeatureFlags> for VkExternalSemaphoreFe
         if src.exportable { *dst |= 0x00000001; }
         if src.importable { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkExternalSemaphoreFeatureFlags {
     
     fn vk_default() -> VkExternalSemaphoreFeatureFlags {
         VkExternalSemaphoreFeatureFlags {

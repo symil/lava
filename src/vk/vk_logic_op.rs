@@ -39,6 +39,9 @@ impl VkWrappedType<RawVkLogicOp> for VkLogicOp {
     fn vk_to_raw(src: &VkLogicOp, dst: &mut RawVkLogicOp) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkLogicOp {
     
     fn vk_default() -> VkLogicOp {
         VkLogicOp::Clear

@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineMultisampleStateCreateFlags> for VkPipelineMulti
     fn vk_to_raw(src: &VkPipelineMultisampleStateCreateFlags, dst: &mut RawVkPipelineMultisampleStateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineMultisampleStateCreateFlags {
     
     fn vk_default() -> VkPipelineMultisampleStateCreateFlags {
         VkPipelineMultisampleStateCreateFlags {

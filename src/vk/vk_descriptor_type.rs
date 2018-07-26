@@ -34,6 +34,9 @@ impl VkWrappedType<RawVkDescriptorType> for VkDescriptorType {
     fn vk_to_raw(src: &VkDescriptorType, dst: &mut RawVkDescriptorType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkDescriptorType {
     
     fn vk_default() -> VkDescriptorType {
         VkDescriptorType::Sampler

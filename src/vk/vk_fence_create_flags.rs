@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkFenceCreateFlags> for VkFenceCreateFlags {
         *dst = 0;
         if src.signaled { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkFenceCreateFlags {
     
     fn vk_default() -> VkFenceCreateFlags {
         VkFenceCreateFlags {

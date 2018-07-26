@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkDescriptorSetLayoutCreateFlags> for VkDescriptorSetLayou
         if src.push_descriptor_khr { *dst |= 0x00000001; }
         if src.update_after_bind_pool_ext { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkDescriptorSetLayoutCreateFlags {
     
     fn vk_default() -> VkDescriptorSetLayoutCreateFlags {
         VkDescriptorSetLayoutCreateFlags {

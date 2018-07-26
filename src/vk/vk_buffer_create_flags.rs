@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkBufferCreateFlags> for VkBufferCreateFlags {
         if src.sparse_aliased { *dst |= 0x00000004; }
         if src.protected { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkBufferCreateFlags {
     
     fn vk_default() -> VkBufferCreateFlags {
         VkBufferCreateFlags {

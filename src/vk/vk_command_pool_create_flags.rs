@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkCommandPoolCreateFlags> for VkCommandPoolCreateFlags {
         if src.reset_command_buffer { *dst |= 0x00000002; }
         if src.protected { *dst |= 0x00000004; }
     }
+}
+
+impl VkDefault for VkCommandPoolCreateFlags {
     
     fn vk_default() -> VkCommandPoolCreateFlags {
         VkCommandPoolCreateFlags {

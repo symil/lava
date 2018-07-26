@@ -28,6 +28,9 @@ impl VkWrappedType<RawVkSamplerYcbcrModelConversion> for VkSamplerYcbcrModelConv
     fn vk_to_raw(src: &VkSamplerYcbcrModelConversion, dst: &mut RawVkSamplerYcbcrModelConversion) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkSamplerYcbcrModelConversion {
     
     fn vk_default() -> VkSamplerYcbcrModelConversion {
         VkSamplerYcbcrModelConversion::RgbIdentity

@@ -42,6 +42,9 @@ impl VkWrappedType<RawVkSampleCountFlags> for VkSampleCountFlags {
         if src._32 { *dst |= 0x00000020; }
         if src._64 { *dst |= 0x00000040; }
     }
+}
+
+impl VkDefault for VkSampleCountFlags {
     
     fn vk_default() -> VkSampleCountFlags {
         VkSampleCountFlags {

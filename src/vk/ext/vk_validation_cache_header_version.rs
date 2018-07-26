@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkValidationCacheHeaderVersion> for VkValidationCacheHeade
     fn vk_to_raw(src: &VkValidationCacheHeaderVersion, dst: &mut RawVkValidationCacheHeaderVersion) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkValidationCacheHeaderVersion {
     
     fn vk_default() -> VkValidationCacheHeaderVersion {
         VkValidationCacheHeaderVersion::One

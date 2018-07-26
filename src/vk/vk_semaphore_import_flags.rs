@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkSemaphoreImportFlags> for VkSemaphoreImportFlags {
         *dst = 0;
         if src.temporary { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkSemaphoreImportFlags {
     
     fn vk_default() -> VkSemaphoreImportFlags {
         VkSemaphoreImportFlags {

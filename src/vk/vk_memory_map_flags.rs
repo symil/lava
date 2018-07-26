@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkMemoryMapFlags> for VkMemoryMapFlags {
     fn vk_to_raw(src: &VkMemoryMapFlags, dst: &mut RawVkMemoryMapFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkMemoryMapFlags {
     
     fn vk_default() -> VkMemoryMapFlags {
         VkMemoryMapFlags {

@@ -93,6 +93,9 @@ impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {
         if src.sampled_image_filter_cubic_img { *dst |= 0x00002000; }
         if src.sampled_image_filter_minmax_ext { *dst |= 0x00010000; }
     }
+}
+
+impl VkDefault for VkFormatFeatureFlags {
     
     fn vk_default() -> VkFormatFeatureFlags {
         VkFormatFeatureFlags {

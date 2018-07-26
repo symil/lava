@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkPeerMemoryFeatureFlags> for VkPeerMemoryFeatureFlags {
         if src.generic_src { *dst |= 0x00000004; }
         if src.generic_dst { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkPeerMemoryFeatureFlags {
     
     fn vk_default() -> VkPeerMemoryFeatureFlags {
         VkPeerMemoryFeatureFlags {

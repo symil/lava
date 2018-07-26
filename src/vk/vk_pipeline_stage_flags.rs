@@ -75,6 +75,9 @@ impl VkWrappedType<RawVkPipelineStageFlags> for VkPipelineStageFlags {
         if src.all_commands { *dst |= 0x00010000; }
         if src.command_process_nvx { *dst |= 0x00020000; }
     }
+}
+
+impl VkDefault for VkPipelineStageFlags {
     
     fn vk_default() -> VkPipelineStageFlags {
         VkPipelineStageFlags {

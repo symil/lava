@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkBufferViewCreateFlags> for VkBufferViewCreateFlags {
     fn vk_to_raw(src: &VkBufferViewCreateFlags, dst: &mut RawVkBufferViewCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkBufferViewCreateFlags {
     
     fn vk_default() -> VkBufferViewCreateFlags {
         VkBufferViewCreateFlags {

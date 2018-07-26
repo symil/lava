@@ -1,6 +1,8 @@
 struct VkNullType;
 static VK_NULL_VALUE : VkNullType = VkNullType {};
 
+pub static STR_NULL : &'static str = "";
+
 pub fn vk_null<T>() -> &'static T {
     unsafe {
         ((&VK_NULL_VALUE as *const VkNullType) as *const T).as_ref().unwrap()

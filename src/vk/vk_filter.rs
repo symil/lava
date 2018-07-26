@@ -26,6 +26,9 @@ impl VkWrappedType<RawVkFilter> for VkFilter {
     fn vk_to_raw(src: &VkFilter, dst: &mut RawVkFilter) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkFilter {
     
     fn vk_default() -> VkFilter {
         VkFilter::Nearest

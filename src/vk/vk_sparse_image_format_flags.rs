@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkSparseImageFormatFlags> for VkSparseImageFormatFlags {
         if src.aligned_mip_size { *dst |= 0x00000002; }
         if src.nonstandard_block_size { *dst |= 0x00000004; }
     }
+}
+
+impl VkDefault for VkSparseImageFormatFlags {
     
     fn vk_default() -> VkSparseImageFormatFlags {
         VkSparseImageFormatFlags {

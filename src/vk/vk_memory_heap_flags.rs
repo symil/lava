@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkMemoryHeapFlags> for VkMemoryHeapFlags {
         if src.device_local { *dst |= 0x00000001; }
         if src.multi_instance { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkMemoryHeapFlags {
     
     fn vk_default() -> VkMemoryHeapFlags {
         VkMemoryHeapFlags {

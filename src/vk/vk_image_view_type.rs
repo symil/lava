@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkImageViewType> for VkImageViewType {
     fn vk_to_raw(src: &VkImageViewType, dst: &mut RawVkImageViewType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkImageViewType {
     
     fn vk_default() -> VkImageViewType {
         VkImageViewType::_1d

@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineShaderStageCreateFlags> for VkPipelineShaderStag
     fn vk_to_raw(src: &VkPipelineShaderStageCreateFlags, dst: &mut RawVkPipelineShaderStageCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineShaderStageCreateFlags {
     
     fn vk_default() -> VkPipelineShaderStageCreateFlags {
         VkPipelineShaderStageCreateFlags {

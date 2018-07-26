@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkSamplerMipmapMode> for VkSamplerMipmapMode {
     fn vk_to_raw(src: &VkSamplerMipmapMode, dst: &mut RawVkSamplerMipmapMode) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkSamplerMipmapMode {
     
     fn vk_default() -> VkSamplerMipmapMode {
         VkSamplerMipmapMode::Nearest

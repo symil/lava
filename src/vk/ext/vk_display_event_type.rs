@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkDisplayEventType> for VkDisplayEventType {
     fn vk_to_raw(src: &VkDisplayEventType, dst: &mut RawVkDisplayEventType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkDisplayEventType {
     
     fn vk_default() -> VkDisplayEventType {
         VkDisplayEventType::FirstPixelOut

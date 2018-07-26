@@ -36,6 +36,9 @@ impl VkWrappedType<RawVkQueueFlags> for VkQueueFlags {
         if src.sparse_binding { *dst |= 0x00000008; }
         if src.protected { *dst |= 0x00000010; }
     }
+}
+
+impl VkDefault for VkQueueFlags {
     
     fn vk_default() -> VkQueueFlags {
         VkQueueFlags {

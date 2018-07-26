@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkStencilFaceFlags> for VkStencilFaceFlags {
         if src.back { *dst |= 0x00000002; }
         if src._and_back { *dst |= 0x00000003; }
     }
+}
+
+impl VkDefault for VkStencilFaceFlags {
     
     fn vk_default() -> VkStencilFaceFlags {
         VkStencilFaceFlags {

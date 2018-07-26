@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkRenderPassCreateFlags> for VkRenderPassCreateFlags {
     fn vk_to_raw(src: &VkRenderPassCreateFlags, dst: &mut RawVkRenderPassCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkRenderPassCreateFlags {
     
     fn vk_default() -> VkRenderPassCreateFlags {
         VkRenderPassCreateFlags {

@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkQueryControlFlags> for VkQueryControlFlags {
         *dst = 0;
         if src.precise { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkQueryControlFlags {
     
     fn vk_default() -> VkQueryControlFlags {
         VkQueryControlFlags {

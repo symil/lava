@@ -28,6 +28,9 @@ impl VkWrappedType<RawVkSamplerAddressMode> for VkSamplerAddressMode {
     fn vk_to_raw(src: &VkSamplerAddressMode, dst: &mut RawVkSamplerAddressMode) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkSamplerAddressMode {
     
     fn vk_default() -> VkSamplerAddressMode {
         VkSamplerAddressMode::Repeat

@@ -48,6 +48,9 @@ impl VkWrappedType<RawVkSubgroupFeatureFlags> for VkSubgroupFeatureFlags {
         if src.quad { *dst |= 0x00000080; }
         if src.partitioned_nv { *dst |= 0x00000100; }
     }
+}
+
+impl VkDefault for VkSubgroupFeatureFlags {
     
     fn vk_default() -> VkSubgroupFeatureFlags {
         VkSubgroupFeatureFlags {

@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkImageViewCreateFlags> for VkImageViewCreateFlags {
     fn vk_to_raw(src: &VkImageViewCreateFlags, dst: &mut RawVkImageViewCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkImageViewCreateFlags {
     
     fn vk_default() -> VkImageViewCreateFlags {
         VkImageViewCreateFlags {

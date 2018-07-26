@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkCommandBufferUsageFlags> for VkCommandBufferUsageFlags {
         if src.render_pass_continue { *dst |= 0x00000002; }
         if src.simultaneous_use { *dst |= 0x00000004; }
     }
+}
+
+impl VkDefault for VkCommandBufferUsageFlags {
     
     fn vk_default() -> VkCommandBufferUsageFlags {
         VkCommandBufferUsageFlags {

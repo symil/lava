@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkDeviceEventType> for VkDeviceEventType {
     fn vk_to_raw(src: &VkDeviceEventType, dst: &mut RawVkDeviceEventType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkDeviceEventType {
     
     fn vk_default() -> VkDeviceEventType {
         VkDeviceEventType::DisplayHotplug

@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkIndirectCommandsLayoutUsageFlags> for VkIndirectCommands
         if src.empty_executions { *dst |= 0x00000004; }
         if src.indexed_sequences { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkIndirectCommandsLayoutUsageFlags {
     
     fn vk_default() -> VkIndirectCommandsLayoutUsageFlags {
         VkIndirectCommandsLayoutUsageFlags {

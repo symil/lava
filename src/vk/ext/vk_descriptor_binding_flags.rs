@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkDescriptorBindingFlags> for VkDescriptorBindingFlags {
         if src.partially_bound { *dst |= 0x00000004; }
         if src.variable_descriptor_count { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkDescriptorBindingFlags {
     
     fn vk_default() -> VkDescriptorBindingFlags {
         VkDescriptorBindingFlags {

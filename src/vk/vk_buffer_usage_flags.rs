@@ -48,6 +48,9 @@ impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
         if src.vertex_buffer { *dst |= 0x00000080; }
         if src.indirect_buffer { *dst |= 0x00000100; }
     }
+}
+
+impl VkDefault for VkBufferUsageFlags {
     
     fn vk_default() -> VkBufferUsageFlags {
         VkBufferUsageFlags {

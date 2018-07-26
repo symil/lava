@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkValidationCheck> for VkValidationCheck {
     fn vk_to_raw(src: &VkValidationCheck, dst: &mut RawVkValidationCheck) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkValidationCheck {
     
     fn vk_default() -> VkValidationCheck {
         VkValidationCheck::All

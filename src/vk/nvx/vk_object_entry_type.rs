@@ -28,6 +28,9 @@ impl VkWrappedType<RawVkObjectEntryType> for VkObjectEntryType {
     fn vk_to_raw(src: &VkObjectEntryType, dst: &mut RawVkObjectEntryType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkObjectEntryType {
     
     fn vk_default() -> VkObjectEntryType {
         VkObjectEntryType::DescriptorSet

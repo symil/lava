@@ -35,7 +35,8 @@ function generateVkBitFlagsDefinition(cDef) {
         genRawType(cDef),
         genWrappedType(cDef),
         genImplVkRawType(cDef),
-        genImplVkWrappedType(cDef)
+        genImplVkWrappedType(cDef),
+        genImplVkDefault(cDef)
     ];
 }
 
@@ -60,7 +61,7 @@ function genWrappedType(def) {
 function genImplVkRawType(def) {
     return [
         `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
-            `\nfn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
+            `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName,
                 def.fields.map(field => `${field.rustName}: (src & ${field.value}) != 0,`)
             ]
@@ -71,12 +72,18 @@ function genImplVkRawType(def) {
 function genImplVkWrappedType(def) {
     return [
         `impl VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}`, [
-            `\nfn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
+            `fn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
                 `*dst = 0;`,
                 ...def.fields.map(field => `if src.${field.rustName} { *dst |= ${field.value}; }`),
-            ],
+            ]
+        ]
+    ];
+}
 
-            `\nfn vk_default() -> ${def.wrappedTypeName}`, [
+function genImplVkDefault(def) {
+    return [
+        `impl VkDefault for ${def.wrappedTypeName}`, [
+            `fn vk_default() -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName,
                 def.fields.map(field => `${field.rustName}: false,`)
             ]

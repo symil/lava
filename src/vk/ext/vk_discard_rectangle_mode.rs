@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkDiscardRectangleMode> for VkDiscardRectangleMode {
     fn vk_to_raw(src: &VkDiscardRectangleMode, dst: &mut RawVkDiscardRectangleMode) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkDiscardRectangleMode {
     
     fn vk_default() -> VkDiscardRectangleMode {
         VkDiscardRectangleMode::Inclusive

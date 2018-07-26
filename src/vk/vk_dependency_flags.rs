@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkDependencyFlags> for VkDependencyFlags {
         if src.device_group { *dst |= 0x00000004; }
         if src.view_local { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkDependencyFlags {
     
     fn vk_default() -> VkDependencyFlags {
         VkDependencyFlags {

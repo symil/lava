@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkDebugUtilsMessengerCreateFlags> for VkDebugUtilsMessenge
     fn vk_to_raw(src: &VkDebugUtilsMessengerCreateFlags, dst: &mut RawVkDebugUtilsMessengerCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkDebugUtilsMessengerCreateFlags {
     
     fn vk_default() -> VkDebugUtilsMessengerCreateFlags {
         VkDebugUtilsMessengerCreateFlags {

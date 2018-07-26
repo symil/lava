@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkDisplayModeCreateFlags> for VkDisplayModeCreateFlags {
     fn vk_to_raw(src: &VkDisplayModeCreateFlags, dst: &mut RawVkDisplayModeCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkDisplayModeCreateFlags {
     
     fn vk_default() -> VkDisplayModeCreateFlags {
         VkDisplayModeCreateFlags {

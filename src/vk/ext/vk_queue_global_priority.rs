@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkQueueGlobalPriority> for VkQueueGlobalPriority {
     fn vk_to_raw(src: &VkQueueGlobalPriority, dst: &mut RawVkQueueGlobalPriority) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkQueueGlobalPriority {
     
     fn vk_default() -> VkQueueGlobalPriority {
         VkQueueGlobalPriority::Low

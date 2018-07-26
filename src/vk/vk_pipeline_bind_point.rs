@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkPipelineBindPoint> for VkPipelineBindPoint {
     fn vk_to_raw(src: &VkPipelineBindPoint, dst: &mut RawVkPipelineBindPoint) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkPipelineBindPoint {
     
     fn vk_default() -> VkPipelineBindPoint {
         VkPipelineBindPoint::Graphics

@@ -74,6 +74,9 @@ impl VkWrappedType<RawVkBlendOp> for VkBlendOp {
     fn vk_to_raw(src: &VkBlendOp, dst: &mut RawVkBlendOp) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkBlendOp {
     
     fn vk_default() -> VkBlendOp {
         VkBlendOp::Add

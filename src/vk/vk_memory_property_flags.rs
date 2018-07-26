@@ -39,6 +39,9 @@ impl VkWrappedType<RawVkMemoryPropertyFlags> for VkMemoryPropertyFlags {
         if src.lazily_allocated { *dst |= 0x00000010; }
         if src.protected { *dst |= 0x00000020; }
     }
+}
+
+impl VkDefault for VkMemoryPropertyFlags {
     
     fn vk_default() -> VkMemoryPropertyFlags {
         VkMemoryPropertyFlags {

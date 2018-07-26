@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkDescriptorPoolCreateFlags> for VkDescriptorPoolCreateFla
         if src.free_descriptor_set { *dst |= 0x00000001; }
         if src.update_after_bind_ext { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkDescriptorPoolCreateFlags {
     
     fn vk_default() -> VkDescriptorPoolCreateFlags {
         VkDescriptorPoolCreateFlags {

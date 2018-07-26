@@ -42,6 +42,9 @@ impl VkWrappedType<RawVkShaderStageFlags> for VkShaderStageFlags {
         if src.compute { *dst |= 0x00000020; }
         if src.all_graphics { *dst |= 0x0000001F; }
     }
+}
+
+impl VkDefault for VkShaderStageFlags {
     
     fn vk_default() -> VkShaderStageFlags {
         VkShaderStageFlags {

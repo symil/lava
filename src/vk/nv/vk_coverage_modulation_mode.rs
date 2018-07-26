@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkCoverageModulationMode> for VkCoverageModulationMode {
     fn vk_to_raw(src: &VkCoverageModulationMode, dst: &mut RawVkCoverageModulationMode) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkCoverageModulationMode {
     
     fn vk_default() -> VkCoverageModulationMode {
         VkCoverageModulationMode::None

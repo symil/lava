@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkRasterizationOrder> for VkRasterizationOrder {
     fn vk_to_raw(src: &VkRasterizationOrder, dst: &mut RawVkRasterizationOrder) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkRasterizationOrder {
     
     fn vk_default() -> VkRasterizationOrder {
         VkRasterizationOrder::Strict

@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkFrontFace> for VkFrontFace {
     fn vk_to_raw(src: &VkFrontFace, dst: &mut RawVkFrontFace) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkFrontFace {
     
     fn vk_default() -> VkFrontFace {
         VkFrontFace::CounterClockwise

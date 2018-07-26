@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkFenceImportFlags> for VkFenceImportFlags {
         *dst = 0;
         if src.temporary { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkFenceImportFlags {
     
     fn vk_default() -> VkFenceImportFlags {
         VkFenceImportFlags {

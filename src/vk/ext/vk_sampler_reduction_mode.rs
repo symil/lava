@@ -26,6 +26,9 @@ impl VkWrappedType<RawVkSamplerReductionMode> for VkSamplerReductionMode {
     fn vk_to_raw(src: &VkSamplerReductionMode, dst: &mut RawVkSamplerReductionMode) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkSamplerReductionMode {
     
     fn vk_default() -> VkSamplerReductionMode {
         VkSamplerReductionMode::WeightedAverage

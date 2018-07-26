@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkSwapchainCreateFlags> for VkSwapchainCreateFlags {
         if src.split_instance_bind_regions { *dst |= 0x00000001; }
         if src.protected { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkSwapchainCreateFlags {
     
     fn vk_default() -> VkSwapchainCreateFlags {
         VkSwapchainCreateFlags {

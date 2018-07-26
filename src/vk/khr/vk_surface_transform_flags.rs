@@ -48,6 +48,9 @@ impl VkWrappedType<RawVkSurfaceTransformFlags> for VkSurfaceTransformFlags {
         if src.horizontal_mirror_rotate_270 { *dst |= 0x00000080; }
         if src.inherit { *dst |= 0x00000100; }
     }
+}
+
+impl VkDefault for VkSurfaceTransformFlags {
     
     fn vk_default() -> VkSurfaceTransformFlags {
         VkSurfaceTransformFlags {

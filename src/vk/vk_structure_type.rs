@@ -260,6 +260,9 @@ impl VkWrappedType<RawVkStructureType> for VkStructureType {
     fn vk_to_raw(src: &VkStructureType, dst: &mut RawVkStructureType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkStructureType {
     
     fn vk_default() -> VkStructureType {
         VkStructureType::ApplicationInfo

@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkCommandPoolTrimFlags> for VkCommandPoolTrimFlags {
     fn vk_to_raw(src: &VkCommandPoolTrimFlags, dst: &mut RawVkCommandPoolTrimFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkCommandPoolTrimFlags {
     
     fn vk_default() -> VkCommandPoolTrimFlags {
         VkCommandPoolTrimFlags {

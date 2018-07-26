@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkCommandBufferResetFlags> for VkCommandBufferResetFlags {
         *dst = 0;
         if src.release_resources { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkCommandBufferResetFlags {
     
     fn vk_default() -> VkCommandBufferResetFlags {
         VkCommandBufferResetFlags {

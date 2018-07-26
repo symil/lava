@@ -42,6 +42,9 @@ impl VkWrappedType<RawVkBlendFactor> for VkBlendFactor {
     fn vk_to_raw(src: &VkBlendFactor, dst: &mut RawVkBlendFactor) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkBlendFactor {
     
     fn vk_default() -> VkBlendFactor {
         VkBlendFactor::Zero

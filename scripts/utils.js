@@ -227,8 +227,8 @@ function getFieldInformation(field, prevField, nextField) {
         rawType = `VkPtr<c_char>`;
         wrappedType = `T : Deref<Target=str>`;
         toRaw = `VkPtr::new_string(&${varName})`;
-        toWrapped = `new_string(${varName})`; // Should never be used
-        defValue = `vk_null()`;
+        toWrapped = `new_string(${varName}.as_ptr())`; // Should never be used
+        defValue = `vk_null::<String>()`;
     } else if (field.fullType === 'char' && field.arraySize) {
         rawType = `[c_char; ${arraySize}]`;
         wrappedType = `T : Deref<Target=str>`;
@@ -272,7 +272,7 @@ function getFieldInformation(field, prevField, nextField) {
             rawType = `VkPtr<${rawTypeName}>`;
             wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
             toRaw = `VkPtr::new_vk_value(&${varName})`;
-            toWrapped = `${wrappedTypeName}::vk_from_raw(${varName}.as_ref().unwrap())`; // Pointer should never be null; if that happens, we should use an `Option`
+            toWrapped = `${rawTypeName}::vk_to_wrapped(${varName}.as_ref().unwrap())`; // Pointer should never be null; if that happens, we should use an `Option`
             defValue = `vk_null()`;
         } else if (isStaticArray) {
             rawType = `[${rawTypeName}; ${arraySize}]`;
@@ -284,13 +284,13 @@ function getFieldInformation(field, prevField, nextField) {
             rawType = rawTypeName;
             wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
             toRaw = `vk_to_raw_value(&${varName})`;
-            toWrapped = `${wrappedTypeName}::vk_from_raw(&${varName})`;
+            toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
             defValue = `vk_null()`;
         } else {
             rawType = rawTypeName;
             wrappedType = wrappedTypeName;
             toRaw = `vk_to_raw_value(&${varName})`;
-            toWrapped = `${wrappedTypeName}::vk_from_raw(&${varName})`;
+            toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
             defValue = `${wrappedTypeName}::vk_default()`;
         }
     }

@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkValidationCacheCreateFlags> for VkValidationCacheCreateF
     fn vk_to_raw(src: &VkValidationCacheCreateFlags, dst: &mut RawVkValidationCacheCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkValidationCacheCreateFlags {
     
     fn vk_default() -> VkValidationCacheCreateFlags {
         VkValidationCacheCreateFlags {

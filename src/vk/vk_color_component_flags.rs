@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkColorComponentFlags> for VkColorComponentFlags {
         if src.b { *dst |= 0x00000004; }
         if src.a { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkColorComponentFlags {
     
     fn vk_default() -> VkColorComponentFlags {
         VkColorComponentFlags {

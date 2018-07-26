@@ -31,6 +31,9 @@ impl VkWrappedType<RawVkViewportCoordinateSwizzle> for VkViewportCoordinateSwizz
     fn vk_to_raw(src: &VkViewportCoordinateSwizzle, dst: &mut RawVkViewportCoordinateSwizzle) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkViewportCoordinateSwizzle {
     
     fn vk_default() -> VkViewportCoordinateSwizzle {
         VkViewportCoordinateSwizzle::PositiveX

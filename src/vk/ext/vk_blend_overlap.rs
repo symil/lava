@@ -26,6 +26,9 @@ impl VkWrappedType<RawVkBlendOverlap> for VkBlendOverlap {
     fn vk_to_raw(src: &VkBlendOverlap, dst: &mut RawVkBlendOverlap) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkBlendOverlap {
     
     fn vk_default() -> VkBlendOverlap {
         VkBlendOverlap::Uncorrelated

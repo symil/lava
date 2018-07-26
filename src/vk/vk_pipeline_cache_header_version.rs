@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkPipelineCacheHeaderVersion> for VkPipelineCacheHeaderVer
     fn vk_to_raw(src: &VkPipelineCacheHeaderVersion, dst: &mut RawVkPipelineCacheHeaderVersion) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkPipelineCacheHeaderVersion {
     
     fn vk_default() -> VkPipelineCacheHeaderVersion {
         VkPipelineCacheHeaderVersion::One

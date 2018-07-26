@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkIndexType> for VkIndexType {
     fn vk_to_raw(src: &VkIndexType, dst: &mut RawVkIndexType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkIndexType {
     
     fn vk_default() -> VkIndexType {
         VkIndexType::Uint16

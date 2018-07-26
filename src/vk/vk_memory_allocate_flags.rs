@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkMemoryAllocateFlags> for VkMemoryAllocateFlags {
         *dst = 0;
         if src.device_mask { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkMemoryAllocateFlags {
     
     fn vk_default() -> VkMemoryAllocateFlags {
         VkMemoryAllocateFlags {

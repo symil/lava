@@ -21,9 +21,9 @@ main();
 
 function main() {
     const vkTypes = [
-        ...generateEnums(),
-        ...generateBitFlags(),
-        // ...generateStructs()
+        // ...generateEnums(),
+        // ...generateBitFlags(),
+        ...generateStructs()
     ];
 
     writeVkTypes(vkTypes);
@@ -95,8 +95,8 @@ function writeModFile(dirPath) {
 }
 
 function generateVkTypes(parseFunction, generateFunction) {
-    const cTypes = parseFunction();
-    // const cTypes = parseFunction().slice(0, 1);
+    // const cTypes = parseFunction();
+    const cTypes = parseFunction().slice(0, 2);
 
     return cTypes.map(cDef => {
         const rustDefinition = generateFunction(cDef);

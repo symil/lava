@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkChromaLocation> for VkChromaLocation {
     fn vk_to_raw(src: &VkChromaLocation, dst: &mut RawVkChromaLocation) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkChromaLocation {
     
     fn vk_default() -> VkChromaLocation {
         VkChromaLocation::CositedEven

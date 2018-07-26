@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkDebugUtilsMessageSeverityFlags> for VkDebugUtilsMessageS
         if src.warning { *dst |= 0x00000100; }
         if src.error { *dst |= 0x00001000; }
     }
+}
+
+impl VkDefault for VkDebugUtilsMessageSeverityFlags {
     
     fn vk_default() -> VkDebugUtilsMessageSeverityFlags {
         VkDebugUtilsMessageSeverityFlags {

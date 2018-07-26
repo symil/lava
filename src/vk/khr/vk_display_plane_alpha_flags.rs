@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkDisplayPlaneAlphaFlags> for VkDisplayPlaneAlphaFlags {
         if src.per_pixel { *dst |= 0x00000004; }
         if src.per_pixel_premultiplied { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkDisplayPlaneAlphaFlags {
     
     fn vk_default() -> VkDisplayPlaneAlphaFlags {
         VkDisplayPlaneAlphaFlags {

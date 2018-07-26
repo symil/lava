@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkDeviceCreateFlags> for VkDeviceCreateFlags {
     fn vk_to_raw(src: &VkDeviceCreateFlags, dst: &mut RawVkDeviceCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkDeviceCreateFlags {
     
     fn vk_default() -> VkDeviceCreateFlags {
         VkDeviceCreateFlags {

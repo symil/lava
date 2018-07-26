@@ -45,6 +45,9 @@ impl VkWrappedType<RawVkImageUsageFlags> for VkImageUsageFlags {
         if src.transient_attachment { *dst |= 0x00000040; }
         if src.input_attachment { *dst |= 0x00000080; }
     }
+}
+
+impl VkDefault for VkImageUsageFlags {
     
     fn vk_default() -> VkImageUsageFlags {
         VkImageUsageFlags {

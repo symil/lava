@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkDebugUtilsMessengerCallbackDataFlags> for VkDebugUtilsMe
     fn vk_to_raw(src: &VkDebugUtilsMessengerCallbackDataFlags, dst: &mut RawVkDebugUtilsMessengerCallbackDataFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkDebugUtilsMessengerCallbackDataFlags {
     
     fn vk_default() -> VkDebugUtilsMessengerCallbackDataFlags {
         VkDebugUtilsMessengerCallbackDataFlags {

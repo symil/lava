@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineDynamicStateCreateFlags> for VkPipelineDynamicSt
     fn vk_to_raw(src: &VkPipelineDynamicStateCreateFlags, dst: &mut RawVkPipelineDynamicStateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineDynamicStateCreateFlags {
     
     fn vk_default() -> VkPipelineDynamicStateCreateFlags {
         VkPipelineDynamicStateCreateFlags {

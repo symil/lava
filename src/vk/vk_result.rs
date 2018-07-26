@@ -52,6 +52,9 @@ impl VkWrappedType<RawVkResult> for VkResult {
     fn vk_to_raw(src: &VkResult, dst: &mut RawVkResult) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkResult {
     
     fn vk_default() -> VkResult {
         VkResult::Success

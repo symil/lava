@@ -59,6 +59,9 @@ impl VkWrappedType<RawVkDebugReportObjectType> for VkDebugReportObjectType {
     fn vk_to_raw(src: &VkDebugReportObjectType, dst: &mut RawVkDebugReportObjectType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkDebugReportObjectType {
     
     fn vk_default() -> VkDebugReportObjectType {
         VkDebugReportObjectType::Unknown

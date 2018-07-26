@@ -36,6 +36,9 @@ impl VkWrappedType<RawVkImageLayout> for VkImageLayout {
     fn vk_to_raw(src: &VkImageLayout, dst: &mut RawVkImageLayout) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkImageLayout {
     
     fn vk_default() -> VkImageLayout {
         VkImageLayout::Undefined

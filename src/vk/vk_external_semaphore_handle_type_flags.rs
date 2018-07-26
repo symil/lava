@@ -36,6 +36,9 @@ impl VkWrappedType<RawVkExternalSemaphoreHandleTypeFlags> for VkExternalSemaphor
         if src.d3d12_fence { *dst |= 0x00000008; }
         if src.sync_fd { *dst |= 0x00000010; }
     }
+}
+
+impl VkDefault for VkExternalSemaphoreHandleTypeFlags {
     
     fn vk_default() -> VkExternalSemaphoreHandleTypeFlags {
         VkExternalSemaphoreHandleTypeFlags {

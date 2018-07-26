@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineLayoutCreateFlags> for VkPipelineLayoutCreateFla
     fn vk_to_raw(src: &VkPipelineLayoutCreateFlags, dst: &mut RawVkPipelineLayoutCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineLayoutCreateFlags {
     
     fn vk_default() -> VkPipelineLayoutCreateFlags {
         VkPipelineLayoutCreateFlags {

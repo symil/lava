@@ -26,6 +26,9 @@ impl VkWrappedType<RawVkShaderInfoType> for VkShaderInfoType {
     fn vk_to_raw(src: &VkShaderInfoType, dst: &mut RawVkShaderInfoType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkShaderInfoType {
     
     fn vk_default() -> VkShaderInfoType {
         VkShaderInfoType::Statistics

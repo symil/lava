@@ -26,6 +26,9 @@ impl VkWrappedType<RawVkConservativeRasterizationMode> for VkConservativeRasteri
     fn vk_to_raw(src: &VkConservativeRasterizationMode, dst: &mut RawVkConservativeRasterizationMode) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkConservativeRasterizationMode {
     
     fn vk_default() -> VkConservativeRasterizationMode {
         VkConservativeRasterizationMode::Disabled

@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkCommandBufferLevel> for VkCommandBufferLevel {
     fn vk_to_raw(src: &VkCommandBufferLevel, dst: &mut RawVkCommandBufferLevel) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkCommandBufferLevel {
     
     fn vk_default() -> VkCommandBufferLevel {
         VkCommandBufferLevel::Primary

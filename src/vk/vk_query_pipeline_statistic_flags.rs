@@ -54,6 +54,9 @@ impl VkWrappedType<RawVkQueryPipelineStatisticFlags> for VkQueryPipelineStatisti
         if src.tessellation_evaluation_shader_invocations { *dst |= 0x00000200; }
         if src.compute_shader_invocations { *dst |= 0x00000400; }
     }
+}
+
+impl VkDefault for VkQueryPipelineStatisticFlags {
     
     fn vk_default() -> VkQueryPipelineStatisticFlags {
         VkQueryPipelineStatisticFlags {

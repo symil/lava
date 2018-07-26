@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineCoverageModulationStateCreateFlags> for VkPipeli
     fn vk_to_raw(src: &VkPipelineCoverageModulationStateCreateFlags, dst: &mut RawVkPipelineCoverageModulationStateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineCoverageModulationStateCreateFlags {
     
     fn vk_default() -> VkPipelineCoverageModulationStateCreateFlags {
         VkPipelineCoverageModulationStateCreateFlags {

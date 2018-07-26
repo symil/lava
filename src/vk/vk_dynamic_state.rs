@@ -35,6 +35,9 @@ impl VkWrappedType<RawVkDynamicState> for VkDynamicState {
     fn vk_to_raw(src: &VkDynamicState, dst: &mut RawVkDynamicState) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkDynamicState {
     
     fn vk_default() -> VkDynamicState {
         VkDynamicState::Viewport

@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkCompositeAlphaFlags> for VkCompositeAlphaFlags {
         if src.post_multiplied { *dst |= 0x00000004; }
         if src.inherit { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkCompositeAlphaFlags {
     
     fn vk_default() -> VkCompositeAlphaFlags {
         VkCompositeAlphaFlags {

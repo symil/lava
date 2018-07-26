@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandl
         if src.d3d11_image { *dst |= 0x00000004; }
         if src.d3d11_image_kmt { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkExternalMemoryHandleTypeFlags {
     
     fn vk_default() -> VkExternalMemoryHandleTypeFlags {
         VkExternalMemoryHandleTypeFlags {

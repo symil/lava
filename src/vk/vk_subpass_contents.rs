@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkSubpassContents> for VkSubpassContents {
     fn vk_to_raw(src: &VkSubpassContents, dst: &mut RawVkSubpassContents) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkSubpassContents {
     
     fn vk_default() -> VkSubpassContents {
         VkSubpassContents::Inline

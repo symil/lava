@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineRasterizationConservativeStateCreateFlags> for V
     fn vk_to_raw(src: &VkPipelineRasterizationConservativeStateCreateFlags, dst: &mut RawVkPipelineRasterizationConservativeStateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineRasterizationConservativeStateCreateFlags {
     
     fn vk_default() -> VkPipelineRasterizationConservativeStateCreateFlags {
         VkPipelineRasterizationConservativeStateCreateFlags {

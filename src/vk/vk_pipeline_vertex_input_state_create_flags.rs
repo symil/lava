@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkPipelineVertexInputStateCreateFlags> for VkPipelineVerte
     fn vk_to_raw(src: &VkPipelineVertexInputStateCreateFlags, dst: &mut RawVkPipelineVertexInputStateCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkPipelineVertexInputStateCreateFlags {
     
     fn vk_default() -> VkPipelineVertexInputStateCreateFlags {
         VkPipelineVertexInputStateCreateFlags {

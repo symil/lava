@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkDeviceQueueCreateFlags> for VkDeviceQueueCreateFlags {
         *dst = 0;
         if src.protected { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkDeviceQueueCreateFlags {
     
     fn vk_default() -> VkDeviceQueueCreateFlags {
         VkDeviceQueueCreateFlags {

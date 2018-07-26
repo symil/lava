@@ -222,6 +222,9 @@ impl VkWrappedType<RawVkFormat> for VkFormat {
     fn vk_to_raw(src: &VkFormat, dst: &mut RawVkFormat) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkFormat {
     
     fn vk_default() -> VkFormat {
         VkFormat::Undefined

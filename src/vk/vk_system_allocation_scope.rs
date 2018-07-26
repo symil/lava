@@ -28,6 +28,9 @@ impl VkWrappedType<RawVkSystemAllocationScope> for VkSystemAllocationScope {
     fn vk_to_raw(src: &VkSystemAllocationScope, dst: &mut RawVkSystemAllocationScope) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkSystemAllocationScope {
     
     fn vk_default() -> VkSystemAllocationScope {
         VkSystemAllocationScope::Command

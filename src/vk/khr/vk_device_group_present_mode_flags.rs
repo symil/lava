@@ -33,6 +33,9 @@ impl VkWrappedType<RawVkDeviceGroupPresentModeFlags> for VkDeviceGroupPresentMod
         if src.sum { *dst |= 0x00000004; }
         if src.local_multi_device { *dst |= 0x00000008; }
     }
+}
+
+impl VkDefault for VkDeviceGroupPresentModeFlags {
     
     fn vk_default() -> VkDeviceGroupPresentModeFlags {
         VkDeviceGroupPresentModeFlags {

@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkCommandPoolResetFlags> for VkCommandPoolResetFlags {
         *dst = 0;
         if src.release_resources { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkCommandPoolResetFlags {
     
     fn vk_default() -> VkCommandPoolResetFlags {
         VkCommandPoolResetFlags {

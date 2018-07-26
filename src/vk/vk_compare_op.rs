@@ -31,6 +31,9 @@ impl VkWrappedType<RawVkCompareOp> for VkCompareOp {
     fn vk_to_raw(src: &VkCompareOp, dst: &mut RawVkCompareOp) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkCompareOp {
     
     fn vk_default() -> VkCompareOp {
         VkCompareOp::Never

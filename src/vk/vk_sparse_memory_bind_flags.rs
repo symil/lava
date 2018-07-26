@@ -24,6 +24,9 @@ impl VkWrappedType<RawVkSparseMemoryBindFlags> for VkSparseMemoryBindFlags {
         *dst = 0;
         if src.metadata { *dst |= 0x00000001; }
     }
+}
+
+impl VkDefault for VkSparseMemoryBindFlags {
     
     fn vk_default() -> VkSparseMemoryBindFlags {
         VkSparseMemoryBindFlags {

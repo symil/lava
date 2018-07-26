@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkDebugUtilsMessageTypeFlags> for VkDebugUtilsMessageTypeF
         if src.validation { *dst |= 0x00000002; }
         if src.performance { *dst |= 0x00000004; }
     }
+}
+
+impl VkDefault for VkDebugUtilsMessageTypeFlags {
     
     fn vk_default() -> VkDebugUtilsMessageTypeFlags {
         VkDebugUtilsMessageTypeFlags {

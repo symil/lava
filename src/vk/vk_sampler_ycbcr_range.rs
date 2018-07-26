@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkSamplerYcbcrRange> for VkSamplerYcbcrRange {
     fn vk_to_raw(src: &VkSamplerYcbcrRange, dst: &mut RawVkSamplerYcbcrRange) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkSamplerYcbcrRange {
     
     fn vk_default() -> VkSamplerYcbcrRange {
         VkSamplerYcbcrRange::ItuFull

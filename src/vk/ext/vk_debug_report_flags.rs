@@ -36,6 +36,9 @@ impl VkWrappedType<RawVkDebugReportFlags> for VkDebugReportFlags {
         if src.error { *dst |= 0x00000008; }
         if src.debug { *dst |= 0x00000010; }
     }
+}
+
+impl VkDefault for VkDebugReportFlags {
     
     fn vk_default() -> VkDebugReportFlags {
         VkDebugReportFlags {

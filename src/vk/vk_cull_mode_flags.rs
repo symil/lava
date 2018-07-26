@@ -30,6 +30,9 @@ impl VkWrappedType<RawVkCullModeFlags> for VkCullModeFlags {
         if src.back { *dst |= 0x00000002; }
         if src.front_and_back { *dst |= 0x00000003; }
     }
+}
+
+impl VkDefault for VkCullModeFlags {
     
     fn vk_default() -> VkCullModeFlags {
         VkCullModeFlags {

@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkQueryPoolCreateFlags> for VkQueryPoolCreateFlags {
     fn vk_to_raw(src: &VkQueryPoolCreateFlags, dst: &mut RawVkQueryPoolCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkQueryPoolCreateFlags {
     
     fn vk_default() -> VkQueryPoolCreateFlags {
         VkQueryPoolCreateFlags {

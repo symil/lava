@@ -31,6 +31,9 @@ impl VkWrappedType<RawVkStencilOp> for VkStencilOp {
     fn vk_to_raw(src: &VkStencilOp, dst: &mut RawVkStencilOp) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkStencilOp {
     
     fn vk_default() -> VkStencilOp {
         VkStencilOp::Keep

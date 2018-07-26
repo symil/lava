@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkSharingMode> for VkSharingMode {
     fn vk_to_raw(src: &VkSharingMode, dst: &mut RawVkSharingMode) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkSharingMode {
     
     fn vk_default() -> VkSharingMode {
         VkSharingMode::Exclusive

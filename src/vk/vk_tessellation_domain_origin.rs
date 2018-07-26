@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkTessellationDomainOrigin> for VkTessellationDomainOrigin
     fn vk_to_raw(src: &VkTessellationDomainOrigin, dst: &mut RawVkTessellationDomainOrigin) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkTessellationDomainOrigin {
     
     fn vk_default() -> VkTessellationDomainOrigin {
         VkTessellationDomainOrigin::UpperLeft

@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkDescriptorUpdateTemplateType> for VkDescriptorUpdateTemp
     fn vk_to_raw(src: &VkDescriptorUpdateTemplateType, dst: &mut RawVkDescriptorUpdateTemplateType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkDescriptorUpdateTemplateType {
     
     fn vk_default() -> VkDescriptorUpdateTemplateType {
         VkDescriptorUpdateTemplateType::DescriptorSet

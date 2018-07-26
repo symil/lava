@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkEventCreateFlags> for VkEventCreateFlags {
     fn vk_to_raw(src: &VkEventCreateFlags, dst: &mut RawVkEventCreateFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkEventCreateFlags {
     
     fn vk_default() -> VkEventCreateFlags {
         VkEventCreateFlags {

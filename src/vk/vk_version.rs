@@ -15,7 +15,9 @@ impl VkWrappedType<u32> for VkVersion {
     fn vk_to_raw(value: &VkVersion, dst: &mut u32) {
         *dst = ((value.0) << 22) | ((value.1) << 12) | (value.2);
     }
+}
 
+impl VkDefault for VkVersion {
     fn vk_default() -> VkVersion {
         VkVersion(0, 0, 0)
     }

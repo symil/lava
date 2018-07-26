@@ -26,6 +26,9 @@ impl VkWrappedType<RawVkAttachmentLoadOp> for VkAttachmentLoadOp {
     fn vk_to_raw(src: &VkAttachmentLoadOp, dst: &mut RawVkAttachmentLoadOp) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkAttachmentLoadOp {
     
     fn vk_default() -> VkAttachmentLoadOp {
         VkAttachmentLoadOp::Load

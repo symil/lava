@@ -27,6 +27,9 @@ impl VkWrappedType<RawVkExternalFenceFeatureFlags> for VkExternalFenceFeatureFla
         if src.exportable { *dst |= 0x00000001; }
         if src.importable { *dst |= 0x00000002; }
     }
+}
+
+impl VkDefault for VkExternalFenceFeatureFlags {
     
     fn vk_default() -> VkExternalFenceFeatureFlags {
         VkExternalFenceFeatureFlags {

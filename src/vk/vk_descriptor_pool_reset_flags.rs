@@ -23,6 +23,9 @@ impl VkWrappedType<RawVkDescriptorPoolResetFlags> for VkDescriptorPoolResetFlags
     fn vk_to_raw(src: &VkDescriptorPoolResetFlags, dst: &mut RawVkDescriptorPoolResetFlags) {
         *dst = 0;
     }
+}
+
+impl VkDefault for VkDescriptorPoolResetFlags {
     
     fn vk_default() -> VkDescriptorPoolResetFlags {
         VkDescriptorPoolResetFlags {

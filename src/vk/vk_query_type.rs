@@ -26,6 +26,9 @@ impl VkWrappedType<RawVkQueryType> for VkQueryType {
     fn vk_to_raw(src: &VkQueryType, dst: &mut RawVkQueryType) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkQueryType {
     
     fn vk_default() -> VkQueryType {
         VkQueryType::Occlusion

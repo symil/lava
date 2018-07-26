@@ -25,6 +25,9 @@ impl VkWrappedType<RawVkVertexInputRate> for VkVertexInputRate {
     fn vk_to_raw(src: &VkVertexInputRate, dst: &mut RawVkVertexInputRate) {
         *dst = *src as i32
     }
+}
+
+impl VkDefault for VkVertexInputRate {
     
     fn vk_default() -> VkVertexInputRate {
         VkVertexInputRate::Vertex

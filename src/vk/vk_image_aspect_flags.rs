@@ -42,6 +42,9 @@ impl VkWrappedType<RawVkImageAspectFlags> for VkImageAspectFlags {
         if src.plane_1 { *dst |= 0x00000020; }
         if src.plane_2 { *dst |= 0x00000040; }
     }
+}
+
+impl VkDefault for VkImageAspectFlags {
     
     fn vk_default() -> VkImageAspectFlags {
         VkImageAspectFlags {
