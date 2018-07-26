@@ -217,7 +217,7 @@ function getFieldInformation(field, prevField, nextField) {
         toRaw = `${nextVarName}.len() as u32`;
     } else if (field.fullType === 'const char* const*') {
         // rawType = `*const *const c_char`;
-        rawType = `VkPtr<c_char>`;
+        rawType = `VkPtr<*mut c_char>`;
         wrappedType = `Vec<String>`;
         toRaw = `VkPtr::new_string_array(&${varName})`;
         toWrapped = `Vec::new()`; // Should never be used

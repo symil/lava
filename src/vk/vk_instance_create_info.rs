@@ -19,9 +19,9 @@ pub struct RawVkInstanceCreateInfo {
     flags: RawVkInstanceCreateFlags,
     application_info: VkPtr<RawVkApplicationInfo>,
     enabled_layer_count: u32,
-    enabled_layer_names: VkPtr<c_char>,
+    enabled_layer_names: VkPtr<*mut c_char>,
     enabled_extension_count: u32,
-    enabled_extension_names: VkPtr<c_char>,
+    enabled_extension_names: VkPtr<*mut c_char>,
 }
 
 pub struct VkInstanceCreateInfo<A>
