@@ -4,9 +4,10 @@ use std::vec::Vec;
 use std::cmp;
 use std::mem;
 use std::os::raw::c_char;
-use utils::vk_type::VkType;
+use utils::vk_type::VkRawType;
+use utils::vk_type::VkWrappedType;
 
-fn vk_to_raw_value<W : VkType<R>, R>(value: &W) -> R {
+pub fn vk_to_raw_value<W : VkWrappedType<R>, R>(value: &W) -> R {
     unsafe {
         let mut dst = mem::uninitialized();
         W::vk_to_raw(value, &mut dst);
@@ -14,7 +15,7 @@ fn vk_to_raw_value<W : VkType<R>, R>(value: &W) -> R {
     }
 }
 
-fn vk_to_raw_array<W : VkType<R>, R>(array: &[W], dst: &mut[R]) {
+pub fn vk_to_raw_array<W : VkWrappedType<R>, R>(array: &[W], dst: &mut[R]) {
     let len = cmp::min(array.len(), dst.len());
 
     for i in 0..len {
@@ -22,7 +23,7 @@ fn vk_to_raw_array<W : VkType<R>, R>(array: &[W], dst: &mut[R]) {
     }
 }
 
-fn to_array<T : Copy>(src: &[T], dst: &mut[T]) {
+pub fn to_array<T : Copy>(src: &[T], dst: &mut[T]) {
     let len = cmp::min(src.len(), dst.len());
 
     for i in 0..len {
@@ -30,7 +31,7 @@ fn to_array<T : Copy>(src: &[T], dst: &mut[T]) {
     }
 }
 
-fn string_to_byte_array(string: &str, dst: &mut[c_char]) {
+pub fn string_to_byte_array(string: &str, dst: &mut[c_char]) {
     let bytes = string.as_bytes();
     let len = cmp::min(bytes.len(), dst.len() - 1);
 
@@ -41,14 +42,14 @@ fn string_to_byte_array(string: &str, dst: &mut[c_char]) {
     dst[len] = 0;
 }
 
-pub fn new_vk_array<W : VkType<R>, R>(length: u32, ptr: *const R) -> Vec<W>
+pub fn new_vk_array<R : VkRawType<W>, W>(length: u32, ptr: *const R) -> Vec<W>
 {
     unsafe {
         let len = length as usize;
         let mut vector : Vec<W> = Vec::with_capacity(len);
 
         for i in 0..len {
-            vector.push(W::vk_from_raw(&*ptr.add(i)));
+            vector.push(R::vk_to_wrapped(&*ptr.add(i)));
         }
 
         vector

@@ -32,14 +32,15 @@ function generateVkEnumDefinition(cDef) {
         genUses(),
         genRawType(cDef),
         genWrappedType(cDef),
-        genImplVkType(cDef)
+        genImplVkRawType(cDef),
+        genImplVkWrappedType(cDef)
     ];
 }
 
 
 function genUses() {
     return [
-        `utils::vk_type::VkType`
+        `utils::vk_type::*`
     ].map(str => `use ${str};`);
 }
 
@@ -56,17 +57,23 @@ function genWrappedType(def) {
     ];
 }
 
-function genImplVkType(def) {
+function genImplVkRawType(def) {
     return [
-        `impl VkType<${def.rawTypeName}> for ${def.wrappedTypeName}`, [
-            `\nfn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
-                `*dst = *src as i32`
-            ],
-
-            `\nfn vk_from_raw(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
+        `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
+            `\nfn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                 `unsafe`, [
                     `*((src as *const i32) as *const ${def.wrappedTypeName})`
                 ]
+            ],
+        ]
+    ];
+}
+
+function genImplVkWrappedType(def) {
+    return [
+        `impl VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}`, [
+            `\nfn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
+                `*dst = *src as i32`
             ],
 
             `\nfn vk_default() -> ${def.wrappedTypeName}`, [

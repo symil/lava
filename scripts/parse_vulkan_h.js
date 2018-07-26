@@ -100,36 +100,6 @@ function parseEnums() {
     }).filter(x => x);
 }
 
-function _parseBitFlags(typeName) {
-    const bitsFlagTypeName = typeName.replace('Flags', 'FlagBits');
-    const match = VULKAN_H.match(new RegExp(`typedef enum ${bitsFlagTypeName}${SUFFIX}\\s+{\n([^}]+)\n}`, 'mi'));
-
-    if (!match) {
-        return typeName.includes('Flags') ? [] : null;
-    }
-
-    const fields = [];
-
-    match[1].split('\n').map(line => {
-        const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(0x[\dA-F]{8})|([A-Z_]+),?\s*$/);
-
-        if (!match) {
-            throw new Error(`for enum ${typeName}: unexpected field "${line}"`);
-        }
-
-        const value =  match[2] || match[3];
-
-        if (value !== '0x7FFFFFFF' && value.startsWith('0x')) {
-            fields.push({
-                name: removeSuffix(match[1]),
-                value: value
-            })
-        }
-    });
-
-    return fields;
-}
-
 function parseBitFlags() {
     const defined = {};
     const flagBitsRegexp = /typedef enum \w+FlagBits[A-Z]* {\n([^}]+)\n}/gmi;
@@ -179,7 +149,7 @@ function parseHandle(typeName) {
 }
 
 function isHandle(typeName) {
-    return new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}${SUFFIX}\\)`, 'mi').test(VULKAN_H);
+    return new RegExp(`\n(?:VK_DEFINE_HANDLE|VK_DEFINE_NON_DISPATCHABLE_HANDLE)\\(${typeName}(${EXTENSIONS.join('|')})?\\)`, 'mi').test(VULKAN_H);
 }
 
 function parseConstant(name) {

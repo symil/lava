@@ -216,13 +216,15 @@ function getFieldInformation(field, prevField, nextField) {
         rawType = `u32`;
         toRaw = `${nextVarName}.len() as u32`;
     } else if (field.fullType === 'const char* const*') {
-        rawType = `*const *const c_char`;
+        // rawType = `*const *const c_char`;
+        rawType = `VkPtr<c_char>`;
         wrappedType = `Vec<String>`;
         toRaw = `VkPtr::new_string_array(&${varName})`;
         toWrapped = `Vec::new()`; // Should never be used
         defValue = `Vec::new()`;
     } else if (field.fullType === 'const char*') {
-        rawType = `*const c_char`;
+        // rawType = `*const c_char`;
+        rawType = `VkPtr<c_char>`;
         wrappedType = `T : Deref<Target=str>`;
         toRaw = `VkPtr::new_string(&${varName})`;
         toWrapped = `new_string(${varName})`; // Should never be used
@@ -296,6 +298,8 @@ function getFieldInformation(field, prevField, nextField) {
     return {
         rawType: rawType,
         wrappedType: wrappedType,
+        rawTypeName: rawTypeName,
+        wrappedTypeName, wrappedTypeName,
         toRaw: stringToFunction(toRaw, varName, prevVarName, nextVarName),
         toWrapped: stringToFunction(toWrapped, varName, prevVarName, nextVarName),
         defaultValue: defValue,

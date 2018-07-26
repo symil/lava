@@ -1,11 +1,12 @@
 use std::os::raw::c_char;
 use std::mem;
 use std::ptr;
-use utils::vk_type::VkType;
 use utils::vk_null::vk_is_null;
+use utils::vk_type::VkRawType;
+use utils::vk_type::VkWrappedType;
 
 #[allow(non_camel_case_types)]
-type c_void = u8;
+pub type c_void = u8;
 
 extern {
     pub fn malloc(size: usize) -> *mut c_void;
@@ -49,7 +50,7 @@ impl<R> VkPtr<R> {
         }
     }
 
-    pub fn new_vk_value<W : VkType<R>>(value: &W) -> Self {
+    pub fn new_vk_value<W : VkWrappedType<R>>(value: &W) -> Self {
         unsafe {
             if vk_is_null(value) {
                 return Self {
@@ -67,7 +68,7 @@ impl<R> VkPtr<R> {
         }
     }
 
-    pub fn new_vk_value_array<W : VkType<R>>(array: &[W]) -> Self {
+    pub fn new_vk_value_array<W : VkWrappedType<R>>(array: &[W]) -> Self {
         unsafe {
             let byte_len = array.len() * mem::size_of::<W>();
             let ptr = malloc(byte_len) as *mut R;
