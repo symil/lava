@@ -76,6 +76,18 @@ function getFullWrappedType(arg) {
     }
 }
 
+function findEnumPrefix(typeName) {
+    if (typeName === 'VkResult') {
+        return 'VK_';
+    }
+
+    return typeName
+        .replace(/[A-Z]+$/, '')
+        .replace(/[A-Z]+/g, `_$&`)
+        .toUpperCase()
+        .substring(1);
+}
+
 function blockToString(block) {
     if (typeof block === 'string') {
         return block;
@@ -316,5 +328,6 @@ module.exports = {
     isPlural,
     cToRustVarName,
     argToString,
-    getFieldInformation
+    getFieldInformation,
+    findEnumPrefix
 };

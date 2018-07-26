@@ -2,6 +2,7 @@ const {
     toPascalCase,
     getRawVkTypeName,
     getWrappedVkTypeName,
+    findEnumPrefix,
     getFullWrappedType,
     getFullRawType,
     blockToString,
@@ -35,10 +36,6 @@ function generateVkEnumDefinition(cDef) {
     ];
 }
 
-function formatEnumFieldName(name) {
-    return toPascalCase(name)
-        .replace(/^(\d)/, '_$1');
-}
 
 function genUses() {
     return [
@@ -59,18 +56,6 @@ function genWrappedType(def) {
     ];
 }
 
-function findEnumPrefix(typeName) {
-    if (typeName === 'VkResult') {
-        return 'VK_';
-    }
-
-    return typeName
-        .replace(/[A-Z]+$/, '')
-        .replace(/[A-Z]+/g, `_$&`)
-        .toUpperCase()
-        .substring(1);
-}
-
 function genImplVkType(def) {
     return [
         `impl VkType<${def.rawTypeName}> for ${def.wrappedTypeName}`, [
@@ -89,6 +74,11 @@ function genImplVkType(def) {
             ]
         ]
     ];
+}
+
+function formatEnumFieldName(name) {
+    return toPascalCase(name)
+        .replace(/^(\d)/, '_$1');
 }
 
 module.exports = {

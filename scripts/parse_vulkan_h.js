@@ -131,7 +131,45 @@ function _parseBitFlags(typeName) {
 }
 
 function parseBitFlags() {
-    const regexp = /typedef enum \w+BitFlags[A-Z]* {\n([^}]+)\n}/gmi;
+    const defined = {};
+    const flagBitsRegexp = /typedef enum \w+FlagBits[A-Z]* {\n([^}]+)\n}/gmi;
+    const match = VULKAN_H.match(flagBitsRegexp);
+
+    match.forEach(str => {
+        const name = str.split(' ', 3)[2];
+        const fieldsStr = str.substring(str.indexOf('{') + 2, str.indexOf('}') - 1);
+
+        const fields = fieldsStr.split('\n').map(line => {
+            const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(0x[\dA-F]{8})|([A-Z_]+)|(0),?\s*$/);
+
+            if (!match) {
+                throw new Error(`for enum ${name}: unexpected field "${line}"`);
+            }
+
+            return {
+                name: match[1],
+                value: match[2] || match[3] || match[4]
+            };
+        }).filter(({value}) => value !== '0x7FFFFFFF' && value.startsWith('0x'));
+
+        defined[name] = fields;
+    });
+
+    const flagsRegexp = /typedef VkFlags \w+;/g
+    const match2 = VULKAN_H.match(flagsRegexp);
+
+    return match2.map(str => {
+        const fullName = str.substring(str.lastIndexOf(' ') + 1, str.indexOf(';'));
+        const flagBitsName = fullName.replace('Flags', 'FlagBits');
+        const nameInfo = parseName(fullName);
+        const fields = defined[flagBitsName] || [];
+
+        return {
+            name: nameInfo.basename,
+            extension: nameInfo.extension,
+            fields: fields
+        };
+    });
 }
 
 function parseHandle(typeName) {
