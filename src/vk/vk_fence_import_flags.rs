@@ -10,7 +10,6 @@ pub struct VkFenceImportFlags {
 }
 
 impl VkRawType<VkFenceImportFlags> for RawVkFenceImportFlags {
-    
     fn vk_to_wrapped(src: &RawVkFenceImportFlags) -> VkFenceImportFlags {
         VkFenceImportFlags {
             temporary: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkFenceImportFlags> for RawVkFenceImportFlags {
 }
 
 impl VkWrappedType<RawVkFenceImportFlags> for VkFenceImportFlags {
-    
     fn vk_to_raw(src: &VkFenceImportFlags, dst: &mut RawVkFenceImportFlags) {
         *dst = 0;
         if src.temporary { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkFenceImportFlags> for VkFenceImportFlags {
 }
 
 impl VkDefault for VkFenceImportFlags {
-    
     fn vk_default() -> VkFenceImportFlags {
         VkFenceImportFlags {
             temporary: false,

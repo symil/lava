@@ -11,7 +11,6 @@ pub enum VkInternalAllocationType {
 }
 
 impl VkRawType<VkInternalAllocationType> for RawVkInternalAllocationType {
-    
     fn vk_to_wrapped(src: &RawVkInternalAllocationType) -> VkInternalAllocationType {
         unsafe {
             *((src as *const i32) as *const VkInternalAllocationType)
@@ -20,14 +19,12 @@ impl VkRawType<VkInternalAllocationType> for RawVkInternalAllocationType {
 }
 
 impl VkWrappedType<RawVkInternalAllocationType> for VkInternalAllocationType {
-    
     fn vk_to_raw(src: &VkInternalAllocationType, dst: &mut RawVkInternalAllocationType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkInternalAllocationType {
-    
     fn vk_default() -> VkInternalAllocationType {
         VkInternalAllocationType::Executable
     }

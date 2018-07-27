@@ -46,7 +46,6 @@ pub enum VkDebugReportObjectType {
 }
 
 impl VkRawType<VkDebugReportObjectType> for RawVkDebugReportObjectType {
-    
     fn vk_to_wrapped(src: &RawVkDebugReportObjectType) -> VkDebugReportObjectType {
         unsafe {
             *((src as *const i32) as *const VkDebugReportObjectType)
@@ -55,14 +54,12 @@ impl VkRawType<VkDebugReportObjectType> for RawVkDebugReportObjectType {
 }
 
 impl VkWrappedType<RawVkDebugReportObjectType> for VkDebugReportObjectType {
-    
     fn vk_to_raw(src: &VkDebugReportObjectType, dst: &mut RawVkDebugReportObjectType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkDebugReportObjectType {
-    
     fn vk_default() -> VkDebugReportObjectType {
         VkDebugReportObjectType::Unknown
     }

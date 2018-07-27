@@ -13,7 +13,6 @@ pub struct VkBufferCreateFlags {
 }
 
 impl VkRawType<VkBufferCreateFlags> for RawVkBufferCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkBufferCreateFlags) -> VkBufferCreateFlags {
         VkBufferCreateFlags {
             sparse_binding: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkBufferCreateFlags> for RawVkBufferCreateFlags {
 }
 
 impl VkWrappedType<RawVkBufferCreateFlags> for VkBufferCreateFlags {
-    
     fn vk_to_raw(src: &VkBufferCreateFlags, dst: &mut RawVkBufferCreateFlags) {
         *dst = 0;
         if src.sparse_binding { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkBufferCreateFlags> for VkBufferCreateFlags {
 }
 
 impl VkDefault for VkBufferCreateFlags {
-    
     fn vk_default() -> VkBufferCreateFlags {
         VkBufferCreateFlags {
             sparse_binding: false,

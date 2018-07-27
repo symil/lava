@@ -12,7 +12,6 @@ pub enum VkSubpassContents {
 }
 
 impl VkRawType<VkSubpassContents> for RawVkSubpassContents {
-    
     fn vk_to_wrapped(src: &RawVkSubpassContents) -> VkSubpassContents {
         unsafe {
             *((src as *const i32) as *const VkSubpassContents)
@@ -21,14 +20,12 @@ impl VkRawType<VkSubpassContents> for RawVkSubpassContents {
 }
 
 impl VkWrappedType<RawVkSubpassContents> for VkSubpassContents {
-    
     fn vk_to_raw(src: &VkSubpassContents, dst: &mut RawVkSubpassContents) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkSubpassContents {
-    
     fn vk_default() -> VkSubpassContents {
         VkSubpassContents::Inline
     }

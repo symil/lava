@@ -10,7 +10,6 @@ pub struct VkDebugUtilsMessengerCreateFlags {
 }
 
 impl VkRawType<VkDebugUtilsMessengerCreateFlags> for RawVkDebugUtilsMessengerCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkDebugUtilsMessengerCreateFlags) -> VkDebugUtilsMessengerCreateFlags {
         VkDebugUtilsMessengerCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkDebugUtilsMessengerCreateFlags> for RawVkDebugUtilsMessengerCre
 }
 
 impl VkWrappedType<RawVkDebugUtilsMessengerCreateFlags> for VkDebugUtilsMessengerCreateFlags {
-    
     fn vk_to_raw(src: &VkDebugUtilsMessengerCreateFlags, dst: &mut RawVkDebugUtilsMessengerCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkDebugUtilsMessengerCreateFlags {
-    
     fn vk_default() -> VkDebugUtilsMessengerCreateFlags {
         VkDebugUtilsMessengerCreateFlags {
             

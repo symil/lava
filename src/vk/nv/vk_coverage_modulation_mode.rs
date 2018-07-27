@@ -14,7 +14,6 @@ pub enum VkCoverageModulationMode {
 }
 
 impl VkRawType<VkCoverageModulationMode> for RawVkCoverageModulationMode {
-    
     fn vk_to_wrapped(src: &RawVkCoverageModulationMode) -> VkCoverageModulationMode {
         unsafe {
             *((src as *const i32) as *const VkCoverageModulationMode)
@@ -23,14 +22,12 @@ impl VkRawType<VkCoverageModulationMode> for RawVkCoverageModulationMode {
 }
 
 impl VkWrappedType<RawVkCoverageModulationMode> for VkCoverageModulationMode {
-    
     fn vk_to_raw(src: &VkCoverageModulationMode, dst: &mut RawVkCoverageModulationMode) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkCoverageModulationMode {
-    
     fn vk_default() -> VkCoverageModulationMode {
         VkCoverageModulationMode::None
     }

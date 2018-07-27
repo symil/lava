@@ -14,7 +14,6 @@ pub struct VkDebugReportFlags {
 }
 
 impl VkRawType<VkDebugReportFlags> for RawVkDebugReportFlags {
-    
     fn vk_to_wrapped(src: &RawVkDebugReportFlags) -> VkDebugReportFlags {
         VkDebugReportFlags {
             information: (src & 0x00000001) != 0,
@@ -27,7 +26,6 @@ impl VkRawType<VkDebugReportFlags> for RawVkDebugReportFlags {
 }
 
 impl VkWrappedType<RawVkDebugReportFlags> for VkDebugReportFlags {
-    
     fn vk_to_raw(src: &VkDebugReportFlags, dst: &mut RawVkDebugReportFlags) {
         *dst = 0;
         if src.information { *dst |= 0x00000001; }
@@ -39,7 +37,6 @@ impl VkWrappedType<RawVkDebugReportFlags> for VkDebugReportFlags {
 }
 
 impl VkDefault for VkDebugReportFlags {
-    
     fn vk_default() -> VkDebugReportFlags {
         VkDebugReportFlags {
             information: false,

@@ -21,7 +21,6 @@ pub enum VkDescriptorType {
 }
 
 impl VkRawType<VkDescriptorType> for RawVkDescriptorType {
-    
     fn vk_to_wrapped(src: &RawVkDescriptorType) -> VkDescriptorType {
         unsafe {
             *((src as *const i32) as *const VkDescriptorType)
@@ -30,14 +29,12 @@ impl VkRawType<VkDescriptorType> for RawVkDescriptorType {
 }
 
 impl VkWrappedType<RawVkDescriptorType> for VkDescriptorType {
-    
     fn vk_to_raw(src: &VkDescriptorType, dst: &mut RawVkDescriptorType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkDescriptorType {
-    
     fn vk_default() -> VkDescriptorType {
         VkDescriptorType::Sampler
     }

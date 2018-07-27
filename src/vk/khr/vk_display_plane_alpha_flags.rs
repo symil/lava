@@ -13,7 +13,6 @@ pub struct VkDisplayPlaneAlphaFlags {
 }
 
 impl VkRawType<VkDisplayPlaneAlphaFlags> for RawVkDisplayPlaneAlphaFlags {
-    
     fn vk_to_wrapped(src: &RawVkDisplayPlaneAlphaFlags) -> VkDisplayPlaneAlphaFlags {
         VkDisplayPlaneAlphaFlags {
             opaque: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkDisplayPlaneAlphaFlags> for RawVkDisplayPlaneAlphaFlags {
 }
 
 impl VkWrappedType<RawVkDisplayPlaneAlphaFlags> for VkDisplayPlaneAlphaFlags {
-    
     fn vk_to_raw(src: &VkDisplayPlaneAlphaFlags, dst: &mut RawVkDisplayPlaneAlphaFlags) {
         *dst = 0;
         if src.opaque { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkDisplayPlaneAlphaFlags> for VkDisplayPlaneAlphaFlags {
 }
 
 impl VkDefault for VkDisplayPlaneAlphaFlags {
-    
     fn vk_default() -> VkDisplayPlaneAlphaFlags {
         VkDisplayPlaneAlphaFlags {
             opaque: false,

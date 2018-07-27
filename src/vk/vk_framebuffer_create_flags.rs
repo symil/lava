@@ -10,7 +10,6 @@ pub struct VkFramebufferCreateFlags {
 }
 
 impl VkRawType<VkFramebufferCreateFlags> for RawVkFramebufferCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkFramebufferCreateFlags) -> VkFramebufferCreateFlags {
         VkFramebufferCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkFramebufferCreateFlags> for RawVkFramebufferCreateFlags {
 }
 
 impl VkWrappedType<RawVkFramebufferCreateFlags> for VkFramebufferCreateFlags {
-    
     fn vk_to_raw(src: &VkFramebufferCreateFlags, dst: &mut RawVkFramebufferCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkFramebufferCreateFlags {
-    
     fn vk_default() -> VkFramebufferCreateFlags {
         VkFramebufferCreateFlags {
             

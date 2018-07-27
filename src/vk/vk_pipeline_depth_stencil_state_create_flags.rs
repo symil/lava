@@ -10,7 +10,6 @@ pub struct VkPipelineDepthStencilStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineDepthStencilStateCreateFlags> for RawVkPipelineDepthStencilStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineDepthStencilStateCreateFlags) -> VkPipelineDepthStencilStateCreateFlags {
         VkPipelineDepthStencilStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineDepthStencilStateCreateFlags> for RawVkPipelineDepthSte
 }
 
 impl VkWrappedType<RawVkPipelineDepthStencilStateCreateFlags> for VkPipelineDepthStencilStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineDepthStencilStateCreateFlags, dst: &mut RawVkPipelineDepthStencilStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineDepthStencilStateCreateFlags {
-    
     fn vk_default() -> VkPipelineDepthStencilStateCreateFlags {
         VkPipelineDepthStencilStateCreateFlags {
             

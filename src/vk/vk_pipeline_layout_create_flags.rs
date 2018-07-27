@@ -10,7 +10,6 @@ pub struct VkPipelineLayoutCreateFlags {
 }
 
 impl VkRawType<VkPipelineLayoutCreateFlags> for RawVkPipelineLayoutCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineLayoutCreateFlags) -> VkPipelineLayoutCreateFlags {
         VkPipelineLayoutCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineLayoutCreateFlags> for RawVkPipelineLayoutCreateFlags {
 }
 
 impl VkWrappedType<RawVkPipelineLayoutCreateFlags> for VkPipelineLayoutCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineLayoutCreateFlags, dst: &mut RawVkPipelineLayoutCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineLayoutCreateFlags {
-    
     fn vk_default() -> VkPipelineLayoutCreateFlags {
         VkPipelineLayoutCreateFlags {
             

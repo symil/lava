@@ -20,7 +20,6 @@ pub struct VkQueryPipelineStatisticFlags {
 }
 
 impl VkRawType<VkQueryPipelineStatisticFlags> for RawVkQueryPipelineStatisticFlags {
-    
     fn vk_to_wrapped(src: &RawVkQueryPipelineStatisticFlags) -> VkQueryPipelineStatisticFlags {
         VkQueryPipelineStatisticFlags {
             input_assembly_vertices: (src & 0x00000001) != 0,
@@ -39,7 +38,6 @@ impl VkRawType<VkQueryPipelineStatisticFlags> for RawVkQueryPipelineStatisticFla
 }
 
 impl VkWrappedType<RawVkQueryPipelineStatisticFlags> for VkQueryPipelineStatisticFlags {
-    
     fn vk_to_raw(src: &VkQueryPipelineStatisticFlags, dst: &mut RawVkQueryPipelineStatisticFlags) {
         *dst = 0;
         if src.input_assembly_vertices { *dst |= 0x00000001; }
@@ -57,7 +55,6 @@ impl VkWrappedType<RawVkQueryPipelineStatisticFlags> for VkQueryPipelineStatisti
 }
 
 impl VkDefault for VkQueryPipelineStatisticFlags {
-    
     fn vk_default() -> VkQueryPipelineStatisticFlags {
         VkQueryPipelineStatisticFlags {
             input_assembly_vertices: false,

@@ -11,7 +11,6 @@ pub struct VkExternalFenceFeatureFlags {
 }
 
 impl VkRawType<VkExternalFenceFeatureFlags> for RawVkExternalFenceFeatureFlags {
-    
     fn vk_to_wrapped(src: &RawVkExternalFenceFeatureFlags) -> VkExternalFenceFeatureFlags {
         VkExternalFenceFeatureFlags {
             exportable: (src & 0x00000001) != 0,
@@ -21,7 +20,6 @@ impl VkRawType<VkExternalFenceFeatureFlags> for RawVkExternalFenceFeatureFlags {
 }
 
 impl VkWrappedType<RawVkExternalFenceFeatureFlags> for VkExternalFenceFeatureFlags {
-    
     fn vk_to_raw(src: &VkExternalFenceFeatureFlags, dst: &mut RawVkExternalFenceFeatureFlags) {
         *dst = 0;
         if src.exportable { *dst |= 0x00000001; }
@@ -30,7 +28,6 @@ impl VkWrappedType<RawVkExternalFenceFeatureFlags> for VkExternalFenceFeatureFla
 }
 
 impl VkDefault for VkExternalFenceFeatureFlags {
-    
     fn vk_default() -> VkExternalFenceFeatureFlags {
         VkExternalFenceFeatureFlags {
             exportable: false,

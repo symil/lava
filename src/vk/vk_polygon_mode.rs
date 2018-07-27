@@ -14,7 +14,6 @@ pub enum VkPolygonMode {
 }
 
 impl VkRawType<VkPolygonMode> for RawVkPolygonMode {
-    
     fn vk_to_wrapped(src: &RawVkPolygonMode) -> VkPolygonMode {
         unsafe {
             *((src as *const i32) as *const VkPolygonMode)
@@ -23,14 +22,12 @@ impl VkRawType<VkPolygonMode> for RawVkPolygonMode {
 }
 
 impl VkWrappedType<RawVkPolygonMode> for VkPolygonMode {
-    
     fn vk_to_raw(src: &VkPolygonMode, dst: &mut RawVkPolygonMode) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkPolygonMode {
-    
     fn vk_default() -> VkPolygonMode {
         VkPolygonMode::Fill
     }

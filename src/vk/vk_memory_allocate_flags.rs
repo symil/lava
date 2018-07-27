@@ -10,7 +10,6 @@ pub struct VkMemoryAllocateFlags {
 }
 
 impl VkRawType<VkMemoryAllocateFlags> for RawVkMemoryAllocateFlags {
-    
     fn vk_to_wrapped(src: &RawVkMemoryAllocateFlags) -> VkMemoryAllocateFlags {
         VkMemoryAllocateFlags {
             device_mask: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkMemoryAllocateFlags> for RawVkMemoryAllocateFlags {
 }
 
 impl VkWrappedType<RawVkMemoryAllocateFlags> for VkMemoryAllocateFlags {
-    
     fn vk_to_raw(src: &VkMemoryAllocateFlags, dst: &mut RawVkMemoryAllocateFlags) {
         *dst = 0;
         if src.device_mask { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkMemoryAllocateFlags> for VkMemoryAllocateFlags {
 }
 
 impl VkDefault for VkMemoryAllocateFlags {
-    
     fn vk_default() -> VkMemoryAllocateFlags {
         VkMemoryAllocateFlags {
             device_mask: false,

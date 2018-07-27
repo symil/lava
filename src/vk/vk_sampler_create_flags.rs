@@ -10,7 +10,6 @@ pub struct VkSamplerCreateFlags {
 }
 
 impl VkRawType<VkSamplerCreateFlags> for RawVkSamplerCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkSamplerCreateFlags) -> VkSamplerCreateFlags {
         VkSamplerCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkSamplerCreateFlags> for RawVkSamplerCreateFlags {
 }
 
 impl VkWrappedType<RawVkSamplerCreateFlags> for VkSamplerCreateFlags {
-    
     fn vk_to_raw(src: &VkSamplerCreateFlags, dst: &mut RawVkSamplerCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkSamplerCreateFlags {
-    
     fn vk_default() -> VkSamplerCreateFlags {
         VkSamplerCreateFlags {
             

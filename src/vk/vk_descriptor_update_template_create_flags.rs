@@ -10,7 +10,6 @@ pub struct VkDescriptorUpdateTemplateCreateFlags {
 }
 
 impl VkRawType<VkDescriptorUpdateTemplateCreateFlags> for RawVkDescriptorUpdateTemplateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkDescriptorUpdateTemplateCreateFlags) -> VkDescriptorUpdateTemplateCreateFlags {
         VkDescriptorUpdateTemplateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkDescriptorUpdateTemplateCreateFlags> for RawVkDescriptorUpdateT
 }
 
 impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateFlags> for VkDescriptorUpdateTemplateCreateFlags {
-    
     fn vk_to_raw(src: &VkDescriptorUpdateTemplateCreateFlags, dst: &mut RawVkDescriptorUpdateTemplateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkDescriptorUpdateTemplateCreateFlags {
-    
     fn vk_default() -> VkDescriptorUpdateTemplateCreateFlags {
         VkDescriptorUpdateTemplateCreateFlags {
             

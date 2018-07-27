@@ -11,7 +11,6 @@ pub enum VkValidationCacheHeaderVersion {
 }
 
 impl VkRawType<VkValidationCacheHeaderVersion> for RawVkValidationCacheHeaderVersion {
-    
     fn vk_to_wrapped(src: &RawVkValidationCacheHeaderVersion) -> VkValidationCacheHeaderVersion {
         unsafe {
             *((src as *const i32) as *const VkValidationCacheHeaderVersion)
@@ -20,14 +19,12 @@ impl VkRawType<VkValidationCacheHeaderVersion> for RawVkValidationCacheHeaderVer
 }
 
 impl VkWrappedType<RawVkValidationCacheHeaderVersion> for VkValidationCacheHeaderVersion {
-    
     fn vk_to_raw(src: &VkValidationCacheHeaderVersion, dst: &mut RawVkValidationCacheHeaderVersion) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkValidationCacheHeaderVersion {
-    
     fn vk_default() -> VkValidationCacheHeaderVersion {
         VkValidationCacheHeaderVersion::One
     }

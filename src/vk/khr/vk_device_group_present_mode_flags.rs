@@ -13,7 +13,6 @@ pub struct VkDeviceGroupPresentModeFlags {
 }
 
 impl VkRawType<VkDeviceGroupPresentModeFlags> for RawVkDeviceGroupPresentModeFlags {
-    
     fn vk_to_wrapped(src: &RawVkDeviceGroupPresentModeFlags) -> VkDeviceGroupPresentModeFlags {
         VkDeviceGroupPresentModeFlags {
             local: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkDeviceGroupPresentModeFlags> for RawVkDeviceGroupPresentModeFla
 }
 
 impl VkWrappedType<RawVkDeviceGroupPresentModeFlags> for VkDeviceGroupPresentModeFlags {
-    
     fn vk_to_raw(src: &VkDeviceGroupPresentModeFlags, dst: &mut RawVkDeviceGroupPresentModeFlags) {
         *dst = 0;
         if src.local { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkDeviceGroupPresentModeFlags> for VkDeviceGroupPresentMod
 }
 
 impl VkDefault for VkDeviceGroupPresentModeFlags {
-    
     fn vk_default() -> VkDeviceGroupPresentModeFlags {
         VkDeviceGroupPresentModeFlags {
             local: false,

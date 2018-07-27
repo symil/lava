@@ -12,7 +12,6 @@ pub enum VkIndexType {
 }
 
 impl VkRawType<VkIndexType> for RawVkIndexType {
-    
     fn vk_to_wrapped(src: &RawVkIndexType) -> VkIndexType {
         unsafe {
             *((src as *const i32) as *const VkIndexType)
@@ -21,14 +20,12 @@ impl VkRawType<VkIndexType> for RawVkIndexType {
 }
 
 impl VkWrappedType<RawVkIndexType> for VkIndexType {
-    
     fn vk_to_raw(src: &VkIndexType, dst: &mut RawVkIndexType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkIndexType {
-    
     fn vk_default() -> VkIndexType {
         VkIndexType::Uint16
     }

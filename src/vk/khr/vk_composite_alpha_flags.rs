@@ -13,7 +13,6 @@ pub struct VkCompositeAlphaFlags {
 }
 
 impl VkRawType<VkCompositeAlphaFlags> for RawVkCompositeAlphaFlags {
-    
     fn vk_to_wrapped(src: &RawVkCompositeAlphaFlags) -> VkCompositeAlphaFlags {
         VkCompositeAlphaFlags {
             opaque: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkCompositeAlphaFlags> for RawVkCompositeAlphaFlags {
 }
 
 impl VkWrappedType<RawVkCompositeAlphaFlags> for VkCompositeAlphaFlags {
-    
     fn vk_to_raw(src: &VkCompositeAlphaFlags, dst: &mut RawVkCompositeAlphaFlags) {
         *dst = 0;
         if src.opaque { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkCompositeAlphaFlags> for VkCompositeAlphaFlags {
 }
 
 impl VkDefault for VkCompositeAlphaFlags {
-    
     fn vk_default() -> VkCompositeAlphaFlags {
         VkCompositeAlphaFlags {
             opaque: false,

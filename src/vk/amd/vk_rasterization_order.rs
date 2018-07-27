@@ -12,7 +12,6 @@ pub enum VkRasterizationOrder {
 }
 
 impl VkRawType<VkRasterizationOrder> for RawVkRasterizationOrder {
-    
     fn vk_to_wrapped(src: &RawVkRasterizationOrder) -> VkRasterizationOrder {
         unsafe {
             *((src as *const i32) as *const VkRasterizationOrder)
@@ -21,14 +20,12 @@ impl VkRawType<VkRasterizationOrder> for RawVkRasterizationOrder {
 }
 
 impl VkWrappedType<RawVkRasterizationOrder> for VkRasterizationOrder {
-    
     fn vk_to_raw(src: &VkRasterizationOrder, dst: &mut RawVkRasterizationOrder) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkRasterizationOrder {
-    
     fn vk_default() -> VkRasterizationOrder {
         VkRasterizationOrder::Strict
     }

@@ -17,7 +17,6 @@ pub enum VkComponentSwizzle {
 }
 
 impl VkRawType<VkComponentSwizzle> for RawVkComponentSwizzle {
-    
     fn vk_to_wrapped(src: &RawVkComponentSwizzle) -> VkComponentSwizzle {
         unsafe {
             *((src as *const i32) as *const VkComponentSwizzle)
@@ -26,14 +25,12 @@ impl VkRawType<VkComponentSwizzle> for RawVkComponentSwizzle {
 }
 
 impl VkWrappedType<RawVkComponentSwizzle> for VkComponentSwizzle {
-    
     fn vk_to_raw(src: &VkComponentSwizzle, dst: &mut RawVkComponentSwizzle) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkComponentSwizzle {
-    
     fn vk_default() -> VkComponentSwizzle {
         VkComponentSwizzle::Identity
     }

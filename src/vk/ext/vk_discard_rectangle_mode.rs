@@ -12,7 +12,6 @@ pub enum VkDiscardRectangleMode {
 }
 
 impl VkRawType<VkDiscardRectangleMode> for RawVkDiscardRectangleMode {
-    
     fn vk_to_wrapped(src: &RawVkDiscardRectangleMode) -> VkDiscardRectangleMode {
         unsafe {
             *((src as *const i32) as *const VkDiscardRectangleMode)
@@ -21,14 +20,12 @@ impl VkRawType<VkDiscardRectangleMode> for RawVkDiscardRectangleMode {
 }
 
 impl VkWrappedType<RawVkDiscardRectangleMode> for VkDiscardRectangleMode {
-    
     fn vk_to_raw(src: &VkDiscardRectangleMode, dst: &mut RawVkDiscardRectangleMode) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkDiscardRectangleMode {
-    
     fn vk_default() -> VkDiscardRectangleMode {
         VkDiscardRectangleMode::Inclusive
     }

@@ -13,7 +13,6 @@ pub struct VkExternalFenceHandleTypeFlags {
 }
 
 impl VkRawType<VkExternalFenceHandleTypeFlags> for RawVkExternalFenceHandleTypeFlags {
-    
     fn vk_to_wrapped(src: &RawVkExternalFenceHandleTypeFlags) -> VkExternalFenceHandleTypeFlags {
         VkExternalFenceHandleTypeFlags {
             opaque_fd: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkExternalFenceHandleTypeFlags> for RawVkExternalFenceHandleTypeF
 }
 
 impl VkWrappedType<RawVkExternalFenceHandleTypeFlags> for VkExternalFenceHandleTypeFlags {
-    
     fn vk_to_raw(src: &VkExternalFenceHandleTypeFlags, dst: &mut RawVkExternalFenceHandleTypeFlags) {
         *dst = 0;
         if src.opaque_fd { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkExternalFenceHandleTypeFlags> for VkExternalFenceHandleT
 }
 
 impl VkDefault for VkExternalFenceHandleTypeFlags {
-    
     fn vk_default() -> VkExternalFenceHandleTypeFlags {
         VkExternalFenceHandleTypeFlags {
             opaque_fd: false,

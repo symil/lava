@@ -18,7 +18,6 @@ pub enum VkIndirectCommandsTokenType {
 }
 
 impl VkRawType<VkIndirectCommandsTokenType> for RawVkIndirectCommandsTokenType {
-    
     fn vk_to_wrapped(src: &RawVkIndirectCommandsTokenType) -> VkIndirectCommandsTokenType {
         unsafe {
             *((src as *const i32) as *const VkIndirectCommandsTokenType)
@@ -27,14 +26,12 @@ impl VkRawType<VkIndirectCommandsTokenType> for RawVkIndirectCommandsTokenType {
 }
 
 impl VkWrappedType<RawVkIndirectCommandsTokenType> for VkIndirectCommandsTokenType {
-    
     fn vk_to_raw(src: &VkIndirectCommandsTokenType, dst: &mut RawVkIndirectCommandsTokenType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkIndirectCommandsTokenType {
-    
     fn vk_default() -> VkIndirectCommandsTokenType {
         VkIndirectCommandsTokenType::Pipeline
     }

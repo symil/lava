@@ -12,7 +12,6 @@ pub enum VkSamplerYcbcrRange {
 }
 
 impl VkRawType<VkSamplerYcbcrRange> for RawVkSamplerYcbcrRange {
-    
     fn vk_to_wrapped(src: &RawVkSamplerYcbcrRange) -> VkSamplerYcbcrRange {
         unsafe {
             *((src as *const i32) as *const VkSamplerYcbcrRange)
@@ -21,14 +20,12 @@ impl VkRawType<VkSamplerYcbcrRange> for RawVkSamplerYcbcrRange {
 }
 
 impl VkWrappedType<RawVkSamplerYcbcrRange> for VkSamplerYcbcrRange {
-    
     fn vk_to_raw(src: &VkSamplerYcbcrRange, dst: &mut RawVkSamplerYcbcrRange) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkSamplerYcbcrRange {
-    
     fn vk_default() -> VkSamplerYcbcrRange {
         VkSamplerYcbcrRange::ItuFull
     }

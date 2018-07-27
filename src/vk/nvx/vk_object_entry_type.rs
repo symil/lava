@@ -15,7 +15,6 @@ pub enum VkObjectEntryType {
 }
 
 impl VkRawType<VkObjectEntryType> for RawVkObjectEntryType {
-    
     fn vk_to_wrapped(src: &RawVkObjectEntryType) -> VkObjectEntryType {
         unsafe {
             *((src as *const i32) as *const VkObjectEntryType)
@@ -24,14 +23,12 @@ impl VkRawType<VkObjectEntryType> for RawVkObjectEntryType {
 }
 
 impl VkWrappedType<RawVkObjectEntryType> for VkObjectEntryType {
-    
     fn vk_to_raw(src: &VkObjectEntryType, dst: &mut RawVkObjectEntryType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkObjectEntryType {
-    
     fn vk_default() -> VkObjectEntryType {
         VkObjectEntryType::DescriptorSet
     }

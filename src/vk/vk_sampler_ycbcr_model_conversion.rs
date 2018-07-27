@@ -15,7 +15,6 @@ pub enum VkSamplerYcbcrModelConversion {
 }
 
 impl VkRawType<VkSamplerYcbcrModelConversion> for RawVkSamplerYcbcrModelConversion {
-    
     fn vk_to_wrapped(src: &RawVkSamplerYcbcrModelConversion) -> VkSamplerYcbcrModelConversion {
         unsafe {
             *((src as *const i32) as *const VkSamplerYcbcrModelConversion)
@@ -24,14 +23,12 @@ impl VkRawType<VkSamplerYcbcrModelConversion> for RawVkSamplerYcbcrModelConversi
 }
 
 impl VkWrappedType<RawVkSamplerYcbcrModelConversion> for VkSamplerYcbcrModelConversion {
-    
     fn vk_to_raw(src: &VkSamplerYcbcrModelConversion, dst: &mut RawVkSamplerYcbcrModelConversion) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkSamplerYcbcrModelConversion {
-    
     fn vk_default() -> VkSamplerYcbcrModelConversion {
         VkSamplerYcbcrModelConversion::RgbIdentity
     }

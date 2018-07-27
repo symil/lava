@@ -13,7 +13,6 @@ pub struct VkPeerMemoryFeatureFlags {
 }
 
 impl VkRawType<VkPeerMemoryFeatureFlags> for RawVkPeerMemoryFeatureFlags {
-    
     fn vk_to_wrapped(src: &RawVkPeerMemoryFeatureFlags) -> VkPeerMemoryFeatureFlags {
         VkPeerMemoryFeatureFlags {
             copy_src: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkPeerMemoryFeatureFlags> for RawVkPeerMemoryFeatureFlags {
 }
 
 impl VkWrappedType<RawVkPeerMemoryFeatureFlags> for VkPeerMemoryFeatureFlags {
-    
     fn vk_to_raw(src: &VkPeerMemoryFeatureFlags, dst: &mut RawVkPeerMemoryFeatureFlags) {
         *dst = 0;
         if src.copy_src { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkPeerMemoryFeatureFlags> for VkPeerMemoryFeatureFlags {
 }
 
 impl VkDefault for VkPeerMemoryFeatureFlags {
-    
     fn vk_default() -> VkPeerMemoryFeatureFlags {
         VkPeerMemoryFeatureFlags {
             copy_src: false,

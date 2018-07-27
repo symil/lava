@@ -209,7 +209,6 @@ pub enum VkFormat {
 }
 
 impl VkRawType<VkFormat> for RawVkFormat {
-    
     fn vk_to_wrapped(src: &RawVkFormat) -> VkFormat {
         unsafe {
             *((src as *const i32) as *const VkFormat)
@@ -218,14 +217,12 @@ impl VkRawType<VkFormat> for RawVkFormat {
 }
 
 impl VkWrappedType<RawVkFormat> for VkFormat {
-    
     fn vk_to_raw(src: &VkFormat, dst: &mut RawVkFormat) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkFormat {
-    
     fn vk_default() -> VkFormat {
         VkFormat::Undefined
     }

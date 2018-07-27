@@ -18,7 +18,6 @@ pub struct VkBufferUsageFlags {
 }
 
 impl VkRawType<VkBufferUsageFlags> for RawVkBufferUsageFlags {
-    
     fn vk_to_wrapped(src: &RawVkBufferUsageFlags) -> VkBufferUsageFlags {
         VkBufferUsageFlags {
             transfer_src: (src & 0x00000001) != 0,
@@ -35,7 +34,6 @@ impl VkRawType<VkBufferUsageFlags> for RawVkBufferUsageFlags {
 }
 
 impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
-    
     fn vk_to_raw(src: &VkBufferUsageFlags, dst: &mut RawVkBufferUsageFlags) {
         *dst = 0;
         if src.transfer_src { *dst |= 0x00000001; }
@@ -51,7 +49,6 @@ impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
 }
 
 impl VkDefault for VkBufferUsageFlags {
-    
     fn vk_default() -> VkBufferUsageFlags {
         VkBufferUsageFlags {
             transfer_src: false,

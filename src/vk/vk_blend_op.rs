@@ -61,7 +61,6 @@ pub enum VkBlendOp {
 }
 
 impl VkRawType<VkBlendOp> for RawVkBlendOp {
-    
     fn vk_to_wrapped(src: &RawVkBlendOp) -> VkBlendOp {
         unsafe {
             *((src as *const i32) as *const VkBlendOp)
@@ -70,14 +69,12 @@ impl VkRawType<VkBlendOp> for RawVkBlendOp {
 }
 
 impl VkWrappedType<RawVkBlendOp> for VkBlendOp {
-    
     fn vk_to_raw(src: &VkBlendOp, dst: &mut RawVkBlendOp) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkBlendOp {
-    
     fn vk_default() -> VkBlendOp {
         VkBlendOp::Add
     }

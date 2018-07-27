@@ -12,7 +12,6 @@ pub enum VkChromaLocation {
 }
 
 impl VkRawType<VkChromaLocation> for RawVkChromaLocation {
-    
     fn vk_to_wrapped(src: &RawVkChromaLocation) -> VkChromaLocation {
         unsafe {
             *((src as *const i32) as *const VkChromaLocation)
@@ -21,14 +20,12 @@ impl VkRawType<VkChromaLocation> for RawVkChromaLocation {
 }
 
 impl VkWrappedType<RawVkChromaLocation> for VkChromaLocation {
-    
     fn vk_to_raw(src: &VkChromaLocation, dst: &mut RawVkChromaLocation) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkChromaLocation {
-    
     fn vk_default() -> VkChromaLocation {
         VkChromaLocation::CositedEven
     }

@@ -10,7 +10,6 @@ pub struct VkCommandPoolResetFlags {
 }
 
 impl VkRawType<VkCommandPoolResetFlags> for RawVkCommandPoolResetFlags {
-    
     fn vk_to_wrapped(src: &RawVkCommandPoolResetFlags) -> VkCommandPoolResetFlags {
         VkCommandPoolResetFlags {
             release_resources: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkCommandPoolResetFlags> for RawVkCommandPoolResetFlags {
 }
 
 impl VkWrappedType<RawVkCommandPoolResetFlags> for VkCommandPoolResetFlags {
-    
     fn vk_to_raw(src: &VkCommandPoolResetFlags, dst: &mut RawVkCommandPoolResetFlags) {
         *dst = 0;
         if src.release_resources { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkCommandPoolResetFlags> for VkCommandPoolResetFlags {
 }
 
 impl VkDefault for VkCommandPoolResetFlags {
-    
     fn vk_default() -> VkCommandPoolResetFlags {
         VkCommandPoolResetFlags {
             release_resources: false,

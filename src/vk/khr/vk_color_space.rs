@@ -25,7 +25,6 @@ pub enum VkColorSpace {
 }
 
 impl VkRawType<VkColorSpace> for RawVkColorSpace {
-    
     fn vk_to_wrapped(src: &RawVkColorSpace) -> VkColorSpace {
         unsafe {
             *((src as *const i32) as *const VkColorSpace)
@@ -34,14 +33,12 @@ impl VkRawType<VkColorSpace> for RawVkColorSpace {
 }
 
 impl VkWrappedType<RawVkColorSpace> for VkColorSpace {
-    
     fn vk_to_raw(src: &VkColorSpace, dst: &mut RawVkColorSpace) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkColorSpace {
-    
     fn vk_default() -> VkColorSpace {
         VkColorSpace::SrgbNonlinear
     }

@@ -13,7 +13,6 @@ pub enum VkQueryType {
 }
 
 impl VkRawType<VkQueryType> for RawVkQueryType {
-    
     fn vk_to_wrapped(src: &RawVkQueryType) -> VkQueryType {
         unsafe {
             *((src as *const i32) as *const VkQueryType)
@@ -22,14 +21,12 @@ impl VkRawType<VkQueryType> for RawVkQueryType {
 }
 
 impl VkWrappedType<RawVkQueryType> for VkQueryType {
-    
     fn vk_to_raw(src: &VkQueryType, dst: &mut RawVkQueryType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkQueryType {
-    
     fn vk_default() -> VkQueryType {
         VkQueryType::Occlusion
     }

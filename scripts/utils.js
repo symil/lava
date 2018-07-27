@@ -1,4 +1,4 @@
-const { isHandle } = require('./parse_vulkan_h');
+const { isHandle } = require('./vulkan_header');
 
 const PRIMITIVE_TYPES = {
     uint64_t: 'u64',
@@ -184,7 +184,32 @@ function getFieldWrappedTypeName(field) {
     return PRIMITIVE_TYPES[field.typeName] || getWrappedVkTypeName(field.typeName);
 }
 
-function getFieldInformation(field, prevField, nextField) {
+class GenericsSet {
+    constructor() {
+        this._nb = 0;
+        this._types = {};
+    }
+
+    add(definition) {
+        const letter = String.fromCharCode('A'.charCodeAt(0) + this._nb);
+        this._types[letter] = definition;
+        this._nb += 1;
+
+        return letter;
+    }
+
+    getTypes() {
+        return Object.keys(definition);
+    }
+
+    getDefinitions() {
+        return Object.values(definition);
+    }
+}
+
+
+
+function getFieldInformation(field, prevField, nextField, genericsSet) {
     const rawTypeName = getFieldRawTypeName(field);
     const wrappedTypeName = getFieldWrappedTypeName(field);
 
@@ -218,39 +243,39 @@ function getFieldInformation(field, prevField, nextField) {
     } else if (field.fullType === 'const char* const*') {
         // rawType = `*const *const c_char`;
         rawType = `VkPtr<*mut c_char>`;
-        wrappedType = `Vec<String>`;
+        wrappedType = genericsSet.add(`Deref<Target=[str]>`);
         toRaw = `VkPtr::new_string_array(&${varName})`;
         toWrapped = `Vec::new()`; // Should never be used
         defValue = `Vec::new()`;
     } else if (field.fullType === 'const char*') {
         // rawType = `*const c_char`;
         rawType = `VkPtr<c_char>`;
-        wrappedType = `T : Deref<Target=str>`;
+        wrappedType = genericsSet.add(`Deref<Target=str>`);
         toRaw = `VkPtr::new_string(&${varName})`;
         toWrapped = `new_string(${varName}.as_ptr())`; // Should never be used
         defValue = `vk_null::<String>()`;
     } else if (field.fullType === 'char' && field.arraySize) {
         rawType = `[c_char; ${arraySize}]`;
-        wrappedType = `T : Deref<Target=str>`;
+        wrappedType = genericsSet.add(`Deref<Target=str>`);
         toRaw = createStaticArray(rawTypeName, arraySize, varName, 'string_to_byte_array');
         toWrapped = `new_string(&${varName}[0] as *const c_char)`;
         defValue = `""`;
     } else if (isPrimitiveType) {
         if (isPointerArray) {
             rawType = `VkPtr<${rawTypeName}>`;
-            wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
+            wrappedType = genericsSet.add(`Deref<Target=[${wrappedTypeName}]>`);
             toRaw = `VkPtr::new_array(&${varName})`;
             toWrapped = `new_array(${prevVarName}, ${varName})`;
             defValue = `Vec::new()`;
         } else if (isPointerValue) {
             rawType = `VkPtr<${rawTypeName}>`;
-            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
+            wrappedType = genericsSet.add(`Deref<Target=${wrappedTypeName}>`);
             toRaw = `VkPtr::new_value(${varName})`;
             toWrapped = varName; // Should never be used
             defValue = `vk_null()`;
         } else if (isStaticArray) {
             rawType = `[${rawTypeName}; ${arraySize}]`;
-            wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
+            wrappedType = genericsSet.add(`Deref<Target=[${wrappedTypeName}]>`);
             toRaw = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
             toWrapped = `new_array(${prevVarName}, &${varName}[0] as *const ${rawTypeName})`;
             defValue = `Vec::new()`;
@@ -264,25 +289,25 @@ function getFieldInformation(field, prevField, nextField) {
     } else {
         if (isPointerArray) {
             rawType = `VkPtr<${rawTypeName}>`;
-            wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
+            wrappedType = genericsSet.add(`Deref<Target=[${wrappedTypeName}]>`);
             toRaw = `VkPtr::new_vk_array(&${varName})`;
             toWrapped = `new_vk_array(${prevVarName}, ${varName})`;
             defValue = `Vec::new()`;
         } else if (isPointerValue) {
             rawType = `VkPtr<${rawTypeName}>`;
-            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
+            wrappedType = genericsSet.add(`Deref<Target=${wrappedTypeName}>`);
             toRaw = `VkPtr::new_vk_value(&${varName})`;
             toWrapped = `${rawTypeName}::vk_to_wrapped(${varName}.as_ref().unwrap())`; // Pointer should never be null; if that happens, we should use an `Option`
             defValue = `vk_null()`;
         } else if (isStaticArray) {
             rawType = `[${rawTypeName}; ${arraySize}]`;
-            wrappedType = `T : Deref<Target=[${wrappedTypeName}]>`;
+            wrappedType = genericsSet.add(`Deref<Target=[${wrappedTypeName}]>`);
             toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
             toWrapped = `new_vk_array(${prevVarName}, &${varName}[0] as *const ${rawTypeName})`;
             defValue = `Vec::new()`;
         } else if (isHandleType) {
             rawType = rawTypeName;
-            wrappedType = `T : Deref<Target=${wrappedTypeName}>`;
+            wrappedType = genericsSet.add(`Deref<Target=${wrappedTypeName}>`);
             toRaw = `vk_to_raw_value(&${varName})`;
             toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
             defValue = `vk_null()`;
@@ -333,5 +358,6 @@ module.exports = {
     cToRustVarName,
     argToString,
     getFieldInformation,
-    findEnumPrefix
+    findEnumPrefix,
+    GenericsSet
 };

@@ -247,7 +247,6 @@ pub enum VkStructureType {
 }
 
 impl VkRawType<VkStructureType> for RawVkStructureType {
-    
     fn vk_to_wrapped(src: &RawVkStructureType) -> VkStructureType {
         unsafe {
             *((src as *const i32) as *const VkStructureType)
@@ -256,14 +255,12 @@ impl VkRawType<VkStructureType> for RawVkStructureType {
 }
 
 impl VkWrappedType<RawVkStructureType> for VkStructureType {
-    
     fn vk_to_raw(src: &VkStructureType, dst: &mut RawVkStructureType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkStructureType {
-    
     fn vk_default() -> VkStructureType {
         VkStructureType::ApplicationInfo
     }

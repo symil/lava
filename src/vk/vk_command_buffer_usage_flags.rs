@@ -12,7 +12,6 @@ pub struct VkCommandBufferUsageFlags {
 }
 
 impl VkRawType<VkCommandBufferUsageFlags> for RawVkCommandBufferUsageFlags {
-    
     fn vk_to_wrapped(src: &RawVkCommandBufferUsageFlags) -> VkCommandBufferUsageFlags {
         VkCommandBufferUsageFlags {
             one_time_submit: (src & 0x00000001) != 0,
@@ -23,7 +22,6 @@ impl VkRawType<VkCommandBufferUsageFlags> for RawVkCommandBufferUsageFlags {
 }
 
 impl VkWrappedType<RawVkCommandBufferUsageFlags> for VkCommandBufferUsageFlags {
-    
     fn vk_to_raw(src: &VkCommandBufferUsageFlags, dst: &mut RawVkCommandBufferUsageFlags) {
         *dst = 0;
         if src.one_time_submit { *dst |= 0x00000001; }
@@ -33,7 +31,6 @@ impl VkWrappedType<RawVkCommandBufferUsageFlags> for VkCommandBufferUsageFlags {
 }
 
 impl VkDefault for VkCommandBufferUsageFlags {
-    
     fn vk_default() -> VkCommandBufferUsageFlags {
         VkCommandBufferUsageFlags {
             one_time_submit: false,

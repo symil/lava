@@ -10,7 +10,6 @@ pub struct VkBufferViewCreateFlags {
 }
 
 impl VkRawType<VkBufferViewCreateFlags> for RawVkBufferViewCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkBufferViewCreateFlags) -> VkBufferViewCreateFlags {
         VkBufferViewCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkBufferViewCreateFlags> for RawVkBufferViewCreateFlags {
 }
 
 impl VkWrappedType<RawVkBufferViewCreateFlags> for VkBufferViewCreateFlags {
-    
     fn vk_to_raw(src: &VkBufferViewCreateFlags, dst: &mut RawVkBufferViewCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkBufferViewCreateFlags {
-    
     fn vk_default() -> VkBufferViewCreateFlags {
         VkBufferViewCreateFlags {
             

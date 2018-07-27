@@ -13,7 +13,6 @@ pub struct VkDescriptorBindingFlags {
 }
 
 impl VkRawType<VkDescriptorBindingFlags> for RawVkDescriptorBindingFlags {
-    
     fn vk_to_wrapped(src: &RawVkDescriptorBindingFlags) -> VkDescriptorBindingFlags {
         VkDescriptorBindingFlags {
             update_after_bind: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkDescriptorBindingFlags> for RawVkDescriptorBindingFlags {
 }
 
 impl VkWrappedType<RawVkDescriptorBindingFlags> for VkDescriptorBindingFlags {
-    
     fn vk_to_raw(src: &VkDescriptorBindingFlags, dst: &mut RawVkDescriptorBindingFlags) {
         *dst = 0;
         if src.update_after_bind { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkDescriptorBindingFlags> for VkDescriptorBindingFlags {
 }
 
 impl VkDefault for VkDescriptorBindingFlags {
-    
     fn vk_default() -> VkDescriptorBindingFlags {
         VkDescriptorBindingFlags {
             update_after_bind: false,

@@ -18,7 +18,6 @@ pub enum VkCompareOp {
 }
 
 impl VkRawType<VkCompareOp> for RawVkCompareOp {
-    
     fn vk_to_wrapped(src: &RawVkCompareOp) -> VkCompareOp {
         unsafe {
             *((src as *const i32) as *const VkCompareOp)
@@ -27,14 +26,12 @@ impl VkRawType<VkCompareOp> for RawVkCompareOp {
 }
 
 impl VkWrappedType<RawVkCompareOp> for VkCompareOp {
-    
     fn vk_to_raw(src: &VkCompareOp, dst: &mut RawVkCompareOp) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkCompareOp {
-    
     fn vk_default() -> VkCompareOp {
         VkCompareOp::Never
     }

@@ -12,7 +12,6 @@ pub struct VkCullModeFlags {
 }
 
 impl VkRawType<VkCullModeFlags> for RawVkCullModeFlags {
-    
     fn vk_to_wrapped(src: &RawVkCullModeFlags) -> VkCullModeFlags {
         VkCullModeFlags {
             front: (src & 0x00000001) != 0,
@@ -23,7 +22,6 @@ impl VkRawType<VkCullModeFlags> for RawVkCullModeFlags {
 }
 
 impl VkWrappedType<RawVkCullModeFlags> for VkCullModeFlags {
-    
     fn vk_to_raw(src: &VkCullModeFlags, dst: &mut RawVkCullModeFlags) {
         *dst = 0;
         if src.front { *dst |= 0x00000001; }
@@ -33,7 +31,6 @@ impl VkWrappedType<RawVkCullModeFlags> for VkCullModeFlags {
 }
 
 impl VkDefault for VkCullModeFlags {
-    
     fn vk_default() -> VkCullModeFlags {
         VkCullModeFlags {
             front: false,

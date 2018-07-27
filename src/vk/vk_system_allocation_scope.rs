@@ -15,7 +15,6 @@ pub enum VkSystemAllocationScope {
 }
 
 impl VkRawType<VkSystemAllocationScope> for RawVkSystemAllocationScope {
-    
     fn vk_to_wrapped(src: &RawVkSystemAllocationScope) -> VkSystemAllocationScope {
         unsafe {
             *((src as *const i32) as *const VkSystemAllocationScope)
@@ -24,14 +23,12 @@ impl VkRawType<VkSystemAllocationScope> for RawVkSystemAllocationScope {
 }
 
 impl VkWrappedType<RawVkSystemAllocationScope> for VkSystemAllocationScope {
-    
     fn vk_to_raw(src: &VkSystemAllocationScope, dst: &mut RawVkSystemAllocationScope) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkSystemAllocationScope {
-    
     fn vk_default() -> VkSystemAllocationScope {
         VkSystemAllocationScope::Command
     }

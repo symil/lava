@@ -10,7 +10,6 @@ pub struct VkQueryPoolCreateFlags {
 }
 
 impl VkRawType<VkQueryPoolCreateFlags> for RawVkQueryPoolCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkQueryPoolCreateFlags) -> VkQueryPoolCreateFlags {
         VkQueryPoolCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkQueryPoolCreateFlags> for RawVkQueryPoolCreateFlags {
 }
 
 impl VkWrappedType<RawVkQueryPoolCreateFlags> for VkQueryPoolCreateFlags {
-    
     fn vk_to_raw(src: &VkQueryPoolCreateFlags, dst: &mut RawVkQueryPoolCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkQueryPoolCreateFlags {
-    
     fn vk_default() -> VkQueryPoolCreateFlags {
         VkQueryPoolCreateFlags {
             

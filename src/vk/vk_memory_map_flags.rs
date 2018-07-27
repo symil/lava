@@ -10,7 +10,6 @@ pub struct VkMemoryMapFlags {
 }
 
 impl VkRawType<VkMemoryMapFlags> for RawVkMemoryMapFlags {
-    
     fn vk_to_wrapped(src: &RawVkMemoryMapFlags) -> VkMemoryMapFlags {
         VkMemoryMapFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkMemoryMapFlags> for RawVkMemoryMapFlags {
 }
 
 impl VkWrappedType<RawVkMemoryMapFlags> for VkMemoryMapFlags {
-    
     fn vk_to_raw(src: &VkMemoryMapFlags, dst: &mut RawVkMemoryMapFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkMemoryMapFlags {
-    
     fn vk_default() -> VkMemoryMapFlags {
         VkMemoryMapFlags {
             

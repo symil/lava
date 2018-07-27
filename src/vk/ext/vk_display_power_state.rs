@@ -13,7 +13,6 @@ pub enum VkDisplayPowerState {
 }
 
 impl VkRawType<VkDisplayPowerState> for RawVkDisplayPowerState {
-    
     fn vk_to_wrapped(src: &RawVkDisplayPowerState) -> VkDisplayPowerState {
         unsafe {
             *((src as *const i32) as *const VkDisplayPowerState)
@@ -22,14 +21,12 @@ impl VkRawType<VkDisplayPowerState> for RawVkDisplayPowerState {
 }
 
 impl VkWrappedType<RawVkDisplayPowerState> for VkDisplayPowerState {
-    
     fn vk_to_raw(src: &VkDisplayPowerState, dst: &mut RawVkDisplayPowerState) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkDisplayPowerState {
-    
     fn vk_default() -> VkDisplayPowerState {
         VkDisplayPowerState::Off
     }

@@ -13,7 +13,6 @@ pub enum VkFilter {
 }
 
 impl VkRawType<VkFilter> for RawVkFilter {
-    
     fn vk_to_wrapped(src: &RawVkFilter) -> VkFilter {
         unsafe {
             *((src as *const i32) as *const VkFilter)
@@ -22,14 +21,12 @@ impl VkRawType<VkFilter> for RawVkFilter {
 }
 
 impl VkWrappedType<RawVkFilter> for VkFilter {
-    
     fn vk_to_raw(src: &VkFilter, dst: &mut RawVkFilter) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkFilter {
-    
     fn vk_default() -> VkFilter {
         VkFilter::Nearest
     }

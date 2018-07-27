@@ -13,7 +13,6 @@ pub struct VkIndirectCommandsLayoutUsageFlags {
 }
 
 impl VkRawType<VkIndirectCommandsLayoutUsageFlags> for RawVkIndirectCommandsLayoutUsageFlags {
-    
     fn vk_to_wrapped(src: &RawVkIndirectCommandsLayoutUsageFlags) -> VkIndirectCommandsLayoutUsageFlags {
         VkIndirectCommandsLayoutUsageFlags {
             unordered_sequences: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkIndirectCommandsLayoutUsageFlags> for RawVkIndirectCommandsLayo
 }
 
 impl VkWrappedType<RawVkIndirectCommandsLayoutUsageFlags> for VkIndirectCommandsLayoutUsageFlags {
-    
     fn vk_to_raw(src: &VkIndirectCommandsLayoutUsageFlags, dst: &mut RawVkIndirectCommandsLayoutUsageFlags) {
         *dst = 0;
         if src.unordered_sequences { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkIndirectCommandsLayoutUsageFlags> for VkIndirectCommands
 }
 
 impl VkDefault for VkIndirectCommandsLayoutUsageFlags {
-    
     fn vk_default() -> VkIndirectCommandsLayoutUsageFlags {
         VkIndirectCommandsLayoutUsageFlags {
             unordered_sequences: false,

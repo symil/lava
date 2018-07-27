@@ -16,7 +16,6 @@ pub struct VkImageAspectFlags {
 }
 
 impl VkRawType<VkImageAspectFlags> for RawVkImageAspectFlags {
-    
     fn vk_to_wrapped(src: &RawVkImageAspectFlags) -> VkImageAspectFlags {
         VkImageAspectFlags {
             color: (src & 0x00000001) != 0,
@@ -31,7 +30,6 @@ impl VkRawType<VkImageAspectFlags> for RawVkImageAspectFlags {
 }
 
 impl VkWrappedType<RawVkImageAspectFlags> for VkImageAspectFlags {
-    
     fn vk_to_raw(src: &VkImageAspectFlags, dst: &mut RawVkImageAspectFlags) {
         *dst = 0;
         if src.color { *dst |= 0x00000001; }
@@ -45,7 +43,6 @@ impl VkWrappedType<RawVkImageAspectFlags> for VkImageAspectFlags {
 }
 
 impl VkDefault for VkImageAspectFlags {
-    
     fn vk_default() -> VkImageAspectFlags {
         VkImageAspectFlags {
             color: false,

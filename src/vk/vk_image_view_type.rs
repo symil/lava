@@ -17,7 +17,6 @@ pub enum VkImageViewType {
 }
 
 impl VkRawType<VkImageViewType> for RawVkImageViewType {
-    
     fn vk_to_wrapped(src: &RawVkImageViewType) -> VkImageViewType {
         unsafe {
             *((src as *const i32) as *const VkImageViewType)
@@ -26,14 +25,12 @@ impl VkRawType<VkImageViewType> for RawVkImageViewType {
 }
 
 impl VkWrappedType<RawVkImageViewType> for VkImageViewType {
-    
     fn vk_to_raw(src: &VkImageViewType, dst: &mut RawVkImageViewType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkImageViewType {
-    
     fn vk_default() -> VkImageViewType {
         VkImageViewType::_1d
     }

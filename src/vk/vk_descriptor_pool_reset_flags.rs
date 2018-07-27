@@ -10,7 +10,6 @@ pub struct VkDescriptorPoolResetFlags {
 }
 
 impl VkRawType<VkDescriptorPoolResetFlags> for RawVkDescriptorPoolResetFlags {
-    
     fn vk_to_wrapped(src: &RawVkDescriptorPoolResetFlags) -> VkDescriptorPoolResetFlags {
         VkDescriptorPoolResetFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkDescriptorPoolResetFlags> for RawVkDescriptorPoolResetFlags {
 }
 
 impl VkWrappedType<RawVkDescriptorPoolResetFlags> for VkDescriptorPoolResetFlags {
-    
     fn vk_to_raw(src: &VkDescriptorPoolResetFlags, dst: &mut RawVkDescriptorPoolResetFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkDescriptorPoolResetFlags {
-    
     fn vk_default() -> VkDescriptorPoolResetFlags {
         VkDescriptorPoolResetFlags {
             

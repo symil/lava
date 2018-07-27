@@ -11,7 +11,6 @@ pub struct VkDescriptorPoolCreateFlags {
 }
 
 impl VkRawType<VkDescriptorPoolCreateFlags> for RawVkDescriptorPoolCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkDescriptorPoolCreateFlags) -> VkDescriptorPoolCreateFlags {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: (src & 0x00000001) != 0,
@@ -21,7 +20,6 @@ impl VkRawType<VkDescriptorPoolCreateFlags> for RawVkDescriptorPoolCreateFlags {
 }
 
 impl VkWrappedType<RawVkDescriptorPoolCreateFlags> for VkDescriptorPoolCreateFlags {
-    
     fn vk_to_raw(src: &VkDescriptorPoolCreateFlags, dst: &mut RawVkDescriptorPoolCreateFlags) {
         *dst = 0;
         if src.free_descriptor_set { *dst |= 0x00000001; }
@@ -30,7 +28,6 @@ impl VkWrappedType<RawVkDescriptorPoolCreateFlags> for VkDescriptorPoolCreateFla
 }
 
 impl VkDefault for VkDescriptorPoolCreateFlags {
-    
     fn vk_default() -> VkDescriptorPoolCreateFlags {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: false,

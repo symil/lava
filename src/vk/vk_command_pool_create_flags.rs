@@ -12,7 +12,6 @@ pub struct VkCommandPoolCreateFlags {
 }
 
 impl VkRawType<VkCommandPoolCreateFlags> for RawVkCommandPoolCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkCommandPoolCreateFlags) -> VkCommandPoolCreateFlags {
         VkCommandPoolCreateFlags {
             transient: (src & 0x00000001) != 0,
@@ -23,7 +22,6 @@ impl VkRawType<VkCommandPoolCreateFlags> for RawVkCommandPoolCreateFlags {
 }
 
 impl VkWrappedType<RawVkCommandPoolCreateFlags> for VkCommandPoolCreateFlags {
-    
     fn vk_to_raw(src: &VkCommandPoolCreateFlags, dst: &mut RawVkCommandPoolCreateFlags) {
         *dst = 0;
         if src.transient { *dst |= 0x00000001; }
@@ -33,7 +31,6 @@ impl VkWrappedType<RawVkCommandPoolCreateFlags> for VkCommandPoolCreateFlags {
 }
 
 impl VkDefault for VkCommandPoolCreateFlags {
-    
     fn vk_default() -> VkCommandPoolCreateFlags {
         VkCommandPoolCreateFlags {
             transient: false,

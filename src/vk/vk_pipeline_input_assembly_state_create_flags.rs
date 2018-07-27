@@ -10,7 +10,6 @@ pub struct VkPipelineInputAssemblyStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineInputAssemblyStateCreateFlags> for RawVkPipelineInputAssemblyStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineInputAssemblyStateCreateFlags) -> VkPipelineInputAssemblyStateCreateFlags {
         VkPipelineInputAssemblyStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineInputAssemblyStateCreateFlags> for RawVkPipelineInputAs
 }
 
 impl VkWrappedType<RawVkPipelineInputAssemblyStateCreateFlags> for VkPipelineInputAssemblyStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineInputAssemblyStateCreateFlags, dst: &mut RawVkPipelineInputAssemblyStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineInputAssemblyStateCreateFlags {
-    
     fn vk_default() -> VkPipelineInputAssemblyStateCreateFlags {
         VkPipelineInputAssemblyStateCreateFlags {
             

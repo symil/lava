@@ -12,7 +12,6 @@ pub enum VkPipelineBindPoint {
 }
 
 impl VkRawType<VkPipelineBindPoint> for RawVkPipelineBindPoint {
-    
     fn vk_to_wrapped(src: &RawVkPipelineBindPoint) -> VkPipelineBindPoint {
         unsafe {
             *((src as *const i32) as *const VkPipelineBindPoint)
@@ -21,14 +20,12 @@ impl VkRawType<VkPipelineBindPoint> for RawVkPipelineBindPoint {
 }
 
 impl VkWrappedType<RawVkPipelineBindPoint> for VkPipelineBindPoint {
-    
     fn vk_to_raw(src: &VkPipelineBindPoint, dst: &mut RawVkPipelineBindPoint) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkPipelineBindPoint {
-    
     fn vk_default() -> VkPipelineBindPoint {
         VkPipelineBindPoint::Graphics
     }

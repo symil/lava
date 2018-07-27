@@ -10,7 +10,6 @@ pub struct VkPipelineDynamicStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineDynamicStateCreateFlags> for RawVkPipelineDynamicStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineDynamicStateCreateFlags) -> VkPipelineDynamicStateCreateFlags {
         VkPipelineDynamicStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineDynamicStateCreateFlags> for RawVkPipelineDynamicStateC
 }
 
 impl VkWrappedType<RawVkPipelineDynamicStateCreateFlags> for VkPipelineDynamicStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineDynamicStateCreateFlags, dst: &mut RawVkPipelineDynamicStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineDynamicStateCreateFlags {
-    
     fn vk_default() -> VkPipelineDynamicStateCreateFlags {
         VkPipelineDynamicStateCreateFlags {
             

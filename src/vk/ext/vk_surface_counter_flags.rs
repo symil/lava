@@ -10,7 +10,6 @@ pub struct VkSurfaceCounterFlags {
 }
 
 impl VkRawType<VkSurfaceCounterFlags> for RawVkSurfaceCounterFlags {
-    
     fn vk_to_wrapped(src: &RawVkSurfaceCounterFlags) -> VkSurfaceCounterFlags {
         VkSurfaceCounterFlags {
             vblank: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkSurfaceCounterFlags> for RawVkSurfaceCounterFlags {
 }
 
 impl VkWrappedType<RawVkSurfaceCounterFlags> for VkSurfaceCounterFlags {
-    
     fn vk_to_raw(src: &VkSurfaceCounterFlags, dst: &mut RawVkSurfaceCounterFlags) {
         *dst = 0;
         if src.vblank { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkSurfaceCounterFlags> for VkSurfaceCounterFlags {
 }
 
 impl VkDefault for VkSurfaceCounterFlags {
-    
     fn vk_default() -> VkSurfaceCounterFlags {
         VkSurfaceCounterFlags {
             vblank: false,

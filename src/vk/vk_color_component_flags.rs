@@ -13,7 +13,6 @@ pub struct VkColorComponentFlags {
 }
 
 impl VkRawType<VkColorComponentFlags> for RawVkColorComponentFlags {
-    
     fn vk_to_wrapped(src: &RawVkColorComponentFlags) -> VkColorComponentFlags {
         VkColorComponentFlags {
             r: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkColorComponentFlags> for RawVkColorComponentFlags {
 }
 
 impl VkWrappedType<RawVkColorComponentFlags> for VkColorComponentFlags {
-    
     fn vk_to_raw(src: &VkColorComponentFlags, dst: &mut RawVkColorComponentFlags) {
         *dst = 0;
         if src.r { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkColorComponentFlags> for VkColorComponentFlags {
 }
 
 impl VkDefault for VkColorComponentFlags {
-    
     fn vk_default() -> VkColorComponentFlags {
         VkColorComponentFlags {
             r: false,

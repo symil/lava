@@ -10,7 +10,6 @@ pub struct VkSparseMemoryBindFlags {
 }
 
 impl VkRawType<VkSparseMemoryBindFlags> for RawVkSparseMemoryBindFlags {
-    
     fn vk_to_wrapped(src: &RawVkSparseMemoryBindFlags) -> VkSparseMemoryBindFlags {
         VkSparseMemoryBindFlags {
             metadata: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkSparseMemoryBindFlags> for RawVkSparseMemoryBindFlags {
 }
 
 impl VkWrappedType<RawVkSparseMemoryBindFlags> for VkSparseMemoryBindFlags {
-    
     fn vk_to_raw(src: &VkSparseMemoryBindFlags, dst: &mut RawVkSparseMemoryBindFlags) {
         *dst = 0;
         if src.metadata { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkSparseMemoryBindFlags> for VkSparseMemoryBindFlags {
 }
 
 impl VkDefault for VkSparseMemoryBindFlags {
-    
     fn vk_default() -> VkSparseMemoryBindFlags {
         VkSparseMemoryBindFlags {
             metadata: false,

@@ -12,7 +12,6 @@ pub enum VkVertexInputRate {
 }
 
 impl VkRawType<VkVertexInputRate> for RawVkVertexInputRate {
-    
     fn vk_to_wrapped(src: &RawVkVertexInputRate) -> VkVertexInputRate {
         unsafe {
             *((src as *const i32) as *const VkVertexInputRate)
@@ -21,14 +20,12 @@ impl VkRawType<VkVertexInputRate> for RawVkVertexInputRate {
 }
 
 impl VkWrappedType<RawVkVertexInputRate> for VkVertexInputRate {
-    
     fn vk_to_raw(src: &VkVertexInputRate, dst: &mut RawVkVertexInputRate) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkVertexInputRate {
-    
     fn vk_default() -> VkVertexInputRate {
         VkVertexInputRate::Vertex
     }

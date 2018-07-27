@@ -12,7 +12,6 @@ pub enum VkImageTiling {
 }
 
 impl VkRawType<VkImageTiling> for RawVkImageTiling {
-    
     fn vk_to_wrapped(src: &RawVkImageTiling) -> VkImageTiling {
         unsafe {
             *((src as *const i32) as *const VkImageTiling)
@@ -21,14 +20,12 @@ impl VkRawType<VkImageTiling> for RawVkImageTiling {
 }
 
 impl VkWrappedType<RawVkImageTiling> for VkImageTiling {
-    
     fn vk_to_raw(src: &VkImageTiling, dst: &mut RawVkImageTiling) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkImageTiling {
-    
     fn vk_default() -> VkImageTiling {
         VkImageTiling::Optimal
     }

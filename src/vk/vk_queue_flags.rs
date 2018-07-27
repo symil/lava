@@ -14,7 +14,6 @@ pub struct VkQueueFlags {
 }
 
 impl VkRawType<VkQueueFlags> for RawVkQueueFlags {
-    
     fn vk_to_wrapped(src: &RawVkQueueFlags) -> VkQueueFlags {
         VkQueueFlags {
             graphics: (src & 0x00000001) != 0,
@@ -27,7 +26,6 @@ impl VkRawType<VkQueueFlags> for RawVkQueueFlags {
 }
 
 impl VkWrappedType<RawVkQueueFlags> for VkQueueFlags {
-    
     fn vk_to_raw(src: &VkQueueFlags, dst: &mut RawVkQueueFlags) {
         *dst = 0;
         if src.graphics { *dst |= 0x00000001; }
@@ -39,7 +37,6 @@ impl VkWrappedType<RawVkQueueFlags> for VkQueueFlags {
 }
 
 impl VkDefault for VkQueueFlags {
-    
     fn vk_default() -> VkQueueFlags {
         VkQueueFlags {
             graphics: false,

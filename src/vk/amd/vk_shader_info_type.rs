@@ -13,7 +13,6 @@ pub enum VkShaderInfoType {
 }
 
 impl VkRawType<VkShaderInfoType> for RawVkShaderInfoType {
-    
     fn vk_to_wrapped(src: &RawVkShaderInfoType) -> VkShaderInfoType {
         unsafe {
             *((src as *const i32) as *const VkShaderInfoType)
@@ -22,14 +21,12 @@ impl VkRawType<VkShaderInfoType> for RawVkShaderInfoType {
 }
 
 impl VkWrappedType<RawVkShaderInfoType> for VkShaderInfoType {
-    
     fn vk_to_raw(src: &VkShaderInfoType, dst: &mut RawVkShaderInfoType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkShaderInfoType {
-    
     fn vk_default() -> VkShaderInfoType {
         VkShaderInfoType::Statistics
     }

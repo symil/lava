@@ -10,7 +10,6 @@ pub struct VkSemaphoreImportFlags {
 }
 
 impl VkRawType<VkSemaphoreImportFlags> for RawVkSemaphoreImportFlags {
-    
     fn vk_to_wrapped(src: &RawVkSemaphoreImportFlags) -> VkSemaphoreImportFlags {
         VkSemaphoreImportFlags {
             temporary: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkSemaphoreImportFlags> for RawVkSemaphoreImportFlags {
 }
 
 impl VkWrappedType<RawVkSemaphoreImportFlags> for VkSemaphoreImportFlags {
-    
     fn vk_to_raw(src: &VkSemaphoreImportFlags, dst: &mut RawVkSemaphoreImportFlags) {
         *dst = 0;
         if src.temporary { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkSemaphoreImportFlags> for VkSemaphoreImportFlags {
 }
 
 impl VkDefault for VkSemaphoreImportFlags {
-    
     fn vk_default() -> VkSemaphoreImportFlags {
         VkSemaphoreImportFlags {
             temporary: false,

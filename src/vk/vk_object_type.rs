@@ -47,7 +47,6 @@ pub enum VkObjectType {
 }
 
 impl VkRawType<VkObjectType> for RawVkObjectType {
-    
     fn vk_to_wrapped(src: &RawVkObjectType) -> VkObjectType {
         unsafe {
             *((src as *const i32) as *const VkObjectType)
@@ -56,14 +55,12 @@ impl VkRawType<VkObjectType> for RawVkObjectType {
 }
 
 impl VkWrappedType<RawVkObjectType> for VkObjectType {
-    
     fn vk_to_raw(src: &VkObjectType, dst: &mut RawVkObjectType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkObjectType {
-    
     fn vk_default() -> VkObjectType {
         VkObjectType::Unknown
     }

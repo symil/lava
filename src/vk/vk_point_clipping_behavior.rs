@@ -12,7 +12,6 @@ pub enum VkPointClippingBehavior {
 }
 
 impl VkRawType<VkPointClippingBehavior> for RawVkPointClippingBehavior {
-    
     fn vk_to_wrapped(src: &RawVkPointClippingBehavior) -> VkPointClippingBehavior {
         unsafe {
             *((src as *const i32) as *const VkPointClippingBehavior)
@@ -21,14 +20,12 @@ impl VkRawType<VkPointClippingBehavior> for RawVkPointClippingBehavior {
 }
 
 impl VkWrappedType<RawVkPointClippingBehavior> for VkPointClippingBehavior {
-    
     fn vk_to_raw(src: &VkPointClippingBehavior, dst: &mut RawVkPointClippingBehavior) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkPointClippingBehavior {
-    
     fn vk_default() -> VkPointClippingBehavior {
         VkPointClippingBehavior::AllClipPlanes
     }

@@ -15,7 +15,6 @@ pub enum VkSamplerAddressMode {
 }
 
 impl VkRawType<VkSamplerAddressMode> for RawVkSamplerAddressMode {
-    
     fn vk_to_wrapped(src: &RawVkSamplerAddressMode) -> VkSamplerAddressMode {
         unsafe {
             *((src as *const i32) as *const VkSamplerAddressMode)
@@ -24,14 +23,12 @@ impl VkRawType<VkSamplerAddressMode> for RawVkSamplerAddressMode {
 }
 
 impl VkWrappedType<RawVkSamplerAddressMode> for VkSamplerAddressMode {
-    
     fn vk_to_raw(src: &VkSamplerAddressMode, dst: &mut RawVkSamplerAddressMode) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkSamplerAddressMode {
-    
     fn vk_default() -> VkSamplerAddressMode {
         VkSamplerAddressMode::Repeat
     }

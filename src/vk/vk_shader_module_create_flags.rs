@@ -10,7 +10,6 @@ pub struct VkShaderModuleCreateFlags {
 }
 
 impl VkRawType<VkShaderModuleCreateFlags> for RawVkShaderModuleCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkShaderModuleCreateFlags) -> VkShaderModuleCreateFlags {
         VkShaderModuleCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkShaderModuleCreateFlags> for RawVkShaderModuleCreateFlags {
 }
 
 impl VkWrappedType<RawVkShaderModuleCreateFlags> for VkShaderModuleCreateFlags {
-    
     fn vk_to_raw(src: &VkShaderModuleCreateFlags, dst: &mut RawVkShaderModuleCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkShaderModuleCreateFlags {
-    
     fn vk_default() -> VkShaderModuleCreateFlags {
         VkShaderModuleCreateFlags {
             

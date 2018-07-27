@@ -27,7 +27,6 @@ pub struct VkPipelineStageFlags {
 }
 
 impl VkRawType<VkPipelineStageFlags> for RawVkPipelineStageFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineStageFlags) -> VkPipelineStageFlags {
         VkPipelineStageFlags {
             top_of_pipe: (src & 0x00000001) != 0,
@@ -53,7 +52,6 @@ impl VkRawType<VkPipelineStageFlags> for RawVkPipelineStageFlags {
 }
 
 impl VkWrappedType<RawVkPipelineStageFlags> for VkPipelineStageFlags {
-    
     fn vk_to_raw(src: &VkPipelineStageFlags, dst: &mut RawVkPipelineStageFlags) {
         *dst = 0;
         if src.top_of_pipe { *dst |= 0x00000001; }
@@ -78,7 +76,6 @@ impl VkWrappedType<RawVkPipelineStageFlags> for VkPipelineStageFlags {
 }
 
 impl VkDefault for VkPipelineStageFlags {
-    
     fn vk_default() -> VkPipelineStageFlags {
         VkPipelineStageFlags {
             top_of_pipe: false,

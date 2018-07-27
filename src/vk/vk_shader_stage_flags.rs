@@ -16,7 +16,6 @@ pub struct VkShaderStageFlags {
 }
 
 impl VkRawType<VkShaderStageFlags> for RawVkShaderStageFlags {
-    
     fn vk_to_wrapped(src: &RawVkShaderStageFlags) -> VkShaderStageFlags {
         VkShaderStageFlags {
             vertex: (src & 0x00000001) != 0,
@@ -31,7 +30,6 @@ impl VkRawType<VkShaderStageFlags> for RawVkShaderStageFlags {
 }
 
 impl VkWrappedType<RawVkShaderStageFlags> for VkShaderStageFlags {
-    
     fn vk_to_raw(src: &VkShaderStageFlags, dst: &mut RawVkShaderStageFlags) {
         *dst = 0;
         if src.vertex { *dst |= 0x00000001; }
@@ -45,7 +43,6 @@ impl VkWrappedType<RawVkShaderStageFlags> for VkShaderStageFlags {
 }
 
 impl VkDefault for VkShaderStageFlags {
-    
     fn vk_default() -> VkShaderStageFlags {
         VkShaderStageFlags {
             vertex: false,

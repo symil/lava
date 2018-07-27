@@ -15,7 +15,6 @@ pub struct VkMemoryPropertyFlags {
 }
 
 impl VkRawType<VkMemoryPropertyFlags> for RawVkMemoryPropertyFlags {
-    
     fn vk_to_wrapped(src: &RawVkMemoryPropertyFlags) -> VkMemoryPropertyFlags {
         VkMemoryPropertyFlags {
             device_local: (src & 0x00000001) != 0,
@@ -29,7 +28,6 @@ impl VkRawType<VkMemoryPropertyFlags> for RawVkMemoryPropertyFlags {
 }
 
 impl VkWrappedType<RawVkMemoryPropertyFlags> for VkMemoryPropertyFlags {
-    
     fn vk_to_raw(src: &VkMemoryPropertyFlags, dst: &mut RawVkMemoryPropertyFlags) {
         *dst = 0;
         if src.device_local { *dst |= 0x00000001; }
@@ -42,7 +40,6 @@ impl VkWrappedType<RawVkMemoryPropertyFlags> for VkMemoryPropertyFlags {
 }
 
 impl VkDefault for VkMemoryPropertyFlags {
-    
     fn vk_default() -> VkMemoryPropertyFlags {
         VkMemoryPropertyFlags {
             device_local: false,

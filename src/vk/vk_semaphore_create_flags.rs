@@ -10,7 +10,6 @@ pub struct VkSemaphoreCreateFlags {
 }
 
 impl VkRawType<VkSemaphoreCreateFlags> for RawVkSemaphoreCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkSemaphoreCreateFlags) -> VkSemaphoreCreateFlags {
         VkSemaphoreCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkSemaphoreCreateFlags> for RawVkSemaphoreCreateFlags {
 }
 
 impl VkWrappedType<RawVkSemaphoreCreateFlags> for VkSemaphoreCreateFlags {
-    
     fn vk_to_raw(src: &VkSemaphoreCreateFlags, dst: &mut RawVkSemaphoreCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkSemaphoreCreateFlags {
-    
     fn vk_default() -> VkSemaphoreCreateFlags {
         VkSemaphoreCreateFlags {
             

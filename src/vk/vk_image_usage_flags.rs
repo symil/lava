@@ -17,7 +17,6 @@ pub struct VkImageUsageFlags {
 }
 
 impl VkRawType<VkImageUsageFlags> for RawVkImageUsageFlags {
-    
     fn vk_to_wrapped(src: &RawVkImageUsageFlags) -> VkImageUsageFlags {
         VkImageUsageFlags {
             transfer_src: (src & 0x00000001) != 0,
@@ -33,7 +32,6 @@ impl VkRawType<VkImageUsageFlags> for RawVkImageUsageFlags {
 }
 
 impl VkWrappedType<RawVkImageUsageFlags> for VkImageUsageFlags {
-    
     fn vk_to_raw(src: &VkImageUsageFlags, dst: &mut RawVkImageUsageFlags) {
         *dst = 0;
         if src.transfer_src { *dst |= 0x00000001; }
@@ -48,7 +46,6 @@ impl VkWrappedType<RawVkImageUsageFlags> for VkImageUsageFlags {
 }
 
 impl VkDefault for VkImageUsageFlags {
-    
     fn vk_default() -> VkImageUsageFlags {
         VkImageUsageFlags {
             transfer_src: false,

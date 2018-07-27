@@ -13,7 +13,6 @@ pub struct VkQueryResultFlags {
 }
 
 impl VkRawType<VkQueryResultFlags> for RawVkQueryResultFlags {
-    
     fn vk_to_wrapped(src: &RawVkQueryResultFlags) -> VkQueryResultFlags {
         VkQueryResultFlags {
             _64: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkQueryResultFlags> for RawVkQueryResultFlags {
 }
 
 impl VkWrappedType<RawVkQueryResultFlags> for VkQueryResultFlags {
-    
     fn vk_to_raw(src: &VkQueryResultFlags, dst: &mut RawVkQueryResultFlags) {
         *dst = 0;
         if src._64 { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkQueryResultFlags> for VkQueryResultFlags {
 }
 
 impl VkDefault for VkQueryResultFlags {
-    
     fn vk_default() -> VkQueryResultFlags {
         VkQueryResultFlags {
             _64: false,

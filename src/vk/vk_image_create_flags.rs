@@ -22,7 +22,6 @@ pub struct VkImageCreateFlags {
 }
 
 impl VkRawType<VkImageCreateFlags> for RawVkImageCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkImageCreateFlags) -> VkImageCreateFlags {
         VkImageCreateFlags {
             sparse_binding: (src & 0x00000001) != 0,
@@ -43,7 +42,6 @@ impl VkRawType<VkImageCreateFlags> for RawVkImageCreateFlags {
 }
 
 impl VkWrappedType<RawVkImageCreateFlags> for VkImageCreateFlags {
-    
     fn vk_to_raw(src: &VkImageCreateFlags, dst: &mut RawVkImageCreateFlags) {
         *dst = 0;
         if src.sparse_binding { *dst |= 0x00000001; }
@@ -63,7 +61,6 @@ impl VkWrappedType<RawVkImageCreateFlags> for VkImageCreateFlags {
 }
 
 impl VkDefault for VkImageCreateFlags {
-    
     fn vk_default() -> VkImageCreateFlags {
         VkImageCreateFlags {
             sparse_binding: false,

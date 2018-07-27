@@ -26,7 +26,6 @@ pub enum VkLogicOp {
 }
 
 impl VkRawType<VkLogicOp> for RawVkLogicOp {
-    
     fn vk_to_wrapped(src: &RawVkLogicOp) -> VkLogicOp {
         unsafe {
             *((src as *const i32) as *const VkLogicOp)
@@ -35,14 +34,12 @@ impl VkRawType<VkLogicOp> for RawVkLogicOp {
 }
 
 impl VkWrappedType<RawVkLogicOp> for VkLogicOp {
-    
     fn vk_to_raw(src: &VkLogicOp, dst: &mut RawVkLogicOp) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkLogicOp {
-    
     fn vk_default() -> VkLogicOp {
         VkLogicOp::Clear
     }

@@ -10,7 +10,6 @@ pub struct VkPipelineCoverageModulationStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineCoverageModulationStateCreateFlags> for RawVkPipelineCoverageModulationStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineCoverageModulationStateCreateFlags) -> VkPipelineCoverageModulationStateCreateFlags {
         VkPipelineCoverageModulationStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineCoverageModulationStateCreateFlags> for RawVkPipelineCo
 }
 
 impl VkWrappedType<RawVkPipelineCoverageModulationStateCreateFlags> for VkPipelineCoverageModulationStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineCoverageModulationStateCreateFlags, dst: &mut RawVkPipelineCoverageModulationStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineCoverageModulationStateCreateFlags {
-    
     fn vk_default() -> VkPipelineCoverageModulationStateCreateFlags {
         VkPipelineCoverageModulationStateCreateFlags {
             

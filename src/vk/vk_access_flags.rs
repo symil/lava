@@ -29,7 +29,6 @@ pub struct VkAccessFlags {
 }
 
 impl VkRawType<VkAccessFlags> for RawVkAccessFlags {
-    
     fn vk_to_wrapped(src: &RawVkAccessFlags) -> VkAccessFlags {
         VkAccessFlags {
             indirect_command_read: (src & 0x00000001) != 0,
@@ -57,7 +56,6 @@ impl VkRawType<VkAccessFlags> for RawVkAccessFlags {
 }
 
 impl VkWrappedType<RawVkAccessFlags> for VkAccessFlags {
-    
     fn vk_to_raw(src: &VkAccessFlags, dst: &mut RawVkAccessFlags) {
         *dst = 0;
         if src.indirect_command_read { *dst |= 0x00000001; }
@@ -84,7 +82,6 @@ impl VkWrappedType<RawVkAccessFlags> for VkAccessFlags {
 }
 
 impl VkDefault for VkAccessFlags {
-    
     fn vk_default() -> VkAccessFlags {
         VkAccessFlags {
             indirect_command_read: false,

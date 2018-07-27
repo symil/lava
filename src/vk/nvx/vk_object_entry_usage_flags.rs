@@ -11,7 +11,6 @@ pub struct VkObjectEntryUsageFlags {
 }
 
 impl VkRawType<VkObjectEntryUsageFlags> for RawVkObjectEntryUsageFlags {
-    
     fn vk_to_wrapped(src: &RawVkObjectEntryUsageFlags) -> VkObjectEntryUsageFlags {
         VkObjectEntryUsageFlags {
             graphics: (src & 0x00000001) != 0,
@@ -21,7 +20,6 @@ impl VkRawType<VkObjectEntryUsageFlags> for RawVkObjectEntryUsageFlags {
 }
 
 impl VkWrappedType<RawVkObjectEntryUsageFlags> for VkObjectEntryUsageFlags {
-    
     fn vk_to_raw(src: &VkObjectEntryUsageFlags, dst: &mut RawVkObjectEntryUsageFlags) {
         *dst = 0;
         if src.graphics { *dst |= 0x00000001; }
@@ -30,7 +28,6 @@ impl VkWrappedType<RawVkObjectEntryUsageFlags> for VkObjectEntryUsageFlags {
 }
 
 impl VkDefault for VkObjectEntryUsageFlags {
-    
     fn vk_default() -> VkObjectEntryUsageFlags {
         VkObjectEntryUsageFlags {
             graphics: false,

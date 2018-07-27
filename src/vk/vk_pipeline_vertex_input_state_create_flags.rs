@@ -10,7 +10,6 @@ pub struct VkPipelineVertexInputStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineVertexInputStateCreateFlags> for RawVkPipelineVertexInputStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineVertexInputStateCreateFlags) -> VkPipelineVertexInputStateCreateFlags {
         VkPipelineVertexInputStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineVertexInputStateCreateFlags> for RawVkPipelineVertexInp
 }
 
 impl VkWrappedType<RawVkPipelineVertexInputStateCreateFlags> for VkPipelineVertexInputStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineVertexInputStateCreateFlags, dst: &mut RawVkPipelineVertexInputStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineVertexInputStateCreateFlags {
-    
     fn vk_default() -> VkPipelineVertexInputStateCreateFlags {
         VkPipelineVertexInputStateCreateFlags {
             

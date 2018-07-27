@@ -10,7 +10,6 @@ pub struct VkDeviceQueueCreateFlags {
 }
 
 impl VkRawType<VkDeviceQueueCreateFlags> for RawVkDeviceQueueCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkDeviceQueueCreateFlags) -> VkDeviceQueueCreateFlags {
         VkDeviceQueueCreateFlags {
             protected: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkDeviceQueueCreateFlags> for RawVkDeviceQueueCreateFlags {
 }
 
 impl VkWrappedType<RawVkDeviceQueueCreateFlags> for VkDeviceQueueCreateFlags {
-    
     fn vk_to_raw(src: &VkDeviceQueueCreateFlags, dst: &mut RawVkDeviceQueueCreateFlags) {
         *dst = 0;
         if src.protected { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkDeviceQueueCreateFlags> for VkDeviceQueueCreateFlags {
 }
 
 impl VkDefault for VkDeviceQueueCreateFlags {
-    
     fn vk_default() -> VkDeviceQueueCreateFlags {
         VkDeviceQueueCreateFlags {
             protected: false,

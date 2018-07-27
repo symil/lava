@@ -12,7 +12,6 @@ pub struct VkDebugUtilsMessageTypeFlags {
 }
 
 impl VkRawType<VkDebugUtilsMessageTypeFlags> for RawVkDebugUtilsMessageTypeFlags {
-    
     fn vk_to_wrapped(src: &RawVkDebugUtilsMessageTypeFlags) -> VkDebugUtilsMessageTypeFlags {
         VkDebugUtilsMessageTypeFlags {
             general: (src & 0x00000001) != 0,
@@ -23,7 +22,6 @@ impl VkRawType<VkDebugUtilsMessageTypeFlags> for RawVkDebugUtilsMessageTypeFlags
 }
 
 impl VkWrappedType<RawVkDebugUtilsMessageTypeFlags> for VkDebugUtilsMessageTypeFlags {
-    
     fn vk_to_raw(src: &VkDebugUtilsMessageTypeFlags, dst: &mut RawVkDebugUtilsMessageTypeFlags) {
         *dst = 0;
         if src.general { *dst |= 0x00000001; }
@@ -33,7 +31,6 @@ impl VkWrappedType<RawVkDebugUtilsMessageTypeFlags> for VkDebugUtilsMessageTypeF
 }
 
 impl VkDefault for VkDebugUtilsMessageTypeFlags {
-    
     fn vk_default() -> VkDebugUtilsMessageTypeFlags {
         VkDebugUtilsMessageTypeFlags {
             general: false,

@@ -18,7 +18,6 @@ pub struct VkSubgroupFeatureFlags {
 }
 
 impl VkRawType<VkSubgroupFeatureFlags> for RawVkSubgroupFeatureFlags {
-    
     fn vk_to_wrapped(src: &RawVkSubgroupFeatureFlags) -> VkSubgroupFeatureFlags {
         VkSubgroupFeatureFlags {
             basic: (src & 0x00000001) != 0,
@@ -35,7 +34,6 @@ impl VkRawType<VkSubgroupFeatureFlags> for RawVkSubgroupFeatureFlags {
 }
 
 impl VkWrappedType<RawVkSubgroupFeatureFlags> for VkSubgroupFeatureFlags {
-    
     fn vk_to_raw(src: &VkSubgroupFeatureFlags, dst: &mut RawVkSubgroupFeatureFlags) {
         *dst = 0;
         if src.basic { *dst |= 0x00000001; }
@@ -51,7 +49,6 @@ impl VkWrappedType<RawVkSubgroupFeatureFlags> for VkSubgroupFeatureFlags {
 }
 
 impl VkDefault for VkSubgroupFeatureFlags {
-    
     fn vk_default() -> VkSubgroupFeatureFlags {
         VkSubgroupFeatureFlags {
             basic: false,

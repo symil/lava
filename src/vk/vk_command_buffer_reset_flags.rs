@@ -10,7 +10,6 @@ pub struct VkCommandBufferResetFlags {
 }
 
 impl VkRawType<VkCommandBufferResetFlags> for RawVkCommandBufferResetFlags {
-    
     fn vk_to_wrapped(src: &RawVkCommandBufferResetFlags) -> VkCommandBufferResetFlags {
         VkCommandBufferResetFlags {
             release_resources: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkCommandBufferResetFlags> for RawVkCommandBufferResetFlags {
 }
 
 impl VkWrappedType<RawVkCommandBufferResetFlags> for VkCommandBufferResetFlags {
-    
     fn vk_to_raw(src: &VkCommandBufferResetFlags, dst: &mut RawVkCommandBufferResetFlags) {
         *dst = 0;
         if src.release_resources { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkCommandBufferResetFlags> for VkCommandBufferResetFlags {
 }
 
 impl VkDefault for VkCommandBufferResetFlags {
-    
     fn vk_default() -> VkCommandBufferResetFlags {
         VkCommandBufferResetFlags {
             release_resources: false,

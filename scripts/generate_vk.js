@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const { parseEnums, parseBitFlags,parseStructs, parseFunctions, isHandle } = require('./parse_vulkan_h');
+const { getAllEnums, getAllBitFlags, getAllStructs, parseFunctions, isHandle } = require('./vulkan_header');
 const { blockToString, toSnakeCase, toPascalCase, getRawTypeName, getWrappedTypeName } = require('./utils');
 const { HandleList } = require('./handles');
 const { generateVkStructDefinition } = require('./structs');
@@ -21,8 +21,8 @@ main();
 
 function main() {
     const vkTypes = [
-        // ...generateEnums(),
-        // ...generateBitFlags(),
+        ...generateEnums(),
+        ...generateBitFlags(),
         ...generateStructs()
     ];
 
@@ -94,10 +94,7 @@ function writeModFile(dirPath) {
     directories.forEach(dirName => writeModFile(path.join(dirPath, dirName)));
 }
 
-function generateVkTypes(parseFunction, generateFunction) {
-    // const cTypes = parseFunction();
-    const cTypes = parseFunction().slice(0, 2);
-
+function generateVkTypes(cTypes, generateFunction) {
     return cTypes.map(cDef => {
         const rustDefinition = generateFunction(cDef);
 
@@ -109,16 +106,16 @@ function generateVkTypes(parseFunction, generateFunction) {
     });
 }
 
-function generateStructs() {
-    return generateVkTypes(parseStructs, generateVkStructDefinition);
-}
-
 function generateEnums() {
-    return generateVkTypes(parseEnums, generateVkEnumDefinition);
+    return generateVkTypes(getAllEnums(), generateVkEnumDefinition);
 }
 
 function generateBitFlags() {
-    return generateVkTypes(parseBitFlags, generateVkBitFlagsDefinition);
+    return generateVkTypes(getAllBitFlags(), generateVkBitFlagsDefinition);
+}
+
+function generateStructs() {
+    return generateVkTypes(getAllStructs().slice(0, 2), generateVkStructDefinition);
 }
 
 function generateHandles() {

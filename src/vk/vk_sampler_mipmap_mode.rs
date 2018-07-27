@@ -12,7 +12,6 @@ pub enum VkSamplerMipmapMode {
 }
 
 impl VkRawType<VkSamplerMipmapMode> for RawVkSamplerMipmapMode {
-    
     fn vk_to_wrapped(src: &RawVkSamplerMipmapMode) -> VkSamplerMipmapMode {
         unsafe {
             *((src as *const i32) as *const VkSamplerMipmapMode)
@@ -21,14 +20,12 @@ impl VkRawType<VkSamplerMipmapMode> for RawVkSamplerMipmapMode {
 }
 
 impl VkWrappedType<RawVkSamplerMipmapMode> for VkSamplerMipmapMode {
-    
     fn vk_to_raw(src: &VkSamplerMipmapMode, dst: &mut RawVkSamplerMipmapMode) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkSamplerMipmapMode {
-    
     fn vk_default() -> VkSamplerMipmapMode {
         VkSamplerMipmapMode::Nearest
     }

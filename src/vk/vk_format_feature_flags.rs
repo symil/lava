@@ -33,7 +33,6 @@ pub struct VkFormatFeatureFlags {
 }
 
 impl VkRawType<VkFormatFeatureFlags> for RawVkFormatFeatureFlags {
-    
     fn vk_to_wrapped(src: &RawVkFormatFeatureFlags) -> VkFormatFeatureFlags {
         VkFormatFeatureFlags {
             sampled_image: (src & 0x00000001) != 0,
@@ -65,7 +64,6 @@ impl VkRawType<VkFormatFeatureFlags> for RawVkFormatFeatureFlags {
 }
 
 impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {
-    
     fn vk_to_raw(src: &VkFormatFeatureFlags, dst: &mut RawVkFormatFeatureFlags) {
         *dst = 0;
         if src.sampled_image { *dst |= 0x00000001; }
@@ -96,7 +94,6 @@ impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {
 }
 
 impl VkDefault for VkFormatFeatureFlags {
-    
     fn vk_default() -> VkFormatFeatureFlags {
         VkFormatFeatureFlags {
             sampled_image: false,

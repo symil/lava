@@ -13,7 +13,6 @@ pub enum VkConservativeRasterizationMode {
 }
 
 impl VkRawType<VkConservativeRasterizationMode> for RawVkConservativeRasterizationMode {
-    
     fn vk_to_wrapped(src: &RawVkConservativeRasterizationMode) -> VkConservativeRasterizationMode {
         unsafe {
             *((src as *const i32) as *const VkConservativeRasterizationMode)
@@ -22,14 +21,12 @@ impl VkRawType<VkConservativeRasterizationMode> for RawVkConservativeRasterizati
 }
 
 impl VkWrappedType<RawVkConservativeRasterizationMode> for VkConservativeRasterizationMode {
-    
     fn vk_to_raw(src: &VkConservativeRasterizationMode, dst: &mut RawVkConservativeRasterizationMode) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkConservativeRasterizationMode {
-    
     fn vk_default() -> VkConservativeRasterizationMode {
         VkConservativeRasterizationMode::Disabled
     }

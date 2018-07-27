@@ -10,7 +10,6 @@ pub struct VkPipelineShaderStageCreateFlags {
 }
 
 impl VkRawType<VkPipelineShaderStageCreateFlags> for RawVkPipelineShaderStageCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineShaderStageCreateFlags) -> VkPipelineShaderStageCreateFlags {
         VkPipelineShaderStageCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineShaderStageCreateFlags> for RawVkPipelineShaderStageCre
 }
 
 impl VkWrappedType<RawVkPipelineShaderStageCreateFlags> for VkPipelineShaderStageCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineShaderStageCreateFlags, dst: &mut RawVkPipelineShaderStageCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineShaderStageCreateFlags {
-    
     fn vk_default() -> VkPipelineShaderStageCreateFlags {
         VkPipelineShaderStageCreateFlags {
             

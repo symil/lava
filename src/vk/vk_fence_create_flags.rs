@@ -10,7 +10,6 @@ pub struct VkFenceCreateFlags {
 }
 
 impl VkRawType<VkFenceCreateFlags> for RawVkFenceCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkFenceCreateFlags) -> VkFenceCreateFlags {
         VkFenceCreateFlags {
             signaled: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkFenceCreateFlags> for RawVkFenceCreateFlags {
 }
 
 impl VkWrappedType<RawVkFenceCreateFlags> for VkFenceCreateFlags {
-    
     fn vk_to_raw(src: &VkFenceCreateFlags, dst: &mut RawVkFenceCreateFlags) {
         *dst = 0;
         if src.signaled { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkFenceCreateFlags> for VkFenceCreateFlags {
 }
 
 impl VkDefault for VkFenceCreateFlags {
-    
     fn vk_default() -> VkFenceCreateFlags {
         VkFenceCreateFlags {
             signaled: false,

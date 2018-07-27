@@ -11,7 +11,6 @@ pub struct VkDescriptorSetLayoutCreateFlags {
 }
 
 impl VkRawType<VkDescriptorSetLayoutCreateFlags> for RawVkDescriptorSetLayoutCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkDescriptorSetLayoutCreateFlags) -> VkDescriptorSetLayoutCreateFlags {
         VkDescriptorSetLayoutCreateFlags {
             push_descriptor_khr: (src & 0x00000001) != 0,
@@ -21,7 +20,6 @@ impl VkRawType<VkDescriptorSetLayoutCreateFlags> for RawVkDescriptorSetLayoutCre
 }
 
 impl VkWrappedType<RawVkDescriptorSetLayoutCreateFlags> for VkDescriptorSetLayoutCreateFlags {
-    
     fn vk_to_raw(src: &VkDescriptorSetLayoutCreateFlags, dst: &mut RawVkDescriptorSetLayoutCreateFlags) {
         *dst = 0;
         if src.push_descriptor_khr { *dst |= 0x00000001; }
@@ -30,7 +28,6 @@ impl VkWrappedType<RawVkDescriptorSetLayoutCreateFlags> for VkDescriptorSetLayou
 }
 
 impl VkDefault for VkDescriptorSetLayoutCreateFlags {
-    
     fn vk_default() -> VkDescriptorSetLayoutCreateFlags {
         VkDescriptorSetLayoutCreateFlags {
             push_descriptor_khr: false,

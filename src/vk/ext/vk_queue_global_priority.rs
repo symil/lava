@@ -14,7 +14,6 @@ pub enum VkQueueGlobalPriority {
 }
 
 impl VkRawType<VkQueueGlobalPriority> for RawVkQueueGlobalPriority {
-    
     fn vk_to_wrapped(src: &RawVkQueueGlobalPriority) -> VkQueueGlobalPriority {
         unsafe {
             *((src as *const i32) as *const VkQueueGlobalPriority)
@@ -23,14 +22,12 @@ impl VkRawType<VkQueueGlobalPriority> for RawVkQueueGlobalPriority {
 }
 
 impl VkWrappedType<RawVkQueueGlobalPriority> for VkQueueGlobalPriority {
-    
     fn vk_to_raw(src: &VkQueueGlobalPriority, dst: &mut RawVkQueueGlobalPriority) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkQueueGlobalPriority {
-    
     fn vk_default() -> VkQueueGlobalPriority {
         VkQueueGlobalPriority::Low
     }

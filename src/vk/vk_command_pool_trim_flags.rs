@@ -10,7 +10,6 @@ pub struct VkCommandPoolTrimFlags {
 }
 
 impl VkRawType<VkCommandPoolTrimFlags> for RawVkCommandPoolTrimFlags {
-    
     fn vk_to_wrapped(src: &RawVkCommandPoolTrimFlags) -> VkCommandPoolTrimFlags {
         VkCommandPoolTrimFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkCommandPoolTrimFlags> for RawVkCommandPoolTrimFlags {
 }
 
 impl VkWrappedType<RawVkCommandPoolTrimFlags> for VkCommandPoolTrimFlags {
-    
     fn vk_to_raw(src: &VkCommandPoolTrimFlags, dst: &mut RawVkCommandPoolTrimFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkCommandPoolTrimFlags {
-    
     fn vk_default() -> VkCommandPoolTrimFlags {
         VkCommandPoolTrimFlags {
             

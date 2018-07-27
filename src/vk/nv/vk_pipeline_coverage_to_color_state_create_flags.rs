@@ -10,7 +10,6 @@ pub struct VkPipelineCoverageToColorStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineCoverageToColorStateCreateFlags> for RawVkPipelineCoverageToColorStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineCoverageToColorStateCreateFlags) -> VkPipelineCoverageToColorStateCreateFlags {
         VkPipelineCoverageToColorStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineCoverageToColorStateCreateFlags> for RawVkPipelineCover
 }
 
 impl VkWrappedType<RawVkPipelineCoverageToColorStateCreateFlags> for VkPipelineCoverageToColorStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineCoverageToColorStateCreateFlags, dst: &mut RawVkPipelineCoverageToColorStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineCoverageToColorStateCreateFlags {
-    
     fn vk_default() -> VkPipelineCoverageToColorStateCreateFlags {
         VkPipelineCoverageToColorStateCreateFlags {
             

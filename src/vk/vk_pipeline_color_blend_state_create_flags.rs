@@ -10,7 +10,6 @@ pub struct VkPipelineColorBlendStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineColorBlendStateCreateFlags> for RawVkPipelineColorBlendStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineColorBlendStateCreateFlags) -> VkPipelineColorBlendStateCreateFlags {
         VkPipelineColorBlendStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineColorBlendStateCreateFlags> for RawVkPipelineColorBlend
 }
 
 impl VkWrappedType<RawVkPipelineColorBlendStateCreateFlags> for VkPipelineColorBlendStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineColorBlendStateCreateFlags, dst: &mut RawVkPipelineColorBlendStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineColorBlendStateCreateFlags {
-    
     fn vk_default() -> VkPipelineColorBlendStateCreateFlags {
         VkPipelineColorBlendStateCreateFlags {
             

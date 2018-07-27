@@ -16,7 +16,6 @@ pub struct VkSampleCountFlags {
 }
 
 impl VkRawType<VkSampleCountFlags> for RawVkSampleCountFlags {
-    
     fn vk_to_wrapped(src: &RawVkSampleCountFlags) -> VkSampleCountFlags {
         VkSampleCountFlags {
             _1: (src & 0x00000001) != 0,
@@ -31,7 +30,6 @@ impl VkRawType<VkSampleCountFlags> for RawVkSampleCountFlags {
 }
 
 impl VkWrappedType<RawVkSampleCountFlags> for VkSampleCountFlags {
-    
     fn vk_to_raw(src: &VkSampleCountFlags, dst: &mut RawVkSampleCountFlags) {
         *dst = 0;
         if src._1 { *dst |= 0x00000001; }
@@ -45,7 +43,6 @@ impl VkWrappedType<RawVkSampleCountFlags> for VkSampleCountFlags {
 }
 
 impl VkDefault for VkSampleCountFlags {
-    
     fn vk_default() -> VkSampleCountFlags {
         VkSampleCountFlags {
             _1: false,

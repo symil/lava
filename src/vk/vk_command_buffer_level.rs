@@ -12,7 +12,6 @@ pub enum VkCommandBufferLevel {
 }
 
 impl VkRawType<VkCommandBufferLevel> for RawVkCommandBufferLevel {
-    
     fn vk_to_wrapped(src: &RawVkCommandBufferLevel) -> VkCommandBufferLevel {
         unsafe {
             *((src as *const i32) as *const VkCommandBufferLevel)
@@ -21,14 +20,12 @@ impl VkRawType<VkCommandBufferLevel> for RawVkCommandBufferLevel {
 }
 
 impl VkWrappedType<RawVkCommandBufferLevel> for VkCommandBufferLevel {
-    
     fn vk_to_raw(src: &VkCommandBufferLevel, dst: &mut RawVkCommandBufferLevel) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkCommandBufferLevel {
-    
     fn vk_default() -> VkCommandBufferLevel {
         VkCommandBufferLevel::Primary
     }

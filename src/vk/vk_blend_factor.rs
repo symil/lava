@@ -29,7 +29,6 @@ pub enum VkBlendFactor {
 }
 
 impl VkRawType<VkBlendFactor> for RawVkBlendFactor {
-    
     fn vk_to_wrapped(src: &RawVkBlendFactor) -> VkBlendFactor {
         unsafe {
             *((src as *const i32) as *const VkBlendFactor)
@@ -38,14 +37,12 @@ impl VkRawType<VkBlendFactor> for RawVkBlendFactor {
 }
 
 impl VkWrappedType<RawVkBlendFactor> for VkBlendFactor {
-    
     fn vk_to_raw(src: &VkBlendFactor, dst: &mut RawVkBlendFactor) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkBlendFactor {
-    
     fn vk_default() -> VkBlendFactor {
         VkBlendFactor::Zero
     }

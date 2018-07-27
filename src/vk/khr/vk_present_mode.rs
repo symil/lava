@@ -16,7 +16,6 @@ pub enum VkPresentMode {
 }
 
 impl VkRawType<VkPresentMode> for RawVkPresentMode {
-    
     fn vk_to_wrapped(src: &RawVkPresentMode) -> VkPresentMode {
         unsafe {
             *((src as *const i32) as *const VkPresentMode)
@@ -25,14 +24,12 @@ impl VkRawType<VkPresentMode> for RawVkPresentMode {
 }
 
 impl VkWrappedType<RawVkPresentMode> for VkPresentMode {
-    
     fn vk_to_raw(src: &VkPresentMode, dst: &mut RawVkPresentMode) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkPresentMode {
-    
     fn vk_default() -> VkPresentMode {
         VkPresentMode::Immediate
     }

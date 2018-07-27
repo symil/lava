@@ -10,7 +10,6 @@ pub struct VkInstanceCreateFlags {
 }
 
 impl VkRawType<VkInstanceCreateFlags> for RawVkInstanceCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkInstanceCreateFlags) -> VkInstanceCreateFlags {
         VkInstanceCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkInstanceCreateFlags> for RawVkInstanceCreateFlags {
 }
 
 impl VkWrappedType<RawVkInstanceCreateFlags> for VkInstanceCreateFlags {
-    
     fn vk_to_raw(src: &VkInstanceCreateFlags, dst: &mut RawVkInstanceCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkInstanceCreateFlags {
-    
     fn vk_default() -> VkInstanceCreateFlags {
         VkInstanceCreateFlags {
             

@@ -13,7 +13,6 @@ pub enum VkAttachmentLoadOp {
 }
 
 impl VkRawType<VkAttachmentLoadOp> for RawVkAttachmentLoadOp {
-    
     fn vk_to_wrapped(src: &RawVkAttachmentLoadOp) -> VkAttachmentLoadOp {
         unsafe {
             *((src as *const i32) as *const VkAttachmentLoadOp)
@@ -22,14 +21,12 @@ impl VkRawType<VkAttachmentLoadOp> for RawVkAttachmentLoadOp {
 }
 
 impl VkWrappedType<RawVkAttachmentLoadOp> for VkAttachmentLoadOp {
-    
     fn vk_to_raw(src: &VkAttachmentLoadOp, dst: &mut RawVkAttachmentLoadOp) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkAttachmentLoadOp {
-    
     fn vk_default() -> VkAttachmentLoadOp {
         VkAttachmentLoadOp::Load
     }

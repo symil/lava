@@ -10,7 +10,6 @@ pub struct VkPipelineRasterizationStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineRasterizationStateCreateFlags> for RawVkPipelineRasterizationStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineRasterizationStateCreateFlags) -> VkPipelineRasterizationStateCreateFlags {
         VkPipelineRasterizationStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineRasterizationStateCreateFlags> for RawVkPipelineRasteri
 }
 
 impl VkWrappedType<RawVkPipelineRasterizationStateCreateFlags> for VkPipelineRasterizationStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineRasterizationStateCreateFlags, dst: &mut RawVkPipelineRasterizationStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineRasterizationStateCreateFlags {
-    
     fn vk_default() -> VkPipelineRasterizationStateCreateFlags {
         VkPipelineRasterizationStateCreateFlags {
             

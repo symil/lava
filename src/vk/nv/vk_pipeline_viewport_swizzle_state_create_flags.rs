@@ -10,7 +10,6 @@ pub struct VkPipelineViewportSwizzleStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineViewportSwizzleStateCreateFlags> for RawVkPipelineViewportSwizzleStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineViewportSwizzleStateCreateFlags) -> VkPipelineViewportSwizzleStateCreateFlags {
         VkPipelineViewportSwizzleStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineViewportSwizzleStateCreateFlags> for RawVkPipelineViewp
 }
 
 impl VkWrappedType<RawVkPipelineViewportSwizzleStateCreateFlags> for VkPipelineViewportSwizzleStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineViewportSwizzleStateCreateFlags, dst: &mut RawVkPipelineViewportSwizzleStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineViewportSwizzleStateCreateFlags {
-    
     fn vk_default() -> VkPipelineViewportSwizzleStateCreateFlags {
         VkPipelineViewportSwizzleStateCreateFlags {
             

@@ -11,7 +11,6 @@ pub struct VkMemoryHeapFlags {
 }
 
 impl VkRawType<VkMemoryHeapFlags> for RawVkMemoryHeapFlags {
-    
     fn vk_to_wrapped(src: &RawVkMemoryHeapFlags) -> VkMemoryHeapFlags {
         VkMemoryHeapFlags {
             device_local: (src & 0x00000001) != 0,
@@ -21,7 +20,6 @@ impl VkRawType<VkMemoryHeapFlags> for RawVkMemoryHeapFlags {
 }
 
 impl VkWrappedType<RawVkMemoryHeapFlags> for VkMemoryHeapFlags {
-    
     fn vk_to_raw(src: &VkMemoryHeapFlags, dst: &mut RawVkMemoryHeapFlags) {
         *dst = 0;
         if src.device_local { *dst |= 0x00000001; }
@@ -30,7 +28,6 @@ impl VkWrappedType<RawVkMemoryHeapFlags> for VkMemoryHeapFlags {
 }
 
 impl VkDefault for VkMemoryHeapFlags {
-    
     fn vk_default() -> VkMemoryHeapFlags {
         VkMemoryHeapFlags {
             device_local: false,

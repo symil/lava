@@ -10,7 +10,6 @@ pub struct VkValidationCacheCreateFlags {
 }
 
 impl VkRawType<VkValidationCacheCreateFlags> for RawVkValidationCacheCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkValidationCacheCreateFlags) -> VkValidationCacheCreateFlags {
         VkValidationCacheCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkValidationCacheCreateFlags> for RawVkValidationCacheCreateFlags
 }
 
 impl VkWrappedType<RawVkValidationCacheCreateFlags> for VkValidationCacheCreateFlags {
-    
     fn vk_to_raw(src: &VkValidationCacheCreateFlags, dst: &mut RawVkValidationCacheCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkValidationCacheCreateFlags {
-    
     fn vk_default() -> VkValidationCacheCreateFlags {
         VkValidationCacheCreateFlags {
             

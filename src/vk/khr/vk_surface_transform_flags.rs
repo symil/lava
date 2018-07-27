@@ -18,7 +18,6 @@ pub struct VkSurfaceTransformFlags {
 }
 
 impl VkRawType<VkSurfaceTransformFlags> for RawVkSurfaceTransformFlags {
-    
     fn vk_to_wrapped(src: &RawVkSurfaceTransformFlags) -> VkSurfaceTransformFlags {
         VkSurfaceTransformFlags {
             identity: (src & 0x00000001) != 0,
@@ -35,7 +34,6 @@ impl VkRawType<VkSurfaceTransformFlags> for RawVkSurfaceTransformFlags {
 }
 
 impl VkWrappedType<RawVkSurfaceTransformFlags> for VkSurfaceTransformFlags {
-    
     fn vk_to_raw(src: &VkSurfaceTransformFlags, dst: &mut RawVkSurfaceTransformFlags) {
         *dst = 0;
         if src.identity { *dst |= 0x00000001; }
@@ -51,7 +49,6 @@ impl VkWrappedType<RawVkSurfaceTransformFlags> for VkSurfaceTransformFlags {
 }
 
 impl VkDefault for VkSurfaceTransformFlags {
-    
     fn vk_default() -> VkSurfaceTransformFlags {
         VkSurfaceTransformFlags {
             identity: false,

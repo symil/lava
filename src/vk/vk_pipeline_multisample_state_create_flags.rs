@@ -10,7 +10,6 @@ pub struct VkPipelineMultisampleStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineMultisampleStateCreateFlags> for RawVkPipelineMultisampleStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineMultisampleStateCreateFlags) -> VkPipelineMultisampleStateCreateFlags {
         VkPipelineMultisampleStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineMultisampleStateCreateFlags> for RawVkPipelineMultisamp
 }
 
 impl VkWrappedType<RawVkPipelineMultisampleStateCreateFlags> for VkPipelineMultisampleStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineMultisampleStateCreateFlags, dst: &mut RawVkPipelineMultisampleStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineMultisampleStateCreateFlags {
-    
     fn vk_default() -> VkPipelineMultisampleStateCreateFlags {
         VkPipelineMultisampleStateCreateFlags {
             

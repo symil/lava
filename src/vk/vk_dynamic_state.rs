@@ -22,7 +22,6 @@ pub enum VkDynamicState {
 }
 
 impl VkRawType<VkDynamicState> for RawVkDynamicState {
-    
     fn vk_to_wrapped(src: &RawVkDynamicState) -> VkDynamicState {
         unsafe {
             *((src as *const i32) as *const VkDynamicState)
@@ -31,14 +30,12 @@ impl VkRawType<VkDynamicState> for RawVkDynamicState {
 }
 
 impl VkWrappedType<RawVkDynamicState> for VkDynamicState {
-    
     fn vk_to_raw(src: &VkDynamicState, dst: &mut RawVkDynamicState) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkDynamicState {
-    
     fn vk_default() -> VkDynamicState {
         VkDynamicState::Viewport
     }

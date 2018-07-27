@@ -13,7 +13,6 @@ pub enum VkSamplerReductionMode {
 }
 
 impl VkRawType<VkSamplerReductionMode> for RawVkSamplerReductionMode {
-    
     fn vk_to_wrapped(src: &RawVkSamplerReductionMode) -> VkSamplerReductionMode {
         unsafe {
             *((src as *const i32) as *const VkSamplerReductionMode)
@@ -22,14 +21,12 @@ impl VkRawType<VkSamplerReductionMode> for RawVkSamplerReductionMode {
 }
 
 impl VkWrappedType<RawVkSamplerReductionMode> for VkSamplerReductionMode {
-    
     fn vk_to_raw(src: &VkSamplerReductionMode, dst: &mut RawVkSamplerReductionMode) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkSamplerReductionMode {
-    
     fn vk_default() -> VkSamplerReductionMode {
         VkSamplerReductionMode::WeightedAverage
     }

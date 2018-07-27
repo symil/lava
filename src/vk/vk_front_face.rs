@@ -12,7 +12,6 @@ pub enum VkFrontFace {
 }
 
 impl VkRawType<VkFrontFace> for RawVkFrontFace {
-    
     fn vk_to_wrapped(src: &RawVkFrontFace) -> VkFrontFace {
         unsafe {
             *((src as *const i32) as *const VkFrontFace)
@@ -21,14 +20,12 @@ impl VkRawType<VkFrontFace> for RawVkFrontFace {
 }
 
 impl VkWrappedType<RawVkFrontFace> for VkFrontFace {
-    
     fn vk_to_raw(src: &VkFrontFace, dst: &mut RawVkFrontFace) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkFrontFace {
-    
     fn vk_default() -> VkFrontFace {
         VkFrontFace::CounterClockwise
     }

@@ -10,7 +10,6 @@ pub struct VkDisplaySurfaceCreateFlags {
 }
 
 impl VkRawType<VkDisplaySurfaceCreateFlags> for RawVkDisplaySurfaceCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkDisplaySurfaceCreateFlags) -> VkDisplaySurfaceCreateFlags {
         VkDisplaySurfaceCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkDisplaySurfaceCreateFlags> for RawVkDisplaySurfaceCreateFlags {
 }
 
 impl VkWrappedType<RawVkDisplaySurfaceCreateFlags> for VkDisplaySurfaceCreateFlags {
-    
     fn vk_to_raw(src: &VkDisplaySurfaceCreateFlags, dst: &mut RawVkDisplaySurfaceCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkDisplaySurfaceCreateFlags {
-    
     fn vk_default() -> VkDisplaySurfaceCreateFlags {
         VkDisplaySurfaceCreateFlags {
             

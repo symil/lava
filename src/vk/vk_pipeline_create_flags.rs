@@ -14,7 +14,6 @@ pub struct VkPipelineCreateFlags {
 }
 
 impl VkRawType<VkPipelineCreateFlags> for RawVkPipelineCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineCreateFlags) -> VkPipelineCreateFlags {
         VkPipelineCreateFlags {
             disable_optimization: (src & 0x00000001) != 0,
@@ -27,7 +26,6 @@ impl VkRawType<VkPipelineCreateFlags> for RawVkPipelineCreateFlags {
 }
 
 impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineCreateFlags, dst: &mut RawVkPipelineCreateFlags) {
         *dst = 0;
         if src.disable_optimization { *dst |= 0x00000001; }
@@ -39,7 +37,6 @@ impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {
 }
 
 impl VkDefault for VkPipelineCreateFlags {
-    
     fn vk_default() -> VkPipelineCreateFlags {
         VkPipelineCreateFlags {
             disable_optimization: false,

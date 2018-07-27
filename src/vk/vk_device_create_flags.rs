@@ -10,7 +10,6 @@ pub struct VkDeviceCreateFlags {
 }
 
 impl VkRawType<VkDeviceCreateFlags> for RawVkDeviceCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkDeviceCreateFlags) -> VkDeviceCreateFlags {
         VkDeviceCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkDeviceCreateFlags> for RawVkDeviceCreateFlags {
 }
 
 impl VkWrappedType<RawVkDeviceCreateFlags> for VkDeviceCreateFlags {
-    
     fn vk_to_raw(src: &VkDeviceCreateFlags, dst: &mut RawVkDeviceCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkDeviceCreateFlags {
-    
     fn vk_default() -> VkDeviceCreateFlags {
         VkDeviceCreateFlags {
             

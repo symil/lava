@@ -11,7 +11,6 @@ pub struct VkExternalSemaphoreFeatureFlags {
 }
 
 impl VkRawType<VkExternalSemaphoreFeatureFlags> for RawVkExternalSemaphoreFeatureFlags {
-    
     fn vk_to_wrapped(src: &RawVkExternalSemaphoreFeatureFlags) -> VkExternalSemaphoreFeatureFlags {
         VkExternalSemaphoreFeatureFlags {
             exportable: (src & 0x00000001) != 0,
@@ -21,7 +20,6 @@ impl VkRawType<VkExternalSemaphoreFeatureFlags> for RawVkExternalSemaphoreFeatur
 }
 
 impl VkWrappedType<RawVkExternalSemaphoreFeatureFlags> for VkExternalSemaphoreFeatureFlags {
-    
     fn vk_to_raw(src: &VkExternalSemaphoreFeatureFlags, dst: &mut RawVkExternalSemaphoreFeatureFlags) {
         *dst = 0;
         if src.exportable { *dst |= 0x00000001; }
@@ -30,7 +28,6 @@ impl VkWrappedType<RawVkExternalSemaphoreFeatureFlags> for VkExternalSemaphoreFe
 }
 
 impl VkDefault for VkExternalSemaphoreFeatureFlags {
-    
     fn vk_default() -> VkExternalSemaphoreFeatureFlags {
         VkExternalSemaphoreFeatureFlags {
             exportable: false,

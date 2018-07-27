@@ -11,7 +11,6 @@ pub enum VkDeviceEventType {
 }
 
 impl VkRawType<VkDeviceEventType> for RawVkDeviceEventType {
-    
     fn vk_to_wrapped(src: &RawVkDeviceEventType) -> VkDeviceEventType {
         unsafe {
             *((src as *const i32) as *const VkDeviceEventType)
@@ -20,14 +19,12 @@ impl VkRawType<VkDeviceEventType> for RawVkDeviceEventType {
 }
 
 impl VkWrappedType<RawVkDeviceEventType> for VkDeviceEventType {
-    
     fn vk_to_raw(src: &VkDeviceEventType, dst: &mut RawVkDeviceEventType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkDeviceEventType {
-    
     fn vk_default() -> VkDeviceEventType {
         VkDeviceEventType::DisplayHotplug
     }

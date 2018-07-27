@@ -13,7 +13,6 @@ pub struct VkDebugUtilsMessageSeverityFlags {
 }
 
 impl VkRawType<VkDebugUtilsMessageSeverityFlags> for RawVkDebugUtilsMessageSeverityFlags {
-    
     fn vk_to_wrapped(src: &RawVkDebugUtilsMessageSeverityFlags) -> VkDebugUtilsMessageSeverityFlags {
         VkDebugUtilsMessageSeverityFlags {
             verbose: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkDebugUtilsMessageSeverityFlags> for RawVkDebugUtilsMessageSever
 }
 
 impl VkWrappedType<RawVkDebugUtilsMessageSeverityFlags> for VkDebugUtilsMessageSeverityFlags {
-    
     fn vk_to_raw(src: &VkDebugUtilsMessageSeverityFlags, dst: &mut RawVkDebugUtilsMessageSeverityFlags) {
         *dst = 0;
         if src.verbose { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkDebugUtilsMessageSeverityFlags> for VkDebugUtilsMessageS
 }
 
 impl VkDefault for VkDebugUtilsMessageSeverityFlags {
-    
     fn vk_default() -> VkDebugUtilsMessageSeverityFlags {
         VkDebugUtilsMessageSeverityFlags {
             verbose: false,

@@ -10,7 +10,6 @@ pub struct VkPipelineDiscardRectangleStateCreateFlags {
 }
 
 impl VkRawType<VkPipelineDiscardRectangleStateCreateFlags> for RawVkPipelineDiscardRectangleStateCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineDiscardRectangleStateCreateFlags) -> VkPipelineDiscardRectangleStateCreateFlags {
         VkPipelineDiscardRectangleStateCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineDiscardRectangleStateCreateFlags> for RawVkPipelineDisc
 }
 
 impl VkWrappedType<RawVkPipelineDiscardRectangleStateCreateFlags> for VkPipelineDiscardRectangleStateCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineDiscardRectangleStateCreateFlags, dst: &mut RawVkPipelineDiscardRectangleStateCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineDiscardRectangleStateCreateFlags {
-    
     fn vk_default() -> VkPipelineDiscardRectangleStateCreateFlags {
         VkPipelineDiscardRectangleStateCreateFlags {
             

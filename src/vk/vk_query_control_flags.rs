@@ -10,7 +10,6 @@ pub struct VkQueryControlFlags {
 }
 
 impl VkRawType<VkQueryControlFlags> for RawVkQueryControlFlags {
-    
     fn vk_to_wrapped(src: &RawVkQueryControlFlags) -> VkQueryControlFlags {
         VkQueryControlFlags {
             precise: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkQueryControlFlags> for RawVkQueryControlFlags {
 }
 
 impl VkWrappedType<RawVkQueryControlFlags> for VkQueryControlFlags {
-    
     fn vk_to_raw(src: &VkQueryControlFlags, dst: &mut RawVkQueryControlFlags) {
         *dst = 0;
         if src.precise { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkQueryControlFlags> for VkQueryControlFlags {
 }
 
 impl VkDefault for VkQueryControlFlags {
-    
     fn vk_default() -> VkQueryControlFlags {
         VkQueryControlFlags {
             precise: false,

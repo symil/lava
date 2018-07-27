@@ -11,7 +11,6 @@ pub struct VkSwapchainCreateFlags {
 }
 
 impl VkRawType<VkSwapchainCreateFlags> for RawVkSwapchainCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkSwapchainCreateFlags) -> VkSwapchainCreateFlags {
         VkSwapchainCreateFlags {
             split_instance_bind_regions: (src & 0x00000001) != 0,
@@ -21,7 +20,6 @@ impl VkRawType<VkSwapchainCreateFlags> for RawVkSwapchainCreateFlags {
 }
 
 impl VkWrappedType<RawVkSwapchainCreateFlags> for VkSwapchainCreateFlags {
-    
     fn vk_to_raw(src: &VkSwapchainCreateFlags, dst: &mut RawVkSwapchainCreateFlags) {
         *dst = 0;
         if src.split_instance_bind_regions { *dst |= 0x00000001; }
@@ -30,7 +28,6 @@ impl VkWrappedType<RawVkSwapchainCreateFlags> for VkSwapchainCreateFlags {
 }
 
 impl VkDefault for VkSwapchainCreateFlags {
-    
     fn vk_default() -> VkSwapchainCreateFlags {
         VkSwapchainCreateFlags {
             split_instance_bind_regions: false,

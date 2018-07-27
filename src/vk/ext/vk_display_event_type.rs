@@ -11,7 +11,6 @@ pub enum VkDisplayEventType {
 }
 
 impl VkRawType<VkDisplayEventType> for RawVkDisplayEventType {
-    
     fn vk_to_wrapped(src: &RawVkDisplayEventType) -> VkDisplayEventType {
         unsafe {
             *((src as *const i32) as *const VkDisplayEventType)
@@ -20,14 +19,12 @@ impl VkRawType<VkDisplayEventType> for RawVkDisplayEventType {
 }
 
 impl VkWrappedType<RawVkDisplayEventType> for VkDisplayEventType {
-    
     fn vk_to_raw(src: &VkDisplayEventType, dst: &mut RawVkDisplayEventType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkDisplayEventType {
-    
     fn vk_default() -> VkDisplayEventType {
         VkDisplayEventType::FirstPixelOut
     }

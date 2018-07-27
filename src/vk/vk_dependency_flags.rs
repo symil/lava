@@ -12,7 +12,6 @@ pub struct VkDependencyFlags {
 }
 
 impl VkRawType<VkDependencyFlags> for RawVkDependencyFlags {
-    
     fn vk_to_wrapped(src: &RawVkDependencyFlags) -> VkDependencyFlags {
         VkDependencyFlags {
             by_region: (src & 0x00000001) != 0,
@@ -23,7 +22,6 @@ impl VkRawType<VkDependencyFlags> for RawVkDependencyFlags {
 }
 
 impl VkWrappedType<RawVkDependencyFlags> for VkDependencyFlags {
-    
     fn vk_to_raw(src: &VkDependencyFlags, dst: &mut RawVkDependencyFlags) {
         *dst = 0;
         if src.by_region { *dst |= 0x00000001; }
@@ -33,7 +31,6 @@ impl VkWrappedType<RawVkDependencyFlags> for VkDependencyFlags {
 }
 
 impl VkDefault for VkDependencyFlags {
-    
     fn vk_default() -> VkDependencyFlags {
         VkDependencyFlags {
             by_region: false,

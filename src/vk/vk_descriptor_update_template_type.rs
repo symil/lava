@@ -12,7 +12,6 @@ pub enum VkDescriptorUpdateTemplateType {
 }
 
 impl VkRawType<VkDescriptorUpdateTemplateType> for RawVkDescriptorUpdateTemplateType {
-    
     fn vk_to_wrapped(src: &RawVkDescriptorUpdateTemplateType) -> VkDescriptorUpdateTemplateType {
         unsafe {
             *((src as *const i32) as *const VkDescriptorUpdateTemplateType)
@@ -21,14 +20,12 @@ impl VkRawType<VkDescriptorUpdateTemplateType> for RawVkDescriptorUpdateTemplate
 }
 
 impl VkWrappedType<RawVkDescriptorUpdateTemplateType> for VkDescriptorUpdateTemplateType {
-    
     fn vk_to_raw(src: &VkDescriptorUpdateTemplateType, dst: &mut RawVkDescriptorUpdateTemplateType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkDescriptorUpdateTemplateType {
-    
     fn vk_default() -> VkDescriptorUpdateTemplateType {
         VkDescriptorUpdateTemplateType::DescriptorSet
     }

@@ -15,7 +15,6 @@ pub enum VkPhysicalDeviceType {
 }
 
 impl VkRawType<VkPhysicalDeviceType> for RawVkPhysicalDeviceType {
-    
     fn vk_to_wrapped(src: &RawVkPhysicalDeviceType) -> VkPhysicalDeviceType {
         unsafe {
             *((src as *const i32) as *const VkPhysicalDeviceType)
@@ -24,14 +23,12 @@ impl VkRawType<VkPhysicalDeviceType> for RawVkPhysicalDeviceType {
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceType> for VkPhysicalDeviceType {
-    
     fn vk_to_raw(src: &VkPhysicalDeviceType, dst: &mut RawVkPhysicalDeviceType) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkPhysicalDeviceType {
-    
     fn vk_default() -> VkPhysicalDeviceType {
         VkPhysicalDeviceType::Other
     }

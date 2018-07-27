@@ -10,7 +10,6 @@ pub struct VkAttachmentDescriptionFlags {
 }
 
 impl VkRawType<VkAttachmentDescriptionFlags> for RawVkAttachmentDescriptionFlags {
-    
     fn vk_to_wrapped(src: &RawVkAttachmentDescriptionFlags) -> VkAttachmentDescriptionFlags {
         VkAttachmentDescriptionFlags {
             may_alias: (src & 0x00000001) != 0,
@@ -19,7 +18,6 @@ impl VkRawType<VkAttachmentDescriptionFlags> for RawVkAttachmentDescriptionFlags
 }
 
 impl VkWrappedType<RawVkAttachmentDescriptionFlags> for VkAttachmentDescriptionFlags {
-    
     fn vk_to_raw(src: &VkAttachmentDescriptionFlags, dst: &mut RawVkAttachmentDescriptionFlags) {
         *dst = 0;
         if src.may_alias { *dst |= 0x00000001; }
@@ -27,7 +25,6 @@ impl VkWrappedType<RawVkAttachmentDescriptionFlags> for VkAttachmentDescriptionF
 }
 
 impl VkDefault for VkAttachmentDescriptionFlags {
-    
     fn vk_default() -> VkAttachmentDescriptionFlags {
         VkAttachmentDescriptionFlags {
             may_alias: false,

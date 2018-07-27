@@ -12,7 +12,6 @@ pub struct VkSparseImageFormatFlags {
 }
 
 impl VkRawType<VkSparseImageFormatFlags> for RawVkSparseImageFormatFlags {
-    
     fn vk_to_wrapped(src: &RawVkSparseImageFormatFlags) -> VkSparseImageFormatFlags {
         VkSparseImageFormatFlags {
             single_miptail: (src & 0x00000001) != 0,
@@ -23,7 +22,6 @@ impl VkRawType<VkSparseImageFormatFlags> for RawVkSparseImageFormatFlags {
 }
 
 impl VkWrappedType<RawVkSparseImageFormatFlags> for VkSparseImageFormatFlags {
-    
     fn vk_to_raw(src: &VkSparseImageFormatFlags, dst: &mut RawVkSparseImageFormatFlags) {
         *dst = 0;
         if src.single_miptail { *dst |= 0x00000001; }
@@ -33,7 +31,6 @@ impl VkWrappedType<RawVkSparseImageFormatFlags> for VkSparseImageFormatFlags {
 }
 
 impl VkDefault for VkSparseImageFormatFlags {
-    
     fn vk_default() -> VkSparseImageFormatFlags {
         VkSparseImageFormatFlags {
             single_miptail: false,

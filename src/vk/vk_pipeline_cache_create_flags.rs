@@ -10,7 +10,6 @@ pub struct VkPipelineCacheCreateFlags {
 }
 
 impl VkRawType<VkPipelineCacheCreateFlags> for RawVkPipelineCacheCreateFlags {
-    
     fn vk_to_wrapped(src: &RawVkPipelineCacheCreateFlags) -> VkPipelineCacheCreateFlags {
         VkPipelineCacheCreateFlags {
             
@@ -19,14 +18,12 @@ impl VkRawType<VkPipelineCacheCreateFlags> for RawVkPipelineCacheCreateFlags {
 }
 
 impl VkWrappedType<RawVkPipelineCacheCreateFlags> for VkPipelineCacheCreateFlags {
-    
     fn vk_to_raw(src: &VkPipelineCacheCreateFlags, dst: &mut RawVkPipelineCacheCreateFlags) {
         *dst = 0;
     }
 }
 
 impl VkDefault for VkPipelineCacheCreateFlags {
-    
     fn vk_default() -> VkPipelineCacheCreateFlags {
         VkPipelineCacheCreateFlags {
             

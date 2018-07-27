@@ -18,7 +18,6 @@ pub enum VkStencilOp {
 }
 
 impl VkRawType<VkStencilOp> for RawVkStencilOp {
-    
     fn vk_to_wrapped(src: &RawVkStencilOp) -> VkStencilOp {
         unsafe {
             *((src as *const i32) as *const VkStencilOp)
@@ -27,14 +26,12 @@ impl VkRawType<VkStencilOp> for RawVkStencilOp {
 }
 
 impl VkWrappedType<RawVkStencilOp> for VkStencilOp {
-    
     fn vk_to_raw(src: &VkStencilOp, dst: &mut RawVkStencilOp) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkStencilOp {
-    
     fn vk_default() -> VkStencilOp {
         VkStencilOp::Keep
     }

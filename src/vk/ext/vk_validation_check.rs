@@ -12,7 +12,6 @@ pub enum VkValidationCheck {
 }
 
 impl VkRawType<VkValidationCheck> for RawVkValidationCheck {
-    
     fn vk_to_wrapped(src: &RawVkValidationCheck) -> VkValidationCheck {
         unsafe {
             *((src as *const i32) as *const VkValidationCheck)
@@ -21,14 +20,12 @@ impl VkRawType<VkValidationCheck> for RawVkValidationCheck {
 }
 
 impl VkWrappedType<RawVkValidationCheck> for VkValidationCheck {
-    
     fn vk_to_raw(src: &VkValidationCheck, dst: &mut RawVkValidationCheck) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkValidationCheck {
-    
     fn vk_default() -> VkValidationCheck {
         VkValidationCheck::All
     }

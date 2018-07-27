@@ -18,7 +18,6 @@ pub enum VkViewportCoordinateSwizzle {
 }
 
 impl VkRawType<VkViewportCoordinateSwizzle> for RawVkViewportCoordinateSwizzle {
-    
     fn vk_to_wrapped(src: &RawVkViewportCoordinateSwizzle) -> VkViewportCoordinateSwizzle {
         unsafe {
             *((src as *const i32) as *const VkViewportCoordinateSwizzle)
@@ -27,14 +26,12 @@ impl VkRawType<VkViewportCoordinateSwizzle> for RawVkViewportCoordinateSwizzle {
 }
 
 impl VkWrappedType<RawVkViewportCoordinateSwizzle> for VkViewportCoordinateSwizzle {
-    
     fn vk_to_raw(src: &VkViewportCoordinateSwizzle, dst: &mut RawVkViewportCoordinateSwizzle) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkViewportCoordinateSwizzle {
-    
     fn vk_default() -> VkViewportCoordinateSwizzle {
         VkViewportCoordinateSwizzle::PositiveX
     }

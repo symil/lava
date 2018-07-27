@@ -16,7 +16,6 @@ pub enum VkBorderColor {
 }
 
 impl VkRawType<VkBorderColor> for RawVkBorderColor {
-    
     fn vk_to_wrapped(src: &RawVkBorderColor) -> VkBorderColor {
         unsafe {
             *((src as *const i32) as *const VkBorderColor)
@@ -25,14 +24,12 @@ impl VkRawType<VkBorderColor> for RawVkBorderColor {
 }
 
 impl VkWrappedType<RawVkBorderColor> for VkBorderColor {
-    
     fn vk_to_raw(src: &VkBorderColor, dst: &mut RawVkBorderColor) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkBorderColor {
-    
     fn vk_default() -> VkBorderColor {
         VkBorderColor::FloatTransparentBlack
     }

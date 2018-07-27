@@ -14,7 +14,6 @@ pub struct VkExternalSemaphoreHandleTypeFlags {
 }
 
 impl VkRawType<VkExternalSemaphoreHandleTypeFlags> for RawVkExternalSemaphoreHandleTypeFlags {
-    
     fn vk_to_wrapped(src: &RawVkExternalSemaphoreHandleTypeFlags) -> VkExternalSemaphoreHandleTypeFlags {
         VkExternalSemaphoreHandleTypeFlags {
             opaque_fd: (src & 0x00000001) != 0,
@@ -27,7 +26,6 @@ impl VkRawType<VkExternalSemaphoreHandleTypeFlags> for RawVkExternalSemaphoreHan
 }
 
 impl VkWrappedType<RawVkExternalSemaphoreHandleTypeFlags> for VkExternalSemaphoreHandleTypeFlags {
-    
     fn vk_to_raw(src: &VkExternalSemaphoreHandleTypeFlags, dst: &mut RawVkExternalSemaphoreHandleTypeFlags) {
         *dst = 0;
         if src.opaque_fd { *dst |= 0x00000001; }
@@ -39,7 +37,6 @@ impl VkWrappedType<RawVkExternalSemaphoreHandleTypeFlags> for VkExternalSemaphor
 }
 
 impl VkDefault for VkExternalSemaphoreHandleTypeFlags {
-    
     fn vk_default() -> VkExternalSemaphoreHandleTypeFlags {
         VkExternalSemaphoreHandleTypeFlags {
             opaque_fd: false,

@@ -12,7 +12,6 @@ pub struct VkStencilFaceFlags {
 }
 
 impl VkRawType<VkStencilFaceFlags> for RawVkStencilFaceFlags {
-    
     fn vk_to_wrapped(src: &RawVkStencilFaceFlags) -> VkStencilFaceFlags {
         VkStencilFaceFlags {
             front: (src & 0x00000001) != 0,
@@ -23,7 +22,6 @@ impl VkRawType<VkStencilFaceFlags> for RawVkStencilFaceFlags {
 }
 
 impl VkWrappedType<RawVkStencilFaceFlags> for VkStencilFaceFlags {
-    
     fn vk_to_raw(src: &VkStencilFaceFlags, dst: &mut RawVkStencilFaceFlags) {
         *dst = 0;
         if src.front { *dst |= 0x00000001; }
@@ -33,7 +31,6 @@ impl VkWrappedType<RawVkStencilFaceFlags> for VkStencilFaceFlags {
 }
 
 impl VkDefault for VkStencilFaceFlags {
-    
     fn vk_default() -> VkStencilFaceFlags {
         VkStencilFaceFlags {
             front: false,

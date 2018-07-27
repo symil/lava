@@ -11,7 +11,6 @@ pub enum VkPipelineCacheHeaderVersion {
 }
 
 impl VkRawType<VkPipelineCacheHeaderVersion> for RawVkPipelineCacheHeaderVersion {
-    
     fn vk_to_wrapped(src: &RawVkPipelineCacheHeaderVersion) -> VkPipelineCacheHeaderVersion {
         unsafe {
             *((src as *const i32) as *const VkPipelineCacheHeaderVersion)
@@ -20,14 +19,12 @@ impl VkRawType<VkPipelineCacheHeaderVersion> for RawVkPipelineCacheHeaderVersion
 }
 
 impl VkWrappedType<RawVkPipelineCacheHeaderVersion> for VkPipelineCacheHeaderVersion {
-    
     fn vk_to_raw(src: &VkPipelineCacheHeaderVersion, dst: &mut RawVkPipelineCacheHeaderVersion) {
         *dst = *src as i32
     }
 }
 
 impl VkDefault for VkPipelineCacheHeaderVersion {
-    
     fn vk_default() -> VkPipelineCacheHeaderVersion {
         VkPipelineCacheHeaderVersion::One
     }

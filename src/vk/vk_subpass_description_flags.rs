@@ -11,7 +11,6 @@ pub struct VkSubpassDescriptionFlags {
 }
 
 impl VkRawType<VkSubpassDescriptionFlags> for RawVkSubpassDescriptionFlags {
-    
     fn vk_to_wrapped(src: &RawVkSubpassDescriptionFlags) -> VkSubpassDescriptionFlags {
         VkSubpassDescriptionFlags {
             per_view_attributes_nvx: (src & 0x00000001) != 0,
@@ -21,7 +20,6 @@ impl VkRawType<VkSubpassDescriptionFlags> for RawVkSubpassDescriptionFlags {
 }
 
 impl VkWrappedType<RawVkSubpassDescriptionFlags> for VkSubpassDescriptionFlags {
-    
     fn vk_to_raw(src: &VkSubpassDescriptionFlags, dst: &mut RawVkSubpassDescriptionFlags) {
         *dst = 0;
         if src.per_view_attributes_nvx { *dst |= 0x00000001; }
@@ -30,7 +28,6 @@ impl VkWrappedType<RawVkSubpassDescriptionFlags> for VkSubpassDescriptionFlags {
 }
 
 impl VkDefault for VkSubpassDescriptionFlags {
-    
     fn vk_default() -> VkSubpassDescriptionFlags {
         VkSubpassDescriptionFlags {
             per_view_attributes_nvx: false,

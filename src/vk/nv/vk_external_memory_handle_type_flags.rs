@@ -13,7 +13,6 @@ pub struct VkExternalMemoryHandleTypeFlags {
 }
 
 impl VkRawType<VkExternalMemoryHandleTypeFlags> for RawVkExternalMemoryHandleTypeFlags {
-    
     fn vk_to_wrapped(src: &RawVkExternalMemoryHandleTypeFlags) -> VkExternalMemoryHandleTypeFlags {
         VkExternalMemoryHandleTypeFlags {
             opaque_win32: (src & 0x00000001) != 0,
@@ -25,7 +24,6 @@ impl VkRawType<VkExternalMemoryHandleTypeFlags> for RawVkExternalMemoryHandleTyp
 }
 
 impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandleTypeFlags {
-    
     fn vk_to_raw(src: &VkExternalMemoryHandleTypeFlags, dst: &mut RawVkExternalMemoryHandleTypeFlags) {
         *dst = 0;
         if src.opaque_win32 { *dst |= 0x00000001; }
@@ -36,7 +34,6 @@ impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandl
 }
 
 impl VkDefault for VkExternalMemoryHandleTypeFlags {
-    
     fn vk_default() -> VkExternalMemoryHandleTypeFlags {
         VkExternalMemoryHandleTypeFlags {
             opaque_win32: false,

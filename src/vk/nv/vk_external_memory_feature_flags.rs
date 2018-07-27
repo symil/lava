@@ -12,7 +12,6 @@ pub struct VkExternalMemoryFeatureFlags {
 }
 
 impl VkRawType<VkExternalMemoryFeatureFlags> for RawVkExternalMemoryFeatureFlags {
-    
     fn vk_to_wrapped(src: &RawVkExternalMemoryFeatureFlags) -> VkExternalMemoryFeatureFlags {
         VkExternalMemoryFeatureFlags {
             dedicated_only: (src & 0x00000001) != 0,
@@ -23,7 +22,6 @@ impl VkRawType<VkExternalMemoryFeatureFlags> for RawVkExternalMemoryFeatureFlags
 }
 
 impl VkWrappedType<RawVkExternalMemoryFeatureFlags> for VkExternalMemoryFeatureFlags {
-    
     fn vk_to_raw(src: &VkExternalMemoryFeatureFlags, dst: &mut RawVkExternalMemoryFeatureFlags) {
         *dst = 0;
         if src.dedicated_only { *dst |= 0x00000001; }
@@ -33,7 +31,6 @@ impl VkWrappedType<RawVkExternalMemoryFeatureFlags> for VkExternalMemoryFeatureF
 }
 
 impl VkDefault for VkExternalMemoryFeatureFlags {
-    
     fn vk_default() -> VkExternalMemoryFeatureFlags {
         VkExternalMemoryFeatureFlags {
             dedicated_only: false,
