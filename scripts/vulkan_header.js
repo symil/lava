@@ -33,6 +33,10 @@ function getAll(obj) {
     return Object.values(obj).reduce((acc, subObj) => acc.concat(Object.values(subObj)), []);
 }
 
+function get(obj, type) {
+    return obj[type.extension][obj.name];
+}
+
 function getAllEnums() { return getAll(ENUMS); }
 function getAllBitFlags() { return getAll(BIT_FLAGS); }
 function getAllStructs() { return getAll(STRUCTS); }
@@ -42,6 +46,11 @@ function getEnumByName(name) { return getByName(ENUMS, name); }
 function getBitFlagsByName(name) { return getByName(BIT_FLAGS, name); }
 function getStructByName(name) { return getByName(STRUCTS, name); }
 function getHandleByName(name) { return getByName(HANDLES, name); }
+
+function getEnum(type) { return get(ENUMS, type); }
+function getBitFlags(type) { return get(BIT_FLAGS, type); }
+function getStruct(type) { return get(STRUCTS, type); }
+function getHandle(type) { return get(HANDLES, type); }
 
 function isHandle(name) { return !!getByName(HANDLES, name); }
 
@@ -256,5 +265,9 @@ module.exports = {
     getBitFlagsByName,
     getStructByName,
     getHandleByName,
+    getEnum,
+    getBitFlags,
+    getStruct,
+    getHandle,
     isHandle
-}
+};
