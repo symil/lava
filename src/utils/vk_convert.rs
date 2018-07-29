@@ -74,3 +74,11 @@ pub fn new_string(ptr: *const c_char) -> String {
         String::from_utf8_unchecked(CStr::from_ptr(ptr).to_bytes().to_vec())
     }
 }
+
+pub fn new_string_checked(ptr: *const c_char) -> Option<String> {
+    if ptr.is_null() {
+        Some(new_string(ptr))
+    } else {
+        None
+    }
+}

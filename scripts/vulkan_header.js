@@ -123,6 +123,10 @@ function parseStructs() {
         for (let field of fields) {
             const xmlMember = xmlDef.member.find(member => member.name === field.name);
 
+            if (xmlMember.name === 'pCode') {
+                xmlMember.len = "codeSize";
+            }
+
             field.isOptional = !!xmlMember.optional;
             field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
         }

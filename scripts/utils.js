@@ -184,6 +184,7 @@ function getFieldsInformation(fields) {
         const isStaticArray = !field.isPointer && !!arraySize;
         const isPrimitiveType = rawTypeName === wrappedTypeName;
         const isHandleType = !isPrimitiveType && isHandle(field.typeName);
+        const isOptional = field.isOptional;
 
         const varName = '[VarName]';
         const countVarName = '[CountVarName]';
@@ -213,7 +214,13 @@ function getFieldsInformation(fields) {
                 lenValue = `cmp::max(${lenValue}, ${otherLen})`;
             }
 
-            toRaw = new Function('makeVarName', `return '${lenValue} as u32'.replace(/makeVarName\\((\\w+)\\)/g, function(_, name) { return makeVarName(name); })`);
+            if (field.name === 'codeSize') {
+                lenValue += ' * 4';
+            }
+
+            lenValue += ' as u32';
+
+            toRaw = new Function('makeVarName', `return '${lenValue}'.replace(/makeVarName\\((\\w+)\\)/g, function(_, name) { return makeVarName(name); })`);
         } else if (field.fullType === 'const char* const*') {
             rawType = `VkPtr<*mut c_char>`;
             wrappedType = `&[&str]`;
@@ -222,13 +229,20 @@ function getFieldsInformation(fields) {
         } else if (field.fullType === 'const char*') {
             if (field.name === 'displayName') {
                 rawType = '*const c_char';
-                wrappedType =`String`;
-                toWrapped = `new_string(${varName})`;
+                wrappedType =`Option(String)`;
+                toWrapped = `new_string_checked(${varName})`;
             } else {
                 rawType = `VkPtr<c_char>`;
-                wrappedType =`&str`;
-                toRaw = `VkPtr::new_string(${varName})`;
-                defValue = `""`;
+
+                if (isOptional) {
+                    wrappedType =`Option<&str>`;
+                    toRaw = `VkPtr::new_string_checked(${varName})`;
+                    defValue = `None`;
+                } else {
+                    wrappedType =`&str`;
+                    toRaw = `VkPtr::new_string(${varName})`;
+                    defValue = `""`;
+                }
             }
         } else if (field.fullType === 'char' && field.arraySize) {
             rawType = `[c_char; ${arraySize}]`;
@@ -244,10 +258,12 @@ function getFieldsInformation(fields) {
                 // toWrapped = `new_array(${prevVarName}, ${varName})`;
                 defValue = `&[]`;
             } else if (isPointerValue) {
+                // There's no reason to get there
+                console.log(`NON ARRAY POINTER ON PRIMITIVE VALUE: ${field.name}`);
                 rawType = `*const *${rawTypeName}`;
                 wrappedType = `&${wrappedTypeName}`;
                 toRaw = `${varName} as *const ${rawTypeName}`;
-                // toWrapped = varName; // Should never be used
+                // toWrapped = varName;
                 defValue = `&0`;
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
@@ -271,10 +287,17 @@ function getFieldsInformation(fields) {
                 defValue = `&[]`;
             } else if (isPointerValue) {
                 rawType = `VkPtr<${rawTypeName}>`;
-                wrappedType = `&${wrappedTypeName}`;
-                toRaw = `VkPtr::new_vk_value(${varName})`;
                 // toWrapped = `${rawTypeName}::vk_to_wrapped(${varName}.as_ref().unwrap())`;
-                defValue = `&${vkStaticValue}`;
+
+                if (isOptional) {
+                    wrappedType = `Option<&${wrappedTypeName}>`;
+                    toRaw = `VkPtr::new_vk_value_checked(${varName})`;
+                    defValue = `None`;
+                } else {
+                    wrappedType = `&${wrappedTypeName}`;
+                    toRaw = `VkPtr::new_vk_value(${varName})`;
+                    defValue = `&${vkStaticValue}`;
+                }
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
                 wrappedType = `Vec<${wrappedTypeName}>`;
@@ -283,10 +306,17 @@ function getFieldsInformation(fields) {
                 // defValue = `Vec::new()`;
             } else if (isHandleType) {
                 rawType = rawTypeName;
-                wrappedType = `&${wrappedTypeName}`;
-                toRaw = `vk_to_raw_value(&${varName})`;
                 // toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
-                defValue = `&${vkStaticValue}`;
+
+                if (isOptional) {
+                    wrappedType = `Option<&${wrappedTypeName}>`;
+                    toRaw = `if ${varName}.is_some() { vk_to_raw_value(${varName}.unwrap()) } else { 0 }`;
+                    defValue = `None`;
+                } else {
+                    wrappedType = `&${wrappedTypeName}`;
+                    toRaw = `vk_to_raw_value(&${varName})`;
+                    defValue = `&${vkStaticValue}`;
+                }
             } else {
                 rawType = rawTypeName;
                 wrappedType = wrappedTypeName;

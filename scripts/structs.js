@@ -54,6 +54,7 @@ function genUses(def) {
         'std::vec::Vec',
         'std::ops::Deref',
         'std::ptr',
+        'std::cmp',
         'utils::vk_convert::*',
         'utils::vk_null::*',
         'utils::vk_ptr::*',
@@ -222,7 +223,7 @@ function assignLifetimes(fields, counter, root) {
         let tree = root;
 
         if (field.wrappedType) {
-            if (field.wrappedType.startsWith('&')) {
+            if (field.wrappedType.includes('&')) {
                 tree = tree.add(counter);
                 field.wrappedType = field.wrappedType.replace('&', `&${tree.letter()} `);
 

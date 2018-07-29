@@ -1,6 +1,6 @@
-use std::os::raw::c_char;
 use std::mem;
 use std::ptr;
+use std::os::raw::c_char;
 use utils::vk_null::vk_is_null;
 use utils::vk_type::VkRawType;
 use utils::vk_type::VkWrappedType;
@@ -50,7 +50,9 @@ impl<R> VkPtr<R> {
         }
     }
 
-    pub fn new_vk_value<W : VkWrappedType<R>>(value: &W) -> Self {
+    pub fn new_vk_value<W>(value: &W) -> Self
+        where W : VkWrappedType<R>
+    {
         unsafe {
             if vk_is_null(value) {
                 return Self {
@@ -65,6 +67,15 @@ impl<R> VkPtr<R> {
             Self {
                 ptr: ptr
             }
+        }
+    }
+
+    pub fn new_vk_value_checked<W>(value: Option<&W>) -> Self
+        where W : VkWrappedType<R>
+    {
+        match value {
+            Some(v) => Self::new_vk_value(v),
+            None => Self { ptr: ptr::null_mut() }
         }
     }
 
@@ -111,6 +122,13 @@ impl VkPtr<c_char> {
             Self {
                 ptr: ptr
             }
+        }
+    }
+
+    pub fn new_string_checked(string: Option<&str>) -> Self {
+        match string {
+            Some(value) => Self::new_string(value),
+            None => Self { ptr: ptr::null_mut() }
         }
     }
 }
