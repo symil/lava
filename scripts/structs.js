@@ -3,6 +3,7 @@ const {
     toPascalCase,
     getRawVkTypeName,
     getWrappedVkTypeName,
+    getStaticVkValueName,
     getFullWrappedType,
     getFullRawType,
     blockToString,
@@ -11,39 +12,35 @@ const {
     isPlural,
     cToRustVarName,
     argToString,
-    getFieldInformation
+    getFieldsInformation
 } = require('./utils');
 
 function generateVkStructDefinition(cDef) {
-    cDef.rawTypeName = getRawVkTypeName(cDef.name);
-    cDef.wrappedTypeName = getWrappedVkTypeName(cDef.name);
+    const def = {
+        rawTypeName: getRawVkTypeName(cDef.name),
+        wrappedTypeName: getWrappedVkTypeName(cDef.name),
+        fields: getFieldsInformation(cDef.fields)
+    };
 
-    for (let i = 0; i < cDef.fields.length; ++i) {
-        const field = cDef.fields[i];
-        const prevField = cDef.fields[i - 1];
-        const nextField = cDef.fields[i + 1];
 
-        field.info = getFieldInformation(field, prevField, nextField);
+    if (isSelfDescribingStructureType(def.fields[0], 0)) {
+        def.fields[0].toRaw = () => `vk_to_raw_value(&VkStructureType::${def.wrappedTypeName.substring(2)})`;
+        def.fields[0].wrappedType = null;
     }
 
-    cDef.generics = replaceGenericTypes(cDef.fields);
-
-    if (isSelfDescribingStructureType(cDef.fields[0], 0)) {
-        cDef.fields[0].info.toRaw = () => `vk_to_raw_value(&VkStructureType::${cDef.wrappedTypeName.substring(2)})`;
-    }
+    def.generics = { types: '', specs: '', static: '', created: '' };
 
     return [
-        genUses(cDef),
-        genRawStructDeclaration(cDef),
-        getWrappedStructDeclaration(cDef),
-        genImplDeref(cDef),
-        genImplVkRawType(cDef),
-        genImplVkWrappedType(cDef),
-        genImplVkDefault(cDef)
+        genUses(def),
+        genRawStructDeclaration(def),
+        getWrappedStructDeclaration(def),
+        genImplVkRawType(def),
+        genImplVkWrappedType(def),
+        genImplVkDefault(def)
     ];
 }
 
-function genUses(cDef) {
+function genUses(def) {
     const uses = new Set([
         'std::os::raw::c_char',
         'std::string::String',
@@ -56,8 +53,8 @@ function genUses(cDef) {
         'utils::vk_type::*'
     ]);
 
-    for (let field of cDef.fields) {
-        const typeName = field.info.wrappedTypeName;
+    for (let field of def.fields) {
+        const typeName = field.wrappedTypeName;
 
         if (typeName.startsWith('Vk')) {
             let use = `vk::`;
@@ -84,10 +81,10 @@ function replaceGenericTypes(fields) {
     const createdTypeNames = [];
     
     for (let field of fields) {
-        if (startsWith(field.info.wrappedType, 'T : ')) {
+        if (startsWith(field.wrappedType, 'T : ')) {
             const letter = String.fromCharCode(startCode + specs.length);
-            const typeSpec = field.info.wrappedType.replace('T : ', `${letter} : `);
-            const refTypeName = field.info.wrappedType.match(/T : Deref<Target=(.*)>/)[1];
+            const typeSpec = field.wrappedType.replace('T : ', `${letter} : `);
+            const refTypeName = field.wrappedType.match(/T : Deref<Target=(.*)>/)[1];
             let targetTypeName = refTypeName;
             let isVec = false;
 
@@ -102,7 +99,7 @@ function replaceGenericTypes(fields) {
                 typeName = `Vec<${typeName}>`;
             }
 
-            field.info.wrappedType = letter;
+            field.wrappedType = letter;
             letters.push(letter);
             specs.push(typeSpec);
             staticTypes.push(`&'static ${refTypeName}`)
@@ -125,78 +122,88 @@ function replaceGenericTypes(fields) {
 function genRawStructDeclaration(cDef) {
     return [
         `pub struct ${cDef.rawTypeName}`,
-            cDef.fields.map(field => `${field.info.varName}: ${field.info.rawType},`)
+            cDef.fields.map(field => `${field.varName}: ${field.rawType},`)
     ];
 }
 
 function getWrappedStructDeclaration(def) {
-    const fields = def.fields.filter(field => field.info.wrappedType && field.name !== 'sType');
+    const fields = getWrappedFields(def);
     
     return [
         `pub struct ${def.wrappedTypeName}${def.generics.types}${def.generics.specs}`,
-            fields.map(field => `pub ${field.info.varName}: ${field.info.wrappedType},`)
-    ];
-}
-
-function genImplDeref(def) {
-    return [
-        `impl${def.generics.types} Deref for ${def.wrappedTypeName}${def.generics.types}${def.generics.specs}`, [
-            `type Target = ${def.wrappedTypeName}${def.generics.types};`,
-            `fn deref(&self) -> &${def.wrappedTypeName}${def.generics.types}`, [
-                `self`
-            ]
-        ]
+            fields.map(field => `pub ${field.varName}: ${field.wrappedType},`)
     ];
 }
 
 function isSelfDescribingStructureType(field, index) {
-    return field.name === 'sType' && index === 0;
+    return field.wrappedTypeName === 'VkStructureType' && index === 0;
+}
+
+function getWrappedFields(def) {
+    return def.fields.filter((field, index) => field.wrappedType && !isSelfDescribingStructureType(field, index));
+}
+
+function canBeCreatedByUser(def) {
+    def.fields.every(field => !field.wrappedType || field.toWrapped);
 }
 
 function genImplVkRawType(def) {
-    const wrappedFields = def.fields.filter((field, index) => field.info.wrappedType && !isSelfDescribingStructureType(field, index));
+    const canBeConverted = canBeCreatedByUser(def);
 
-    return [
-        `impl VkRawType<${def.wrappedTypeName}${def.generics.created}> for ${def.rawTypeName}`, [
-            `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}${def.generics.created}`, [
-                def.wrappedTypeName,
-                wrappedFields.map((field, index) => `${field.info.varName}: ${genConvertStatement('toWrapped', 'src', wrappedFields, index)},`)
-            ],
-        ]
-    ];
+    if (canBeConverted) {
+        const wrappedFields = getWrappedFields(def);
+
+        return [
+            `impl VkRawType<${def.wrappedTypeName}${def.generics.created}> for ${def.rawTypeName}`, [
+                `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}${def.generics.created}`, [
+                    def.wrappedTypeName,
+                    wrappedFields.map((field, index) => `${field.varName}: ${genConvertStatement('toWrapped', 'src', wrappedFields, index)},`)
+                ],
+            ]
+        ];
+    }
 }
 
 function genImplVkWrappedType(def) {
-    const rawFields = def.fields;
+    const canBeConverted = def.fields.every(field => field.toRaw);
 
-    return [
-        `impl${def.generics.types} VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}${def.generics.types}${def.generics.specs}`, [
-            `fn vk_to_raw(src: &${def.wrappedTypeName}${def.generics.types}, dst: &mut ${def.rawTypeName})`,
-            rawFields.map((field, index) => `dst.${field.info.varName} = ${genConvertStatement('toRaw', 'src', rawFields, index)};`)
-        ]
-    ];
+    if (canBeConverted) {
+        const rawFields = def.fields;
+
+        return [
+            `impl${def.generics.types} VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}${def.generics.types}${def.generics.specs}`, [
+                `fn vk_to_raw(src: &${def.wrappedTypeName}${def.generics.types}, dst: &mut ${def.rawTypeName})`,
+                rawFields.map((field, index) => `dst.${field.varName} = ${genConvertStatement('toRaw', 'src', rawFields, index)};`)
+            ]
+        ];
+    }
 }
 
 function genImplVkDefault(def) {
-    const wrappedFields = def.fields.filter((field, index) => field.info.wrappedType && !isSelfDescribingStructureType(field, index));
+    if (canBeCreatedByUser(def)) {
+        const staticValueName = getStaticVkValueName(def.wrappedTypeName);
+        const wrappedFields = getWrappedFields(def);
 
-    return [
-        `impl VkDefault for ${def.wrappedTypeName}${def.generics.static}`, [
-            `fn vk_default() -> ${def.wrappedTypeName}${def.generics.static}`, [
-                def.wrappedTypeName,
-                wrappedFields.map(field => `${field.info.varName}: ${field.info.defaultValue},`)
+        return [
+            `pub static ${staticValueName} : ${def.wrappedTypeName} = ${def.wrappedTypeName}`, [
+                wrappedFields.map(field => `${field.varName}: ${field.defaultValue},`)
+            ],
+            `;\nimpl VkDefault for ${def.wrappedTypeName}`, [
+                `fn vk_default() -> ${def.wrappedTypeName}`, [
+                    staticValueName
+                ]
             ]
-        ]
-    ];
+        ];
+    }
 }
 
 function getVarName(prefix, field) {
-    return field && `${prefix}.${field.info.varName}`;
+    return field && `${prefix}.${field.varName}`;
 }
 
 function genConvertStatement(key, prefix, fields, index) {
     const field = fields[index];
-    const convertFunction = field.info[key];
+    const convertFunction = field[key];
     const varName = getVarName(prefix, field);
     const prevVarName = getVarName(prefix, fields[index - 1]);
     const nextVarName = getVarName(prefix, fields[index + 1]);

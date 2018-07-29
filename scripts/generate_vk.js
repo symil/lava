@@ -23,7 +23,7 @@ function main() {
     const vkTypes = [
         ...generateEnums(),
         ...generateBitFlags(),
-        // ...generateStructs()
+        ...generateStructs()
     ];
 
     writeVkTypes(vkTypes);
@@ -51,7 +51,7 @@ function writeVkTypes(types) {
         const dirPath = extension ? path.join(OUTPUT_DIR_PATH, extension) : OUTPUT_DIR_PATH;
         const fileName = toSnakeCase(name) + '.rs';
         const filePath = path.join(dirPath, fileName);
-        const fileContent = GENERATED_HEADER + definition.map(blockToString).join('\n\n');
+        const fileContent = GENERATED_HEADER + definition.filter(x => x).map(blockToString).join('\n\n');
 
         mkdir(dirPath);
         // console.log(fileContent);
