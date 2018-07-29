@@ -1,6 +1,6 @@
 use utils::vk_type::*;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct VkVersion(u32, u32, u32);
 
 impl VkRawType<VkVersion> for u32 {
@@ -21,8 +21,10 @@ impl VkDefault for VkVersion {
     }
 }
 
+pub static STATIC_VK_VERSION : VkVersion = VkVersion(1, 0, 0);
+
 impl VkVersion {
     pub fn one() -> VkVersion {
-        VkVersion(1, 0, 0)
+        STATIC_VK_VERSION
     }
 }

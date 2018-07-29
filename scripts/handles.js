@@ -1,8 +1,8 @@
 const {
     toSnakeCase,
     toPascalCase,
-    getRawTypeName,
-    getWrappedTypeName,
+    getRawVkTypeName,
+    getWrappedVkTypeName,
     getFullWrappedType,
     getFullRawType,
     blockToString,
@@ -10,8 +10,43 @@ const {
     isPlural,
     removeSuffix,
     cToRustVarName,
-    argToString
+    argToString,
+    getStaticVkValueName
 } = require('./utils');
+
+function generateVkHandleDefinition(cDef) {
+    const rawTypeName = getRawVkTypeName(cDef.name);
+    const wrappedTypeName = getWrappedVkTypeName(cDef.name);
+    const staticValueName = getStaticVkValueName(wrappedTypeName);
+
+    return [
+        `use utils::vk_type::*;`,
+        `pub type ${rawTypeName} = u64;`,
+        [
+            `#[derive(Debug, Copy, Clone)]`,
+            `pub struct ${wrappedTypeName}(${rawTypeName});`
+        ], [
+            `impl VkRawType<${wrappedTypeName}> for ${rawTypeName}`, [
+                `fn vk_to_wrapped(src: &${rawTypeName}) -> ${wrappedTypeName}`, [
+                    `${wrappedTypeName}(*src)`
+                ],
+            ]
+        ], [
+            `impl VkWrappedType<${rawTypeName}> for ${wrappedTypeName}`, [
+                `fn vk_to_raw(src: &${wrappedTypeName}, dst: &mut ${rawTypeName})`, [
+                    `*dst = src.0`
+                ]
+            ]
+        ], [
+            `pub static ${staticValueName} : ${wrappedTypeName} = ${wrappedTypeName}(0);`,
+            `\nimpl VkDefault for ${wrappedTypeName}`, [
+                `fn vk_default() -> ${wrappedTypeName}`, [
+                    staticValueName
+                ]
+            ]
+        ]
+    ];
+}
 
 class HandleList {
     constructor() {
@@ -205,3 +240,4 @@ class Handle {
 }
 
 exports.HandleList = HandleList;
+exports.generateVkHandleDefinition = generateVkHandleDefinition;

@@ -3,12 +3,13 @@
 const path = require('path');
 const fs = require('fs');
 
-const { getAllEnums, getAllBitFlags, getAllStructs, parseFunctions, isHandle } = require('./vulkan_header');
+const { getAllEnums, getAllBitFlags, getAllStructs, getAllHandles, parseFunctions, isHandle } = require('./vulkan_header');
 const { blockToString, toSnakeCase, toPascalCase, getRawTypeName, getWrappedTypeName } = require('./utils');
 const { HandleList } = require('./handles');
 const { generateVkStructDefinition } = require('./structs');
 const { generateVkEnumDefinition } = require('./enums');
 const { generateVkBitFlagsDefinition } = require('./bit_flags');
+const { generateVkHandleDefinition } = require('./handles');
 
 const ROOT_DIR_PATH         = path.join(__dirname, '..');
 const OUTPUT_DIR_PATH       = path.join(ROOT_DIR_PATH, 'src', 'vk');
@@ -23,7 +24,8 @@ function main() {
     const vkTypes = [
         ...generateEnums(),
         ...generateBitFlags(),
-        ...generateStructs()
+        ...generateStructs(),
+        ...generateHandles()
     ];
 
     writeVkTypes(vkTypes);
@@ -85,7 +87,7 @@ function writeModFile(dirPath) {
     const moduleNames = files.map(name => name.replace('.rs', ''));
     const content = [
         directories.map(name => `pub mod ${name};`),
-        moduleNames.map(name => `mod ${name};`),
+        moduleNames.map(name => `pub mod ${name};`),
         moduleNames.map(name => `pub use self::${name}::*;`),
     ].map(list => list.join('\n')).filter(x => x).join('\n\n');
 
@@ -123,6 +125,10 @@ function generateStructs() {
 }
 
 function generateHandles() {
+    return generateVkTypes(getAllHandles(), generateVkHandleDefinition);
+}
+
+function _generateHandles() {
     const cFunctions = parseFunctions();
     const handles = new HandleList();
 

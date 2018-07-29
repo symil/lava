@@ -53,7 +53,7 @@ function genRawType(def) {
 
 function genWrappedType(def) {
     return [
-        `#[derive(Debug, Copy, Clone)]`,
+        `#[derive(Debug, Clone, Copy)]`,
         `pub struct ${def.wrappedTypeName}`,
         def.fields.map(field => `${field.rustName}: bool,`)
     ];

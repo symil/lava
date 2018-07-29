@@ -18,9 +18,9 @@ const {
 const { getStruct } = require('./vulkan_header');
 
 function generateVkStructDefinition(cDef) {
-    // console.log('GENERATING ' + cDef.name)
-
     const def = {
+        typeName: cDef.name,
+        extension: cDef.extension,
         rawTypeName: getRawVkTypeName(cDef.name),
         wrappedTypeName: getWrappedVkTypeName(cDef.name),
         fields: getFieldsInformation(cDef.fields)
@@ -30,12 +30,7 @@ function generateVkStructDefinition(cDef) {
 
     def.lifetimes = lifetimeTree.getSpecs();
     def.lifetimesRestrictions = lifetimeTree.getRestrictions();
-
-
-    if (isSelfDescribingStructureType(def.fields[0], 0)) {
-        def.fields[0].toRaw = () => `vk_to_raw_value(&VkStructureType::${def.wrappedTypeName.substring(2)})`;
-        def.fields[0].wrappedType = null;
-    }
+    def.staticLifetimes = lifetimeTree.getStatics();
 
     return [
         genUses(def),
@@ -55,6 +50,7 @@ function genUses(def) {
         'std::ops::Deref',
         'std::ptr',
         'std::cmp',
+        'std::mem',
         'utils::vk_convert::*',
         'utils::vk_null::*',
         'utils::vk_ptr::*',
@@ -64,7 +60,7 @@ function genUses(def) {
     for (let field of def.fields) {
         const typeName = field.wrappedTypeName;
 
-        if (typeName.startsWith('Vk')) {
+        if (typeName.startsWith('Vk') && typeName !== def.wrappedTypeName) {
             let use = `vk::`;
             if (field.extension) { use += `${field.extension}::`; }
             use += toSnakeCase(typeName);
@@ -86,28 +82,30 @@ function genRawStructDeclaration(cDef) {
 
 function getWrappedStructDeclaration(def) {
     const fields = getWrappedFields(def);
+    const hasCopy = canHaveStaticValue(def);
+    const derivedTraits = ['Debug', 'Clone'];
+
+    if (hasCopy) {
+        derivedTraits.push('Copy');
+    }
     
     return [
-        `#[derive(Debug, Copy, Clone)]`,
+        `#[derive(${derivedTraits.join(', ')})]`,
         `pub struct ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`,
             fields.map(field => `pub ${field.varName}: ${field.wrappedType},`)
     ];
 }
 
-function isSelfDescribingStructureType(field, index) {
-    return field.wrappedTypeName === 'VkStructureType' && index === 0;
-}
-
 function getWrappedFields(def) {
-    return def.fields.filter((field, index) => field.wrappedType && !isSelfDescribingStructureType(field, index));
+    return def.fields.filter(field => field.wrappedType);
 }
 
 function isConvertibleFromRawToWrapped(def) {
-    return def.fields.every(field => !field.wrappedType || field.toWrapped);
+    return def.fields.every(field => !field.wrappedType || field.toWrapped) && !def.lifetimes;
 }
 
 function isConvertibleFromWrappedToRaw(def) {
-    return def.fields.every(field => field.toRaw);
+    return def.fields.every(field => field.toRaw && (!field.wrappedType || field.defaultValue)) && canHaveStaticValue(def);
 }
 
 function genImplVkRawType(def) {
@@ -139,20 +137,45 @@ function genImplVkWrappedType(def) {
 }
 
 function genImplVkDefault(def) {
-    if (isConvertibleFromWrappedToRaw(def)) {
-        const staticValueName = getStaticVkValueName(def.wrappedTypeName);
-        const wrappedFields = getWrappedFields(def);
+    const block = []
+    const wrappedFields = getWrappedFields(def);
+    const staticValueName = getStaticVkValueName(def.wrappedTypeName);
 
-        return [
+    if (isConvertibleFromWrappedToRaw(def)) {
+        block.push(
             `pub static ${staticValueName} : ${def.wrappedTypeName} = ${def.wrappedTypeName}`, [
                 wrappedFields.map(field => `${field.varName}: ${field.defaultValue},`)
             ],
-            `;\nimpl VkDefault for ${def.wrappedTypeName}`, [
-                `fn vk_default() -> ${def.wrappedTypeName}`, [
+            ';'
+        );
+
+        block.push(
+            `\nimpl VkDefault for ${def.wrappedTypeName}${def.staticLifetimes}`, [
+                `fn vk_default() -> ${def.wrappedTypeName}${def.staticLifetimes}`, [
                     staticValueName
                 ]
             ]
-        ];
+        );
+    }
+
+    return block;
+}
+
+function canHaveStaticValue(def) {
+    if (def.typeName === 'VkDisplayProperties') {
+        return false;
+    }
+
+    if (def.arraySize) {
+        return false;
+    } else {
+        const struct = getStruct(def);
+
+        if (struct) {
+            return struct.fields.every(field => field.typeName === def.typeName || canHaveStaticValue(field));
+        } else {
+            return true;
+        }
     }
 }
 
@@ -213,6 +236,16 @@ class LifetimeTree {
         }
 
         return `\n    where\n${restrictions.map(([key, value]) => `        ${key}: ${value},\n`).join('')}`
+    }
+
+    getStatics() {
+        const letters = Object.keys(this._collect());
+
+        if (!letters.length) {
+            return '';
+        }
+
+        return `<${letters.map(() => "'static").join(', ')}>`;
     }
 }
 

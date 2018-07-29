@@ -79,7 +79,7 @@ impl<R> VkPtr<R> {
         }
     }
 
-    pub fn new_vk_value_array<W : VkWrappedType<R>>(array: &[W]) -> Self {
+    pub fn new_vk_array<W : VkWrappedType<R>>(array: &[W]) -> Self {
         unsafe {
             let byte_len = array.len() * mem::size_of::<W>();
             let ptr = malloc(byte_len) as *mut R;

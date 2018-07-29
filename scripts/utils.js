@@ -9,6 +9,7 @@ const PRIMITIVE_TYPES = {
     int32_t: 'i32',
     int16_t: 'i16',
     int8_t: 'i8',
+    int: 'i32',
     char: 'c_char',
     float: 'f32',
     double: 'f64',
@@ -16,7 +17,8 @@ const PRIMITIVE_TYPES = {
     ssize_t: 'isize',
     void: 'c_void',
     VkAllocationCallbacks: 'c_void',
-    VkDeviceSize: 'u64'
+    VkDeviceSize: 'u64',
+    VkSampleMask: 'u32'
 };
 
 const INDENT = '    ';
@@ -99,8 +101,13 @@ function isPlural(arg) {
 
 function cToRustVarName(name) {
     name = name.replace(/^(p{1,2})[A-Z]/, str => str[str.length - 1]);
+    name = toSnakeCase(name);
 
-    return toSnakeCase(name);
+    if (name === 'type') {
+        name = 'type_';
+    }
+
+    return name;
 }
 
 function argToString(arg) {
@@ -116,7 +123,7 @@ function doesFieldRepresentIndex(field) {
 }
 
 function createStaticArray(typeName, arraySize, varName, functionName) {
-    return `unsafe { let mut dst_array : [${typeName}, ${arraySize}] = mem::uninitialized(); ${functionName}(&${varName}, &mut dst_array); dst_array }`;
+    return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::uninitialized(); ${functionName}(&${varName}, &mut dst_array); dst_array }`;
 }
 
 function getRawVkTypeName(cTypeName) {
@@ -128,6 +135,10 @@ function getWrappedVkTypeName(cTypeName) {
 }
 
 function getFieldRawTypeName(field) {
+    if (field.typeName === 'VkBool32') {
+        return 'u32';
+    }
+
     return PRIMITIVE_TYPES[field.typeName] || getRawVkTypeName(field.typeName);
 }
 
@@ -169,7 +180,7 @@ function getFieldsInformation(fields) {
 
         const arraySize = field.arraySize;
         const isCount = !!field.countFor.length;
-        const isPointerArray = field.isPointer && field.countField;
+        const isPointerArray = field.isPointer && (field.countField || field.name === 'pSampleMask');
         const isPointerValue = field.isPointer && !isPointerArray;
         const isStaticArray = !field.isPointer && !!arraySize;
         const isPrimitiveType = rawTypeName === wrappedTypeName;
@@ -190,7 +201,10 @@ function getFieldsInformation(fields) {
         let toWrapped = null;
         let defValue = null;
 
-        if (field.name === 'pNext' && field.fullType === 'const void*') {
+        if (field.name === 'sType' && field.values) {
+            rawType = 'RawVkStructureType';
+            toRaw = () => `vk_to_raw_value(&VkStructureType::${toPascalCase(field.values.substring('VK_STRUCTURE_TYPE_'.length))})`;
+        } else if (field.name === 'pNext') {
             rawType = `*const c_void`;
             toRaw = `ptr::null()`;
         } else if (field.typeName === 'void' && field.isPointer) {
@@ -212,7 +226,7 @@ function getFieldsInformation(fields) {
             }
 
             if (field.name === 'codeSize') {
-                lenValue += ' * 4';
+                lenValue = `(${lenValue} * 4)`
             }
 
             lenValue += ' as u32';
@@ -226,8 +240,9 @@ function getFieldsInformation(fields) {
         } else if (field.fullType === 'const char*') {
             if (field.name === 'displayName') {
                 rawType = '*const c_char';
-                wrappedType =`Option(String)`;
+                wrappedType =`Option<String>`;
                 toWrapped = `new_string_checked(${varName})`;
+                defValue = 'None';
             } else {
                 rawType = `VkPtr<c_char>`;
 
@@ -271,6 +286,7 @@ function getFieldsInformation(fields) {
                 } else {
                     wrappedType = `[${wrappedTypeName}; ${arraySize}]`;
                     toRaw = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
+                    toWrapped = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
                     defValue = `[${typeDefaultValue}; ${arraySize}]`;
                 }
             } else {
@@ -321,7 +337,7 @@ function getFieldsInformation(fields) {
                     defValue = `None`;
                 } else {
                     wrappedType = `&${wrappedTypeName}`;
-                    toRaw = `vk_to_raw_value(&${varName})`;
+                    toRaw = `vk_to_raw_value(${varName})`;
                     defValue = `&${typeDefaultValue}`;
                 }
             } else {
@@ -363,6 +379,7 @@ function stringToFunction(statement, varName, countVarName, arrayVarName, varNam
 
     let body = [
         `var str = '${statement}';`,
+        `str = str.replace('${varName}', makeVarName("${varNameValue}"));`,
         `str = str.replace('${varName}', makeVarName("${varNameValue}"));`
     ];
 

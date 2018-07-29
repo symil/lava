@@ -106,9 +106,8 @@ function parseStructs() {
                 throw new Error(`unexpected line for struct ${structName}: "${line}"`);
             }
 
-            // const fullType = match[1].trim().replace('BitFlags', 'Flags');
+            const fullType = match[1].replace('FlagBits', 'Flags').replace(' struct ', ' ').trim();
             const name = match[2].trim();
-            const fullType = match[1].trim();
             const fieldName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
             const fieldTypeNameInfo = parseName(fieldName);
             const typeName = fieldTypeNameInfo.name;
@@ -125,15 +124,19 @@ function parseStructs() {
         for (let field of fields) {
             const xmlMember = xmlDef.member.find(member => member.name === field.name);
 
+            field.values = xmlMember.values;
+
             if (xmlMember.name === 'pCode') {
                 xmlMember.len = "codeSize";
             }
 
             field.isOptional = !!xmlMember.optional;
-            field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
+            if (field.typeName !== 'void') {
+                field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
 
-            if (areCountAndArray(lastField, field)) {
-                field.countField = lastField.name;
+                if (areCountAndArray(lastField, field)) {
+                    field.countField = lastField.name;
+                }
             }
 
             lastField = field;
