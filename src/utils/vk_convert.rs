@@ -4,8 +4,7 @@ use std::vec::Vec;
 use std::cmp;
 use std::mem;
 use std::os::raw::c_char;
-use utils::vk_type::VkRawType;
-use utils::vk_type::VkWrappedType;
+use utils::vk_type::*;
 
 pub fn vk_to_raw_value<W : VkWrappedType<R>, R>(value: &W) -> R {
     unsafe {
@@ -20,6 +19,12 @@ pub fn vk_to_raw_array<W : VkWrappedType<R>, R>(array: &[W], dst: &mut[R]) {
 
     for i in 0..len {
         W::vk_to_raw(&array[i], &mut dst[i])
+    }
+}
+
+pub fn fill_vk_array<T : VkDefault>(dst: &mut[T]) {
+    for i in 0..dst.len() {
+        dst[i] = T::vk_default();
     }
 }
 

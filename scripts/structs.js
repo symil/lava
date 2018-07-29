@@ -139,28 +139,18 @@ function genImplVkWrappedType(def) {
 }
 
 function genImplVkDefault(def) {
-    const block = []
-    const wrappedFields = getWrappedFields(def);
-    const constValueName = getConstVkValueName(def.wrappedTypeName);
-
     if (isConvertibleFromWrappedToRaw(def)) {
-        block.push(
-            `pub const ${constValueName} : ${def.wrappedTypeName} = ${def.wrappedTypeName}`, [
-                wrappedFields.map(field => `${field.varName}: ${field.defaultValue},`)
-            ],
-            ';'
-        );
+        const wrappedFields = getWrappedFields(def);
 
-        block.push(
-            `\nimpl VkDefault for ${def.wrappedTypeName}${def.staticLifetimes}`, [
+        return [
+            `impl VkDefault for ${def.wrappedTypeName}${def.staticLifetimes}`, [
                 `fn vk_default() -> ${def.wrappedTypeName}${def.staticLifetimes}`, [
-                    constValueName
+                    def.wrappedTypeName,
+                    wrappedFields.map(field => `${field.varName}: ${field.defaultValue},`)
                 ]
             ]
-        );
+        ];
     }
-
-    return block;
 }
 
 function canHaveStaticValue(def) {

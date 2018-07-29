@@ -22,10 +22,8 @@ impl VkWrappedType<RawVkClearValue> for VkClearValue {
     }
 }
 
-pub static CONST_VK_CLEAR_VALUE : VkClearValue = VkClearValue::Color(VkClearColorValue::U([0; 4]));
-
 impl VkDefault for VkClearValue {
     fn vk_default() -> VkClearValue {
-        CONST_VK_CLEAR_VALUE
+        VkClearValue::Color(VkClearColorValue::U([0; 4]))
     }
 }

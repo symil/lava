@@ -17,7 +17,6 @@ const {
 function generateVkHandleDefinition(cDef) {
     const rawTypeName = getRawVkTypeName(cDef.name);
     const wrappedTypeName = getWrappedVkTypeName(cDef.name);
-    const constValueName = getConstVkValueName(wrappedTypeName);
 
     return [
         `use utils::vk_type::*;`,
@@ -38,10 +37,9 @@ function generateVkHandleDefinition(cDef) {
                 ]
             ]
         ], [
-            `pub const ${constValueName} : ${wrappedTypeName} = ${wrappedTypeName}(0);`,
-            `\nimpl VkDefault for ${wrappedTypeName}`, [
+            `impl VkDefault for ${wrappedTypeName}`, [
                 `fn vk_default() -> ${wrappedTypeName}`, [
-                    constValueName
+                    `${wrappedTypeName}(0)`
                 ]
             ]
         ]

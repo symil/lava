@@ -82,15 +82,11 @@ function genImplVkWrappedType(def) {
 }
 
 function genImplVkDefault(def) {
-    const constValueName = getConstVkValueName(def.wrappedTypeName);
-
     return [
-        `pub const ${constValueName} : ${def.wrappedTypeName} = ${def.wrappedTypeName}`, [
-            def.fields.map(field => `${field.rustName}: false,`)
-        ],
-        `;\nimpl VkDefault for ${def.wrappedTypeName}`, [
+        `impl VkDefault for ${def.wrappedTypeName}`, [
             `fn vk_default() -> ${def.wrappedTypeName}`, [
-                constValueName
+                def.wrappedTypeName,
+                def.fields.map(field => `${field.rustName}: false,`)
             ]
         ]
     ];

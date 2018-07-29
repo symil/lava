@@ -1,4 +1,4 @@
-const { getEnumByName, getBitFlagsByName, getStructByName, getHandleByName, isHandle } = require('./vulkan_header');
+const { isHandle } = require('./vulkan_header');
 
 const PRIMITIVE_TYPES = {
     bool: 'bool',
@@ -125,6 +125,10 @@ function doesFieldRepresentIndex(field) {
 
 function createStaticArray(typeName, arraySize, varName, functionName) {
     return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::uninitialized(); ${functionName}(&${varName}, &mut dst_array); dst_array }`;
+}
+
+function fillStaticArray(typeName, arraySize) {
+    return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array }`;
 }
 
 function getRawVkTypeName(cTypeName) {
@@ -303,8 +307,6 @@ function getFieldsInformation(fields) {
                 defValue = primitiveDefaultValue;
             }
         } else {
-            const constDefaultValue = getPrimitiveDefaultValue(wrappedTypeName) || getConstVkValueName(wrappedTypeName);
-
             if (isPointerArray) {
                 rawType = `VkPtr<${rawTypeName}>`;
                 wrappedType = `&[${wrappedTypeName}]`;
@@ -333,7 +335,7 @@ function getFieldsInformation(fields) {
                 } else {
                     wrappedType = `[${wrappedTypeName}; ${arraySize}]`;
                     toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
-                    defValue = `[${constDefaultValue}; ${arraySize}]`;
+                    defValue = fillStaticArray(wrappedTypeName, arraySize);
                 }
             } else if (isHandleType) {
                 rawType = rawTypeName;
@@ -353,7 +355,7 @@ function getFieldsInformation(fields) {
                 wrappedType = wrappedTypeName;
                 toRaw = `vk_to_raw_value(&${varName})`;
                 toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
-                defValue = constDefaultValue;
+                defValue = getPrimitiveDefaultValue(wrappedTypeName) || `${wrappedTypeName}::vk_default()`;
             }
         }
 
