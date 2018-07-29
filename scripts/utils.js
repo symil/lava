@@ -34,8 +34,10 @@ Array.prototype.beforeLast = function() {
 
 function toSnakeCase(str) {
     return str
-        .replace(/[A-Z0-9]+/g, str => str.charAt(0) + str.substring(1).toLowerCase())
-        .split(/(?=[A-Z])/).join('_').toLowerCase()
+        .replace(/([A-Z]+)|([0-9]+)/g, str => `_${str}`)
+        .toLowerCase()
+        .replace(/(^|_)(1|2|3)_d(_|$)/g, '$1$2d$3')
+        .replace(/^_/, '')
         .replace(/_+/g, '_');
 }
 
