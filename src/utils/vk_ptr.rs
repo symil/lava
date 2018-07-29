@@ -1,7 +1,6 @@
 use std::mem;
 use std::ptr;
 use std::os::raw::c_char;
-use utils::vk_null::vk_is_null;
 use utils::vk_type::VkRawType;
 use utils::vk_type::VkWrappedType;
 
@@ -54,12 +53,6 @@ impl<R> VkPtr<R> {
         where W : VkWrappedType<R>
     {
         unsafe {
-            if vk_is_null(value) {
-                return Self {
-                    ptr: ptr::null_mut() as *mut R
-                }
-            }
-
             let ptr = malloc(mem::size_of::<R>()) as *mut R;
             let dst = ptr.as_mut().unwrap();
             W::vk_to_raw(value, dst);

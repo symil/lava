@@ -1,6 +1,7 @@
 const { getEnumByName, getBitFlagsByName, getStructByName, getHandleByName, isHandle } = require('./vulkan_header');
 
 const PRIMITIVE_TYPES = {
+    bool: 'bool',
     uint64_t: 'u64',
     uint32_t: 'u32',
     uint16_t: 'u16',
@@ -158,12 +159,16 @@ function getStaticVkValueName(wrappedTypeName) {
     return `STATIC_${toUpperCase(wrappedTypeName)}`;
 }
 
-function getTypeDefaultValue(wrappedTypeName) {
-    if (wrappedTypeName.startsWith('Vk')) {
-        return getStaticVkValueName(wrappedTypeName)
-    } else if (wrappedTypeName === 'bool') {
+function getConstVkValueName(wrappedTypeName) {
+    return `CONST_${toUpperCase(wrappedTypeName)}`;
+}
+
+function getPrimitiveDefaultValue(typeName) {
+    if (!Object.values(PRIMITIVE_TYPES).includes(typeName)) {
+        return null;
+    } if (typeName === 'bool') {
         return 'false';
-    } else if (wrappedTypeName === 'f32' || wrappedTypeName === 'f64') {
+    } else if (typeName === 'f32' || typeName === 'f64') {
         return '0.0';
     } else {
         return '0';
@@ -176,7 +181,6 @@ function getFieldsInformation(fields) {
     for (let field of fields) {
         const rawTypeName = getFieldRawTypeName(field);
         const wrappedTypeName = getFieldWrappedTypeName(field);
-        const typeDefaultValue = getTypeDefaultValue(wrappedTypeName);
 
         const arraySize = field.arraySize;
         const isCount = !!field.countFor.length;
@@ -263,6 +267,8 @@ function getFieldsInformation(fields) {
             toWrapped = `new_string(&${varName}[0] as *const c_char)`;
             // defValue = `String::new()`;
         } else if (isPrimitiveType) {
+            const primitiveDefaultValue = getPrimitiveDefaultValue(wrappedTypeName);
+
             if (isPointerArray) {
                 rawType = `*const ${rawTypeName}`;
                 wrappedType = `&[${wrappedTypeName}]`;
@@ -276,7 +282,7 @@ function getFieldsInformation(fields) {
                 wrappedType = `&${wrappedTypeName}`;
                 toRaw = `${varName} as *const ${rawTypeName}`;
                 // toWrapped = varName;
-                defValue = `&${typeDefaultValue}`;
+                defValue = `&${primitiveDefaultValue}`;
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
 
@@ -287,16 +293,18 @@ function getFieldsInformation(fields) {
                     wrappedType = `[${wrappedTypeName}; ${arraySize}]`;
                     toRaw = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
                     toWrapped = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
-                    defValue = `[${typeDefaultValue}; ${arraySize}]`;
+                    defValue = `[${primitiveDefaultValue}; ${arraySize}]`;
                 }
             } else {
                 rawType = rawTypeName;
                 wrappedType = wrappedTypeName;
                 toRaw = varName;
                 toWrapped = varName;
-                defValue = typeDefaultValue;
+                defValue = primitiveDefaultValue;
             }
         } else {
+            const constDefaultValue = getPrimitiveDefaultValue(wrappedTypeName) || getConstVkValueName(wrappedTypeName);
+
             if (isPointerArray) {
                 rawType = `VkPtr<${rawTypeName}>`;
                 wrappedType = `&[${wrappedTypeName}]`;
@@ -314,7 +322,7 @@ function getFieldsInformation(fields) {
                 } else {
                     wrappedType = `&${wrappedTypeName}`;
                     toRaw = `VkPtr::new_vk_value(${varName})`;
-                    defValue = `&${typeDefaultValue}`;
+                    defValue = `vk_null_ref()`;
                 }
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
@@ -325,7 +333,7 @@ function getFieldsInformation(fields) {
                 } else {
                     wrappedType = `[${wrappedTypeName}; ${arraySize}]`;
                     toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
-                    defValue = `[${typeDefaultValue}; ${arraySize}]`;
+                    defValue = `[${constDefaultValue}; ${arraySize}]`;
                 }
             } else if (isHandleType) {
                 rawType = rawTypeName;
@@ -338,14 +346,14 @@ function getFieldsInformation(fields) {
                 } else {
                     wrappedType = `&${wrappedTypeName}`;
                     toRaw = `vk_to_raw_value(${varName})`;
-                    defValue = `&${typeDefaultValue}`;
+                    defValue = `vk_null_ref()`;
                 }
             } else {
                 rawType = rawTypeName;
                 wrappedType = wrappedTypeName;
                 toRaw = `vk_to_raw_value(&${varName})`;
                 toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
-                defValue = typeDefaultValue;
+                defValue = constDefaultValue;
             }
         }
 
@@ -408,5 +416,6 @@ module.exports = {
     argToString,
     getFieldsInformation,
     findEnumPrefix,
-    getStaticVkValueName
+    getStaticVkValueName,
+    getConstVkValueName
 };

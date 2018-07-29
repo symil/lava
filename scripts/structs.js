@@ -3,7 +3,7 @@ const {
     toPascalCase,
     getRawVkTypeName,
     getWrappedVkTypeName,
-    getStaticVkValueName,
+    getConstVkValueName,
     getFullWrappedType,
     getFullRawType,
     blockToString,
@@ -100,8 +100,10 @@ function getWrappedFields(def) {
     return def.fields.filter(field => field.wrappedType);
 }
 
+const SPECIAL_NON_RAW_TYPES = ['VkClearValue', 'VkClearColorValue'];
+
 function isConvertibleFromRawToWrapped(def) {
-    return def.fields.every(field => !field.wrappedType || field.toWrapped) && !def.lifetimes;
+    return def.fields.every(field => SPECIAL_NON_RAW_TYPES.includes(field.name) && (!field.wrappedType || field.toWrapped)) && !def.lifetimes;
 }
 
 function isConvertibleFromWrappedToRaw(def) {
@@ -139,11 +141,11 @@ function genImplVkWrappedType(def) {
 function genImplVkDefault(def) {
     const block = []
     const wrappedFields = getWrappedFields(def);
-    const staticValueName = getStaticVkValueName(def.wrappedTypeName);
+    const constValueName = getConstVkValueName(def.wrappedTypeName);
 
     if (isConvertibleFromWrappedToRaw(def)) {
         block.push(
-            `pub static ${staticValueName} : ${def.wrappedTypeName} = ${def.wrappedTypeName}`, [
+            `pub const ${constValueName} : ${def.wrappedTypeName} = ${def.wrappedTypeName}`, [
                 wrappedFields.map(field => `${field.varName}: ${field.defaultValue},`)
             ],
             ';'
@@ -152,7 +154,7 @@ function genImplVkDefault(def) {
         block.push(
             `\nimpl VkDefault for ${def.wrappedTypeName}${def.staticLifetimes}`, [
                 `fn vk_default() -> ${def.wrappedTypeName}${def.staticLifetimes}`, [
-                    staticValueName
+                    constValueName
                 ]
             ]
         );

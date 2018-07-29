@@ -1,14 +1,9 @@
-struct VkNullType;
-static VK_NULL_VALUE : VkNullType = VkNullType {};
+type VkNullType = [u8; 1024];
 
-pub static STR_NULL : &'static str = "";
+pub static VK_NULL_VALUE : VkNullType = [0; 1024];
 
-pub fn vk_null<T>() -> &'static T {
+pub fn vk_null_ref<T>() -> &'static T {
     unsafe {
         ((&VK_NULL_VALUE as *const VkNullType) as *const T).as_ref().unwrap()
     }
-}
-
-pub fn vk_is_null<T>(value: &T) -> bool {
-    value as *const T == (&VK_NULL_VALUE as *const VkNullType) as *const T
 }

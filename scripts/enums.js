@@ -4,7 +4,7 @@ const {
     getRawVkTypeName,
     getWrappedVkTypeName,
     findEnumPrefix,
-    getStaticVkValueName,
+    getConstVkValueName,
     getFullWrappedType,
     getFullRawType,
     blockToString,
@@ -83,13 +83,13 @@ function genImplVkWrappedType(def) {
 }
 
 function genImplVkDefault(def) {
-    const staticValueName = getStaticVkValueName(def.wrappedTypeName);
+    const constValueName = getConstVkValueName(def.wrappedTypeName);
 
     return [
-        `pub static ${staticValueName} : ${def.wrappedTypeName} = ${def.wrappedTypeName}::${def.fields[0].rustName};`,
+        `pub const ${constValueName} : ${def.wrappedTypeName} = ${def.wrappedTypeName}::${def.fields[0].rustName};`,
         `\nimpl VkDefault for ${def.wrappedTypeName}`, [
             `fn vk_default() -> ${def.wrappedTypeName}`, [
-                staticValueName
+                constValueName
             ]
         ]
     ];
