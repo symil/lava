@@ -64,7 +64,7 @@ function blockToString(block) {
     if (typeof block === 'string') {
         return block;
     } else {
-        return _blocksToString(block);
+        return _blocksToString(block).replace(/\n {/g, '\n{');
     }
 }
 
@@ -169,19 +169,6 @@ class LifetimeSet {
 
     getDefinitions() {
         return Object.values(this._types);
-    }
-}
-
-function getFieldLifetime(field, genericsSet) {
-    const def = getStructByName(field);
-
-    if (field.fullType === 'const char* const*') {
-        const sliceLifetime = genericsSet.add();
-        const strLifetime = genericsSet.add(sliceLifetime);
-
-        return [sliceLifetime, strLifetime];
-    } else if (field.fullType === 'const char*') {
-        return [genericsSet.add()];
     }
 }
 
@@ -309,6 +296,8 @@ function getFieldsInformation(fields) {
         }
 
         const info = {
+            typeName: field.typeName,
+            extension: field.extension,
             rawType: rawType,
             wrappedType: wrappedType,
             rawTypeName: rawTypeName,

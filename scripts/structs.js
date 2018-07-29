@@ -15,12 +15,112 @@ const {
     getFieldsInformation
 } = require('./utils');
 
+const { getStruct } = require('./vulkan_header');
+
+class LetterCounter {
+    constructor() {
+        this._counter = 0;
+        this._initialized = false;
+    }
+
+    next() {
+        return "'" + String.fromCharCode('a'.charCodeAt(0) + this._counter++);
+    }
+}
+
+class LifetimeTree {
+    constructor(letter, parentLetter) {
+        this._letter = letter;
+        this._parentLetter = parentLetter;
+        this._children = [];
+    }
+
+    add(counter) {
+        const child = new LifetimeTree(counter && counter.next(), this._letter || this._parentLetter);
+        this._children.push(child);
+
+        return child;
+    }
+
+    _collect(obj = {}) {
+        if (this._letter) {
+            obj[this._letter] = this._parentLetter;
+        }
+
+        this._children.forEach(child => child._collect(obj));
+
+        return obj;
+    }
+
+    letter() {
+        return this._letter;
+    }
+
+    getSpecs() {
+        const letters = Object.keys(this._collect());
+
+        if (!letters.length) {
+            return '';
+        }
+
+        return `<${letters.join(', ')}>`;
+    }
+
+    getRestrictions() {
+        const restrictions = Object.entries(this._collect()).filter(entry => entry[1]);
+
+        if (!restrictions.length) {
+            return '';
+        }
+
+        return `\n    where\n${restrictions.map(([key, value]) => `        ${key}: ${value},\n`).join('')}`
+    }
+}
+
+function assignLifetimes(fields, counter, root) {
+    counter = counter || new LetterCounter();
+    root = root || new LifetimeTree();
+
+    for (let field of fields) {
+        let tree = root;
+
+        if (field.wrappedType) {
+            if (field.wrappedType.startsWith('&')) {
+                tree = tree.add(counter);
+                field.wrappedType = field.wrappedType.replace('&', `&${tree.letter()} `);
+
+                if (field.wrappedType.endsWith(`[&str]`)) {
+                    tree = tree.add(counter);
+                    field.wrappedType = field.wrappedType.replace('[&str]', `[&${tree.letter()} str]`);
+                }
+            }
+
+            if (field.wrappedTypeName.startsWith('Vk')) {
+                const structDef = getStruct(field);
+
+                if (structDef) {
+                    const structFields = getFieldsInformation(structDef.fields);
+                    tree = assignLifetimes(structFields, counter, tree.add(null));
+                    field.wrappedType = field.wrappedType.replace(field.wrappedTypeName, field.wrappedTypeName + tree.getSpecs());
+                }
+            }
+        }
+    }
+
+    return root;
+}
+
 function generateVkStructDefinition(cDef) {
     const def = {
         rawTypeName: getRawVkTypeName(cDef.name),
         wrappedTypeName: getWrappedVkTypeName(cDef.name),
         fields: getFieldsInformation(cDef.fields)
     };
+
+    const lifetimeTree = assignLifetimes(def.fields);
+
+    def.lifetimes = lifetimeTree.getSpecs();
+    def.lifetimesRestrictions = lifetimeTree.getRestrictions();
 
 
     if (isSelfDescribingStructureType(def.fields[0], 0)) {
@@ -130,7 +230,7 @@ function getWrappedStructDeclaration(def) {
     const fields = getWrappedFields(def);
     
     return [
-        `pub struct ${def.wrappedTypeName}${def.generics.types}${def.generics.specs}`,
+        `pub struct ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`,
             fields.map(field => `pub ${field.varName}: ${field.wrappedType},`)
     ];
 }
@@ -154,7 +254,7 @@ function genImplVkRawType(def) {
         const wrappedFields = getWrappedFields(def);
 
         return [
-            `impl VkRawType<${def.wrappedTypeName}${def.generics.created}> for ${def.rawTypeName}`, [
+            `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
                 `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}${def.generics.created}`, [
                     def.wrappedTypeName,
                     wrappedFields.map((field, index) => `${field.varName}: ${genConvertStatement('toWrapped', 'src', wrappedFields, index)},`)
@@ -171,7 +271,7 @@ function genImplVkWrappedType(def) {
         const rawFields = def.fields;
 
         return [
-            `impl${def.generics.types} VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}${def.generics.types}${def.generics.specs}`, [
+            `impl${def.lifetimes} VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`, [
                 `fn vk_to_raw(src: &${def.wrappedTypeName}${def.generics.types}, dst: &mut ${def.rawTypeName})`,
                 rawFields.map((field, index) => `dst.${field.varName} = ${genConvertStatement('toRaw', 'src', rawFields, index)};`)
             ]
