@@ -93,14 +93,6 @@ function _blocksToString(blocks) {
     return result.replace(/\n;/g, ';\n');
 }
 
-function isCountField(field) {
-    return field && !field.isPointer && !field.isConst && field.typeName === 'uint32_t';
-}
-
-function areFieldsCountAndArray(field1, field2) {
-    return isCountField(field1) && field2 && field2.isPointer && field2.typeName !== 'char';
-}
-
 function isPlural(arg) {
     return arg && !arg.typeName.endsWith('s') && arg.name.endsWith('s');
 }
@@ -180,26 +172,27 @@ function getStaticVkValueName(wrappedTypeName) {
 function getFieldsInformation(fields) {
     const infos = [];
 
-    for (let i = 0; i < fields.length; ++i) {
-        const field = fields[i];
-        const prevField = fields[i - 1];
-        const nextField = fields[i + 1];
-
+    for (let field of fields) {
         const rawTypeName = getFieldRawTypeName(field);
         const wrappedTypeName = getFieldWrappedTypeName(field);
         const vkStaticValue = getStaticVkValueName(wrappedTypeName);
 
         const arraySize = field.arraySize;
-        const isPointerArray = field.isPointer && areFieldsCountAndArray(prevField, field);
+        const isCount = !!field.countFor.length;
+        const isPointerArray = field.isPointer && field.countField;
         const isPointerValue = field.isPointer && !isPointerArray;
         const isStaticArray = !field.isPointer && !!arraySize;
         const isPrimitiveType = rawTypeName === wrappedTypeName;
         const isHandleType = !isPrimitiveType && isHandle(field.typeName);
-        const isCount = areFieldsCountAndArray(field, nextField);
 
-        const varName = '[varName]';
-        const prevVarName = '[prevVarName]';
-        const nextVarName = '[nextVarName]';
+        const varName = '[VarName]';
+        const countVarName = '[CountVarName]';
+        const arrayVarName = '[ArrayVarName]';
+
+        const varNameValue = cToRustVarName(field.name);
+        const countVarNameValue = isPointerArray ? cToRustVarName(field.countField) : null;
+        const arrayVarNameValue = isCount ? cToRustVarName(field.countFor[0]) : null;
+
 
         let rawType = null;
         let wrappedType = null;
@@ -212,7 +205,15 @@ function getFieldsInformation(fields) {
             toRaw = `ptr::null()`;
         } else if (isCount) {
             rawType = `u32`;
-            toRaw = `${nextVarName}.len() as u32`;
+
+            let lenValue = `makeVarName(${cToRustVarName(field.countFor[0])}).len()`;
+
+            for (let i = 1; i < field.countFor.length; ++i) {
+                const otherLen = `makeVarName(${cToRustVarName(field.countFor[i])}.len()`;
+                lenValue = `cmp::max(${lenValue}, ${otherLen})`;
+            }
+
+            toRaw = new Function('makeVarName', `return '${lenValue} as u32'.replace(/makeVarName\\((\\w+)\\)/g, function(_, name) { return makeVarName(name); })`);
         } else if (field.fullType === 'const char* const*') {
             rawType = `VkPtr<*mut c_char>`;
             wrappedType = `&[&str]`;
@@ -252,7 +253,7 @@ function getFieldsInformation(fields) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
                 wrappedType = `Vec<${wrappedTypeName}>`;
                 // toRaw = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
-                toWrapped = `new_array(${prevVarName}, &${varName}[0] as *const ${rawTypeName})`;
+                toWrapped = `new_array(${countVarName}, &${varName}[0] as *const ${rawTypeName})`;
                 // defValue = `Vec::new()`;
             } else {
                 rawType = rawTypeName;
@@ -278,7 +279,7 @@ function getFieldsInformation(fields) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
                 wrappedType = `Vec<${wrappedTypeName}>`;
                 // toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
-                toWrapped = `new_vk_array(${prevVarName}, &${varName}[0] as *const ${rawTypeName})`;
+                toWrapped = `new_vk_array(${countVarName}, &${varName}[0] as *const ${rawTypeName})`;
                 // defValue = `Vec::new()`;
             } else if (isHandleType) {
                 rawType = rawTypeName;
@@ -302,10 +303,10 @@ function getFieldsInformation(fields) {
             wrappedType: wrappedType,
             rawTypeName: rawTypeName,
             wrappedTypeName: wrappedTypeName,
-            toRaw: stringToFunction(toRaw, varName, prevVarName, nextVarName),
-            toWrapped: stringToFunction(toWrapped, varName, prevVarName, nextVarName),
+            toRaw: stringToFunction(toRaw, varName, countVarName, arrayVarName, varNameValue, countVarNameValue, arrayVarNameValue),
+            toWrapped: stringToFunction(toWrapped, varName, countVarName, arrayVarName, varNameValue, countVarNameValue, arrayVarNameValue),
             defaultValue: defValue,
-            varName: cToRustVarName(field.name)
+            varName: varNameValue
         };
 
         infos.push(info);
@@ -314,18 +315,31 @@ function getFieldsInformation(fields) {
     return infos;
 }
 
-function stringToFunction(statement, varName, prevVarName, nextVarName) {
+function stringToFunction(statement, varName, countVarName, arrayVarName, varNameValue, countVarNameValue, arrayVarNameValue) {
     if (!statement) {
         return null;
     }
 
-    return new Function('varName', 'prevVarName', 'nextVarName', [
+    if (typeof statement === 'function') {
+        return statement;
+    }
+
+    let body = [
         `var str = '${statement}';`,
-        `str = str.replace('${varName}', varName);`,
-        `str = str.replace('${prevVarName}', prevVarName);`,
-        `str = str.replace('${nextVarName}', nextVarName);`,
-        `return str;`
-    ].join('\n'));
+        `str = str.replace('${varName}', makeVarName("${varNameValue}"));`
+    ];
+
+    if (countVarNameValue) {
+        body.push(`str = str.replace('${countVarName}', makeVarName("${countVarNameValue}"));`);
+    }
+
+    if (arrayVarNameValue) {
+        body.push(`str = str.replace('${arrayVarName}', makeVarName("${arrayVarNameValue}"));`);
+    }
+
+    body.push(`return str;`);
+
+    return new Function('makeVarName', body.join('\n'));
 }
 
 module.exports = {
@@ -335,8 +349,6 @@ module.exports = {
     getRawVkTypeName,
     getWrappedVkTypeName,
     blockToString,
-    isCountField,
-    areFieldsCountAndArray,
     isPlural,
     cToRustVarName,
     argToString,

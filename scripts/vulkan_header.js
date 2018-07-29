@@ -2,10 +2,13 @@
 
 const path = require('path');
 const fs = require('fs');
+const XML = require('pixl-xml')
 
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK || "C:\\VulkanSDK\\1.1.77.0";
 const INCLUDE_DIR_NAME = process.platform === 'win32' ? 'Include' : 'include';
 const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, INCLUDE_DIR_NAME, `vulkan`, `vulkan_core.h`), 'utf8');
+const VK_XML_STR = fs.readFileSync(path.join(__dirname, '..', 'download', 'vk.xml'));
+const VK_XML = XML.parse(VK_XML_STR);
 
 const SPECIAL_FUNCTIONS = [
     'VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window, const VkAllocationCallbacks* allocator, VkSurfaceKHR* surface);',
@@ -77,6 +80,8 @@ function listToObj(array) {
     return types;
 }
 
+// console.log(Object.keys(VK_XML.types.type))
+
 function parseStructs() {
     const regexp = /typedef struct \w+ {\n([^}]+)\n}/gmi;
     const match = VULKAN_H.match(regexp);
@@ -87,6 +92,12 @@ function parseStructs() {
         const name = structNameInfo.name;
         const extension = structNameInfo.extension;
         const fieldsStr = str.substring(str.indexOf('{') + 2, str.indexOf('}') - 1);
+
+        const xmlDef = VK_XML.types.type.find(def => def.name === structName);
+
+        if (!Array.isArray(xmlDef.member)) {
+            xmlDef.member = [xmlDef.member];
+        }
 
         const fields = fieldsStr.split('\n').filter(x => x).map(line => {
             const match = line.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;\s*$/);
@@ -108,6 +119,17 @@ function parseStructs() {
 
             return { name, extension, fullType, typeName, isPointer, isConst, arraySize };
         });
+
+        for (let field of fields) {
+            const xmlMember = xmlDef.member.find(member => member.name === field.name);
+
+            field.isOptional = !!xmlMember.optional;
+            field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
+        }
+
+        for (let field of fields) {
+            field.countFor = fields.filter(otherField => otherField.countField === field.name).map(f => f.name);
+        }
 
         return { name, extension, fields };
     });
