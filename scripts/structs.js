@@ -18,6 +18,8 @@ const {
 const { getStruct } = require('./vulkan_header');
 
 function generateVkStructDefinition(cDef) {
+    // console.log('GENERATING ' + cDef.name)
+
     const def = {
         rawTypeName: getRawVkTypeName(cDef.name),
         wrappedTypeName: getWrappedVkTypeName(cDef.name),
@@ -34,8 +36,6 @@ function generateVkStructDefinition(cDef) {
         def.fields[0].toRaw = () => `vk_to_raw_value(&VkStructureType::${def.wrappedTypeName.substring(2)})`;
         def.fields[0].wrappedType = null;
     }
-
-    def.generics = { types: '', specs: '', static: '', created: '' };
 
     return [
         genUses(def),
@@ -88,6 +88,7 @@ function getWrappedStructDeclaration(def) {
     const fields = getWrappedFields(def);
     
     return [
+        `#[derive(Debug, Copy, Clone)]`,
         `pub struct ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`,
             fields.map(field => `pub ${field.varName}: ${field.wrappedType},`)
     ];
@@ -101,19 +102,21 @@ function getWrappedFields(def) {
     return def.fields.filter((field, index) => field.wrappedType && !isSelfDescribingStructureType(field, index));
 }
 
-function canBeCreatedByUser(def) {
-    def.fields.every(field => !field.wrappedType || field.toWrapped);
+function isConvertibleFromRawToWrapped(def) {
+    return def.fields.every(field => !field.wrappedType || field.toWrapped);
+}
+
+function isConvertibleFromWrappedToRaw(def) {
+    return def.fields.every(field => field.toRaw);
 }
 
 function genImplVkRawType(def) {
-    const canBeConverted = canBeCreatedByUser(def);
-
-    if (canBeConverted) {
+    if (isConvertibleFromRawToWrapped(def)) {
         const wrappedFields = getWrappedFields(def);
 
         return [
             `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
-                `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}${def.generics.created}`, [
+                `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                     def.wrappedTypeName,
                     wrappedFields.map(field => `${field.varName}: ${field.toWrapped(varName => `src.${varName}`)},`)
                 ],
@@ -123,14 +126,12 @@ function genImplVkRawType(def) {
 }
 
 function genImplVkWrappedType(def) {
-    const canBeConverted = def.fields.every(field => field.toRaw);
-
-    if (canBeConverted) {
+    if (isConvertibleFromWrappedToRaw(def)) {
         const rawFields = def.fields;
 
         return [
             `impl${def.lifetimes} VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`, [
-                `fn vk_to_raw(src: &${def.wrappedTypeName}${def.generics.types}, dst: &mut ${def.rawTypeName})`,
+                `fn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`,
                 rawFields.map(field => `dst.${field.varName} = ${field.toRaw(varName => `src.${varName}`)};`)
             ]
         ];
@@ -138,7 +139,7 @@ function genImplVkWrappedType(def) {
 }
 
 function genImplVkDefault(def) {
-    if (canBeCreatedByUser(def)) {
+    if (isConvertibleFromWrappedToRaw(def)) {
         const staticValueName = getStaticVkValueName(def.wrappedTypeName);
         const wrappedFields = getWrappedFields(def);
 

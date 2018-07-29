@@ -106,7 +106,7 @@ function parseStructs() {
                 throw new Error(`unexpected line for struct ${structName}: "${line}"`);
             }
 
-            // const name = match[2].trim().replace('BitFlags', 'Flags');
+            // const fullType = match[1].trim().replace('BitFlags', 'Flags');
             const name = match[2].trim();
             const fullType = match[1].trim();
             const fieldName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
@@ -115,11 +115,13 @@ function parseStructs() {
             const extension = fieldTypeNameInfo.extension;
             const isPointer = fullType.endsWith('*');
             const isConst = fullType.startsWith('const ');
-            const arraySize = parseConstant(match[3]);
+            const arraySizeIdentifier = match[3];
+            const arraySize = parseConstant(arraySizeIdentifier);
 
             return { name, extension, fullType, typeName, isPointer, isConst, arraySize };
         });
 
+        let lastField = null;
         for (let field of fields) {
             const xmlMember = xmlDef.member.find(member => member.name === field.name);
 
@@ -129,6 +131,12 @@ function parseStructs() {
 
             field.isOptional = !!xmlMember.optional;
             field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
+
+            if (areCountAndArray(lastField, field)) {
+                field.countField = lastField.name;
+            }
+
+            lastField = field;
         }
 
         for (let field of fields) {
@@ -139,6 +147,14 @@ function parseStructs() {
     });
 
     return listToObj(structs);
+}
+
+function areCountAndArray(field1, field2) {
+    return field1
+        && field2
+        && field1.name.startsWith(field2.name.substring(0, field2.name.length - 1))
+        && field1.name.endsWith('Count')
+        && field1.fullType === 'uint32_t';
 }
 
 function parseEnums() {

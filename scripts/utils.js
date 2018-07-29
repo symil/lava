@@ -136,38 +136,28 @@ function getFieldWrappedTypeName(field) {
         return `VkVersion`;
     } else if (doesFieldRepresentIndex(field)) {
         return `usize`;
+    } else if (field.typeName === 'VkBool32') {
+        return 'bool';
     }
 
     return PRIMITIVE_TYPES[field.typeName] || getWrappedVkTypeName(field.typeName);
-}
-
-class LifetimeSet {
-    constructor() {
-        this._nb = 0;
-        this._types = {};
-    }
-
-    add(outlives) {
-        const letter = "'" + String.fromCharCode('a'.charCodeAt(0) + this._nb);
-        this._types[letter] = outlives;
-        this._nb += 1;
-
-        return letter;
-    }
-
-    getTypes() {
-        return Object.keys(this._types);
-    }
-
-    getDefinitions() {
-        return Object.values(this._types);
-    }
 }
 
 function getStaticVkValueName(wrappedTypeName) {
     return `STATIC_${toUpperCase(wrappedTypeName)}`;
 }
 
+function getTypeDefaultValue(wrappedTypeName) {
+    if (wrappedTypeName.startsWith('Vk')) {
+        return getStaticVkValueName(wrappedTypeName)
+    } else if (wrappedTypeName === 'bool') {
+        return 'false';
+    } else if (wrappedTypeName === 'f32' || wrappedTypeName === 'f64') {
+        return '0.0';
+    } else {
+        return '0';
+    }
+}
 
 function getFieldsInformation(fields) {
     const infos = [];
@@ -175,7 +165,7 @@ function getFieldsInformation(fields) {
     for (let field of fields) {
         const rawTypeName = getFieldRawTypeName(field);
         const wrappedTypeName = getFieldWrappedTypeName(field);
-        const vkStaticValue = getStaticVkValueName(wrappedTypeName);
+        const typeDefaultValue = getTypeDefaultValue(wrappedTypeName);
 
         const arraySize = field.arraySize;
         const isCount = !!field.countFor.length;
@@ -191,9 +181,8 @@ function getFieldsInformation(fields) {
         const arrayVarName = '[ArrayVarName]';
 
         const varNameValue = cToRustVarName(field.name);
-        const countVarNameValue = isPointerArray ? cToRustVarName(field.countField) : null;
+        const countVarNameValue = field.countField ? cToRustVarName(field.countField) : null;
         const arrayVarNameValue = isCount ? cToRustVarName(field.countFor[0]) : null;
-
 
         let rawType = null;
         let wrappedType = null;
@@ -201,16 +190,24 @@ function getFieldsInformation(fields) {
         let toWrapped = null;
         let defValue = null;
 
-        if (field.fullType === 'const void*') {
+        if (field.name === 'pNext' && field.fullType === 'const void*') {
             rawType = `*const c_void`;
             toRaw = `ptr::null()`;
+        } else if (field.typeName === 'void' && field.isPointer) {
+            const qualifier = field.isConst ? 'const' : 'mut';
+
+            rawType = `*${qualifier} c_void`;
+            wrappedType = `*${qualifier} c_void`;
+            toRaw = varName;
+            toWrapped = varName;
+            defValue = field.isConst ? `ptr::null()` : `ptr::null_mut()`;
         } else if (isCount) {
             rawType = `u32`;
 
             let lenValue = `makeVarName(${cToRustVarName(field.countFor[0])}).len()`;
 
             for (let i = 1; i < field.countFor.length; ++i) {
-                const otherLen = `makeVarName(${cToRustVarName(field.countFor[i])}.len()`;
+                const otherLen = `makeVarName(${cToRustVarName(field.countFor[i])}).len()`;
                 lenValue = `cmp::max(${lenValue}, ${otherLen})`;
             }
 
@@ -252,7 +249,7 @@ function getFieldsInformation(fields) {
             // defValue = `String::new()`;
         } else if (isPrimitiveType) {
             if (isPointerArray) {
-                rawType = `*const *${rawTypeName}`;
+                rawType = `*const ${rawTypeName}`;
                 wrappedType = `&[${wrappedTypeName}]`;
                 toRaw = `${varName}.as_ptr()`;
                 // toWrapped = `new_array(${prevVarName}, ${varName})`;
@@ -264,19 +261,24 @@ function getFieldsInformation(fields) {
                 wrappedType = `&${wrappedTypeName}`;
                 toRaw = `${varName} as *const ${rawTypeName}`;
                 // toWrapped = varName;
-                defValue = `&0`;
+                defValue = `&${typeDefaultValue}`;
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
-                wrappedType = `Vec<${wrappedTypeName}>`;
-                // toRaw = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
-                toWrapped = `new_array(${countVarName}, &${varName}[0] as *const ${rawTypeName})`;
-                // defValue = `Vec::new()`;
+
+                if (countVarNameValue) {
+                    wrappedType = `Vec<${wrappedTypeName}>`;
+                    toWrapped = `new_array(${countVarName}, ${varName}.as_ptr())`;
+                } else {
+                    wrappedType = `[${wrappedTypeName}; ${arraySize}]`;
+                    toRaw = createStaticArray(rawTypeName, arraySize, varName, 'to_array');
+                    defValue = `[${typeDefaultValue}; ${arraySize}]`;
+                }
             } else {
                 rawType = rawTypeName;
                 wrappedType = wrappedTypeName;
                 toRaw = varName;
                 toWrapped = varName;
-                defValue = `0`;
+                defValue = typeDefaultValue;
             }
         } else {
             if (isPointerArray) {
@@ -296,14 +298,19 @@ function getFieldsInformation(fields) {
                 } else {
                     wrappedType = `&${wrappedTypeName}`;
                     toRaw = `VkPtr::new_vk_value(${varName})`;
-                    defValue = `&${vkStaticValue}`;
+                    defValue = `&${typeDefaultValue}`;
                 }
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
-                wrappedType = `Vec<${wrappedTypeName}>`;
-                // toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
-                toWrapped = `new_vk_array(${countVarName}, &${varName}[0] as *const ${rawTypeName})`;
-                // defValue = `Vec::new()`;
+
+                if (countVarNameValue) {
+                    wrappedType = `Vec<${wrappedTypeName}>`;
+                    toWrapped = `new_vk_array(${countVarName}, ${varName}.as_ptr())`;
+                } else {
+                    wrappedType = `[${wrappedTypeName}; ${arraySize}]`;
+                    toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
+                    defValue = `[${typeDefaultValue}; ${arraySize}]`;
+                }
             } else if (isHandleType) {
                 rawType = rawTypeName;
                 // toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
@@ -315,14 +322,14 @@ function getFieldsInformation(fields) {
                 } else {
                     wrappedType = `&${wrappedTypeName}`;
                     toRaw = `vk_to_raw_value(&${varName})`;
-                    defValue = `&${vkStaticValue}`;
+                    defValue = `&${typeDefaultValue}`;
                 }
             } else {
                 rawType = rawTypeName;
                 wrappedType = wrappedTypeName;
                 toRaw = `vk_to_raw_value(&${varName})`;
                 toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
-                defValue = vkStaticValue;
+                defValue = typeDefaultValue;
             }
         }
 
@@ -384,6 +391,5 @@ module.exports = {
     argToString,
     getFieldsInformation,
     findEnumPrefix,
-    getStaticVkValueName,
-    LifetimeSet
+    getStaticVkValueName
 };

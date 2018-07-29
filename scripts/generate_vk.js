@@ -115,7 +115,11 @@ function generateBitFlags() {
 }
 
 function generateStructs() {
-    return generateVkTypes(getAllStructs().slice(0, 2), generateVkStructDefinition);
+    const structs = getAllStructs()
+        // .slice(0, 10)
+        .filter(struct => struct.fields.every(field => !field.fullType.includes('PFN')));
+
+    return generateVkTypes(structs, generateVkStructDefinition);
 }
 
 function generateHandles() {
