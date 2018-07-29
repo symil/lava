@@ -93,12 +93,12 @@ function _blocksToString(blocks) {
     return result.replace(/\n;/g, ';\n');
 }
 
-function isCount(arg) {
-    return arg && arg.isPointer && !arg.isConst && arg.typeName === 'uint32_t';
+function isCountField(field) {
+    return field && !field.isPointer && !field.isConst && field.typeName === 'uint32_t';
 }
 
 function areFieldsCountAndArray(field1, field2) {
-    return isCount(field1) && field2 && field2.isPointer && field2.typeName !== 'char';
+    return isCountField(field1) && field2 && field2.isPointer && field2.typeName !== 'char';
 }
 
 function isPlural(arg) {
@@ -335,7 +335,7 @@ module.exports = {
     getRawVkTypeName,
     getWrappedVkTypeName,
     blockToString,
-    isCount,
+    isCountField,
     areFieldsCountAndArray,
     isPlural,
     cToRustVarName,
