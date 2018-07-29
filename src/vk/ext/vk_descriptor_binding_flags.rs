@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkDescriptorBindingFlags> for VkDescriptorBindingFlags {
     }
 }
 
+pub static STATIC_VK_DESCRIPTOR_BINDING_FLAGS : VkDescriptorBindingFlags = VkDescriptorBindingFlags {
+    update_after_bind: false,
+    update_unused_while_pending: false,
+    partially_bound: false,
+    variable_descriptor_count: false,
+};
+
 impl VkDefault for VkDescriptorBindingFlags {
     fn vk_default() -> VkDescriptorBindingFlags {
-        VkDescriptorBindingFlags {
-            update_after_bind: false,
-            update_unused_while_pending: false,
-            partially_bound: false,
-            variable_descriptor_count: false,
-        }
+        STATIC_VK_DESCRIPTOR_BINDING_FLAGS
     }
 }

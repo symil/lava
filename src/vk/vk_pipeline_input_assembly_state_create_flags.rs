@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineInputAssemblyStateCreateFlags> for VkPipelineInp
     }
 }
 
+pub static STATIC_VK_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAGS : VkPipelineInputAssemblyStateCreateFlags = VkPipelineInputAssemblyStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineInputAssemblyStateCreateFlags {
     fn vk_default() -> VkPipelineInputAssemblyStateCreateFlags {
-        VkPipelineInputAssemblyStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAGS
     }
 }

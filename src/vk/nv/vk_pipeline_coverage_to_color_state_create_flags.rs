@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineCoverageToColorStateCreateFlags> for VkPipelineC
     }
 }
 
+pub static STATIC_VK_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_FLAGS : VkPipelineCoverageToColorStateCreateFlags = VkPipelineCoverageToColorStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineCoverageToColorStateCreateFlags {
     fn vk_default() -> VkPipelineCoverageToColorStateCreateFlags {
-        VkPipelineCoverageToColorStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_FLAGS
     }
 }

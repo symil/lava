@@ -31,8 +31,10 @@ impl VkWrappedType<RawVkStencilOp> for VkStencilOp {
     }
 }
 
+pub static STATIC_VK_STENCIL_OP : VkStencilOp = VkStencilOp::Keep;
+
 impl VkDefault for VkStencilOp {
     fn vk_default() -> VkStencilOp {
-        VkStencilOp::Keep
+        STATIC_VK_STENCIL_OP
     }
 }

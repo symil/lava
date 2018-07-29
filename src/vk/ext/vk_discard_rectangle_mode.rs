@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkDiscardRectangleMode> for VkDiscardRectangleMode {
     }
 }
 
+pub static STATIC_VK_DISCARD_RECTANGLE_MODE : VkDiscardRectangleMode = VkDiscardRectangleMode::Inclusive;
+
 impl VkDefault for VkDiscardRectangleMode {
     fn vk_default() -> VkDiscardRectangleMode {
-        VkDiscardRectangleMode::Inclusive
+        STATIC_VK_DISCARD_RECTANGLE_MODE
     }
 }

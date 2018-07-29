@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkSurfaceCounterFlags> for VkSurfaceCounterFlags {
     }
 }
 
+pub static STATIC_VK_SURFACE_COUNTER_FLAGS : VkSurfaceCounterFlags = VkSurfaceCounterFlags {
+    vblank: false,
+};
+
 impl VkDefault for VkSurfaceCounterFlags {
     fn vk_default() -> VkSurfaceCounterFlags {
-        VkSurfaceCounterFlags {
-            vblank: false,
-        }
+        STATIC_VK_SURFACE_COUNTER_FLAGS
     }
 }

@@ -48,18 +48,20 @@ impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
     }
 }
 
+pub static STATIC_VK_BUFFER_USAGE_FLAGS : VkBufferUsageFlags = VkBufferUsageFlags {
+    transfer_src: false,
+    transfer_dst: false,
+    uniform_texel_buffer: false,
+    storage_texel_buffer: false,
+    uniform_buffer: false,
+    storage_buffer: false,
+    index_buffer: false,
+    vertex_buffer: false,
+    indirect_buffer: false,
+};
+
 impl VkDefault for VkBufferUsageFlags {
     fn vk_default() -> VkBufferUsageFlags {
-        VkBufferUsageFlags {
-            transfer_src: false,
-            transfer_dst: false,
-            uniform_texel_buffer: false,
-            storage_texel_buffer: false,
-            uniform_buffer: false,
-            storage_buffer: false,
-            index_buffer: false,
-            vertex_buffer: false,
-            indirect_buffer: false,
-        }
+        STATIC_VK_BUFFER_USAGE_FLAGS
     }
 }

@@ -35,8 +35,10 @@ impl VkWrappedType<RawVkDynamicState> for VkDynamicState {
     }
 }
 
+pub static STATIC_VK_DYNAMIC_STATE : VkDynamicState = VkDynamicState::Viewport;
+
 impl VkDefault for VkDynamicState {
     fn vk_default() -> VkDynamicState {
-        VkDynamicState::Viewport
+        STATIC_VK_DYNAMIC_STATE
     }
 }

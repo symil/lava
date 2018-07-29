@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandl
     }
 }
 
+pub static STATIC_VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAGS : VkExternalMemoryHandleTypeFlags = VkExternalMemoryHandleTypeFlags {
+    opaque_win32: false,
+    opaque_win32_kmt: false,
+    d3d11_image: false,
+    d3d11_image_kmt: false,
+};
+
 impl VkDefault for VkExternalMemoryHandleTypeFlags {
     fn vk_default() -> VkExternalMemoryHandleTypeFlags {
-        VkExternalMemoryHandleTypeFlags {
-            opaque_win32: false,
-            opaque_win32_kmt: false,
-            d3d11_image: false,
-            d3d11_image_kmt: false,
-        }
+        STATIC_VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAGS
     }
 }

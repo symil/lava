@@ -27,11 +27,13 @@ impl VkWrappedType<RawVkMemoryHeapFlags> for VkMemoryHeapFlags {
     }
 }
 
+pub static STATIC_VK_MEMORY_HEAP_FLAGS : VkMemoryHeapFlags = VkMemoryHeapFlags {
+    device_local: false,
+    multi_instance: false,
+};
+
 impl VkDefault for VkMemoryHeapFlags {
     fn vk_default() -> VkMemoryHeapFlags {
-        VkMemoryHeapFlags {
-            device_local: false,
-            multi_instance: false,
-        }
+        STATIC_VK_MEMORY_HEAP_FLAGS
     }
 }

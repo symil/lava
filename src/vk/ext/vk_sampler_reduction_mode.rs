@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkSamplerReductionMode> for VkSamplerReductionMode {
     }
 }
 
+pub static STATIC_VK_SAMPLER_REDUCTION_MODE : VkSamplerReductionMode = VkSamplerReductionMode::WeightedAverage;
+
 impl VkDefault for VkSamplerReductionMode {
     fn vk_default() -> VkSamplerReductionMode {
-        VkSamplerReductionMode::WeightedAverage
+        STATIC_VK_SAMPLER_REDUCTION_MODE
     }
 }

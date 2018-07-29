@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkFramebufferCreateFlags> for VkFramebufferCreateFlags {
     }
 }
 
+pub static STATIC_VK_FRAMEBUFFER_CREATE_FLAGS : VkFramebufferCreateFlags = VkFramebufferCreateFlags {
+    
+};
+
 impl VkDefault for VkFramebufferCreateFlags {
     fn vk_default() -> VkFramebufferCreateFlags {
-        VkFramebufferCreateFlags {
-            
-        }
+        STATIC_VK_FRAMEBUFFER_CREATE_FLAGS
     }
 }

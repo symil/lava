@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkConservativeRasterizationMode> for VkConservativeRasteri
     }
 }
 
+pub static STATIC_VK_CONSERVATIVE_RASTERIZATION_MODE : VkConservativeRasterizationMode = VkConservativeRasterizationMode::Disabled;
+
 impl VkDefault for VkConservativeRasterizationMode {
     fn vk_default() -> VkConservativeRasterizationMode {
-        VkConservativeRasterizationMode::Disabled
+        STATIC_VK_CONSERVATIVE_RASTERIZATION_MODE
     }
 }

@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineColorBlendStateCreateFlags> for VkPipelineColorB
     }
 }
 
+pub static STATIC_VK_PIPELINE_COLOR_BLEND_STATE_CREATE_FLAGS : VkPipelineColorBlendStateCreateFlags = VkPipelineColorBlendStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineColorBlendStateCreateFlags {
     fn vk_default() -> VkPipelineColorBlendStateCreateFlags {
-        VkPipelineColorBlendStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_COLOR_BLEND_STATE_CREATE_FLAGS
     }
 }

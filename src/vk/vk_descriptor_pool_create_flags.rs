@@ -27,11 +27,13 @@ impl VkWrappedType<RawVkDescriptorPoolCreateFlags> for VkDescriptorPoolCreateFla
     }
 }
 
+pub static STATIC_VK_DESCRIPTOR_POOL_CREATE_FLAGS : VkDescriptorPoolCreateFlags = VkDescriptorPoolCreateFlags {
+    free_descriptor_set: false,
+    update_after_bind_ext: false,
+};
+
 impl VkDefault for VkDescriptorPoolCreateFlags {
     fn vk_default() -> VkDescriptorPoolCreateFlags {
-        VkDescriptorPoolCreateFlags {
-            free_descriptor_set: false,
-            update_after_bind_ext: false,
-        }
+        STATIC_VK_DESCRIPTOR_POOL_CREATE_FLAGS
     }
 }

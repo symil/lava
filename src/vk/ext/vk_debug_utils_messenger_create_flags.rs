@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkDebugUtilsMessengerCreateFlags> for VkDebugUtilsMessenge
     }
 }
 
+pub static STATIC_VK_DEBUG_UTILS_MESSENGER_CREATE_FLAGS : VkDebugUtilsMessengerCreateFlags = VkDebugUtilsMessengerCreateFlags {
+    
+};
+
 impl VkDefault for VkDebugUtilsMessengerCreateFlags {
     fn vk_default() -> VkDebugUtilsMessengerCreateFlags {
-        VkDebugUtilsMessengerCreateFlags {
-            
-        }
+        STATIC_VK_DEBUG_UTILS_MESSENGER_CREATE_FLAGS
     }
 }

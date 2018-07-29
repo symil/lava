@@ -81,29 +81,31 @@ impl VkWrappedType<RawVkAccessFlags> for VkAccessFlags {
     }
 }
 
+pub static STATIC_VK_ACCESS_FLAGS : VkAccessFlags = VkAccessFlags {
+    indirect_command_read: false,
+    index_read: false,
+    vertex_attribute_read: false,
+    uniform_read: false,
+    input_attachment_read: false,
+    shader_read: false,
+    shader_write: false,
+    color_attachment_read: false,
+    color_attachment_write: false,
+    depth_stencil_attachment_read: false,
+    depth_stencil_attachment_write: false,
+    transfer_read: false,
+    transfer_write: false,
+    host_read: false,
+    host_write: false,
+    memory_read: false,
+    memory_write: false,
+    command_process_read_nvx: false,
+    command_process_write_nvx: false,
+    color_attachment_read_noncoherent_ext: false,
+};
+
 impl VkDefault for VkAccessFlags {
     fn vk_default() -> VkAccessFlags {
-        VkAccessFlags {
-            indirect_command_read: false,
-            index_read: false,
-            vertex_attribute_read: false,
-            uniform_read: false,
-            input_attachment_read: false,
-            shader_read: false,
-            shader_write: false,
-            color_attachment_read: false,
-            color_attachment_write: false,
-            depth_stencil_attachment_read: false,
-            depth_stencil_attachment_write: false,
-            transfer_read: false,
-            transfer_write: false,
-            host_read: false,
-            host_write: false,
-            memory_read: false,
-            memory_write: false,
-            command_process_read_nvx: false,
-            command_process_write_nvx: false,
-            color_attachment_read_noncoherent_ext: false,
-        }
+        STATIC_VK_ACCESS_FLAGS
     }
 }

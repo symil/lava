@@ -48,18 +48,20 @@ impl VkWrappedType<RawVkSurfaceTransformFlags> for VkSurfaceTransformFlags {
     }
 }
 
+pub static STATIC_VK_SURFACE_TRANSFORM_FLAGS : VkSurfaceTransformFlags = VkSurfaceTransformFlags {
+    identity: false,
+    rotate_90: false,
+    rotate_180: false,
+    rotate_270: false,
+    horizontal_mirror: false,
+    horizontal_mirror_rotate_90: false,
+    horizontal_mirror_rotate_180: false,
+    horizontal_mirror_rotate_270: false,
+    inherit: false,
+};
+
 impl VkDefault for VkSurfaceTransformFlags {
     fn vk_default() -> VkSurfaceTransformFlags {
-        VkSurfaceTransformFlags {
-            identity: false,
-            rotate_90: false,
-            rotate_180: false,
-            rotate_270: false,
-            horizontal_mirror: false,
-            horizontal_mirror_rotate_90: false,
-            horizontal_mirror_rotate_180: false,
-            horizontal_mirror_rotate_270: false,
-            inherit: false,
-        }
+        STATIC_VK_SURFACE_TRANSFORM_FLAGS
     }
 }

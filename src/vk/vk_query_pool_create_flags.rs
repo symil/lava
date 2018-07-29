@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkQueryPoolCreateFlags> for VkQueryPoolCreateFlags {
     }
 }
 
+pub static STATIC_VK_QUERY_POOL_CREATE_FLAGS : VkQueryPoolCreateFlags = VkQueryPoolCreateFlags {
+    
+};
+
 impl VkDefault for VkQueryPoolCreateFlags {
     fn vk_default() -> VkQueryPoolCreateFlags {
-        VkQueryPoolCreateFlags {
-            
-        }
+        STATIC_VK_QUERY_POOL_CREATE_FLAGS
     }
 }

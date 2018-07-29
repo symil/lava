@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkMemoryMapFlags> for VkMemoryMapFlags {
     }
 }
 
+pub static STATIC_VK_MEMORY_MAP_FLAGS : VkMemoryMapFlags = VkMemoryMapFlags {
+    
+};
+
 impl VkDefault for VkMemoryMapFlags {
     fn vk_default() -> VkMemoryMapFlags {
-        VkMemoryMapFlags {
-            
-        }
+        STATIC_VK_MEMORY_MAP_FLAGS
     }
 }

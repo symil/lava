@@ -45,17 +45,19 @@ impl VkWrappedType<RawVkImageUsageFlags> for VkImageUsageFlags {
     }
 }
 
+pub static STATIC_VK_IMAGE_USAGE_FLAGS : VkImageUsageFlags = VkImageUsageFlags {
+    transfer_src: false,
+    transfer_dst: false,
+    sampled: false,
+    storage: false,
+    color_attachment: false,
+    depth_stencil_attachment: false,
+    transient_attachment: false,
+    input_attachment: false,
+};
+
 impl VkDefault for VkImageUsageFlags {
     fn vk_default() -> VkImageUsageFlags {
-        VkImageUsageFlags {
-            transfer_src: false,
-            transfer_dst: false,
-            sampled: false,
-            storage: false,
-            color_attachment: false,
-            depth_stencil_attachment: false,
-            transient_attachment: false,
-            input_attachment: false,
-        }
+        STATIC_VK_IMAGE_USAGE_FLAGS
     }
 }

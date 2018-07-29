@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineDiscardRectangleStateCreateFlags> for VkPipeline
     }
 }
 
+pub static STATIC_VK_PIPELINE_DISCARD_RECTANGLE_STATE_CREATE_FLAGS : VkPipelineDiscardRectangleStateCreateFlags = VkPipelineDiscardRectangleStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineDiscardRectangleStateCreateFlags {
     fn vk_default() -> VkPipelineDiscardRectangleStateCreateFlags {
-        VkPipelineDiscardRectangleStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_DISCARD_RECTANGLE_STATE_CREATE_FLAGS
     }
 }

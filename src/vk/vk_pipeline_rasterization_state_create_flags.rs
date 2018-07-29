@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineRasterizationStateCreateFlags> for VkPipelineRas
     }
 }
 
+pub static STATIC_VK_PIPELINE_RASTERIZATION_STATE_CREATE_FLAGS : VkPipelineRasterizationStateCreateFlags = VkPipelineRasterizationStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineRasterizationStateCreateFlags {
     fn vk_default() -> VkPipelineRasterizationStateCreateFlags {
-        VkPipelineRasterizationStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_RASTERIZATION_STATE_CREATE_FLAGS
     }
 }

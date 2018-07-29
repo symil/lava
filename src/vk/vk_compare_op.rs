@@ -31,8 +31,10 @@ impl VkWrappedType<RawVkCompareOp> for VkCompareOp {
     }
 }
 
+pub static STATIC_VK_COMPARE_OP : VkCompareOp = VkCompareOp::Never;
+
 impl VkDefault for VkCompareOp {
     fn vk_default() -> VkCompareOp {
-        VkCompareOp::Never
+        STATIC_VK_COMPARE_OP
     }
 }

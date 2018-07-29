@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkSamplerMipmapMode> for VkSamplerMipmapMode {
     }
 }
 
+pub static STATIC_VK_SAMPLER_MIPMAP_MODE : VkSamplerMipmapMode = VkSamplerMipmapMode::Nearest;
+
 impl VkDefault for VkSamplerMipmapMode {
     fn vk_default() -> VkSamplerMipmapMode {
-        VkSamplerMipmapMode::Nearest
+        STATIC_VK_SAMPLER_MIPMAP_MODE
     }
 }

@@ -34,8 +34,10 @@ impl VkWrappedType<RawVkPrimitiveTopology> for VkPrimitiveTopology {
     }
 }
 
+pub static STATIC_VK_PRIMITIVE_TOPOLOGY : VkPrimitiveTopology = VkPrimitiveTopology::PointList;
+
 impl VkDefault for VkPrimitiveTopology {
     fn vk_default() -> VkPrimitiveTopology {
-        VkPrimitiveTopology::PointList
+        STATIC_VK_PRIMITIVE_TOPOLOGY
     }
 }

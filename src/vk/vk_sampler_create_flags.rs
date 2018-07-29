@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkSamplerCreateFlags> for VkSamplerCreateFlags {
     }
 }
 
+pub static STATIC_VK_SAMPLER_CREATE_FLAGS : VkSamplerCreateFlags = VkSamplerCreateFlags {
+    
+};
+
 impl VkDefault for VkSamplerCreateFlags {
     fn vk_default() -> VkSamplerCreateFlags {
-        VkSamplerCreateFlags {
-            
-        }
+        STATIC_VK_SAMPLER_CREATE_FLAGS
     }
 }

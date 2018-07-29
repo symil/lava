@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkSparseMemoryBindFlags> for VkSparseMemoryBindFlags {
     }
 }
 
+pub static STATIC_VK_SPARSE_MEMORY_BIND_FLAGS : VkSparseMemoryBindFlags = VkSparseMemoryBindFlags {
+    metadata: false,
+};
+
 impl VkDefault for VkSparseMemoryBindFlags {
     fn vk_default() -> VkSparseMemoryBindFlags {
-        VkSparseMemoryBindFlags {
-            metadata: false,
-        }
+        STATIC_VK_SPARSE_MEMORY_BIND_FLAGS
     }
 }

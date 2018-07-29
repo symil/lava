@@ -31,8 +31,10 @@ impl VkWrappedType<RawVkIndirectCommandsTokenType> for VkIndirectCommandsTokenTy
     }
 }
 
+pub static STATIC_VK_INDIRECT_COMMANDS_TOKEN_TYPE : VkIndirectCommandsTokenType = VkIndirectCommandsTokenType::Pipeline;
+
 impl VkDefault for VkIndirectCommandsTokenType {
     fn vk_default() -> VkIndirectCommandsTokenType {
-        VkIndirectCommandsTokenType::Pipeline
+        STATIC_VK_INDIRECT_COMMANDS_TOKEN_TYPE
     }
 }

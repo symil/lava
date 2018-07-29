@@ -27,11 +27,13 @@ impl VkWrappedType<RawVkDescriptorSetLayoutCreateFlags> for VkDescriptorSetLayou
     }
 }
 
+pub static STATIC_VK_DESCRIPTOR_SET_LAYOUT_CREATE_FLAGS : VkDescriptorSetLayoutCreateFlags = VkDescriptorSetLayoutCreateFlags {
+    push_descriptor_khr: false,
+    update_after_bind_pool_ext: false,
+};
+
 impl VkDefault for VkDescriptorSetLayoutCreateFlags {
     fn vk_default() -> VkDescriptorSetLayoutCreateFlags {
-        VkDescriptorSetLayoutCreateFlags {
-            push_descriptor_khr: false,
-            update_after_bind_pool_ext: false,
-        }
+        STATIC_VK_DESCRIPTOR_SET_LAYOUT_CREATE_FLAGS
     }
 }

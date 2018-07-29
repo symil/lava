@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkAttachmentDescriptionFlags> for VkAttachmentDescriptionF
     }
 }
 
+pub static STATIC_VK_ATTACHMENT_DESCRIPTION_FLAGS : VkAttachmentDescriptionFlags = VkAttachmentDescriptionFlags {
+    may_alias: false,
+};
+
 impl VkDefault for VkAttachmentDescriptionFlags {
     fn vk_default() -> VkAttachmentDescriptionFlags {
-        VkAttachmentDescriptionFlags {
-            may_alias: false,
-        }
+        STATIC_VK_ATTACHMENT_DESCRIPTION_FLAGS
     }
 }

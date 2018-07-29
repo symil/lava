@@ -30,12 +30,14 @@ impl VkWrappedType<RawVkDependencyFlags> for VkDependencyFlags {
     }
 }
 
+pub static STATIC_VK_DEPENDENCY_FLAGS : VkDependencyFlags = VkDependencyFlags {
+    by_region: false,
+    device_group: false,
+    view_local: false,
+};
+
 impl VkDefault for VkDependencyFlags {
     fn vk_default() -> VkDependencyFlags {
-        VkDependencyFlags {
-            by_region: false,
-            device_group: false,
-            view_local: false,
-        }
+        STATIC_VK_DEPENDENCY_FLAGS
     }
 }

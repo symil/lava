@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineCoverageModulationStateCreateFlags> for VkPipeli
     }
 }
 
+pub static STATIC_VK_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_FLAGS : VkPipelineCoverageModulationStateCreateFlags = VkPipelineCoverageModulationStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineCoverageModulationStateCreateFlags {
     fn vk_default() -> VkPipelineCoverageModulationStateCreateFlags {
-        VkPipelineCoverageModulationStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_FLAGS
     }
 }

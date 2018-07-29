@@ -74,8 +74,10 @@ impl VkWrappedType<RawVkBlendOp> for VkBlendOp {
     }
 }
 
+pub static STATIC_VK_BLEND_OP : VkBlendOp = VkBlendOp::Add;
+
 impl VkDefault for VkBlendOp {
     fn vk_default() -> VkBlendOp {
-        VkBlendOp::Add
+        STATIC_VK_BLEND_OP
     }
 }

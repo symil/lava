@@ -24,8 +24,10 @@ impl VkWrappedType<RawVkPipelineCacheHeaderVersion> for VkPipelineCacheHeaderVer
     }
 }
 
+pub static STATIC_VK_PIPELINE_CACHE_HEADER_VERSION : VkPipelineCacheHeaderVersion = VkPipelineCacheHeaderVersion::One;
+
 impl VkDefault for VkPipelineCacheHeaderVersion {
     fn vk_default() -> VkPipelineCacheHeaderVersion {
-        VkPipelineCacheHeaderVersion::One
+        STATIC_VK_PIPELINE_CACHE_HEADER_VERSION
     }
 }

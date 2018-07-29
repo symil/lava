@@ -28,8 +28,10 @@ impl VkWrappedType<RawVkPhysicalDeviceType> for VkPhysicalDeviceType {
     }
 }
 
+pub static STATIC_VK_PHYSICAL_DEVICE_TYPE : VkPhysicalDeviceType = VkPhysicalDeviceType::Other;
+
 impl VkDefault for VkPhysicalDeviceType {
     fn vk_default() -> VkPhysicalDeviceType {
-        VkPhysicalDeviceType::Other
+        STATIC_VK_PHYSICAL_DEVICE_TYPE
     }
 }

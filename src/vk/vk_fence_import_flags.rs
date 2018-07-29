@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkFenceImportFlags> for VkFenceImportFlags {
     }
 }
 
+pub static STATIC_VK_FENCE_IMPORT_FLAGS : VkFenceImportFlags = VkFenceImportFlags {
+    temporary: false,
+};
+
 impl VkDefault for VkFenceImportFlags {
     fn vk_default() -> VkFenceImportFlags {
-        VkFenceImportFlags {
-            temporary: false,
-        }
+        STATIC_VK_FENCE_IMPORT_FLAGS
     }
 }

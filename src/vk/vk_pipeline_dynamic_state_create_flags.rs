@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineDynamicStateCreateFlags> for VkPipelineDynamicSt
     }
 }
 
+pub static STATIC_VK_PIPELINE_DYNAMIC_STATE_CREATE_FLAGS : VkPipelineDynamicStateCreateFlags = VkPipelineDynamicStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineDynamicStateCreateFlags {
     fn vk_default() -> VkPipelineDynamicStateCreateFlags {
-        VkPipelineDynamicStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_DYNAMIC_STATE_CREATE_FLAGS
     }
 }

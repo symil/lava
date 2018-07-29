@@ -54,20 +54,22 @@ impl VkWrappedType<RawVkQueryPipelineStatisticFlags> for VkQueryPipelineStatisti
     }
 }
 
+pub static STATIC_VK_QUERY_PIPELINE_STATISTIC_FLAGS : VkQueryPipelineStatisticFlags = VkQueryPipelineStatisticFlags {
+    input_assembly_vertices: false,
+    input_assembly_primitives: false,
+    vertex_shader_invocations: false,
+    geometry_shader_invocations: false,
+    geometry_shader_primitives: false,
+    clipping_invocations: false,
+    clipping_primitives: false,
+    fragment_shader_invocations: false,
+    tessellation_control_shader_patches: false,
+    tessellation_evaluation_shader_invocations: false,
+    compute_shader_invocations: false,
+};
+
 impl VkDefault for VkQueryPipelineStatisticFlags {
     fn vk_default() -> VkQueryPipelineStatisticFlags {
-        VkQueryPipelineStatisticFlags {
-            input_assembly_vertices: false,
-            input_assembly_primitives: false,
-            vertex_shader_invocations: false,
-            geometry_shader_invocations: false,
-            geometry_shader_primitives: false,
-            clipping_invocations: false,
-            clipping_primitives: false,
-            fragment_shader_invocations: false,
-            tessellation_control_shader_patches: false,
-            tessellation_evaluation_shader_invocations: false,
-            compute_shader_invocations: false,
-        }
+        STATIC_VK_QUERY_PIPELINE_STATISTIC_FLAGS
     }
 }

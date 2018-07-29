@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkPeerMemoryFeatureFlags> for VkPeerMemoryFeatureFlags {
     }
 }
 
+pub static STATIC_VK_PEER_MEMORY_FEATURE_FLAGS : VkPeerMemoryFeatureFlags = VkPeerMemoryFeatureFlags {
+    copy_src: false,
+    copy_dst: false,
+    generic_src: false,
+    generic_dst: false,
+};
+
 impl VkDefault for VkPeerMemoryFeatureFlags {
     fn vk_default() -> VkPeerMemoryFeatureFlags {
-        VkPeerMemoryFeatureFlags {
-            copy_src: false,
-            copy_dst: false,
-            generic_src: false,
-            generic_dst: false,
-        }
+        STATIC_VK_PEER_MEMORY_FEATURE_FLAGS
     }
 }

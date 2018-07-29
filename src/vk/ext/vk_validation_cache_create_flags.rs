@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkValidationCacheCreateFlags> for VkValidationCacheCreateF
     }
 }
 
+pub static STATIC_VK_VALIDATION_CACHE_CREATE_FLAGS : VkValidationCacheCreateFlags = VkValidationCacheCreateFlags {
+    
+};
+
 impl VkDefault for VkValidationCacheCreateFlags {
     fn vk_default() -> VkValidationCacheCreateFlags {
-        VkValidationCacheCreateFlags {
-            
-        }
+        STATIC_VK_VALIDATION_CACHE_CREATE_FLAGS
     }
 }

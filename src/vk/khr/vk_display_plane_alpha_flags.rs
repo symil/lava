@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkDisplayPlaneAlphaFlags> for VkDisplayPlaneAlphaFlags {
     }
 }
 
+pub static STATIC_VK_DISPLAY_PLANE_ALPHA_FLAGS : VkDisplayPlaneAlphaFlags = VkDisplayPlaneAlphaFlags {
+    opaque: false,
+    global: false,
+    per_pixel: false,
+    per_pixel_premultiplied: false,
+};
+
 impl VkDefault for VkDisplayPlaneAlphaFlags {
     fn vk_default() -> VkDisplayPlaneAlphaFlags {
-        VkDisplayPlaneAlphaFlags {
-            opaque: false,
-            global: false,
-            per_pixel: false,
-            per_pixel_premultiplied: false,
-        }
+        STATIC_VK_DISPLAY_PLANE_ALPHA_FLAGS
     }
 }

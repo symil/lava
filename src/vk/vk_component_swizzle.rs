@@ -30,8 +30,10 @@ impl VkWrappedType<RawVkComponentSwizzle> for VkComponentSwizzle {
     }
 }
 
+pub static STATIC_VK_COMPONENT_SWIZZLE : VkComponentSwizzle = VkComponentSwizzle::Identity;
+
 impl VkDefault for VkComponentSwizzle {
     fn vk_default() -> VkComponentSwizzle {
-        VkComponentSwizzle::Identity
+        STATIC_VK_COMPONENT_SWIZZLE
     }
 }

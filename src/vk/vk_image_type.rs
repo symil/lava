@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkImageType> for VkImageType {
     }
 }
 
+pub static STATIC_VK_IMAGE_TYPE : VkImageType = VkImageType::_1d;
+
 impl VkDefault for VkImageType {
     fn vk_default() -> VkImageType {
-        VkImageType::_1d
+        STATIC_VK_IMAGE_TYPE
     }
 }

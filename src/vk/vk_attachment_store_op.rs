@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkAttachmentStoreOp> for VkAttachmentStoreOp {
     }
 }
 
+pub static STATIC_VK_ATTACHMENT_STORE_OP : VkAttachmentStoreOp = VkAttachmentStoreOp::Store;
+
 impl VkDefault for VkAttachmentStoreOp {
     fn vk_default() -> VkAttachmentStoreOp {
-        VkAttachmentStoreOp::Store
+        STATIC_VK_ATTACHMENT_STORE_OP
     }
 }

@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkDisplayPowerState> for VkDisplayPowerState {
     }
 }
 
+pub static STATIC_VK_DISPLAY_POWER_STATE : VkDisplayPowerState = VkDisplayPowerState::Off;
+
 impl VkDefault for VkDisplayPowerState {
     fn vk_default() -> VkDisplayPowerState {
-        VkDisplayPowerState::Off
+        STATIC_VK_DISPLAY_POWER_STATE
     }
 }

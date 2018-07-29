@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkRasterizationOrder> for VkRasterizationOrder {
     }
 }
 
+pub static STATIC_VK_RASTERIZATION_ORDER : VkRasterizationOrder = VkRasterizationOrder::Strict;
+
 impl VkDefault for VkRasterizationOrder {
     fn vk_default() -> VkRasterizationOrder {
-        VkRasterizationOrder::Strict
+        STATIC_VK_RASTERIZATION_ORDER
     }
 }

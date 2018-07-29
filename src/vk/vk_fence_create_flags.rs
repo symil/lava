@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkFenceCreateFlags> for VkFenceCreateFlags {
     }
 }
 
+pub static STATIC_VK_FENCE_CREATE_FLAGS : VkFenceCreateFlags = VkFenceCreateFlags {
+    signaled: false,
+};
+
 impl VkDefault for VkFenceCreateFlags {
     fn vk_default() -> VkFenceCreateFlags {
-        VkFenceCreateFlags {
-            signaled: false,
-        }
+        STATIC_VK_FENCE_CREATE_FLAGS
     }
 }

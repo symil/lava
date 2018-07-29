@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkCommandBufferResetFlags> for VkCommandBufferResetFlags {
     }
 }
 
+pub static STATIC_VK_COMMAND_BUFFER_RESET_FLAGS : VkCommandBufferResetFlags = VkCommandBufferResetFlags {
+    release_resources: false,
+};
+
 impl VkDefault for VkCommandBufferResetFlags {
     fn vk_default() -> VkCommandBufferResetFlags {
-        VkCommandBufferResetFlags {
-            release_resources: false,
-        }
+        STATIC_VK_COMMAND_BUFFER_RESET_FLAGS
     }
 }

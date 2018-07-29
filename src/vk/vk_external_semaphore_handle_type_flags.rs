@@ -36,14 +36,16 @@ impl VkWrappedType<RawVkExternalSemaphoreHandleTypeFlags> for VkExternalSemaphor
     }
 }
 
+pub static STATIC_VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_FLAGS : VkExternalSemaphoreHandleTypeFlags = VkExternalSemaphoreHandleTypeFlags {
+    opaque_fd: false,
+    opaque_win32: false,
+    opaque_win32_kmt: false,
+    d3d12_fence: false,
+    sync_fd: false,
+};
+
 impl VkDefault for VkExternalSemaphoreHandleTypeFlags {
     fn vk_default() -> VkExternalSemaphoreHandleTypeFlags {
-        VkExternalSemaphoreHandleTypeFlags {
-            opaque_fd: false,
-            opaque_win32: false,
-            opaque_win32_kmt: false,
-            d3d12_fence: false,
-            sync_fd: false,
-        }
+        STATIC_VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_FLAGS
     }
 }

@@ -29,8 +29,10 @@ impl VkWrappedType<RawVkPresentMode> for VkPresentMode {
     }
 }
 
+pub static STATIC_VK_PRESENT_MODE : VkPresentMode = VkPresentMode::Immediate;
+
 impl VkDefault for VkPresentMode {
     fn vk_default() -> VkPresentMode {
-        VkPresentMode::Immediate
+        STATIC_VK_PRESENT_MODE
     }
 }

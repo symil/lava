@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineShaderStageCreateFlags> for VkPipelineShaderStag
     }
 }
 
+pub static STATIC_VK_PIPELINE_SHADER_STAGE_CREATE_FLAGS : VkPipelineShaderStageCreateFlags = VkPipelineShaderStageCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineShaderStageCreateFlags {
     fn vk_default() -> VkPipelineShaderStageCreateFlags {
-        VkPipelineShaderStageCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_SHADER_STAGE_CREATE_FLAGS
     }
 }

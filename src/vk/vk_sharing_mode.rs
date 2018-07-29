@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkSharingMode> for VkSharingMode {
     }
 }
 
+pub static STATIC_VK_SHARING_MODE : VkSharingMode = VkSharingMode::Exclusive;
+
 impl VkDefault for VkSharingMode {
     fn vk_default() -> VkSharingMode {
-        VkSharingMode::Exclusive
+        STATIC_VK_SHARING_MODE
     }
 }

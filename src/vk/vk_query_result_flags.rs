@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkQueryResultFlags> for VkQueryResultFlags {
     }
 }
 
+pub static STATIC_VK_QUERY_RESULT_FLAGS : VkQueryResultFlags = VkQueryResultFlags {
+    _64: false,
+    wait: false,
+    with_availability: false,
+    partial: false,
+};
+
 impl VkDefault for VkQueryResultFlags {
     fn vk_default() -> VkQueryResultFlags {
-        VkQueryResultFlags {
-            _64: false,
-            wait: false,
-            with_availability: false,
-            partial: false,
-        }
+        STATIC_VK_QUERY_RESULT_FLAGS
     }
 }

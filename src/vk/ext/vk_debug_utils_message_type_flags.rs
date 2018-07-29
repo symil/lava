@@ -30,12 +30,14 @@ impl VkWrappedType<RawVkDebugUtilsMessageTypeFlags> for VkDebugUtilsMessageTypeF
     }
 }
 
+pub static STATIC_VK_DEBUG_UTILS_MESSAGE_TYPE_FLAGS : VkDebugUtilsMessageTypeFlags = VkDebugUtilsMessageTypeFlags {
+    general: false,
+    validation: false,
+    performance: false,
+};
+
 impl VkDefault for VkDebugUtilsMessageTypeFlags {
     fn vk_default() -> VkDebugUtilsMessageTypeFlags {
-        VkDebugUtilsMessageTypeFlags {
-            general: false,
-            validation: false,
-            performance: false,
-        }
+        STATIC_VK_DEBUG_UTILS_MESSAGE_TYPE_FLAGS
     }
 }

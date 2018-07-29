@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkDescriptorPoolResetFlags> for VkDescriptorPoolResetFlags
     }
 }
 
+pub static STATIC_VK_DESCRIPTOR_POOL_RESET_FLAGS : VkDescriptorPoolResetFlags = VkDescriptorPoolResetFlags {
+    
+};
+
 impl VkDefault for VkDescriptorPoolResetFlags {
     fn vk_default() -> VkDescriptorPoolResetFlags {
-        VkDescriptorPoolResetFlags {
-            
-        }
+        STATIC_VK_DESCRIPTOR_POOL_RESET_FLAGS
     }
 }

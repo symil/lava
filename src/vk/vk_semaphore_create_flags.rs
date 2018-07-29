@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkSemaphoreCreateFlags> for VkSemaphoreCreateFlags {
     }
 }
 
+pub static STATIC_VK_SEMAPHORE_CREATE_FLAGS : VkSemaphoreCreateFlags = VkSemaphoreCreateFlags {
+    
+};
+
 impl VkDefault for VkSemaphoreCreateFlags {
     fn vk_default() -> VkSemaphoreCreateFlags {
-        VkSemaphoreCreateFlags {
-            
-        }
+        STATIC_VK_SEMAPHORE_CREATE_FLAGS
     }
 }

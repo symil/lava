@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkExternalFenceHandleTypeFlags> for VkExternalFenceHandleT
     }
 }
 
+pub static STATIC_VK_EXTERNAL_FENCE_HANDLE_TYPE_FLAGS : VkExternalFenceHandleTypeFlags = VkExternalFenceHandleTypeFlags {
+    opaque_fd: false,
+    opaque_win32: false,
+    opaque_win32_kmt: false,
+    sync_fd: false,
+};
+
 impl VkDefault for VkExternalFenceHandleTypeFlags {
     fn vk_default() -> VkExternalFenceHandleTypeFlags {
-        VkExternalFenceHandleTypeFlags {
-            opaque_fd: false,
-            opaque_win32: false,
-            opaque_win32_kmt: false,
-            sync_fd: false,
-        }
+        STATIC_VK_EXTERNAL_FENCE_HANDLE_TYPE_FLAGS
     }
 }

@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkFilter> for VkFilter {
     }
 }
 
+pub static STATIC_VK_FILTER : VkFilter = VkFilter::Nearest;
+
 impl VkDefault for VkFilter {
     fn vk_default() -> VkFilter {
-        VkFilter::Nearest
+        STATIC_VK_FILTER
     }
 }

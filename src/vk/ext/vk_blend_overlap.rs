@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkBlendOverlap> for VkBlendOverlap {
     }
 }
 
+pub static STATIC_VK_BLEND_OVERLAP : VkBlendOverlap = VkBlendOverlap::Uncorrelated;
+
 impl VkDefault for VkBlendOverlap {
     fn vk_default() -> VkBlendOverlap {
-        VkBlendOverlap::Uncorrelated
+        STATIC_VK_BLEND_OVERLAP
     }
 }

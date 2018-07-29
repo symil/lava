@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkQueryControlFlags> for VkQueryControlFlags {
     }
 }
 
+pub static STATIC_VK_QUERY_CONTROL_FLAGS : VkQueryControlFlags = VkQueryControlFlags {
+    precise: false,
+};
+
 impl VkDefault for VkQueryControlFlags {
     fn vk_default() -> VkQueryControlFlags {
-        VkQueryControlFlags {
-            precise: false,
-        }
+        STATIC_VK_QUERY_CONTROL_FLAGS
     }
 }

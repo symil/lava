@@ -36,14 +36,16 @@ impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {
     }
 }
 
+pub static STATIC_VK_PIPELINE_CREATE_FLAGS : VkPipelineCreateFlags = VkPipelineCreateFlags {
+    disable_optimization: false,
+    allow_derivatives: false,
+    derivative: false,
+    view_index_from_device_index: false,
+    dispatch_base: false,
+};
+
 impl VkDefault for VkPipelineCreateFlags {
     fn vk_default() -> VkPipelineCreateFlags {
-        VkPipelineCreateFlags {
-            disable_optimization: false,
-            allow_derivatives: false,
-            derivative: false,
-            view_index_from_device_index: false,
-            dispatch_base: false,
-        }
+        STATIC_VK_PIPELINE_CREATE_FLAGS
     }
 }

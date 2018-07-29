@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkBufferViewCreateFlags> for VkBufferViewCreateFlags {
     }
 }
 
+pub static STATIC_VK_BUFFER_VIEW_CREATE_FLAGS : VkBufferViewCreateFlags = VkBufferViewCreateFlags {
+    
+};
+
 impl VkDefault for VkBufferViewCreateFlags {
     fn vk_default() -> VkBufferViewCreateFlags {
-        VkBufferViewCreateFlags {
-            
-        }
+        STATIC_VK_BUFFER_VIEW_CREATE_FLAGS
     }
 }

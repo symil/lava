@@ -28,8 +28,10 @@ impl VkWrappedType<RawVkSamplerYcbcrModelConversion> for VkSamplerYcbcrModelConv
     }
 }
 
+pub static STATIC_VK_SAMPLER_YCBCR_MODEL_CONVERSION : VkSamplerYcbcrModelConversion = VkSamplerYcbcrModelConversion::RgbIdentity;
+
 impl VkDefault for VkSamplerYcbcrModelConversion {
     fn vk_default() -> VkSamplerYcbcrModelConversion {
-        VkSamplerYcbcrModelConversion::RgbIdentity
+        STATIC_VK_SAMPLER_YCBCR_MODEL_CONVERSION
     }
 }

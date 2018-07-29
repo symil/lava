@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkEventCreateFlags> for VkEventCreateFlags {
     }
 }
 
+pub static STATIC_VK_EVENT_CREATE_FLAGS : VkEventCreateFlags = VkEventCreateFlags {
+    
+};
+
 impl VkDefault for VkEventCreateFlags {
     fn vk_default() -> VkEventCreateFlags {
-        VkEventCreateFlags {
-            
-        }
+        STATIC_VK_EVENT_CREATE_FLAGS
     }
 }

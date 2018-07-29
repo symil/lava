@@ -27,11 +27,13 @@ impl VkWrappedType<RawVkObjectEntryUsageFlags> for VkObjectEntryUsageFlags {
     }
 }
 
+pub static STATIC_VK_OBJECT_ENTRY_USAGE_FLAGS : VkObjectEntryUsageFlags = VkObjectEntryUsageFlags {
+    graphics: false,
+    compute: false,
+};
+
 impl VkDefault for VkObjectEntryUsageFlags {
     fn vk_default() -> VkObjectEntryUsageFlags {
-        VkObjectEntryUsageFlags {
-            graphics: false,
-            compute: false,
-        }
+        STATIC_VK_OBJECT_ENTRY_USAGE_FLAGS
     }
 }

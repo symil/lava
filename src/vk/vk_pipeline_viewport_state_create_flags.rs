@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineViewportStateCreateFlags> for VkPipelineViewport
     }
 }
 
+pub static STATIC_VK_PIPELINE_VIEWPORT_STATE_CREATE_FLAGS : VkPipelineViewportStateCreateFlags = VkPipelineViewportStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineViewportStateCreateFlags {
     fn vk_default() -> VkPipelineViewportStateCreateFlags {
-        VkPipelineViewportStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_VIEWPORT_STATE_CREATE_FLAGS
     }
 }

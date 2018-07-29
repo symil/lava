@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkDebugUtilsMessageSeverityFlags> for VkDebugUtilsMessageS
     }
 }
 
+pub static STATIC_VK_DEBUG_UTILS_MESSAGE_SEVERITY_FLAGS : VkDebugUtilsMessageSeverityFlags = VkDebugUtilsMessageSeverityFlags {
+    verbose: false,
+    info: false,
+    warning: false,
+    error: false,
+};
+
 impl VkDefault for VkDebugUtilsMessageSeverityFlags {
     fn vk_default() -> VkDebugUtilsMessageSeverityFlags {
-        VkDebugUtilsMessageSeverityFlags {
-            verbose: false,
-            info: false,
-            warning: false,
-            error: false,
-        }
+        STATIC_VK_DEBUG_UTILS_MESSAGE_SEVERITY_FLAGS
     }
 }

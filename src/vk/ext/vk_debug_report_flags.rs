@@ -36,14 +36,16 @@ impl VkWrappedType<RawVkDebugReportFlags> for VkDebugReportFlags {
     }
 }
 
+pub static STATIC_VK_DEBUG_REPORT_FLAGS : VkDebugReportFlags = VkDebugReportFlags {
+    information: false,
+    warning: false,
+    performance_warning: false,
+    error: false,
+    debug: false,
+};
+
 impl VkDefault for VkDebugReportFlags {
     fn vk_default() -> VkDebugReportFlags {
-        VkDebugReportFlags {
-            information: false,
-            warning: false,
-            performance_warning: false,
-            error: false,
-            debug: false,
-        }
+        STATIC_VK_DEBUG_REPORT_FLAGS
     }
 }

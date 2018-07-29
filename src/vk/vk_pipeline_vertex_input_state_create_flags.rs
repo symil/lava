@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineVertexInputStateCreateFlags> for VkPipelineVerte
     }
 }
 
+pub static STATIC_VK_PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAGS : VkPipelineVertexInputStateCreateFlags = VkPipelineVertexInputStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineVertexInputStateCreateFlags {
     fn vk_default() -> VkPipelineVertexInputStateCreateFlags {
-        VkPipelineVertexInputStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAGS
     }
 }

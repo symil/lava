@@ -39,8 +39,10 @@ impl VkWrappedType<RawVkLogicOp> for VkLogicOp {
     }
 }
 
+pub static STATIC_VK_LOGIC_OP : VkLogicOp = VkLogicOp::Clear;
+
 impl VkDefault for VkLogicOp {
     fn vk_default() -> VkLogicOp {
-        VkLogicOp::Clear
+        STATIC_VK_LOGIC_OP
     }
 }

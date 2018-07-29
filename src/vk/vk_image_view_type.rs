@@ -30,8 +30,10 @@ impl VkWrappedType<RawVkImageViewType> for VkImageViewType {
     }
 }
 
+pub static STATIC_VK_IMAGE_VIEW_TYPE : VkImageViewType = VkImageViewType::_1d;
+
 impl VkDefault for VkImageViewType {
     fn vk_default() -> VkImageViewType {
-        VkImageViewType::_1d
+        STATIC_VK_IMAGE_VIEW_TYPE
     }
 }

@@ -27,11 +27,13 @@ impl VkWrappedType<RawVkExternalFenceFeatureFlags> for VkExternalFenceFeatureFla
     }
 }
 
+pub static STATIC_VK_EXTERNAL_FENCE_FEATURE_FLAGS : VkExternalFenceFeatureFlags = VkExternalFenceFeatureFlags {
+    exportable: false,
+    importable: false,
+};
+
 impl VkDefault for VkExternalFenceFeatureFlags {
     fn vk_default() -> VkExternalFenceFeatureFlags {
-        VkExternalFenceFeatureFlags {
-            exportable: false,
-            importable: false,
-        }
+        STATIC_VK_EXTERNAL_FENCE_FEATURE_FLAGS
     }
 }

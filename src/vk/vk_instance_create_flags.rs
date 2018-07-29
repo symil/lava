@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkInstanceCreateFlags> for VkInstanceCreateFlags {
     }
 }
 
+pub static STATIC_VK_INSTANCE_CREATE_FLAGS : VkInstanceCreateFlags = VkInstanceCreateFlags {
+    
+};
+
 impl VkDefault for VkInstanceCreateFlags {
     fn vk_default() -> VkInstanceCreateFlags {
-        VkInstanceCreateFlags {
-            
-        }
+        STATIC_VK_INSTANCE_CREATE_FLAGS
     }
 }

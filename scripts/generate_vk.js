@@ -23,7 +23,7 @@ function main() {
     const vkTypes = [
         ...generateEnums(),
         ...generateBitFlags(),
-        ...generateStructs()
+        // ...generateStructs()
     ];
 
     writeVkTypes(vkTypes);

@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkImageViewCreateFlags> for VkImageViewCreateFlags {
     }
 }
 
+pub static STATIC_VK_IMAGE_VIEW_CREATE_FLAGS : VkImageViewCreateFlags = VkImageViewCreateFlags {
+    
+};
+
 impl VkDefault for VkImageViewCreateFlags {
     fn vk_default() -> VkImageViewCreateFlags {
-        VkImageViewCreateFlags {
-            
-        }
+        STATIC_VK_IMAGE_VIEW_CREATE_FLAGS
     }
 }

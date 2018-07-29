@@ -30,12 +30,14 @@ impl VkWrappedType<RawVkCullModeFlags> for VkCullModeFlags {
     }
 }
 
+pub static STATIC_VK_CULL_MODE_FLAGS : VkCullModeFlags = VkCullModeFlags {
+    front: false,
+    back: false,
+    front_and_back: false,
+};
+
 impl VkDefault for VkCullModeFlags {
     fn vk_default() -> VkCullModeFlags {
-        VkCullModeFlags {
-            front: false,
-            back: false,
-            front_and_back: false,
-        }
+        STATIC_VK_CULL_MODE_FLAGS
     }
 }

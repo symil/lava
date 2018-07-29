@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineCacheCreateFlags> for VkPipelineCacheCreateFlags
     }
 }
 
+pub static STATIC_VK_PIPELINE_CACHE_CREATE_FLAGS : VkPipelineCacheCreateFlags = VkPipelineCacheCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineCacheCreateFlags {
     fn vk_default() -> VkPipelineCacheCreateFlags {
-        VkPipelineCacheCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_CACHE_CREATE_FLAGS
     }
 }

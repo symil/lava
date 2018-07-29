@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineMultisampleStateCreateFlags> for VkPipelineMulti
     }
 }
 
+pub static STATIC_VK_PIPELINE_MULTISAMPLE_STATE_CREATE_FLAGS : VkPipelineMultisampleStateCreateFlags = VkPipelineMultisampleStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineMultisampleStateCreateFlags {
     fn vk_default() -> VkPipelineMultisampleStateCreateFlags {
-        VkPipelineMultisampleStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_MULTISAMPLE_STATE_CREATE_FLAGS
     }
 }

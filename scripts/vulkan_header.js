@@ -20,9 +20,6 @@ const BIT_FLAGS = parseBitFlags();
 const STRUCTS = parseStructs();
 const HANDLES = parseHandles();
 
-const structs = getAllStructs().filter(struct => struct.fields.some(field => field.fullType.includes('char')));
-console.log(structs.map(s => s.name));
-
 function getByName(obj, typeName) {
     const { name, extension } = parseName(typeName);
 
@@ -34,7 +31,7 @@ function getAll(obj) {
 }
 
 function get(obj, type) {
-    return obj[type.extension][obj.name];
+    return (obj[type.extension] || {})[type.typeName];
 }
 
 function getAllEnums() { return getAll(ENUMS); }

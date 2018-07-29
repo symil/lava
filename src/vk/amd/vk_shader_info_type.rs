@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkShaderInfoType> for VkShaderInfoType {
     }
 }
 
+pub static STATIC_VK_SHADER_INFO_TYPE : VkShaderInfoType = VkShaderInfoType::Statistics;
+
 impl VkDefault for VkShaderInfoType {
     fn vk_default() -> VkShaderInfoType {
-        VkShaderInfoType::Statistics
+        STATIC_VK_SHADER_INFO_TYPE
     }
 }

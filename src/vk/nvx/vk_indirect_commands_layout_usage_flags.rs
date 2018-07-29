@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkIndirectCommandsLayoutUsageFlags> for VkIndirectCommands
     }
 }
 
+pub static STATIC_VK_INDIRECT_COMMANDS_LAYOUT_USAGE_FLAGS : VkIndirectCommandsLayoutUsageFlags = VkIndirectCommandsLayoutUsageFlags {
+    unordered_sequences: false,
+    sparse_sequences: false,
+    empty_executions: false,
+    indexed_sequences: false,
+};
+
 impl VkDefault for VkIndirectCommandsLayoutUsageFlags {
     fn vk_default() -> VkIndirectCommandsLayoutUsageFlags {
-        VkIndirectCommandsLayoutUsageFlags {
-            unordered_sequences: false,
-            sparse_sequences: false,
-            empty_executions: false,
-            indexed_sequences: false,
-        }
+        STATIC_VK_INDIRECT_COMMANDS_LAYOUT_USAGE_FLAGS
     }
 }

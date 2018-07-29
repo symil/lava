@@ -28,8 +28,10 @@ impl VkWrappedType<RawVkSamplerAddressMode> for VkSamplerAddressMode {
     }
 }
 
+pub static STATIC_VK_SAMPLER_ADDRESS_MODE : VkSamplerAddressMode = VkSamplerAddressMode::Repeat;
+
 impl VkDefault for VkSamplerAddressMode {
     fn vk_default() -> VkSamplerAddressMode {
-        VkSamplerAddressMode::Repeat
+        STATIC_VK_SAMPLER_ADDRESS_MODE
     }
 }

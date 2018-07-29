@@ -54,20 +54,22 @@ impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandl
     }
 }
 
+pub static STATIC_VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAGS : VkExternalMemoryHandleTypeFlags = VkExternalMemoryHandleTypeFlags {
+    opaque_fd: false,
+    opaque_win32: false,
+    opaque_win32_kmt: false,
+    d3d11_texture: false,
+    d3d11_texture_kmt: false,
+    d3d12_heap: false,
+    d3d12_resource: false,
+    dma_buf_ext: false,
+    android_hardware_buffer_android: false,
+    host_allocation_ext: false,
+    host_mapped_foreign_memory_ext: false,
+};
+
 impl VkDefault for VkExternalMemoryHandleTypeFlags {
     fn vk_default() -> VkExternalMemoryHandleTypeFlags {
-        VkExternalMemoryHandleTypeFlags {
-            opaque_fd: false,
-            opaque_win32: false,
-            opaque_win32_kmt: false,
-            d3d11_texture: false,
-            d3d11_texture_kmt: false,
-            d3d12_heap: false,
-            d3d12_resource: false,
-            dma_buf_ext: false,
-            android_hardware_buffer_android: false,
-            host_allocation_ext: false,
-            host_mapped_foreign_memory_ext: false,
-        }
+        STATIC_VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAGS
     }
 }

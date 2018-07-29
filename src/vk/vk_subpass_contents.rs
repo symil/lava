@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkSubpassContents> for VkSubpassContents {
     }
 }
 
+pub static STATIC_VK_SUBPASS_CONTENTS : VkSubpassContents = VkSubpassContents::Inline;
+
 impl VkDefault for VkSubpassContents {
     fn vk_default() -> VkSubpassContents {
-        VkSubpassContents::Inline
+        STATIC_VK_SUBPASS_CONTENTS
     }
 }

@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkCompositeAlphaFlags> for VkCompositeAlphaFlags {
     }
 }
 
+pub static STATIC_VK_COMPOSITE_ALPHA_FLAGS : VkCompositeAlphaFlags = VkCompositeAlphaFlags {
+    opaque: false,
+    pre_multiplied: false,
+    post_multiplied: false,
+    inherit: false,
+};
+
 impl VkDefault for VkCompositeAlphaFlags {
     fn vk_default() -> VkCompositeAlphaFlags {
-        VkCompositeAlphaFlags {
-            opaque: false,
-            pre_multiplied: false,
-            post_multiplied: false,
-            inherit: false,
-        }
+        STATIC_VK_COMPOSITE_ALPHA_FLAGS
     }
 }

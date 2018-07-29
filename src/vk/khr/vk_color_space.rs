@@ -38,8 +38,10 @@ impl VkWrappedType<RawVkColorSpace> for VkColorSpace {
     }
 }
 
+pub static STATIC_VK_COLOR_SPACE : VkColorSpace = VkColorSpace::SrgbNonlinear;
+
 impl VkDefault for VkColorSpace {
     fn vk_default() -> VkColorSpace {
-        VkColorSpace::SrgbNonlinear
+        STATIC_VK_COLOR_SPACE
     }
 }

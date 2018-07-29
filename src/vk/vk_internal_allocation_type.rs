@@ -24,8 +24,10 @@ impl VkWrappedType<RawVkInternalAllocationType> for VkInternalAllocationType {
     }
 }
 
+pub static STATIC_VK_INTERNAL_ALLOCATION_TYPE : VkInternalAllocationType = VkInternalAllocationType::Executable;
+
 impl VkDefault for VkInternalAllocationType {
     fn vk_default() -> VkInternalAllocationType {
-        VkInternalAllocationType::Executable
+        STATIC_VK_INTERNAL_ALLOCATION_TYPE
     }
 }

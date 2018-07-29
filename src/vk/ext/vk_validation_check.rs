@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkValidationCheck> for VkValidationCheck {
     }
 }
 
+pub static STATIC_VK_VALIDATION_CHECK : VkValidationCheck = VkValidationCheck::All;
+
 impl VkDefault for VkValidationCheck {
     fn vk_default() -> VkValidationCheck {
-        VkValidationCheck::All
+        STATIC_VK_VALIDATION_CHECK
     }
 }

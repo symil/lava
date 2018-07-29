@@ -42,16 +42,18 @@ impl VkWrappedType<RawVkShaderStageFlags> for VkShaderStageFlags {
     }
 }
 
+pub static STATIC_VK_SHADER_STAGE_FLAGS : VkShaderStageFlags = VkShaderStageFlags {
+    vertex: false,
+    tessellation_control: false,
+    tessellation_evaluation: false,
+    geometry: false,
+    fragment: false,
+    compute: false,
+    all_graphics: false,
+};
+
 impl VkDefault for VkShaderStageFlags {
     fn vk_default() -> VkShaderStageFlags {
-        VkShaderStageFlags {
-            vertex: false,
-            tessellation_control: false,
-            tessellation_evaluation: false,
-            geometry: false,
-            fragment: false,
-            compute: false,
-            all_graphics: false,
-        }
+        STATIC_VK_SHADER_STAGE_FLAGS
     }
 }

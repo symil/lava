@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkSamplerYcbcrRange> for VkSamplerYcbcrRange {
     }
 }
 
+pub static STATIC_VK_SAMPLER_YCBCR_RANGE : VkSamplerYcbcrRange = VkSamplerYcbcrRange::ItuFull;
+
 impl VkDefault for VkSamplerYcbcrRange {
     fn vk_default() -> VkSamplerYcbcrRange {
-        VkSamplerYcbcrRange::ItuFull
+        STATIC_VK_SAMPLER_YCBCR_RANGE
     }
 }

@@ -27,11 +27,13 @@ impl VkWrappedType<RawVkSwapchainCreateFlags> for VkSwapchainCreateFlags {
     }
 }
 
+pub static STATIC_VK_SWAPCHAIN_CREATE_FLAGS : VkSwapchainCreateFlags = VkSwapchainCreateFlags {
+    split_instance_bind_regions: false,
+    protected: false,
+};
+
 impl VkDefault for VkSwapchainCreateFlags {
     fn vk_default() -> VkSwapchainCreateFlags {
-        VkSwapchainCreateFlags {
-            split_instance_bind_regions: false,
-            protected: false,
-        }
+        STATIC_VK_SWAPCHAIN_CREATE_FLAGS
     }
 }

@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkMemoryAllocateFlags> for VkMemoryAllocateFlags {
     }
 }
 
+pub static STATIC_VK_MEMORY_ALLOCATE_FLAGS : VkMemoryAllocateFlags = VkMemoryAllocateFlags {
+    device_mask: false,
+};
+
 impl VkDefault for VkMemoryAllocateFlags {
     fn vk_default() -> VkMemoryAllocateFlags {
-        VkMemoryAllocateFlags {
-            device_mask: false,
-        }
+        STATIC_VK_MEMORY_ALLOCATE_FLAGS
     }
 }

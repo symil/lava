@@ -30,12 +30,14 @@ impl VkWrappedType<RawVkSparseImageFormatFlags> for VkSparseImageFormatFlags {
     }
 }
 
+pub static STATIC_VK_SPARSE_IMAGE_FORMAT_FLAGS : VkSparseImageFormatFlags = VkSparseImageFormatFlags {
+    single_miptail: false,
+    aligned_mip_size: false,
+    nonstandard_block_size: false,
+};
+
 impl VkDefault for VkSparseImageFormatFlags {
     fn vk_default() -> VkSparseImageFormatFlags {
-        VkSparseImageFormatFlags {
-            single_miptail: false,
-            aligned_mip_size: false,
-            nonstandard_block_size: false,
-        }
+        STATIC_VK_SPARSE_IMAGE_FORMAT_FLAGS
     }
 }

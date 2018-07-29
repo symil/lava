@@ -28,8 +28,10 @@ impl VkWrappedType<RawVkObjectEntryType> for VkObjectEntryType {
     }
 }
 
+pub static STATIC_VK_OBJECT_ENTRY_TYPE : VkObjectEntryType = VkObjectEntryType::DescriptorSet;
+
 impl VkDefault for VkObjectEntryType {
     fn vk_default() -> VkObjectEntryType {
-        VkObjectEntryType::DescriptorSet
+        STATIC_VK_OBJECT_ENTRY_TYPE
     }
 }

@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineViewportSwizzleStateCreateFlags> for VkPipelineV
     }
 }
 
+pub static STATIC_VK_PIPELINE_VIEWPORT_SWIZZLE_STATE_CREATE_FLAGS : VkPipelineViewportSwizzleStateCreateFlags = VkPipelineViewportSwizzleStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineViewportSwizzleStateCreateFlags {
     fn vk_default() -> VkPipelineViewportSwizzleStateCreateFlags {
-        VkPipelineViewportSwizzleStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_VIEWPORT_SWIZZLE_STATE_CREATE_FLAGS
     }
 }

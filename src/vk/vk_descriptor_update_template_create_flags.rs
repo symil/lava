@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateFlags> for VkDescriptorUpd
     }
 }
 
+pub static STATIC_VK_DESCRIPTOR_UPDATE_TEMPLATE_CREATE_FLAGS : VkDescriptorUpdateTemplateCreateFlags = VkDescriptorUpdateTemplateCreateFlags {
+    
+};
+
 impl VkDefault for VkDescriptorUpdateTemplateCreateFlags {
     fn vk_default() -> VkDescriptorUpdateTemplateCreateFlags {
-        VkDescriptorUpdateTemplateCreateFlags {
-            
-        }
+        STATIC_VK_DESCRIPTOR_UPDATE_TEMPLATE_CREATE_FLAGS
     }
 }

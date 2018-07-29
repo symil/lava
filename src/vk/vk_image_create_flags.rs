@@ -60,22 +60,24 @@ impl VkWrappedType<RawVkImageCreateFlags> for VkImageCreateFlags {
     }
 }
 
+pub static STATIC_VK_IMAGE_CREATE_FLAGS : VkImageCreateFlags = VkImageCreateFlags {
+    sparse_binding: false,
+    sparse_residency: false,
+    sparse_aliased: false,
+    mutable_format: false,
+    cube_compatible: false,
+    alias: false,
+    split_instance_bind_regions: false,
+    _2d_array_compatible: false,
+    block_texel_view_compatible: false,
+    extended_usage: false,
+    protected: false,
+    disjoint: false,
+    sample_locations_compatible_depth_ext: false,
+};
+
 impl VkDefault for VkImageCreateFlags {
     fn vk_default() -> VkImageCreateFlags {
-        VkImageCreateFlags {
-            sparse_binding: false,
-            sparse_residency: false,
-            sparse_aliased: false,
-            mutable_format: false,
-            cube_compatible: false,
-            alias: false,
-            split_instance_bind_regions: false,
-            _2d_array_compatible: false,
-            block_texel_view_compatible: false,
-            extended_usage: false,
-            protected: false,
-            disjoint: false,
-            sample_locations_compatible_depth_ext: false,
-        }
+        STATIC_VK_IMAGE_CREATE_FLAGS
     }
 }

@@ -24,8 +24,10 @@ impl VkWrappedType<RawVkDisplayEventType> for VkDisplayEventType {
     }
 }
 
+pub static STATIC_VK_DISPLAY_EVENT_TYPE : VkDisplayEventType = VkDisplayEventType::FirstPixelOut;
+
 impl VkDefault for VkDisplayEventType {
     fn vk_default() -> VkDisplayEventType {
-        VkDisplayEventType::FirstPixelOut
+        STATIC_VK_DISPLAY_EVENT_TYPE
     }
 }

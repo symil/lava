@@ -34,8 +34,10 @@ impl VkWrappedType<RawVkDescriptorType> for VkDescriptorType {
     }
 }
 
+pub static STATIC_VK_DESCRIPTOR_TYPE : VkDescriptorType = VkDescriptorType::Sampler;
+
 impl VkDefault for VkDescriptorType {
     fn vk_default() -> VkDescriptorType {
-        VkDescriptorType::Sampler
+        STATIC_VK_DESCRIPTOR_TYPE
     }
 }

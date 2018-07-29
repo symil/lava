@@ -27,11 +27,13 @@ impl VkWrappedType<RawVkExternalSemaphoreFeatureFlags> for VkExternalSemaphoreFe
     }
 }
 
+pub static STATIC_VK_EXTERNAL_SEMAPHORE_FEATURE_FLAGS : VkExternalSemaphoreFeatureFlags = VkExternalSemaphoreFeatureFlags {
+    exportable: false,
+    importable: false,
+};
+
 impl VkDefault for VkExternalSemaphoreFeatureFlags {
     fn vk_default() -> VkExternalSemaphoreFeatureFlags {
-        VkExternalSemaphoreFeatureFlags {
-            exportable: false,
-            importable: false,
-        }
+        STATIC_VK_EXTERNAL_SEMAPHORE_FEATURE_FLAGS
     }
 }

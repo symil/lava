@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkDisplayModeCreateFlags> for VkDisplayModeCreateFlags {
     }
 }
 
+pub static STATIC_VK_DISPLAY_MODE_CREATE_FLAGS : VkDisplayModeCreateFlags = VkDisplayModeCreateFlags {
+    
+};
+
 impl VkDefault for VkDisplayModeCreateFlags {
     fn vk_default() -> VkDisplayModeCreateFlags {
-        VkDisplayModeCreateFlags {
-            
-        }
+        STATIC_VK_DISPLAY_MODE_CREATE_FLAGS
     }
 }

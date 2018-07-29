@@ -93,33 +93,35 @@ impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {
     }
 }
 
+pub static STATIC_VK_FORMAT_FEATURE_FLAGS : VkFormatFeatureFlags = VkFormatFeatureFlags {
+    sampled_image: false,
+    storage_image: false,
+    storage_image_atomic: false,
+    uniform_texel_buffer: false,
+    storage_texel_buffer: false,
+    storage_texel_buffer_atomic: false,
+    vertex_buffer: false,
+    color_attachment: false,
+    color_attachment_blend: false,
+    depth_stencil_attachment: false,
+    blit_src: false,
+    blit_dst: false,
+    sampled_image_filter_linear: false,
+    transfer_src: false,
+    transfer_dst: false,
+    midpoint_chroma_samples: false,
+    sampled_image_ycbcr_conversion_linear_filter: false,
+    sampled_image_ycbcr_conversion_separate_reconstruction_filter: false,
+    sampled_image_ycbcr_conversion_chroma_reconstruction_explicit: false,
+    sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable: false,
+    disjoint: false,
+    cosited_chroma_samples: false,
+    sampled_image_filter_cubic_img: false,
+    sampled_image_filter_minmax_ext: false,
+};
+
 impl VkDefault for VkFormatFeatureFlags {
     fn vk_default() -> VkFormatFeatureFlags {
-        VkFormatFeatureFlags {
-            sampled_image: false,
-            storage_image: false,
-            storage_image_atomic: false,
-            uniform_texel_buffer: false,
-            storage_texel_buffer: false,
-            storage_texel_buffer_atomic: false,
-            vertex_buffer: false,
-            color_attachment: false,
-            color_attachment_blend: false,
-            depth_stencil_attachment: false,
-            blit_src: false,
-            blit_dst: false,
-            sampled_image_filter_linear: false,
-            transfer_src: false,
-            transfer_dst: false,
-            midpoint_chroma_samples: false,
-            sampled_image_ycbcr_conversion_linear_filter: false,
-            sampled_image_ycbcr_conversion_separate_reconstruction_filter: false,
-            sampled_image_ycbcr_conversion_chroma_reconstruction_explicit: false,
-            sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable: false,
-            disjoint: false,
-            cosited_chroma_samples: false,
-            sampled_image_filter_cubic_img: false,
-            sampled_image_filter_minmax_ext: false,
-        }
+        STATIC_VK_FORMAT_FEATURE_FLAGS
     }
 }

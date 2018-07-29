@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkColorComponentFlags> for VkColorComponentFlags {
     }
 }
 
+pub static STATIC_VK_COLOR_COMPONENT_FLAGS : VkColorComponentFlags = VkColorComponentFlags {
+    r: false,
+    g: false,
+    b: false,
+    a: false,
+};
+
 impl VkDefault for VkColorComponentFlags {
     fn vk_default() -> VkColorComponentFlags {
-        VkColorComponentFlags {
-            r: false,
-            g: false,
-            b: false,
-            a: false,
-        }
+        STATIC_VK_COLOR_COMPONENT_FLAGS
     }
 }

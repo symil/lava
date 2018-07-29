@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkPipelineBindPoint> for VkPipelineBindPoint {
     }
 }
 
+pub static STATIC_VK_PIPELINE_BIND_POINT : VkPipelineBindPoint = VkPipelineBindPoint::Graphics;
+
 impl VkDefault for VkPipelineBindPoint {
     fn vk_default() -> VkPipelineBindPoint {
-        VkPipelineBindPoint::Graphics
+        STATIC_VK_PIPELINE_BIND_POINT
     }
 }

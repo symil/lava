@@ -42,16 +42,18 @@ impl VkWrappedType<RawVkImageAspectFlags> for VkImageAspectFlags {
     }
 }
 
+pub static STATIC_VK_IMAGE_ASPECT_FLAGS : VkImageAspectFlags = VkImageAspectFlags {
+    color: false,
+    depth: false,
+    stencil: false,
+    metadata: false,
+    plane_0: false,
+    plane_1: false,
+    plane_2: false,
+};
+
 impl VkDefault for VkImageAspectFlags {
     fn vk_default() -> VkImageAspectFlags {
-        VkImageAspectFlags {
-            color: false,
-            depth: false,
-            stencil: false,
-            metadata: false,
-            plane_0: false,
-            plane_1: false,
-            plane_2: false,
-        }
+        STATIC_VK_IMAGE_ASPECT_FLAGS
     }
 }

@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineLayoutCreateFlags> for VkPipelineLayoutCreateFla
     }
 }
 
+pub static STATIC_VK_PIPELINE_LAYOUT_CREATE_FLAGS : VkPipelineLayoutCreateFlags = VkPipelineLayoutCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineLayoutCreateFlags {
     fn vk_default() -> VkPipelineLayoutCreateFlags {
-        VkPipelineLayoutCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_LAYOUT_CREATE_FLAGS
     }
 }

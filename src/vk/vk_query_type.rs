@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkQueryType> for VkQueryType {
     }
 }
 
+pub static STATIC_VK_QUERY_TYPE : VkQueryType = VkQueryType::Occlusion;
+
 impl VkDefault for VkQueryType {
     fn vk_default() -> VkQueryType {
-        VkQueryType::Occlusion
+        STATIC_VK_QUERY_TYPE
     }
 }

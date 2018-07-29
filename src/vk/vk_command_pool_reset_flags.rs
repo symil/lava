@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkCommandPoolResetFlags> for VkCommandPoolResetFlags {
     }
 }
 
+pub static STATIC_VK_COMMAND_POOL_RESET_FLAGS : VkCommandPoolResetFlags = VkCommandPoolResetFlags {
+    release_resources: false,
+};
+
 impl VkDefault for VkCommandPoolResetFlags {
     fn vk_default() -> VkCommandPoolResetFlags {
-        VkCommandPoolResetFlags {
-            release_resources: false,
-        }
+        STATIC_VK_COMMAND_POOL_RESET_FLAGS
     }
 }

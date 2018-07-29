@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkDebugUtilsMessengerCallbackDataFlags> for VkDebugUtilsMe
     }
 }
 
+pub static STATIC_VK_DEBUG_UTILS_MESSENGER_CALLBACK_DATA_FLAGS : VkDebugUtilsMessengerCallbackDataFlags = VkDebugUtilsMessengerCallbackDataFlags {
+    
+};
+
 impl VkDefault for VkDebugUtilsMessengerCallbackDataFlags {
     fn vk_default() -> VkDebugUtilsMessengerCallbackDataFlags {
-        VkDebugUtilsMessengerCallbackDataFlags {
-            
-        }
+        STATIC_VK_DEBUG_UTILS_MESSENGER_CALLBACK_DATA_FLAGS
     }
 }

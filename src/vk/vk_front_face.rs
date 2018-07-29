@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkFrontFace> for VkFrontFace {
     }
 }
 
+pub static STATIC_VK_FRONT_FACE : VkFrontFace = VkFrontFace::CounterClockwise;
+
 impl VkDefault for VkFrontFace {
     fn vk_default() -> VkFrontFace {
-        VkFrontFace::CounterClockwise
+        STATIC_VK_FRONT_FACE
     }
 }

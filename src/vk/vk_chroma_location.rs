@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkChromaLocation> for VkChromaLocation {
     }
 }
 
+pub static STATIC_VK_CHROMA_LOCATION : VkChromaLocation = VkChromaLocation::CositedEven;
+
 impl VkDefault for VkChromaLocation {
     fn vk_default() -> VkChromaLocation {
-        VkChromaLocation::CositedEven
+        STATIC_VK_CHROMA_LOCATION
     }
 }

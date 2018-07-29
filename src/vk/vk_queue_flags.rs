@@ -36,14 +36,16 @@ impl VkWrappedType<RawVkQueueFlags> for VkQueueFlags {
     }
 }
 
+pub static STATIC_VK_QUEUE_FLAGS : VkQueueFlags = VkQueueFlags {
+    graphics: false,
+    compute: false,
+    transfer: false,
+    sparse_binding: false,
+    protected: false,
+};
+
 impl VkDefault for VkQueueFlags {
     fn vk_default() -> VkQueueFlags {
-        VkQueueFlags {
-            graphics: false,
-            compute: false,
-            transfer: false,
-            sparse_binding: false,
-            protected: false,
-        }
+        STATIC_VK_QUEUE_FLAGS
     }
 }

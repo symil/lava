@@ -222,8 +222,10 @@ impl VkWrappedType<RawVkFormat> for VkFormat {
     }
 }
 
+pub static STATIC_VK_FORMAT : VkFormat = VkFormat::Undefined;
+
 impl VkDefault for VkFormat {
     fn vk_default() -> VkFormat {
-        VkFormat::Undefined
+        STATIC_VK_FORMAT
     }
 }

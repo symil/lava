@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkCommandBufferLevel> for VkCommandBufferLevel {
     }
 }
 
+pub static STATIC_VK_COMMAND_BUFFER_LEVEL : VkCommandBufferLevel = VkCommandBufferLevel::Primary;
+
 impl VkDefault for VkCommandBufferLevel {
     fn vk_default() -> VkCommandBufferLevel {
-        VkCommandBufferLevel::Primary
+        STATIC_VK_COMMAND_BUFFER_LEVEL
     }
 }

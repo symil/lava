@@ -48,18 +48,20 @@ impl VkWrappedType<RawVkSubgroupFeatureFlags> for VkSubgroupFeatureFlags {
     }
 }
 
+pub static STATIC_VK_SUBGROUP_FEATURE_FLAGS : VkSubgroupFeatureFlags = VkSubgroupFeatureFlags {
+    basic: false,
+    vote: false,
+    arithmetic: false,
+    ballot: false,
+    shuffle: false,
+    shuffle_relative: false,
+    clustered: false,
+    quad: false,
+    partitioned_nv: false,
+};
+
 impl VkDefault for VkSubgroupFeatureFlags {
     fn vk_default() -> VkSubgroupFeatureFlags {
-        VkSubgroupFeatureFlags {
-            basic: false,
-            vote: false,
-            arithmetic: false,
-            ballot: false,
-            shuffle: false,
-            shuffle_relative: false,
-            clustered: false,
-            quad: false,
-            partitioned_nv: false,
-        }
+        STATIC_VK_SUBGROUP_FEATURE_FLAGS
     }
 }

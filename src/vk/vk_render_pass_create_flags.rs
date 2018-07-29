@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkRenderPassCreateFlags> for VkRenderPassCreateFlags {
     }
 }
 
+pub static STATIC_VK_RENDER_PASS_CREATE_FLAGS : VkRenderPassCreateFlags = VkRenderPassCreateFlags {
+    
+};
+
 impl VkDefault for VkRenderPassCreateFlags {
     fn vk_default() -> VkRenderPassCreateFlags {
-        VkRenderPassCreateFlags {
-            
-        }
+        STATIC_VK_RENDER_PASS_CREATE_FLAGS
     }
 }

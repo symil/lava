@@ -30,12 +30,14 @@ impl VkWrappedType<RawVkCommandPoolCreateFlags> for VkCommandPoolCreateFlags {
     }
 }
 
+pub static STATIC_VK_COMMAND_POOL_CREATE_FLAGS : VkCommandPoolCreateFlags = VkCommandPoolCreateFlags {
+    transient: false,
+    reset_command_buffer: false,
+    protected: false,
+};
+
 impl VkDefault for VkCommandPoolCreateFlags {
     fn vk_default() -> VkCommandPoolCreateFlags {
-        VkCommandPoolCreateFlags {
-            transient: false,
-            reset_command_buffer: false,
-            protected: false,
-        }
+        STATIC_VK_COMMAND_POOL_CREATE_FLAGS
     }
 }

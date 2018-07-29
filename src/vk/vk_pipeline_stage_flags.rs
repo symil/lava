@@ -75,27 +75,29 @@ impl VkWrappedType<RawVkPipelineStageFlags> for VkPipelineStageFlags {
     }
 }
 
+pub static STATIC_VK_PIPELINE_STAGE_FLAGS : VkPipelineStageFlags = VkPipelineStageFlags {
+    top_of_pipe: false,
+    draw_indirect: false,
+    vertex_input: false,
+    vertex_shader: false,
+    tessellation_control_shader: false,
+    tessellation_evaluation_shader: false,
+    geometry_shader: false,
+    fragment_shader: false,
+    early_fragment_tests: false,
+    late_fragment_tests: false,
+    color_attachment_output: false,
+    compute_shader: false,
+    transfer: false,
+    bottom_of_pipe: false,
+    host: false,
+    all_graphics: false,
+    all_commands: false,
+    command_process_nvx: false,
+};
+
 impl VkDefault for VkPipelineStageFlags {
     fn vk_default() -> VkPipelineStageFlags {
-        VkPipelineStageFlags {
-            top_of_pipe: false,
-            draw_indirect: false,
-            vertex_input: false,
-            vertex_shader: false,
-            tessellation_control_shader: false,
-            tessellation_evaluation_shader: false,
-            geometry_shader: false,
-            fragment_shader: false,
-            early_fragment_tests: false,
-            late_fragment_tests: false,
-            color_attachment_output: false,
-            compute_shader: false,
-            transfer: false,
-            bottom_of_pipe: false,
-            host: false,
-            all_graphics: false,
-            all_commands: false,
-            command_process_nvx: false,
-        }
+        STATIC_VK_PIPELINE_STAGE_FLAGS
     }
 }

@@ -27,8 +27,10 @@ impl VkWrappedType<RawVkQueueGlobalPriority> for VkQueueGlobalPriority {
     }
 }
 
+pub static STATIC_VK_QUEUE_GLOBAL_PRIORITY : VkQueueGlobalPriority = VkQueueGlobalPriority::Low;
+
 impl VkDefault for VkQueueGlobalPriority {
     fn vk_default() -> VkQueueGlobalPriority {
-        VkQueueGlobalPriority::Low
+        STATIC_VK_QUEUE_GLOBAL_PRIORITY
     }
 }

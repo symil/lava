@@ -27,8 +27,10 @@ impl VkWrappedType<RawVkPolygonMode> for VkPolygonMode {
     }
 }
 
+pub static STATIC_VK_POLYGON_MODE : VkPolygonMode = VkPolygonMode::Fill;
+
 impl VkDefault for VkPolygonMode {
     fn vk_default() -> VkPolygonMode {
-        VkPolygonMode::Fill
+        STATIC_VK_POLYGON_MODE
     }
 }

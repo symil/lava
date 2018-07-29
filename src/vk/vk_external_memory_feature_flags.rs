@@ -30,12 +30,14 @@ impl VkWrappedType<RawVkExternalMemoryFeatureFlags> for VkExternalMemoryFeatureF
     }
 }
 
+pub static STATIC_VK_EXTERNAL_MEMORY_FEATURE_FLAGS : VkExternalMemoryFeatureFlags = VkExternalMemoryFeatureFlags {
+    dedicated_only: false,
+    exportable: false,
+    importable: false,
+};
+
 impl VkDefault for VkExternalMemoryFeatureFlags {
     fn vk_default() -> VkExternalMemoryFeatureFlags {
-        VkExternalMemoryFeatureFlags {
-            dedicated_only: false,
-            exportable: false,
-            importable: false,
-        }
+        STATIC_VK_EXTERNAL_MEMORY_FEATURE_FLAGS
     }
 }

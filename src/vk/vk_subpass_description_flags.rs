@@ -27,11 +27,13 @@ impl VkWrappedType<RawVkSubpassDescriptionFlags> for VkSubpassDescriptionFlags {
     }
 }
 
+pub static STATIC_VK_SUBPASS_DESCRIPTION_FLAGS : VkSubpassDescriptionFlags = VkSubpassDescriptionFlags {
+    per_view_attributes_nvx: false,
+    per_view_position_x_only_nvx: false,
+};
+
 impl VkDefault for VkSubpassDescriptionFlags {
     fn vk_default() -> VkSubpassDescriptionFlags {
-        VkSubpassDescriptionFlags {
-            per_view_attributes_nvx: false,
-            per_view_position_x_only_nvx: false,
-        }
+        STATIC_VK_SUBPASS_DESCRIPTION_FLAGS
     }
 }

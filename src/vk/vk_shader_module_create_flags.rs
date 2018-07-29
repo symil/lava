@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkShaderModuleCreateFlags> for VkShaderModuleCreateFlags {
     }
 }
 
+pub static STATIC_VK_SHADER_MODULE_CREATE_FLAGS : VkShaderModuleCreateFlags = VkShaderModuleCreateFlags {
+    
+};
+
 impl VkDefault for VkShaderModuleCreateFlags {
     fn vk_default() -> VkShaderModuleCreateFlags {
-        VkShaderModuleCreateFlags {
-            
-        }
+        STATIC_VK_SHADER_MODULE_CREATE_FLAGS
     }
 }

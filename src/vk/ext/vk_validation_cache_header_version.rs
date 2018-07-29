@@ -24,8 +24,10 @@ impl VkWrappedType<RawVkValidationCacheHeaderVersion> for VkValidationCacheHeade
     }
 }
 
+pub static STATIC_VK_VALIDATION_CACHE_HEADER_VERSION : VkValidationCacheHeaderVersion = VkValidationCacheHeaderVersion::One;
+
 impl VkDefault for VkValidationCacheHeaderVersion {
     fn vk_default() -> VkValidationCacheHeaderVersion {
-        VkValidationCacheHeaderVersion::One
+        STATIC_VK_VALIDATION_CACHE_HEADER_VERSION
     }
 }

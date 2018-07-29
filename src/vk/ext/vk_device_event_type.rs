@@ -24,8 +24,10 @@ impl VkWrappedType<RawVkDeviceEventType> for VkDeviceEventType {
     }
 }
 
+pub static STATIC_VK_DEVICE_EVENT_TYPE : VkDeviceEventType = VkDeviceEventType::DisplayHotplug;
+
 impl VkDefault for VkDeviceEventType {
     fn vk_default() -> VkDeviceEventType {
-        VkDeviceEventType::DisplayHotplug
+        STATIC_VK_DEVICE_EVENT_TYPE
     }
 }

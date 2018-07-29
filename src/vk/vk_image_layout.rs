@@ -36,8 +36,10 @@ impl VkWrappedType<RawVkImageLayout> for VkImageLayout {
     }
 }
 
+pub static STATIC_VK_IMAGE_LAYOUT : VkImageLayout = VkImageLayout::Undefined;
+
 impl VkDefault for VkImageLayout {
     fn vk_default() -> VkImageLayout {
-        VkImageLayout::Undefined
+        STATIC_VK_IMAGE_LAYOUT
     }
 }

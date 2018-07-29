@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkBufferCreateFlags> for VkBufferCreateFlags {
     }
 }
 
+pub static STATIC_VK_BUFFER_CREATE_FLAGS : VkBufferCreateFlags = VkBufferCreateFlags {
+    sparse_binding: false,
+    sparse_residency: false,
+    sparse_aliased: false,
+    protected: false,
+};
+
 impl VkDefault for VkBufferCreateFlags {
     fn vk_default() -> VkBufferCreateFlags {
-        VkBufferCreateFlags {
-            sparse_binding: false,
-            sparse_residency: false,
-            sparse_aliased: false,
-            protected: false,
-        }
+        STATIC_VK_BUFFER_CREATE_FLAGS
     }
 }

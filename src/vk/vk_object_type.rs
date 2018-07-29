@@ -60,8 +60,10 @@ impl VkWrappedType<RawVkObjectType> for VkObjectType {
     }
 }
 
+pub static STATIC_VK_OBJECT_TYPE : VkObjectType = VkObjectType::Unknown;
+
 impl VkDefault for VkObjectType {
     fn vk_default() -> VkObjectType {
-        VkObjectType::Unknown
+        STATIC_VK_OBJECT_TYPE
     }
 }

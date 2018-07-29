@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkVertexInputRate> for VkVertexInputRate {
     }
 }
 
+pub static STATIC_VK_VERTEX_INPUT_RATE : VkVertexInputRate = VkVertexInputRate::Vertex;
+
 impl VkDefault for VkVertexInputRate {
     fn vk_default() -> VkVertexInputRate {
-        VkVertexInputRate::Vertex
+        STATIC_VK_VERTEX_INPUT_RATE
     }
 }

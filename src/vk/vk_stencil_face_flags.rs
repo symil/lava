@@ -30,12 +30,14 @@ impl VkWrappedType<RawVkStencilFaceFlags> for VkStencilFaceFlags {
     }
 }
 
+pub static STATIC_VK_STENCIL_FACE_FLAGS : VkStencilFaceFlags = VkStencilFaceFlags {
+    front: false,
+    back: false,
+    _and_back: false,
+};
+
 impl VkDefault for VkStencilFaceFlags {
     fn vk_default() -> VkStencilFaceFlags {
-        VkStencilFaceFlags {
-            front: false,
-            back: false,
-            _and_back: false,
-        }
+        STATIC_VK_STENCIL_FACE_FLAGS
     }
 }

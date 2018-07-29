@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkSemaphoreImportFlags> for VkSemaphoreImportFlags {
     }
 }
 
+pub static STATIC_VK_SEMAPHORE_IMPORT_FLAGS : VkSemaphoreImportFlags = VkSemaphoreImportFlags {
+    temporary: false,
+};
+
 impl VkDefault for VkSemaphoreImportFlags {
     fn vk_default() -> VkSemaphoreImportFlags {
-        VkSemaphoreImportFlags {
-            temporary: false,
-        }
+        STATIC_VK_SEMAPHORE_IMPORT_FLAGS
     }
 }

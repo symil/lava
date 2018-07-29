@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkPipelineTessellationStateCreateFlags> for VkPipelineTess
     }
 }
 
+pub static STATIC_VK_PIPELINE_TESSELLATION_STATE_CREATE_FLAGS : VkPipelineTessellationStateCreateFlags = VkPipelineTessellationStateCreateFlags {
+    
+};
+
 impl VkDefault for VkPipelineTessellationStateCreateFlags {
     fn vk_default() -> VkPipelineTessellationStateCreateFlags {
-        VkPipelineTessellationStateCreateFlags {
-            
-        }
+        STATIC_VK_PIPELINE_TESSELLATION_STATE_CREATE_FLAGS
     }
 }

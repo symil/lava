@@ -42,8 +42,10 @@ impl VkWrappedType<RawVkBlendFactor> for VkBlendFactor {
     }
 }
 
+pub static STATIC_VK_BLEND_FACTOR : VkBlendFactor = VkBlendFactor::Zero;
+
 impl VkDefault for VkBlendFactor {
     fn vk_default() -> VkBlendFactor {
-        VkBlendFactor::Zero
+        STATIC_VK_BLEND_FACTOR
     }
 }

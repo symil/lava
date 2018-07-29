@@ -30,12 +30,14 @@ impl VkWrappedType<RawVkCommandBufferUsageFlags> for VkCommandBufferUsageFlags {
     }
 }
 
+pub static STATIC_VK_COMMAND_BUFFER_USAGE_FLAGS : VkCommandBufferUsageFlags = VkCommandBufferUsageFlags {
+    one_time_submit: false,
+    render_pass_continue: false,
+    simultaneous_use: false,
+};
+
 impl VkDefault for VkCommandBufferUsageFlags {
     fn vk_default() -> VkCommandBufferUsageFlags {
-        VkCommandBufferUsageFlags {
-            one_time_submit: false,
-            render_pass_continue: false,
-            simultaneous_use: false,
-        }
+        STATIC_VK_COMMAND_BUFFER_USAGE_FLAGS
     }
 }

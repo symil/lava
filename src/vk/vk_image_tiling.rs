@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkImageTiling> for VkImageTiling {
     }
 }
 
+pub static STATIC_VK_IMAGE_TILING : VkImageTiling = VkImageTiling::Optimal;
+
 impl VkDefault for VkImageTiling {
     fn vk_default() -> VkImageTiling {
-        VkImageTiling::Optimal
+        STATIC_VK_IMAGE_TILING
     }
 }

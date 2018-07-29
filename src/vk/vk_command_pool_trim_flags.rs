@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkCommandPoolTrimFlags> for VkCommandPoolTrimFlags {
     }
 }
 
+pub static STATIC_VK_COMMAND_POOL_TRIM_FLAGS : VkCommandPoolTrimFlags = VkCommandPoolTrimFlags {
+    
+};
+
 impl VkDefault for VkCommandPoolTrimFlags {
     fn vk_default() -> VkCommandPoolTrimFlags {
-        VkCommandPoolTrimFlags {
-            
-        }
+        STATIC_VK_COMMAND_POOL_TRIM_FLAGS
     }
 }

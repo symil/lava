@@ -260,8 +260,10 @@ impl VkWrappedType<RawVkStructureType> for VkStructureType {
     }
 }
 
+pub static STATIC_VK_STRUCTURE_TYPE : VkStructureType = VkStructureType::ApplicationInfo;
+
 impl VkDefault for VkStructureType {
     fn vk_default() -> VkStructureType {
-        VkStructureType::ApplicationInfo
+        STATIC_VK_STRUCTURE_TYPE
     }
 }

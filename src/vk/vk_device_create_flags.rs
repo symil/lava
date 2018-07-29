@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkDeviceCreateFlags> for VkDeviceCreateFlags {
     }
 }
 
+pub static STATIC_VK_DEVICE_CREATE_FLAGS : VkDeviceCreateFlags = VkDeviceCreateFlags {
+    
+};
+
 impl VkDefault for VkDeviceCreateFlags {
     fn vk_default() -> VkDeviceCreateFlags {
-        VkDeviceCreateFlags {
-            
-        }
+        STATIC_VK_DEVICE_CREATE_FLAGS
     }
 }

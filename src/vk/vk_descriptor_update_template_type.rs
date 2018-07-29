@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkDescriptorUpdateTemplateType> for VkDescriptorUpdateTemp
     }
 }
 
+pub static STATIC_VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE : VkDescriptorUpdateTemplateType = VkDescriptorUpdateTemplateType::DescriptorSet;
+
 impl VkDefault for VkDescriptorUpdateTemplateType {
     fn vk_default() -> VkDescriptorUpdateTemplateType {
-        VkDescriptorUpdateTemplateType::DescriptorSet
+        STATIC_VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE
     }
 }

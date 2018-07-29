@@ -23,10 +23,12 @@ impl VkWrappedType<RawVkDisplaySurfaceCreateFlags> for VkDisplaySurfaceCreateFla
     }
 }
 
+pub static STATIC_VK_DISPLAY_SURFACE_CREATE_FLAGS : VkDisplaySurfaceCreateFlags = VkDisplaySurfaceCreateFlags {
+    
+};
+
 impl VkDefault for VkDisplaySurfaceCreateFlags {
     fn vk_default() -> VkDisplaySurfaceCreateFlags {
-        VkDisplaySurfaceCreateFlags {
-            
-        }
+        STATIC_VK_DISPLAY_SURFACE_CREATE_FLAGS
     }
 }

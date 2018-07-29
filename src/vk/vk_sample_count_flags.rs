@@ -42,16 +42,18 @@ impl VkWrappedType<RawVkSampleCountFlags> for VkSampleCountFlags {
     }
 }
 
+pub static STATIC_VK_SAMPLE_COUNT_FLAGS : VkSampleCountFlags = VkSampleCountFlags {
+    _1: false,
+    _2: false,
+    _4: false,
+    _8: false,
+    _16: false,
+    _32: false,
+    _64: false,
+};
+
 impl VkDefault for VkSampleCountFlags {
     fn vk_default() -> VkSampleCountFlags {
-        VkSampleCountFlags {
-            _1: false,
-            _2: false,
-            _4: false,
-            _8: false,
-            _16: false,
-            _32: false,
-            _64: false,
-        }
+        STATIC_VK_SAMPLE_COUNT_FLAGS
     }
 }

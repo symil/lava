@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkPointClippingBehavior> for VkPointClippingBehavior {
     }
 }
 
+pub static STATIC_VK_POINT_CLIPPING_BEHAVIOR : VkPointClippingBehavior = VkPointClippingBehavior::AllClipPlanes;
+
 impl VkDefault for VkPointClippingBehavior {
     fn vk_default() -> VkPointClippingBehavior {
-        VkPointClippingBehavior::AllClipPlanes
+        STATIC_VK_POINT_CLIPPING_BEHAVIOR
     }
 }

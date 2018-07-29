@@ -52,8 +52,10 @@ impl VkWrappedType<RawVkResult> for VkResult {
     }
 }
 
+pub static STATIC_VK_RESULT : VkResult = VkResult::Success;
+
 impl VkDefault for VkResult {
     fn vk_default() -> VkResult {
-        VkResult::Success
+        STATIC_VK_RESULT
     }
 }

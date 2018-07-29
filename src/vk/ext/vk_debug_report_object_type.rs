@@ -59,8 +59,10 @@ impl VkWrappedType<RawVkDebugReportObjectType> for VkDebugReportObjectType {
     }
 }
 
+pub static STATIC_VK_DEBUG_REPORT_OBJECT_TYPE : VkDebugReportObjectType = VkDebugReportObjectType::Unknown;
+
 impl VkDefault for VkDebugReportObjectType {
     fn vk_default() -> VkDebugReportObjectType {
-        VkDebugReportObjectType::Unknown
+        STATIC_VK_DEBUG_REPORT_OBJECT_TYPE
     }
 }

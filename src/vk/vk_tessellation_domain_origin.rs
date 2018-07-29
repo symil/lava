@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkTessellationDomainOrigin> for VkTessellationDomainOrigin
     }
 }
 
+pub static STATIC_VK_TESSELLATION_DOMAIN_ORIGIN : VkTessellationDomainOrigin = VkTessellationDomainOrigin::UpperLeft;
+
 impl VkDefault for VkTessellationDomainOrigin {
     fn vk_default() -> VkTessellationDomainOrigin {
-        VkTessellationDomainOrigin::UpperLeft
+        STATIC_VK_TESSELLATION_DOMAIN_ORIGIN
     }
 }

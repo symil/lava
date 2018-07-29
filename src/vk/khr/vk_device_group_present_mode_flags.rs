@@ -33,13 +33,15 @@ impl VkWrappedType<RawVkDeviceGroupPresentModeFlags> for VkDeviceGroupPresentMod
     }
 }
 
+pub static STATIC_VK_DEVICE_GROUP_PRESENT_MODE_FLAGS : VkDeviceGroupPresentModeFlags = VkDeviceGroupPresentModeFlags {
+    local: false,
+    remote: false,
+    sum: false,
+    local_multi_device: false,
+};
+
 impl VkDefault for VkDeviceGroupPresentModeFlags {
     fn vk_default() -> VkDeviceGroupPresentModeFlags {
-        VkDeviceGroupPresentModeFlags {
-            local: false,
-            remote: false,
-            sum: false,
-            local_multi_device: false,
-        }
+        STATIC_VK_DEVICE_GROUP_PRESENT_MODE_FLAGS
     }
 }

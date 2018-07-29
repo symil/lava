@@ -28,8 +28,10 @@ impl VkWrappedType<RawVkSystemAllocationScope> for VkSystemAllocationScope {
     }
 }
 
+pub static STATIC_VK_SYSTEM_ALLOCATION_SCOPE : VkSystemAllocationScope = VkSystemAllocationScope::Command;
+
 impl VkDefault for VkSystemAllocationScope {
     fn vk_default() -> VkSystemAllocationScope {
-        VkSystemAllocationScope::Command
+        STATIC_VK_SYSTEM_ALLOCATION_SCOPE
     }
 }

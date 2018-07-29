@@ -29,8 +29,10 @@ impl VkWrappedType<RawVkBorderColor> for VkBorderColor {
     }
 }
 
+pub static STATIC_VK_BORDER_COLOR : VkBorderColor = VkBorderColor::FloatTransparentBlack;
+
 impl VkDefault for VkBorderColor {
     fn vk_default() -> VkBorderColor {
-        VkBorderColor::FloatTransparentBlack
+        STATIC_VK_BORDER_COLOR
     }
 }

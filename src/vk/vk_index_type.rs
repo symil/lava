@@ -25,8 +25,10 @@ impl VkWrappedType<RawVkIndexType> for VkIndexType {
     }
 }
 
+pub static STATIC_VK_INDEX_TYPE : VkIndexType = VkIndexType::Uint16;
+
 impl VkDefault for VkIndexType {
     fn vk_default() -> VkIndexType {
-        VkIndexType::Uint16
+        STATIC_VK_INDEX_TYPE
     }
 }

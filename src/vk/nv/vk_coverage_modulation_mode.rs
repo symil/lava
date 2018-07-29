@@ -27,8 +27,10 @@ impl VkWrappedType<RawVkCoverageModulationMode> for VkCoverageModulationMode {
     }
 }
 
+pub static STATIC_VK_COVERAGE_MODULATION_MODE : VkCoverageModulationMode = VkCoverageModulationMode::None;
+
 impl VkDefault for VkCoverageModulationMode {
     fn vk_default() -> VkCoverageModulationMode {
-        VkCoverageModulationMode::None
+        STATIC_VK_COVERAGE_MODULATION_MODE
     }
 }

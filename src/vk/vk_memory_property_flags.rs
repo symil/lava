@@ -39,15 +39,17 @@ impl VkWrappedType<RawVkMemoryPropertyFlags> for VkMemoryPropertyFlags {
     }
 }
 
+pub static STATIC_VK_MEMORY_PROPERTY_FLAGS : VkMemoryPropertyFlags = VkMemoryPropertyFlags {
+    device_local: false,
+    host_visible: false,
+    host_coherent: false,
+    host_cached: false,
+    lazily_allocated: false,
+    protected: false,
+};
+
 impl VkDefault for VkMemoryPropertyFlags {
     fn vk_default() -> VkMemoryPropertyFlags {
-        VkMemoryPropertyFlags {
-            device_local: false,
-            host_visible: false,
-            host_coherent: false,
-            host_cached: false,
-            lazily_allocated: false,
-            protected: false,
-        }
+        STATIC_VK_MEMORY_PROPERTY_FLAGS
     }
 }

@@ -24,10 +24,12 @@ impl VkWrappedType<RawVkDeviceQueueCreateFlags> for VkDeviceQueueCreateFlags {
     }
 }
 
+pub static STATIC_VK_DEVICE_QUEUE_CREATE_FLAGS : VkDeviceQueueCreateFlags = VkDeviceQueueCreateFlags {
+    protected: false,
+};
+
 impl VkDefault for VkDeviceQueueCreateFlags {
     fn vk_default() -> VkDeviceQueueCreateFlags {
-        VkDeviceQueueCreateFlags {
-            protected: false,
-        }
+        STATIC_VK_DEVICE_QUEUE_CREATE_FLAGS
     }
 }

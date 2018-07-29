@@ -26,8 +26,10 @@ impl VkWrappedType<RawVkAttachmentLoadOp> for VkAttachmentLoadOp {
     }
 }
 
+pub static STATIC_VK_ATTACHMENT_LOAD_OP : VkAttachmentLoadOp = VkAttachmentLoadOp::Load;
+
 impl VkDefault for VkAttachmentLoadOp {
     fn vk_default() -> VkAttachmentLoadOp {
-        VkAttachmentLoadOp::Load
+        STATIC_VK_ATTACHMENT_LOAD_OP
     }
 }
