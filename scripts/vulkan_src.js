@@ -22,6 +22,7 @@ const ENUMS = parseEnums();
 const BIT_FLAGS = parseBitFlags();
 const STRUCTS = parseStructs();
 const HANDLES = parseHandles();
+const FUNCTIONS = parseFunctions();
 
 function getByName(obj, typeName) {
     const { name, extension } = parseName(typeName);
@@ -41,6 +42,7 @@ function getAllEnums() { return getAll(ENUMS); }
 function getAllBitFlags() { return getAll(BIT_FLAGS); }
 function getAllStructs() { return getAll(STRUCTS); }
 function getAllHandles() { return getAll(HANDLES); }
+function getAllFunctions() { return FUNCTIONS.slice(); }
 
 function getEnumByName(name) { return getByName(ENUMS, name); }
 function getBitFlagsByName(name) { return getByName(BIT_FLAGS, name); }
@@ -79,8 +81,6 @@ function listToObj(array) {
 
     return types;
 }
-
-// console.log(Object.keys(VK_XML.types.type))
 
 function parseStructs() {
     const regexp = /typedef struct \w+ {\n([^}]+)\n}/gmi;
@@ -285,11 +285,13 @@ function parseFunctions() {
             const spaceIndex = argStr.lastIndexOf(' ');
             const name = argStr.substring(spaceIndex + 1);
             const fullType = argStr.substring(0, spaceIndex).trim();
-            const typeName = removeSuffix(fullType.replace(/(?:const )?(\w+)\*?/, '$1'));
+            const typeNameInfo = parseName(fullType.replace(/(?:const )?(\w+)\*?/, '$1'));
             const isPointer = fullType.endsWith('*');
             const isConst = fullType.startsWith('const ');
+            const typeName = typeNameInfo.name;
+            const extension = typeNameInfo.extension
 
-            return { name, fullType, typeName, isPointer, isConst };
+            return { name, fullType, typeName, extension, isPointer, isConst };
         });
 
         return { name, type, args };
@@ -303,6 +305,7 @@ module.exports = {
     getAllBitFlags,
     getAllStructs,
     getAllHandles,
+    getAllFunctions,
     getEnumByName,
     getBitFlagsByName,
     getStructByName,

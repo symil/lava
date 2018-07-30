@@ -14,9 +14,13 @@ const {
     getConstVkValueName
 } = require('./utils');
 
-function generateVkHandleDefinition(cDef) {
-    const rawTypeName = getRawVkTypeName(cDef.name);
-    const wrappedTypeName = getWrappedVkTypeName(cDef.name);
+function generateVkHandleDefinition(def) {
+    const rawTypeName = getRawVkTypeName(def.name);
+    const wrappedTypeName = getWrappedVkTypeName(def.name);
+
+    if (def.name === 'VkInstance') {
+        
+    }
 
     return [
         `use utils::vk_type::*;`,

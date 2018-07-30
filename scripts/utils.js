@@ -1,4 +1,4 @@
-const { isHandle } = require('./vulkan_header');
+const { isHandle } = require('./vulkan_src');
 
 const PRIMITIVE_TYPES = {
     bool: 'bool',
@@ -23,6 +23,10 @@ const PRIMITIVE_TYPES = {
 };
 
 const INDENT = '    ';
+
+Array.prototype.first = function() {
+    return this[0];
+};
 
 Array.prototype.last = function() {    
     return this[this.length - 1];

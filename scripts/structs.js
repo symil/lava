@@ -1,21 +1,5 @@
-const {
-    toSnakeCase,
-    toPascalCase,
-    getRawVkTypeName,
-    getWrappedVkTypeName,
-    getConstVkValueName,
-    getFullWrappedType,
-    getFullRawType,
-    blockToString,
-    isCount,
-    areCountAndArray,
-    isPlural,
-    cToRustVarName,
-    argToString,
-    getFieldsInformation
-} = require('./utils');
-
-const { getStruct } = require('./vulkan_header');
+const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation } = require('./utils');
+const { getStruct } = require('./vulkan_src');
 
 function generateVkStructDefinition(cDef) {
     const def = {

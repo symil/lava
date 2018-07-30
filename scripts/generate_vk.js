@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const { getAllEnums, getAllBitFlags, getAllStructs, getAllHandles, parseFunctions, isHandle } = require('./vulkan_header');
+const { getAllEnums, getAllBitFlags, getAllStructs, getAllHandles, getAllFunctions, isHandle } = require('./vulkan_src');
 const { blockToString, toSnakeCase, toPascalCase, getRawTypeName, getWrappedTypeName } = require('./utils');
 const { HandleList } = require('./handles');
 const { generateVkStructDefinition } = require('./structs');
@@ -22,9 +22,9 @@ main();
 
 function main() {
     const vkTypes = [
-        ...generateEnums(),
-        ...generateBitFlags(),
-        ...generateStructs(),
+        // ...generateEnums(),
+        // ...generateBitFlags(),
+        // ...generateStructs(),
         ...generateHandles()
     ];
 
@@ -128,14 +128,48 @@ function generateBitFlags() {
 
 function generateStructs() {
     const structs = getAllStructs()
-        // .slice(0, 10)
         .filter(struct => struct.fields.every(field => !field.fullType.includes('PFN')));
 
     return generateVkTypes(structs, generateVkStructDefinition);
 }
 
 function generateHandles() {
-    return generateVkTypes(getAllHandles(), generateVkHandleDefinition);
+    const handles = getAllHandles();
+    const functions = getAllFunctions();
+
+    const destroyFunctions = functions.filter(func => func.name.includes('Destroy'));
+
+    for (let destroyFunction of destroyFunctions) {
+        const parentType = destroyFunction.args.first().typeName;
+        const destroyedType = destroyFunction.args.beforeLast().typeName;
+
+        if (parentType !== destroyedType) {
+            handles.find(handle => handle.name === destroyedType).parentName = parentType;
+        }
+    }
+
+    const vkInstance = handles.find(h => h.name === 'VkInstance');
+
+    for (let func of functions) {
+        const firstArgType = func.args[0].typeName;
+        const secondArgType = func.args[1] && func.args[1].typeName;
+
+        let handle = handles.find(handle => firstArgType === handle.parentName && secondArgType === handle.name);
+
+        if (!handle) {
+            handle = handles.find(handle => firstArgType === handle.name);
+        }
+
+        if (!handle) {
+            handle = vkInstance;
+        }
+
+        (handle.functions || (handle.functions = [])).push(func);
+    }
+
+    console.log(handles.find(h => h.name === 'VkInstance').functions.map(f => f.name))
+
+    return generateVkTypes(handles, generateVkHandleDefinition);
 }
 
 function _generateHandles() {
