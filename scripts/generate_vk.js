@@ -140,11 +140,13 @@ function generateHandles() {
     const destroyFunctions = functions.filter(func => func.name.includes('Destroy'));
 
     for (let destroyFunction of destroyFunctions) {
-        const parentType = destroyFunction.args.first().typeName;
-        const destroyedType = destroyFunction.args.beforeLast().typeName;
+        const parentArg = destroyFunction.args.first();
+        const destroyedArg = destroyFunction.args.beforeLast();
 
-        if (parentType !== destroyedType) {
-            handles.find(handle => handle.name === destroyedType).parentName = parentType;
+        if (parentArg !== destroyedArg) {
+            const parent = { name: parentArg.typeName, extension: parentArg.extension };
+
+            handles.find(handle => handle.name === destroyedArg.typeName).parent = parent;
         }
     }
 
@@ -154,7 +156,7 @@ function generateHandles() {
         const firstArgType = func.args[0].typeName;
         const secondArgType = func.args[1] && func.args[1].typeName;
 
-        let handle = handles.find(handle => firstArgType === handle.parentName && secondArgType === handle.name);
+        let handle = handles.find(handle => firstArgType === handle.parent && handle.parent.name && secondArgType === handle.name);
 
         if (!handle) {
             handle = handles.find(handle => firstArgType === handle.name);
@@ -166,8 +168,6 @@ function generateHandles() {
 
         (handle.functions || (handle.functions = [])).push(func);
     }
-
-    console.log(handles.find(h => h.name === 'VkInstance').functions.map(f => f.name))
 
     return generateVkTypes(handles, generateVkHandleDefinition);
 }
