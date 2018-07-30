@@ -29,20 +29,30 @@ function main() {
     ];
 
     writeVkTypes(vkTypes);
-    copyStaticFiles();
+    copyStaticFiles(STATIC_FILES_DIR_PATH, OUTPUT_DIR_PATH);
     writeModFile(OUTPUT_DIR_PATH);
 }
 
-function copyStaticFiles() {
-    const fileNames = fs.readdirSync(STATIC_FILES_DIR_PATH);
+function copyStaticFiles(srcDirPath, dstDirPath) {
+    const fileNames = fs.readdirSync(srcDirPath);
+
+    mkdir(dstDirPath);
 
     fileNames.forEach(fileName => {
-        const fileContent = fs.readFileSync(path.join(STATIC_FILES_DIR_PATH, fileName), 'utf8');
-        const targetFilePath = path.join(OUTPUT_DIR_PATH, fileName);
-        
-        if (!fileContent.startsWith('// no-copy')) {
-            fs.writeFileSync(targetFilePath, COPIED_HEADER + fileContent, 'utf8');
+        const sourcePath = path.join(srcDirPath, fileName);
+        const targetPath = path.join(dstDirPath, fileName);
+        const stats = fs.statSync(sourcePath);
+
+        if (stats.isFile()) {
+            const fileContent = fs.readFileSync(sourcePath, 'utf8');
+
+            if (!fileContent.startsWith('// no-copy')) {
+                fs.writeFileSync(targetPath, COPIED_HEADER + fileContent, 'utf8');
+            }
+        } else if (stats.isDirectory()) {
+            copyStaticFiles(sourcePath, targetPath);
         }
+    
     });
 }
 
