@@ -75,6 +75,7 @@ function genUses(def) {
 
 function genRawStructDeclaration(cDef) {
     return [
+        `#[repr(C)]`,
         `pub struct ${cDef.rawTypeName}`,
             cDef.fields.map(field => `${field.varName}: ${field.rawType},`)
     ];

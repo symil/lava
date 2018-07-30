@@ -1,5 +1,6 @@
 use utils::vk_type::*;
 
+#[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct VkVersion(u32, u32, u32);
 
