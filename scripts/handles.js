@@ -19,7 +19,7 @@ function generateVkHandleDefinition(def) {
     const wrappedTypeName = getWrappedVkTypeName(def.name);
 
     if (def.name === 'VkInstance') {
-        
+
     }
 
     return [
@@ -48,6 +48,13 @@ function generateVkHandleDefinition(def) {
             ]
         ]
     ];
+}
+
+function makeMethodName(functionName, handleName) {
+    return functionName
+        .replace(/^vk/g, '')
+        .replace(handleName.replace('Vk', ''), '')
+        .toSnakeCase();
 }
 
 class HandleList {

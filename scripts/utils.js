@@ -36,6 +36,10 @@ Array.prototype.beforeLast = function() {
     return this[this.length - 2];
 };
 
+String.prototype.toSnakeCase = function() {
+    return toSnakeCase(this);
+}
+
 function toSnakeCase(str) {
     return str
         .replace(/([A-Z]+)|([0-9]+)/g, str => `_${str}`)
