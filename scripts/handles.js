@@ -15,39 +15,72 @@ const {
 } = require('./utils');
 
 function generateVkHandleDefinition(def) {
-    const rawTypeName = getRawVkTypeName(def.name);
-    const wrappedTypeName = getWrappedVkTypeName(def.name);
-
-    if (def.name === 'VkInstance') {
-
-    }
+    def.rawTypeName = getRawVkTypeName(def.name);
+    def.wrappedTypeName = getWrappedVkTypeName(def.name);
 
     return [
-        `use utils::vk_type::*;`,
-        `pub type ${rawTypeName} = u64;`,
-        [
-            `#[derive(Debug, Copy, Clone)]`,
-            `pub struct ${wrappedTypeName}(${rawTypeName});`
-        ], [
-            `impl VkRawType<${wrappedTypeName}> for ${rawTypeName}`, [
-                `fn vk_to_wrapped(src: &${rawTypeName}) -> ${wrappedTypeName}`, [
-                    `${wrappedTypeName}(*src)`
-                ],
-            ]
-        ], [
-            `impl VkWrappedType<${rawTypeName}> for ${wrappedTypeName}`, [
-                `fn vk_to_raw(src: &${wrappedTypeName}, dst: &mut ${rawTypeName})`, [
-                    `*dst = src.0`
-                ]
-            ]
-        ], [
-            `impl VkDefault for ${wrappedTypeName}`, [
-                `fn vk_default() -> ${wrappedTypeName}`, [
-                    `${wrappedTypeName}(0)`
-                ]
+        genUses(def),
+        genRawType(def),
+        genWrappedType(def),
+        genVkRawTypeTrait(def),
+        genVkWrappedTypeTrait(def),
+        genVkDefaultTrait(def),
+        genMethods(def),
+        genExterns(def)
+    ];
+}
+
+function genUses(def) {
+    return `use utils::vk_type::*;`;
+}
+
+function genRawType(def) {
+    return `pub type ${def.rawTypeName} = u64;`;
+}
+
+function genWrappedType(def) {
+    return [
+        `#[derive(Debug, Copy, Clone)]`,
+        `pub struct ${def.wrappedTypeName}(${def.rawTypeName});`
+    ];
+}
+
+function genVkRawTypeTrait(def) {
+    return [
+        `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
+            `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
+                `${def.wrappedTypeName}(*src)`
+            ],
+        ]
+    ];
+}
+
+function genVkWrappedTypeTrait(def) {
+    return [
+        `impl VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}`, [
+            `fn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
+                `*dst = src.0`
             ]
         ]
     ];
+}
+
+function genVkDefaultTrait(def) {
+    return [
+        `impl VkDefault for ${def.wrappedTypeName}`, [
+            `fn vk_default() -> ${def.wrappedTypeName}`, [
+                `${def.wrappedTypeName}(0)`
+            ]
+        ]
+    ];
+}
+
+function genMethods(def) {
+
+}
+
+function genExterns(def) {
+
 }
 
 function makeMethodName(functionName, handleName) {
