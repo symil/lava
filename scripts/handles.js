@@ -11,12 +11,18 @@ const {
     removeSuffix,
     cToRustVarName,
     argToString,
-    getConstVkValueName
+    getConstVkValueName,
+    getFieldsInformation,
+    addUsesToSet
 } = require('./utils');
 
 function generateVkHandleDefinition(def) {
     def.rawTypeName = getRawVkTypeName(def.name);
     def.wrappedTypeName = getWrappedVkTypeName(def.name);
+
+    for (let func of def.functions) {
+        func.argsInfo = getFieldsInformation(func.args);
+    }
 
     return [
         genUses(def),
@@ -31,7 +37,16 @@ function generateVkHandleDefinition(def) {
 }
 
 function genUses(def) {
-    return `use utils::vk_type::*;`;
+    const uses = new Set([
+        `utils::vk_type::*`,
+        `vk::vk_structure_type::*`
+    ]);
+
+    for (let func of def.functions) {
+        addUsesToSet(uses, def, func.argsInfo);
+    }
+
+    return Array.from(uses.values()).map(str => `use ${str};`);
 }
 
 function genRawType(def) {
@@ -76,18 +91,149 @@ function genVkDefaultTrait(def) {
 }
 
 function genMethods(def) {
+    return;
+    if (!def.functions.length || def.name !== 'VkInstance') {
+        return;
+    }
 
+    return [
+        `impl ${def.wrappedTypeName}`,
+        def.functions.map(func => functionToMethod(def, func)).reduce((acc, block) => acc.concat(block), [])
+    ];
 }
 
 function genExterns(def) {
+    if (!def.functions.length) {
+        return;
+    }
 
+    return [
+        `extern`,
+        def.functions.map(func => functionToDeclaration(func)).reduce((acc, block) => acc.concat(block), [])
+    ];
+}
+
+function functionToDeclaration(func) {
+    const args = func.argsInfo.map(arg => `${arg.varName}: ${arg.rawType}`);
+    const returnType = func.type === 'VkResult' ? ' -> RawVkResult' : '';
+
+    return `fn ${func.name}(${args.join(', ')})${returnType};`;
 }
 
 function makeMethodName(functionName, handleName) {
     return functionName
         .replace(/^vk/g, '')
         .replace(handleName.replace('Vk', ''), '')
+        .replace(/[A-Z]+$/, '')
         .toSnakeCase();
+}
+
+function functionToMethod(handle, func) {
+    const methodName = makeMethodName(func.name, handle.name);
+
+    const lastArg = cFunction.args.last();
+    const beforeLastArg = cFunction.args.beforeLast();
+    const instanceVarName = toSnakeCase(lastArg.typeName.substring(2));
+    const createSomething = lastArg.isPointer && !lastArg.isConst;
+    const beforeLastArgIsCount = isCount(beforeLastArg);
+    const createList = createSomething && (beforeLastArgIsCount || isPlural(lastArg));
+    const returnVkResult = cFunction.type === 'VkResult';
+
+    const methodName = toSnakeCase(removeSuffix(cFunction.name.substring(2)));
+    const methodArgs = [];
+    const statements = [];
+    const functionRustArgs = cFunction.args.map((arg, index) => {
+        if (index === cFunction.args.length - 1 && createSomething) {
+            return 'raw_result_ptr';
+        } else if (index === cFunction.args.length - 2 && createSomething && beforeLastArgIsCount) {
+            return 'count_ptr';
+        } else if (arg.typeName === 'VkAllocationCallbacks') {
+            return 'ptr::null()';
+        } else {
+            const rawArgType = getFullRawType(arg);
+            const wrappedArgType = getFullWrappedType(arg);
+
+            const methodArgName = cToRustVarName(arg.name);
+            const functionArgName = `raw_${methodArgName}`;
+
+            let wrappedValue;
+
+            if (arg.fullType === this._name) {
+                wrappedValue = 'self';
+            } else {
+                wrappedValue = methodArgName;
+                methodArgs.push({name: methodArgName, type: wrappedArgType});
+            }
+
+            statements.push(`let ${functionArgName} = ${rawArgType}::vk_from_wrapped(${wrappedValue});`);
+
+            return functionArgName;
+        }
+    });
+
+    if (createList && !beforeLastArgIsCount) {
+        throw new Error(`function ${cFunction.name} returns an array but does not takes a count, need manual review`);
+    }
+
+    if (createSomething) {
+        const functionCall = `${cFunction.name}(${functionRustArgs.join(', ')})`;
+        const createdRawTypeName = getRawTypeName(lastArg.typeName);
+        const createdWrappedTypeName = getWrappedTypeName(lastArg.typeName);
+
+        if (createList) {
+            statements.push(
+                `let mut raw_result : Vec<${createdRawTypeName}> = Vec::new();`,
+                `let mut raw_result_ptr = ptr:null_mut();`,
+                `let mut count : u32 = 0;`,
+                `let count_ptr = &mut count as *mut u32;`,
+            );
+
+            if (returnVkResult) {
+                statements.push(
+                    `let vk_result_1 = ${functionCall};`,
+                    `if (vk_result_1 != VK_SUCCESS)`, [
+                        `return Err(VkResult::vk_from_raw(vk_result_1))`
+                    ]
+                )
+            } else {
+                statements.push(`${functionCall};`);
+            }
+
+            statements.push(
+                ``,
+                `raw_result.reserve(count as usize);`,
+                `raw_result.set_len(count as usize);`,
+                `raw_result_ptr = raw_result.as_mut_ptr();`,
+                `${functionCall};`,
+            );
+
+            if (returnVkResult) {
+                statements.push(
+                    `let vk_result_2 = ${functionCall};`,
+                    `if (vk_result_2 != VK_SUCCESS)`, [
+                        `return Err(VkResult::vk_from_raw(vk_result_2))`
+                    ]
+                )
+            } else {
+                statements.push(`${functionCall};`);
+            }
+
+            statements.push(
+                ``,
+                `let wrapped_result = raw_result.iter().map(|raw| { ${createdWrappedTypeName}::vk_from_raw(raw) }).collect();`,
+                `Ok(wrapped_result)`
+            );
+
+        } else {
+            statements.push(
+
+            );
+        }
+    }
+
+    const argList = methodArgs.map(argToString).join(', ');
+
+    return [`pub fn ${methodName}(${argList})`, statements];
 }
 
 class HandleList {

@@ -1,4 +1,4 @@
-const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation } = require('./utils');
+const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet } = require('./utils');
 const { getStruct } = require('./vulkan_src');
 
 function generateVkStructDefinition(cDef) {
@@ -41,18 +41,7 @@ function genUses(def) {
         'utils::vk_type::*'
     ]);
 
-    for (let field of def.fields) {
-        const typeName = field.wrappedTypeName;
-
-        if (typeName.startsWith('Vk') && typeName !== def.wrappedTypeName) {
-            let use = `vk::`;
-            if (field.extension) { use += `${field.extension}::`; }
-            use += toSnakeCase(typeName);
-            use += `::*`;
-
-            uses.add(use);
-        }
-    }
+    addUsesToSet(uses, def, def.fields);
 
     return Array.from(uses).map(str => `use ${str};`);
 }
@@ -241,6 +230,11 @@ function assignLifetimes(fields, counter, root) {
                 if (field.wrappedType.endsWith(`[&str]`)) {
                     tree = tree.add(counter);
                     field.wrappedType = field.wrappedType.replace('[&str]', `[&${tree.letter()} str]`);
+                }
+
+                if (field.wrappedType.endsWith(`[&${field.wrappedTypeName}]`)) {
+                    tree = tree.add(counter);
+                    field.wrappedType = field.wrappedType.replace(`[&${field.wrappedTypeName}]`, `[&${tree.letter()} ${field.wrappedTypeName}]`);
                 }
             }
 

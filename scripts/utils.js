@@ -197,13 +197,15 @@ function getFieldsInformation(fields) {
         const wrappedTypeName = getFieldWrappedTypeName(field);
 
         const arraySize = field.arraySize;
-        const isCount = !!field.countFor.length;
+        const isCount = !!(field.countFor && field.countFor.length);
+        const isDoublePointer = field.isDoublePointer;
         const isPointerArray = field.isPointer && (field.countField || field.name === 'pSampleMask');
         const isPointerValue = field.isPointer && !isPointerArray;
         const isStaticArray = !field.isPointer && !!arraySize;
         const isPrimitiveType = rawTypeName === wrappedTypeName;
         const isHandleType = !isPrimitiveType && isHandle(field.typeName);
         const isOptional = field.isOptional;
+        const isConst = field.isConst;
 
         const varName = '[VarName]';
         const countVarName = '[CountVarName]';
@@ -282,19 +284,20 @@ function getFieldsInformation(fields) {
             // defValue = `String::new()`;
         } else if (isPrimitiveType) {
             const primitiveDefaultValue = getPrimitiveDefaultValue(wrappedTypeName);
+            const ptrQualifier = isConst ? 'const' : 'mut';
 
             if (isPointerArray) {
-                rawType = `*const ${rawTypeName}`;
+                rawType = `*${ptrQualifier} ${rawTypeName}`;
                 wrappedType = `&[${wrappedTypeName}]`;
                 toRaw = `${varName}.as_ptr()`;
                 // toWrapped = `new_array(${prevVarName}, ${varName})`;
                 defValue = `&[]`;
             } else if (isPointerValue) {
                 // There's no reason to get there
-                console.log(`NON ARRAY POINTER ON PRIMITIVE VALUE: ${field.name}`);
-                rawType = `*const *${rawTypeName}`;
+                // console.log(`NON ARRAY POINTER ON PRIMITIVE VALUE: ${field.name}`);
+                rawType = `*${ptrQualifier} ${rawTypeName}`;
                 wrappedType = `&${wrappedTypeName}`;
-                toRaw = `${varName} as *const ${rawTypeName}`;
+                toRaw = `${varName} as *${ptrQualifier} ${rawTypeName}`;
                 // toWrapped = varName;
                 defValue = `&${primitiveDefaultValue}`;
             } else if (isStaticArray) {
@@ -317,7 +320,12 @@ function getFieldsInformation(fields) {
                 defValue = primitiveDefaultValue;
             }
         } else {
-            if (isPointerArray) {
+            if (isDoublePointer) {
+                rawType = `VkPtr<*mut ${rawTypeName}>`;
+                wrappedType = `&[&${wrappedTypeName}]`;
+                toRaw = `VkPtr::new_vk_ptr_array(${varName})`;
+                defValue = `&[]`;
+            } else if (isPointerArray) {
                 rawType = `VkPtr<${rawTypeName}>`;
                 wrappedType = `&[${wrappedTypeName}]`;
                 toRaw = `VkPtr::new_vk_array(${varName})`;
@@ -388,6 +396,21 @@ function getFieldsInformation(fields) {
     return infos;
 }
 
+function addUsesToSet(set, rootType, fields) {
+    for (let field of fields) {
+        const typeName = field.wrappedTypeName;
+
+        if (typeName.startsWith('Vk') && typeName !== rootType.wrappedTypeName) {
+            let use = `vk::`;
+            if (field.extension) { use += `${field.extension}::`; }
+            use += toSnakeCase(typeName);
+            use += `::*`;
+
+            set.add(use);
+        }
+    }
+}
+
 function stringToFunction(statement, varName, countVarName, arrayVarName, varNameValue, countVarNameValue, arrayVarNameValue) {
     if (!statement) {
         return null;
@@ -429,5 +452,6 @@ module.exports = {
     getFieldsInformation,
     findEnumPrefix,
     getStaticVkValueName,
-    getConstVkValueName
+    getConstVkValueName,
+    addUsesToSet
 };

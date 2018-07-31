@@ -137,6 +137,10 @@ function generateHandles() {
     const handles = getAllHandles();
     const functions = getAllFunctions();
 
+    for (let handle of handles) {
+        handle.functions = [];
+    }
+
     const destroyFunctions = functions.filter(func => func.name.includes('Destroy'));
 
     for (let destroyFunction of destroyFunctions) {
@@ -166,7 +170,7 @@ function generateHandles() {
             handle = vkInstance;
         }
 
-        (handle.functions || (handle.functions = [])).push(func);
+        handle.functions.push(func);
     }
 
     return generateVkTypes(handles, generateVkHandleDefinition);

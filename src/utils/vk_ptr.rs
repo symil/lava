@@ -162,6 +162,17 @@ impl VkPtr<*mut c_char> {
     }
 }
 
+// TODO
+impl<R> VkPtr<*mut R> {
+    pub fn new_vk_ptr_array(array: &[&W]) -> VkPtr
+        where W: VkWrappedType<R>
+    {
+        Self {
+            ptr: ptr::null_mut()
+        }
+    }
+}
+
 impl<T> Drop for VkPtr<T> {
     fn drop(&mut self) {
         unsafe {

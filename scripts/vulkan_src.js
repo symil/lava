@@ -82,6 +82,28 @@ function listToObj(array) {
     return types;
 }
 
+function parseField(str) {
+    const match = str.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;?\s*$/);
+
+    if (!match) {
+        return null;
+    }
+
+    const fullType = match[1].replace('FlagBits', 'Flags').replace(' struct ', ' ').trim();
+    const name = match[2].trim();
+    const fieldName = fullType.replace(/(?:const )?(\w+)\*?/, '$1').replace(/ const\*$/, '');
+    const fieldTypeNameInfo = parseName(fieldName);
+    const typeName = fieldTypeNameInfo.name;
+    const extension = fieldTypeNameInfo.extension;
+    const isPointer = fullType.endsWith('*');
+    const isDoublePointer = fullType.endsWith(' const*');
+    const isConst = fullType.startsWith('const ');
+    const arraySizeIdentifier = match[3];
+    const arraySize = parseConstant(arraySizeIdentifier);
+
+    return { name, extension, fullType, typeName, isPointer, isDoublePointer, isConst, arraySize };
+}
+
 function parseStructs() {
     const regexp = /typedef struct \w+ {\n([^}]+)\n}/gmi;
     const match = VULKAN_H.match(regexp);
@@ -100,24 +122,13 @@ function parseStructs() {
         }
 
         const fields = fieldsStr.split('\n').filter(x => x).map(line => {
-            const match = line.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;\s*$/);
+            const fieldInfo = parseField(line);
 
-            if (!match) {
+            if (!fieldInfo) {
                 throw new Error(`unexpected line for struct ${structName}: "${line}"`);
             }
 
-            const fullType = match[1].replace('FlagBits', 'Flags').replace(' struct ', ' ').trim();
-            const name = match[2].trim();
-            const fieldName = fullType.replace(/(?:const )?(\w+)\*?/, '$1');
-            const fieldTypeNameInfo = parseName(fieldName);
-            const typeName = fieldTypeNameInfo.name;
-            const extension = fieldTypeNameInfo.extension;
-            const isPointer = fullType.endsWith('*');
-            const isConst = fullType.startsWith('const ');
-            const arraySizeIdentifier = match[3];
-            const arraySize = parseConstant(arraySizeIdentifier);
-
-            return { name, extension, fullType, typeName, isPointer, isConst, arraySize };
+            return fieldInfo;
         });
 
         let lastField = null;
@@ -282,16 +293,13 @@ function parseFunctions() {
         const type = words[1];
         const name = words[3];
         const args = str.substring(str.indexOf('(') + 1, str.indexOf(')')).split(',').map(x => x.trim()).map(argStr => {
-            const spaceIndex = argStr.lastIndexOf(' ');
-            const name = argStr.substring(spaceIndex + 1);
-            const fullType = argStr.substring(0, spaceIndex).trim();
-            const typeNameInfo = parseName(fullType.replace(/(?:const )?(\w+)\*?/, '$1'));
-            const isPointer = fullType.endsWith('*');
-            const isConst = fullType.startsWith('const ');
-            const typeName = typeNameInfo.name;
-            const extension = typeNameInfo.extension
+            const argInfo = parseField(argStr);
 
-            return { name, fullType, typeName, extension, isPointer, isConst };
+            if (!argInfo) {
+                throw new Error(`unexpected arg "${argStr}" for function "${name}"`);
+            }
+
+            return argInfo;
         });
 
         return { name, type, args };
