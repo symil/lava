@@ -39,6 +39,10 @@ function generateVkHandleDefinition(def) {
 function genUses(def) {
     const uses = new Set([
         `utils::vk_type::*`,
+        `utils::vk_ptr::*`,
+        'std::os::raw::c_char',
+        'std::ptr',
+        'std::mem',
         `vk::vk_structure_type::*`
     ]);
 
@@ -103,7 +107,8 @@ function genMethods(def) {
 }
 
 function genExterns(def) {
-    if (!def.functions.length) {
+    return;
+    if (!def.functions.length || def.name !== 'VkInstance') {
         return;
     }
 

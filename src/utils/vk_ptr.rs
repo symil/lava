@@ -164,7 +164,7 @@ impl VkPtr<*mut c_char> {
 
 // TODO
 impl<R> VkPtr<*mut R> {
-    pub fn new_vk_ptr_array(array: &[&W]) -> VkPtr
+    pub fn new_vk_ptr_array<W>(array: &[&W]) -> VkPtr<*mut R>
         where W: VkWrappedType<R>
     {
         Self {

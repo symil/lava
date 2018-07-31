@@ -22,9 +22,9 @@ main();
 
 function main() {
     const vkTypes = [
-        // ...generateEnums(),
-        // ...generateBitFlags(),
-        // ...generateStructs(),
+        ...generateEnums(),
+        ...generateBitFlags(),
+        ...generateStructs(),
         ...generateHandles()
     ];
 
