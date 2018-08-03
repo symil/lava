@@ -9,6 +9,7 @@ use std::fmt;
 
 mod vk;
 use vk::*;
+use vk::ext::*;
 
 mod utils;
 // use utils::*;
@@ -63,14 +64,16 @@ fn main() {
         enabled_extension_names: &[]
     }).expect("Failed to create VkInstance");
 
-    // instance.create_debug_callback(&VkDebugReportCallbackCreateInfo {
-    //     flags: VkDebugReportFlags {
-    //         warning: true,
-    //         error: true,
-    //         ..VkFlags::none()
-    //     },
-    //     callback: simple_debug_callback
-    // }).expect("Faield to create debug callback");
+    instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
+        flags: VkDebugReportFlags {
+            information: false,
+            warning: true,
+            performance_warning: false,
+            error: true,
+            debug: false,
+        },
+        callback: simple_debug_callback
+    }).expect("Faield to create debug callback");
 
     // let surface = instance.create_surface_from_glfw(&window).expect("Failed to create VkSurface");
 

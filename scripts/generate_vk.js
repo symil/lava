@@ -160,7 +160,7 @@ function generateHandles() {
         const firstArgType = func.args[0].typeName;
         const secondArgType = func.args[1] && func.args[1].typeName;
 
-        let handle = handles.find(handle => firstArgType === handle.parent && handle.parent.name && secondArgType === handle.name);
+        let handle = handles.find(handle => handle.parent && firstArgType === handle.parent.name && secondArgType === handle.name);
 
         if (!handle) {
             handle = handles.find(handle => firstArgType === handle.name);
