@@ -3,7 +3,7 @@ use utils::vk_type::*;
 
 pub type RawVkClearColorValue = [u32; 4];
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub enum VkClearColorValue {
     F([f32; 4]),
     I([i32; 4]),

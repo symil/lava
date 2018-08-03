@@ -17,7 +17,7 @@ pub struct RawVkDebugUtilsMessengerCreateInfo {
     flags: u32,
     message_severity: u32,
     message_type: u32,
-    user_callback: fn(),
+    user_callback: extern fn(),
     user_data: *mut c_void
 }
 
@@ -25,7 +25,7 @@ pub struct VkDebugUtilsMessengerCreateInfo {
     pub flags: VkDebugUtilsMessengerCreateFlags,
     pub message_severity: VkDebugUtilsMessageSeverityFlags,
     pub message_type: VkDebugUtilsMessageTypeFlags,
-    pub user_callback: fn(),
+    pub user_callback: extern fn(),
     pub user_data: *mut c_void
 }
 

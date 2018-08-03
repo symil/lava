@@ -38,11 +38,11 @@ fn simple_debug_callback(msg: String) {
 }
 
 fn main() {
-    let glfw = GlfwInstance::new();
-    let required_extensions = glfw.get_required_vulkan_extensions().unwrap();
+    // let glfw = GlfwInstance::new();
+    // let required_extensions = glfw.get_required_vulkan_extensions().unwrap();
     // let window = glfw.create_window(WINDOW_WIDTH, WINDOW_HEIGHT, "Vulkan");
 
-    println!("{:#?}", required_extensions);
+    // println!("{:#?}", required_extensions);
 
     // let mut required_extensions : Vec<String> = vec![];
     // let validation_layers = vec![String::from(LAYER_STANDARD_VALIDATION)];
@@ -50,18 +50,18 @@ fn main() {
     // required_extensions.append(&mut glfw.get_required_vulkan_extensions().unwrap());
     // required_extensions.push(String::from(EXT_DEBUG_REPORT));
 
-    // let mut instance = VkInstance::new(&VkInstanceCreateInfo {
-    //     flags: VkInstanceCreateFlags { },
-    //     application_info: VkApplicationInfo {
-    //         application_name: String::from("foo"),
-    //         application_version: [0, 1, 0],
-    //         engine_name: String::from("engine"),
-    //         engine_version: [0, 1, 0],
-    //         api_version: [1, 0, 0]
-    //     },
-    //     enabled_layer_names: validation_layers.clone(),
-    //     enabled_extension_names: required_extensions
-    // }).expect("Failed to create VkInstance");
+    let instance = VkInstance::create(&VkInstanceCreateInfo {
+        flags: VkInstanceCreateFlags { },
+        application_info: Some(&VkApplicationInfo {
+            application_name: Some("foo"),
+            application_version: 1,
+            engine_name: Some("engine"),
+            engine_version: 1,
+            api_version: VkVersion(1, 0, 0),
+        }),
+        enabled_layer_names: &[],
+        enabled_extension_names: &[]
+    }).expect("Failed to create VkInstance");
 
     // instance.create_debug_callback(&VkDebugReportCallbackCreateInfo {
     //     flags: VkDebugReportFlags {
@@ -74,7 +74,13 @@ fn main() {
 
     // let surface = instance.create_surface_from_glfw(&window).expect("Failed to create VkSurface");
 
-    // let physical_devices = instance.get_physical_devices().expect("Failed to retrieve physical devices");
+    let supported_extensions = instance.enumerate_extension_properties(None).expect("Failed to retrieve supported extensions");
+
+    println!("{:#?}", supported_extensions);
+
+    // let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
+
+    instance.destroy();
     // let physical_device = &physical_devices[0];
     // let features = physical_device.get_features();
     // let properties = physical_device.get_properties();

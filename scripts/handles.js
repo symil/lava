@@ -15,6 +15,8 @@ const {
     addUsesToSet
 } = require('./utils');
 
+const VK_SUCCESS = 0;
+
 function generateVkHandleDefinition(def) {
     def.rawTypeName = getRawVkTypeName(def.name);
     def.wrappedTypeName = getWrappedVkTypeName(def.name);
@@ -24,7 +26,6 @@ function generateVkHandleDefinition(def) {
     }
 
     return [
-        `#![allow(improper_ctypes)]`,
         genUses(def),
         genRawType(def),
         genWrappedType(def),
@@ -40,11 +41,20 @@ function genUses(def) {
     const uses = new Set([
         `utils::vk_type::*`,
         `utils::vk_ptr::*`,
+        `utils::vk_convert::*`,
         'std::os::raw::c_char',
         'std::ptr',
         'std::mem',
         `vk::vk_result::*`
     ]);
+
+    if (def.parent && def.name !== 'VkInstance') {
+        let use = `vk::`;
+        if (def.parent.extension) use += `::${def.parent.extension}`;
+        use += `${toSnakeCase(def.parent.name)}::*`;
+
+        uses.add(use);
+    }
 
     for (let func of def.functions) {
         addUsesToSet(uses, def, func.argsInfo);
@@ -60,7 +70,10 @@ function genRawType(def) {
 function genWrappedType(def) {
     return [
         `#[derive(Debug, Copy, Clone)]`,
-        `pub struct ${def.wrappedTypeName}(${def.rawTypeName});`
+        `pub struct ${def.wrappedTypeName}`, [
+            `_handle: ${def.rawTypeName},`,
+            def.parent ? `_parent_handle: Raw${def.parent.name},` : null
+        ]
     ];
 }
 
@@ -68,7 +81,10 @@ function genVkRawTypeTrait(def) {
     return [
         `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
             `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
-                `${def.wrappedTypeName}(*src)`
+                def.wrappedTypeName, [
+                    `_handle: *src,`,
+                    def.parent ? `_parent_handle: 0,` : null
+                ]
             ],
         ]
     ];
@@ -78,7 +94,7 @@ function genVkWrappedTypeTrait(def) {
     return [
         `impl VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}`, [
             `fn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
-                `*dst = src.0`
+                `*dst = src._handle`
             ]
         ]
     ];
@@ -88,21 +104,28 @@ function genVkDefaultTrait(def) {
     return [
         `impl VkDefault for ${def.wrappedTypeName}`, [
             `fn vk_default() -> ${def.wrappedTypeName}`, [
-                `${def.wrappedTypeName}(0)`
+                def.wrappedTypeName, [
+                    `_handle: 0,`,
+                    def.parent ? `_parent_handle: 0,` : null
+                ]
             ]
         ]
     ];
 }
 
 function genMethods(def) {
-    return;
-    if (!def.functions.length || def.name !== 'VkInstance') {
+    if (def.name !== 'VkInstance') {
         return;
     }
 
+    const handleMethod = [
+        `\npub fn handle(&self) -> u64`, [
+            `self._handle`
+        ]
+    ];
     return [
         `impl ${def.wrappedTypeName}`,
-        def.functions.map(func => functionToMethod(def, func)).reduce((acc, block) => acc.concat(block), [])
+        def.functions.map(func => functionToMethod(def, func)).reduce((acc, block) => acc.concat(block), handleMethod)
     ];
 }
 
@@ -133,89 +156,115 @@ function makeMethodName(functionName, handleName) {
 }
 
 function functionToMethod(handle, func) {
-    const methodName = makeMethodName(func.name, handle.name);
-
     const lastArg = func.args.last();
     const beforeLastArg = func.args.beforeLast();
-    const instanceVarName = toSnakeCase(lastArg.typeName.substring(2));
     const createSomething = lastArg.isPointer && !lastArg.isConst;
-    const beforeLastArgIsCount = isCount(beforeLastArg);
-    const createList = createSomething && (beforeLastArgIsCount || isPlural(lastArg));
-    const returnVkResult = cFunction.type === 'VkResult';
+    const beforeLastArgIsCount = beforeLastArg && !!beforeLastArg.countFor.length;
+    const createList = createSomething && lastArg.countField;
+    const returnVkResult = func.type === 'VkResult';
 
     const methodName = makeMethodName(func.name, handle.name);
-    const methodArgs = [];
+    const methodArgs = [{type: '&self'}];
     const statements = [];
     const functionRustArgs = func.argsInfo.map((arg, index) => {
-        if (index === cFunction.args.length - 1 && createSomething) {
+        if (index === func.args.length - 1 && createSomething) {
             return 'raw_result_ptr';
-        } else if (index === cFunction.args.length - 2 && createSomething && beforeLastArgIsCount) {
+        } else if (index === func.args.length - 2 && createSomething && beforeLastArgIsCount) {
             return 'count_ptr';
-        } else if (arg.typeName === 'VkAllocationCallbacks') {
+        } else if (arg.varName === 'allocator') {
             return 'ptr::null()';
+        } else if (index <= 1 && arg.typeName === handle.name) {
+            return `self._handle`;
+        } else if (handle.parent && index === 0 && arg.typeName === handle.parent.name) {
+            return `self._parent_handle`;
         } else {
-            const rawArgType = getFullRawType(arg);
-            const wrappedArgType = getFullWrappedType(arg);
+            const argInfo = func.argsInfo[index];
 
-            const methodArgName = cToRustVarName(arg.name);
+            const methodArgName = argInfo.varName;
             const functionArgName = `raw_${methodArgName}`;
 
-            let wrappedValue;
-
-            if (arg.fullType === this._name) {
-                wrappedValue = 'self';
-            } else {
-                wrappedValue = methodArgName;
-                methodArgs.push({name: methodArgName, type: wrappedArgType});
-            }
-
-            statements.push(`let ${functionArgName} = ${rawArgType}::vk_from_wrapped(${wrappedValue});`);
+            methodArgs.push({name: methodArgName, type: argInfo.wrappedType});
+            statements.push(`let ${functionArgName} = ${argInfo.toRaw(x => x)};`);
 
             return functionArgName;
         }
     });
 
     if (createList && !beforeLastArgIsCount) {
-        throw new Error(`function ${cFunction.name} returns an array but does not takes a count, need manual review`);
+        throw new Error(`function ${func.name} returns an array but does not takes a count, need manual review`);
     }
 
+    const functionCall = `${func.name}(${functionRustArgs.join(', ')})`;
+    let returnType = null;
+
     if (createSomething) {
-        const functionCall = `${cFunction.name}(${functionRustArgs.join(', ')})`;
-        const createdRawTypeName = getRawTypeName(lastArg.typeName);
-        const createdWrappedTypeName = getWrappedTypeName(lastArg.typeName);
+        const createdRawTypeName = func.argsInfo.last().rawTypeName;
+        const createdWrappedTypeName = func.argsInfo.last().wrappedTypeName;
 
         if (createList) {
             statements.push(
                 `let mut raw_result : Vec<${createdRawTypeName}> = Vec::new();`,
-                `let mut raw_result_ptr = ptr:null_mut();`,
+                `let mut raw_result_ptr : *mut ${createdRawTypeName} = ptr::null_mut();`,
                 `let mut count : u32 = 0;`,
                 `let count_ptr = &mut count as *mut u32;`,
             );
 
             if (returnVkResult) {
                 statements.push(
+                    ``,
                     `let vk_result_1 = ${functionCall};`,
-                    `if (vk_result_1 != VK_SUCCESS)`, [
-                        `return Err(VkResult::vk_from_raw(vk_result_1))`
-                    ]
+                    `if vk_result_1 != ${VK_SUCCESS}`, [
+                        `return Err(RawVkResult::vk_to_wrapped(&vk_result_1))`
+                    ],
+                    ``
                 )
             } else {
                 statements.push(`${functionCall};`);
             }
 
             statements.push(
-                ``,
                 `raw_result.reserve(count as usize);`,
                 `raw_result.set_len(count as usize);`,
                 `raw_result_ptr = raw_result.as_mut_ptr();`,
-                `${functionCall};`,
             );
 
             if (returnVkResult) {
                 statements.push(
+                    ``,
                     `let vk_result_2 = ${functionCall};`,
-                    `if (vk_result_2 != VK_SUCCESS)`, [
-                        `return Err(VkResult::vk_from_raw(vk_result_2))`
+                    `if vk_result_2 != ${VK_SUCCESS}`, [
+                        `return Err(RawVkResult::vk_to_wrapped(&vk_result_2))`
+                    ]
+                );
+            } else {
+                statements.push(`${functionCall};`);
+            }
+
+            statements.push(
+                ``,
+                `let wrapped_result = raw_result.iter().map(|raw| { ${createdRawTypeName}::vk_to_wrapped(raw) }).collect();`
+            );
+
+            if (returnVkResult) {
+                statements.push(`Ok(wrapped_result)`);
+                returnType = `Result<Vec<${createdWrappedTypeName}>, VkResult>`
+            } else {
+                statements.push(`wrapped_result`);
+                returnType = `Vec<${createdWrappedTypeName}>`
+            }
+
+        } else {
+            statements.push(
+                `let mut raw_result : ${createdRawTypeName} = mem::uninitialized();`,
+                `let raw_result_ptr = &mut raw_result as *mut ${createdRawTypeName};`,
+                ``
+            );
+
+            if (returnVkResult) {
+                statements.push(
+                    `let vk_result = ${functionCall};`,
+                    `if vk_result != ${VK_SUCCESS}`, [
+                        `return Err(RawVkResult::vk_to_wrapped(&vk_result))`
                     ]
                 )
             } else {
@@ -224,212 +273,34 @@ function functionToMethod(handle, func) {
 
             statements.push(
                 ``,
-                `let wrapped_result = raw_result.iter().map(|raw| { ${createdWrappedTypeName}::vk_from_raw(raw) }).collect();`,
-                `Ok(wrapped_result)`
+                `let wrapped_result = ${createdRawTypeName}::vk_to_wrapped(&raw_result);`
             );
 
-        } else {
-            statements.push(
-
-            );
+            if (returnVkResult) {
+                statements.push(`Ok(wrapped_result)`);
+                returnType = `Result<${createdWrappedTypeName}, VkResult>`
+            } else {
+                statements.push(`wrapped_result`);
+                returnType = createdWrappedTypeName;
+            }
         }
+    } else {
+        statements.push(`${functionCall};`);
+    }
+
+    if (func.name === 'vkCreateInstance') {
+        methodArgs.shift();
     }
 
     const argList = methodArgs.map(argToString).join(', ');
-
-    return [`pub fn ${methodName}(${argList})`, statements];
+    const returnInfo = returnType ? ` -> ${returnType}` : '';
+    
+    return [
+        `\npub fn ${methodName}(${argList})${returnInfo}`,
+        [`unsafe`, statements]
+    ];
 }
 
-class HandleList {
-    constructor() {
-        this._handles = {};
-    }
-
-    get(name) {
-        return this._handles[name] || (this._handles[name] = new Handle(name));
-    }
-}
-
-class Handle {
-    constructor(name) {
-        this._name = name;
-        this._parent = null;
-        this._toDestroy = [];
-        this._methods = [];
-    }
-
-    setParent(parent) {
-        this._parent = parent;
-    }
-
-    addHandleToDestroy(handleName, destroyFunction) {
-        this._toDestroy.push({handleName, destroyFunction});
-    }
-
-    addMethod(cFunction) {
-        this._methods.push(cFunction);
-    }
-
-    toString() {
-        const rawTypeName = getRawTypeName(this._name);
-        const wrappedTypeName = getWrappedTypeName(this._name);
-
-        const block = [
-            `use std::string::String;`,
-            `use std::vec::Vec;`,
-            `use std::*;`,
-            `use vk::*;`,
-            ``,
-            `#[repr(C)]`,
-            `struct ${rawTypeName}(u64);`,
-            ``,
-            `pub struct ${wrappedTypeName}`, [
-                `_handle: ${rawTypeName},`,
-                this._parent ? `_parent: ${getRawTypeName(this._parent)}` : null
-            ],
-            ``,
-            `impl ${rawTypeName}`, [
-                `fn vk_from_wrapped(value: &${wrappedTypeName}) -> Self`, [
-                    `Self(value.raw_handle())`
-                ]
-            ],
-            ``,
-            `impl ${wrappedTypeName}`, [
-                `fn vk_from_raw(value: &${wrappedTypeName}) -> Self`, [
-                    `Self`, [
-                        `_handle: value.0`,
-                        this._parent ? `_parent: VK_NULL_HANDLE` : null
-                    ]
-                ],
-                ``,
-                `fn vk_default() -> Self`, [
-                    `Self`, [
-                        `_handle: VK_NULL_HANDLE`,
-                        this._parent ? `_parent: VK_NULL_HANDLE` : null
-                    ]
-                ],
-                ``,
-                ...this._methods.slice(0, 3).map(cFunction => this._methodToBlock(cFunction)).reduce((acc, f) => acc.concat([``, ...f]), [])
-            ],
-            ``,
-            `extern`,
-                this._methods.map(cFunction => this._methodToExternDeclaration(cFunction))
-            
-        ];
-
-        return blockToString(block);
-    }
-
-    _methodToExternDeclaration(cFunction) {
-        return `${cFunction.name}();`
-    }
-
-    _methodToBlock(cFunction) {
-        const lastArg = cFunction.args.last();
-        const beforeLastArg = cFunction.args.beforeLast();
-        const instanceVarName = toSnakeCase(lastArg.typeName.substring(2));
-        const createSomething = lastArg.isPointer && !lastArg.isConst;
-        const beforeLastArgIsCount = isCount(beforeLastArg);
-        const createList = createSomething && (beforeLastArgIsCount || isPlural(lastArg));
-        const returnVkResult = cFunction.type === 'VkResult';
-
-        const methodName = toSnakeCase(removeSuffix(cFunction.name.substring(2)));
-        const methodArgs = [];
-        const statements = [];
-        const functionRustArgs = cFunction.args.map((arg, index) => {
-            if (index === cFunction.args.length - 1 && createSomething) {
-                return 'raw_result_ptr';
-            } else if (index === cFunction.args.length - 2 && createSomething && beforeLastArgIsCount) {
-                return 'count_ptr';
-            } else if (arg.typeName === 'VkAllocationCallbacks') {
-                return 'ptr::null()';
-            } else {
-                const rawArgType = getFullRawType(arg);
-                const wrappedArgType = getFullWrappedType(arg);
-
-                const methodArgName = cToRustVarName(arg.name);
-                const functionArgName = `raw_${methodArgName}`;
-
-                let wrappedValue;
-
-                if (arg.fullType === this._name) {
-                    wrappedValue = 'self';
-                } else {
-                    wrappedValue = methodArgName;
-                    methodArgs.push({name: methodArgName, type: wrappedArgType});
-                }
-
-                statements.push(`let ${functionArgName} = ${rawArgType}::vk_from_wrapped(${wrappedValue});`);
-
-                return functionArgName;
-            }
-        });
-
-        if (createList && !beforeLastArgIsCount) {
-            throw new Error(`function ${cFunction.name} returns an array but does not takes a count, need manual review`);
-        }
-
-        if (createSomething) {
-            const functionCall = `${cFunction.name}(${functionRustArgs.join(', ')})`;
-            const createdRawTypeName = getRawTypeName(lastArg.typeName);
-            const createdWrappedTypeName = getWrappedTypeName(lastArg.typeName);
-
-            if (createList) {
-                statements.push(
-                    `let mut raw_result : Vec<${createdRawTypeName}> = Vec::new();`,
-                    `let mut raw_result_ptr = ptr:null_mut();`,
-                    `let mut count : u32 = 0;`,
-                    `let count_ptr = &mut count as *mut u32;`,
-                );
-
-                if (returnVkResult) {
-                    statements.push(
-                        `let vk_result_1 = ${functionCall};`,
-                        `if (vk_result_1 != VK_SUCCESS)`, [
-                            `return Err(VkResult::vk_from_raw(vk_result_1))`
-                        ]
-                    )
-                } else {
-                    statements.push(`${functionCall};`);
-                }
-
-                statements.push(
-                    ``,
-                    `raw_result.reserve(count as usize);`,
-                    `raw_result.set_len(count as usize);`,
-                    `raw_result_ptr = raw_result.as_mut_ptr();`,
-                    `${functionCall};`,
-                );
-
-                if (returnVkResult) {
-                    statements.push(
-                        `let vk_result_2 = ${functionCall};`,
-                        `if (vk_result_2 != VK_SUCCESS)`, [
-                            `return Err(VkResult::vk_from_raw(vk_result_2))`
-                        ]
-                    )
-                } else {
-                    statements.push(`${functionCall};`);
-                }
-
-                statements.push(
-                    ``,
-                    `let wrapped_result = raw_result.iter().map(|raw| { ${createdWrappedTypeName}::vk_from_raw(raw) }).collect();`,
-                    `Ok(wrapped_result)`
-                );
-
-            } else {
-                statements.push(
-
-                );
-            }
-        }
-
-        const argList = methodArgs.map(argToString).join(', ');
-
-        return [`pub fn ${methodName}(${argList})`, statements];
-    }
-}
-
-exports.HandleList = HandleList;
-exports.generateVkHandleDefinition = generateVkHandleDefinition;
+module.exports = {
+    generateVkHandleDefinition
+};

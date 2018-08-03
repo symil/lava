@@ -1,7 +1,7 @@
 use utils::vk_type::*;
 
 #[derive(Debug, Copy, Clone)]
-pub struct VkVersion(u32, u32, u32);
+pub struct VkVersion(pub u32, pub u32, pub u32);
 
 impl VkRawType<VkVersion> for u32 {
     fn vk_to_wrapped(value: &u32) -> VkVersion {

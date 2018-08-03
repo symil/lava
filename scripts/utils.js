@@ -82,6 +82,8 @@ function blockToString(block) {
 }
 
 function _blocksToString(blocks) {
+    blocks = blocks.filter(b => b !== null);
+
     let result = '';
 
     let isFirst = true;
@@ -126,7 +128,7 @@ function argToString(arg) {
 }
 
 function doesFieldRepresentVersion(field) {
-    return field.typeName === 'uint32_t' && /Version$/.test(field.name);
+    return field.typeName === 'uint32_t' && /(p?)apiversion$/i.test(field.name);
 }
 
 function doesFieldRepresentIndex(field) {
@@ -220,6 +222,7 @@ function getFieldsInformation(fields) {
         let toRaw = null;
         let toWrapped = null;
         let defValue = null;
+        let freeRaw = null;
 
         if (field.name === 'sType' && field.values) {
             rawType = 'RawVkStructureType';
@@ -236,7 +239,7 @@ function getFieldsInformation(fields) {
             toWrapped = varName;
             defValue = field.isConst ? `ptr::null()` : `ptr::null_mut()`;
         } else if (isCount) {
-            rawType = `u32`;
+            rawType = isPointerValue ? (isConst ? `*const u32` : `*mut u32`) : `u32`;
 
             let lenValue = `makeVarName(${cToRustVarName(field.countFor[0])}).len()`;
 
@@ -253,10 +256,11 @@ function getFieldsInformation(fields) {
 
             toRaw = new Function('makeVarName', `return '${lenValue}'.replace(/makeVarName\\((\\w+)\\)/g, function(_, name) { return makeVarName(name); })`);
         } else if (field.fullType === 'const char* const*') {
-            rawType = `VkPtr<*mut c_char>`;
+            rawType = `*mut *mut c_char`;
             wrappedType = `&[&str]`;
-            toRaw = `VkPtr::new_string_array(${varName})`;
+            toRaw = `new_ptr_string_array(${varName})`;
             defValue = `&[]`;
+            freeRaw = `free_ptr(${varName})`
         } else if (field.fullType === 'const char*') {
             if (field.name === 'displayName') {
                 rawType = '*const c_char';
@@ -264,15 +268,16 @@ function getFieldsInformation(fields) {
                 toWrapped = `new_string_checked(${varName})`;
                 defValue = 'None';
             } else {
-                rawType = `VkPtr<c_char>`;
+                rawType = `*mut c_char`;
+                freeRaw = `free_ptr(${varName})`
 
                 if (isOptional) {
                     wrappedType =`Option<&str>`;
-                    toRaw = `VkPtr::new_string_checked(${varName})`;
+                    toRaw = `new_ptr_string_checked(${varName})`;
                     defValue = `None`;
                 } else {
                     wrappedType =`&str`;
-                    toRaw = `VkPtr::new_string(${varName})`;
+                    toRaw = `new_ptr_string(${varName})`;
                     defValue = `""`;
                 }
             }
@@ -321,27 +326,30 @@ function getFieldsInformation(fields) {
             }
         } else {
             if (isDoublePointer) {
-                rawType = `VkPtr<*mut ${rawTypeName}>`;
+                rawType = `*mut *mut ${rawTypeName}`;
                 wrappedType = `&[&${wrappedTypeName}]`;
-                toRaw = `VkPtr::new_vk_ptr_array(${varName})`;
+                toRaw = `new_ptr_vk_array_array(${varName})`;
                 defValue = `&[]`;
+                freeRaw = `free_ptr(${varName})`
             } else if (isPointerArray) {
-                rawType = `VkPtr<${rawTypeName}>`;
+                rawType = `*mut ${rawTypeName}`;
                 wrappedType = `&[${wrappedTypeName}]`;
-                toRaw = `VkPtr::new_vk_array(${varName})`;
+                toRaw = `new_ptr_vk_array(${varName})`;
                 // toWrapped = `new_vk_array(${prevVarName}, ${varName})`;
                 defValue = `&[]`;
+                freeRaw = `free_ptr(${varName})`
             } else if (isPointerValue) {
-                rawType = `VkPtr<${rawTypeName}>`;
+                rawType = `*mut ${rawTypeName}`;
+                freeRaw = `free_ptr(${varName})`
                 // toWrapped = `${rawTypeName}::vk_to_wrapped(${varName}.as_ref().unwrap())`;
 
                 if (isOptional) {
                     wrappedType = `Option<&${wrappedTypeName}>`;
-                    toRaw = `VkPtr::new_vk_value_checked(${varName})`;
+                    toRaw = `new_ptr_vk_value_checked(${varName})`;
                     defValue = `None`;
                 } else {
                     wrappedType = `&${wrappedTypeName}`;
-                    toRaw = `VkPtr::new_vk_value(${varName})`;
+                    toRaw = `new_ptr_vk_value(${varName})`;
                     defValue = `vk_null_ref()`;
                 }
             } else if (isStaticArray) {
@@ -350,6 +358,8 @@ function getFieldsInformation(fields) {
                 if (countVarNameValue) {
                     wrappedType = `Vec<${wrappedTypeName}>`;
                     toWrapped = `new_vk_array(${countVarName}, ${varName}.as_ptr())`;
+                    toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
+                    defValue = `Vec::new()`;
                 } else {
                     wrappedType = `[${wrappedTypeName}; ${arraySize}]`;
                     toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
@@ -386,6 +396,7 @@ function getFieldsInformation(fields) {
             wrappedTypeName: wrappedTypeName,
             toRaw: stringToFunction(toRaw, varName, countVarName, arrayVarName, varNameValue, countVarNameValue, arrayVarNameValue),
             toWrapped: stringToFunction(toWrapped, varName, countVarName, arrayVarName, varNameValue, countVarNameValue, arrayVarNameValue),
+            freeRaw: stringToFunction(freeRaw, varName, countVarName, arrayVarName, varNameValue, countVarNameValue, arrayVarNameValue),
             defaultValue: defValue,
             varName: varNameValue
         };
@@ -421,6 +432,7 @@ function stringToFunction(statement, varName, countVarName, arrayVarName, varNam
     }
 
     let body = [
+        `makeVarName = makeVarName || function(x) { return x; };`,
         `var str = '${statement}';`,
         `str = str.replace('${varName}', makeVarName("${varNameValue}"));`,
         `str = str.replace('${varName}', makeVarName("${varNameValue}"));`

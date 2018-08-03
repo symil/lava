@@ -14,172 +14,123 @@ extern {
 
 const SIZE_OF_PTR : usize = mem::size_of::<*const u8>();
 
-#[repr(C)]
-pub struct VkPtr<R> {
-    ptr: *mut R
-}
-
-impl<R> VkPtr<R> {
-    pub fn new_value(value: R) -> Self
-        where R : Copy
-    {
-        unsafe {
-            let ptr = malloc(mem::size_of::<R>()) as *mut R;
-            *ptr = value;
-
-            Self {
-                ptr: ptr
-            }
-        }
-    }
-
-    pub fn new_array(array: &[R]) -> Self
-        where R : Copy
-    {
-        unsafe {
-            let ptr = malloc(mem::size_of::<R>() * array.len()) as *mut R;
-
-            for i in 0..array.len() {
-                *ptr.add(i) = array[i];
-            }
-
-            Self {
-                ptr: ptr
-            }
-        }
-    }
-
-    pub fn new_vk_value<W>(value: &W) -> Self
-        where W : VkWrappedType<R>
-    {
-        unsafe {
-            let ptr = malloc(mem::size_of::<R>()) as *mut R;
-            let dst = ptr.as_mut().unwrap();
-            W::vk_to_raw(value, dst);
-
-            Self {
-                ptr: ptr
-            }
-        }
-    }
-
-    pub fn new_vk_value_checked<W>(value: Option<&W>) -> Self
-        where W : VkWrappedType<R>
-    {
-        match value {
-            Some(v) => Self::new_vk_value(v),
-            None => Self { ptr: ptr::null_mut() }
-        }
-    }
-
-    pub fn new_vk_array<W : VkWrappedType<R>>(array: &[W]) -> Self {
-        unsafe {
-            let byte_len = array.len() * mem::size_of::<W>();
-            let ptr = malloc(byte_len) as *mut R;
-
-            for i in 0..array.len() {
-                let dst = ptr.add(i).as_mut().unwrap();
-                W::vk_to_raw(&array[i], dst);
-            }
-
-            Self {
-                ptr: ptr
-            }
-        }
-    }
-
-    pub fn new_null() -> Self {
-        Self {
-            ptr: ptr::null_mut() as *mut R
-        }
-    }
-
-    pub fn as_ptr(&self) -> *const R {
-        self.ptr as *const R
+pub fn free_ptr<T>(ptr: *mut T) {
+    unsafe {
+        free(ptr as *mut c_void);
     }
 }
 
-impl VkPtr<c_char> {
-    pub fn new_string(string: &str) -> Self {
-        unsafe {
-            let bytes = string.as_bytes();
+pub fn new_ptr_value<R : Copy>(value: R) -> *mut R {
+    unsafe {
+        let ptr = malloc(mem::size_of::<R>()) as *mut R;
+        *ptr = value;
+
+        ptr
+    }
+}
+
+pub fn new_ptr_array<R : Copy>(array: &[R]) -> *mut R {
+    unsafe {
+        let ptr = malloc(mem::size_of::<R>() * array.len()) as *mut R;
+
+        for i in 0..array.len() {
+            *ptr.add(i) = array[i];
+        }
+
+        ptr
+    }
+}
+
+pub fn new_ptr_vk_value<R, W : VkWrappedType<R>>(value: &W) -> *mut R {
+    unsafe {
+        let ptr = malloc(mem::size_of::<R>()) as *mut R;
+        let dst = ptr.as_mut().unwrap();
+        W::vk_to_raw(value, dst);
+
+        ptr
+    }
+}
+
+pub fn new_ptr_vk_value_checked<R, W : VkWrappedType<R>>(value: Option<&W>) -> *mut R {
+    match value {
+        Some(v) => new_ptr_vk_value(v),
+        None => ptr::null_mut()
+    }
+}
+
+pub fn new_ptr_vk_array<R, W : VkWrappedType<R>>(array: &[W]) -> *mut R {
+    unsafe {
+        let byte_len = array.len() * mem::size_of::<W>();
+        let ptr = malloc(byte_len) as *mut R;
+
+        for i in 0..array.len() {
+            let dst = ptr.add(i).as_mut().unwrap();
+            W::vk_to_raw(&array[i], dst);
+        }
+
+        ptr
+    }
+}
+
+pub fn new_ptr_string(string: &str) -> *mut c_char {
+    unsafe {
+        let bytes = string.as_bytes();
+        let len = bytes.len();
+        let ptr = malloc(len + 1) as *mut c_char;
+
+        for i in 0..len {
+            *ptr.add(i) = bytes[i] as c_char;
+        }
+
+        *ptr.add(len) = 0;
+
+        ptr
+    }
+}
+
+pub fn new_ptr_string_checked(string: Option<&str>) -> *mut c_char {
+    match string {
+        Some(value) => new_ptr_string(value),
+        None => ptr::null_mut()
+    }
+}
+
+pub fn new_ptr_string_array(array: &[&str]) -> *mut *mut c_char {
+    unsafe {
+        let nb_strings = array.len();
+        let mut total_strings_len : usize = 0;
+
+        for i in 0..array.len() {
+            total_strings_len += array[i].len();
+        }
+
+        let byte_len = total_strings_len + (SIZE_OF_PTR + 1) * nb_strings;
+        let ptr = malloc(byte_len) as *mut c_char;
+        let addr_ptr = ptr as *mut *mut c_char;
+        let mut write_start_addr = ptr.add(SIZE_OF_PTR * nb_strings);
+
+        for i in 0..nb_strings {
+            let bytes = array[i].as_bytes();
             let len = bytes.len();
-            let ptr = malloc(len + 1) as *mut c_char;
 
-            for i in 0..len {
-                *ptr.add(i) = bytes[i] as c_char;
+            *addr_ptr.add(i) = write_start_addr;
+
+            for j in 0..len {
+                *write_start_addr.add(j) = bytes[j] as c_char;
             }
 
-            *ptr.add(len) = 0;
-
-            Self {
-                ptr: ptr
-            }
+            *write_start_addr.add(len) = 0;
+            write_start_addr = write_start_addr.add(len + 1);
         }
-    }
 
-    pub fn new_string_checked(string: Option<&str>) -> Self {
-        match string {
-            Some(value) => Self::new_string(value),
-            None => Self { ptr: ptr::null_mut() }
-        }
-    }
-}
-
-impl VkPtr<*mut c_char> {
-    pub fn new_string_array(array: &[&str]) -> Self {
-        unsafe {
-            let nb_strings = array.len();
-            let mut total_strings_len : usize = 0;
-
-            for i in 0..array.len() {
-                total_strings_len += array[i].len();
-            }
-
-            let byte_len = total_strings_len + (SIZE_OF_PTR + 1) * nb_strings;
-            let ptr = malloc(byte_len) as *mut c_char;
-            let addr_ptr = ptr as *mut *mut c_char;
-            let mut write_start_addr = ptr.add(SIZE_OF_PTR * nb_strings);
-
-            for i in 0..nb_strings {
-                let bytes = array[i].as_bytes();
-                let len = bytes.len();
-
-                *addr_ptr.add(i) = write_start_addr;
-
-                for j in 0..len {
-                    *write_start_addr.add(j) = bytes[j] as c_char;
-                }
-
-                *write_start_addr.add(len) = 0;
-                write_start_addr = write_start_addr.add(len + 1);
-            }
-
-            Self {
-                ptr: addr_ptr
-            }
-        }
+        addr_ptr
     }
 }
 
 // TODO
-impl<R> VkPtr<*mut R> {
-    #[allow(unreachable_code)]
-    pub fn new_vk_ptr_array<W>(array: &[&W]) -> VkPtr<*mut R>
-        where W: VkWrappedType<R>
-    {
-        panic!("VkPtr::new_vk_ptr_array is not implemented yet");
+#[allow(unreachable_code)]
+pub fn new_ptr_vk_array_array<R, W : VkWrappedType<R>>(array: &[&W]) -> *mut *mut R {
+    panic!("new_ptr_vk_array_array is not implemented yet");
 
-        Self {
-            ptr: ptr::null_mut()
-        }
-    }
-}
-
-impl<T> Drop for VkPtr<T> {
-    fn drop(&mut self) {
-        unsafe {
-            free(self.ptr as *mut c_void);
-        }
-    }
+    ptr::null_mut()
 }

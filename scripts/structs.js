@@ -16,13 +16,23 @@ function generateVkStructDefinition(cDef) {
     def.lifetimesRestrictions = lifetimeTree.getRestrictions();
     def.staticLifetimes = lifetimeTree.getStatics();
 
+    // if (def.typeName === 'VkPhysicalDeviceMemoryProperties') {
+    //     def.fields.forEach(field => {
+    //         console.log(`--> ${field.varName}`)
+    //         console.log(!!field.toRaw)
+    //         console.log(!field.wrappedType);
+    //         console.log(!!field.defaultValue)
+    //     })
+    // }
+
     return [
         genUses(def),
         genRawStructDeclaration(def),
         getWrappedStructDeclaration(def),
         genImplVkRawType(def),
         genImplVkWrappedType(def),
-        genImplVkDefault(def)
+        genImplVkDefault(def),
+        genImplFree(def)
     ];
 }
 
@@ -60,7 +70,7 @@ function getWrappedStructDeclaration(def) {
     const derivedTraits = ['Debug', 'Clone'];
 
     if (hasCopy) {
-        derivedTraits.push('Copy');
+        // derivedTraits.push('Copy');
     }
     
     return [
@@ -77,7 +87,7 @@ function getWrappedFields(def) {
 const SPECIAL_NON_RAW_TYPES = ['VkClearValue', 'VkClearColorValue'];
 
 function isConvertibleFromRawToWrapped(def) {
-    return def.fields.every(field => SPECIAL_NON_RAW_TYPES.includes(field.name) && (!field.wrappedType || field.toWrapped)) && !def.lifetimes;
+    return def.fields.every(field => !SPECIAL_NON_RAW_TYPES.includes(field.typeName) && (!field.wrappedType || field.toWrapped)) && !def.lifetimes;
 }
 
 function isConvertibleFromWrappedToRaw(def) {
@@ -127,12 +137,16 @@ function genImplVkDefault(def) {
     }
 }
 
+function genImplFree(def) {
+
+}
+
 function canHaveStaticValue(def) {
     if (def.typeName === 'VkDisplayProperties') {
         return false;
     }
 
-    if (def.arraySize) {
+    if (def.arraySize && def.typeName === 'char') {
         return false;
     } else {
         const struct = getStruct(def);

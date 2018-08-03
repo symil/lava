@@ -295,6 +295,7 @@ function parseFunctions() {
 
         let xml = VK_XML.commands.command.find(c => (c.proto && c.proto.name === name) || c.name === name);
         if (xml.alias) {
+            return null;
             xml = VK_XML.commands.command.find(c => c.proto && c.proto.name === xml.alias)
         }
 
@@ -341,7 +342,7 @@ function parseFunctions() {
         }
 
         return { name, type, args };
-    });
+    }).filter(f => f);
 
     return functions;
 }
