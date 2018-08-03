@@ -164,9 +164,12 @@ impl VkPtr<*mut c_char> {
 
 // TODO
 impl<R> VkPtr<*mut R> {
+    #[allow(unreachable_code)]
     pub fn new_vk_ptr_array<W>(array: &[&W]) -> VkPtr<*mut R>
         where W: VkWrappedType<R>
     {
+        panic!("VkPtr::new_vk_ptr_array is not implemented yet");
+
         Self {
             ptr: ptr::null_mut()
         }

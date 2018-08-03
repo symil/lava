@@ -6,7 +6,6 @@ const {
     getFullWrappedType,
     getFullRawType,
     blockToString,
-    isCount,
     isPlural,
     removeSuffix,
     cToRustVarName,
@@ -25,6 +24,7 @@ function generateVkHandleDefinition(def) {
     }
 
     return [
+        `#![allow(improper_ctypes)]`,
         genUses(def),
         genRawType(def),
         genWrappedType(def),
@@ -43,7 +43,7 @@ function genUses(def) {
         'std::os::raw::c_char',
         'std::ptr',
         'std::mem',
-        `vk::vk_structure_type::*`
+        `vk::vk_result::*`
     ]);
 
     for (let func of def.functions) {
@@ -107,7 +107,6 @@ function genMethods(def) {
 }
 
 function genExterns(def) {
-    return;
     if (!def.functions.length || def.name !== 'VkInstance') {
         return;
     }
@@ -136,18 +135,18 @@ function makeMethodName(functionName, handleName) {
 function functionToMethod(handle, func) {
     const methodName = makeMethodName(func.name, handle.name);
 
-    const lastArg = cFunction.args.last();
-    const beforeLastArg = cFunction.args.beforeLast();
+    const lastArg = func.args.last();
+    const beforeLastArg = func.args.beforeLast();
     const instanceVarName = toSnakeCase(lastArg.typeName.substring(2));
     const createSomething = lastArg.isPointer && !lastArg.isConst;
     const beforeLastArgIsCount = isCount(beforeLastArg);
     const createList = createSomething && (beforeLastArgIsCount || isPlural(lastArg));
     const returnVkResult = cFunction.type === 'VkResult';
 
-    const methodName = toSnakeCase(removeSuffix(cFunction.name.substring(2)));
+    const methodName = makeMethodName(func.name, handle.name);
     const methodArgs = [];
     const statements = [];
-    const functionRustArgs = cFunction.args.map((arg, index) => {
+    const functionRustArgs = func.argsInfo.map((arg, index) => {
         if (index === cFunction.args.length - 1 && createSomething) {
             return 'raw_result_ptr';
         } else if (index === cFunction.args.length - 2 && createSomething && beforeLastArgIsCount) {

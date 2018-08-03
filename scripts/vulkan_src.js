@@ -104,73 +104,6 @@ function parseField(str) {
     return { name, extension, fullType, typeName, isPointer, isDoublePointer, isConst, arraySize };
 }
 
-function parseStructs() {
-    const regexp = /typedef struct \w+ {\n([^}]+)\n}/gmi;
-    const match = VULKAN_H.match(regexp);
-
-    const structs = match.map(str => {
-        const structName = str.split(' ', 3)[2];
-        const structNameInfo = parseName(structName);
-        const name = structNameInfo.name;
-        const extension = structNameInfo.extension;
-        const fieldsStr = str.substring(str.indexOf('{') + 2, str.indexOf('}') - 1);
-
-        const xmlDef = VK_XML.types.type.find(def => def.name === structName);
-
-        if (!Array.isArray(xmlDef.member)) {
-            xmlDef.member = [xmlDef.member];
-        }
-
-        const fields = fieldsStr.split('\n').filter(x => x).map(line => {
-            const fieldInfo = parseField(line);
-
-            if (!fieldInfo) {
-                throw new Error(`unexpected line for struct ${structName}: "${line}"`);
-            }
-
-            return fieldInfo;
-        });
-
-        let lastField = null;
-        for (let field of fields) {
-            const xmlMember = xmlDef.member.find(member => member.name === field.name);
-
-            field.values = xmlMember.values;
-
-            if (xmlMember.name === 'pCode') {
-                xmlMember.len = "codeSize";
-            }
-
-            field.isOptional = !!xmlMember.optional;
-            if (field.typeName !== 'void') {
-                field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
-
-                if (areCountAndArray(lastField, field)) {
-                    field.countField = lastField.name;
-                }
-            }
-
-            lastField = field;
-        }
-
-        for (let field of fields) {
-            field.countFor = fields.filter(otherField => otherField.countField === field.name).map(f => f.name);
-        }
-
-        return { name, extension, fields };
-    });
-
-    return listToObj(structs);
-}
-
-function areCountAndArray(field1, field2) {
-    return field1
-        && field2
-        && field1.name.startsWith(field2.name.substring(0, field2.name.length - 1))
-        && field1.name.endsWith('Count')
-        && field1.fullType === 'uint32_t';
-}
-
 function parseEnums() {
     const regexp = /typedef enum \w+ {\n([^}]+)\n}/gmi;
     const match = VULKAN_H.match(regexp);
@@ -284,6 +217,73 @@ function parseConstant(name) {
     return match[1];
 }
 
+function parseStructs() {
+    const regexp = /typedef struct \w+ {\n([^}]+)\n}/gmi;
+    const match = VULKAN_H.match(regexp);
+
+    const structs = match.map(str => {
+        const structName = str.split(' ', 3)[2];
+        const structNameInfo = parseName(structName);
+        const name = structNameInfo.name;
+        const extension = structNameInfo.extension;
+        const fieldsStr = str.substring(str.indexOf('{') + 2, str.indexOf('}') - 1);
+
+        const xmlDef = VK_XML.types.type.find(def => def.name === structName);
+
+        if (!Array.isArray(xmlDef.member)) {
+            xmlDef.member = [xmlDef.member];
+        }
+
+        const fields = fieldsStr.split('\n').filter(x => x).map(line => {
+            const fieldInfo = parseField(line);
+
+            if (!fieldInfo) {
+                throw new Error(`unexpected line for struct ${structName}: "${line}"`);
+            }
+
+            return fieldInfo;
+        });
+
+        let lastField = null;
+        for (let field of fields) {
+            const xmlMember = xmlDef.member.find(member => member.name === field.name);
+
+            field.values = xmlMember.values;
+
+            if (xmlMember.name === 'pCode') {
+                xmlMember.len = "codeSize";
+            }
+
+            field.isOptional = !!xmlMember.optional;
+            if (field.typeName !== 'void') {
+                field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
+
+                if (areCountAndArray(lastField, field)) {
+                    field.countField = lastField.name;
+                }
+            }
+
+            lastField = field;
+        }
+
+        for (let field of fields) {
+            field.countFor = fields.filter(otherField => otherField.countField === field.name).map(f => f.name);
+        }
+
+        return { name, extension, fields };
+    });
+
+    return listToObj(structs);
+}
+
+function areCountAndArray(field1, field2) {
+    return field1
+        && field2
+        && field1.name.startsWith(field2.name.substring(0, field2.name.length - 1))
+        && field1.name.endsWith('Count')
+        && field1.fullType === 'uint32_t';
+}
+
 function parseFunctions() {
     const regexp = /(?:VKAPI_ATTR\s+)?(VkResult|void)\s+(?:VKAPI_CALL\s+)?(\w+)\s*\(([^;]+)\)/gm;
     const match = VULKAN_H.match(regexp);
@@ -292,7 +292,19 @@ function parseFunctions() {
         const words = str.split(/\W+/g);
         const type = words[1];
         const name = words[3];
-        const args = str.substring(str.indexOf('(') + 1, str.indexOf(')')).split(',').map(x => x.trim()).map(argStr => {
+
+        let xml = VK_XML.commands.command.find(c => (c.proto && c.proto.name === name) || c.name === name);
+        if (xml.alias) {
+            xml = VK_XML.commands.command.find(c => c.proto && c.proto.name === xml.alias)
+        }
+
+        const xmlParams = Array.isArray(xml.param) ? xml.param : [xml.param];
+
+        if (!xmlParams) {
+            throw new Error(`function ${name} does not have a xml`)
+        }
+        
+        const args = str.substring(str.indexOf('(') + 1, str.indexOf(')')).split(',').map(x => x.trim()).map((argStr, index) => {
             const argInfo = parseField(argStr);
 
             if (!argInfo) {
@@ -301,6 +313,32 @@ function parseFunctions() {
 
             return argInfo;
         });
+
+        let lastArg = null;
+        for (let arg of args) {
+            const xmlParam = xmlParams.find(p => p.name === arg.name);
+
+            if (!xmlParam) {
+                throw new Error(`function "${name}": missing xml parameter ${arg.name}`);
+            }
+
+            arg.values = xmlParam.values;
+
+            arg.isOptional = !!xmlParam.optional;
+            if (arg.typeName !== 'void') {
+                arg.countField = (xmlParam.len || '').split(',').find(str => args.some(arg => arg.name === str));
+
+                if (areCountAndArray(lastArg, arg)) {
+                    arg.countField = lastArg.name;
+                }
+            }
+
+            lastArg = arg;
+        }
+
+        for (let arg of args) {
+            arg.countFor = args.filter(otherArg => otherArg.countField === arg.name).map(a => a.name);
+        }
 
         return { name, type, args };
     });
