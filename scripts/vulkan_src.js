@@ -326,13 +326,13 @@ function parseFunctions() {
             arg.values = xmlParam.values;
 
             arg.isOptional = !!xmlParam.optional;
-            if (arg.typeName !== 'void') {
+            // if (arg.typeName !== 'void') {
                 arg.countField = (xmlParam.len || '').split(',').find(str => args.some(arg => arg.name === str));
 
                 if (areCountAndArray(lastArg, arg)) {
                     arg.countField = lastArg.name;
                 }
-            }
+            // }
 
             lastArg = arg;
         }

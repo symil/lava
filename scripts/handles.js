@@ -191,8 +191,12 @@ function getRawVarName(varName) {
     return `raw_${varName}`;
 }
 
+function idName(name) {
+    return name;
+}
+
 function functionToMethod(handle, func) {
-    // if (func.name === '')
+    // if (func.name === 'vkGetValidationCacheDataEXT') console.log(func.args)
 
     const lastArg = func.args.last();
     const beforeLastArg = func.args.beforeLast();
@@ -210,7 +214,7 @@ function functionToMethod(handle, func) {
 
         if (createList && rawArg.countFor.includes(lastArg.name) && !beforeLastArgIsCountPtr) {
             const countVarName = getRawVarName(arg.varName);
-            statements.push(`let ${countVarName} = ${arg.toRaw()};`)
+            statements.push(`let ${countVarName} = ${arg.toRaw(idName)};`)
             return countVarName;
         } else if (index === func.args.length - 1 && createSomething) {
             return getRawVarName(arg.varName);
@@ -236,7 +240,7 @@ function functionToMethod(handle, func) {
                 methodArgs.push(methodArg);
             }
 
-            statements.push(`let ${functionArgName} = ${arg.toRaw()};`);
+            statements.push(`let ${functionArgName} = ${arg.toRaw(idName, true)};`);
 
             return functionArgName;
         }
@@ -266,10 +270,6 @@ function functionToMethod(handle, func) {
         const rawResultName = getRawVarName(createdType.varName);
 
         if (!createList) {
-            if (!createdType.toWrapped) {
-                console.log(func.name)
-            }
-
             statements.push(
                 `let ${rawResultName} = &mut mem::uninitialized() as *mut ${createdRawTypeName};`,
                 ``,
@@ -296,20 +296,17 @@ function functionToMethod(handle, func) {
         } else {
             const countArg = func.argsInfo[func.args.findIndex(arg => arg.countFor.includes(lastArg.name))];
             const rawCountName = getRawVarName(countArg.varName);
-            
-            statements.push(
-                `let mut ${rawResultName} : *mut ${createdRawTypeName} = ptr::null_mut();`,
-            );
 
             if (beforeLastArgIsCountPtr) {
                 statements.push(
-                    `let ${rawCountName} = &mut mem::uninitialized() as *mut u32;`,
+                    `let mut ${rawResultName} : *mut ${createdRawTypeName} = ptr::null_mut();`,
+                    `let ${rawCountName} = &mut mem::uninitialized() as *mut ${func.argsInfo.beforeLast().rawTypeName};`,
                     wrappedFunctionCall
                 );
             }
 
             statements.push(
-                `${rawResultName} = malloc((${beforeLastArgIsCountPtr ? '*' : ''}${rawCountName} as usize) * mem::size_of::<${createdRawTypeName}>()) as *mut ${createdRawTypeName};`,
+                `${beforeLastArgIsCountPtr ? '' : 'let '}${rawResultName} = malloc((${beforeLastArgIsCountPtr ? '*' : ''}${rawCountName} as usize) * mem::size_of::<${createdRawTypeName}>()) as *mut ${createdRawTypeName};`,
                 ``,
                 wrappedFunctionCall,
                 ``,
@@ -333,6 +330,7 @@ function functionToMethod(handle, func) {
             returnType = `Result<${returnType}, VkResult>`;
         }
 
+        
         statements.push(returnVkResult ? `Ok(${wrappedResultVarName})` : wrappedResultVarName);
     } else if (returnVkResult) {
         returnType = 'VkResult';

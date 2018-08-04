@@ -1,4 +1,4 @@
-const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle } = require('./utils');
+const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle, isOutputHandleStruct } = require('./utils');
 const { getStruct } = require('./vulkan_src');
 
 function generateVkStructDefinition(cDef) {
@@ -7,7 +7,7 @@ function generateVkStructDefinition(cDef) {
         extension: cDef.extension,
         rawTypeName: getRawVkTypeName(cDef.name),
         wrappedTypeName: getWrappedVkTypeName(cDef.name),
-        fields: getFieldsInformation(cDef.fields)
+        fields: getFieldsInformation(cDef.fields, cDef.name)
     };
 
     const lifetimeTree = assignLifetimes(def.fields);
@@ -16,7 +16,7 @@ function generateVkStructDefinition(cDef) {
     def.lifetimesRestrictions = lifetimeTree.getRestrictions();
     def.staticLifetimes = lifetimeTree.getStatics();
 
-    // if (def.typeName === 'VkPhysicalDeviceMemoryProperties') {
+    // if (def.typeName === 'VkDisplayProperties') {
     //     def.fields.forEach(field => {
     //         console.log(`--> ${field.varName}`)
     //         console.log(!!field.toRaw)
@@ -71,10 +71,6 @@ function getWrappedStructDeclaration(def) {
     const fields = getWrappedFields(def);
     const hasCopy = canHaveStaticValue(def);
     const derivedTraits = ['Debug', 'Clone'];
-
-    if (hasCopy) {
-        // derivedTraits.push('Copy');
-    }
     
     return [
         `#[derive(${derivedTraits.join(', ')})]`,
@@ -158,7 +154,7 @@ function genImplFree(def) {
 }
 
 function canHaveStaticValue(def) {
-    if (def.typeName === 'VkDisplayProperties') {
+    if (isOutputHandleStruct(def.typeName)) {
         return false;
     }
 
@@ -272,7 +268,7 @@ function assignLifetimes(fields, counter, root) {
                 const structDef = getStruct(field);
 
                 if (structDef) {
-                    const structFields = getFieldsInformation(structDef.fields);
+                    const structFields = getFieldsInformation(structDef.fields, structDef.name);
                     tree = assignLifetimes(structFields, counter, tree.add(null));
                     field.wrappedType = field.wrappedType.replace(field.wrappedTypeName, field.wrappedTypeName + tree.getSpecs());
                 }
