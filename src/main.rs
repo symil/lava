@@ -81,7 +81,7 @@ fn main() {
 
     println!("{:#?}", supported_extensions);
 
-    // let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
+    let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
 
     instance.destroy();
     // let physical_device = &physical_devices[0];

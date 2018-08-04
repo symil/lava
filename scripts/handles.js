@@ -50,29 +50,29 @@ function genUses(def) {
         'std::os::raw::c_char',
         'std::ptr',
         'std::mem',
-        `vk::vk_instance_function_table::*`,
-        `vk::vk_result::*`
+        'std::cmp',
+        `vk::*`,
     ]);
 
-    if (def.name !== 'VkInstance') {
-        uses.add('vk::vk_instance::*');
-    }
+    // if (def.name !== 'VkInstance') {
+    //     uses.add('vk::vk_instance::*');
+    // }
 
-    if (def.name !== 'VkDevice') {
-        uses.add('vk::vk_device::*');
-    }
+    // if (def.name !== 'VkDevice') {
+    //     uses.add('vk::vk_device::*');
+    // }
 
-    if (def.parent && def.name !== 'VkInstance') {
-        let use = `vk::`;
-        if (def.parent.extension) use += `::${def.parent.extension}`;
-        use += `${toSnakeCase(def.parent.name)}::*`;
+    // if (def.parent && def.name !== 'VkInstance') {
+    //     let use = `vk::`;
+    //     if (def.parent.extension) use += `::${def.parent.extension}`;
+    //     use += `${toSnakeCase(def.parent.name)}::*`;
 
-        uses.add(use);
-    }
+    //     uses.add(use);
+    // }
 
-    for (let func of def.functions) {
-        addUsesToSet(uses, def, func.argsInfo);
-    }
+    // for (let func of def.functions) {
+    //     addUsesToSet(uses, def, func.argsInfo);
+    // }
 
     return Array.from(uses.values()).map(str => `use ${str};`);
 }
@@ -146,7 +146,7 @@ function genVkSetupTrait(def) {
 }
 
 function genMethods(def) {
-    if (def.name !== 'VkInstance') return;
+    // if (def.name !== 'VkInstance') return;
 
     const handleMethod = [
         `\npub fn handle(&self) -> u64`, [
@@ -183,7 +183,7 @@ function makeMethodName(func, handle) {
     return func.name
         .replace(/^vk/g, '')
         .replace(toReplace, '')
-        .replace(/[A-Z]+$/, '')
+        .replace(/[A-Z]+$/, ext => ext.toLowerCase() === handle.extension ? '' : ext)
         .toSnakeCase();
 }
 
@@ -192,10 +192,12 @@ function getRawVarName(varName) {
 }
 
 function functionToMethod(handle, func) {
+    // if (func.name === '')
+
     const lastArg = func.args.last();
     const beforeLastArg = func.args.beforeLast();
-    const createSomething = lastArg.isPointer && !lastArg.isConst;
-    const beforeLastArgIsCountPtr = beforeLastArg && !!beforeLastArg.countFor.length && beforeLastArg.isPointer;
+    const createSomething = lastArg.isPointer && !lastArg.isConst && lastArg.fullType !== 'void**';
+    const beforeLastArgIsCountPtr = createSomething && beforeLastArg && !!beforeLastArg.countFor.length && beforeLastArg.isPointer;
     const createList = createSomething && lastArg.countField;
     const returnVkResult = func.type === 'VkResult';
 
@@ -224,7 +226,16 @@ function functionToMethod(handle, func) {
             const methodArgName = arg.varName;
             const functionArgName = getRawVarName(methodArgName);
             
-            methodArgs.push({name: methodArgName, type: arg.wrappedType});
+            if (arg.wrappedType) {
+                const methodArg = { name: methodArgName, type: arg.wrappedType };
+
+                if (arg.extension) {
+                    methodArg.type = arg.wrappedType.replace(arg.wrappedTypeName, `${arg.extension}::${arg.wrappedTypeName}`)
+                }
+
+                methodArgs.push(methodArg);
+            }
+
             statements.push(`let ${functionArgName} = ${arg.toRaw()};`);
 
             return functionArgName;
@@ -246,8 +257,8 @@ function functionToMethod(handle, func) {
             : `${functionCall};`;
 
         const createdType = func.argsInfo.last();
-        const createdRawTypeName = createdType.rawTypeName;
-        const createdWrappedTypeName = createdType.wrappedTypeName;
+        const createdRawTypeName = prefixWithExtension(createdType.extension, createdType.rawTypeName);
+        const createdWrappedTypeName = prefixWithExtension(createdType.extension, createdType.wrappedTypeName);
 
         const setupResult = createdType.typeName === 'VkInstance' || (handle && isStructOrHandle(createdType));
 
@@ -255,6 +266,10 @@ function functionToMethod(handle, func) {
         const rawResultName = getRawVarName(createdType.varName);
 
         if (!createList) {
+            if (!createdType.toWrapped) {
+                console.log(func.name)
+            }
+
             statements.push(
                 `let ${rawResultName} = &mut mem::uninitialized() as *mut ${createdRawTypeName};`,
                 ``,
@@ -340,6 +355,10 @@ function functionToMethod(handle, func) {
         `\npub fn ${methodName}(${argList})${returnInfo}`,
         [`unsafe`, statements]
     ];
+}
+
+function prefixWithExtension(ext, name) {
+    return ext ? `${ext}::${name}` : name;
 }
 
 module.exports = {

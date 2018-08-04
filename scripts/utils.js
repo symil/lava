@@ -317,12 +317,10 @@ function getFieldsInformation(fields) {
                 // toWrapped = `new_array(${prevVarName}, ${varName})`;
                 defValue = `&[]`;
             } else if (isPointerValue) {
-                // There's no reason to get there
-                // console.log(`NON ARRAY POINTER ON PRIMITIVE VALUE: ${field.name}`);
                 rawType = `*${ptrQualifier} ${rawTypeName}`;
                 wrappedType = `&${wrappedTypeName}`;
                 toRaw = `${varName} as *${ptrQualifier} ${rawTypeName}`;
-                // toWrapped = varName;
+                toWrapped = varName;
                 defValue = `&${primitiveDefaultValue}`;
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;

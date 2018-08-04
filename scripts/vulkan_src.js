@@ -91,12 +91,12 @@ function parseField(str) {
 
     const fullType = match[1].replace('FlagBits', 'Flags').replace(' struct ', ' ').trim();
     const name = match[2].trim();
-    const fieldName = fullType.replace(/(?:const )?(\w+)\*?/, '$1').replace(/ const\*$/, '');
+    const fieldName = fullType.replace(/\*\*$/, '').replace(/ const\*$/, '').replace(/(?:const )?(\w+)\*?/, '$1');
     const fieldTypeNameInfo = parseName(fieldName);
     const typeName = fieldTypeNameInfo.name;
     const extension = fieldTypeNameInfo.extension;
     const isPointer = fullType.endsWith('*');
-    const isDoublePointer = fullType.endsWith(' const*');
+    const isDoublePointer = fullType.endsWith(' const*') || fullType.endsWith('**');
     const isConst = fullType.startsWith('const ');
     const arraySizeIdentifier = match[3];
     const arraySize = parseConstant(arraySizeIdentifier);
