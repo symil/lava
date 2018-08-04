@@ -44,6 +44,7 @@ function genUses(def) {
         'std::ptr',
         'std::cmp',
         'std::mem',
+        `utils::c_bindings::*`,
         'utils::vk_convert::*',
         'utils::vk_null::*',
         'utils::vk_ptr::*',

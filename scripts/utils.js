@@ -220,8 +220,9 @@ function getFieldsInformation(fields) {
         const varNameValue = cToRustVarName(field.name);
         const countVarNameValue = field.countField ? cToRustVarName(field.countField) : null;
         const arrayVarNameValue = isCount ? cToRustVarName(field.countFor[0]) : null;
+        const countVarIsPointer = field.countField && fields.find(f => f.name === field.countField).isPointer;
 
-let rawType = null;
+        let rawType = null;
         let wrappedType = null;
         let toRaw = null;
         let toWrapped = null;
@@ -254,8 +255,13 @@ let rawType = null;
             let lenValue = `makeVarName(${cToRustVarName(field.countFor[0])}).len()`;
 
             for (let i = 1; i < field.countFor.length; ++i) {
-                const otherLen = `makeVarName(${cToRustVarName(field.countFor[i])}).len()`;
-                lenValue = `cmp::max(${lenValue}, ${otherLen})`;
+                const arrayFieldName = field.countFor[i];
+                const arrayField = fields.find(f => f.name === arrayFieldName);
+                if (arrayField.isConst || !arrayField.isPointer) {
+                    // Don't use created array into account
+                    const otherLen = `makeVarName(${cToRustVarName(arrayFieldName)}).len()`;
+                    lenValue = `cmp::max(${lenValue}, ${otherLen})`;
+                }
             }
 
             if (field.name === 'codeSize') {
@@ -264,7 +270,10 @@ let rawType = null;
 
             lenValue += ' as u32';
 
-            toRaw = new Function('makeVarName', `return '${lenValue}'.replace(/makeVarName\\((\\w+)\\)/g, function(_, name) { return makeVarName(name); })`);
+            toRaw = new Function('makeVarName', [
+                `makeVarName = makeVarName || function(x) { return x; };`,
+                `return '${lenValue}'.replace(/makeVarName\\((\\w+)\\)/g, function(_, name) { return makeVarName(name); });`,
+            ].join('\n'));
         } else if (field.fullType === 'const char* const*') {
             rawType = `*mut *mut c_char`;
             wrappedType = `&[&str]`;
@@ -345,21 +354,22 @@ let rawType = null;
                 rawType = `*mut ${rawTypeName}`;
                 wrappedType = `&[${wrappedTypeName}]`;
                 toRaw = `new_ptr_vk_array(${varName})`;
-                // toWrapped = `new_vk_array(${prevVarName}, ${varName})`;
+                toWrapped = `new_vk_array(${countVarIsPointer ? '*' : ''}${countVarName}, ${varName})`;
                 defValue = `&[]`;
                 freeRaw = `free_ptr(${varName})`
             } else if (isPointerValue) {
                 rawType = `*mut ${rawTypeName}`;
                 freeRaw = `free_ptr(${varName})`
-                // toWrapped = `${rawTypeName}::vk_to_wrapped(${varName}.as_ref().unwrap())`;
 
                 if (isOptional) {
                     wrappedType = `Option<&${wrappedTypeName}>`;
                     toRaw = `new_ptr_vk_value_checked(${varName})`;
+                    toWrapped = `new_vk_value_checked(${varName})`;
                     defValue = `None`;
                 } else {
                     wrappedType = `&${wrappedTypeName}`;
                     toRaw = `new_ptr_vk_value(${varName})`;
+                    toWrapped = `new_vk_value(${varName})`;
                     defValue = `vk_null_ref()`;
                 }
             } else if (isStaticArray) {

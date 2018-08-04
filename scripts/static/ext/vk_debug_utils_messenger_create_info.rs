@@ -2,6 +2,7 @@ use std::os::raw::c_char;
 use std::string::String;
 use std::ffi::CString;
 use std::*;
+use utils::c_bindings::*;
 use utils::vk_type::*;
 use utils::vk_convert::*;
 use utils::vk_ptr::*;

@@ -22,7 +22,7 @@ function genUses() {
     return [
         `std::os::raw::c_char`,
         `std::mem`,
-        `utils::vk_ptr::c_void`,
+        `utils::c_bindings::*`,
         `utils::vk_convert::get_vk_instance_function_pointer`,
         'vk::*'
     ].map(x => `use ${x};`);

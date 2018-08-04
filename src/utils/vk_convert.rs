@@ -5,6 +5,7 @@ use std::vec::Vec;
 use std::cmp;
 use std::mem;
 use std::os::raw::c_char;
+use utils::c_bindings::*;
 use utils::vk_type::*;
 use utils::vk_ptr::*;
 use vk::vk_instance::*;
@@ -51,8 +52,7 @@ pub fn string_to_byte_array(string: &str, dst: &mut[c_char]) {
     dst[len] = 0;
 }
 
-pub fn new_vk_array<R : VkRawType<W>, W>(length: u32, ptr: *const R) -> Vec<W>
-{
+pub fn new_vk_array<R : VkRawType<W>, W>(length: u32, ptr: *const R) -> Vec<W> {
     unsafe {
         let len = length as usize;
         let mut vector : Vec<W> = Vec::with_capacity(len);
@@ -62,6 +62,22 @@ pub fn new_vk_array<R : VkRawType<W>, W>(length: u32, ptr: *const R) -> Vec<W>
         }
 
         vector
+    }
+}
+
+pub fn new_vk_value<R : VkRawType<W>, W>(ptr: *const R) -> W {
+    unsafe {
+        R::vk_to_wrapped(&*ptr)
+    }
+}
+
+pub fn new_vk_value_checked<R : VkRawType<W>, W>(ptr: *const R) -> Option<W> {
+    unsafe {
+        if ptr.is_null() {
+            None
+        } else {
+            Some(R::vk_to_wrapped(&*ptr))
+        }
     }
 }
 

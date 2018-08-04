@@ -19,6 +19,7 @@ function generateRootTypeDefinition(functions) {
 
 function genUses() {
     return [
+        `utils::c_bindings::*`,
         `utils::vk_type::*`,
         `utils::vk_ptr::*`,
         `utils::vk_convert::*`,

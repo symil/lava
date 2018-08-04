@@ -1,16 +1,9 @@
 use std::mem;
 use std::ptr;
 use std::os::raw::c_char;
+use utils::c_bindings::*;
 use utils::vk_type::VkRawType;
 use utils::vk_type::VkWrappedType;
-
-#[allow(non_camel_case_types)]
-pub type c_void = u8;
-
-extern {
-    pub fn malloc(size: usize) -> *mut c_void;
-    pub fn free(ptr: *mut c_void);
-}
 
 const SIZE_OF_PTR : usize = mem::size_of::<*const u8>();
 
