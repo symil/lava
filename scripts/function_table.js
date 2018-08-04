@@ -4,7 +4,9 @@ const {
 
 function generateFunctionTableDefinition(functions) {
     for (let func of functions) {
-        func.argsInfo = getFieldsInformation(func.args);
+        if (!func.argsInfo) {
+            func.argsInfo = getFieldsInformation(func.args);
+        }
     }
 
     return [
@@ -50,14 +52,19 @@ function functionToDeclaration(func) {
     return `extern fn(${args.join(', ')})${returnType}`;
 }
 
+function getVkFunctionPrototype(func) {
+    const args = func.argsInfo.map(arg => `${arg.varName}: ${getArgType(arg)}`);
+    const returnType = func.type === 'VkResult' ? ' -> RawVkResult' : '';
+
+    return `(${args.join(', ')})${returnType}`;
+}
+
 function genNullFunctions(functions) {
     return functions.map(func => {
-        const args = func.argsInfo.map(arg => `${arg.varName}: ${getArgType(arg)}`);
-        const returnType = func.type === 'VkResult' ? ' -> RawVkResult' : '';
         const funcName = `null_${func.name}`;
 
         return [
-            `extern fn ${funcName}(${args.join(', ')})${returnType}`, [
+            `extern fn ${funcName}${getVkFunctionPrototype(func)}`, [
                 `panic!("\\"vkGetInstanceProcAddr\\" returned NULL for \\"${func.name}\\"");`
             ]
         ];
@@ -67,7 +74,7 @@ function genNullFunctions(functions) {
 function genNewMethod(functions) {
     return [
         `impl VkInstanceFunctionTable`, [
-            `fn new(instance: RawVkInstance) -> Self`, [
+            `pub fn new(instance: RawVkInstance) -> Self`, [
                 `unsafe`, [
                     `Self`,
                     functions.map(func => `${func.name}: { let fn_ptr = get_vk_instance_function_pointer(instance, "${func.name}"); if fn_ptr.is_null() { null_${func.name} } else { mem::transmute(fn_ptr) } },`)
@@ -78,5 +85,6 @@ function genNewMethod(functions) {
 }
 
 module.exports = {
-    generateFunctionTableDefinition
+    generateFunctionTableDefinition,
+    getVkFunctionPrototype
 };

@@ -1,4 +1,4 @@
-const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet } = require('./utils');
+const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle } = require('./utils');
 const { getStruct } = require('./vulkan_src');
 
 function generateVkStructDefinition(cDef) {
@@ -32,6 +32,7 @@ function generateVkStructDefinition(cDef) {
         genImplVkRawType(def),
         genImplVkWrappedType(def),
         genImplVkDefault(def),
+        genImplVkSetup(def),
         genImplFree(def)
     ];
 }
@@ -39,8 +40,6 @@ function generateVkStructDefinition(cDef) {
 function genUses(def) {
     const uses = new Set([
         'std::os::raw::c_char',
-        'std::string::String',
-        'std::vec::Vec',
         'std::ops::Deref',
         'std::ptr',
         'std::cmp',
@@ -48,7 +47,10 @@ function genUses(def) {
         'utils::vk_convert::*',
         'utils::vk_null::*',
         'utils::vk_ptr::*',
-        'utils::vk_type::*'
+        'utils::vk_type::*',
+        `vk::vk_instance_function_table::*`,
+        `vk::vk_instance::*`,
+        `vk::vk_device::*`
     ]);
 
     addUsesToSet(uses, def, def.fields);
@@ -135,6 +137,19 @@ function genImplVkDefault(def) {
             ]
         ];
     }
+}
+
+function genImplVkSetup(def) {
+    return [
+        `impl${def.lifetimes} VkSetup for ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`, [
+            `fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice)`,
+            def.fields.map(field => {
+                if (isStructOrHandle(field) && field.wrappedType === field.wrappedTypeName) {
+                    return `VkSetup::vk_setup(&mut self.${field.varName}, fn_table, instance, device);`
+                }
+            }).filter(x => x)
+        ]
+    ]
 }
 
 function genImplFree(def) {

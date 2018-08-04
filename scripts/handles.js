@@ -12,14 +12,24 @@ const {
     argToString,
     getConstVkValueName,
     getFieldsInformation,
-    addUsesToSet
+    addUsesToSet,
+    isStructOrHandle
 } = require('./utils');
 
 const VK_SUCCESS = 0;
+const VK_NULL_HANDLE = 0;
 
 function generateVkHandleDefinition(def) {
     def.rawTypeName = getRawVkTypeName(def.name);
     def.wrappedTypeName = getWrappedVkTypeName(def.name);
+
+    for (let func of def.functions) {
+        if (!func.argsInfo) {
+            func.argsInfo = getFieldsInformation(func.args);
+        }
+    }
+
+    // console.log(`${def.parent && def.parent.name} <-- ${def.name}`);
 
     return [
         genUses(def),
@@ -28,6 +38,7 @@ function generateVkHandleDefinition(def) {
         genVkRawTypeTrait(def),
         genVkWrappedTypeTrait(def),
         genVkDefaultTrait(def),
+        genVkSetupTrait(def),
         genMethods(def),
         genExterns(def)
     ];
@@ -41,8 +52,17 @@ function genUses(def) {
         'std::os::raw::c_char',
         'std::ptr',
         'std::mem',
+        `vk::vk_instance_function_table::*`,
         `vk::vk_result::*`
     ]);
+
+    if (def.name !== 'VkInstance') {
+        uses.add('vk::vk_instance::*');
+    }
+
+    if (def.name !== 'VkDevice') {
+        uses.add('vk::vk_device::*');
+    }
 
     if (def.parent && def.name !== 'VkInstance') {
         let use = `vk::`;
@@ -68,7 +88,9 @@ function genWrappedType(def) {
         `#[derive(Debug, Copy, Clone)]`,
         `pub struct ${def.wrappedTypeName}`, [
             `_handle: ${def.rawTypeName},`,
-            def.parent ? `_parent_handle: Raw${def.parent.name},` : null
+            `_parent_instance: RawVkInstance,`,
+            `_parent_device: RawVkDevice,`,
+            `_fn_table: *mut VkInstanceFunctionTable`
         ]
     ];
 }
@@ -79,7 +101,9 @@ function genVkRawTypeTrait(def) {
             `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName, [
                     `_handle: *src,`,
-                    def.parent ? `_parent_handle: 0,` : null
+                    `_parent_instance: ${VK_NULL_HANDLE},`,
+                    `_parent_device: ${VK_NULL_HANDLE},`,
+                    `_fn_table: ptr::null_mut()`
                 ]
             ],
         ]
@@ -101,12 +125,26 @@ function genVkDefaultTrait(def) {
         `impl VkDefault for ${def.wrappedTypeName}`, [
             `fn vk_default() -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName, [
-                    `_handle: 0,`,
-                    def.parent ? `_parent_handle: 0,` : null
+                    `_handle: ${VK_NULL_HANDLE},`,
+                    `_parent_instance: ${VK_NULL_HANDLE},`,
+                    `_parent_device: ${VK_NULL_HANDLE},`,
+                    `_fn_table: ptr::null_mut()`
                 ]
             ]
         ]
     ];
+}
+
+function genVkSetupTrait(def) {
+    return [
+        `impl VkSetup for ${def.wrappedTypeName}`, [
+            `fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice)`, [
+                `self._parent_instance = instance;`,
+                `self._parent_device = device;`,
+                `self._fn_table = fn_table;`
+            ]
+        ]
+    ]
 }
 
 function genMethods(def) {
@@ -117,7 +155,7 @@ function genMethods(def) {
     const handleMethod = [
         `\npub fn handle(&self) -> u64`, [
             `self._handle`
-        ]
+        ],
     ];
     return [
         `impl ${def.wrappedTypeName}`,
@@ -143,10 +181,12 @@ function functionToDeclaration(func) {
     return `fn ${func.name}(${args.join(', ')})${returnType};`;
 }
 
-function makeMethodName(functionName, handleName) {
-    return functionName
+function makeMethodName(func, handle) {
+    const toReplace = handle ? handle.name.replace('Vk', '') : '';
+
+    return func.name
         .replace(/^vk/g, '')
-        .replace(handleName.replace('Vk', ''), '')
+        .replace(toReplace, '')
         .replace(/[A-Z]+$/, '')
         .toSnakeCase();
 }
@@ -159,8 +199,8 @@ function functionToMethod(handle, func) {
     const createList = createSomething && lastArg.countField;
     const returnVkResult = func.type === 'VkResult';
 
-    const methodName = makeMethodName(func.name, handle.name);
-    const methodArgs = [{type: '&self'}];
+    const methodName = makeMethodName(func, handle);
+    const methodArgs = handle ? [{type: '&self'}] : [];
     const statements = [];
     const functionRustArgs = func.argsInfo.map((arg, index) => {
         if (index === func.args.length - 1 && createSomething) {
@@ -169,10 +209,10 @@ function functionToMethod(handle, func) {
             return 'count_ptr';
         } else if (arg.varName === 'allocator') {
             return 'ptr::null()';
-        } else if (index <= 1 && arg.typeName === handle.name) {
+        } else if (handle && index <= 1 && arg.typeName === handle.name) {
             return `self._handle`;
-        } else if (handle.parent && index === 0 && arg.typeName === handle.parent.name) {
-            return `self._parent_handle`;
+        } else if (handle && handle.parent && index === 0 && arg.typeName === handle.parent.name) {
+            return handle.parent.name === 'VkInstance' ? `self._parent_instance` : `self._parent_device`;
         } else {
             const argInfo = func.argsInfo[index];
 
@@ -194,8 +234,11 @@ function functionToMethod(handle, func) {
     let returnType = null;
 
     if (createSomething) {
-        const createdRawTypeName = func.argsInfo.last().rawTypeName;
-        const createdWrappedTypeName = func.argsInfo.last().wrappedTypeName;
+        const createdType = func.argsInfo.last();
+        const createdRawTypeName = createdType.rawTypeName;
+        const createdWrappedTypeName = createdType.wrappedTypeName;
+
+        const setupResult = createdType.typeName === 'VkInstance' || (handle && isStructOrHandle(createdType));
 
         if (createList) {
             statements.push(
@@ -238,8 +281,14 @@ function functionToMethod(handle, func) {
 
             statements.push(
                 ``,
-                `let wrapped_result = raw_result.iter().map(|raw| { ${createdRawTypeName}::vk_to_wrapped(raw) }).collect();`
+                `let${setupResult ? ' mut' : ''} wrapped_result = raw_result.iter().map(|raw| { ${createdRawTypeName}::vk_to_wrapped(raw) }).collect();`
             );
+
+            if (setupResult) {
+                statements.push(
+                    `for elt in &mut wrapped_result { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }`
+                );
+            }
 
             if (returnVkResult) {
                 statements.push(`Ok(wrapped_result)`);
@@ -269,8 +318,24 @@ function functionToMethod(handle, func) {
 
             statements.push(
                 ``,
-                `let wrapped_result = ${createdRawTypeName}::vk_to_wrapped(&raw_result);`
+                `let${setupResult ? ' mut' : ''} wrapped_result = ${createdRawTypeName}::vk_to_wrapped(&raw_result);`
             );
+
+            if (setupResult) {
+                const isInstance = createdType.typeName === 'VkInstance';
+                const isDevice = createdType.typeName === 'VkDevice';
+
+                const functionTable = isInstance ? `Box::into_raw(Box::new(VkInstanceFunctionTable::new(raw_result)))` : `self._fn_table`;
+                const parentInstance = isInstance ? `raw_result` : `self._parent_instance`;
+                const parentDevice = isDevice ? `raw_result` : (isInstance ? VK_NULL_HANDLE : `self._parent_device`);
+
+                statements.push(
+                    `let fn_table = ${functionTable};`,
+                    `let parent_instance = ${parentInstance};`,
+                    `let parent_device = ${parentDevice};`,
+                    `VkSetup::vk_setup(&mut wrapped_result, fn_table, parent_instance, parent_device);`
+                );
+            }
 
             if (returnVkResult) {
                 statements.push(`Ok(wrapped_result)`);
@@ -284,10 +349,6 @@ function functionToMethod(handle, func) {
         statements.push(`${functionCall};`);
     }
 
-    if (func.name === 'vkCreateInstance') {
-        methodArgs.shift();
-    }
-
     const argList = methodArgs.map(argToString).join(', ');
     const returnInfo = returnType ? ` -> ${returnType}` : '';
     
@@ -298,5 +359,6 @@ function functionToMethod(handle, func) {
 }
 
 module.exports = {
-    generateVkHandleDefinition
+    generateVkHandleDefinition,
+    functionToMethod
 };

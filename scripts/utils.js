@@ -1,4 +1,4 @@
-const { isHandle } = require('./vulkan_src');
+const { getHandle, getStruct } = require('./vulkan_src');
 
 const PRIMITIVE_TYPES = {
     bool: 'bool',
@@ -38,6 +38,10 @@ Array.prototype.beforeLast = function() {
 
 String.prototype.toSnakeCase = function() {
     return toSnakeCase(this);
+}
+
+function isStructOrHandle(field) {
+    return !!(getHandle(field) || getStruct(field));
 }
 
 function toSnakeCase(str) {
@@ -205,7 +209,7 @@ function getFieldsInformation(fields) {
         const isPointerValue = field.isPointer && !isPointerArray;
         const isStaticArray = !field.isPointer && !!arraySize;
         const isPrimitiveType = rawTypeName === wrappedTypeName;
-        const isHandleType = !isPrimitiveType && isHandle(field.typeName);
+        const isHandleType = !isPrimitiveType && !!getHandle(field);
         const isOptional = field.isOptional;
         const isConst = field.isConst;
 
@@ -217,7 +221,7 @@ function getFieldsInformation(fields) {
         const countVarNameValue = field.countField ? cToRustVarName(field.countField) : null;
         const arrayVarNameValue = isCount ? cToRustVarName(field.countFor[0]) : null;
 
-        let rawType = null;
+let rawType = null;
         let wrappedType = null;
         let toRaw = null;
         let toWrapped = null;
@@ -471,5 +475,6 @@ module.exports = {
     findEnumPrefix,
     getStaticVkValueName,
     getConstVkValueName,
-    addUsesToSet
+    addUsesToSet,
+    isStructOrHandle
 };

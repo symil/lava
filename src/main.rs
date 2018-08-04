@@ -51,7 +51,7 @@ fn main() {
     // required_extensions.append(&mut glfw.get_required_vulkan_extensions().unwrap());
     // required_extensions.push(String::from(EXT_DEBUG_REPORT));
 
-    let instance = VkInstance::create(&VkInstanceCreateInfo {
+    let instance = Vk::create_instance(&VkInstanceCreateInfo {
         flags: VkInstanceCreateFlags { },
         application_info: Some(&VkApplicationInfo {
             application_name: Some("foo"),
@@ -64,20 +64,20 @@ fn main() {
         enabled_extension_names: &[EXT_DEBUG_REPORT]
     }).expect("Failed to create VkInstance");
 
-    instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
-        flags: VkDebugReportFlags {
-            information: false,
-            warning: true,
-            performance_warning: false,
-            error: true,
-            debug: false,
-        },
-        callback: simple_debug_callback
-    }).expect("Faield to create debug callback");
+    // instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
+    //     flags: VkDebugReportFlags {
+    //         information: false,
+    //         warning: true,
+    //         performance_warning: false,
+    //         error: true,
+    //         debug: false,
+    //     },
+    //     callback: simple_debug_callback
+    // }).expect("Faield to create debug callback");
 
     // let surface = instance.create_surface_from_glfw(&window).expect("Failed to create VkSurface");
 
-    let supported_extensions = instance.enumerate_extension_properties(None).expect("Failed to retrieve supported extensions");
+    let supported_extensions = Vk::enumerate_instance_extension_properties(None).expect("Failed to retrieve supported extensions");
 
     println!("{:#?}", supported_extensions);
 
