@@ -158,7 +158,9 @@ function getWrappedVkTypeName(cTypeName) {
 }
 
 function getFieldRawTypeName(field) {
-    if (field.typeName === 'VkBool32') {
+    if (field.name === 'pCode') {
+        return 'u8';
+    } else if (field.typeName === 'VkBool32') {
         return 'u32';
     }
 
@@ -168,7 +170,9 @@ function getFieldRawTypeName(field) {
 const INT_TYPES = ['uint32_t', 'uint64_t', 'int32_t', 'int64_t', 'VkDeviceSize']
 
 function getFieldWrappedTypeName(field) {
-    if (doesFieldRepresentVersion(field)) {
+    if (field.name === 'pCode') {
+        return `u8`;
+    } else if (doesFieldRepresentVersion(field)) {
         return `VkVersion`;
     } else if (INT_TYPES.includes(field.typeName) && !/(mask|version)/i.test(field.name)) {
         return field.typeName.startsWith('int') ? `isize` : `usize`;
@@ -267,9 +271,9 @@ function getFieldsInformation(fields, structName) {
                 }
             }
 
-            if (field.name === 'codeSize') {
-                lenValue = `${lenValue} * 4`
-            }
+            // if (field.name === 'codeSize') {
+            //     lenValue = `${lenValue} * 4`
+            // }
 
             if (rawTypeName !== 'usize') {
                 lenValue += ` as ${rawTypeName}`;
