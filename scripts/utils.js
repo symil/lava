@@ -141,10 +141,6 @@ function doesFieldRepresentVersion(field) {
     return field.typeName === 'uint32_t' && /(p?)apiversion$/i.test(field.name);
 }
 
-function doesFieldRepresentIndex(field) {
-    return field.typeName === 'uint32_t' && /Index|Indices/.test(field.name);
-}
-
 function createStaticArray(typeName, arraySize, varName, functionName) {
     return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::uninitialized(); ${functionName}(&${varName}, &mut dst_array); dst_array }`;
 }
@@ -169,11 +165,13 @@ function getFieldRawTypeName(field) {
     return PRIMITIVE_TYPES[field.typeName] || getRawVkTypeName(field.typeName);
 }
 
+const INT_TYPES = ['uint32_t', 'uint64_t', 'int32_t', 'int64_t', 'VkDeviceSize']
+
 function getFieldWrappedTypeName(field) {
     if (doesFieldRepresentVersion(field)) {
         return `VkVersion`;
-    } else if (doesFieldRepresentIndex(field)) {
-        return `usize`;
+    } else if (INT_TYPES.includes(field.typeName) && !/(mask|version)/i.test(field.name)) {
+        return field.typeName.startsWith('int') ? `isize` : `usize`;
     } else if (field.typeName === 'VkBool32') {
         return 'bool';
     }
@@ -391,12 +389,13 @@ function getFieldsInformation(fields, structName) {
 
                 if (countVarNameValue) {
                     wrappedType = `Vec<${wrappedTypeName}>`;
-                    toWrapped = `new_vk_array(${countVarName}, ${varName}.as_ptr())`;
                     toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
+                    toWrapped = `new_vk_array(${countVarName}, ${varName}.as_ptr())`;
                     defValue = `Vec::new()`;
                 } else {
                     wrappedType = `[${wrappedTypeName}; ${arraySize}]`;
                     toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
+                    toWrapped = createStaticArray(wrappedTypeName, arraySize, varName, 'vk_to_wrapped_array');
                     defValue = fillStaticArray(wrappedTypeName, arraySize);
                 }
             } else if (isHandleType && !doesOutputHandle) {

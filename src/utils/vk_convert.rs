@@ -27,6 +27,14 @@ pub fn vk_to_raw_array<W : VkWrappedType<R>, R>(array: &[W], dst: &mut[R]) {
     }
 }
 
+pub fn vk_to_wrapped_array<W, R : VkRawType<W>>(array: &[R], dst: &mut[W]) {
+    let len = cmp::min(array.len(), dst.len());
+
+    for i in 0..len {
+        dst[i] = R::vk_to_wrapped(&array[i])
+    }
+}
+
 pub fn fill_vk_array<T : VkDefault>(dst: &mut[T]) {
     for i in 0..dst.len() {
         dst[i] = T::vk_default();

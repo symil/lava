@@ -38,6 +38,13 @@ function get(obj, type) {
     return (obj[type.extension] || {})[type.typeName];
 }
 
+// for (let struct of getAllStructs()) {
+
+//     if (struct.name !== 'VkDeviceGroupSubmitInfo' && struct.fields.some(field => ['int32_t', 'int64_t', 'VkDeviceSize'].includes(field.typeName) && field.isPointer && !field.name.includes('Indices'))) {
+//         console.log(struct.name)
+//     }
+// }
+
 function getAllEnums() { return getAll(ENUMS); }
 function getAllBitFlags() { return getAll(BIT_FLAGS); }
 function getAllStructs() { return getAll(STRUCTS); }
