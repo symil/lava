@@ -21,10 +21,6 @@ function generateVkHandleDefinition(def) {
     def.rawTypeName = getRawVkTypeName(def.name);
     def.wrappedTypeName = getWrappedVkTypeName(def.name);
 
-    for (let func of def.functions) {
-        func.argsInfo = getFieldsInformation(func.args);
-    }
-
     return [
         genUses(def),
         genRawType(def),

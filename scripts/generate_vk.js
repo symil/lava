@@ -10,6 +10,7 @@ const { generateVkStructDefinition } = require('./structs');
 const { generateVkEnumDefinition } = require('./enums');
 const { generateVkBitFlagsDefinition } = require('./bit_flags');
 const { generateVkHandleDefinition } = require('./handles');
+const { generateFunctionTableDefinition } = require('./function_table');
 
 const ROOT_DIR_PATH         = path.join(__dirname, '..');
 const OUTPUT_DIR_PATH       = path.join(ROOT_DIR_PATH, 'src', 'vk');
@@ -22,10 +23,11 @@ main();
 
 function main() {
     const vkTypes = [
-        ...generateEnums(),
-        ...generateBitFlags(),
-        ...generateStructs(),
-        ...generateHandles()
+        generateFunctionTable(),
+        // ...generateEnums(),
+        // ...generateBitFlags(),
+        // ...generateStructs(),
+        // ...generateHandles()
     ];
 
     writeVkTypes(vkTypes);
@@ -116,6 +118,14 @@ function generateVkTypes(cTypes, generateFunction) {
             definition: rustDefinition
         };
     });
+}
+
+function generateFunctionTable() {
+    return {
+        name: 'VkInstanceFunctionTable',
+        extension: '',
+        definition: generateFunctionTableDefinition(getAllFunctions())
+    };
 }
 
 function generateEnums() {

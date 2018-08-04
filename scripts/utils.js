@@ -230,6 +230,12 @@ function getFieldsInformation(fields) {
         } else if (field.name === 'pNext') {
             rawType = `*const c_void`;
             toRaw = `ptr::null()`;
+        } else if (field.fullType === 'void**') {
+            rawType = `*mut *mut c_void`;
+            wrappedType = `*mut *mut c_void`;
+            toRaw = varName;
+            toWrapped = varName;
+            defValue = 'ptr::null_mut()'
         } else if (field.typeName === 'void' && field.isPointer) {
             const qualifier = field.isConst ? 'const' : 'mut';
 

@@ -61,7 +61,7 @@ fn main() {
             api_version: VkVersion(1, 0, 0),
         }),
         enabled_layer_names: &[],
-        enabled_extension_names: &[]
+        enabled_extension_names: &[EXT_DEBUG_REPORT]
     }).expect("Failed to create VkInstance");
 
     instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {

@@ -1,10 +1,14 @@
 use std::string::String;
+use std::ffi::CString;
 use std::ffi::CStr;
 use std::vec::Vec;
 use std::cmp;
 use std::mem;
 use std::os::raw::c_char;
 use utils::vk_type::*;
+use utils::vk_ptr::*;
+use vk::vk_instance::*;
+use vk::vk_result::*;
 
 pub fn vk_to_raw_value<W : VkWrappedType<R>, R>(value: &W) -> R {
     unsafe {
@@ -86,4 +90,14 @@ pub fn new_string_checked(ptr: *const c_char) -> Option<String> {
     } else {
         None
     }
+}
+
+pub unsafe fn get_vk_instance_function_pointer(instance: RawVkInstance, name: &str) -> *mut c_void {
+    let c_string = CString::new(name).unwrap();
+
+    vkGetInstanceProcAddr(instance, c_string.as_c_str().as_ptr())
+}
+
+extern {
+    fn vkGetInstanceProcAddr(instance: RawVkInstance, name: *const c_char) -> *mut c_void;
 }

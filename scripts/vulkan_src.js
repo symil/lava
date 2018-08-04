@@ -347,6 +347,10 @@ function parseFunctions() {
     return functions;
 }
 
+function getExtensions() {
+    return EXTENSIONS.slice();
+}
+
 module.exports = {
     getAllEnums,
     getAllBitFlags,
@@ -361,5 +365,6 @@ module.exports = {
     getBitFlags,
     getStruct,
     getHandle,
-    isHandle
+    isHandle,
+    getExtensions
 };
