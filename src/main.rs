@@ -65,7 +65,7 @@ fn main() {
         enabled_extension_names: &required_extensions
     }).expect("Failed to create VkInstance");
 
-    let debug_report_callback = instance.create_debug_report_callback_ext(&VkDebugReportCallbackCreateInfo {
+    let debug_report_callback = instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
         flags: VkDebugReportFlags {
             warning: true,
             error: true,
@@ -107,14 +107,14 @@ fn main() {
         queue_family_indices: &[]
     }).expect("Failed to create VkBuffer");
 
-    let is_surface_supported = physical_device.get_surface_support_khr(0, &surface).unwrap();
+    let is_surface_supported = physical_device.get_surface_support(0, &surface).unwrap();
     let device_supported_extensions = physical_device.enumerate_device_extension_properties(None).expect("Failed to retrieve device extensions");
-    let capabilities = physical_device.get_surface_capabilities_khr(&surface).expect("Failed to retrieve surface capabilities");
-    let formats = physical_device.get_surface_formats_khr(&surface).expect("Failed to retrieve surface formats");
-    let surface_present_modes = physical_device.get_surface_present_modes_khr(&surface).expect("Failed to retrieve present modes");
+    let capabilities = physical_device.get_surface_capabilities(&surface).expect("Failed to retrieve surface capabilities");
+    let formats = physical_device.get_surface_formats(&surface).expect("Failed to retrieve surface formats");
+    let surface_present_modes = physical_device.get_surface_present_modes(&surface).expect("Failed to retrieve present modes");
     let current_transform = capabilities.current_transform.clone();
 
-    let swapchain = device.create_swapchain_khr(&VkSwapchainCreateInfo {
+    let swapchain = device.create_swapchain(&VkSwapchainCreateInfo {
         flags: VkSwapchainCreateFlags::none(),
         surface: &surface,
         min_image_count: 2,

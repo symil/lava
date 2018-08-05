@@ -29,6 +29,8 @@ function generateVkHandleDefinition(def) {
         }
     }
 
+    makeMethodNames(def, def.functions)
+
     return [
         genUses(def),
         genRawType(def),
@@ -76,6 +78,28 @@ function genUses(def) {
     // }
 
     return Array.from(uses.values()).map(str => `use ${str};`);
+}
+
+function makeMethodNames(handle, functions) {
+    const assigned = new Set();
+
+    for (const func of functions) {
+        const toReplace = handle ? handle.name.replace('Vk', '') : '';
+
+        let extension = '';
+        let methodName = func.name
+            .replace(/^vk/g, '')
+            .replace(toReplace, '')
+            .replace(/[A-Z]+$/, ext => { extension = ext.toLowerCase(); return ''; })
+            .toSnakeCase();
+
+        if (assigned.has(methodName)) {
+            methodName += `_${extension}`;
+        }
+
+        assigned.add(methodName);
+        func.methodName = methodName;
+    }
 }
 
 function genRawType(def) {
@@ -158,34 +182,6 @@ function genMethods(def) {
     ];
 }
 
-function genExterns(def) {
-    if (!def.functions.length) {
-        return;
-    }
-
-    return [
-        `extern`,
-        def.functions.map(func => functionToDeclaration(func)).reduce((acc, block) => acc.concat(block), [])
-    ];
-}
-
-function functionToDeclaration(func) {
-    const args = func.argsInfo.map(arg => `${arg.varName}: ${arg.rawType}`);
-    const returnType = func.type === 'VkResult' ? ' -> RawVkResult' : '';
-
-    return `fn ${func.name}(${args.join(', ')})${returnType};`;
-}
-
-function makeMethodName(func, handle) {
-    const toReplace = handle ? handle.name.replace('Vk', '') : '';
-
-    return func.name
-        .replace(/^vk/g, '')
-        .replace(toReplace, '')
-        .replace(/[A-Z]+$/, ext => ext.toLowerCase() === handle.extension ? '' : ext)
-        .toSnakeCase();
-}
-
 function getRawVarName(varName) {
     return `raw_${varName}`;
 }
@@ -204,7 +200,7 @@ function functionToMethod(handle, func) {
     const createList = createSomething && lastArg.countField;
     const returnVkResult = func.type === 'VkResult';
 
-    const methodName = makeMethodName(func, handle);
+    const methodName = func.methodName;
     const methodArgs = handle ? [{type: '&self'}] : [];
     const statements = [];
     
@@ -360,5 +356,6 @@ function prefixWithExtension(ext, name) {
 
 module.exports = {
     generateVkHandleDefinition,
+    makeMethodNames,
     functionToMethod
 };

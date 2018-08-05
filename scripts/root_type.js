@@ -1,6 +1,6 @@
 const { getFieldsInformation } = require('./utils');
 const { getVkFunctionPrototype } = require('./function_table');
-const { functionToMethod } = require('./handles');
+const { functionToMethod, makeMethodNames } = require('./handles');
 
 function generateRootTypeDefinition(functions) {
     for (let func of functions) {
@@ -8,6 +8,8 @@ function generateRootTypeDefinition(functions) {
             func.argsInfo = getFieldsInformation(func.args);
         }
     }
+
+    makeMethodNames(null, functions);
 
     return [
         genUses(functions),
