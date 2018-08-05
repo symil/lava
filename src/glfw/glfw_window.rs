@@ -9,7 +9,11 @@ pub struct GlfwWindow {
 }
 
 impl GlfwWindow {
-    pub fn new(width: u32, height: u32, title: &str) -> Self {
+    pub fn handle(&self) -> *mut RawGlfwWindow {
+        self._window
+    }
+
+    pub fn new(width: usize, height: usize, title: &str) -> Self {
         unsafe {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
             glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -29,10 +33,6 @@ impl GlfwWindow {
                 glfwPollEvents();
             }
         }
-    }
-
-    pub fn handle(&self) -> *mut RawGlfwWindow {
-        self._window
     }
 }
 

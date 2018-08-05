@@ -36,7 +36,7 @@ function generateVkEnumDefinition(cDef) {
         genWrappedType(cDef),
         genImplVkRawType(cDef),
         genImplVkWrappedType(cDef),
-        genImplVkDefault(cDef),
+        genImplDefault(cDef),
     ];
 }
 
@@ -82,10 +82,10 @@ function genImplVkWrappedType(def) {
     ];
 }
 
-function genImplVkDefault(def) {
+function genImplDefault(def) {
     return [
-        `impl VkDefault for ${def.wrappedTypeName}`, [
-            `fn vk_default() -> ${def.wrappedTypeName}`, [
+        `impl Default for ${def.wrappedTypeName}`, [
+            `fn default() -> ${def.wrappedTypeName}`, [
                 `${def.wrappedTypeName}::${def.fields[0].rustName}`
             ]
         ]

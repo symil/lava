@@ -53,7 +53,7 @@ pub fn new_ptr_vk_value_checked<R, W : VkWrappedType<R>>(value: Option<&W>) -> *
 
 pub fn new_ptr_vk_array<R, W : VkWrappedType<R>>(array: &[W]) -> *mut R {
     unsafe {
-        let byte_len = array.len() * mem::size_of::<W>();
+        let byte_len = array.len() * mem::size_of::<R>();
         let ptr = malloc(byte_len) as *mut R;
 
         for i in 0..array.len() {

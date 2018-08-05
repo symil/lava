@@ -1,5 +1,6 @@
 const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle, isOutputHandleStruct } = require('./utils');
 const { getStruct } = require('./vulkan_src');
+const { genImplFlags } = require('./bit_flags');
 
 function generateVkStructDefinition(cDef) {
     const def = {
@@ -25,15 +26,18 @@ function generateVkStructDefinition(cDef) {
     //     })
     // }
 
+    const isFlags = cDef.name === 'VkPhysicalDeviceFeatures';
+
     return [
         genUses(def),
         genRawStructDeclaration(def),
         getWrappedStructDeclaration(def),
         genImplVkRawType(def),
         genImplVkWrappedType(def),
-        genImplVkDefault(def),
+        genImplDefault(def),
         genImplVkSetup(def),
-        genImplFree(def)
+        genImplFree(def),
+        isFlags ? genImplFlags(def) : null
     ];
 }
 
@@ -69,7 +73,6 @@ function genRawStructDeclaration(cDef) {
 
 function getWrappedStructDeclaration(def) {
     const fields = getWrappedFields(def);
-    const hasCopy = canHaveStaticValue(def);
     const derivedTraits = ['Debug', 'Clone'];
     
     return [
@@ -121,13 +124,13 @@ function genImplVkWrappedType(def) {
     }
 }
 
-function genImplVkDefault(def) {
+function genImplDefault(def) {
     if (isConvertibleFromWrappedToRaw(def)) {
         const wrappedFields = getWrappedFields(def);
 
         return [
-            `impl VkDefault for ${def.wrappedTypeName}${def.staticLifetimes}`, [
-                `fn vk_default() -> ${def.wrappedTypeName}${def.staticLifetimes}`, [
+            `impl Default for ${def.wrappedTypeName}${def.staticLifetimes}`, [
+                `fn default() -> ${def.wrappedTypeName}${def.staticLifetimes}`, [
                     def.wrappedTypeName,
                     wrappedFields.map(field => `${field.varName}: ${field.defaultValue},`)
                 ]

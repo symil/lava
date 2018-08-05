@@ -35,7 +35,7 @@ function generateVkHandleDefinition(def) {
         genWrappedType(def),
         genVkRawTypeTrait(def),
         genVkWrappedTypeTrait(def),
-        genVkDefaultTrait(def),
+        genDefaultTrait(def),
         genVkSetupTrait(def),
         genMethods(def)
     ];
@@ -52,6 +52,7 @@ function genUses(def) {
         'std::mem',
         'std::cmp',
         `vk::*`,
+        `glfw::*`
     ]);
 
     // if (def.name !== 'VkInstance') {
@@ -118,10 +119,10 @@ function genVkWrappedTypeTrait(def) {
     ];
 }
 
-function genVkDefaultTrait(def) {
+function genDefaultTrait(def) {
     return [
-        `impl VkDefault for ${def.wrappedTypeName}`, [
-            `fn vk_default() -> ${def.wrappedTypeName}`, [
+        `impl Default for ${def.wrappedTypeName}`, [
+            `fn default() -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName, [
                     `_handle: ${VK_NULL_HANDLE},`,
                     `_parent_instance: ${VK_NULL_HANDLE},`,
@@ -146,8 +147,6 @@ function genVkSetupTrait(def) {
 }
 
 function genMethods(def) {
-    // if (def.name !== 'VkInstance') return;
-
     const handleMethod = [
         `\npub fn handle(&self) -> u64`, [
             `self._handle`

@@ -24,13 +24,6 @@ impl VkWrappedType<u64> for usize {
     }
 }
 
-impl VkDefault for usize {
-    fn vk_default() -> usize {
-        0
-    }
-}
-
-
 impl VkRawType<isize> for i32 {
     fn vk_to_wrapped(value: &i32) -> isize {
         *value as isize
@@ -52,11 +45,5 @@ impl VkRawType<isize> for i64 {
 impl VkWrappedType<i64> for isize {
     fn vk_to_raw(value: &isize, dst: &mut i64) {
         *dst = *value as i64;
-    }
-}
-
-impl VkDefault for isize {
-    fn vk_default() -> isize {
-        0
     }
 }

@@ -28,7 +28,7 @@ function generateVkBitFlagsDefinition(cDef) {
         const suffix = name.endsWith(extSuffix) ? extSuffix : '';
         const strippedName = name.substring(prefix.length + 1, name.length - suffix.length);
         
-        field.rustName = formatBitFlagsFieldName(strippedName);
+        field.varName = formatBitFlagsFieldName(strippedName);
     }
 
     return [
@@ -37,7 +37,8 @@ function generateVkBitFlagsDefinition(cDef) {
         genWrappedType(cDef),
         genImplVkRawType(cDef),
         genImplVkWrappedType(cDef),
-        genImplVkDefault(cDef)
+        genImplDefault(cDef),
+        genImplFlags(cDef)
     ];
 }
 
@@ -55,7 +56,7 @@ function genWrappedType(def) {
     return [
         `#[derive(Debug, Clone, Copy)]`,
         `pub struct ${def.wrappedTypeName}`,
-        def.fields.map(field => `pub ${field.rustName}: bool,`)
+        def.fields.map(field => `pub ${field.varName}: bool,`)
     ];
 }
 
@@ -64,7 +65,7 @@ function genImplVkRawType(def) {
         `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
             `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName,
-                def.fields.map(field => `${field.rustName}: (src & ${field.value}) != 0,`)
+                def.fields.map(field => `${field.varName}: (src & ${field.value}) != 0,`)
             ]
         ]
     ];
@@ -75,18 +76,18 @@ function genImplVkWrappedType(def) {
         `impl VkWrappedType<${def.rawTypeName}> for ${def.wrappedTypeName}`, [
             `fn vk_to_raw(src: &${def.wrappedTypeName}, dst: &mut ${def.rawTypeName})`, [
                 `*dst = 0;`,
-                ...def.fields.map(field => `if src.${field.rustName} { *dst |= ${field.value}; }`),
+                ...def.fields.map(field => `if src.${field.varName} { *dst |= ${field.value}; }`),
             ]
         ]
     ];
 }
 
-function genImplVkDefault(def) {
+function genImplDefault(def) {
     return [
-        `impl VkDefault for ${def.wrappedTypeName}`, [
-            `fn vk_default() -> ${def.wrappedTypeName}`, [
+        `impl Default for ${def.wrappedTypeName}`, [
+            `fn default() -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName,
-                def.fields.map(field => `${field.rustName}: false,`)
+                def.fields.map(field => `${field.varName}: false,`)
             ]
         ]
     ];
@@ -97,6 +98,22 @@ function formatBitFlagsFieldName(name) {
         .replace(/^(\d)/, '_$1');
 }
 
+function genImplFlags(def) {
+    return [
+        `impl ${def.wrappedTypeName}`, [
+            `\npub fn none() -> ${def.wrappedTypeName}`, [
+                def.wrappedTypeName,
+                def.fields.map(field => `${field.varName}: false,`)
+            ],
+            `\npub fn all() -> ${def.wrappedTypeName}`, [
+                def.wrappedTypeName,
+                def.fields.map(field => `${field.varName}: true,`)
+            ]
+        ]
+    ];
+}
+
 module.exports = {
-    generateVkBitFlagsDefinition
+    generateVkBitFlagsDefinition,
+    genImplFlags
 };

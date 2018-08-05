@@ -21,7 +21,7 @@ impl GlfwInstance {
         }
     }
 
-    pub fn create_window(&self, width: u32, height: u32, title: &str) -> GlfwWindow {
+    pub fn create_window(&self, width: usize, height: usize, title: &str) -> GlfwWindow {
         GlfwWindow::new(width, height, title)
     }
 

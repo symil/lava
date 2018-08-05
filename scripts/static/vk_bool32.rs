@@ -11,9 +11,3 @@ impl VkWrappedType<u32> for bool {
         *dst = if *value { 1 } else { 0 }
     }
 }
-
-impl VkDefault for bool {
-    fn vk_default() -> bool {
-        false
-    }
-}

@@ -4,17 +4,15 @@ const path = require('path');
 const fs = require('fs');
 const XML = require('pixl-xml')
 
-const VULKAN_SDK_PATH = process.env.VULKAN_SDK || "C:\\VulkanSDK\\1.1.77.0";
-const INCLUDE_DIR_NAME = process.platform === 'win32' ? 'Include' : 'include';
-const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, INCLUDE_DIR_NAME, `vulkan`, `vulkan_core.h`), 'utf8');
-const VK_XML_STR = fs.readFileSync(path.join(__dirname, '..', 'download', 'vk.xml'));
-const VK_XML = XML.parse(VK_XML_STR);
-
 const SPECIAL_FUNCTIONS = [
     'VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window, const VkAllocationCallbacks* allocator, VkSurfaceKHR* surface);',
-    'VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfo* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback);',
-    'void vkDestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator);'
 ].join('\n');
+
+const VULKAN_SDK_PATH = process.env.VULKAN_SDK || "C:\\VulkanSDK\\1.1.77.0";
+const INCLUDE_DIR_NAME = process.platform === 'win32' ? 'Include' : 'include';
+const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, INCLUDE_DIR_NAME, `vulkan`, `vulkan_core.h`), 'utf8') + '\n' + SPECIAL_FUNCTIONS;
+const VK_XML_STR = fs.readFileSync(path.join(__dirname, '..', 'download', 'vk.xml'));
+const VK_XML = XML.parse(VK_XML_STR);
 
 const EXTENSIONS = ['KHR', 'EXT', 'GOOGLE', 'NV', 'NVX', 'AMD'];
 
@@ -107,8 +105,9 @@ function parseField(str) {
     const isConst = fullType.startsWith('const ');
     const arraySizeIdentifier = match[3];
     const arraySize = parseConstant(arraySizeIdentifier);
+    const countFor = [];
 
-    return { name, extension, fullType, typeName, isPointer, isDoublePointer, isConst, arraySize };
+    return { name, extension, fullType, typeName, isPointer, isDoublePointer, isConst, arraySize, countFor };
 }
 
 function parseEnums() {
@@ -296,23 +295,11 @@ function parseFunctions() {
     const match = VULKAN_H.match(regexp);
 
     const functions = match.map(str => {
-        const words = str.split(/\W+/g);
-        const type = words[1];
-        const name = words[3];
-
-        let xml = VK_XML.commands.command.find(c => (c.proto && c.proto.name === name) || c.name === name);
-        if (xml.alias) {
-            return null;
-            xml = VK_XML.commands.command.find(c => c.proto && c.proto.name === xml.alias)
-        }
-
-        const xmlParams = Array.isArray(xml.param) ? xml.param : [xml.param];
-
-        if (!xmlParams) {
-            throw new Error(`function ${name} does not have a xml`)
-        }
+        const words = str.replace(/VKAPI_ATTR|VKAPI_CALL/g, '').trim().split(/\W+/, 2);
+        const type = words[0];
+        const name = words[1];
         
-        const args = str.substring(str.indexOf('(') + 1, str.indexOf(')')).split(',').map(x => x.trim()).map((argStr, index) => {
+        const args = str.substring(str.indexOf('(') + 1, str.indexOf(')')).split(',').map(x => x.trim()).map(argStr => {
             const argInfo = parseField(argStr);
 
             if (!argInfo) {
@@ -322,30 +309,45 @@ function parseFunctions() {
             return argInfo;
         });
 
-        let lastArg = null;
-        for (let arg of args) {
-            const xmlParam = xmlParams.find(p => p.name === arg.name);
-
-            if (!xmlParam) {
-                throw new Error(`function "${name}": missing xml parameter ${arg.name}`);
+        let xml = VK_XML.commands.command.find(c => (c.proto && c.proto.name === name) || c.name === name);
+        
+        if (xml) {
+            if (xml.alias) {
+                return null;
+                xml = VK_XML.commands.command.find(c => c.proto && c.proto.name === xml.alias)
+            }
+    
+            const xmlParams = Array.isArray(xml.param) ? xml.param : [xml.param];
+    
+            if (!xmlParams) {
+                throw new Error(`function ${name} does not have a xml`)
             }
 
-            arg.values = xmlParam.values;
-
-            arg.isOptional = !!xmlParam.optional;
-            // if (arg.typeName !== 'void') {
-                arg.countField = (xmlParam.len || '').split(',').find(str => args.some(arg => arg.name === str));
-
-                if (areCountAndArray(lastArg, arg)) {
-                    arg.countField = lastArg.name;
+            let lastArg = null;
+            for (let arg of args) {
+                const xmlParam = xmlParams.find(p => p.name === arg.name);
+    
+                if (!xmlParam) {
+                    throw new Error(`function "${name}": missing xml parameter ${arg.name}`);
                 }
-            // }
-
-            lastArg = arg;
-        }
-
-        for (let arg of args) {
-            arg.countFor = args.filter(otherArg => otherArg.countField === arg.name).map(a => a.name);
+    
+                arg.values = xmlParam.values;
+    
+                arg.isOptional = !!xmlParam.optional;
+                // if (arg.typeName !== 'void') {
+                    arg.countField = (xmlParam.len || '').split(',').find(str => args.some(arg => arg.name === str));
+    
+                    if (areCountAndArray(lastArg, arg)) {
+                        arg.countField = lastArg.name;
+                    }
+                // }
+    
+                lastArg = arg;
+            }
+    
+            for (let arg of args) {
+                arg.countFor = args.filter(otherArg => otherArg.countField === arg.name).map(a => a.name);
+            }
         }
 
         return { name, type, args };

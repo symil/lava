@@ -149,6 +149,18 @@ function fillStaticArray(typeName, arraySize) {
     return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array }`;
 }
 
+function getRawGlfwTypeName(cTypeName) {
+    if (cTypeName.startsWith('GLFW')) {
+        return `Raw${cTypeName.replace(/^GLFW\w/, str => `Glfw${str[4].toUpperCase()}`)}`
+    }
+}
+
+function getWrappedGlfwTypeName(cTypeName) {
+    if (cTypeName.startsWith('GLFW')) {
+        return cTypeName.replace(/^GLFW\w/, str => `Glfw${str[4].toUpperCase()}`);
+    }
+}
+
 function getRawVkTypeName(cTypeName) {
     return `Raw${cTypeName}`;
 }
@@ -164,7 +176,7 @@ function getFieldRawTypeName(field) {
         return 'u32';
     }
 
-    return PRIMITIVE_TYPES[field.typeName] || getRawVkTypeName(field.typeName);
+    return PRIMITIVE_TYPES[field.typeName] || getRawGlfwTypeName(field.typeName) || getRawVkTypeName(field.typeName);
 }
 
 const INT_TYPES = ['uint32_t', 'uint64_t', 'int32_t', 'int64_t', 'VkDeviceSize']
@@ -180,7 +192,7 @@ function getFieldWrappedTypeName(field) {
         return 'bool';
     }
 
-    return PRIMITIVE_TYPES[field.typeName] || getWrappedVkTypeName(field.typeName);
+    return PRIMITIVE_TYPES[field.typeName] || getWrappedGlfwTypeName(field.typeName) || getWrappedVkTypeName(field.typeName);
 }
 
 function getStaticVkValueName(wrappedTypeName) {
@@ -244,7 +256,11 @@ function getFieldsInformation(fields, structName) {
         let defValue = null;
         let freeRaw = null;
 
-        if (field.name === 'sType' && field.values) {
+        if (field.fullType === 'GLFWwindow*') {
+            rawType = '*mut RawGlfwWindow';
+            wrappedType = '&GlfwWindow';
+            toRaw = `${varName}.handle()`;
+        } else if (field.name === 'sType' && field.values) {
             rawType = 'RawVkStructureType';
             toRaw = () => `vk_to_raw_value(&VkStructureType::${toPascalCase(field.values.substring('VK_STRUCTURE_TYPE_'.length))})`;
         } else if (field.name === 'pNext') {
@@ -421,7 +437,7 @@ function getFieldsInformation(fields, structName) {
                 wrappedType = wrappedTypeName;
                 toRaw = `vk_to_raw_value(&${varName})`;
                 toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
-                defValue = getPrimitiveDefaultValue(wrappedTypeName) || `${wrappedTypeName}::vk_default()`;
+                defValue = getPrimitiveDefaultValue(wrappedTypeName) || `${wrappedTypeName}::default()`;
             }
         }
 

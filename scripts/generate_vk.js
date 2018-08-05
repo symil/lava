@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const { getAllEnums, getAllBitFlags, getAllStructs, getAllHandles, getAllFunctions, isHandle } = require('./vulkan_src');
-const { blockToString, toSnakeCase, toPascalCase, getRawTypeName, getWrappedTypeName } = require('./utils');
+const { blockToString, toSnakeCase } = require('./utils');
 const { HandleList } = require('./handles');
 const { generateVkStructDefinition } = require('./structs');
 const { generateVkEnumDefinition } = require('./enums');
@@ -33,8 +33,8 @@ function main() {
     const vkTypes = [
         generateRootType(),
         generateFunctionTable(),
-        // ...generateEnums(),
-        // ...generateBitFlags(),
+        ...generateEnums(),
+        ...generateBitFlags(),
         ...generateStructs(),
         ...generateHandles()
     ];

@@ -15,8 +15,8 @@ impl VkWrappedType<u32> for VkVersion {
     }
 }
 
-impl VkDefault for VkVersion {
-    fn vk_default() -> VkVersion {
+impl Default for VkVersion {
+    fn default() -> VkVersion {
         VkVersion(0, 0, 0)
     }
 }

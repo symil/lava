@@ -35,9 +35,9 @@ pub fn vk_to_wrapped_array<W, R : VkRawType<W>>(array: &[R], dst: &mut[W]) {
     }
 }
 
-pub fn fill_vk_array<T : VkDefault>(dst: &mut[T]) {
+pub fn fill_vk_array<T : Default>(dst: &mut[T]) {
     for i in 0..dst.len() {
-        dst[i] = T::vk_default();
+        dst[i] = T::default();
     }
 }
 

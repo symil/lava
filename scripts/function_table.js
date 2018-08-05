@@ -14,7 +14,8 @@ function generateFunctionTableDefinition(functions) {
         genUses(functions),
         genDefinition(functions),
         genNewMethod(functions),
-        genNullFunctions(functions)
+        genNullFunctions(functions),
+        genExterns(functions)
     ];
 }
 
@@ -24,7 +25,8 @@ function genUses() {
         `std::mem`,
         `utils::c_bindings::*`,
         `utils::vk_convert::get_vk_instance_function_pointer`,
-        'vk::*'
+        'vk::*',
+        `glfw::*`
     ].map(x => `use ${x};`);
 }
 
@@ -49,7 +51,7 @@ function functionToDeclaration(func) {
     const args = func.argsInfo.map(getArgType);
     const returnType = func.type === 'VkResult' ? ' -> RawVkResult' : '';
 
-    return `extern fn(${args.join(', ')})${returnType}`;
+    return `unsafe extern fn(${args.join(', ')})${returnType}`;
 }
 
 function getVkFunctionPrototype(func) {
@@ -60,15 +62,23 @@ function getVkFunctionPrototype(func) {
 }
 
 function genNullFunctions(functions) {
-    return functions.map(func => {
+    return functions.filter(func => func.name.startsWith('vk')).map(func => {
         const funcName = `null_${func.name}`;
 
         return [
-            `extern fn ${funcName}${getVkFunctionPrototype(func)}`, [
+            `unsafe extern fn ${funcName}${getVkFunctionPrototype(func)}`, [
                 `panic!("\\"vkGetInstanceProcAddr\\" returned NULL for \\"${func.name}\\"");`
             ]
         ];
     }).reduce((acc, value) => acc.concat(value), []);
+}
+
+function getFunctionPointer(func) {
+    if (func.name.startsWith('vk')) {
+        return `{ let fn_ptr = get_vk_instance_function_pointer(instance, "${func.name}"); if fn_ptr.is_null() { null_${func.name} } else { mem::transmute(fn_ptr) } }`;
+    } else {
+        return func.name;
+    }
 }
 
 function genNewMethod(functions) {
@@ -77,11 +87,22 @@ function genNewMethod(functions) {
             `pub fn new(instance: RawVkInstance) -> Self`, [
                 `unsafe`, [
                     `Self`,
-                    functions.map(func => `${func.name}: { let fn_ptr = get_vk_instance_function_pointer(instance, "${func.name}"); if fn_ptr.is_null() { null_${func.name} } else { mem::transmute(fn_ptr) } },`)
+                    functions.map(func => `${func.name}: ${getFunctionPointer(func)},`)
                 ]
             ]
         ]
     ]
+}
+
+function genExterns(functions) {
+    const externs = functions.filter(func => !func.name.startsWith('vk'));
+
+    if (externs.length) {
+        return [
+            `extern`,
+            externs.map(func => `fn ${func.name}${getVkFunctionPrototype(func)};`)
+        ]
+    }
 }
 
 module.exports = {
