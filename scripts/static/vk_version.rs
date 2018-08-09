@@ -1,4 +1,4 @@
-use utils::vk_type::*;
+use utils::vk_traits::*;
 
 #[derive(Debug, Copy, Clone)]
 pub struct VkVersion(pub u32, pub u32, pub u32);

@@ -1,5 +1,5 @@
 use std::mem;
-use utils::vk_type::*;
+use utils::vk_traits::*;
 use vk::vk_clear_color_value::*;
 use vk::vk_clear_depth_stencil_value::*;
 

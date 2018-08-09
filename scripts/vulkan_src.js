@@ -37,10 +37,11 @@ function get(obj, type) {
 }
 
 // for (let struct of getAllStructs()) {
-
-//     if (struct.name !== 'VkDeviceGroupSubmitInfo' && struct.fields.some(field => ['int32_t', 'int64_t', 'VkDeviceSize'].includes(field.typeName) && field.isPointer && !field.name.includes('Indices'))) {
-//         console.log(struct.name)
-//     }
+//     struct.fields.forEach(field => {
+//         if (field.countFor.length > 1) {
+//             console.log(`${struct.name} -> ${field.name} (${field.countFor.join(' & ')})`)
+//         }
+//     });
 // }
 
 function getAllEnums() { return getAll(ENUMS); }

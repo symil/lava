@@ -52,7 +52,7 @@ function genUses(def) {
         'utils::vk_convert::*',
         'utils::vk_null::*',
         'utils::vk_ptr::*',
-        'utils::vk_type::*',
+        'utils::vk_traits::*',
         `vk::vk_instance_function_table::*`,
         `vk::vk_instance::*`,
         `vk::vk_device::*`

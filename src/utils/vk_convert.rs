@@ -6,7 +6,7 @@ use std::cmp;
 use std::mem;
 use std::os::raw::c_char;
 use utils::c_bindings::*;
-use utils::vk_type::*;
+use utils::vk_traits::*;
 use utils::vk_ptr::*;
 use vk::vk_instance::*;
 use vk::vk_result::*;

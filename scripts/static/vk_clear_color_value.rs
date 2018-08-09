@@ -1,5 +1,5 @@
 use std::mem;
-use utils::vk_type::*;
+use utils::vk_traits::*;
 
 pub type RawVkClearColorValue = [u32; 4];
 

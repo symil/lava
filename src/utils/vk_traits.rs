@@ -13,3 +13,7 @@ pub trait VkRawType<W> {
 pub trait VkSetup {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice);
 }
+
+pub trait VkFree {
+    fn vk_free(&mut self);
+}

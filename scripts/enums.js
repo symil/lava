@@ -43,7 +43,7 @@ function generateVkEnumDefinition(cDef) {
 
 function genUses() {
     return [
-        `utils::vk_type::*`
+        `utils::vk_traits::*`
     ].map(str => `use ${str};`);
 }
 

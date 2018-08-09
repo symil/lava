@@ -1,4 +1,4 @@
-use utils::vk_type::*;
+use utils::vk_traits::*;
 
 impl VkRawType<bool> for u32 {
     fn vk_to_wrapped(value: &u32) -> bool {

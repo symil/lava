@@ -46,7 +46,7 @@ function generateVkHandleDefinition(def) {
 function genUses(def) {
     const uses = new Set([
         `utils::c_bindings::*`,
-        `utils::vk_type::*`,
+        `utils::vk_traits::*`,
         `utils::vk_ptr::*`,
         `utils::vk_convert::*`,
         'std::os::raw::c_char',

@@ -2,14 +2,35 @@ use std::mem;
 use std::ptr;
 use std::os::raw::c_char;
 use utils::c_bindings::*;
-use utils::vk_type::VkRawType;
-use utils::vk_type::VkWrappedType;
+use utils::vk_traits::*;
 
 const SIZE_OF_PTR : usize = mem::size_of::<*const u8>();
 
 pub fn free_ptr<T>(ptr: *mut T) {
     unsafe {
         free(ptr as *mut c_void);
+    }
+}
+
+pub fn free_vk_ptr<T : VkFree>(ptr: *mut T) {
+    unsafe {
+        if !ptr.is_null() {
+            (&mut *ptr).vk_free();
+            free_ptr(ptr);
+        }
+
+    }
+}
+
+pub fn free_vk_ptr_array<T : VkFree>(size: u32, ptr: *mut T) {
+    unsafe {
+        if !ptr.is_null() {
+            for i in 0..size as usize {
+                (&mut *ptr.add(i)).vk_free();
+            }
+
+            free_ptr(ptr);
+        }
     }
 }
 
@@ -24,6 +45,10 @@ pub fn new_ptr_value<R : Copy>(value: R) -> *mut R {
 
 pub fn new_ptr_array<R : Copy>(array: &[R]) -> *mut R {
     unsafe {
+        if array.len() == 0 {
+            return ptr::null_mut()
+        }
+
         let ptr = malloc(mem::size_of::<R>() * array.len()) as *mut R;
 
         for i in 0..array.len() {
@@ -53,6 +78,10 @@ pub fn new_ptr_vk_value_checked<R, W : VkWrappedType<R>>(value: Option<&W>) -> *
 
 pub fn new_ptr_vk_array<R, W : VkWrappedType<R>>(array: &[W]) -> *mut R {
     unsafe {
+        if array.len() == 0 {
+            return ptr::null_mut()
+        }
+
         let byte_len = array.len() * mem::size_of::<R>();
         let ptr = malloc(byte_len) as *mut R;
 
@@ -120,10 +149,24 @@ pub fn new_ptr_string_array(array: &[&str]) -> *mut *mut c_char {
     }
 }
 
-// TODO
-#[allow(unreachable_code)]
 pub fn new_ptr_vk_array_array<R, W : VkWrappedType<R>>(array: &[&W]) -> *mut *mut R {
-    panic!("new_ptr_vk_array_array is not implemented yet");
+    unsafe {
+        let nb_elements = array.len();
+        if nb_elements == 0 {
+            return ptr::null_mut()
+        }
 
-    ptr::null_mut()
+        let byte_len = nb_elements * (SIZE_OF_PTR + mem::size_of::<R>());
+        let ptr = malloc(byte_len);
+        let ptr_addr = ptr as *mut *mut R;
+        let ptr_content = ptr.add(SIZE_OF_PTR * nb_elements) as *mut R;
+
+        for i in 0..nb_elements {
+            let elt_ptr = ptr_content.add(i);
+            W::vk_to_raw(array[i], &mut *elt_ptr);
+            *ptr_addr.add(i) = elt_ptr;
+        }
+
+        ptr_addr
+    }
 }
