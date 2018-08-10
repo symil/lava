@@ -36,7 +36,7 @@ function generateVkStructDefinition(cDef) {
         genImplVkWrappedType(def),
         genImplDefault(def),
         genImplVkSetup(def),
-        genImplFree(def),
+        genImplVkFree(def),
         isFlags ? genImplFlags(def) : null
     ];
 }
@@ -152,8 +152,15 @@ function genImplVkSetup(def) {
     ]
 }
 
-function genImplFree(def) {
+function genImplVkFree(def) {
+    const fieldsToFree = def.fields.filter(field => field.freeRaw);
 
+    return [
+        `impl VkFree for ${def.rawTypeName}`, [
+            `fn vk_free(&mut self)`,
+            fieldsToFree.map(field => `${field.freeRaw(varName => `self.${varName}`)};`)
+        ]
+    ]
 }
 
 function canHaveStaticValue(def) {

@@ -51,7 +51,7 @@ function isStructOrHandle(field) {
 }
 
 function isStruct(field) {
-    return !!getHandle(field);
+    return !!getStruct(field);
 }
 
 function toSnakeCase(str) {
@@ -262,6 +262,7 @@ function getFieldsInformation(fields, structName) {
         let freeRaw = null;
 
         let freeMethod = null;
+        let freeMemory = false;
 
         if (isStruct(field)) {
             if (isDoublePointer) {
@@ -270,8 +271,10 @@ function getFieldsInformation(fields, structName) {
                 freeMethod = `free_vk_ptr_array(${countVarName}, ${varName})`;
             } else if (isPointer) {
                 freeMethod = `free_vk_ptr(${varName})`;
+            } else if (isStaticArray) {
+                freeMethod = `for elt in ${varName}.iter_mut() { ${rawTypeName}::vk_free(elt); }`
             } else {
-                freeMethod = `${wrappedTypeName}::vk_free(&${varName})`;
+                freeMethod = `${rawTypeName}::vk_free(&mut ${varName})`;
             }
         } else if (isPointer) {
             freeMethod = `free_ptr(${varName})`;
@@ -325,6 +328,7 @@ function getFieldsInformation(fields, structName) {
             wrappedType = `&[&str]`;
             toRaw = `new_ptr_string_array(${varName})`;
             defValue = `&[]`;
+            freeMemory = true;
         } else if (field.fullType === 'const char*') {
             if (doesOutputHandle) {
                 rawType = '*const c_char';
@@ -333,6 +337,7 @@ function getFieldsInformation(fields, structName) {
                 defValue = 'None';
             } else {
                 rawType = `*mut c_char`;
+                freeMemory = true;
 
                 if (isOptional) {
                     wrappedType =`Option<&str>`;
@@ -403,6 +408,8 @@ function getFieldsInformation(fields, structName) {
                 defValue = primitiveDefaultValue;
             }
         } else {
+            freeMemory = true;
+
             if (isDoublePointer) {
                 rawType = `*mut *mut ${rawTypeName}`;
                 wrappedType = `&[&${wrappedTypeName}]`;
@@ -469,6 +476,10 @@ function getFieldsInformation(fields, structName) {
                 toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
                 defValue = getPrimitiveDefaultValue(wrappedTypeName) || `${wrappedTypeName}::default()`;
             }
+        }
+
+        if (freeMemory) {
+            freeRaw = freeMethod;
         }
 
         const info = {
