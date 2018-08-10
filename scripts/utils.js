@@ -50,6 +50,10 @@ function isStructOrHandle(field) {
     return !!(getHandle(field) || getStruct(field));
 }
 
+function isStruct(field) {
+    return !!getHandle(field);
+}
+
 function toSnakeCase(str) {
     return str
         .replace(/([A-Z]+)|([0-9]+)/g, str => `_${str}`)
@@ -230,6 +234,7 @@ function getFieldsInformation(fields, structName) {
 
         const arraySize = field.arraySize;
         const isCount = !!(field.countFor && field.countFor.length);
+        const isPointer = field.isPointer;
         const isDoublePointer = field.isDoublePointer;
         const isPointerArray = field.isPointer && (field.countField || field.name === 'pSampleMask');
         const isPointerValue = field.isPointer && !isPointerArray;
@@ -256,6 +261,22 @@ function getFieldsInformation(fields, structName) {
         let defValue = null;
         let freeRaw = null;
 
+        let freeMethod = null;
+
+        if (isStruct(field)) {
+            if (isDoublePointer) {
+                freeMethod = `free_vk_ptr_array_array(${countVarName}, ${varName})`;
+            } else if (isPointerArray) {
+                freeMethod = `free_vk_ptr_array(${countVarName}, ${varName})`;
+            } else if (isPointer) {
+                freeMethod = `free_vk_ptr(${varName})`;
+            } else {
+                freeMethod = `${wrappedTypeName}::vk_free(&${varName})`;
+            }
+        } else if (isPointer) {
+            freeMethod = `free_ptr(${varName})`;
+        }
+
         if (field.fullType === 'GLFWwindow*') {
             rawType = '*mut RawGlfwWindow';
             wrappedType = '&GlfwWindow';
@@ -275,15 +296,16 @@ function getFieldsInformation(fields, structName) {
         } else if (isCount) {
             rawType = isPointerValue ? (isConst ? `*const ${rawTypeName}` : `*mut ${rawTypeName}`) : rawTypeName;
 
-            let lenValue = `makeVarName(${cToRustVarName(field.countFor[0])}).len()`;
+            let lenValue = '';
 
-            for (let i = 1; i < field.countFor.length; ++i) {
+            for (let i = 0; i < field.countFor.length; ++i) {
                 const arrayFieldName = field.countFor[i];
                 const arrayField = fields.find(f => f.name === arrayFieldName);
-                if (arrayField.isConst || !arrayField.isPointer) {
+                if (i === 0 || arrayField.isConst || !arrayField.isPointer) {
                     // Don't use created array into account
-                    const otherLen = `makeVarName(${cToRustVarName(arrayFieldName)}).len()`;
-                    lenValue = `cmp::max(${lenValue}, ${otherLen})`;
+                    const arrayName =`makeVarName(${cToRustVarName(arrayFieldName)})`; 
+                    const otherLen = arrayField.isOptional ? `get_array_option_len(${arrayName})` : `${arrayName}.len()`;
+                    lenValue = !lenValue ? otherLen : `cmp::max(${lenValue}, ${otherLen})`;
                 }
             }
 
@@ -303,7 +325,6 @@ function getFieldsInformation(fields, structName) {
             wrappedType = `&[&str]`;
             toRaw = `new_ptr_string_array(${varName})`;
             defValue = `&[]`;
-            freeRaw = `free_ptr(${varName})`
         } else if (field.fullType === 'const char*') {
             if (doesOutputHandle) {
                 rawType = '*const c_char';
@@ -312,7 +333,6 @@ function getFieldsInformation(fields, structName) {
                 defValue = 'None';
             } else {
                 rawType = `*mut c_char`;
-                freeRaw = `free_ptr(${varName})`
 
                 if (isOptional) {
                     wrappedType =`Option<&str>`;
@@ -342,10 +362,17 @@ function getFieldsInformation(fields, structName) {
                 }
 
                 rawType = `*${ptrQualifier} ${rawTypeName}`;
-                wrappedType = `&${refQualifier}[${wrappedTypeName}]`;
-                toRaw = `${varName}.${isConst ? 'as_ptr' : 'as_mut_ptr'}()`;
                 toWrapped = `Vec::from_raw_parts(${varName}, ${vecLength}, ${vecLength})`; // Maybe risky
-                defValue = `&[]`;
+
+                if (isOptional) {
+                    wrappedType = `Option<&${refQualifier}[${wrappedTypeName}]>`;
+                    toRaw = `slice_option_to_ptr${isConst ? '' : '_mut'}(${varName})`;
+                    defValue = `None`;
+                } else {
+                    wrappedType = `&${refQualifier}[${wrappedTypeName}]`;
+                    toRaw = `${varName}.${isConst ? 'as_ptr' : 'as_mut_ptr'}()`;
+                    defValue = `&[]`;
+                }
             } else if (isPointerValue) {
                 if (rawTypeName === 'c_void') {
                     ptrQualifier = 'const';
@@ -381,27 +408,30 @@ function getFieldsInformation(fields, structName) {
                 wrappedType = `&[&${wrappedTypeName}]`;
                 toRaw = `new_ptr_vk_array_array(${varName})`;
                 defValue = `&[]`;
-                freeRaw = `free_ptr(${varName})`
             } else if (isPointerArray) {
                 rawType = `*mut ${rawTypeName}`;
-                wrappedType = `&[${wrappedTypeName}]`;
-                toRaw = `new_ptr_vk_array(${varName})`;
                 toWrapped = `new_vk_array(${countVarIsPointer ? '*' : ''}${countVarName}, ${varName})`;
-                defValue = `&[]`;
-                freeRaw = `free_ptr(${varName})`
+
+                if (isOptional) {
+                    wrappedType = `Option<&[${wrappedTypeName}]>`;
+                    toRaw = `new_ptr_vk_array_checked(${varName})`;
+                    defValue = `None`;
+                } else {
+                    wrappedType = `&[${wrappedTypeName}]`;
+                    toRaw = `new_ptr_vk_array(${varName})`;
+                    defValue = `&[]`;
+                }
             } else if (isPointerValue) {
                 rawType = `*mut ${rawTypeName}`;
-                freeRaw = `free_ptr(${varName})`
+                toWrapped = `new_vk_value(${varName})`;
 
                 if (isOptional) {
                     wrappedType = `Option<&${wrappedTypeName}>`;
                     toRaw = `new_ptr_vk_value_checked(${varName})`;
-                    toWrapped = `new_vk_value(${varName})`;
                     defValue = `None`;
                 } else {
                     wrappedType = `&${wrappedTypeName}`;
                     toRaw = `new_ptr_vk_value(${varName})`;
-                    toWrapped = `new_vk_value(${varName})`;
                     defValue = `vk_null_ref()`;
                 }
             } else if (isStaticArray) {

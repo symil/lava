@@ -34,6 +34,19 @@ pub fn free_vk_ptr_array<T : VkFree>(size: u32, ptr: *mut T) {
     }
 }
 
+pub fn free_vk_ptr_array_array<T : VkFree>(size: u32, ptr: *mut *mut T) {
+    unsafe {
+        if !ptr.is_null() {
+            for i in 0..size as usize {
+                let addr = *ptr.add(i);
+                (&mut *addr).vk_free();
+            }
+
+            free_ptr(ptr);
+        }
+    }
+}
+
 pub fn new_ptr_value<R : Copy>(value: R) -> *mut R {
     unsafe {
         let ptr = malloc(mem::size_of::<R>()) as *mut R;
@@ -91,6 +104,13 @@ pub fn new_ptr_vk_array<R, W : VkWrappedType<R>>(array: &[W]) -> *mut R {
         }
 
         ptr
+    }
+}
+
+pub fn new_ptr_vk_array_checked<R, W : VkWrappedType<R>>(array: Option<&[W]>) -> *mut R {
+    match array {
+        Some(v) => new_ptr_vk_array(v),
+        None => ptr::null_mut()
     }
 }
 
@@ -168,5 +188,26 @@ pub fn new_ptr_vk_array_array<R, W : VkWrappedType<R>>(array: &[&W]) -> *mut *mu
         }
 
         ptr_addr
+    }
+}
+
+pub fn get_array_option_len<T>(value: Option<&[T]>) -> usize {
+    match value {
+        Some(array) => array.len(),
+        None => 0
+    }
+}
+
+pub fn slice_option_to_ptr<T>(value: Option<&[T]>) -> *const T {
+    match value {
+        Some(array) => array.as_ptr(),
+        None => ptr::null()
+    }
+}
+
+pub fn slice_option_to_ptr_mut<T>(value: Option<&mut [T]>) -> *mut T {
+    match value {
+        Some(array) => array.as_mut_ptr(),
+        None => ptr::null_mut()
     }
 }
