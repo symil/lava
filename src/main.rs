@@ -44,7 +44,7 @@ fn main() {
     let glfw_required_extensions = glfw.get_required_vulkan_extensions().unwrap();
     let window = glfw.create_window(WINDOW_WIDTH, WINDOW_HEIGHT, "Vulkan");
 
-    let mut required_extensions : Vec<&str> = vec![EXT_DEBUG_REPORT];
+    let mut required_extensions = vec![EXT_DEBUG_REPORT];
 
     for ext_name in &glfw_required_extensions {
         required_extensions.push(&ext_name)
@@ -74,7 +74,9 @@ fn main() {
         callback: simple_debug_callback
     }).expect("Faield to create debug callback");
 
-    let surface = instance.glfw_create_window_surface(&window).expect("Failed to create VkSurface");
+
+    // let surface = instance.glfw_create_window_surface(&window).expect("Failed to create VkSurface");
+    let surface = window.create_vk_surface(&instance).expect("Failed to create VkSurface");
 
     let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
 

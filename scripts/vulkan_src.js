@@ -4,13 +4,9 @@ const path = require('path');
 const fs = require('fs');
 const XML = require('pixl-xml')
 
-const SPECIAL_FUNCTIONS = [
-    'VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window, const VkAllocationCallbacks* allocator, VkSurfaceKHR* surface);',
-].join('\n');
-
 const VULKAN_SDK_PATH = process.env.VULKAN_SDK || "C:\\VulkanSDK\\1.1.77.0";
 const INCLUDE_DIR_NAME = process.platform === 'win32' ? 'Include' : 'include';
-const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, INCLUDE_DIR_NAME, `vulkan`, `vulkan_core.h`), 'utf8') + '\n' + SPECIAL_FUNCTIONS;
+const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, INCLUDE_DIR_NAME, `vulkan`, `vulkan_core.h`), 'utf8');
 const VK_XML_STR = fs.readFileSync(path.join(__dirname, '..', 'download', 'vk.xml'));
 const VK_XML = XML.parse(VK_XML_STR);
 
@@ -35,14 +31,6 @@ function getAll(obj) {
 function get(obj, type) {
     return (obj[type.extension] || {})[type.typeName];
 }
-
-// for (let struct of getAllStructs()) {
-//     struct.fields.forEach(field => {
-//         if (field.countFor.length > 1) {
-//             console.log(`${struct.name} -> ${field.name} (${field.countFor.join(' & ')})`)
-//         }
-//     });
-// }
 
 function getAllEnums() { return getAll(ENUMS); }
 function getAllBitFlags() { return getAll(BIT_FLAGS); }

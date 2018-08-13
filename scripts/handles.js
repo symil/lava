@@ -40,6 +40,7 @@ function generateVkHandleDefinition(def) {
         genVkWrappedTypeTrait(def),
         genDefaultTrait(def),
         genVkSetupTrait(def),
+        genSpecialMethods(def),
         genMethods(def)
     ];
 }
@@ -54,8 +55,7 @@ function genUses(def) {
         'std::ptr',
         'std::mem',
         'std::cmp',
-        `vk::*`,
-        `glfw::*`
+        `vk::*`
     ]);
 
     // if (def.name !== 'VkInstance') {
@@ -169,6 +169,28 @@ function genVkSetupTrait(def) {
             ]
         ]
     ]
+}
+
+function genSpecialMethods(def) {
+    if (def.name === 'VkInstance') {
+        return [
+            `impl ${def.wrappedTypeName}`, [
+                `pub fn create_surface<F : Fn(u64, *const c_void, *mut u64) -> i32>(&self, create_fn: F) -> Result<khr::VkSurface, VkResult>`, [
+                    `unsafe`, [
+                        `let raw_surface = &mut mem::uninitialized() as *mut khr::RawVkSurface;`,
+                        `let vk_result = create_fn(self._handle, ptr::null(), raw_surface);`,
+                        `if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }`,
+                        `let mut surface = new_vk_value(raw_surface);`,
+                        `let fn_table = self._fn_table;`,
+                        `let parent_instance = self._parent_instance;`,
+                        `let parent_device = self._parent_device;`,
+                        `VkSetup::vk_setup(&mut surface, fn_table, parent_instance, parent_device);`,
+                        `Ok(surface)`
+                    ]
+                ]
+            ]
+        ]
+    }
 }
 
 function genMethods(def) {

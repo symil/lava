@@ -25,8 +25,7 @@ function genUses() {
         `std::mem`,
         `utils::c_bindings::*`,
         `utils::vk_convert::get_vk_instance_function_pointer`,
-        'vk::*',
-        `glfw::*`
+        'vk::*'
     ].map(x => `use ${x};`);
 }
 

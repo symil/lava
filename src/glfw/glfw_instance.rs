@@ -2,6 +2,7 @@ use std::string::*;
 use std::vec::*;
 use std::ops::Drop;
 use utils::vk_convert::new_string;
+use vk::*;
 use glfw::*;
 
 static mut NB_INSTANCES : u32 = 0;

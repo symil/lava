@@ -34,6 +34,10 @@ impl GlfwWindow {
             }
         }
     }
+
+    pub fn create_vk_surface(&self, vk_instance: &VkInstance) -> Result<khr::VkSurface, VkResult> {
+        vk_instance.create_surface(|handle, allocator, surface| unsafe { glfwCreateWindowSurface(handle, self._window, allocator, surface) })
+    }
 }
 
 impl Drop for GlfwWindow {
