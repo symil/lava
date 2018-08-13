@@ -83,6 +83,10 @@ function genImplVkWrappedType(def) {
 }
 
 function genImplDefault(def) {
+    if (!def.fields[0]) {
+        console.log(def.name)
+    }
+
     return [
         `impl Default for ${def.wrappedTypeName}`, [
             `fn default() -> ${def.wrappedTypeName}`, [

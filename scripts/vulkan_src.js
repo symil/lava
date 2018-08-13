@@ -1,13 +1,11 @@
-#!/usr/bin/env node
-
 const path = require('path');
 const fs = require('fs');
 const XML = require('pixl-xml')
 
-const VULKAN_SDK_PATH = process.env.VULKAN_SDK || "C:\\VulkanSDK\\1.1.77.0";
-const INCLUDE_DIR_NAME = process.platform === 'win32' ? 'Include' : 'include';
-const VULKAN_H = fs.readFileSync(path.join(VULKAN_SDK_PATH, INCLUDE_DIR_NAME, `vulkan`, `vulkan_core.h`), 'utf8');
-const VK_XML_STR = fs.readFileSync(path.join(__dirname, '..', 'download', 'vk.xml'));
+const DOWNLOAD_DIR_PATH = path.join(__dirname, '..', 'download');
+
+const VULKAN_H = fs.readFileSync(path.join(DOWNLOAD_DIR_PATH, `vulkan_core.h`), 'utf8');
+const VK_XML_STR = fs.readFileSync(path.join(DOWNLOAD_DIR_PATH, 'vk.xml'), 'utf8');
 const VK_XML = XML.parse(VK_XML_STR);
 
 const EXTENSIONS = ['KHR', 'EXT', 'GOOGLE', 'NV', 'NVX', 'AMD'];
@@ -115,7 +113,7 @@ function parseEnums() {
         }
 
         const fields = fieldsStr.split('\n').map(line => {
-            const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(-?\d+),?$/);
+            const match = line.match(/^\s*([0-9A-Z_]+)\s*=\s*(-?(?:0x)?\d+),?$/);
 
             if (!match) {
                 return null;

@@ -282,6 +282,12 @@ function getFieldsInformation(fields, structName) {
             toRaw = varName;
             toWrapped = varName;
             defValue = 'ptr::null_mut()'
+        } else if (field.fullType === 'void*' && !field.countField) {
+            rawType = `*const c_void`;
+            wrappedType = `*const c_void`;
+            toRaw = varName;
+            toWrapped = varName;
+            defValue = 'ptr::null()';
         } else if (isCount) {
             rawType = isPointerValue ? (isConst ? `*const ${rawTypeName}` : `*mut ${rawTypeName}`) : rawTypeName;
 

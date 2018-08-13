@@ -75,7 +75,6 @@ fn main() {
     }).expect("Faield to create debug callback");
 
 
-    // let surface = instance.glfw_create_window_surface(&window).expect("Failed to create VkSurface");
     let surface = window.create_vk_surface(&instance).expect("Failed to create VkSurface");
 
     let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
@@ -104,7 +103,10 @@ fn main() {
     let buffer = device.create_buffer(&VkBufferCreateInfo {
         flags: VkBufferCreateFlags::none(),
         size: 128,
-        usage: VkBufferUsageFlags::all(),
+        usage: VkBufferUsageFlags {
+            transfer_src: true,
+            ..VkBufferUsageFlags::none()
+        },
         sharing_mode: VkSharingMode::Exclusive,
         queue_family_indices: &[]
     }).expect("Failed to create VkBuffer");
