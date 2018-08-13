@@ -13,7 +13,8 @@ const {
     getConstVkValueName,
     getFieldsInformation,
     addUsesToSet,
-    isStructOrHandle
+    isStructOrHandle,
+    isStruct
 } = require('./utils');
 
 const VK_SUCCESS = 0;
@@ -186,7 +187,7 @@ function getRawVarName(varName) {
     return `raw_${varName}`;
 }
 
-function idName(name) {
+function idFunction(name) {
     return name;
 }
 
@@ -203,13 +204,15 @@ function functionToMethod(handle, func) {
     const methodName = func.methodName;
     const methodArgs = handle ? [{type: '&self'}] : [];
     const statements = [];
+    const freeStataments = [];
+    let returnStatement = null;
     
     const functionRustArgs = func.argsInfo.map((arg, index) => {
         const rawArg = func.args[index];
 
         if (createList && rawArg.countFor.includes(lastArg.name) && !beforeLastArgIsCountPtr) {
             const countVarName = getRawVarName(arg.varName);
-            statements.push(`let ${countVarName} = ${arg.toRaw(idName)};`)
+            statements.push(`let ${countVarName} = ${arg.toRaw(idFunction)};`)
             return countVarName;
         } else if (index === func.args.length - 1 && createSomething) {
             return getRawVarName(arg.varName);
@@ -235,7 +238,11 @@ function functionToMethod(handle, func) {
                 methodArgs.push(methodArg);
             }
 
-            statements.push(`let ${functionArgName} = ${arg.toRaw(idName, true)};`);
+            statements.push(`let ${functionArgName} = ${arg.toRaw(idFunction, true)};`);
+
+            if (arg.freeRaw) {
+                freeStataments.push(`${arg.freeRaw(getRawVarName)};`);
+            }
 
             return functionArgName;
         }
@@ -260,6 +267,7 @@ function functionToMethod(handle, func) {
         const createdWrappedTypeName = prefixWithExtension(createdType.extension, createdType.wrappedTypeName);
 
         const setupResult = createdType.typeName === 'VkInstance' || (handle && isStructOrHandle(createdType));
+        const resutlIsStruct = isStruct(createdType);
 
         const wrappedResultVarName = createdType.varName;
         const rawResultName = getRawVarName(createdType.varName);
@@ -288,6 +296,10 @@ function functionToMethod(handle, func) {
                     `VkSetup::vk_setup(&mut ${wrappedResultVarName}, fn_table, parent_instance, parent_device);`
                 );
             }
+
+            if (resutlIsStruct) {
+                freeStataments.push(`${createdRawTypeName}::vk_free(${rawResultName}.as_mut().unwrap());`)
+            }
         } else {
             const countArg = func.argsInfo[func.args.findIndex(arg => arg.countFor.includes(lastArg.name))];
             const rawCountName = getRawVarName(countArg.varName);
@@ -313,6 +325,19 @@ function functionToMethod(handle, func) {
                     `for elt in &mut ${wrappedResultVarName} { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }`
                 );
             }
+
+            if (createdType.freeRaw) {
+                freeStataments.push(`${createdType.freeRaw(getRawVarName)};`);
+            }
+
+            // if (resutlIsStruct) {
+            //     freeStataments.push(`free_vk_ptr_array(*${rawCountName}, ${rawResultName});`);
+            // } else if (isStructOrHandle(createdType)) {
+            //     freeStataments.push(`free_ptr(${rawResultName});`);
+            // } else {
+            //     console.log(handle.name)
+            //     console.log(methodName)
+            // }
         }
 
         returnType = createdWrappedTypeName;
@@ -326,27 +351,31 @@ function functionToMethod(handle, func) {
         }
 
         
-        statements.push(returnVkResult ? `Ok(${wrappedResultVarName})` : wrappedResultVarName);
+        returnStatement = returnVkResult ? `Ok(${wrappedResultVarName})` : wrappedResultVarName;
     } else if (returnVkResult) {
         returnType = 'VkResult';
-        statements.push(
-            `let vk_result = ${functionCall};`,
-            `RawVkResult::vk_to_wrapped(&vk_result)`
-        );
+        statements.push(`let vk_result = ${functionCall};`);
+        returnStatement = `RawVkResult::vk_to_wrapped(&vk_result)`;
     } else {
         statements.push(`${functionCall};`);
     }
 
     if (func.name === 'vkDestroyInstance') {
-        statements.push(`Box::from_raw(self._fn_table);`);
+        freeStataments.push(`Box::from_raw(self._fn_table);`);
     }
 
     const argList = methodArgs.map(argToString).join(', ');
     const returnInfo = returnType ? ` -> ${returnType}` : '';
     
+    const allStatements = statements.concat(freeStataments);
+
+    if (returnStatement) {
+        allStatements.push(returnStatement);
+    }
+
     return [
         `\npub fn ${methodName}(${argList})${returnInfo}`,
-        [`unsafe`, statements]
+        [`unsafe`, allStatements]
     ];
 }
 

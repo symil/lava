@@ -22,10 +22,10 @@ pub fn free_vk_ptr<T : VkFree>(ptr: *mut T) {
     }
 }
 
-pub fn free_vk_ptr_array<T : VkFree>(size: u32, ptr: *mut T) {
+pub fn free_vk_ptr_array<T : VkFree>(size: usize, ptr: *mut T) {
     unsafe {
         if !ptr.is_null() {
-            for i in 0..size as usize {
+            for i in 0..size {
                 (&mut *ptr.add(i)).vk_free();
             }
 
@@ -34,10 +34,10 @@ pub fn free_vk_ptr_array<T : VkFree>(size: u32, ptr: *mut T) {
     }
 }
 
-pub fn free_vk_ptr_array_array<T : VkFree>(size: u32, ptr: *mut *mut T) {
+pub fn free_vk_ptr_array_array<T : VkFree>(size: usize, ptr: *mut *mut T) {
     unsafe {
         if !ptr.is_null() {
-            for i in 0..size as usize {
+            for i in 0..size {
                 let addr = *ptr.add(i);
                 (&mut *addr).vk_free();
             }

@@ -41,3 +41,9 @@ impl VkWrappedType<RawVkDebugUtilsMessengerCreateInfo> for VkDebugUtilsMessenger
         dst.user_data = src.user_data;
     }
 }
+
+impl VkFree for RawVkDebugUtilsMessengerCreateInfo {
+    fn vk_free(&mut self) {
+        
+    }
+}

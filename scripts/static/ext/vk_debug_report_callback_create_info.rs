@@ -46,3 +46,9 @@ impl VkWrappedType<RawVkDebugReportCallbackCreateInfo> for VkDebugReportCallback
         }
     }
 }
+
+impl VkFree for RawVkDebugReportCallbackCreateInfo {
+    fn vk_free(&mut self) {
+        
+    }
+}

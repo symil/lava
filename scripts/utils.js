@@ -265,10 +265,12 @@ function getFieldsInformation(fields, structName) {
         let freeMemory = false;
 
         if (isStruct(field)) {
-            if (isDoublePointer) {
-                freeMethod = `free_vk_ptr_array_array(${countVarName}, ${varName})`;
-            } else if (isPointerArray) {
-                freeMethod = `free_vk_ptr_array(${countVarName}, ${varName})`;
+            if (isDoublePointer || isPointerArray) {
+                const methodName = isDoublePointer ? 'free_vk_ptr_array_array' : 'free_vk_ptr_array';
+                const countPrefix = countField.isPointer ? '*' : '';
+                const countSuffix = countField.typeName === 'size_t' ? '' : ' as usize';
+
+                freeMethod = `${methodName}(${countPrefix}${countVarName}${countSuffix}, ${varName})`;
             } else if (isPointer) {
                 freeMethod = `free_vk_ptr(${varName})`;
             } else if (isStaticArray) {
@@ -565,5 +567,6 @@ module.exports = {
     getConstVkValueName,
     addUsesToSet,
     isStructOrHandle,
+    isStruct,
     isOutputHandleStruct
 };
