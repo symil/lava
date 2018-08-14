@@ -1,18 +1,8 @@
 const {
-    toSnakeCase,
-    toPascalCase,
     getRawVkTypeName,
     getWrappedVkTypeName,
-    getFullWrappedType,
-    getFullRawType,
-    blockToString,
-    isPlural,
-    removeSuffix,
-    cToRustVarName,
     argToString,
-    getConstVkValueName,
     getFieldsInformation,
-    addUsesToSet,
     isStructOrHandle,
     isStruct
 } = require('./utils');
@@ -30,7 +20,7 @@ function generateVkHandleDefinition(def) {
         }
     }
 
-    makeMethodNames(def, def.functions)
+    makeMethodNames(def, def.functions);
 
     return [
         genUses(def),
@@ -45,7 +35,7 @@ function generateVkHandleDefinition(def) {
     ];
 }
 
-function genUses(def) {
+function genUses() {
     const uses = new Set([
         `utils::c_bindings::*`,
         `utils::vk_traits::*`,
@@ -351,15 +341,6 @@ function functionToMethod(handle, func) {
             if (createdType.freeRaw) {
                 freeStataments.push(`${createdType.freeRaw(getRawVarName)};`);
             }
-
-            // if (resutlIsStruct) {
-            //     freeStataments.push(`free_vk_ptr_array(*${rawCountName}, ${rawResultName});`);
-            // } else if (isStructOrHandle(createdType)) {
-            //     freeStataments.push(`free_ptr(${rawResultName});`);
-            // } else {
-            //     console.log(handle.name)
-            //     console.log(methodName)
-            // }
         }
 
         returnType = createdWrappedTypeName;

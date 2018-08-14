@@ -1,4 +1,4 @@
-const { getHandle, getStruct } = require('./vulkan_src');
+const { getHandle, getStruct } = require('./parse');
 
 const PRIMITIVE_TYPES = {
     bool: 'bool',

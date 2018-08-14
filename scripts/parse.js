@@ -3,18 +3,34 @@ const fs = require('fs');
 const XML = require('pixl-xml')
 
 const DOWNLOAD_DIR_PATH = path.join(__dirname, '..', 'download');
-
-const VULKAN_H = fs.readFileSync(path.join(DOWNLOAD_DIR_PATH, `vulkan_core.h`), 'utf8');
-const VK_XML_STR = fs.readFileSync(path.join(DOWNLOAD_DIR_PATH, 'vk.xml'), 'utf8');
-const VK_XML = XML.parse(VK_XML_STR);
+const VULKAN_CORE_H_PATH = path.join(DOWNLOAD_DIR_PATH, `vulkan_core.h`);
+const VK_XML_PATH = path.join(DOWNLOAD_DIR_PATH, `vk.xml`);
 
 const EXTENSIONS = ['KHR', 'EXT', 'GOOGLE', 'NV', 'NVX', 'AMD'];
 
-const ENUMS = parseEnums();
-const BIT_FLAGS = parseBitFlags();
-const STRUCTS = parseStructs();
-const HANDLES = parseHandles();
-const FUNCTIONS = parseFunctions();
+let VULKAN_H = null;
+let VK_XML_STR = null;
+let VK_XML = null;
+let ENUMS = null;
+let BIT_FLAGS = null;
+let STRUCTS = null;
+let HANDLES = null;
+let FUNCTIONS = null;
+let BOOTSTRAP_DONE = false;
+
+function bootstrap() {
+    if (!BOOTSTRAP_DONE) {
+        VULKAN_H = fs.readFileSync(VULKAN_CORE_H_PATH, 'utf8');
+        VK_XML_STR = fs.readFileSync(VK_XML_PATH, 'utf8');
+        VK_XML = XML.parse(VK_XML_STR);
+        ENUMS = parseEnums();
+        BIT_FLAGS = parseBitFlags();
+        STRUCTS = parseStructs();
+        HANDLES = parseHandles();
+        FUNCTIONS = parseFunctions();
+        BOOTSTRAP_DONE = true;
+    }
+}
 
 function getByName(obj, typeName) {
     const { name, extension } = parseName(typeName);
@@ -23,6 +39,7 @@ function getByName(obj, typeName) {
 }
 
 function getAll(obj) {
+    bootstrap();
     return Object.values(obj).reduce((acc, subObj) => acc.concat(Object.values(subObj)), []);
 }
 
@@ -34,7 +51,7 @@ function getAllEnums() { return getAll(ENUMS); }
 function getAllBitFlags() { return getAll(BIT_FLAGS); }
 function getAllStructs() { return getAll(STRUCTS); }
 function getAllHandles() { return getAll(HANDLES); }
-function getAllFunctions() { return FUNCTIONS.slice(); }
+function getAllFunctions() { bootstrap(); return FUNCTIONS.slice(); }
 
 function getEnumByName(name) { return getByName(ENUMS, name); }
 function getBitFlagsByName(name) { return getByName(BIT_FLAGS, name); }

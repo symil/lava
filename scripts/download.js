@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const fs    = require('fs');
 const path  = require('path');
 const https = require('https');
@@ -10,6 +8,7 @@ const VULKAN_CORE_H_URL = `https://raw.githubusercontent.com/KhronosGroup/Vulkan
 
 async function getFile(url) {
     return new Promise((resolve, reject) => {
+        console.log(`GET ${url}`);
         https.get(url, res => {
             const { statusCode } = res;
         
@@ -40,4 +39,4 @@ async function main() {
     fs.writeFileSync(path.join(TARGET_DIR, 'vulkan_core.h'), vulkanCoreH, 'utf8');
 }
 
-main();
+module.exports = main;

@@ -1,0 +1,23 @@
+{
+  "name": "foo",
+  "version": "0.1.0",
+  "description": "",
+  "main": "generate.js",
+  "dependencies": {
+    "pixl-xml": "^1.0.13"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ytawo/foo.git"
+  },
+  "author": "Sylvain Milan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ytawo/foo/issues"
+  },
+  "homepage": "https://github.com/Ytawo/foo#readme"
+}

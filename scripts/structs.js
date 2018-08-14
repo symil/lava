@@ -1,5 +1,5 @@
 const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle, isOutputHandleStruct } = require('./utils');
-const { getStruct } = require('./vulkan_src');
+const { getStruct } = require('./parse');
 const { genImplFlags } = require('./bit_flags');
 
 function generateVkStructDefinition(cDef) {
