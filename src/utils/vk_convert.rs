@@ -1,7 +1,5 @@
-use std::string::String;
 use std::ffi::CString;
 use std::ffi::CStr;
-use std::vec::Vec;
 use std::cmp;
 use std::mem;
 use std::os::raw::c_char;

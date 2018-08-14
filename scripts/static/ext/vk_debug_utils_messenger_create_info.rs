@@ -1,5 +1,4 @@
 use std::os::raw::c_char;
-use std::string::String;
 use std::ffi::CString;
 use std::*;
 use utils::c_bindings::*;
