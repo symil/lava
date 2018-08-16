@@ -9,6 +9,8 @@ and generate a Rust wrapper for the Vulkan API.
 
 Available options:
 
+--tag <tag>   : Download the files for the specified branch or tag of the \`Vulkan-Docs\` repository (e.g "v1.1.80").
+                Defaults to "master".
 --no-download : Do not download the files from the Vulkan repository, assume they are already there.
 --no-generate : Do not generate the Rust wrapper.
 `;
@@ -24,7 +26,10 @@ async function main() {
     }
 
     if (!argv.includes('--no-download')) {
-        await downloadSourceFiles();
+        const tagOptionIndex = argv.indexOf('--tag');
+        const tag = tagOptionIndex !== -1 ? argv[tagOptionIndex + 1] : 'master';
+
+        await downloadSourceFiles(tag);
     }
 
     if (!argv.includes('--no-generate')) {

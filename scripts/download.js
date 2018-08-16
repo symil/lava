@@ -3,8 +3,8 @@ const path  = require('path');
 const https = require('https');
 
 const TARGET_DIR        = path.join(__dirname, '..', 'download');
-const VK_XML_URL        = `https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/master/xml/vk.xml`;
-const VULKAN_CORE_H_URL = `https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/master/include/vulkan/vulkan_core.h`;
+const VK_XML_URL        = `https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/{TAG}/xml/vk.xml`;
+const VULKAN_CORE_H_URL = `https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/{TAG}/include/vulkan/vulkan_core.h`;
 
 async function getFile(url) {
     return new Promise((resolve, reject) => {
@@ -27,9 +27,9 @@ async function getFile(url) {
     });
 }
 
-async function main() {
-    const vkXml = await getFile(VK_XML_URL);
-    const vulkanCoreH = await getFile(VULKAN_CORE_H_URL);
+async function main(tag) {
+    const vkXml = await getFile(VK_XML_URL.replace('{TAG}', tag));
+    const vulkanCoreH = await getFile(VULKAN_CORE_H_URL.replace('{TAG}', tag));
     
     if (!fs.existsSync(TARGET_DIR)) {
         fs.mkdirSync(TARGET_DIR);
