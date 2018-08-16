@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const { getAllEnums, getAllBitFlags, getAllStructs, getAllHandles, getAllFunctions, isHandle } = require('./parse');
 const { blockToString, toSnakeCase } = require('./utils');
@@ -36,6 +37,8 @@ function main() {
         ...generateHandles()
     ];
 
+    rimraf.sync(OUTPUT_DIR_PATH);
+
     writeVkTypes(vkTypes);
     copyStaticFiles(STATIC_FILES_DIR_PATH, OUTPUT_DIR_PATH);
     writeModFile(OUTPUT_DIR_PATH);
@@ -54,9 +57,7 @@ function copyStaticFiles(srcDirPath, dstDirPath) {
         if (stats.isFile()) {
             const fileContent = fs.readFileSync(sourcePath, 'utf8');
 
-            if (!fileContent.startsWith('// no-copy')) {
-                fs.writeFileSync(targetPath, COPIED_HEADER + fileContent, 'utf8');
-            }
+            fs.writeFileSync(targetPath, COPIED_HEADER + fileContent, 'utf8');
         } else if (stats.isDirectory()) {
             copyStaticFiles(sourcePath, targetPath);
         }

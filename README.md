@@ -1,4 +1,4 @@
-# Lava: Rust wrapper for the Vulkan API
+# Lava: a Rust wrapper for the Vulkan API
 
 Wrapper to manipulate the Vulkan API more conveniently than with bindings:
 
@@ -14,14 +14,14 @@ Wrapper to manipulate the Vulkan API more conveniently than with bindings:
 - manages the calls to `vkGetInstanceProcAddr` to manipulate functions that are not exposed statically
 - provides a generic `create_surface` method to create surfaces
 
-The wrapper comes with the following restrictions (that should be lifted in the future):
+It comes with the following restrictions (that should be lifted in the future):
 
 - no way to provide allocator callbacks
 - no way to set the `pNext` field of structures (always set to `NULL`)
-- debug report callbacks only forward the message to the Rust user-provided function (other pieces of information unavailable)
+- debug report callbacks only forward the message to the Rust user-provided function (other pieces of information are unavailable)
 - no exposed constants for validation layer names or extension names
 
-Lava works by lettting the developer manipulate "wrapped" data structures, which it converts to "raw" data-structures
+Lava works by letting the developer manipulate "wrapped" data structures, which it converts to "raw" data-structures
 expected by Vulkan (and the other way around when retrieving objects from Vulkan).
 It means that there is a small overhead in each API call.
 
@@ -67,10 +67,12 @@ instance.destroy();
 This snippet shows how to create a surface from a GLFW window:
 
 ```rust
-// We assume that `window` is a pointer to a GLFWwindow, as described [here](http://www.glfw.org/docs/latest/group__vulkan.html#ga1a24536bec3f80b08ead18e28e6ae965)
+// We assume that `window` is a pointer to a GLFWwindow, as described here:
+//http://www.glfw.org/docs/latest/group__vulkan.html#ga1a24536bec3f80b08ead18e28e6ae965
 
-let surface = vk_instance.create_surface(|handle, allocator, surface| unsafe { glfwCreateWindowSurface(handle, self._window, allocator, surface) })
-    .expect("Failed to create window surface");
+let surface = vk_instance.create_surface(
+    |handle, allocator, surface| unsafe { glfwCreateWindowSurface(handle, self._window, allocator, surface) }
+).expect("Failed to create window surface");
 ```
 
 ## Manual build
@@ -84,7 +86,7 @@ If you wish to generate the wrapper for a specific version (requires Node.js):
 - `npm install`
 - `node generate.js --tag <version>`
 
-Where `<version>` is a branch or tag name of the Vulkan-Docs reposiroty (e.g "v1.1.80").
+Where `<version>` is a branch or tag name of the Vulkan-Docs repository (e.g "v1.1.80").
 The script will download the appropriate files in the `download/` folder and generates the
 new source files in `src/vk/`.
 
