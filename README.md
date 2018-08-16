@@ -9,10 +9,16 @@ Wrapper to manipulate the Vulkan API more conveniently than with bindings:
 - exposes the API in an object-oriented way (e.g `instance.enumerate_physical_devices()` instead of `enumerate_physical_devices(&instance)`)
 - removes the extension suffix from function and data-structure names
 - puts all data-structures with the same extension in a dedicated module
-- bit flags are exposed as structures instead of integers
-- all structures have a default value, allowing to "auto-complete" large structure with optional fields using `..Default::default()`
+- exposes bit flags as structures instead of integers
+- provides a default value for all structures, allowing to "auto-complete" structure with optional fields using `..Default::default()`
 - manages the calls to `vkGetInstanceProcAddr` to manipulate functions that are not exposed statically
 - provides a generic `create_surface` method to create surfaces
+
+Lava works by letting the developer manipulate "wrapped" data structures, which it internally converts to "raw" data-structures
+expected by Vulkan (and the other way around when retrieving objects from Vulkan).
+It means that there is a small overhead in each API call.
+
+### Restrictions
 
 It comes with the following restrictions (that should be lifted in the future):
 
@@ -21,13 +27,17 @@ It comes with the following restrictions (that should be lifted in the future):
 - debug report callbacks only forward the message to the Rust user-provided function (other pieces of information are unavailable)
 - no exposed constants for validation layer names or extension names
 
-Lava works by letting the developer manipulate "wrapped" data structures, which it converts to "raw" data-structures
-expected by Vulkan (and the other way around when retrieving objects from Vulkan).
-It means that there is a small overhead in each API call.
+## Usage
+
+Add this dependency to your `Cargo.toml` file:
+```
+[dependencies]
+lava = "0.1.0"
+```
 
 ## Examples
 
-This code display the name of each of the physical GPUs of the machine:
+This code adds a debug report callback and displays the name of each physical GPU of the machine:
 
 ```rust
 let instance = Vk::create_instance(&VkInstanceCreateInfo {
@@ -68,10 +78,10 @@ This snippet shows how to create a surface from a GLFW window:
 
 ```rust
 // We assume that `window` is a pointer to a GLFWwindow, as described here:
-//http://www.glfw.org/docs/latest/group__vulkan.html#ga1a24536bec3f80b08ead18e28e6ae965
+// http://www.glfw.org/docs/latest/group__vulkan.html#ga1a24536bec3f80b08ead18e28e6ae965
 
 let surface = vk_instance.create_surface(
-    |handle, allocator, surface| unsafe { glfwCreateWindowSurface(handle, self._window, allocator, surface) }
+    |handle, allocator, surface| unsafe { glfwCreateWindowSurface(handle, window, allocator, surface) }
 ).expect("Failed to create window surface");
 ```
 
@@ -81,12 +91,12 @@ The content of the `src/vk/` folder is generated from the `vulkan_core.h` and `v
 [Vulkan documentation repository](https://github.com/KhronosGroup/Vulkan-Docs).
 This repository is up to date with the `master` branch.
 
-If you wish to generate the wrapper for a specific version (requires Node.js):
+If you wish to generate the wrapper for a specific version, you can do (requires Node.js):
 
 - `npm install`
 - `node generate.js --tag <version>`
 
-Where `<version>` is a branch or tag name of the Vulkan-Docs repository (e.g "v1.1.80").
+Where `<version>` is a branch or tag name of the Vulkan-Docs repository (for example "v1.1.80").
 The script will download the appropriate files in the `download/` folder and generates the
 new source files in `src/vk/`.
 
