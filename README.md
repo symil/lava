@@ -97,7 +97,7 @@ If you wish to generate the wrapper for a specific version, you can do (requires
 - `node generate.js --tag <version>`
 
 Where `<version>` is a branch or tag name of the Vulkan-Docs repository (for example "v1.1.80").
-The script will download the appropriate files in the `download/` folder and generates the
+The script will download the corresponding files in the `download/` folder and generate the
 new source files in `src/vk/`.
 
 ## License
