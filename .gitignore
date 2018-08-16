@@ -2,4 +2,3 @@
 **/*.rs.bk
 node_modules
 download
-src/vk
