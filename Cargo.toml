@@ -2,5 +2,8 @@
 name = "lava"
 version = "0.1.0"
 authors = ["Ytawo <milan.sylvain@gmail.com>"]
+description = "Wrapper for the Vulkan API"
+license = "MIT"
+repository = "https://github.com/Ytawo/lava"
 
 [dependencies]
