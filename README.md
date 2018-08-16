@@ -80,9 +80,9 @@ This snippet shows how to create a surface from a GLFW window:
 // We assume that `window` is a pointer to a GLFWwindow, as described here:
 // http://www.glfw.org/docs/latest/group__vulkan.html#ga1a24536bec3f80b08ead18e28e6ae965
 
-let surface = vk_instance.create_surface(
+let surface = instance.create_surface(
     |handle, allocator, surface| unsafe { glfwCreateWindowSurface(handle, window, allocator, surface) }
-).expect("Failed to create window surface");
+).expect("Failed to create surface from glfw window");
 ```
 
 ## Manual build
