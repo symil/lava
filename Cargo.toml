@@ -1,6 +1,7 @@
 [package]
 name = "lava"
 version = "0.1.0"
+build = "build.rs"
 authors = ["Ytawo <milan.sylvain@gmail.com>"]
 description = "Wrapper for the Vulkan API"
 license = "MIT"
