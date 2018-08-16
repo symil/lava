@@ -1,5 +1,5 @@
 {
-  "name": "foo",
+  "name": "lava",
   "version": "0.1.0",
   "description": "",
   "main": "generate.js",
@@ -12,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ytawo/foo.git"
+    "url": "git+https://github.com/Ytawo/lava.git"
   },
   "author": "Sylvain Milan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Ytawo/foo/issues"
+    "url": "https://github.com/Ytawo/lava/issues"
   },
-  "homepage": "https://github.com/Ytawo/foo#readme"
+  "homepage": "https://github.com/Ytawo/lava#readme"
 }
