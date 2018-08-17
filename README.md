@@ -40,38 +40,43 @@ lava = "0.1.0"
 This code adds a debug report callback and displays the name of each physical GPU of the machine:
 
 ```rust
-let instance = Vk::create_instance(&VkInstanceCreateInfo {
-    flags: VkInstanceCreateFlags::none(),
-    application_info: Some(&VkApplicationInfo {
-        application_name: Some("lava-example"),
-        application_version: 1,
-        engine_name: None,
-        engine_version: 1,
-        api_version: VkVersion(1, 0, 0),
-    }),
-    enabled_layer_names: &["VK_LAYER_LUNARG_standard_validation"],
-    enabled_extension_names: &["VK_EXT_debug_report"]
-}).expect("Failed to create instance");
+extern crate lava;
+use lava::*;
 
-let debug_report_callback = instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
-    flags: VkDebugReportFlags {
-        warning: true,
-        error: true,
-        ..VkDebugReportFlags::none()
-    },
-    callback: |msg : String| println!("{}", msg)
-}).expect("Faield to create debug callback");
+fn main() {
+    let instance = Vk::create_instance(&VkInstanceCreateInfo {
+        flags: VkInstanceCreateFlags::none(),
+        application_info: Some(&VkApplicationInfo {
+            application_name: Some("lava-example"),
+            application_version: 1,
+            engine_name: None,
+            engine_version: 1,
+            api_version: VkVersion(1, 0, 0),
+        }),
+        enabled_layer_names: &["VK_LAYER_LUNARG_standard_validation"],
+        enabled_extension_names: &["VK_EXT_debug_report"]
+    }).expect("Failed to create instance");
 
-let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
+    let debug_report_callback = instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
+        flags: VkDebugReportFlags {
+            warning: true,
+            error: true,
+            ..VkDebugReportFlags::none()
+        },
+        callback: |msg : String| println!("{}", msg)
+    }).expect("Faield to create debug callback");
 
-for physical_device in &physical_devices {
-    let properties = physical_device.get_properties();
+    let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
 
-    println!("{}", properties.device_name);
+    for physical_device in &physical_devices {
+        let properties = physical_device.get_properties();
+
+        println!("{}", properties.device_name);
+    }
+
+    debug_report_callback.destroy();
+    instance.destroy();
 }
-
-debug_report_callback.destroy();
-instance.destroy();
 ```
 
 This snippet shows how to create a surface from a GLFW window:
@@ -99,6 +104,10 @@ If you wish to generate the wrapper for a specific version, you can do (requires
 Where `<version>` is a branch or tag name of the Vulkan-Docs repository (for example "v1.1.80").
 The script will download the corresponding files in the `download/` folder and generate the
 new source files in `src/vk/`.
+
+## Warning
+
+This is very much a work in progress. Most of the API has not been tested.
 
 ## License
 
