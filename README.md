@@ -37,7 +37,7 @@ lava = "0.1.0"
 
 ## Examples
 
-This code adds a debug report callback and displays the name of each physical GPU of the machine:
+This code adds a debug report callback and displays the name of each GPU of the machine:
 
 ```rust
 extern crate lava;
