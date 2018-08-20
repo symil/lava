@@ -22,23 +22,23 @@ pub struct RawVkExtent2D {
 
 #[derive(Debug, Clone)]
 pub struct VkExtent2D {
-    pub width: usize,
-    pub height: usize,
+    pub width: u32,
+    pub height: u32,
 }
 
 impl VkRawType<VkExtent2D> for RawVkExtent2D {
     fn vk_to_wrapped(src: &RawVkExtent2D) -> VkExtent2D {
         VkExtent2D {
-            width: u32::vk_to_wrapped(&src.width),
-            height: u32::vk_to_wrapped(&src.height),
+            width: src.width,
+            height: src.height,
         }
     }
 }
 
 impl VkWrappedType<RawVkExtent2D> for VkExtent2D {
     fn vk_to_raw(src: &VkExtent2D, dst: &mut RawVkExtent2D) {
-        dst.width = vk_to_raw_value(&src.width);
-        dst.height = vk_to_raw_value(&src.height);
+        dst.width = src.width;
+        dst.height = src.height;
     }
 }
 

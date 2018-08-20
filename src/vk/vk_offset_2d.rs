@@ -22,23 +22,23 @@ pub struct RawVkOffset2D {
 
 #[derive(Debug, Clone)]
 pub struct VkOffset2D {
-    pub x: isize,
-    pub y: isize,
+    pub x: i32,
+    pub y: i32,
 }
 
 impl VkRawType<VkOffset2D> for RawVkOffset2D {
     fn vk_to_wrapped(src: &RawVkOffset2D) -> VkOffset2D {
         VkOffset2D {
-            x: i32::vk_to_wrapped(&src.x),
-            y: i32::vk_to_wrapped(&src.y),
+            x: src.x,
+            y: src.y,
         }
     }
 }
 
 impl VkWrappedType<RawVkOffset2D> for VkOffset2D {
     fn vk_to_raw(src: &VkOffset2D, dst: &mut RawVkOffset2D) {
-        dst.x = vk_to_raw_value(&src.x);
-        dst.y = vk_to_raw_value(&src.y);
+        dst.x = src.x;
+        dst.y = src.y;
     }
 }
 

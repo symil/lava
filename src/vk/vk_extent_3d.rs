@@ -23,16 +23,16 @@ pub struct RawVkExtent3D {
 
 #[derive(Debug, Clone)]
 pub struct VkExtent3D {
-    pub width: usize,
-    pub height: usize,
+    pub width: u32,
+    pub height: u32,
     pub depth: usize,
 }
 
 impl VkRawType<VkExtent3D> for RawVkExtent3D {
     fn vk_to_wrapped(src: &RawVkExtent3D) -> VkExtent3D {
         VkExtent3D {
-            width: u32::vk_to_wrapped(&src.width),
-            height: u32::vk_to_wrapped(&src.height),
+            width: src.width,
+            height: src.height,
             depth: u32::vk_to_wrapped(&src.depth),
         }
     }
@@ -40,8 +40,8 @@ impl VkRawType<VkExtent3D> for RawVkExtent3D {
 
 impl VkWrappedType<RawVkExtent3D> for VkExtent3D {
     fn vk_to_raw(src: &VkExtent3D, dst: &mut RawVkExtent3D) {
-        dst.width = vk_to_raw_value(&src.width);
-        dst.height = vk_to_raw_value(&src.height);
+        dst.width = src.width;
+        dst.height = src.height;
         dst.depth = vk_to_raw_value(&src.depth);
     }
 }

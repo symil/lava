@@ -173,12 +173,18 @@ function getFieldRawTypeName(field) {
 
 const INT_TYPES = ['uint32_t', 'uint64_t', 'int32_t', 'int64_t', 'VkDeviceSize']
 
+const INT_FIELD_NAMES = ['x', 'y', 'z', 'width', 'height'];
+
+function fieldNameIsInt(field) {
+    return INT_FIELD_NAMES.includes(field.name) || /(mask|version)/i.test(field.name);
+}
+
 function getFieldWrappedTypeName(field) {
     if (field.name === 'pCode') {
         return `u8`;
     } else if (doesFieldRepresentVersion(field)) {
         return `VkVersion`;
-    } else if (INT_TYPES.includes(field.typeName) && !/(mask|version)/i.test(field.name)) {
+    } else if (INT_TYPES.includes(field.typeName) && !fieldNameIsInt(field)) {
         return field.typeName.startsWith('int') ? `isize` : `usize`;
     } else if (field.typeName === 'VkBool32') {
         return 'bool';
