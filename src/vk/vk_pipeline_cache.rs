@@ -84,47 +84,13 @@ impl VkPipelineCache {
         }
     }
     
-    pub fn merges(&self, src_caches: &[VkPipelineCache]) -> VkResult {
+    pub fn merge(&self, src_caches: &[VkPipelineCache]) -> VkResult {
         unsafe {
             let raw_src_cache_count = src_caches.len() as u32;
             let raw_src_caches = new_ptr_vk_array(src_caches);
             let vk_result = ((&*self._fn_table).vkMergePipelineCaches)(self._parent_device, self._handle, raw_src_cache_count, raw_src_caches);
             free_ptr(raw_src_caches);
             RawVkResult::vk_to_wrapped(&vk_result)
-        }
-    }
-    
-    pub fn create_graphics_pipelines(&self, create_infos: &[VkGraphicsPipelineCreateInfo]) -> Result<Vec<VkPipeline>, VkResult> {
-        unsafe {
-            let raw_create_info_count = create_infos.len() as u32;
-            let raw_create_infos = new_ptr_vk_array(create_infos);
-            let raw_pipelines = malloc((raw_create_info_count as usize) * mem::size_of::<RawVkPipeline>()) as *mut RawVkPipeline;
-            
-            let vk_result = ((&*self._fn_table).vkCreateGraphicsPipelines)(self._parent_device, self._handle, raw_create_info_count, raw_create_infos, ptr::null(), raw_pipelines);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            
-            let mut pipelines = new_vk_array(raw_create_info_count, raw_pipelines);
-            for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
-            free_vk_ptr_array(raw_create_info_count as usize, raw_create_infos);
-            free_ptr(raw_pipelines);
-            Ok(pipelines)
-        }
-    }
-    
-    pub fn create_compute_pipelines(&self, create_infos: &[VkComputePipelineCreateInfo]) -> Result<Vec<VkPipeline>, VkResult> {
-        unsafe {
-            let raw_create_info_count = create_infos.len() as u32;
-            let raw_create_infos = new_ptr_vk_array(create_infos);
-            let raw_pipelines = malloc((raw_create_info_count as usize) * mem::size_of::<RawVkPipeline>()) as *mut RawVkPipeline;
-            
-            let vk_result = ((&*self._fn_table).vkCreateComputePipelines)(self._parent_device, self._handle, raw_create_info_count, raw_create_infos, ptr::null(), raw_pipelines);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            
-            let mut pipelines = new_vk_array(raw_create_info_count, raw_pipelines);
-            for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
-            free_vk_ptr_array(raw_create_info_count as usize, raw_create_infos);
-            free_ptr(raw_pipelines);
-            Ok(pipelines)
         }
     }
 }

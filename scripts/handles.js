@@ -75,12 +75,14 @@ function makeMethodNames(handle, functions) {
     const assigned = new Set();
 
     for (const func of functions) {
-        const toReplace = handle ? handle.name.replace('Vk', '') : '';
+        const singularToReplace = handle ? handle.name.replace('Vk', '') : '';
+        const pluralToReplace = handle ? singularToReplace + 's' : '';
 
         let extension = '';
         let methodName = func.name
             .replace(/^vk/g, '')
-            .replace(toReplace, '')
+            .replace(pluralToReplace, '')
+            .replace(singularToReplace, '')
             .replace(/[A-Z]+$/, ext => { extension = ext.toLowerCase(); return ''; })
             .toSnakeCase();
 

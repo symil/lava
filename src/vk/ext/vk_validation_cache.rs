@@ -68,7 +68,7 @@ impl VkValidationCache {
         }
     }
     
-    pub fn merges(&self, src_caches: &[ext::VkValidationCache]) -> VkResult {
+    pub fn merge(&self, src_caches: &[ext::VkValidationCache]) -> VkResult {
         unsafe {
             let raw_src_cache_count = src_caches.len() as u32;
             let raw_src_caches = new_ptr_vk_array(src_caches);

@@ -183,9 +183,15 @@ function generateHandles() {
 
     for (let func of functions) {
         const firstArgType = func.args[0].typeName;
-        const secondArgType = func.args[1] && func.args[1].typeName;
+        const secondArg = func.args[1];
+        const secondArgType = secondArg && secondArg.typeName;
 
-        let handle = handles.find(handle => handle.parent && firstArgType === handle.parent.name && secondArgType === handle.name);
+        let handle = handles.find(handle => {
+            return handle.parent &&
+                firstArgType === handle.parent.name &&
+                secondArgType === handle.name &&
+                (!secondArg.isOptional || destroyFunctions.includes(func));
+        });
 
         if (!handle) {
             handle = handles.find(handle => firstArgType === handle.name);
