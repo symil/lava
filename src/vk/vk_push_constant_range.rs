@@ -17,9 +17,9 @@ use vk::vk_shader_stage_flags::*;
 
 #[repr(C)]
 pub struct RawVkPushConstantRange {
-    stage_flags: RawVkShaderStageFlags,
-    offset: u32,
-    size: u32,
+    pub stage_flags: RawVkShaderStageFlags,
+    pub offset: u32,
+    pub size: u32,
 }
 
 #[derive(Debug, Clone)]

@@ -18,13 +18,13 @@ use vk::vk_version::*;
 
 #[repr(C)]
 pub struct RawVkApplicationInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    application_name: *mut c_char,
-    application_version: u32,
-    engine_name: *mut c_char,
-    engine_version: u32,
-    api_version: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub application_name: *mut c_char,
+    pub application_version: u32,
+    pub engine_name: *mut c_char,
+    pub engine_version: u32,
+    pub api_version: u32,
 }
 
 #[derive(Debug, Clone)]

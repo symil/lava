@@ -18,9 +18,9 @@ use vk::vk_buffer::*;
 
 #[repr(C)]
 pub struct RawVkBufferMemoryRequirementsInfo2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    buffer: RawVkBuffer,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub buffer: RawVkBuffer,
 }
 
 #[derive(Debug, Clone)]

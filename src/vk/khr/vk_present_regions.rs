@@ -18,10 +18,10 @@ use vk::khr::vk_present_region::*;
 
 #[repr(C)]
 pub struct RawVkPresentRegions {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    swapchain_count: u32,
-    regions: *mut RawVkPresentRegion,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub swapchain_count: u32,
+    pub regions: *mut RawVkPresentRegion,
 }
 
 #[derive(Debug, Clone)]

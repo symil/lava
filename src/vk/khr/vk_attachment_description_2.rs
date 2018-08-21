@@ -23,17 +23,17 @@ use vk::vk_image_layout::*;
 
 #[repr(C)]
 pub struct RawVkAttachmentDescription2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkAttachmentDescriptionFlags,
-    format: RawVkFormat,
-    samples: RawVkSampleCountFlags,
-    load_op: RawVkAttachmentLoadOp,
-    store_op: RawVkAttachmentStoreOp,
-    stencil_load_op: RawVkAttachmentLoadOp,
-    stencil_store_op: RawVkAttachmentStoreOp,
-    initial_layout: RawVkImageLayout,
-    final_layout: RawVkImageLayout,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkAttachmentDescriptionFlags,
+    pub format: RawVkFormat,
+    pub samples: RawVkSampleCountFlags,
+    pub load_op: RawVkAttachmentLoadOp,
+    pub store_op: RawVkAttachmentStoreOp,
+    pub stencil_load_op: RawVkAttachmentLoadOp,
+    pub stencil_store_op: RawVkAttachmentStoreOp,
+    pub initial_layout: RawVkImageLayout,
+    pub final_layout: RawVkImageLayout,
 }
 
 #[derive(Debug, Clone)]

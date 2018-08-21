@@ -17,22 +17,22 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceShaderCoreProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    shader_engine_count: u32,
-    shader_arrays_per_engine_count: u32,
-    compute_units_per_shader_array: u32,
-    simd_per_compute_unit: u32,
-    wavefronts_per_simd: u32,
-    wavefront_size: u32,
-    sgprs_per_simd: u32,
-    min_sgpr_allocation: u32,
-    max_sgpr_allocation: u32,
-    sgpr_allocation_granularity: u32,
-    vgprs_per_simd: u32,
-    min_vgpr_allocation: u32,
-    max_vgpr_allocation: u32,
-    vgpr_allocation_granularity: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub shader_engine_count: u32,
+    pub shader_arrays_per_engine_count: u32,
+    pub compute_units_per_shader_array: u32,
+    pub simd_per_compute_unit: u32,
+    pub wavefronts_per_simd: u32,
+    pub wavefront_size: u32,
+    pub sgprs_per_simd: u32,
+    pub min_sgpr_allocation: u32,
+    pub max_sgpr_allocation: u32,
+    pub sgpr_allocation_granularity: u32,
+    pub vgprs_per_simd: u32,
+    pub min_vgpr_allocation: u32,
+    pub max_vgpr_allocation: u32,
+    pub vgpr_allocation_granularity: u32,
 }
 
 #[derive(Debug, Clone)]

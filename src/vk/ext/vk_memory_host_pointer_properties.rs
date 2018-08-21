@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkMemoryHostPointerProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    memory_type_bits: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub memory_type_bits: u32,
 }
 
 #[derive(Debug, Clone)]

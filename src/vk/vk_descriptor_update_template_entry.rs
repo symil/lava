@@ -17,12 +17,12 @@ use vk::vk_descriptor_type::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorUpdateTemplateEntry {
-    dst_binding: u32,
-    dst_array_element: u32,
-    descriptor_count: u32,
-    descriptor_type: RawVkDescriptorType,
-    offset: usize,
-    stride: usize,
+    pub dst_binding: u32,
+    pub dst_array_element: u32,
+    pub descriptor_count: u32,
+    pub descriptor_type: RawVkDescriptorType,
+    pub offset: usize,
+    pub stride: usize,
 }
 
 #[derive(Debug, Clone)]

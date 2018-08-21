@@ -20,10 +20,10 @@ use vk::vk_shader_stage_flags::*;
 
 #[repr(C)]
 pub struct RawVkObjectTablePushConstantEntry {
-    type_: RawVkObjectEntryType,
-    flags: RawVkObjectEntryUsageFlags,
-    pipeline_layout: RawVkPipelineLayout,
-    stage_flags: RawVkShaderStageFlags,
+    pub type_: RawVkObjectEntryType,
+    pub flags: RawVkObjectEntryUsageFlags,
+    pub pipeline_layout: RawVkPipelineLayout,
+    pub stage_flags: RawVkShaderStageFlags,
 }
 
 #[derive(Debug, Clone)]

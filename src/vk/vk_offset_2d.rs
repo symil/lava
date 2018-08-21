@@ -16,8 +16,8 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkOffset2D {
-    x: i32,
-    y: i32,
+    pub x: i32,
+    pub y: i32,
 }
 
 #[derive(Debug, Clone)]

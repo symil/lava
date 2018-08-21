@@ -19,15 +19,15 @@ use vk::vk_sample_count_flags::*;
 
 #[repr(C)]
 pub struct RawVkPipelineMultisampleStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineMultisampleStateCreateFlags,
-    rasterization_samples: RawVkSampleCountFlags,
-    sample_shading_enable: u32,
-    min_sample_shading: f32,
-    sample_mask: *const u32,
-    alpha_to_coverage_enable: u32,
-    alpha_to_one_enable: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineMultisampleStateCreateFlags,
+    pub rasterization_samples: RawVkSampleCountFlags,
+    pub sample_shading_enable: u32,
+    pub min_sample_shading: f32,
+    pub sample_mask: *const u32,
+    pub alpha_to_coverage_enable: u32,
+    pub alpha_to_one_enable: u32,
 }
 
 #[derive(Debug, Clone)]

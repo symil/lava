@@ -18,9 +18,9 @@ use vk::vk_semaphore_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkSemaphoreCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkSemaphoreCreateFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkSemaphoreCreateFlags,
 }
 
 #[derive(Debug, Clone)]

@@ -23,16 +23,16 @@ use vk::vk_filter::*;
 
 #[repr(C)]
 pub struct RawVkSamplerYcbcrConversionCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    format: RawVkFormat,
-    ycbcr_model: RawVkSamplerYcbcrModelConversion,
-    ycbcr_range: RawVkSamplerYcbcrRange,
-    components: RawVkComponentMapping,
-    x_chroma_offset: RawVkChromaLocation,
-    y_chroma_offset: RawVkChromaLocation,
-    chroma_filter: RawVkFilter,
-    force_explicit_reconstruction: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub format: RawVkFormat,
+    pub ycbcr_model: RawVkSamplerYcbcrModelConversion,
+    pub ycbcr_range: RawVkSamplerYcbcrRange,
+    pub components: RawVkComponentMapping,
+    pub x_chroma_offset: RawVkChromaLocation,
+    pub y_chroma_offset: RawVkChromaLocation,
+    pub chroma_filter: RawVkFilter,
+    pub force_explicit_reconstruction: u32,
 }
 
 #[derive(Debug, Clone)]

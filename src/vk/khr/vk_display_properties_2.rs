@@ -18,9 +18,9 @@ use vk::khr::vk_display_properties::*;
 
 #[repr(C)]
 pub struct RawVkDisplayProperties2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    display_properties: RawVkDisplayProperties,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub display_properties: RawVkDisplayProperties,
 }
 
 #[derive(Debug, Clone)]

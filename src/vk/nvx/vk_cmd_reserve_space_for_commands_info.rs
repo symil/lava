@@ -19,11 +19,11 @@ use vk::nvx::vk_indirect_commands_layout::*;
 
 #[repr(C)]
 pub struct RawVkCmdReserveSpaceForCommandsInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    object_table: RawVkObjectTable,
-    indirect_commands_layout: RawVkIndirectCommandsLayout,
-    max_sequences_count: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub object_table: RawVkObjectTable,
+    pub indirect_commands_layout: RawVkIndirectCommandsLayout,
+    pub max_sequences_count: u32,
 }
 
 #[derive(Debug, Clone)]

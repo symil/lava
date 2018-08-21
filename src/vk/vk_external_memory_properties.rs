@@ -18,9 +18,9 @@ use vk::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkExternalMemoryProperties {
-    external_memory_features: RawVkExternalMemoryFeatureFlags,
-    export_from_imported_handle_types: RawVkExternalMemoryHandleTypeFlags,
-    compatible_handle_types: RawVkExternalMemoryHandleTypeFlags,
+    pub external_memory_features: RawVkExternalMemoryFeatureFlags,
+    pub export_from_imported_handle_types: RawVkExternalMemoryHandleTypeFlags,
+    pub compatible_handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
 #[derive(Debug, Clone)]

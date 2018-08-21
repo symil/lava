@@ -22,16 +22,16 @@ use vk::vk_buffer_view::*;
 
 #[repr(C)]
 pub struct RawVkWriteDescriptorSet {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    dst_set: RawVkDescriptorSet,
-    dst_binding: u32,
-    dst_array_element: u32,
-    descriptor_count: u32,
-    descriptor_type: RawVkDescriptorType,
-    image_info: *mut RawVkDescriptorImageInfo,
-    buffer_info: *mut RawVkDescriptorBufferInfo,
-    texel_buffer_view: *mut RawVkBufferView,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub dst_set: RawVkDescriptorSet,
+    pub dst_binding: u32,
+    pub dst_array_element: u32,
+    pub descriptor_count: u32,
+    pub descriptor_type: RawVkDescriptorType,
+    pub image_info: *mut RawVkDescriptorImageInfo,
+    pub buffer_info: *mut RawVkDescriptorBufferInfo,
+    pub texel_buffer_view: *mut RawVkBufferView,
 }
 
 #[derive(Debug, Clone)]

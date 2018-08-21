@@ -22,19 +22,19 @@ use vk::ext::vk_surface_counter_flags::*;
 
 #[repr(C)]
 pub struct RawVkSurfaceCapabilities2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    min_image_count: u32,
-    max_image_count: u32,
-    current_extent: RawVkExtent2D,
-    min_image_extent: RawVkExtent2D,
-    max_image_extent: RawVkExtent2D,
-    max_image_array_layers: u32,
-    supported_transforms: RawVkSurfaceTransformFlags,
-    current_transform: RawVkSurfaceTransformFlags,
-    supported_composite_alpha: RawVkCompositeAlphaFlags,
-    supported_usage_flags: RawVkImageUsageFlags,
-    supported_surface_counters: RawVkSurfaceCounterFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub min_image_count: u32,
+    pub max_image_count: u32,
+    pub current_extent: RawVkExtent2D,
+    pub min_image_extent: RawVkExtent2D,
+    pub max_image_extent: RawVkExtent2D,
+    pub max_image_array_layers: u32,
+    pub supported_transforms: RawVkSurfaceTransformFlags,
+    pub current_transform: RawVkSurfaceTransformFlags,
+    pub supported_composite_alpha: RawVkCompositeAlphaFlags,
+    pub supported_usage_flags: RawVkImageUsageFlags,
+    pub supported_surface_counters: RawVkSurfaceCounterFlags,
 }
 
 #[derive(Debug, Clone)]

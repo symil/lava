@@ -18,10 +18,10 @@ use vk::vk_pipeline_tessellation_state_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkPipelineTessellationStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineTessellationStateCreateFlags,
-    patch_control_points: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineTessellationStateCreateFlags,
+    pub patch_control_points: u32,
 }
 
 #[derive(Debug, Clone)]

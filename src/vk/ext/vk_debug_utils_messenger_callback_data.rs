@@ -20,18 +20,18 @@ use vk::ext::vk_debug_utils_object_name_info::*;
 
 #[repr(C)]
 pub struct RawVkDebugUtilsMessengerCallbackData {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkDebugUtilsMessengerCallbackDataFlags,
-    message_id_name: *mut c_char,
-    message_id_number: i32,
-    message: *mut c_char,
-    queue_label_count: u32,
-    queue_labels: *mut RawVkDebugUtilsLabel,
-    cmd_buf_label_count: u32,
-    cmd_buf_labels: *mut RawVkDebugUtilsLabel,
-    object_count: u32,
-    objects: *mut RawVkDebugUtilsObjectNameInfo,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDebugUtilsMessengerCallbackDataFlags,
+    pub message_id_name: *mut c_char,
+    pub message_id_number: i32,
+    pub message: *mut c_char,
+    pub queue_label_count: u32,
+    pub queue_labels: *mut RawVkDebugUtilsLabel,
+    pub cmd_buf_label_count: u32,
+    pub cmd_buf_labels: *mut RawVkDebugUtilsLabel,
+    pub object_count: u32,
+    pub objects: *mut RawVkDebugUtilsObjectNameInfo,
 }
 
 #[derive(Debug, Clone)]

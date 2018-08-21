@@ -20,15 +20,15 @@ use vk::vk_physical_device_sparse_properties::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceProperties {
-    api_version: u32,
-    driver_version: u32,
-    vendor_id: u32,
-    device_id: u32,
-    device_type: RawVkPhysicalDeviceType,
-    device_name: [c_char; 256],
-    pipeline_cache_uuid: [u8; 16],
-    limits: RawVkPhysicalDeviceLimits,
-    sparse_properties: RawVkPhysicalDeviceSparseProperties,
+    pub api_version: u32,
+    pub driver_version: u32,
+    pub vendor_id: u32,
+    pub device_id: u32,
+    pub device_type: RawVkPhysicalDeviceType,
+    pub device_name: [c_char; 256],
+    pub pipeline_cache_uuid: [u8; 16],
+    pub limits: RawVkPhysicalDeviceLimits,
+    pub sparse_properties: RawVkPhysicalDeviceSparseProperties,
 }
 
 #[derive(Debug, Clone)]

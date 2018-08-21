@@ -18,10 +18,10 @@ use vk::vk_format::*;
 
 #[repr(C)]
 pub struct RawVkImageFormatListCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    view_format_count: u32,
-    view_formats: *mut RawVkFormat,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub view_format_count: u32,
+    pub view_formats: *mut RawVkFormat,
 }
 
 #[derive(Debug, Clone)]

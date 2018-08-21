@@ -18,10 +18,10 @@ use vk::google::vk_present_time::*;
 
 #[repr(C)]
 pub struct RawVkPresentTimesInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    swapchain_count: u32,
-    times: *mut RawVkPresentTime,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub swapchain_count: u32,
+    pub times: *mut RawVkPresentTime,
 }
 
 #[derive(Debug, Clone)]

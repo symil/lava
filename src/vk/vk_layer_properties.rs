@@ -16,10 +16,10 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkLayerProperties {
-    layer_name: [c_char; 256],
-    spec_version: u32,
-    implementation_version: u32,
-    description: [c_char; 256],
+    pub layer_name: [c_char; 256],
+    pub spec_version: u32,
+    pub implementation_version: u32,
+    pub description: [c_char; 256],
 }
 
 #[derive(Debug, Clone)]

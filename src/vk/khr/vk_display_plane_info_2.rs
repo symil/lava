@@ -18,10 +18,10 @@ use vk::khr::vk_display_mode::*;
 
 #[repr(C)]
 pub struct RawVkDisplayPlaneInfo2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    mode: RawVkDisplayMode,
-    plane_index: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub mode: RawVkDisplayMode,
+    pub plane_index: u32,
 }
 
 #[derive(Debug, Clone)]

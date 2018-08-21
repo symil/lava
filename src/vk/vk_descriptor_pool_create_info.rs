@@ -19,12 +19,12 @@ use vk::vk_descriptor_pool_size::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorPoolCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkDescriptorPoolCreateFlags,
-    max_sets: u32,
-    pool_size_count: u32,
-    pool_sizes: *mut RawVkDescriptorPoolSize,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDescriptorPoolCreateFlags,
+    pub max_sets: u32,
+    pub pool_size_count: u32,
+    pub pool_sizes: *mut RawVkDescriptorPoolSize,
 }
 
 #[derive(Debug, Clone)]

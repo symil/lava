@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceMaintenance3Properties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    max_per_set_descriptors: u32,
-    max_memory_allocation_size: u64,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub max_per_set_descriptors: u32,
+    pub max_memory_allocation_size: u64,
 }
 
 #[derive(Debug, Clone)]

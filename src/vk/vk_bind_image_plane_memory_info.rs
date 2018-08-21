@@ -18,9 +18,9 @@ use vk::vk_image_aspect_flags::*;
 
 #[repr(C)]
 pub struct RawVkBindImagePlaneMemoryInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    plane_aspect: RawVkImageAspectFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub plane_aspect: RawVkImageAspectFlags,
 }
 
 #[derive(Debug, Clone)]

@@ -18,10 +18,10 @@ use vk::vk_input_attachment_aspect_reference::*;
 
 #[repr(C)]
 pub struct RawVkRenderPassInputAttachmentAspectCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    aspect_reference_count: u32,
-    aspect_references: *mut RawVkInputAttachmentAspectReference,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub aspect_reference_count: u32,
+    pub aspect_references: *mut RawVkInputAttachmentAspectReference,
 }
 
 #[derive(Debug, Clone)]

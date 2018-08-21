@@ -17,11 +17,11 @@ use vk::vk_sparse_image_format_properties::*;
 
 #[repr(C)]
 pub struct RawVkSparseImageMemoryRequirements {
-    format_properties: RawVkSparseImageFormatProperties,
-    image_mip_tail_first_lod: u32,
-    image_mip_tail_size: u64,
-    image_mip_tail_offset: u64,
-    image_mip_tail_stride: u64,
+    pub format_properties: RawVkSparseImageFormatProperties,
+    pub image_mip_tail_first_lod: u32,
+    pub image_mip_tail_size: u64,
+    pub image_mip_tail_offset: u64,
+    pub image_mip_tail_stride: u64,
 }
 
 #[derive(Debug, Clone)]

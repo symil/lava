@@ -17,10 +17,10 @@ use vk::nvx::vk_indirect_commands_token_type::*;
 
 #[repr(C)]
 pub struct RawVkIndirectCommandsLayoutToken {
-    token_type: RawVkIndirectCommandsTokenType,
-    binding_unit: u32,
-    dynamic_count: u32,
-    divisor: u32,
+    pub token_type: RawVkIndirectCommandsTokenType,
+    pub binding_unit: u32,
+    pub dynamic_count: u32,
+    pub divisor: u32,
 }
 
 #[derive(Debug, Clone)]

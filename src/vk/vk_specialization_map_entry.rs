@@ -16,9 +16,9 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkSpecializationMapEntry {
-    constant_id: u32,
-    offset: u32,
-    size: usize,
+    pub constant_id: u32,
+    pub offset: u32,
+    pub size: usize,
 }
 
 #[derive(Debug, Clone)]

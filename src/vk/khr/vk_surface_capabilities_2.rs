@@ -18,9 +18,9 @@ use vk::khr::vk_surface_capabilities::*;
 
 #[repr(C)]
 pub struct RawVkSurfaceCapabilities2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    surface_capabilities: RawVkSurfaceCapabilities,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub surface_capabilities: RawVkSurfaceCapabilities,
 }
 
 #[derive(Debug, Clone)]

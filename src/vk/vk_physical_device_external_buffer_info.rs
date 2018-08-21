@@ -20,11 +20,11 @@ use vk::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceExternalBufferInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkBufferCreateFlags,
-    usage: RawVkBufferUsageFlags,
-    handle_type: RawVkExternalMemoryHandleTypeFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkBufferCreateFlags,
+    pub usage: RawVkBufferUsageFlags,
+    pub handle_type: RawVkExternalMemoryHandleTypeFlags,
 }
 
 #[derive(Debug, Clone)]

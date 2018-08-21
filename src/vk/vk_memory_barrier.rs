@@ -18,10 +18,10 @@ use vk::vk_access_flags::*;
 
 #[repr(C)]
 pub struct RawVkMemoryBarrier {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    src_access_mask: RawVkAccessFlags,
-    dst_access_mask: RawVkAccessFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub src_access_mask: RawVkAccessFlags,
+    pub dst_access_mask: RawVkAccessFlags,
 }
 
 #[derive(Debug, Clone)]

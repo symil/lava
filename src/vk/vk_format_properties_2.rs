@@ -18,9 +18,9 @@ use vk::vk_format_properties::*;
 
 #[repr(C)]
 pub struct RawVkFormatProperties2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    format_properties: RawVkFormatProperties,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub format_properties: RawVkFormatProperties,
 }
 
 #[derive(Debug, Clone)]

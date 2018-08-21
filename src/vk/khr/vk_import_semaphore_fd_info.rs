@@ -20,12 +20,12 @@ use vk::vk_external_semaphore_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkImportSemaphoreFdInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    semaphore: RawVkSemaphore,
-    flags: RawVkSemaphoreImportFlags,
-    handle_type: RawVkExternalSemaphoreHandleTypeFlags,
-    fd: i32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub semaphore: RawVkSemaphore,
+    pub flags: RawVkSemaphoreImportFlags,
+    pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
+    pub fd: i32,
 }
 
 #[derive(Debug, Clone)]

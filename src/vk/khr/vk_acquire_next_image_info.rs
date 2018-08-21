@@ -20,13 +20,13 @@ use vk::vk_fence::*;
 
 #[repr(C)]
 pub struct RawVkAcquireNextImageInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    swapchain: RawVkSwapchain,
-    timeout: u64,
-    semaphore: RawVkSemaphore,
-    fence: RawVkFence,
-    device_mask: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub swapchain: RawVkSwapchain,
+    pub timeout: u64,
+    pub semaphore: RawVkSemaphore,
+    pub fence: RawVkFence,
+    pub device_mask: u32,
 }
 
 #[derive(Debug, Clone)]

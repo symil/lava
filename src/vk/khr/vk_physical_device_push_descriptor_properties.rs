@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDevicePushDescriptorProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    max_push_descriptors: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub max_push_descriptors: u32,
 }
 
 #[derive(Debug, Clone)]

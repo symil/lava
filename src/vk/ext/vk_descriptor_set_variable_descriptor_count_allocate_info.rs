@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorSetVariableDescriptorCountAllocateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    descriptor_set_count: u32,
-    descriptor_counts: *mut u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub descriptor_set_count: u32,
+    pub descriptor_counts: *mut u32,
 }
 
 #[derive(Debug, Clone)]

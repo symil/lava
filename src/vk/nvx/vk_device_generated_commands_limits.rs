@@ -17,13 +17,13 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkDeviceGeneratedCommandsLimits {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    max_indirect_commands_layout_token_count: u32,
-    max_object_entry_counts: u32,
-    min_sequence_count_buffer_offset_alignment: u32,
-    min_sequence_index_buffer_offset_alignment: u32,
-    min_commands_token_buffer_offset_alignment: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub max_indirect_commands_layout_token_count: u32,
+    pub max_object_entry_counts: u32,
+    pub min_sequence_count_buffer_offset_alignment: u32,
+    pub min_sequence_index_buffer_offset_alignment: u32,
+    pub min_commands_token_buffer_offset_alignment: u32,
 }
 
 #[derive(Debug, Clone)]

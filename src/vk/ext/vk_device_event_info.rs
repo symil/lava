@@ -18,9 +18,9 @@ use vk::ext::vk_device_event_type::*;
 
 #[repr(C)]
 pub struct RawVkDeviceEventInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    device_event: RawVkDeviceEventType,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub device_event: RawVkDeviceEventType,
 }
 
 #[derive(Debug, Clone)]

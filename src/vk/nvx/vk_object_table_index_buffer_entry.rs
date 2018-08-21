@@ -20,10 +20,10 @@ use vk::vk_index_type::*;
 
 #[repr(C)]
 pub struct RawVkObjectTableIndexBufferEntry {
-    type_: RawVkObjectEntryType,
-    flags: RawVkObjectEntryUsageFlags,
-    buffer: RawVkBuffer,
-    index_type: RawVkIndexType,
+    pub type_: RawVkObjectEntryType,
+    pub flags: RawVkObjectEntryUsageFlags,
+    pub buffer: RawVkBuffer,
+    pub index_type: RawVkIndexType,
 }
 
 #[derive(Debug, Clone)]

@@ -19,11 +19,11 @@ use vk::vk_external_fence_feature_flags::*;
 
 #[repr(C)]
 pub struct RawVkExternalFenceProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    export_from_imported_handle_types: RawVkExternalFenceHandleTypeFlags,
-    compatible_handle_types: RawVkExternalFenceHandleTypeFlags,
-    external_fence_features: RawVkExternalFenceFeatureFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub export_from_imported_handle_types: RawVkExternalFenceHandleTypeFlags,
+    pub compatible_handle_types: RawVkExternalFenceHandleTypeFlags,
+    pub external_fence_features: RawVkExternalFenceFeatureFlags,
 }
 
 #[derive(Debug, Clone)]

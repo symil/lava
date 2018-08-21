@@ -18,9 +18,9 @@ use vk::vk_clear_value::*;
 
 #[repr(C)]
 pub struct RawVkClearAttachment {
-    aspect_mask: RawVkImageAspectFlags,
-    color_attachment: u32,
-    clear_value: RawVkClearValue,
+    pub aspect_mask: RawVkImageAspectFlags,
+    pub color_attachment: u32,
+    pub clear_value: RawVkClearValue,
 }
 
 #[derive(Debug, Clone)]

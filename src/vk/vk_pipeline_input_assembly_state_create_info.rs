@@ -19,11 +19,11 @@ use vk::vk_primitive_topology::*;
 
 #[repr(C)]
 pub struct RawVkPipelineInputAssemblyStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineInputAssemblyStateCreateFlags,
-    topology: RawVkPrimitiveTopology,
-    primitive_restart_enable: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineInputAssemblyStateCreateFlags,
+    pub topology: RawVkPrimitiveTopology,
+    pub primitive_restart_enable: u32,
 }
 
 #[derive(Debug, Clone)]

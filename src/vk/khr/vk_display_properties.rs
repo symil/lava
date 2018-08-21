@@ -19,13 +19,13 @@ use vk::khr::vk_surface_transform_flags::*;
 
 #[repr(C)]
 pub struct RawVkDisplayProperties {
-    display: RawVkDisplay,
-    display_name: *const c_char,
-    physical_dimensions: RawVkExtent2D,
-    physical_resolution: RawVkExtent2D,
-    supported_transforms: RawVkSurfaceTransformFlags,
-    plane_reorder_possible: u32,
-    persistent_content: u32,
+    pub display: RawVkDisplay,
+    pub display_name: *const c_char,
+    pub physical_dimensions: RawVkExtent2D,
+    pub physical_resolution: RawVkExtent2D,
+    pub supported_transforms: RawVkSurfaceTransformFlags,
+    pub plane_reorder_possible: u32,
+    pub persistent_content: u32,
 }
 
 #[derive(Debug, Clone)]

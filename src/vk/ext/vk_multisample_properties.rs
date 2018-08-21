@@ -18,9 +18,9 @@ use vk::vk_extent_2d::*;
 
 #[repr(C)]
 pub struct RawVkMultisampleProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    max_sample_location_grid_size: RawVkExtent2D,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub max_sample_location_grid_size: RawVkExtent2D,
 }
 
 #[derive(Debug, Clone)]

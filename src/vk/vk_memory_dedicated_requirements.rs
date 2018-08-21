@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkMemoryDedicatedRequirements {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    prefers_dedicated_allocation: u32,
-    requires_dedicated_allocation: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub prefers_dedicated_allocation: u32,
+    pub requires_dedicated_allocation: u32,
 }
 
 #[derive(Debug, Clone)]

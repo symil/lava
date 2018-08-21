@@ -19,11 +19,11 @@ use vk::nv::vk_viewport_swizzle::*;
 
 #[repr(C)]
 pub struct RawVkPipelineViewportSwizzleStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineViewportSwizzleStateCreateFlags,
-    viewport_count: u32,
-    viewport_swizzles: *mut RawVkViewportSwizzle,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineViewportSwizzleStateCreateFlags,
+    pub viewport_count: u32,
+    pub viewport_swizzles: *mut RawVkViewportSwizzle,
 }
 
 #[derive(Debug, Clone)]

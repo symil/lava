@@ -17,9 +17,9 @@ use vk::vk_format_feature_flags::*;
 
 #[repr(C)]
 pub struct RawVkFormatProperties {
-    linear_tiling_features: RawVkFormatFeatureFlags,
-    optimal_tiling_features: RawVkFormatFeatureFlags,
-    buffer_features: RawVkFormatFeatureFlags,
+    pub linear_tiling_features: RawVkFormatFeatureFlags,
+    pub optimal_tiling_features: RawVkFormatFeatureFlags,
+    pub buffer_features: RawVkFormatFeatureFlags,
 }
 
 #[derive(Debug, Clone)]

@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceConditionalRenderingFeatures {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    conditional_rendering: u32,
-    inherited_conditional_rendering: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub conditional_rendering: u32,
+    pub inherited_conditional_rendering: u32,
 }
 
 #[derive(Debug, Clone)]

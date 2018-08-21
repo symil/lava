@@ -18,15 +18,15 @@ use vk::vk_descriptor_set::*;
 
 #[repr(C)]
 pub struct RawVkCopyDescriptorSet {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    src_set: RawVkDescriptorSet,
-    src_binding: u32,
-    src_array_element: u32,
-    dst_set: RawVkDescriptorSet,
-    dst_binding: u32,
-    dst_array_element: u32,
-    descriptor_count: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub src_set: RawVkDescriptorSet,
+    pub src_binding: u32,
+    pub src_array_element: u32,
+    pub dst_set: RawVkDescriptorSet,
+    pub dst_binding: u32,
+    pub dst_array_element: u32,
+    pub descriptor_count: u32,
 }
 
 #[derive(Debug, Clone)]

@@ -18,13 +18,13 @@ use vk::vk_compare_op::*;
 
 #[repr(C)]
 pub struct RawVkStencilOpState {
-    fail_op: RawVkStencilOp,
-    pass_op: RawVkStencilOp,
-    depth_fail_op: RawVkStencilOp,
-    compare_op: RawVkCompareOp,
-    compare_mask: u32,
-    write_mask: u32,
-    reference: u32,
+    pub fail_op: RawVkStencilOp,
+    pub pass_op: RawVkStencilOp,
+    pub depth_fail_op: RawVkStencilOp,
+    pub compare_op: RawVkCompareOp,
+    pub compare_mask: u32,
+    pub write_mask: u32,
+    pub reference: u32,
 }
 
 #[derive(Debug, Clone)]

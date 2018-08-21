@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceBlendOperationAdvancedFeatures {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    advanced_blend_coherent_operations: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub advanced_blend_coherent_operations: u32,
 }
 
 #[derive(Debug, Clone)]

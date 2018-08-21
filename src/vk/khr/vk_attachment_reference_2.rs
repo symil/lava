@@ -19,11 +19,11 @@ use vk::vk_image_aspect_flags::*;
 
 #[repr(C)]
 pub struct RawVkAttachmentReference2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    attachment: u32,
-    layout: RawVkImageLayout,
-    aspect_mask: RawVkImageAspectFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub attachment: u32,
+    pub layout: RawVkImageLayout,
+    pub aspect_mask: RawVkImageAspectFlags,
 }
 
 #[derive(Debug, Clone)]

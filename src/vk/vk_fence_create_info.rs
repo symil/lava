@@ -18,9 +18,9 @@ use vk::vk_fence_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkFenceCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkFenceCreateFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkFenceCreateFlags,
 }
 
 #[derive(Debug, Clone)]

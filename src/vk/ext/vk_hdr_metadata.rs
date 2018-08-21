@@ -18,16 +18,16 @@ use vk::ext::vk_xycolor::*;
 
 #[repr(C)]
 pub struct RawVkHdrMetadata {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    display_primary_red: RawVkXYColor,
-    display_primary_green: RawVkXYColor,
-    display_primary_blue: RawVkXYColor,
-    white_point: RawVkXYColor,
-    max_luminance: f32,
-    min_luminance: f32,
-    max_content_light_level: f32,
-    max_frame_average_light_level: f32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub display_primary_red: RawVkXYColor,
+    pub display_primary_green: RawVkXYColor,
+    pub display_primary_blue: RawVkXYColor,
+    pub white_point: RawVkXYColor,
+    pub max_luminance: f32,
+    pub min_luminance: f32,
+    pub max_content_light_level: f32,
+    pub max_frame_average_light_level: f32,
 }
 
 #[derive(Debug, Clone)]

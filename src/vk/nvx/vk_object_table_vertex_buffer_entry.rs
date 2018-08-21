@@ -19,9 +19,9 @@ use vk::vk_buffer::*;
 
 #[repr(C)]
 pub struct RawVkObjectTableVertexBufferEntry {
-    type_: RawVkObjectEntryType,
-    flags: RawVkObjectEntryUsageFlags,
-    buffer: RawVkBuffer,
+    pub type_: RawVkObjectEntryType,
+    pub flags: RawVkObjectEntryUsageFlags,
+    pub buffer: RawVkBuffer,
 }
 
 #[derive(Debug, Clone)]

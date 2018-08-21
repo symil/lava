@@ -16,8 +16,8 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkClearDepthStencilValue {
-    depth: f32,
-    stencil: u32,
+    pub depth: f32,
+    pub stencil: u32,
 }
 
 #[derive(Debug, Clone)]

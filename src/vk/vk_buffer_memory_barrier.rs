@@ -19,15 +19,15 @@ use vk::vk_buffer::*;
 
 #[repr(C)]
 pub struct RawVkBufferMemoryBarrier {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    src_access_mask: RawVkAccessFlags,
-    dst_access_mask: RawVkAccessFlags,
-    src_queue_family_index: u32,
-    dst_queue_family_index: u32,
-    buffer: RawVkBuffer,
-    offset: u64,
-    size: u64,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub src_access_mask: RawVkAccessFlags,
+    pub dst_access_mask: RawVkAccessFlags,
+    pub src_queue_family_index: u32,
+    pub dst_queue_family_index: u32,
+    pub buffer: RawVkBuffer,
+    pub offset: u64,
+    pub size: u64,
 }
 
 #[derive(Debug, Clone)]

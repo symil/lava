@@ -19,11 +19,11 @@ use vk::ext::vk_conditional_rendering_flags::*;
 
 #[repr(C)]
 pub struct RawVkConditionalRenderingBeginInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    buffer: RawVkBuffer,
-    offset: u64,
-    flags: RawVkConditionalRenderingFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub buffer: RawVkBuffer,
+    pub offset: u64,
+    pub flags: RawVkConditionalRenderingFlags,
 }
 
 #[derive(Debug, Clone)]

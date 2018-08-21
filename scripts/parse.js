@@ -339,7 +339,7 @@ function parseFunctions() {
     
                 arg.isOptional = !!xmlParam.optional;
                 // if (arg.typeName !== 'void') {
-                    arg.countField = (xmlParam.len || '').split(',').find(str => args.some(arg => arg.name === str));
+                    arg.countField = (xmlParam.len || '').split(',').find(str => args.some(arg => arg.name === str || str.startsWith(`${arg.name}::`)));
     
                     if (areCountAndArray(lastArg, arg)) {
                         arg.countField = lastArg.name;

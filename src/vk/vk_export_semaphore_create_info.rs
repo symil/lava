@@ -18,9 +18,9 @@ use vk::vk_external_semaphore_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkExportSemaphoreCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    handle_types: RawVkExternalSemaphoreHandleTypeFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub handle_types: RawVkExternalSemaphoreHandleTypeFlags,
 }
 
 #[derive(Debug, Clone)]

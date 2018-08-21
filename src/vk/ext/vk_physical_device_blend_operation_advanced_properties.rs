@@ -17,14 +17,14 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceBlendOperationAdvancedProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    advanced_blend_max_color_attachments: u32,
-    advanced_blend_independent_blend: u32,
-    advanced_blend_non_premultiplied_src_color: u32,
-    advanced_blend_non_premultiplied_dst_color: u32,
-    advanced_blend_correlated_overlap: u32,
-    advanced_blend_all_operations: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub advanced_blend_max_color_attachments: u32,
+    pub advanced_blend_independent_blend: u32,
+    pub advanced_blend_non_premultiplied_src_color: u32,
+    pub advanced_blend_non_premultiplied_dst_color: u32,
+    pub advanced_blend_correlated_overlap: u32,
+    pub advanced_blend_all_operations: u32,
 }
 
 #[derive(Debug, Clone)]

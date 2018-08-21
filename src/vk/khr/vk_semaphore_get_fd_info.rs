@@ -19,10 +19,10 @@ use vk::vk_external_semaphore_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkSemaphoreGetFdInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    semaphore: RawVkSemaphore,
-    handle_type: RawVkExternalSemaphoreHandleTypeFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub semaphore: RawVkSemaphore,
+    pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
 }
 
 #[derive(Debug, Clone)]

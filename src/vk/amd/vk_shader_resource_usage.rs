@@ -16,11 +16,11 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkShaderResourceUsage {
-    num_used_vgprs: u32,
-    num_used_sgprs: u32,
-    lds_size_per_local_work_group: u32,
-    lds_usage_size_in_bytes: usize,
-    scratch_mem_usage_in_bytes: usize,
+    pub num_used_vgprs: u32,
+    pub num_used_sgprs: u32,
+    pub lds_size_per_local_work_group: u32,
+    pub lds_usage_size_in_bytes: usize,
+    pub scratch_mem_usage_in_bytes: usize,
 }
 
 #[derive(Debug, Clone)]

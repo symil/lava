@@ -17,9 +17,9 @@ use vk::vk_vertex_input_rate::*;
 
 #[repr(C)]
 pub struct RawVkVertexInputBindingDescription {
-    binding: u32,
-    stride: u32,
-    input_rate: RawVkVertexInputRate,
+    pub binding: u32,
+    pub stride: u32,
+    pub input_rate: RawVkVertexInputRate,
 }
 
 #[derive(Debug, Clone)]

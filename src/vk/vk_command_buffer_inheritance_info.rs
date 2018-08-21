@@ -21,14 +21,14 @@ use vk::vk_query_pipeline_statistic_flags::*;
 
 #[repr(C)]
 pub struct RawVkCommandBufferInheritanceInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    render_pass: RawVkRenderPass,
-    subpass: u32,
-    framebuffer: RawVkFramebuffer,
-    occlusion_query_enable: u32,
-    query_flags: RawVkQueryControlFlags,
-    pipeline_statistics: RawVkQueryPipelineStatisticFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub render_pass: RawVkRenderPass,
+    pub subpass: u32,
+    pub framebuffer: RawVkFramebuffer,
+    pub occlusion_query_enable: u32,
+    pub query_flags: RawVkQueryControlFlags,
+    pub pipeline_statistics: RawVkQueryPipelineStatisticFlags,
 }
 
 #[derive(Debug, Clone)]

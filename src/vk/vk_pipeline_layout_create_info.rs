@@ -20,13 +20,13 @@ use vk::vk_push_constant_range::*;
 
 #[repr(C)]
 pub struct RawVkPipelineLayoutCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineLayoutCreateFlags,
-    set_layout_count: u32,
-    set_layouts: *mut RawVkDescriptorSetLayout,
-    push_constant_range_count: u32,
-    push_constant_ranges: *mut RawVkPushConstantRange,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineLayoutCreateFlags,
+    pub set_layout_count: u32,
+    pub set_layouts: *mut RawVkDescriptorSetLayout,
+    pub push_constant_range_count: u32,
+    pub push_constant_ranges: *mut RawVkPushConstantRange,
 }
 
 #[derive(Debug, Clone)]

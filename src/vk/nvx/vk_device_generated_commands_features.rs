@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkDeviceGeneratedCommandsFeatures {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    compute_binding_point_support: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub compute_binding_point_support: u32,
 }
 
 #[derive(Debug, Clone)]

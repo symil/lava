@@ -19,13 +19,13 @@ use vk::vk_dependency_flags::*;
 
 #[repr(C)]
 pub struct RawVkSubpassDependency {
-    src_subpass: u32,
-    dst_subpass: u32,
-    src_stage_mask: RawVkPipelineStageFlags,
-    dst_stage_mask: RawVkPipelineStageFlags,
-    src_access_mask: RawVkAccessFlags,
-    dst_access_mask: RawVkAccessFlags,
-    dependency_flags: RawVkDependencyFlags,
+    pub src_subpass: u32,
+    pub dst_subpass: u32,
+    pub src_stage_mask: RawVkPipelineStageFlags,
+    pub dst_stage_mask: RawVkPipelineStageFlags,
+    pub src_access_mask: RawVkAccessFlags,
+    pub dst_access_mask: RawVkAccessFlags,
+    pub dependency_flags: RawVkDependencyFlags,
 }
 
 #[derive(Debug, Clone)]

@@ -16,7 +16,7 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkRefreshCycleDuration {
-    refresh_duration: u64,
+    pub refresh_duration: u64,
 }
 
 #[derive(Debug, Clone)]

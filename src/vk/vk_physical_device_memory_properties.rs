@@ -18,10 +18,10 @@ use vk::vk_memory_heap::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceMemoryProperties {
-    memory_type_count: u32,
-    memory_types: [RawVkMemoryType; 32],
-    memory_heap_count: u32,
-    memory_heaps: [RawVkMemoryHeap; 16],
+    pub memory_type_count: u32,
+    pub memory_types: [RawVkMemoryType; 32],
+    pub memory_heap_count: u32,
+    pub memory_heaps: [RawVkMemoryHeap; 16],
 }
 
 #[derive(Debug, Clone)]

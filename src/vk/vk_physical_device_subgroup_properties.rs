@@ -19,12 +19,12 @@ use vk::vk_subgroup_feature_flags::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceSubgroupProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    subgroup_size: u32,
-    supported_stages: RawVkShaderStageFlags,
-    supported_operations: RawVkSubgroupFeatureFlags,
-    quad_operations_in_all_stages: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub subgroup_size: u32,
+    pub supported_stages: RawVkShaderStageFlags,
+    pub supported_operations: RawVkSubgroupFeatureFlags,
+    pub quad_operations_in_all_stages: u32,
 }
 
 #[derive(Debug, Clone)]

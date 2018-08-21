@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceShaderDrawParameterFeatures {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    shader_draw_parameters: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub shader_draw_parameters: u32,
 }
 
 #[derive(Debug, Clone)]

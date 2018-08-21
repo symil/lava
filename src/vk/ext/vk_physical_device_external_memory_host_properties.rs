@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceExternalMemoryHostProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    min_imported_host_pointer_alignment: u64,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub min_imported_host_pointer_alignment: u64,
 }
 
 #[derive(Debug, Clone)]

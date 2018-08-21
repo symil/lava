@@ -18,9 +18,9 @@ use vk::khr::vk_display_plane_properties::*;
 
 #[repr(C)]
 pub struct RawVkDisplayPlaneProperties2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    display_plane_properties: RawVkDisplayPlaneProperties,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub display_plane_properties: RawVkDisplayPlaneProperties,
 }
 
 #[derive(Debug, Clone)]

@@ -18,11 +18,11 @@ use vk::nv::vk_pipeline_coverage_to_color_state_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkPipelineCoverageToColorStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineCoverageToColorStateCreateFlags,
-    coverage_to_color_enable: u32,
-    coverage_to_color_location: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineCoverageToColorStateCreateFlags,
+    pub coverage_to_color_enable: u32,
+    pub coverage_to_color_location: u32,
 }
 
 #[derive(Debug, Clone)]

@@ -19,11 +19,11 @@ use vk::vk_device_memory::*;
 
 #[repr(C)]
 pub struct RawVkBindBufferMemoryInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    buffer: RawVkBuffer,
-    memory: RawVkDeviceMemory,
-    memory_offset: u64,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub buffer: RawVkBuffer,
+    pub memory: RawVkDeviceMemory,
+    pub memory_offset: u64,
 }
 
 #[derive(Debug, Clone)]

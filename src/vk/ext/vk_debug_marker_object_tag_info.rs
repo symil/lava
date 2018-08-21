@@ -18,13 +18,13 @@ use vk::ext::vk_debug_report_object_type::*;
 
 #[repr(C)]
 pub struct RawVkDebugMarkerObjectTagInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    object_type: RawVkDebugReportObjectType,
-    object: u64,
-    tag_name: u64,
-    tag_size: usize,
-    tag: *const c_void,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub object_type: RawVkDebugReportObjectType,
+    pub object: u64,
+    pub tag_name: u64,
+    pub tag_size: usize,
+    pub tag: *const c_void,
 }
 
 #[derive(Debug, Clone)]

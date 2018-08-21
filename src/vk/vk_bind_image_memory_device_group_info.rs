@@ -18,12 +18,12 @@ use vk::vk_rect_2d::*;
 
 #[repr(C)]
 pub struct RawVkBindImageMemoryDeviceGroupInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    device_index_count: u32,
-    device_indices: *mut u32,
-    split_instance_bind_region_count: u32,
-    split_instance_bind_regions: *mut RawVkRect2D,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub device_index_count: u32,
+    pub device_indices: *mut u32,
+    pub split_instance_bind_region_count: u32,
+    pub split_instance_bind_regions: *mut RawVkRect2D,
 }
 
 #[derive(Debug, Clone)]

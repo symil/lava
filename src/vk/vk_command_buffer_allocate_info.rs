@@ -19,11 +19,11 @@ use vk::vk_command_buffer_level::*;
 
 #[repr(C)]
 pub struct RawVkCommandBufferAllocateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    command_pool: RawVkCommandPool,
-    level: RawVkCommandBufferLevel,
-    command_buffer_count: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub command_pool: RawVkCommandPool,
+    pub level: RawVkCommandBufferLevel,
+    pub command_buffer_count: u32,
 }
 
 #[derive(Debug, Clone)]

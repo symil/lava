@@ -18,9 +18,9 @@ use vk::vk_image_usage_flags::*;
 
 #[repr(C)]
 pub struct RawVkImageViewUsageCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    usage: RawVkImageUsageFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub usage: RawVkImageUsageFlags,
 }
 
 #[derive(Debug, Clone)]

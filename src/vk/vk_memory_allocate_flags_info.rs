@@ -18,10 +18,10 @@ use vk::vk_memory_allocate_flags::*;
 
 #[repr(C)]
 pub struct RawVkMemoryAllocateFlagsInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkMemoryAllocateFlags,
-    device_mask: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkMemoryAllocateFlags,
+    pub device_mask: u32,
 }
 
 #[derive(Debug, Clone)]

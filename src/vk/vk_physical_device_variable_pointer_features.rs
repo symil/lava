@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceVariablePointerFeatures {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    variable_pointers_storage_buffer: u32,
-    variable_pointers: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub variable_pointers_storage_buffer: u32,
+    pub variable_pointers: u32,
 }
 
 #[derive(Debug, Clone)]

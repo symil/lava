@@ -23,14 +23,14 @@ use vk::vk_image_subresource_range::*;
 
 #[repr(C)]
 pub struct RawVkImageViewCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkImageViewCreateFlags,
-    image: RawVkImage,
-    view_type: RawVkImageViewType,
-    format: RawVkFormat,
-    components: RawVkComponentMapping,
-    subresource_range: RawVkImageSubresourceRange,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkImageViewCreateFlags,
+    pub image: RawVkImage,
+    pub view_type: RawVkImageViewType,
+    pub format: RawVkFormat,
+    pub components: RawVkComponentMapping,
+    pub subresource_range: RawVkImageSubresourceRange,
 }
 
 #[derive(Debug, Clone)]

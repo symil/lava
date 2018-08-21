@@ -18,9 +18,9 @@ use vk::vk_queue_family_properties::*;
 
 #[repr(C)]
 pub struct RawVkQueueFamilyProperties2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    queue_family_properties: RawVkQueueFamilyProperties,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub queue_family_properties: RawVkQueueFamilyProperties,
 }
 
 #[derive(Debug, Clone)]

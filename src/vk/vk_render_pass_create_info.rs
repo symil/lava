@@ -21,15 +21,15 @@ use vk::vk_subpass_dependency::*;
 
 #[repr(C)]
 pub struct RawVkRenderPassCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkRenderPassCreateFlags,
-    attachment_count: u32,
-    attachments: *mut RawVkAttachmentDescription,
-    subpass_count: u32,
-    subpasses: *mut RawVkSubpassDescription,
-    dependency_count: u32,
-    dependencies: *mut RawVkSubpassDependency,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkRenderPassCreateFlags,
+    pub attachment_count: u32,
+    pub attachments: *mut RawVkAttachmentDescription,
+    pub subpass_count: u32,
+    pub subpasses: *mut RawVkSubpassDescription,
+    pub dependency_count: u32,
+    pub dependencies: *mut RawVkSubpassDependency,
 }
 
 #[derive(Debug, Clone)]

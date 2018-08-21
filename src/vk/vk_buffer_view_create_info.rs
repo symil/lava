@@ -20,13 +20,13 @@ use vk::vk_format::*;
 
 #[repr(C)]
 pub struct RawVkBufferViewCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkBufferViewCreateFlags,
-    buffer: RawVkBuffer,
-    format: RawVkFormat,
-    offset: u64,
-    range: u64,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkBufferViewCreateFlags,
+    pub buffer: RawVkBuffer,
+    pub format: RawVkFormat,
+    pub offset: u64,
+    pub range: u64,
 }
 
 #[derive(Debug, Clone)]

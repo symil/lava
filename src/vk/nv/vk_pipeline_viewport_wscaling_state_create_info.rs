@@ -18,11 +18,11 @@ use vk::nv::vk_viewport_wscaling::*;
 
 #[repr(C)]
 pub struct RawVkPipelineViewportWScalingStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    viewport_wscaling_enable: u32,
-    viewport_count: u32,
-    viewport_wscalings: *mut RawVkViewportWScaling,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub viewport_wscaling_enable: u32,
+    pub viewport_count: u32,
+    pub viewport_wscalings: *mut RawVkViewportWScaling,
 }
 
 #[derive(Debug, Clone)]

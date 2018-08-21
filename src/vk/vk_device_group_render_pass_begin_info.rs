@@ -18,11 +18,11 @@ use vk::vk_rect_2d::*;
 
 #[repr(C)]
 pub struct RawVkDeviceGroupRenderPassBeginInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    device_mask: u32,
-    device_render_area_count: u32,
-    device_render_areas: *mut RawVkRect2D,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub device_mask: u32,
+    pub device_render_area_count: u32,
+    pub device_render_areas: *mut RawVkRect2D,
 }
 
 #[derive(Debug, Clone)]

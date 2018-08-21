@@ -19,11 +19,11 @@ use vk::ext::vk_conservative_rasterization_mode::*;
 
 #[repr(C)]
 pub struct RawVkPipelineRasterizationConservativeStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineRasterizationConservativeStateCreateFlags,
-    conservative_rasterization_mode: RawVkConservativeRasterizationMode,
-    extra_primitive_overestimation_size: f32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineRasterizationConservativeStateCreateFlags,
+    pub conservative_rasterization_mode: RawVkConservativeRasterizationMode,
+    pub extra_primitive_overestimation_size: f32,
 }
 
 #[derive(Debug, Clone)]

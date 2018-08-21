@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceMultiviewProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    max_multiview_view_count: u32,
-    max_multiview_instance_index: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub max_multiview_view_count: u32,
+    pub max_multiview_instance_index: u32,
 }
 
 #[derive(Debug, Clone)]

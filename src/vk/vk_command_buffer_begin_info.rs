@@ -19,10 +19,10 @@ use vk::vk_command_buffer_inheritance_info::*;
 
 #[repr(C)]
 pub struct RawVkCommandBufferBeginInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkCommandBufferUsageFlags,
-    inheritance_info: *mut RawVkCommandBufferInheritanceInfo,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkCommandBufferUsageFlags,
+    pub inheritance_info: *mut RawVkCommandBufferInheritanceInfo,
 }
 
 #[derive(Debug, Clone)]

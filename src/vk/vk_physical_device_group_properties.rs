@@ -18,11 +18,11 @@ use vk::vk_physical_device::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceGroupProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    physical_device_count: u32,
-    physical_devices: [RawVkPhysicalDevice; 32],
-    subset_allocation: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub physical_device_count: u32,
+    pub physical_devices: [RawVkPhysicalDevice; 32],
+    pub subset_allocation: u32,
 }
 
 #[derive(Debug, Clone)]

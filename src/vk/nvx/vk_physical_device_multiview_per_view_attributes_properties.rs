@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceMultiviewPerViewAttributesProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    per_view_position_all_components: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub per_view_position_all_components: u32,
 }
 
 #[derive(Debug, Clone)]

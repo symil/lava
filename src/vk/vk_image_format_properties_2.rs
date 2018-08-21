@@ -18,9 +18,9 @@ use vk::vk_image_format_properties::*;
 
 #[repr(C)]
 pub struct RawVkImageFormatProperties2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    image_format_properties: RawVkImageFormatProperties,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub image_format_properties: RawVkImageFormatProperties,
 }
 
 #[derive(Debug, Clone)]

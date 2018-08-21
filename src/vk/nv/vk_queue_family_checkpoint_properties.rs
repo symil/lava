@@ -18,9 +18,9 @@ use vk::vk_pipeline_stage_flags::*;
 
 #[repr(C)]
 pub struct RawVkQueueFamilyCheckpointProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    checkpoint_execution_stage_mask: RawVkPipelineStageFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub checkpoint_execution_stage_mask: RawVkPipelineStageFlags,
 }
 
 #[derive(Debug, Clone)]

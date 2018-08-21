@@ -18,9 +18,9 @@ use vk::amd::vk_rasterization_order::*;
 
 #[repr(C)]
 pub struct RawVkPipelineRasterizationStateRasterizationOrder {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    rasterization_order: RawVkRasterizationOrder,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub rasterization_order: RawVkRasterizationOrder,
 }
 
 #[derive(Debug, Clone)]

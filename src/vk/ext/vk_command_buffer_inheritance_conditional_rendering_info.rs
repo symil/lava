@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkCommandBufferInheritanceConditionalRenderingInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    conditional_rendering_enable: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub conditional_rendering_enable: u32,
 }
 
 #[derive(Debug, Clone)]

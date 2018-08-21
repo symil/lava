@@ -16,11 +16,11 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkDrawIndexedIndirectCommand {
-    index_count: u32,
-    instance_count: u32,
-    first_index: u32,
-    vertex_offset: i32,
-    first_instance: u32,
+    pub index_count: u32,
+    pub instance_count: u32,
+    pub first_index: u32,
+    pub vertex_offset: i32,
+    pub first_instance: u32,
 }
 
 #[derive(Debug, Clone)]

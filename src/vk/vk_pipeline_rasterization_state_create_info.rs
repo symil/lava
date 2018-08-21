@@ -21,19 +21,19 @@ use vk::vk_front_face::*;
 
 #[repr(C)]
 pub struct RawVkPipelineRasterizationStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineRasterizationStateCreateFlags,
-    depth_clamp_enable: u32,
-    rasterizer_discard_enable: u32,
-    polygon_mode: RawVkPolygonMode,
-    cull_mode: RawVkCullModeFlags,
-    front_face: RawVkFrontFace,
-    depth_bias_enable: u32,
-    depth_bias_constant_factor: f32,
-    depth_bias_clamp: f32,
-    depth_bias_slope_factor: f32,
-    line_width: f32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineRasterizationStateCreateFlags,
+    pub depth_clamp_enable: u32,
+    pub rasterizer_discard_enable: u32,
+    pub polygon_mode: RawVkPolygonMode,
+    pub cull_mode: RawVkCullModeFlags,
+    pub front_face: RawVkFrontFace,
+    pub depth_bias_enable: u32,
+    pub depth_bias_constant_factor: f32,
+    pub depth_bias_clamp: f32,
+    pub depth_bias_slope_factor: f32,
+    pub line_width: f32,
 }
 
 #[derive(Debug, Clone)]

@@ -23,16 +23,16 @@ use vk::vk_pipeline_layout::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorUpdateTemplateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkDescriptorUpdateTemplateCreateFlags,
-    descriptor_update_entry_count: u32,
-    descriptor_update_entries: *mut RawVkDescriptorUpdateTemplateEntry,
-    template_type: RawVkDescriptorUpdateTemplateType,
-    descriptor_set_layout: RawVkDescriptorSetLayout,
-    pipeline_bind_point: RawVkPipelineBindPoint,
-    pipeline_layout: RawVkPipelineLayout,
-    set: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDescriptorUpdateTemplateCreateFlags,
+    pub descriptor_update_entry_count: u32,
+    pub descriptor_update_entries: *mut RawVkDescriptorUpdateTemplateEntry,
+    pub template_type: RawVkDescriptorUpdateTemplateType,
+    pub descriptor_set_layout: RawVkDescriptorSetLayout,
+    pub pipeline_bind_point: RawVkPipelineBindPoint,
+    pub pipeline_layout: RawVkPipelineLayout,
+    pub set: u32,
 }
 
 #[derive(Debug, Clone)]

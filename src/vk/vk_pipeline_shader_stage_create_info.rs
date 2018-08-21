@@ -21,13 +21,13 @@ use vk::vk_specialization_info::*;
 
 #[repr(C)]
 pub struct RawVkPipelineShaderStageCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineShaderStageCreateFlags,
-    stage: RawVkShaderStageFlags,
-    module: RawVkShaderModule,
-    name: *mut c_char,
-    specialization_info: *mut RawVkSpecializationInfo,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineShaderStageCreateFlags,
+    pub stage: RawVkShaderStageFlags,
+    pub module: RawVkShaderModule,
+    pub name: *mut c_char,
+    pub specialization_info: *mut RawVkSpecializationInfo,
 }
 
 #[derive(Debug, Clone)]

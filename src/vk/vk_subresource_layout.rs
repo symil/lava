@@ -16,11 +16,11 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkSubresourceLayout {
-    offset: u64,
-    size: u64,
-    row_pitch: u64,
-    array_pitch: u64,
-    depth_pitch: u64,
+    pub offset: u64,
+    pub size: u64,
+    pub row_pitch: u64,
+    pub array_pitch: u64,
+    pub depth_pitch: u64,
 }
 
 #[derive(Debug, Clone)]

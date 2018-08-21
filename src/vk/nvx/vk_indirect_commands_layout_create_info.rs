@@ -20,12 +20,12 @@ use vk::nvx::vk_indirect_commands_layout_token::*;
 
 #[repr(C)]
 pub struct RawVkIndirectCommandsLayoutCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    pipeline_bind_point: RawVkPipelineBindPoint,
-    flags: RawVkIndirectCommandsLayoutUsageFlags,
-    token_count: u32,
-    tokens: *mut RawVkIndirectCommandsLayoutToken,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub pipeline_bind_point: RawVkPipelineBindPoint,
+    pub flags: RawVkIndirectCommandsLayoutUsageFlags,
+    pub token_count: u32,
+    pub tokens: *mut RawVkIndirectCommandsLayoutToken,
 }
 
 #[derive(Debug, Clone)]

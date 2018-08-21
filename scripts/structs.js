@@ -67,7 +67,7 @@ function genRawStructDeclaration(cDef) {
     return [
         `#[repr(C)]`,
         `pub struct ${cDef.rawTypeName}`,
-            cDef.fields.map(field => `${field.varName}: ${field.rawType},`)
+            cDef.fields.map(field => `pub ${field.varName}: ${field.rawType},`)
     ];
 }
 

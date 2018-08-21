@@ -18,11 +18,11 @@ use vk::vk_pipeline_cache_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkPipelineCacheCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineCacheCreateFlags,
-    initial_data_size: usize,
-    initial_data: *const c_void,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineCacheCreateFlags,
+    pub initial_data_size: usize,
+    pub initial_data: *const c_void,
 }
 
 #[derive(Debug, Clone)]

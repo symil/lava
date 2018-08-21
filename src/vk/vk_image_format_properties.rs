@@ -18,11 +18,11 @@ use vk::vk_sample_count_flags::*;
 
 #[repr(C)]
 pub struct RawVkImageFormatProperties {
-    max_extent: RawVkExtent3D,
-    max_mip_levels: u32,
-    max_array_layers: u32,
-    sample_counts: RawVkSampleCountFlags,
-    max_resource_size: u64,
+    pub max_extent: RawVkExtent3D,
+    pub max_mip_levels: u32,
+    pub max_array_layers: u32,
+    pub sample_counts: RawVkSampleCountFlags,
+    pub max_resource_size: u64,
 }
 
 #[derive(Debug, Clone)]

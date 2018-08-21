@@ -18,10 +18,10 @@ use vk::ext::vk_descriptor_binding_flags::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorSetLayoutBindingFlagsCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    binding_count: u32,
-    binding_flags: *mut RawVkDescriptorBindingFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub binding_count: u32,
+    pub binding_flags: *mut RawVkDescriptorBindingFlags,
 }
 
 #[derive(Debug, Clone)]

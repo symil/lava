@@ -18,11 +18,11 @@ use vk::ext::vk_validation_cache_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkValidationCacheCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkValidationCacheCreateFlags,
-    initial_data_size: usize,
-    initial_data: *const c_void,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkValidationCacheCreateFlags,
+    pub initial_data_size: usize,
+    pub initial_data: *const c_void,
 }
 
 #[derive(Debug, Clone)]

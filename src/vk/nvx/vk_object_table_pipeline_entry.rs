@@ -19,9 +19,9 @@ use vk::vk_pipeline::*;
 
 #[repr(C)]
 pub struct RawVkObjectTablePipelineEntry {
-    type_: RawVkObjectEntryType,
-    flags: RawVkObjectEntryUsageFlags,
-    pipeline: RawVkPipeline,
+    pub type_: RawVkObjectEntryType,
+    pub flags: RawVkObjectEntryUsageFlags,
+    pub pipeline: RawVkPipeline,
 }
 
 #[derive(Debug, Clone)]

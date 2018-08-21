@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceSamplerFilterMinmaxProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    filter_minmax_single_component_formats: u32,
-    filter_minmax_image_component_mapping: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub filter_minmax_single_component_formats: u32,
+    pub filter_minmax_image_component_mapping: u32,
 }
 
 #[derive(Debug, Clone)]

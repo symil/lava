@@ -17,11 +17,11 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDevice8BitStorageFeatures {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    storage_buffer_8_bit_access: u32,
-    uniform_and_storage_buffer_8_bit_access: u32,
-    storage_push_constant_8: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub storage_buffer_8_bit_access: u32,
+    pub uniform_and_storage_buffer_8_bit_access: u32,
+    pub storage_push_constant_8: u32,
 }
 
 #[derive(Debug, Clone)]

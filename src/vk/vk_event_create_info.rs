@@ -18,9 +18,9 @@ use vk::vk_event_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkEventCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkEventCreateFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkEventCreateFlags,
 }
 
 #[derive(Debug, Clone)]

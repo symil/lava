@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceSamplerYcbcrConversionFeatures {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    sampler_ycbcr_conversion: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub sampler_ycbcr_conversion: u32,
 }
 
 #[derive(Debug, Clone)]

@@ -21,13 +21,13 @@ use vk::vk_clear_value::*;
 
 #[repr(C)]
 pub struct RawVkRenderPassBeginInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    render_pass: RawVkRenderPass,
-    framebuffer: RawVkFramebuffer,
-    render_area: RawVkRect2D,
-    clear_value_count: u32,
-    clear_values: *mut RawVkClearValue,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub render_pass: RawVkRenderPass,
+    pub framebuffer: RawVkFramebuffer,
+    pub render_area: RawVkRect2D,
+    pub clear_value_count: u32,
+    pub clear_values: *mut RawVkClearValue,
 }
 
 #[derive(Debug, Clone)]

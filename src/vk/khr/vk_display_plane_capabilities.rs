@@ -19,15 +19,15 @@ use vk::vk_extent_2d::*;
 
 #[repr(C)]
 pub struct RawVkDisplayPlaneCapabilities {
-    supported_alpha: RawVkDisplayPlaneAlphaFlags,
-    min_src_position: RawVkOffset2D,
-    max_src_position: RawVkOffset2D,
-    min_src_extent: RawVkExtent2D,
-    max_src_extent: RawVkExtent2D,
-    min_dst_position: RawVkOffset2D,
-    max_dst_position: RawVkOffset2D,
-    min_dst_extent: RawVkExtent2D,
-    max_dst_extent: RawVkExtent2D,
+    pub supported_alpha: RawVkDisplayPlaneAlphaFlags,
+    pub min_src_position: RawVkOffset2D,
+    pub max_src_position: RawVkOffset2D,
+    pub min_src_extent: RawVkExtent2D,
+    pub max_src_extent: RawVkExtent2D,
+    pub min_dst_position: RawVkOffset2D,
+    pub max_dst_position: RawVkOffset2D,
+    pub min_dst_extent: RawVkExtent2D,
+    pub max_dst_extent: RawVkExtent2D,
 }
 
 #[derive(Debug, Clone)]

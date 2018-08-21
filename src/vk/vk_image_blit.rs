@@ -18,10 +18,10 @@ use vk::vk_offset_3d::*;
 
 #[repr(C)]
 pub struct RawVkImageBlit {
-    src_subresource: RawVkImageSubresourceLayers,
-    src_offsets: [RawVkOffset3D; 2],
-    dst_subresource: RawVkImageSubresourceLayers,
-    dst_offsets: [RawVkOffset3D; 2],
+    pub src_subresource: RawVkImageSubresourceLayers,
+    pub src_offsets: [RawVkOffset3D; 2],
+    pub dst_subresource: RawVkImageSubresourceLayers,
+    pub dst_offsets: [RawVkOffset3D; 2],
 }
 
 #[derive(Debug, Clone)]

@@ -21,13 +21,13 @@ use vk::vk_pipeline::*;
 
 #[repr(C)]
 pub struct RawVkComputePipelineCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineCreateFlags,
-    stage: RawVkPipelineShaderStageCreateInfo,
-    layout: RawVkPipelineLayout,
-    base_pipeline_handle: RawVkPipeline,
-    base_pipeline_index: i32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineCreateFlags,
+    pub stage: RawVkPipelineShaderStageCreateInfo,
+    pub layout: RawVkPipelineLayout,
+    pub base_pipeline_handle: RawVkPipeline,
+    pub base_pipeline_index: i32,
 }
 
 #[derive(Debug, Clone)]

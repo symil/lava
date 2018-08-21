@@ -20,13 +20,13 @@ use vk::vk_rect_2d::*;
 
 #[repr(C)]
 pub struct RawVkPipelineViewportStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineViewportStateCreateFlags,
-    viewport_count: u32,
-    viewports: *mut RawVkViewport,
-    scissor_count: u32,
-    scissors: *mut RawVkRect2D,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineViewportStateCreateFlags,
+    pub viewport_count: u32,
+    pub viewports: *mut RawVkViewport,
+    pub scissor_count: u32,
+    pub scissors: *mut RawVkRect2D,
 }
 
 #[derive(Debug, Clone)]

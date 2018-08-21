@@ -18,9 +18,9 @@ use vk::vk_sparse_memory_bind::*;
 
 #[repr(C)]
 pub struct RawVkSparseBufferMemoryBindInfo {
-    buffer: RawVkBuffer,
-    bind_count: u32,
-    binds: *mut RawVkSparseMemoryBind,
+    pub buffer: RawVkBuffer,
+    pub bind_count: u32,
+    pub binds: *mut RawVkSparseMemoryBind,
 }
 
 #[derive(Debug, Clone)]

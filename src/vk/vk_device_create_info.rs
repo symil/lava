@@ -20,16 +20,16 @@ use vk::vk_physical_device_features::*;
 
 #[repr(C)]
 pub struct RawVkDeviceCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkDeviceCreateFlags,
-    queue_create_info_count: u32,
-    queue_create_infos: *mut RawVkDeviceQueueCreateInfo,
-    enabled_layer_count: u32,
-    enabled_layer_names: *mut *mut c_char,
-    enabled_extension_count: u32,
-    enabled_extension_names: *mut *mut c_char,
-    enabled_features: *mut RawVkPhysicalDeviceFeatures,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDeviceCreateFlags,
+    pub queue_create_info_count: u32,
+    pub queue_create_infos: *mut RawVkDeviceQueueCreateInfo,
+    pub enabled_layer_count: u32,
+    pub enabled_layer_names: *mut *mut c_char,
+    pub enabled_extension_count: u32,
+    pub enabled_extension_names: *mut *mut c_char,
+    pub enabled_features: *mut RawVkPhysicalDeviceFeatures,
 }
 
 #[derive(Debug, Clone)]

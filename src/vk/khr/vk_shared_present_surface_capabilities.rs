@@ -18,9 +18,9 @@ use vk::vk_image_usage_flags::*;
 
 #[repr(C)]
 pub struct RawVkSharedPresentSurfaceCapabilities {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    shared_present_supported_usage_flags: RawVkImageUsageFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub shared_present_supported_usage_flags: RawVkImageUsageFlags,
 }
 
 #[derive(Debug, Clone)]

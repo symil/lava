@@ -20,12 +20,12 @@ use vk::vk_rect_2d::*;
 
 #[repr(C)]
 pub struct RawVkPipelineDiscardRectangleStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineDiscardRectangleStateCreateFlags,
-    discard_rectangle_mode: RawVkDiscardRectangleMode,
-    discard_rectangle_count: u32,
-    discard_rectangles: *mut RawVkRect2D,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineDiscardRectangleStateCreateFlags,
+    pub discard_rectangle_mode: RawVkDiscardRectangleMode,
+    pub discard_rectangle_count: u32,
+    pub discard_rectangles: *mut RawVkRect2D,
 }
 
 #[derive(Debug, Clone)]

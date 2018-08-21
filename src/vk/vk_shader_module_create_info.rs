@@ -18,11 +18,11 @@ use vk::vk_shader_module_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkShaderModuleCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkShaderModuleCreateFlags,
-    code_size: usize,
-    code: *const u8,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkShaderModuleCreateFlags,
+    pub code_size: usize,
+    pub code: *const u8,
 }
 
 #[derive(Debug, Clone)]

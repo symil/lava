@@ -17,10 +17,10 @@ use vk::vk_format::*;
 
 #[repr(C)]
 pub struct RawVkVertexInputAttributeDescription {
-    location: u32,
-    binding: u32,
-    format: RawVkFormat,
-    offset: u32,
+    pub location: u32,
+    pub binding: u32,
+    pub format: RawVkFormat,
+    pub offset: u32,
 }
 
 #[derive(Debug, Clone)]

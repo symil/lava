@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkTextureLODGatherFormatProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    supports_texture_gather_lodbias_amd: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub supports_texture_gather_lodbias_amd: u32,
 }
 
 #[derive(Debug, Clone)]

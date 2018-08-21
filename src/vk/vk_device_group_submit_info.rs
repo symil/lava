@@ -17,14 +17,14 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkDeviceGroupSubmitInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    wait_semaphore_count: u32,
-    wait_semaphore_device_indices: *mut u32,
-    command_buffer_count: u32,
-    command_buffer_device_masks: *const u32,
-    signal_semaphore_count: u32,
-    signal_semaphore_device_indices: *mut u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub wait_semaphore_count: u32,
+    pub wait_semaphore_device_indices: *mut u32,
+    pub command_buffer_count: u32,
+    pub command_buffer_device_masks: *const u32,
+    pub signal_semaphore_count: u32,
+    pub signal_semaphore_device_indices: *mut u32,
 }
 
 #[derive(Debug, Clone)]

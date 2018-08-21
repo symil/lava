@@ -19,11 +19,11 @@ use vk::vk_descriptor_set_layout_binding::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorSetLayoutCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkDescriptorSetLayoutCreateFlags,
-    binding_count: u32,
-    bindings: *mut RawVkDescriptorSetLayoutBinding,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDescriptorSetLayoutCreateFlags,
+    pub binding_count: u32,
+    pub bindings: *mut RawVkDescriptorSetLayoutBinding,
 }
 
 #[derive(Debug, Clone)]

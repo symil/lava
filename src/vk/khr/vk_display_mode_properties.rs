@@ -18,8 +18,8 @@ use vk::khr::vk_display_mode_parameters::*;
 
 #[repr(C)]
 pub struct RawVkDisplayModeProperties {
-    display_mode: RawVkDisplayMode,
-    parameters: RawVkDisplayModeParameters,
+    pub display_mode: RawVkDisplayMode,
+    pub parameters: RawVkDisplayModeParameters,
 }
 
 #[derive(Debug, Clone)]

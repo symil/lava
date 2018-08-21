@@ -18,9 +18,9 @@ use vk::vk_point_clipping_behavior::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDevicePointClippingProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    point_clipping_behavior: RawVkPointClippingBehavior,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub point_clipping_behavior: RawVkPointClippingBehavior,
 }
 
 #[derive(Debug, Clone)]

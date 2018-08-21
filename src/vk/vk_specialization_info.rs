@@ -17,10 +17,10 @@ use vk::vk_specialization_map_entry::*;
 
 #[repr(C)]
 pub struct RawVkSpecializationInfo {
-    map_entry_count: u32,
-    map_entries: *mut RawVkSpecializationMapEntry,
-    data_size: usize,
-    data: *const c_void,
+    pub map_entry_count: u32,
+    pub map_entries: *mut RawVkSpecializationMapEntry,
+    pub data_size: usize,
+    pub data: *const c_void,
 }
 
 #[derive(Debug, Clone)]

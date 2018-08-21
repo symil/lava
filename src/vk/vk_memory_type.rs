@@ -17,8 +17,8 @@ use vk::vk_memory_property_flags::*;
 
 #[repr(C)]
 pub struct RawVkMemoryType {
-    property_flags: RawVkMemoryPropertyFlags,
-    heap_index: u32,
+    pub property_flags: RawVkMemoryPropertyFlags,
+    pub heap_index: u32,
 }
 
 #[derive(Debug, Clone)]

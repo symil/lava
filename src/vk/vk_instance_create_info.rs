@@ -19,14 +19,14 @@ use vk::vk_application_info::*;
 
 #[repr(C)]
 pub struct RawVkInstanceCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkInstanceCreateFlags,
-    application_info: *mut RawVkApplicationInfo,
-    enabled_layer_count: u32,
-    enabled_layer_names: *mut *mut c_char,
-    enabled_extension_count: u32,
-    enabled_extension_names: *mut *mut c_char,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkInstanceCreateFlags,
+    pub application_info: *mut RawVkApplicationInfo,
+    pub enabled_layer_count: u32,
+    pub enabled_layer_names: *mut *mut c_char,
+    pub enabled_extension_count: u32,
+    pub enabled_extension_names: *mut *mut c_char,
 }
 
 #[derive(Debug, Clone)]

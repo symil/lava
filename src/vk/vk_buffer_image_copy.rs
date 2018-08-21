@@ -19,12 +19,12 @@ use vk::vk_extent_3d::*;
 
 #[repr(C)]
 pub struct RawVkBufferImageCopy {
-    buffer_offset: u64,
-    buffer_row_length: u32,
-    buffer_image_height: u32,
-    image_subresource: RawVkImageSubresourceLayers,
-    image_offset: RawVkOffset3D,
-    image_extent: RawVkExtent3D,
+    pub buffer_offset: u64,
+    pub buffer_row_length: u32,
+    pub buffer_image_height: u32,
+    pub image_subresource: RawVkImageSubresourceLayers,
+    pub image_offset: RawVkOffset3D,
+    pub image_extent: RawVkExtent3D,
 }
 
 #[derive(Debug, Clone)]

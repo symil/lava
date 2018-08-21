@@ -26,21 +26,21 @@ use vk::vk_image_layout::*;
 
 #[repr(C)]
 pub struct RawVkImageCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkImageCreateFlags,
-    image_type: RawVkImageType,
-    format: RawVkFormat,
-    extent: RawVkExtent3D,
-    mip_levels: u32,
-    array_layers: u32,
-    samples: RawVkSampleCountFlags,
-    tiling: RawVkImageTiling,
-    usage: RawVkImageUsageFlags,
-    sharing_mode: RawVkSharingMode,
-    queue_family_index_count: u32,
-    queue_family_indices: *mut u32,
-    initial_layout: RawVkImageLayout,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkImageCreateFlags,
+    pub image_type: RawVkImageType,
+    pub format: RawVkFormat,
+    pub extent: RawVkExtent3D,
+    pub mip_levels: u32,
+    pub array_layers: u32,
+    pub samples: RawVkSampleCountFlags,
+    pub tiling: RawVkImageTiling,
+    pub usage: RawVkImageUsageFlags,
+    pub sharing_mode: RawVkSharingMode,
+    pub queue_family_index_count: u32,
+    pub queue_family_indices: *mut u32,
+    pub initial_layout: RawVkImageLayout,
 }
 
 #[derive(Debug, Clone)]

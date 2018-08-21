@@ -18,9 +18,9 @@ use vk::ext::vk_display_event_type::*;
 
 #[repr(C)]
 pub struct RawVkDisplayEventInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    display_event: RawVkDisplayEventType,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub display_event: RawVkDisplayEventType,
 }
 
 #[derive(Debug, Clone)]

@@ -17,8 +17,8 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkSubpassEndInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
 }
 
 #[derive(Debug, Clone)]

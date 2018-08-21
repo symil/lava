@@ -17,9 +17,9 @@ use vk::vk_buffer::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorBufferInfo {
-    buffer: RawVkBuffer,
-    offset: u64,
-    range: u64,
+    pub buffer: RawVkBuffer,
+    pub offset: u64,
+    pub range: u64,
 }
 
 #[derive(Debug, Clone)]

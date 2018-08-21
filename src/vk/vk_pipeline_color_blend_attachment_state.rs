@@ -19,14 +19,14 @@ use vk::vk_color_component_flags::*;
 
 #[repr(C)]
 pub struct RawVkPipelineColorBlendAttachmentState {
-    blend_enable: u32,
-    src_color_blend_factor: RawVkBlendFactor,
-    dst_color_blend_factor: RawVkBlendFactor,
-    color_blend_op: RawVkBlendOp,
-    src_alpha_blend_factor: RawVkBlendFactor,
-    dst_alpha_blend_factor: RawVkBlendFactor,
-    alpha_blend_op: RawVkBlendOp,
-    color_write_mask: RawVkColorComponentFlags,
+    pub blend_enable: u32,
+    pub src_color_blend_factor: RawVkBlendFactor,
+    pub dst_color_blend_factor: RawVkBlendFactor,
+    pub color_blend_op: RawVkBlendOp,
+    pub src_alpha_blend_factor: RawVkBlendFactor,
+    pub dst_alpha_blend_factor: RawVkBlendFactor,
+    pub alpha_blend_op: RawVkBlendOp,
+    pub color_write_mask: RawVkColorComponentFlags,
 }
 
 #[derive(Debug, Clone)]

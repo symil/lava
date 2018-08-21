@@ -18,9 +18,9 @@ use vk::ext::vk_sampler_reduction_mode::*;
 
 #[repr(C)]
 pub struct RawVkSamplerReductionModeCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    reduction_mode: RawVkSamplerReductionMode,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub reduction_mode: RawVkSamplerReductionMode,
 }
 
 #[derive(Debug, Clone)]

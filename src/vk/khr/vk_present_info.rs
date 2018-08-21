@@ -20,14 +20,14 @@ use vk::vk_result::*;
 
 #[repr(C)]
 pub struct RawVkPresentInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    wait_semaphore_count: u32,
-    wait_semaphores: *mut RawVkSemaphore,
-    swapchain_count: u32,
-    swapchains: *mut RawVkSwapchain,
-    image_indices: *mut u32,
-    results: *mut RawVkResult,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub wait_semaphore_count: u32,
+    pub wait_semaphores: *mut RawVkSemaphore,
+    pub swapchain_count: u32,
+    pub swapchains: *mut RawVkSwapchain,
+    pub image_indices: *mut u32,
+    pub results: *mut RawVkResult,
 }
 
 #[derive(Debug, Clone)]

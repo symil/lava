@@ -18,11 +18,11 @@ use vk::vk_rect_2d::*;
 
 #[repr(C)]
 pub struct RawVkDisplayPresentInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    src_rect: RawVkRect2D,
-    dst_rect: RawVkRect2D,
-    persistent: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub src_rect: RawVkRect2D,
+    pub dst_rect: RawVkRect2D,
+    pub persistent: u32,
 }
 
 #[derive(Debug, Clone)]

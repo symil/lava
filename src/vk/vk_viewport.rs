@@ -16,12 +16,12 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkViewport {
-    x: f32,
-    y: f32,
-    width: f32,
-    height: f32,
-    min_depth: f32,
-    max_depth: f32,
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
+    pub min_depth: f32,
+    pub max_depth: f32,
 }
 
 #[derive(Debug, Clone)]

@@ -18,10 +18,10 @@ use vk::ext::vk_vertex_input_binding_divisor_description::*;
 
 #[repr(C)]
 pub struct RawVkPipelineVertexInputDivisorStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    vertex_binding_divisor_count: u32,
-    vertex_binding_divisors: *mut RawVkVertexInputBindingDivisorDescription,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub vertex_binding_divisor_count: u32,
+    pub vertex_binding_divisors: *mut RawVkVertexInputBindingDivisorDescription,
 }
 
 #[derive(Debug, Clone)]

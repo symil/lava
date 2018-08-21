@@ -18,9 +18,9 @@ use vk::vk_sparse_image_format_properties::*;
 
 #[repr(C)]
 pub struct RawVkSparseImageFormatProperties2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    properties: RawVkSparseImageFormatProperties,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub properties: RawVkSparseImageFormatProperties,
 }
 
 #[derive(Debug, Clone)]

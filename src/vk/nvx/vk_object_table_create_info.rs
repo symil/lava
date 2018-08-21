@@ -19,17 +19,17 @@ use vk::nvx::vk_object_entry_usage_flags::*;
 
 #[repr(C)]
 pub struct RawVkObjectTableCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    object_count: u32,
-    object_entry_types: *mut RawVkObjectEntryType,
-    object_entry_counts: *mut u32,
-    object_entry_usage_flags: *mut RawVkObjectEntryUsageFlags,
-    max_uniform_buffers_per_descriptor: u32,
-    max_storage_buffers_per_descriptor: u32,
-    max_storage_images_per_descriptor: u32,
-    max_sampled_images_per_descriptor: u32,
-    max_pipeline_layouts: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub object_count: u32,
+    pub object_entry_types: *mut RawVkObjectEntryType,
+    pub object_entry_counts: *mut u32,
+    pub object_entry_usage_flags: *mut RawVkObjectEntryUsageFlags,
+    pub max_uniform_buffers_per_descriptor: u32,
+    pub max_storage_buffers_per_descriptor: u32,
+    pub max_storage_images_per_descriptor: u32,
+    pub max_sampled_images_per_descriptor: u32,
+    pub max_pipeline_layouts: u32,
 }
 
 #[derive(Debug, Clone)]

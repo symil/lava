@@ -17,10 +17,10 @@ use vk::nv::vk_viewport_coordinate_swizzle::*;
 
 #[repr(C)]
 pub struct RawVkViewportSwizzle {
-    x: RawVkViewportCoordinateSwizzle,
-    y: RawVkViewportCoordinateSwizzle,
-    z: RawVkViewportCoordinateSwizzle,
-    w: RawVkViewportCoordinateSwizzle,
+    pub x: RawVkViewportCoordinateSwizzle,
+    pub y: RawVkViewportCoordinateSwizzle,
+    pub z: RawVkViewportCoordinateSwizzle,
+    pub w: RawVkViewportCoordinateSwizzle,
 }
 
 #[derive(Debug, Clone)]

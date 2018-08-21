@@ -18,10 +18,10 @@ use vk::vk_pipeline_stage_flags::*;
 
 #[repr(C)]
 pub struct RawVkCheckpointData {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    stage: RawVkPipelineStageFlags,
-    checkpoint_marker: *const c_void,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub stage: RawVkPipelineStageFlags,
+    pub checkpoint_marker: *const c_void,
 }
 
 #[derive(Debug, Clone)]

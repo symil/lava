@@ -17,11 +17,11 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceMultiviewFeatures {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    multiview: u32,
-    multiview_geometry_shader: u32,
-    multiview_tessellation_shader: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub multiview: u32,
+    pub multiview_geometry_shader: u32,
+    pub multiview_tessellation_shader: u32,
 }
 
 #[derive(Debug, Clone)]

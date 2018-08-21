@@ -19,10 +19,10 @@ use vk::khr::vk_display_mode_parameters::*;
 
 #[repr(C)]
 pub struct RawVkDisplayModeCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkDisplayModeCreateFlags,
-    parameters: RawVkDisplayModeParameters,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDisplayModeCreateFlags,
+    pub parameters: RawVkDisplayModeParameters,
 }
 
 #[derive(Debug, Clone)]

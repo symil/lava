@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkSamplerYcbcrConversionImageFormatProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    combined_image_sampler_descriptor_count: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub combined_image_sampler_descriptor_count: u32,
 }
 
 #[derive(Debug, Clone)]

@@ -21,12 +21,12 @@ use vk::vk_sparse_memory_bind_flags::*;
 
 #[repr(C)]
 pub struct RawVkSparseImageMemoryBind {
-    subresource: RawVkImageSubresource,
-    offset: RawVkOffset3D,
-    extent: RawVkExtent3D,
-    memory: RawVkDeviceMemory,
-    memory_offset: u64,
-    flags: RawVkSparseMemoryBindFlags,
+    pub subresource: RawVkImageSubresource,
+    pub offset: RawVkOffset3D,
+    pub extent: RawVkExtent3D,
+    pub memory: RawVkDeviceMemory,
+    pub memory_offset: u64,
+    pub flags: RawVkSparseMemoryBindFlags,
 }
 
 #[derive(Debug, Clone)]

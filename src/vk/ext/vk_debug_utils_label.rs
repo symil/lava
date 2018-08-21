@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkDebugUtilsLabel {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    label_name: *mut c_char,
-    color: [f32; 4],
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub label_name: *mut c_char,
+    pub color: [f32; 4],
 }
 
 #[derive(Debug, Clone)]

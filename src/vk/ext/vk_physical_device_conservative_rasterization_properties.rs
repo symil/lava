@@ -17,17 +17,17 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceConservativeRasterizationProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    primitive_overestimation_size: f32,
-    max_extra_primitive_overestimation_size: f32,
-    extra_primitive_overestimation_size_granularity: f32,
-    primitive_underestimation: u32,
-    conservative_point_and_line_rasterization: u32,
-    degenerate_triangles_rasterized: u32,
-    degenerate_lines_rasterized: u32,
-    fully_covered_fragment_shader_input_variable: u32,
-    conservative_rasterization_post_depth_coverage: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub primitive_overestimation_size: f32,
+    pub max_extra_primitive_overestimation_size: f32,
+    pub extra_primitive_overestimation_size_granularity: f32,
+    pub primitive_underestimation: u32,
+    pub conservative_point_and_line_rasterization: u32,
+    pub degenerate_triangles_rasterized: u32,
+    pub degenerate_lines_rasterized: u32,
+    pub fully_covered_fragment_shader_input_variable: u32,
+    pub conservative_rasterization_post_depth_coverage: u32,
 }
 
 #[derive(Debug, Clone)]

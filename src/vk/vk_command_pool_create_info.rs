@@ -18,10 +18,10 @@ use vk::vk_command_pool_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkCommandPoolCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkCommandPoolCreateFlags,
-    queue_family_index: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkCommandPoolCreateFlags,
+    pub queue_family_index: u32,
 }
 
 #[derive(Debug, Clone)]

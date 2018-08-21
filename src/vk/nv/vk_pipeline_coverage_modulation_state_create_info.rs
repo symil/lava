@@ -19,13 +19,13 @@ use vk::nv::vk_coverage_modulation_mode::*;
 
 #[repr(C)]
 pub struct RawVkPipelineCoverageModulationStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineCoverageModulationStateCreateFlags,
-    coverage_modulation_mode: RawVkCoverageModulationMode,
-    coverage_modulation_table_enable: u32,
-    coverage_modulation_table_count: u32,
-    coverage_modulation_table: *const f32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineCoverageModulationStateCreateFlags,
+    pub coverage_modulation_mode: RawVkCoverageModulationMode,
+    pub coverage_modulation_table_enable: u32,
+    pub coverage_modulation_table_count: u32,
+    pub coverage_modulation_table: *const f32,
 }
 
 #[derive(Debug, Clone)]

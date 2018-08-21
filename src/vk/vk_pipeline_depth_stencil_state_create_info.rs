@@ -20,18 +20,18 @@ use vk::vk_stencil_op_state::*;
 
 #[repr(C)]
 pub struct RawVkPipelineDepthStencilStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineDepthStencilStateCreateFlags,
-    depth_test_enable: u32,
-    depth_write_enable: u32,
-    depth_compare_op: RawVkCompareOp,
-    depth_bounds_test_enable: u32,
-    stencil_test_enable: u32,
-    front: RawVkStencilOpState,
-    back: RawVkStencilOpState,
-    min_depth_bounds: f32,
-    max_depth_bounds: f32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineDepthStencilStateCreateFlags,
+    pub depth_test_enable: u32,
+    pub depth_write_enable: u32,
+    pub depth_compare_op: RawVkCompareOp,
+    pub depth_bounds_test_enable: u32,
+    pub stencil_test_enable: u32,
+    pub front: RawVkStencilOpState,
+    pub back: RawVkStencilOpState,
+    pub min_depth_bounds: f32,
+    pub max_depth_bounds: f32,
 }
 
 #[derive(Debug, Clone)]

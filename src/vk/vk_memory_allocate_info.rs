@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkMemoryAllocateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    allocation_size: u64,
-    memory_type_index: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub allocation_size: u64,
+    pub memory_type_index: u32,
 }
 
 #[derive(Debug, Clone)]

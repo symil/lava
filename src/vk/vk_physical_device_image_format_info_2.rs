@@ -22,13 +22,13 @@ use vk::vk_image_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceImageFormatInfo2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    format: RawVkFormat,
-    type_: RawVkImageType,
-    tiling: RawVkImageTiling,
-    usage: RawVkImageUsageFlags,
-    flags: RawVkImageCreateFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub format: RawVkFormat,
+    pub type_: RawVkImageType,
+    pub tiling: RawVkImageTiling,
+    pub usage: RawVkImageUsageFlags,
+    pub flags: RawVkImageCreateFlags,
 }
 
 #[derive(Debug, Clone)]

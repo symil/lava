@@ -18,13 +18,13 @@ use vk::amd::vk_shader_resource_usage::*;
 
 #[repr(C)]
 pub struct RawVkShaderStatisticsInfo {
-    shader_stage_mask: RawVkShaderStageFlags,
-    resource_usage: RawVkShaderResourceUsage,
-    num_physical_vgprs: u32,
-    num_physical_sgprs: u32,
-    num_available_vgprs: u32,
-    num_available_sgprs: u32,
-    compute_work_group_size: [u32; 3],
+    pub shader_stage_mask: RawVkShaderStageFlags,
+    pub resource_usage: RawVkShaderResourceUsage,
+    pub num_physical_vgprs: u32,
+    pub num_physical_sgprs: u32,
+    pub num_available_vgprs: u32,
+    pub num_available_sgprs: u32,
+    pub compute_work_group_size: [u32; 3],
 }
 
 #[derive(Debug, Clone)]

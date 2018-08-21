@@ -16,9 +16,9 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkDispatchIndirectCommand {
-    x: u32,
-    y: u32,
-    z: u32,
+    pub x: u32,
+    pub y: u32,
+    pub z: u32,
 }
 
 #[derive(Debug, Clone)]

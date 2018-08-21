@@ -478,20 +478,18 @@ impl VkDevice {
         }
     }
     
-    pub fn allocate_descriptor_sets(&self, allocate_info: &VkDescriptorSetAllocateInfo) -> Result<VkDescriptorSet, VkResult> {
+    pub fn allocate_descriptor_sets(&self, allocate_info: &VkDescriptorSetAllocateInfo) -> Result<Vec<VkDescriptorSet>, VkResult> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(allocate_info);
-            let raw_descriptor_sets = &mut mem::uninitialized() as *mut RawVkDescriptorSet;
+            let raw_descriptor_sets = malloc(((&*raw_allocate_info).descriptor_set_count as usize) * mem::size_of::<RawVkDescriptorSet>()) as *mut RawVkDescriptorSet;
             
             let vk_result = ((&*self._fn_table).vkAllocateDescriptorSets)(self._handle, raw_allocate_info, raw_descriptor_sets);
             if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             
-            let mut descriptor_sets = new_vk_value(raw_descriptor_sets);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut descriptor_sets, fn_table, parent_instance, parent_device);
+            let mut descriptor_sets = new_vk_array((&*raw_allocate_info).descriptor_set_count, raw_descriptor_sets);
+            for elt in &mut descriptor_sets { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
             free_vk_ptr(raw_allocate_info);
+            free_ptr(raw_descriptor_sets);
             Ok(descriptor_sets)
         }
     }
@@ -562,20 +560,18 @@ impl VkDevice {
         }
     }
     
-    pub fn allocate_command_buffers(&self, allocate_info: &VkCommandBufferAllocateInfo) -> Result<VkCommandBuffer, VkResult> {
+    pub fn allocate_command_buffers(&self, allocate_info: &VkCommandBufferAllocateInfo) -> Result<Vec<VkCommandBuffer>, VkResult> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(allocate_info);
-            let raw_command_buffers = &mut mem::uninitialized() as *mut RawVkCommandBuffer;
+            let raw_command_buffers = malloc(((&*raw_allocate_info).command_buffer_count as usize) * mem::size_of::<RawVkCommandBuffer>()) as *mut RawVkCommandBuffer;
             
             let vk_result = ((&*self._fn_table).vkAllocateCommandBuffers)(self._handle, raw_allocate_info, raw_command_buffers);
             if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             
-            let mut command_buffers = new_vk_value(raw_command_buffers);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut command_buffers, fn_table, parent_instance, parent_device);
+            let mut command_buffers = new_vk_array((&*raw_allocate_info).command_buffer_count, raw_command_buffers);
+            for elt in &mut command_buffers { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
             free_vk_ptr(raw_allocate_info);
+            free_ptr(raw_command_buffers);
             Ok(command_buffers)
         }
     }

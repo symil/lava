@@ -18,8 +18,8 @@ use vk::khr::vk_color_space::*;
 
 #[repr(C)]
 pub struct RawVkSurfaceFormat {
-    format: RawVkFormat,
-    color_space: RawVkColorSpace,
+    pub format: RawVkFormat,
+    pub color_space: RawVkColorSpace,
 }
 
 #[derive(Debug, Clone)]

@@ -18,13 +18,13 @@ use vk::vk_object_type::*;
 
 #[repr(C)]
 pub struct RawVkDebugUtilsObjectTagInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    object_type: RawVkObjectType,
-    object_handle: u64,
-    tag_name: u64,
-    tag_size: usize,
-    tag: *const c_void,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub object_type: RawVkObjectType,
+    pub object_handle: u64,
+    pub tag_name: u64,
+    pub tag_size: usize,
+    pub tag: *const c_void,
 }
 
 #[derive(Debug, Clone)]

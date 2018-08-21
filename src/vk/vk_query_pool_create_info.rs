@@ -20,12 +20,12 @@ use vk::vk_query_pipeline_statistic_flags::*;
 
 #[repr(C)]
 pub struct RawVkQueryPoolCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkQueryPoolCreateFlags,
-    query_type: RawVkQueryType,
-    query_count: u32,
-    pipeline_statistics: RawVkQueryPipelineStatisticFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkQueryPoolCreateFlags,
+    pub query_type: RawVkQueryType,
+    pub query_count: u32,
+    pub pipeline_statistics: RawVkQueryPipelineStatisticFlags,
 }
 
 #[derive(Debug, Clone)]

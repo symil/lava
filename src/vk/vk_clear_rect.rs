@@ -17,9 +17,9 @@ use vk::vk_rect_2d::*;
 
 #[repr(C)]
 pub struct RawVkClearRect {
-    rect: RawVkRect2D,
-    base_array_layer: u32,
-    layer_count: u32,
+    pub rect: RawVkRect2D,
+    pub base_array_layer: u32,
+    pub layer_count: u32,
 }
 
 #[derive(Debug, Clone)]

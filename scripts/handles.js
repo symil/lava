@@ -4,7 +4,8 @@ const {
     argToString,
     getFieldsInformation,
     isStructOrHandle,
-    isStruct
+    isStruct,
+    getCountVarNameValue
 } = require('./utils');
 
 const VK_SUCCESS = 0;
@@ -315,8 +316,7 @@ function functionToMethod(handle, func) {
                 freeStataments.push(`${createdRawTypeName}::vk_free(${rawResultName}.as_mut().unwrap());`)
             }
         } else {
-            const countArg = func.argsInfo[func.args.findIndex(arg => arg.countFor.includes(lastArg.name))];
-            const rawCountName = getRawVarName(countArg.varName);
+            const rawCountName = getCountVarNameValue(lastArg.countField, getRawVarName);
 
             if (beforeLastArgIsCountPtr) {
                 statements.push(

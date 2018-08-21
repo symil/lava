@@ -18,9 +18,9 @@ use vk::ext::vk_queue_global_priority::*;
 
 #[repr(C)]
 pub struct RawVkDeviceQueueGlobalPriorityCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    global_priority: RawVkQueueGlobalPriority,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub global_priority: RawVkQueueGlobalPriority,
 }
 
 #[derive(Debug, Clone)]

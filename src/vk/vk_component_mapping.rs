@@ -17,10 +17,10 @@ use vk::vk_component_swizzle::*;
 
 #[repr(C)]
 pub struct RawVkComponentMapping {
-    r: RawVkComponentSwizzle,
-    g: RawVkComponentSwizzle,
-    b: RawVkComponentSwizzle,
-    a: RawVkComponentSwizzle,
+    pub r: RawVkComponentSwizzle,
+    pub g: RawVkComponentSwizzle,
+    pub b: RawVkComponentSwizzle,
+    pub a: RawVkComponentSwizzle,
 }
 
 #[derive(Debug, Clone)]

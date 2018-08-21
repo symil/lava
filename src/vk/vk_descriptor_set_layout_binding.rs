@@ -19,11 +19,11 @@ use vk::vk_sampler::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorSetLayoutBinding {
-    binding: u32,
-    descriptor_type: RawVkDescriptorType,
-    descriptor_count: u32,
-    stage_flags: RawVkShaderStageFlags,
-    immutable_samplers: *mut RawVkSampler,
+    pub binding: u32,
+    pub descriptor_type: RawVkDescriptorType,
+    pub descriptor_count: u32,
+    pub stage_flags: RawVkShaderStageFlags,
+    pub immutable_samplers: *mut RawVkSampler,
 }
 
 #[derive(Debug, Clone)]

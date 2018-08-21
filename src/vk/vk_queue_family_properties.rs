@@ -18,10 +18,10 @@ use vk::vk_extent_3d::*;
 
 #[repr(C)]
 pub struct RawVkQueueFamilyProperties {
-    queue_flags: RawVkQueueFlags,
-    queue_count: u32,
-    timestamp_valid_bits: u32,
-    min_image_transfer_granularity: RawVkExtent3D,
+    pub queue_flags: RawVkQueueFlags,
+    pub queue_count: u32,
+    pub timestamp_valid_bits: u32,
+    pub min_image_transfer_granularity: RawVkExtent3D,
 }
 
 #[derive(Debug, Clone)]

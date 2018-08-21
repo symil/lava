@@ -20,13 +20,13 @@ use vk::vk_vertex_input_attribute_description::*;
 
 #[repr(C)]
 pub struct RawVkPipelineVertexInputStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineVertexInputStateCreateFlags,
-    vertex_binding_description_count: u32,
-    vertex_binding_descriptions: *mut RawVkVertexInputBindingDescription,
-    vertex_attribute_description_count: u32,
-    vertex_attribute_descriptions: *mut RawVkVertexInputAttributeDescription,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineVertexInputStateCreateFlags,
+    pub vertex_binding_description_count: u32,
+    pub vertex_binding_descriptions: *mut RawVkVertexInputBindingDescription,
+    pub vertex_attribute_description_count: u32,
+    pub vertex_attribute_descriptions: *mut RawVkVertexInputAttributeDescription,
 }
 
 #[derive(Debug, Clone)]

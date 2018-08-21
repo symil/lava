@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkDescriptorSetVariableDescriptorCountLayoutSupport {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    max_variable_descriptor_count: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub max_variable_descriptor_count: u32,
 }
 
 #[derive(Debug, Clone)]

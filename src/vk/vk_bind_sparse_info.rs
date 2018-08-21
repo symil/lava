@@ -21,18 +21,18 @@ use vk::vk_sparse_image_memory_bind_info::*;
 
 #[repr(C)]
 pub struct RawVkBindSparseInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    wait_semaphore_count: u32,
-    wait_semaphores: *mut RawVkSemaphore,
-    buffer_bind_count: u32,
-    buffer_binds: *mut RawVkSparseBufferMemoryBindInfo,
-    image_opaque_bind_count: u32,
-    image_opaque_binds: *mut RawVkSparseImageOpaqueMemoryBindInfo,
-    image_bind_count: u32,
-    image_binds: *mut RawVkSparseImageMemoryBindInfo,
-    signal_semaphore_count: u32,
-    signal_semaphores: *mut RawVkSemaphore,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub wait_semaphore_count: u32,
+    pub wait_semaphores: *mut RawVkSemaphore,
+    pub buffer_bind_count: u32,
+    pub buffer_binds: *mut RawVkSparseBufferMemoryBindInfo,
+    pub image_opaque_bind_count: u32,
+    pub image_opaque_binds: *mut RawVkSparseImageOpaqueMemoryBindInfo,
+    pub image_bind_count: u32,
+    pub image_binds: *mut RawVkSparseImageMemoryBindInfo,
+    pub signal_semaphore_count: u32,
+    pub signal_semaphores: *mut RawVkSemaphore,
 }
 
 #[derive(Debug, Clone)]

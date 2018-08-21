@@ -18,9 +18,9 @@ use vk::vk_external_semaphore_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceExternalSemaphoreInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    handle_type: RawVkExternalSemaphoreHandleTypeFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
 }
 
 #[derive(Debug, Clone)]

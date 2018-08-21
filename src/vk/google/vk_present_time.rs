@@ -16,8 +16,8 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkPresentTime {
-    present_id: u32,
-    desired_present_time: u64,
+    pub present_id: u32,
+    pub desired_present_time: u64,
 }
 
 #[derive(Debug, Clone)]

@@ -18,10 +18,10 @@ use vk::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkImportMemoryFdInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    handle_type: RawVkExternalMemoryHandleTypeFlags,
-    fd: i32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub handle_type: RawVkExternalMemoryHandleTypeFlags,
+    pub fd: i32,
 }
 
 #[derive(Debug, Clone)]

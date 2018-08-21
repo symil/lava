@@ -22,16 +22,16 @@ use vk::vk_extent_2d::*;
 
 #[repr(C)]
 pub struct RawVkDisplaySurfaceCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkDisplaySurfaceCreateFlags,
-    display_mode: RawVkDisplayMode,
-    plane_index: u32,
-    plane_stack_index: u32,
-    transform: RawVkSurfaceTransformFlags,
-    global_alpha: f32,
-    alpha_mode: RawVkDisplayPlaneAlphaFlags,
-    image_extent: RawVkExtent2D,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDisplaySurfaceCreateFlags,
+    pub display_mode: RawVkDisplayMode,
+    pub plane_index: u32,
+    pub plane_stack_index: u32,
+    pub transform: RawVkSurfaceTransformFlags,
+    pub global_alpha: f32,
+    pub alpha_mode: RawVkDisplayPlaneAlphaFlags,
+    pub image_extent: RawVkExtent2D,
 }
 
 #[derive(Debug, Clone)]

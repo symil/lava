@@ -217,6 +217,17 @@ function isOutputHandleStruct(typeName) {
     return OUTPUT_HANDLE_STRUCTS.includes(typeName);
 }
 
+function getCountVarNameValue(countFieldName, getVarName) {
+    const isNested = countFieldName.includes('::');
+
+    if (isNested) {
+        const path = countFieldName.split('::');
+        return `(&*${getVarName(cToRustVarName(path[0]))}).${path.slice(1).map(cToRustVarName).join('.')}`;
+    } else {
+        return getVarName(cToRustVarName(countFieldName));
+    }
+}
+
 function getFieldsInformation(fields, structName) {
     const infos = [];
 
@@ -243,7 +254,7 @@ function getFieldsInformation(fields, structName) {
         const arrayVarName = '[ArrayVarName]';
 
         const varNameValue = cToRustVarName(field.name);
-        const countVarNameValue = field.countField ? cToRustVarName(field.countField) : null;
+        const countVarNameValue = field.countField ? field.countField : null;
         const arrayVarNameValue = isCount ? cToRustVarName(field.countFor[0]) : null;
         const countField = (field.countField && fields.find(f => f.name === field.countField)) || {};
         const countVarIsPointer = countField.isPointer;
@@ -390,7 +401,7 @@ function getFieldsInformation(fields, structName) {
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
 
-                if (countVarNameValue) {
+                if (field.countField) {
                     wrappedType = `Vec<${wrappedTypeName}>`;
                     toWrapped = `new_array(${countVarName}, ${varName}.as_ptr())`;
                 } else {
@@ -446,7 +457,7 @@ function getFieldsInformation(fields, structName) {
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
 
-                if (countVarNameValue) {
+                if (field.countField) {
                     wrappedType = `Vec<${wrappedTypeName}>`;
                     toRaw = createStaticArray(rawTypeName, arraySize, varName, 'vk_to_raw_array');
                     toWrapped = `new_vk_array(${countVarName}, ${varName}.as_ptr())`;
@@ -535,8 +546,8 @@ function stringToFunction(statement, varName, countVarName, arrayVarName, varNam
     ];
 
     if (countVarNameValue) {
-        body.push(`str = str.replace('${countVarName}', makeVarName("${countVarNameValue}"));`);
-        body.push(`str = str.replace('${countVarName}', makeVarName("${countVarNameValue}"));`);
+        body.push(`str = str.replace('${countVarName}', makeCountVar("${countVarNameValue}", makeVarName));`);
+        body.push(`str = str.replace('${countVarName}', makeCountVar("${countVarNameValue}", makeVarName));`);
     }
 
     if (arrayVarNameValue) {
@@ -548,7 +559,11 @@ function stringToFunction(statement, varName, countVarName, arrayVarName, varNam
         `return str;`
     );
 
-    return new Function('makeVarName', 'removeUnsafe', body.join('\n'));
+    const baseFunc = new Function('makeCountVar', 'makeVarName', 'removeUnsafe', body.join('\n'));
+
+    return function(makeVarName, removeUnsafe) {
+        return baseFunc(getCountVarNameValue, makeVarName, removeUnsafe);
+    };
 }
 
 module.exports = {
@@ -568,5 +583,6 @@ module.exports = {
     addUsesToSet,
     isStructOrHandle,
     isStruct,
-    isOutputHandleStruct
+    isOutputHandleStruct,
+    getCountVarNameValue
 };

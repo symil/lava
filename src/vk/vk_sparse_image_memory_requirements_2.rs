@@ -18,9 +18,9 @@ use vk::vk_sparse_image_memory_requirements::*;
 
 #[repr(C)]
 pub struct RawVkSparseImageMemoryRequirements2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    memory_requirements: RawVkSparseImageMemoryRequirements,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub memory_requirements: RawVkSparseImageMemoryRequirements,
 }
 
 #[derive(Debug, Clone)]

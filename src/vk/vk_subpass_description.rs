@@ -19,16 +19,16 @@ use vk::vk_attachment_reference::*;
 
 #[repr(C)]
 pub struct RawVkSubpassDescription {
-    flags: RawVkSubpassDescriptionFlags,
-    pipeline_bind_point: RawVkPipelineBindPoint,
-    input_attachment_count: u32,
-    input_attachments: *mut RawVkAttachmentReference,
-    color_attachment_count: u32,
-    color_attachments: *mut RawVkAttachmentReference,
-    resolve_attachments: *mut RawVkAttachmentReference,
-    depth_stencil_attachment: *mut RawVkAttachmentReference,
-    preserve_attachment_count: u32,
-    preserve_attachments: *mut u32,
+    pub flags: RawVkSubpassDescriptionFlags,
+    pub pipeline_bind_point: RawVkPipelineBindPoint,
+    pub input_attachment_count: u32,
+    pub input_attachments: *mut RawVkAttachmentReference,
+    pub color_attachment_count: u32,
+    pub color_attachments: *mut RawVkAttachmentReference,
+    pub resolve_attachments: *mut RawVkAttachmentReference,
+    pub depth_stencil_attachment: *mut RawVkAttachmentReference,
+    pub preserve_attachment_count: u32,
+    pub preserve_attachments: *mut u32,
 }
 
 #[derive(Debug, Clone)]

@@ -18,9 +18,9 @@ use vk::vk_subpass_contents::*;
 
 #[repr(C)]
 pub struct RawVkSubpassBeginInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    contents: RawVkSubpassContents,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub contents: RawVkSubpassContents,
 }
 
 #[derive(Debug, Clone)]

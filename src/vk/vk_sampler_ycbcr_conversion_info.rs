@@ -18,9 +18,9 @@ use vk::vk_sampler_ycbcr_conversion::*;
 
 #[repr(C)]
 pub struct RawVkSamplerYcbcrConversionInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    conversion: RawVkSamplerYcbcrConversion,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub conversion: RawVkSamplerYcbcrConversion,
 }
 
 #[derive(Debug, Clone)]

@@ -18,9 +18,9 @@ use vk::khr::vk_swapchain::*;
 
 #[repr(C)]
 pub struct RawVkImageSwapchainCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    swapchain: RawVkSwapchain,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub swapchain: RawVkSwapchain,
 }
 
 #[derive(Debug, Clone)]

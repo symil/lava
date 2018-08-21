@@ -18,9 +18,9 @@ use vk::ext::vk_validation_cache::*;
 
 #[repr(C)]
 pub struct RawVkShaderModuleValidationCacheCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    validation_cache: RawVkValidationCache,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub validation_cache: RawVkValidationCache,
 }
 
 #[derive(Debug, Clone)]

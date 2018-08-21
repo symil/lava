@@ -17,8 +17,8 @@ use vk::ext::vk_sample_locations_info::*;
 
 #[repr(C)]
 pub struct RawVkSubpassSampleLocations {
-    subpass_index: u32,
-    sample_locations_info: RawVkSampleLocationsInfo,
+    pub subpass_index: u32,
+    pub sample_locations_info: RawVkSampleLocationsInfo,
 }
 
 #[derive(Debug, Clone)]

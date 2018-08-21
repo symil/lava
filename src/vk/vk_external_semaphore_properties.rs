@@ -19,11 +19,11 @@ use vk::vk_external_semaphore_feature_flags::*;
 
 #[repr(C)]
 pub struct RawVkExternalSemaphoreProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    export_from_imported_handle_types: RawVkExternalSemaphoreHandleTypeFlags,
-    compatible_handle_types: RawVkExternalSemaphoreHandleTypeFlags,
-    external_semaphore_features: RawVkExternalSemaphoreFeatureFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub export_from_imported_handle_types: RawVkExternalSemaphoreHandleTypeFlags,
+    pub compatible_handle_types: RawVkExternalSemaphoreHandleTypeFlags,
+    pub external_semaphore_features: RawVkExternalSemaphoreFeatureFlags,
 }
 
 #[derive(Debug, Clone)]

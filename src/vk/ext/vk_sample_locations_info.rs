@@ -20,12 +20,12 @@ use vk::ext::vk_sample_location::*;
 
 #[repr(C)]
 pub struct RawVkSampleLocationsInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    sample_locations_per_pixel: RawVkSampleCountFlags,
-    sample_location_grid_size: RawVkExtent2D,
-    sample_locations_count: u32,
-    sample_locations: *mut RawVkSampleLocation,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub sample_locations_per_pixel: RawVkSampleCountFlags,
+    pub sample_location_grid_size: RawVkExtent2D,
+    pub sample_locations_count: u32,
+    pub sample_locations: *mut RawVkSampleLocation,
 }
 
 #[derive(Debug, Clone)]

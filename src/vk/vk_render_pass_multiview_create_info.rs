@@ -17,14 +17,14 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkRenderPassMultiviewCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    subpass_count: u32,
-    view_masks: *const u32,
-    dependency_count: u32,
-    view_offsets: *mut i32,
-    correlation_mask_count: u32,
-    correlation_masks: *const u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub subpass_count: u32,
+    pub view_masks: *const u32,
+    pub dependency_count: u32,
+    pub view_offsets: *mut i32,
+    pub correlation_mask_count: u32,
+    pub correlation_masks: *const u32,
 }
 
 #[derive(Debug, Clone)]

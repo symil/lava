@@ -19,13 +19,13 @@ use vk::vk_extent_2d::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceSampleLocationsProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    sample_location_sample_counts: RawVkSampleCountFlags,
-    max_sample_location_grid_size: RawVkExtent2D,
-    sample_location_coordinate_range: [f32; 2],
-    sample_location_sub_pixel_bits: u32,
-    variable_sample_locations: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub sample_location_sample_counts: RawVkSampleCountFlags,
+    pub max_sample_location_grid_size: RawVkExtent2D,
+    pub sample_location_coordinate_range: [f32; 2],
+    pub sample_location_sub_pixel_bits: u32,
+    pub variable_sample_locations: u32,
 }
 
 #[derive(Debug, Clone)]

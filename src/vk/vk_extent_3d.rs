@@ -16,9 +16,9 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkExtent3D {
-    width: u32,
-    height: u32,
-    depth: u32,
+    pub width: u32,
+    pub height: u32,
+    pub depth: u32,
 }
 
 #[derive(Debug, Clone)]

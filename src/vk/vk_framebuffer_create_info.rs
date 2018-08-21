@@ -20,15 +20,15 @@ use vk::vk_image_view::*;
 
 #[repr(C)]
 pub struct RawVkFramebufferCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkFramebufferCreateFlags,
-    render_pass: RawVkRenderPass,
-    attachment_count: u32,
-    attachments: *mut RawVkImageView,
-    width: u32,
-    height: u32,
-    layers: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkFramebufferCreateFlags,
+    pub render_pass: RawVkRenderPass,
+    pub attachment_count: u32,
+    pub attachments: *mut RawVkImageView,
+    pub width: u32,
+    pub height: u32,
+    pub layers: u32,
 }
 
 #[derive(Debug, Clone)]

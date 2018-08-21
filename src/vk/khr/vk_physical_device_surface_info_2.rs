@@ -18,9 +18,9 @@ use vk::khr::vk_surface::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceSurfaceInfo2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    surface: RawVkSurface,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub surface: RawVkSurface,
 }
 
 #[derive(Debug, Clone)]

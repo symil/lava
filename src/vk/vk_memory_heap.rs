@@ -17,8 +17,8 @@ use vk::vk_memory_heap_flags::*;
 
 #[repr(C)]
 pub struct RawVkMemoryHeap {
-    size: u64,
-    flags: RawVkMemoryHeapFlags,
+    pub size: u64,
+    pub flags: RawVkMemoryHeapFlags,
 }
 
 #[derive(Debug, Clone)]

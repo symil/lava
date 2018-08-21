@@ -18,9 +18,9 @@ use vk::khr::vk_device_group_present_mode_flags::*;
 
 #[repr(C)]
 pub struct RawVkDeviceGroupSwapchainCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    modes: RawVkDeviceGroupPresentModeFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub modes: RawVkDeviceGroupPresentModeFlags,
 }
 
 #[derive(Debug, Clone)]

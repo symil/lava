@@ -20,19 +20,19 @@ use vk::khr::vk_attachment_reference_2::*;
 
 #[repr(C)]
 pub struct RawVkSubpassDescription2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkSubpassDescriptionFlags,
-    pipeline_bind_point: RawVkPipelineBindPoint,
-    view_mask: u32,
-    input_attachment_count: u32,
-    input_attachments: *mut RawVkAttachmentReference2,
-    color_attachment_count: u32,
-    color_attachments: *mut RawVkAttachmentReference2,
-    resolve_attachments: *mut RawVkAttachmentReference2,
-    depth_stencil_attachment: *mut RawVkAttachmentReference2,
-    preserve_attachment_count: u32,
-    preserve_attachments: *mut u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkSubpassDescriptionFlags,
+    pub pipeline_bind_point: RawVkPipelineBindPoint,
+    pub view_mask: u32,
+    pub input_attachment_count: u32,
+    pub input_attachments: *mut RawVkAttachmentReference2,
+    pub color_attachment_count: u32,
+    pub color_attachments: *mut RawVkAttachmentReference2,
+    pub resolve_attachments: *mut RawVkAttachmentReference2,
+    pub depth_stencil_attachment: *mut RawVkAttachmentReference2,
+    pub preserve_attachment_count: u32,
+    pub preserve_attachments: *mut u32,
 }
 
 #[derive(Debug, Clone)]

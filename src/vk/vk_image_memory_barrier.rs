@@ -21,16 +21,16 @@ use vk::vk_image_subresource_range::*;
 
 #[repr(C)]
 pub struct RawVkImageMemoryBarrier {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    src_access_mask: RawVkAccessFlags,
-    dst_access_mask: RawVkAccessFlags,
-    old_layout: RawVkImageLayout,
-    new_layout: RawVkImageLayout,
-    src_queue_family_index: u32,
-    dst_queue_family_index: u32,
-    image: RawVkImage,
-    subresource_range: RawVkImageSubresourceRange,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub src_access_mask: RawVkAccessFlags,
+    pub dst_access_mask: RawVkAccessFlags,
+    pub old_layout: RawVkImageLayout,
+    pub new_layout: RawVkImageLayout,
+    pub src_queue_family_index: u32,
+    pub dst_queue_family_index: u32,
+    pub image: RawVkImage,
+    pub subresource_range: RawVkImageSubresourceRange,
 }
 
 #[derive(Debug, Clone)]

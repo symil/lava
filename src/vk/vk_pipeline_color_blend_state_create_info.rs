@@ -20,14 +20,14 @@ use vk::vk_pipeline_color_blend_attachment_state::*;
 
 #[repr(C)]
 pub struct RawVkPipelineColorBlendStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineColorBlendStateCreateFlags,
-    logic_op_enable: u32,
-    logic_op: RawVkLogicOp,
-    attachment_count: u32,
-    attachments: *mut RawVkPipelineColorBlendAttachmentState,
-    blend_constants: [f32; 4],
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineColorBlendStateCreateFlags,
+    pub logic_op_enable: u32,
+    pub logic_op: RawVkLogicOp,
+    pub attachment_count: u32,
+    pub attachments: *mut RawVkPipelineColorBlendAttachmentState,
+    pub blend_constants: [f32; 4],
 }
 
 #[derive(Debug, Clone)]

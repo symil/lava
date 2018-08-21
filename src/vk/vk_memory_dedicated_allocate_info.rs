@@ -19,10 +19,10 @@ use vk::vk_buffer::*;
 
 #[repr(C)]
 pub struct RawVkMemoryDedicatedAllocateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    image: RawVkImage,
-    buffer: RawVkBuffer,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub image: RawVkImage,
+    pub buffer: RawVkBuffer,
 }
 
 #[derive(Debug, Clone)]

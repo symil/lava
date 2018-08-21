@@ -16,8 +16,8 @@ use vk::vk_device::*;
 
 #[repr(C)]
 pub struct RawVkExtensionProperties {
-    extension_name: [c_char; 256],
-    spec_version: u32,
+    pub extension_name: [c_char; 256],
+    pub spec_version: u32,
 }
 
 #[derive(Debug, Clone)]

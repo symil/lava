@@ -18,10 +18,10 @@ use vk::ext::vk_sample_locations_info::*;
 
 #[repr(C)]
 pub struct RawVkPipelineSampleLocationsStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    sample_locations_enable: u32,
-    sample_locations_info: RawVkSampleLocationsInfo,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub sample_locations_enable: u32,
+    pub sample_locations_info: RawVkSampleLocationsInfo,
 }
 
 #[derive(Debug, Clone)]

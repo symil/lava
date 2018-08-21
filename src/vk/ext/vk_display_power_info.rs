@@ -18,9 +18,9 @@ use vk::ext::vk_display_power_state::*;
 
 #[repr(C)]
 pub struct RawVkDisplayPowerInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    power_state: RawVkDisplayPowerState,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub power_state: RawVkDisplayPowerState,
 }
 
 #[derive(Debug, Clone)]

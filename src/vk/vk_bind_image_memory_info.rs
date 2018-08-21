@@ -19,11 +19,11 @@ use vk::vk_device_memory::*;
 
 #[repr(C)]
 pub struct RawVkBindImageMemoryInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    image: RawVkImage,
-    memory: RawVkDeviceMemory,
-    memory_offset: u64,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub image: RawVkImage,
+    pub memory: RawVkDeviceMemory,
+    pub memory_offset: u64,
 }
 
 #[derive(Debug, Clone)]

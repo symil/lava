@@ -22,13 +22,13 @@ use vk::vk_image_tiling::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceSparseImageFormatInfo2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    format: RawVkFormat,
-    type_: RawVkImageType,
-    samples: RawVkSampleCountFlags,
-    usage: RawVkImageUsageFlags,
-    tiling: RawVkImageTiling,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub format: RawVkFormat,
+    pub type_: RawVkImageType,
+    pub samples: RawVkSampleCountFlags,
+    pub usage: RawVkImageUsageFlags,
+    pub tiling: RawVkImageTiling,
 }
 
 #[derive(Debug, Clone)]

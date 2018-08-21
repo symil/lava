@@ -19,11 +19,11 @@ use vk::vk_extent_3d::*;
 
 #[repr(C)]
 pub struct RawVkImageResolve {
-    src_subresource: RawVkImageSubresourceLayers,
-    src_offset: RawVkOffset3D,
-    dst_subresource: RawVkImageSubresourceLayers,
-    dst_offset: RawVkOffset3D,
-    extent: RawVkExtent3D,
+    pub src_subresource: RawVkImageSubresourceLayers,
+    pub src_offset: RawVkOffset3D,
+    pub dst_subresource: RawVkImageSubresourceLayers,
+    pub dst_offset: RawVkOffset3D,
+    pub extent: RawVkExtent3D,
 }
 
 #[derive(Debug, Clone)]

@@ -18,9 +18,9 @@ use vk::vk_external_fence_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceExternalFenceInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    handle_type: RawVkExternalFenceHandleTypeFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub handle_type: RawVkExternalFenceHandleTypeFlags,
 }
 
 #[derive(Debug, Clone)]

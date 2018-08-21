@@ -17,13 +17,13 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceIDProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    device_uuid: [u8; 16],
-    driver_uuid: [u8; 16],
-    device_luid: [u8; 8],
-    device_node_mask: u32,
-    device_luidvalid: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub device_uuid: [u8; 16],
+    pub driver_uuid: [u8; 16],
+    pub device_luid: [u8; 8],
+    pub device_node_mask: u32,
+    pub device_luidvalid: u32,
 }
 
 #[derive(Debug, Clone)]

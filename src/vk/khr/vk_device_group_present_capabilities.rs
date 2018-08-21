@@ -18,10 +18,10 @@ use vk::khr::vk_device_group_present_mode_flags::*;
 
 #[repr(C)]
 pub struct RawVkDeviceGroupPresentCapabilities {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    present_mask: [u32; 32],
-    modes: RawVkDeviceGroupPresentModeFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub present_mask: [u32; 32],
+    pub modes: RawVkDeviceGroupPresentModeFlags,
 }
 
 #[derive(Debug, Clone)]

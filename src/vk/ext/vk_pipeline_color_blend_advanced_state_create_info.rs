@@ -18,11 +18,11 @@ use vk::ext::vk_blend_overlap::*;
 
 #[repr(C)]
 pub struct RawVkPipelineColorBlendAdvancedStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    src_premultiplied: u32,
-    dst_premultiplied: u32,
-    blend_overlap: RawVkBlendOverlap,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub src_premultiplied: u32,
+    pub dst_premultiplied: u32,
+    pub blend_overlap: RawVkBlendOverlap,
 }
 
 #[derive(Debug, Clone)]

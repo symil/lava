@@ -18,9 +18,9 @@ use vk::vk_external_memory_properties::*;
 
 #[repr(C)]
 pub struct RawVkExternalImageFormatProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    external_memory_properties: RawVkExternalMemoryProperties,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub external_memory_properties: RawVkExternalMemoryProperties,
 }
 
 #[derive(Debug, Clone)]

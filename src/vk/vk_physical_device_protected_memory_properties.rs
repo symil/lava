@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceProtectedMemoryProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    protected_no_fault: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub protected_no_fault: u32,
 }
 
 #[derive(Debug, Clone)]

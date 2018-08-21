@@ -18,9 +18,9 @@ use vk::ext::vk_surface_counter_flags::*;
 
 #[repr(C)]
 pub struct RawVkSwapchainCounterCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    surface_counters: RawVkSurfaceCounterFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub surface_counters: RawVkSurfaceCounterFlags,
 }
 
 #[derive(Debug, Clone)]

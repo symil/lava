@@ -18,12 +18,12 @@ use vk::vk_device_queue_create_flags::*;
 
 #[repr(C)]
 pub struct RawVkDeviceQueueCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkDeviceQueueCreateFlags,
-    queue_family_index: u32,
-    queue_count: u32,
-    queue_priorities: *const f32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDeviceQueueCreateFlags,
+    pub queue_family_index: u32,
+    pub queue_count: u32,
+    pub queue_priorities: *const f32,
 }
 
 #[derive(Debug, Clone)]

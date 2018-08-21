@@ -18,10 +18,10 @@ use vk::ext::vk_validation_check::*;
 
 #[repr(C)]
 pub struct RawVkValidationFlags {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    disabled_validation_check_count: u32,
-    disabled_validation_checks: *mut RawVkValidationCheck,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub disabled_validation_check_count: u32,
+    pub disabled_validation_checks: *mut RawVkValidationCheck,
 }
 
 #[derive(Debug, Clone)]

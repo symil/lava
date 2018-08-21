@@ -19,12 +19,12 @@ use vk::ext::vk_subpass_sample_locations::*;
 
 #[repr(C)]
 pub struct RawVkRenderPassSampleLocationsBeginInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    attachment_initial_sample_locations_count: u32,
-    attachment_initial_sample_locations: *mut RawVkAttachmentSampleLocations,
-    post_subpass_sample_locations_count: u32,
-    post_subpass_sample_locations: *mut RawVkSubpassSampleLocations,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub attachment_initial_sample_locations_count: u32,
+    pub attachment_initial_sample_locations: *mut RawVkAttachmentSampleLocations,
+    pub post_subpass_sample_locations_count: u32,
+    pub post_subpass_sample_locations: *mut RawVkSubpassSampleLocations,
 }
 
 #[derive(Debug, Clone)]

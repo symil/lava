@@ -18,9 +18,9 @@ use vk::nv::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkExportMemoryAllocateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    handle_types: RawVkExternalMemoryHandleTypeFlags,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
 #[derive(Debug, Clone)]

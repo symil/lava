@@ -20,15 +20,15 @@ use vk::vk_command_buffer::*;
 
 #[repr(C)]
 pub struct RawVkSubmitInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    wait_semaphore_count: u32,
-    wait_semaphores: *mut RawVkSemaphore,
-    wait_dst_stage_mask: *mut RawVkPipelineStageFlags,
-    command_buffer_count: u32,
-    command_buffers: *mut RawVkCommandBuffer,
-    signal_semaphore_count: u32,
-    signal_semaphores: *mut RawVkSemaphore,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub wait_semaphore_count: u32,
+    pub wait_semaphores: *mut RawVkSemaphore,
+    pub wait_dst_stage_mask: *mut RawVkPipelineStageFlags,
+    pub command_buffer_count: u32,
+    pub command_buffers: *mut RawVkCommandBuffer,
+    pub signal_semaphore_count: u32,
+    pub signal_semaphores: *mut RawVkSemaphore,
 }
 
 #[derive(Debug, Clone)]

@@ -17,10 +17,10 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkDeviceGroupBindSparseInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    resource_device_index: u32,
-    memory_device_index: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub resource_device_index: u32,
+    pub memory_device_index: u32,
 }
 
 #[derive(Debug, Clone)]

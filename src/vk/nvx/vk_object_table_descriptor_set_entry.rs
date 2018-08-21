@@ -20,10 +20,10 @@ use vk::vk_descriptor_set::*;
 
 #[repr(C)]
 pub struct RawVkObjectTableDescriptorSetEntry {
-    type_: RawVkObjectEntryType,
-    flags: RawVkObjectEntryUsageFlags,
-    pipeline_layout: RawVkPipelineLayout,
-    descriptor_set: RawVkDescriptorSet,
+    pub type_: RawVkObjectEntryType,
+    pub flags: RawVkObjectEntryUsageFlags,
+    pub pipeline_layout: RawVkPipelineLayout,
+    pub descriptor_set: RawVkDescriptorSet,
 }
 
 #[derive(Debug, Clone)]

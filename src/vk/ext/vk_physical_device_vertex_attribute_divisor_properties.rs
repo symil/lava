@@ -17,9 +17,9 @@ use vk::vk_structure_type::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceVertexAttributeDivisorProperties {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    max_vertex_attrib_divisor: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub max_vertex_attrib_divisor: u32,
 }
 
 #[derive(Debug, Clone)]

@@ -17,8 +17,8 @@ use vk::khr::vk_display::*;
 
 #[repr(C)]
 pub struct RawVkDisplayPlaneProperties {
-    current_display: RawVkDisplay,
-    current_stack_index: u32,
+    pub current_display: RawVkDisplay,
+    pub current_stack_index: u32,
 }
 
 #[derive(Debug, Clone)]

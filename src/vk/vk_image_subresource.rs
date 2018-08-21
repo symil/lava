@@ -17,9 +17,9 @@ use vk::vk_image_aspect_flags::*;
 
 #[repr(C)]
 pub struct RawVkImageSubresource {
-    aspect_mask: RawVkImageAspectFlags,
-    mip_level: u32,
-    array_layer: u32,
+    pub aspect_mask: RawVkImageAspectFlags,
+    pub mip_level: u32,
+    pub array_layer: u32,
 }
 
 #[derive(Debug, Clone)]

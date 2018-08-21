@@ -19,11 +19,11 @@ use vk::vk_dynamic_state::*;
 
 #[repr(C)]
 pub struct RawVkPipelineDynamicStateCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkPipelineDynamicStateCreateFlags,
-    dynamic_state_count: u32,
-    dynamic_states: *mut RawVkDynamicState,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineDynamicStateCreateFlags,
+    pub dynamic_state_count: u32,
+    pub dynamic_states: *mut RawVkDynamicState,
 }
 
 #[derive(Debug, Clone)]

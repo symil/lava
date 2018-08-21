@@ -17,10 +17,10 @@ use vk::vk_image_aspect_flags::*;
 
 #[repr(C)]
 pub struct RawVkImageSubresourceLayers {
-    aspect_mask: RawVkImageAspectFlags,
-    mip_level: u32,
-    base_array_layer: u32,
-    layer_count: u32,
+    pub aspect_mask: RawVkImageAspectFlags,
+    pub mip_level: u32,
+    pub base_array_layer: u32,
+    pub layer_count: u32,
 }
 
 #[derive(Debug, Clone)]

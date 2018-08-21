@@ -18,10 +18,10 @@ use vk::khr::vk_swapchain::*;
 
 #[repr(C)]
 pub struct RawVkBindImageMemorySwapchainInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    swapchain: RawVkSwapchain,
-    image_index: u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub swapchain: RawVkSwapchain,
+    pub image_index: u32,
 }
 
 #[derive(Debug, Clone)]

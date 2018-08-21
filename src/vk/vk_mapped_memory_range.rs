@@ -18,11 +18,11 @@ use vk::vk_device_memory::*;
 
 #[repr(C)]
 pub struct RawVkMappedMemoryRange {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    memory: RawVkDeviceMemory,
-    offset: u64,
-    size: u64,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub memory: RawVkDeviceMemory,
+    pub offset: u64,
+    pub size: u64,
 }
 
 #[derive(Debug, Clone)]

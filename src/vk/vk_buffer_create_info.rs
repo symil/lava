@@ -20,14 +20,14 @@ use vk::vk_sharing_mode::*;
 
 #[repr(C)]
 pub struct RawVkBufferCreateInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    flags: RawVkBufferCreateFlags,
-    size: u64,
-    usage: RawVkBufferUsageFlags,
-    sharing_mode: RawVkSharingMode,
-    queue_family_index_count: u32,
-    queue_family_indices: *mut u32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkBufferCreateFlags,
+    pub size: u64,
+    pub usage: RawVkBufferUsageFlags,
+    pub sharing_mode: RawVkSharingMode,
+    pub queue_family_index_count: u32,
+    pub queue_family_indices: *mut u32,
 }
 
 #[derive(Debug, Clone)]

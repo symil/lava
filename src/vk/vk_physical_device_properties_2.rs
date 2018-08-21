@@ -18,9 +18,9 @@ use vk::vk_physical_device_properties::*;
 
 #[repr(C)]
 pub struct RawVkPhysicalDeviceProperties2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    properties: RawVkPhysicalDeviceProperties,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub properties: RawVkPhysicalDeviceProperties,
 }
 
 #[derive(Debug, Clone)]

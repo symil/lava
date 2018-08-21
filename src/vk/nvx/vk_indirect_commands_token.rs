@@ -18,9 +18,9 @@ use vk::vk_buffer::*;
 
 #[repr(C)]
 pub struct RawVkIndirectCommandsToken {
-    token_type: RawVkIndirectCommandsTokenType,
-    buffer: RawVkBuffer,
-    offset: u64,
+    pub token_type: RawVkIndirectCommandsTokenType,
+    pub buffer: RawVkBuffer,
+    pub offset: u64,
 }
 
 #[derive(Debug, Clone)]

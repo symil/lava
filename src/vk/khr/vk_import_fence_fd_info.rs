@@ -20,12 +20,12 @@ use vk::vk_external_fence_handle_type_flags::*;
 
 #[repr(C)]
 pub struct RawVkImportFenceFdInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    fence: RawVkFence,
-    flags: RawVkFenceImportFlags,
-    handle_type: RawVkExternalFenceHandleTypeFlags,
-    fd: i32,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub fence: RawVkFence,
+    pub flags: RawVkFenceImportFlags,
+    pub handle_type: RawVkExternalFenceHandleTypeFlags,
+    pub fd: i32,
 }
 
 #[derive(Debug, Clone)]

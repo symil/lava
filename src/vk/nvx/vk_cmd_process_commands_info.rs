@@ -22,18 +22,18 @@ use vk::vk_buffer::*;
 
 #[repr(C)]
 pub struct RawVkCmdProcessCommandsInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    object_table: RawVkObjectTable,
-    indirect_commands_layout: RawVkIndirectCommandsLayout,
-    indirect_commands_token_count: u32,
-    indirect_commands_tokens: *mut RawVkIndirectCommandsToken,
-    max_sequences_count: u32,
-    target_command_buffer: RawVkCommandBuffer,
-    sequences_count_buffer: RawVkBuffer,
-    sequences_count_offset: u64,
-    sequences_index_buffer: RawVkBuffer,
-    sequences_index_offset: u64,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub object_table: RawVkObjectTable,
+    pub indirect_commands_layout: RawVkIndirectCommandsLayout,
+    pub indirect_commands_token_count: u32,
+    pub indirect_commands_tokens: *mut RawVkIndirectCommandsToken,
+    pub max_sequences_count: u32,
+    pub target_command_buffer: RawVkCommandBuffer,
+    pub sequences_count_buffer: RawVkBuffer,
+    pub sequences_count_offset: u64,
+    pub sequences_index_buffer: RawVkBuffer,
+    pub sequences_index_offset: u64,
 }
 
 #[derive(Debug, Clone)]

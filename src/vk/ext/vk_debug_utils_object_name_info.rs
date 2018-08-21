@@ -18,11 +18,11 @@ use vk::vk_object_type::*;
 
 #[repr(C)]
 pub struct RawVkDebugUtilsObjectNameInfo {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    object_type: RawVkObjectType,
-    object_handle: u64,
-    object_name: *mut c_char,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub object_type: RawVkObjectType,
+    pub object_handle: u64,
+    pub object_name: *mut c_char,
 }
 
 #[derive(Debug, Clone)]

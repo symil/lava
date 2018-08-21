@@ -18,9 +18,9 @@ use vk::vk_image::*;
 
 #[repr(C)]
 pub struct RawVkImageMemoryRequirementsInfo2 {
-    s_type: RawVkStructureType,
-    next: *const c_void,
-    image: RawVkImage,
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub image: RawVkImage,
 }
 
 #[derive(Debug, Clone)]
