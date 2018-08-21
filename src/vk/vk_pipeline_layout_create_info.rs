@@ -30,26 +30,32 @@ pub struct RawVkPipelineLayoutCreateInfo {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkPipelineLayoutCreateInfo<'a, 'b> {
+pub struct VkPipelineLayoutCreateInfo<'a, 'b, 'c>
+    where
+        'b: 'a,
+{
     pub flags: VkPipelineLayoutCreateFlags,
-    pub set_layouts: &'a [VkDescriptorSetLayout],
-    pub push_constant_ranges: &'b [VkPushConstantRange],
+    pub set_layouts: &'a [&'b VkDescriptorSetLayout],
+    pub push_constant_ranges: &'c [VkPushConstantRange],
 }
 
-impl<'a, 'b> VkWrappedType<RawVkPipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfo<'a, 'b> {
+impl<'a, 'b, 'c> VkWrappedType<RawVkPipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfo<'a, 'b, 'c>
+    where
+        'b: 'a,
+{
     fn vk_to_raw(src: &VkPipelineLayoutCreateInfo, dst: &mut RawVkPipelineLayoutCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineLayoutCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.set_layout_count = src.set_layouts.len() as u32;
-        dst.set_layouts = new_ptr_vk_array(src.set_layouts);
+        dst.set_layouts = new_ptr_vk_array_from_ref(src.set_layouts);
         dst.push_constant_range_count = src.push_constant_ranges.len() as u32;
         dst.push_constant_ranges = new_ptr_vk_array(src.push_constant_ranges);
     }
 }
 
-impl Default for VkPipelineLayoutCreateInfo<'static, 'static> {
-    fn default() -> VkPipelineLayoutCreateInfo<'static, 'static> {
+impl Default for VkPipelineLayoutCreateInfo<'static, 'static, 'static> {
+    fn default() -> VkPipelineLayoutCreateInfo<'static, 'static, 'static> {
         VkPipelineLayoutCreateInfo {
             flags: VkPipelineLayoutCreateFlags::default(),
             set_layouts: &[],
@@ -58,7 +64,10 @@ impl Default for VkPipelineLayoutCreateInfo<'static, 'static> {
     }
 }
 
-impl<'a, 'b> VkSetup for VkPipelineLayoutCreateInfo<'a, 'b> {
+impl<'a, 'b, 'c> VkSetup for VkPipelineLayoutCreateInfo<'a, 'b, 'c>
+    where
+        'b: 'a,
+{
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         
     }

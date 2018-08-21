@@ -35,11 +35,12 @@ pub struct RawVkWriteDescriptorSet {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g>
+pub struct VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     where
         'c: 'b,
         'd: 'b,
         'f: 'e,
+        'h: 'g,
 {
     pub dst_set: &'a VkDescriptorSet,
     pub dst_binding: usize,
@@ -47,14 +48,15 @@ pub struct VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g>
     pub descriptor_type: VkDescriptorType,
     pub image_info: &'b [VkDescriptorImageInfo<'c, 'd>],
     pub buffer_info: &'e [VkDescriptorBufferInfo<'f>],
-    pub texel_buffer_view: &'g [VkBufferView],
+    pub texel_buffer_view: &'g [&'h VkBufferView],
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkWriteDescriptorSet> for VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g>
+impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkWrappedType<RawVkWriteDescriptorSet> for VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     where
         'c: 'b,
         'd: 'b,
         'f: 'e,
+        'h: 'g,
 {
     fn vk_to_raw(src: &VkWriteDescriptorSet, dst: &mut RawVkWriteDescriptorSet) {
         dst.s_type = vk_to_raw_value(&VkStructureType::WriteDescriptorSet);
@@ -66,12 +68,12 @@ impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkWriteDescriptorSet> for VkWr
         dst.descriptor_type = vk_to_raw_value(&src.descriptor_type);
         dst.image_info = new_ptr_vk_array(src.image_info);
         dst.buffer_info = new_ptr_vk_array(src.buffer_info);
-        dst.texel_buffer_view = new_ptr_vk_array(src.texel_buffer_view);
+        dst.texel_buffer_view = new_ptr_vk_array_from_ref(src.texel_buffer_view);
     }
 }
 
-impl Default for VkWriteDescriptorSet<'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkWriteDescriptorSet<'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl Default for VkWriteDescriptorSet<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+    fn default() -> VkWriteDescriptorSet<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
         VkWriteDescriptorSet {
             dst_set: vk_null_ref(),
             dst_binding: 0,
@@ -84,11 +86,12 @@ impl Default for VkWriteDescriptorSet<'static, 'static, 'static, 'static, 'stati
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkSetup for VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g>
+impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkSetup for VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     where
         'c: 'b,
         'd: 'b,
         'f: 'e,
+        'h: 'g,
 {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         

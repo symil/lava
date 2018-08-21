@@ -76,10 +76,10 @@ impl VkDescriptorPool {
         }
     }
     
-    pub fn free_descriptor_sets(&self, descriptor_sets: &[VkDescriptorSet]) -> VkResult {
+    pub fn free_descriptor_sets(&self, descriptor_sets: &[&VkDescriptorSet]) -> VkResult {
         unsafe {
             let raw_descriptor_set_count = descriptor_sets.len() as u32;
-            let raw_descriptor_sets = new_ptr_vk_array(descriptor_sets);
+            let raw_descriptor_sets = new_ptr_vk_array_from_ref(descriptor_sets);
             let vk_result = ((&*self._fn_table).vkFreeDescriptorSets)(self._parent_device, self._handle, raw_descriptor_set_count, raw_descriptor_sets);
             free_ptr(raw_descriptor_sets);
             RawVkResult::vk_to_wrapped(&vk_result)

@@ -186,20 +186,20 @@ impl VkDevice {
         }
     }
     
-    pub fn reset_fences(&self, fences: &[VkFence]) -> VkResult {
+    pub fn reset_fences(&self, fences: &[&VkFence]) -> VkResult {
         unsafe {
             let raw_fence_count = fences.len() as u32;
-            let raw_fences = new_ptr_vk_array(fences);
+            let raw_fences = new_ptr_vk_array_from_ref(fences);
             let vk_result = ((&*self._fn_table).vkResetFences)(self._handle, raw_fence_count, raw_fences);
             free_ptr(raw_fences);
             RawVkResult::vk_to_wrapped(&vk_result)
         }
     }
     
-    pub fn wait_for_fences(&self, fences: &[VkFence], wait_all: bool, timeout: usize) -> VkResult {
+    pub fn wait_for_fences(&self, fences: &[&VkFence], wait_all: bool, timeout: usize) -> VkResult {
         unsafe {
             let raw_fence_count = fences.len() as u32;
-            let raw_fences = new_ptr_vk_array(fences);
+            let raw_fences = new_ptr_vk_array_from_ref(fences);
             let raw_wait_all = vk_to_raw_value(&wait_all);
             let raw_timeout = vk_to_raw_value(&timeout);
             let vk_result = ((&*self._fn_table).vkWaitForFences)(self._handle, raw_fence_count, raw_fences, raw_wait_all, raw_timeout);
@@ -1025,10 +1025,10 @@ impl VkDevice {
         }
     }
     
-    pub fn set_hdr_metadata(&self, swapchains: &[khr::VkSwapchain], metadata: &[ext::VkHdrMetadata]) {
+    pub fn set_hdr_metadata(&self, swapchains: &[&khr::VkSwapchain], metadata: &[ext::VkHdrMetadata]) {
         unsafe {
             let raw_swapchain_count = cmp::max(swapchains.len(), metadata.len()) as u32;
-            let raw_swapchains = new_ptr_vk_array(swapchains);
+            let raw_swapchains = new_ptr_vk_array_from_ref(swapchains);
             let raw_metadata = new_ptr_vk_array(metadata);
             ((&*self._fn_table).vkSetHdrMetadataEXT)(self._handle, raw_swapchain_count, raw_swapchains, raw_metadata);
             free_ptr(raw_swapchains);

@@ -27,23 +27,29 @@ pub struct RawVkDescriptorSetAllocateInfo {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkDescriptorSetAllocateInfo<'a, 'b> {
+pub struct VkDescriptorSetAllocateInfo<'a, 'b, 'c>
+    where
+        'c: 'b,
+{
     pub descriptor_pool: &'a VkDescriptorPool,
-    pub set_layouts: &'b [VkDescriptorSetLayout],
+    pub set_layouts: &'b [&'c VkDescriptorSetLayout],
 }
 
-impl<'a, 'b> VkWrappedType<RawVkDescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfo<'a, 'b> {
+impl<'a, 'b, 'c> VkWrappedType<RawVkDescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfo<'a, 'b, 'c>
+    where
+        'c: 'b,
+{
     fn vk_to_raw(src: &VkDescriptorSetAllocateInfo, dst: &mut RawVkDescriptorSetAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetAllocateInfo);
         dst.next = ptr::null();
         dst.descriptor_pool = vk_to_raw_value(src.descriptor_pool);
         dst.descriptor_set_count = src.set_layouts.len() as u32;
-        dst.set_layouts = new_ptr_vk_array(src.set_layouts);
+        dst.set_layouts = new_ptr_vk_array_from_ref(src.set_layouts);
     }
 }
 
-impl Default for VkDescriptorSetAllocateInfo<'static, 'static> {
-    fn default() -> VkDescriptorSetAllocateInfo<'static, 'static> {
+impl Default for VkDescriptorSetAllocateInfo<'static, 'static, 'static> {
+    fn default() -> VkDescriptorSetAllocateInfo<'static, 'static, 'static> {
         VkDescriptorSetAllocateInfo {
             descriptor_pool: vk_null_ref(),
             set_layouts: &[],
@@ -51,7 +57,10 @@ impl Default for VkDescriptorSetAllocateInfo<'static, 'static> {
     }
 }
 
-impl<'a, 'b> VkSetup for VkDescriptorSetAllocateInfo<'a, 'b> {
+impl<'a, 'b, 'c> VkSetup for VkDescriptorSetAllocateInfo<'a, 'b, 'c>
+    where
+        'c: 'b,
+{
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         
     }

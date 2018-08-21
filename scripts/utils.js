@@ -173,7 +173,7 @@ function getFieldRawTypeName(field) {
 
 const INT_TYPES = ['uint32_t', 'uint64_t', 'int32_t', 'int64_t', 'VkDeviceSize']
 
-const INT_FIELD_NAMES = ['x', 'y', 'z', 'width', 'height'];
+const INT_FIELD_NAMES = ['x', 'y', 'z', 'width', 'height', 'layers'];
 
 function fieldNameIsInt(field) {
     return INT_FIELD_NAMES.includes(field.name) || /(mask|version)/i.test(field.name);
@@ -247,6 +247,7 @@ function getFieldsInformation(fields, structName) {
         const arrayVarNameValue = isCount ? cToRustVarName(field.countFor[0]) : null;
         const countField = (field.countField && fields.find(f => f.name === field.countField)) || {};
         const countVarIsPointer = countField.isPointer;
+        const isInputHandle = isHandleType && !doesOutputHandle;
 
         let rawType = null;
         let wrappedType = null;
@@ -414,16 +415,19 @@ function getFieldsInformation(fields, structName) {
                 toRaw = `new_ptr_vk_array_array(${varName})`;
                 defValue = `&[]`;
             } else if (isPointerArray) {
+                const prefixRef = isInputHandle ? '&' : '';
+                const refMethodsuffix = isInputHandle ? '_from_ref' : '';
+
                 rawType = `*mut ${rawTypeName}`;
                 toWrapped = `new_vk_array(${countVarIsPointer ? '*' : ''}${countVarName}, ${varName})`;
 
                 if (isOptional) {
-                    wrappedType = `Option<&[${wrappedTypeName}]>`;
-                    toRaw = `new_ptr_vk_array_checked(${varName})`;
+                    wrappedType = `Option<&[${prefixRef}${wrappedTypeName}]>`;
+                    toRaw = `new_ptr_vk_array_checked${refMethodsuffix}(${varName})`;
                     defValue = `None`;
                 } else {
-                    wrappedType = `&[${wrappedTypeName}]`;
-                    toRaw = `new_ptr_vk_array(${varName})`;
+                    wrappedType = `&[${prefixRef}${wrappedTypeName}]`;
+                    toRaw = `new_ptr_vk_array${refMethodsuffix}(${varName})`;
                     defValue = `&[]`;
                 }
             } else if (isPointerValue) {
@@ -453,7 +457,7 @@ function getFieldsInformation(fields, structName) {
                     toWrapped = createStaticArray(wrappedTypeName, arraySize, varName, 'vk_to_wrapped_array');
                     defValue = fillStaticArray(wrappedTypeName, arraySize);
                 }
-            } else if (isHandleType && !doesOutputHandle) {
+            } else if (isInputHandle) {
                 rawType = rawTypeName;
 
                 // toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;

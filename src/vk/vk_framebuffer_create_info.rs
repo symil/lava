@@ -32,31 +32,37 @@ pub struct RawVkFramebufferCreateInfo {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkFramebufferCreateInfo<'a, 'b> {
+pub struct VkFramebufferCreateInfo<'a, 'b, 'c>
+    where
+        'c: 'b,
+{
     pub flags: VkFramebufferCreateFlags,
     pub render_pass: &'a VkRenderPass,
-    pub attachments: &'b [VkImageView],
+    pub attachments: &'b [&'c VkImageView],
     pub width: u32,
     pub height: u32,
-    pub layers: usize,
+    pub layers: u32,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkFramebufferCreateInfo> for VkFramebufferCreateInfo<'a, 'b> {
+impl<'a, 'b, 'c> VkWrappedType<RawVkFramebufferCreateInfo> for VkFramebufferCreateInfo<'a, 'b, 'c>
+    where
+        'c: 'b,
+{
     fn vk_to_raw(src: &VkFramebufferCreateInfo, dst: &mut RawVkFramebufferCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::FramebufferCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.render_pass = vk_to_raw_value(src.render_pass);
         dst.attachment_count = src.attachments.len() as u32;
-        dst.attachments = new_ptr_vk_array(src.attachments);
+        dst.attachments = new_ptr_vk_array_from_ref(src.attachments);
         dst.width = src.width;
         dst.height = src.height;
-        dst.layers = vk_to_raw_value(&src.layers);
+        dst.layers = src.layers;
     }
 }
 
-impl Default for VkFramebufferCreateInfo<'static, 'static> {
-    fn default() -> VkFramebufferCreateInfo<'static, 'static> {
+impl Default for VkFramebufferCreateInfo<'static, 'static, 'static> {
+    fn default() -> VkFramebufferCreateInfo<'static, 'static, 'static> {
         VkFramebufferCreateInfo {
             flags: VkFramebufferCreateFlags::default(),
             render_pass: vk_null_ref(),
@@ -68,7 +74,10 @@ impl Default for VkFramebufferCreateInfo<'static, 'static> {
     }
 }
 
-impl<'a, 'b> VkSetup for VkFramebufferCreateInfo<'a, 'b> {
+impl<'a, 'b, 'c> VkSetup for VkFramebufferCreateInfo<'a, 'b, 'c>
+    where
+        'c: 'b,
+{
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         
     }

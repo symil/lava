@@ -36,42 +36,46 @@ pub struct RawVkBindSparseInfo {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n>
+pub struct VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>
     where
-        'c: 'b,
-        'd: 'b,
-        'e: 'd,
-        'g: 'f,
-        'h: 'f,
-        'i: 'h,
-        'k: 'j,
-        'l: 'j,
-        'm: 'l,
+        'b: 'a,
+        'd: 'c,
+        'e: 'c,
+        'f: 'e,
+        'h: 'g,
+        'i: 'g,
+        'j: 'i,
+        'l: 'k,
+        'm: 'k,
+        'n: 'm,
+        'p: 'o,
 {
-    pub wait_semaphores: &'a [VkSemaphore],
-    pub buffer_binds: &'b [VkSparseBufferMemoryBindInfo<'c, 'd, 'e>],
-    pub image_opaque_binds: &'f [VkSparseImageOpaqueMemoryBindInfo<'g, 'h, 'i>],
-    pub image_binds: &'j [VkSparseImageMemoryBindInfo<'k, 'l, 'm>],
-    pub signal_semaphores: &'n [VkSemaphore],
+    pub wait_semaphores: &'a [&'b VkSemaphore],
+    pub buffer_binds: &'c [VkSparseBufferMemoryBindInfo<'d, 'e, 'f>],
+    pub image_opaque_binds: &'g [VkSparseImageOpaqueMemoryBindInfo<'h, 'i, 'j>],
+    pub image_binds: &'k [VkSparseImageMemoryBindInfo<'l, 'm, 'n>],
+    pub signal_semaphores: &'o [&'p VkSemaphore],
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n> VkWrappedType<RawVkBindSparseInfo> for VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n>
+impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p> VkWrappedType<RawVkBindSparseInfo> for VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>
     where
-        'c: 'b,
-        'd: 'b,
-        'e: 'd,
-        'g: 'f,
-        'h: 'f,
-        'i: 'h,
-        'k: 'j,
-        'l: 'j,
-        'm: 'l,
+        'b: 'a,
+        'd: 'c,
+        'e: 'c,
+        'f: 'e,
+        'h: 'g,
+        'i: 'g,
+        'j: 'i,
+        'l: 'k,
+        'm: 'k,
+        'n: 'm,
+        'p: 'o,
 {
     fn vk_to_raw(src: &VkBindSparseInfo, dst: &mut RawVkBindSparseInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindSparseInfo);
         dst.next = ptr::null();
         dst.wait_semaphore_count = src.wait_semaphores.len() as u32;
-        dst.wait_semaphores = new_ptr_vk_array(src.wait_semaphores);
+        dst.wait_semaphores = new_ptr_vk_array_from_ref(src.wait_semaphores);
         dst.buffer_bind_count = src.buffer_binds.len() as u32;
         dst.buffer_binds = new_ptr_vk_array(src.buffer_binds);
         dst.image_opaque_bind_count = src.image_opaque_binds.len() as u32;
@@ -79,12 +83,12 @@ impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n> VkWrappedType<RawVk
         dst.image_bind_count = src.image_binds.len() as u32;
         dst.image_binds = new_ptr_vk_array(src.image_binds);
         dst.signal_semaphore_count = src.signal_semaphores.len() as u32;
-        dst.signal_semaphores = new_ptr_vk_array(src.signal_semaphores);
+        dst.signal_semaphores = new_ptr_vk_array_from_ref(src.signal_semaphores);
     }
 }
 
-impl Default for VkBindSparseInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkBindSparseInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl Default for VkBindSparseInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+    fn default() -> VkBindSparseInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
         VkBindSparseInfo {
             wait_semaphores: &[],
             buffer_binds: &[],
@@ -95,17 +99,19 @@ impl Default for VkBindSparseInfo<'static, 'static, 'static, 'static, 'static, '
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n> VkSetup for VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n>
+impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p> VkSetup for VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>
     where
-        'c: 'b,
-        'd: 'b,
-        'e: 'd,
-        'g: 'f,
-        'h: 'f,
-        'i: 'h,
-        'k: 'j,
-        'l: 'j,
-        'm: 'l,
+        'b: 'a,
+        'd: 'c,
+        'e: 'c,
+        'f: 'e,
+        'h: 'g,
+        'i: 'g,
+        'j: 'i,
+        'l: 'k,
+        'm: 'k,
+        'n: 'm,
+        'p: 'o,
 {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         

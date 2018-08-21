@@ -27,17 +27,19 @@ pub struct RawVkDescriptorSetLayoutCreateInfo {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkDescriptorSetLayoutCreateInfo<'a, 'b>
+pub struct VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
     where
         'b: 'a,
+        'c: 'b,
 {
     pub flags: VkDescriptorSetLayoutCreateFlags,
-    pub bindings: &'a [VkDescriptorSetLayoutBinding<'b>],
+    pub bindings: &'a [VkDescriptorSetLayoutBinding<'b, 'c>],
 }
 
-impl<'a, 'b> VkWrappedType<RawVkDescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfo<'a, 'b>
+impl<'a, 'b, 'c> VkWrappedType<RawVkDescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
     where
         'b: 'a,
+        'c: 'b,
 {
     fn vk_to_raw(src: &VkDescriptorSetLayoutCreateInfo, dst: &mut RawVkDescriptorSetLayoutCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetLayoutCreateInfo);
@@ -48,8 +50,8 @@ impl<'a, 'b> VkWrappedType<RawVkDescriptorSetLayoutCreateInfo> for VkDescriptorS
     }
 }
 
-impl Default for VkDescriptorSetLayoutCreateInfo<'static, 'static> {
-    fn default() -> VkDescriptorSetLayoutCreateInfo<'static, 'static> {
+impl Default for VkDescriptorSetLayoutCreateInfo<'static, 'static, 'static> {
+    fn default() -> VkDescriptorSetLayoutCreateInfo<'static, 'static, 'static> {
         VkDescriptorSetLayoutCreateInfo {
             flags: VkDescriptorSetLayoutCreateFlags::default(),
             bindings: &[],
@@ -57,9 +59,10 @@ impl Default for VkDescriptorSetLayoutCreateInfo<'static, 'static> {
     }
 }
 
-impl<'a, 'b> VkSetup for VkDescriptorSetLayoutCreateInfo<'a, 'b>
+impl<'a, 'b, 'c> VkSetup for VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
     where
         'b: 'a,
+        'c: 'b,
 {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         

@@ -31,28 +31,36 @@ pub struct RawVkPresentInfo {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkPresentInfo<'a, 'b, 'c, 'd> {
-    pub wait_semaphores: &'a [VkSemaphore],
-    pub swapchains: &'b [VkSwapchain],
-    pub image_indices: &'c [usize],
-    pub results: Option<&'d [VkResult]>,
+pub struct VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>
+    where
+        'b: 'a,
+        'd: 'c,
+{
+    pub wait_semaphores: &'a [&'b VkSemaphore],
+    pub swapchains: &'c [&'d VkSwapchain],
+    pub image_indices: &'e [usize],
+    pub results: Option<&'f [VkResult]>,
 }
 
-impl<'a, 'b, 'c, 'd> VkWrappedType<RawVkPresentInfo> for VkPresentInfo<'a, 'b, 'c, 'd> {
+impl<'a, 'b, 'c, 'd, 'e, 'f> VkWrappedType<RawVkPresentInfo> for VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>
+    where
+        'b: 'a,
+        'd: 'c,
+{
     fn vk_to_raw(src: &VkPresentInfo, dst: &mut RawVkPresentInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PresentInfoKhr);
         dst.next = ptr::null();
         dst.wait_semaphore_count = src.wait_semaphores.len() as u32;
-        dst.wait_semaphores = new_ptr_vk_array(src.wait_semaphores);
+        dst.wait_semaphores = new_ptr_vk_array_from_ref(src.wait_semaphores);
         dst.swapchain_count = cmp::max(src.swapchains.len(), src.image_indices.len()) as u32;
-        dst.swapchains = new_ptr_vk_array(src.swapchains);
+        dst.swapchains = new_ptr_vk_array_from_ref(src.swapchains);
         dst.image_indices = new_ptr_vk_array(src.image_indices);
         dst.results = new_ptr_vk_array_checked(src.results);
     }
 }
 
-impl Default for VkPresentInfo<'static, 'static, 'static, 'static> {
-    fn default() -> VkPresentInfo<'static, 'static, 'static, 'static> {
+impl Default for VkPresentInfo<'static, 'static, 'static, 'static, 'static, 'static> {
+    fn default() -> VkPresentInfo<'static, 'static, 'static, 'static, 'static, 'static> {
         VkPresentInfo {
             wait_semaphores: &[],
             swapchains: &[],
@@ -62,7 +70,11 @@ impl Default for VkPresentInfo<'static, 'static, 'static, 'static> {
     }
 }
 
-impl<'a, 'b, 'c, 'd> VkSetup for VkPresentInfo<'a, 'b, 'c, 'd> {
+impl<'a, 'b, 'c, 'd, 'e, 'f> VkSetup for VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>
+    where
+        'b: 'a,
+        'd: 'c,
+{
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         
     }

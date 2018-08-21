@@ -27,25 +27,31 @@ pub struct RawVkDescriptorSetLayoutBinding {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkDescriptorSetLayoutBinding<'a> {
+pub struct VkDescriptorSetLayoutBinding<'a, 'b>
+    where
+        'b: 'a,
+{
     pub binding: usize,
     pub descriptor_type: VkDescriptorType,
     pub stage_flags: VkShaderStageFlags,
-    pub immutable_samplers: Option<&'a [VkSampler]>,
+    pub immutable_samplers: Option<&'a [&'b VkSampler]>,
 }
 
-impl<'a> VkWrappedType<RawVkDescriptorSetLayoutBinding> for VkDescriptorSetLayoutBinding<'a> {
+impl<'a, 'b> VkWrappedType<RawVkDescriptorSetLayoutBinding> for VkDescriptorSetLayoutBinding<'a, 'b>
+    where
+        'b: 'a,
+{
     fn vk_to_raw(src: &VkDescriptorSetLayoutBinding, dst: &mut RawVkDescriptorSetLayoutBinding) {
         dst.binding = vk_to_raw_value(&src.binding);
         dst.descriptor_type = vk_to_raw_value(&src.descriptor_type);
         dst.descriptor_count = get_array_option_len(src.immutable_samplers) as u32;
         dst.stage_flags = vk_to_raw_value(&src.stage_flags);
-        dst.immutable_samplers = new_ptr_vk_array_checked(src.immutable_samplers);
+        dst.immutable_samplers = new_ptr_vk_array_checked_from_ref(src.immutable_samplers);
     }
 }
 
-impl Default for VkDescriptorSetLayoutBinding<'static> {
-    fn default() -> VkDescriptorSetLayoutBinding<'static> {
+impl Default for VkDescriptorSetLayoutBinding<'static, 'static> {
+    fn default() -> VkDescriptorSetLayoutBinding<'static, 'static> {
         VkDescriptorSetLayoutBinding {
             binding: 0,
             descriptor_type: VkDescriptorType::default(),
@@ -55,7 +61,10 @@ impl Default for VkDescriptorSetLayoutBinding<'static> {
     }
 }
 
-impl<'a> VkSetup for VkDescriptorSetLayoutBinding<'a> {
+impl<'a, 'b> VkSetup for VkDescriptorSetLayoutBinding<'a, 'b>
+    where
+        'b: 'a,
+{
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         
     }

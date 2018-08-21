@@ -263,12 +263,12 @@ function assignLifetimes(fields, counter, root) {
                 tree = tree.add(counter);
                 field.wrappedType = field.wrappedType.replace('&', `&${tree.letter()} `);
 
-                if (field.wrappedType.endsWith(`[&str]`)) {
+                if (field.wrappedType.includes(`[&str]`)) {
                     tree = tree.add(counter);
                     field.wrappedType = field.wrappedType.replace('[&str]', `[&${tree.letter()} str]`);
                 }
 
-                if (field.wrappedType.endsWith(`[&${field.wrappedTypeName}]`)) {
+                if (field.wrappedType.includes(`[&${field.wrappedTypeName}]`)) {
                     tree = tree.add(counter);
                     field.wrappedType = field.wrappedType.replace(`[&${field.wrappedTypeName}]`, `[&${tree.letter()} ${field.wrappedTypeName}]`);
                 }

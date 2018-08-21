@@ -169,13 +169,13 @@ impl VkCommandBuffer {
         }
     }
     
-    pub fn cmd_bind_descriptor_sets(&self, pipeline_bind_point: VkPipelineBindPoint, layout: &VkPipelineLayout, first_set: usize, descriptor_sets: &[VkDescriptorSet], dynamic_offsets: &[usize]) {
+    pub fn cmd_bind_descriptor_sets(&self, pipeline_bind_point: VkPipelineBindPoint, layout: &VkPipelineLayout, first_set: usize, descriptor_sets: &[&VkDescriptorSet], dynamic_offsets: &[usize]) {
         unsafe {
             let raw_pipeline_bind_point = vk_to_raw_value(&pipeline_bind_point);
             let raw_layout = vk_to_raw_value(layout);
             let raw_first_set = vk_to_raw_value(&first_set);
             let raw_descriptor_set_count = descriptor_sets.len() as u32;
-            let raw_descriptor_sets = new_ptr_vk_array(descriptor_sets);
+            let raw_descriptor_sets = new_ptr_vk_array_from_ref(descriptor_sets);
             let raw_dynamic_offset_count = dynamic_offsets.len() as u32;
             let raw_dynamic_offsets = new_ptr_vk_array(dynamic_offsets);
             ((&*self._fn_table).vkCmdBindDescriptorSets)(self._handle, raw_pipeline_bind_point, raw_layout, raw_first_set, raw_descriptor_set_count, raw_descriptor_sets, raw_dynamic_offset_count, raw_dynamic_offsets);
@@ -193,11 +193,11 @@ impl VkCommandBuffer {
         }
     }
     
-    pub fn cmd_bind_vertex_buffers(&self, first_binding: usize, buffers: &[VkBuffer], offsets: &[usize]) {
+    pub fn cmd_bind_vertex_buffers(&self, first_binding: usize, buffers: &[&VkBuffer], offsets: &[usize]) {
         unsafe {
             let raw_first_binding = vk_to_raw_value(&first_binding);
             let raw_binding_count = cmp::max(buffers.len(), offsets.len()) as u32;
-            let raw_buffers = new_ptr_vk_array(buffers);
+            let raw_buffers = new_ptr_vk_array_from_ref(buffers);
             let raw_offsets = new_ptr_vk_array(offsets);
             ((&*self._fn_table).vkCmdBindVertexBuffers)(self._handle, raw_first_binding, raw_binding_count, raw_buffers, raw_offsets);
             free_ptr(raw_buffers);
@@ -412,10 +412,10 @@ impl VkCommandBuffer {
         }
     }
     
-    pub fn cmd_wait_events(&self, events: &[VkEvent], src_stage_mask: VkPipelineStageFlags, dst_stage_mask: VkPipelineStageFlags, memory_barriers: &[VkMemoryBarrier], buffer_memory_barriers: &[VkBufferMemoryBarrier], image_memory_barriers: &[VkImageMemoryBarrier]) {
+    pub fn cmd_wait_events(&self, events: &[&VkEvent], src_stage_mask: VkPipelineStageFlags, dst_stage_mask: VkPipelineStageFlags, memory_barriers: &[VkMemoryBarrier], buffer_memory_barriers: &[VkBufferMemoryBarrier], image_memory_barriers: &[VkImageMemoryBarrier]) {
         unsafe {
             let raw_event_count = events.len() as u32;
-            let raw_events = new_ptr_vk_array(events);
+            let raw_events = new_ptr_vk_array_from_ref(events);
             let raw_src_stage_mask = vk_to_raw_value(&src_stage_mask);
             let raw_dst_stage_mask = vk_to_raw_value(&dst_stage_mask);
             let raw_memory_barrier_count = memory_barriers.len() as u32;
@@ -531,10 +531,10 @@ impl VkCommandBuffer {
         }
     }
     
-    pub fn cmd_execute_commands(&self, command_buffers: &[VkCommandBuffer]) {
+    pub fn cmd_execute_commands(&self, command_buffers: &[&VkCommandBuffer]) {
         unsafe {
             let raw_command_buffer_count = command_buffers.len() as u32;
-            let raw_command_buffers = new_ptr_vk_array(command_buffers);
+            let raw_command_buffers = new_ptr_vk_array_from_ref(command_buffers);
             ((&*self._fn_table).vkCmdExecuteCommands)(self._handle, raw_command_buffer_count, raw_command_buffers);
             free_ptr(raw_command_buffers);
         }

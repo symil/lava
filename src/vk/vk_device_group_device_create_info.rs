@@ -25,28 +25,37 @@ pub struct RawVkDeviceGroupDeviceCreateInfo {
 }
 
 #[derive(Debug, Clone)]
-pub struct VkDeviceGroupDeviceCreateInfo<'a> {
-    pub physical_devices: &'a [VkPhysicalDevice],
+pub struct VkDeviceGroupDeviceCreateInfo<'a, 'b>
+    where
+        'b: 'a,
+{
+    pub physical_devices: &'a [&'b VkPhysicalDevice],
 }
 
-impl<'a> VkWrappedType<RawVkDeviceGroupDeviceCreateInfo> for VkDeviceGroupDeviceCreateInfo<'a> {
+impl<'a, 'b> VkWrappedType<RawVkDeviceGroupDeviceCreateInfo> for VkDeviceGroupDeviceCreateInfo<'a, 'b>
+    where
+        'b: 'a,
+{
     fn vk_to_raw(src: &VkDeviceGroupDeviceCreateInfo, dst: &mut RawVkDeviceGroupDeviceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupDeviceCreateInfo);
         dst.next = ptr::null();
         dst.physical_device_count = src.physical_devices.len() as u32;
-        dst.physical_devices = new_ptr_vk_array(src.physical_devices);
+        dst.physical_devices = new_ptr_vk_array_from_ref(src.physical_devices);
     }
 }
 
-impl Default for VkDeviceGroupDeviceCreateInfo<'static> {
-    fn default() -> VkDeviceGroupDeviceCreateInfo<'static> {
+impl Default for VkDeviceGroupDeviceCreateInfo<'static, 'static> {
+    fn default() -> VkDeviceGroupDeviceCreateInfo<'static, 'static> {
         VkDeviceGroupDeviceCreateInfo {
             physical_devices: &[],
         }
     }
 }
 
-impl<'a> VkSetup for VkDeviceGroupDeviceCreateInfo<'a> {
+impl<'a, 'b> VkSetup for VkDeviceGroupDeviceCreateInfo<'a, 'b>
+    where
+        'b: 'a,
+{
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         
     }
