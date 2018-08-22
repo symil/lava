@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const downloadSourceFiles = require('./scripts/download');
-const generateFiles = require('./scripts/generate');
+const { generateFiles, removeFiles } = require('./scripts/generate');
 
 const HELP = `
 Download the necessary files from the Vulkan documentation repository in the \`download\` folder,
@@ -13,6 +13,7 @@ Available options:
                 Defaults to "master".
 --no-download : Do not download the files from the Vulkan repository, assume they are already there.
 --no-generate : Do not generate the Rust wrapper.
+--remove      : Remove \`src/vk/\` before generating the files
 `;
 
 main();
@@ -30,6 +31,11 @@ async function main() {
         const tag = tagOptionIndex !== -1 ? argv[tagOptionIndex + 1] : 'master';
 
         await downloadSourceFiles(tag);
+    }
+
+    if (argv.includes('--remove')) {
+        console.log('Removing current source files...');
+        removeFiles();
     }
 
     if (!argv.includes('--no-generate')) {

@@ -27,7 +27,11 @@ const STATIC_VK_FUNCTIONS = [
     'vkCreateInstance'
 ];
 
-function main() {
+function removeFiles() {
+    rimraf.sync(OUTPUT_DIR_PATH);
+}
+
+function generateFiles() {
     const vkTypes = [
         generateRootType(),
         generateFunctionTable(),
@@ -36,8 +40,6 @@ function main() {
         ...generateStructs(),
         ...generateHandles()
     ];
-
-    rimraf.sync(OUTPUT_DIR_PATH);
 
     writeVkTypes(vkTypes);
     copyStaticFiles(STATIC_FILES_DIR_PATH, OUTPUT_DIR_PATH);
@@ -207,4 +209,7 @@ function generateHandles() {
     return generateVkTypes(handles, generateVkHandleDefinition);
 }
 
-module.exports = main;
+module.exports = {
+    generateFiles,
+    removeFiles
+};
