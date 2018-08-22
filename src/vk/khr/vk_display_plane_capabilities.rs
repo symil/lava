@@ -18,7 +18,7 @@ use vk::vk_offset_2d::*;
 use vk::vk_extent_2d::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneCapabilities {
     pub supported_alpha: RawVkDisplayPlaneAlphaFlags,
     pub min_src_position: RawVkOffset2D,

@@ -18,7 +18,7 @@ use vk::nvx::vk_object_table::*;
 use vk::nvx::vk_indirect_commands_layout::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkCmdReserveSpaceForCommandsInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

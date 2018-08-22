@@ -22,7 +22,7 @@ use vk::vk_attachment_store_op::*;
 use vk::vk_image_layout::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkAttachmentDescription2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

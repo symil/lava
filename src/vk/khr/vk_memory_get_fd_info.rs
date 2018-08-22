@@ -18,7 +18,7 @@ use vk::vk_device_memory::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryGetFdInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

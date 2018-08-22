@@ -18,7 +18,7 @@ use vk::ext::vk_pipeline_rasterization_conservative_state_create_flags::*;
 use vk::ext::vk_conservative_rasterization_mode::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationConservativeStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

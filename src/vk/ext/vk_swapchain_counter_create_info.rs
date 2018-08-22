@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::ext::vk_surface_counter_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSwapchainCounterCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

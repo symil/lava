@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::vk_image::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSparseMemoryRequirementsInfo2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

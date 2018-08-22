@@ -19,7 +19,7 @@ use vk::vk_pipeline_stage_flags::*;
 use vk::vk_command_buffer::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSubmitInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

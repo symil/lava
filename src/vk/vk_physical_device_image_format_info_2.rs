@@ -21,7 +21,7 @@ use vk::vk_image_usage_flags::*;
 use vk::vk_image_create_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceImageFormatInfo2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -19,7 +19,7 @@ use vk::vk_pipeline_bind_point::*;
 use vk::khr::vk_attachment_reference_2::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDescription2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::nv::vk_viewport_wscaling::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportWScalingStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::nvx::vk_indirect_commands_token_type::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkIndirectCommandsLayoutToken {
     pub token_type: RawVkIndirectCommandsTokenType,
     pub binding_unit: u32,

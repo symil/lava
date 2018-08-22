@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_specialization_map_entry::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSpecializationInfo {
     pub map_entry_count: u32,
     pub map_entries: *mut RawVkSpecializationMapEntry,

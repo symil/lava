@@ -17,7 +17,7 @@ use vk::vk_external_memory_feature_flags::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalMemoryProperties {
     pub external_memory_features: RawVkExternalMemoryFeatureFlags,
     pub export_from_imported_handle_types: RawVkExternalMemoryHandleTypeFlags,

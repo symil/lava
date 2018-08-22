@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_extent_2d::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayModeParameters {
     pub visible_region: RawVkExtent2D,
     pub refresh_rate: u32,

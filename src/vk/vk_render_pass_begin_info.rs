@@ -20,7 +20,7 @@ use vk::vk_rect_2d::*;
 use vk::vk_clear_value::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassBeginInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

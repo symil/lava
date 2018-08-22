@@ -18,7 +18,7 @@ use vk::vk_pipeline_multisample_state_create_flags::*;
 use vk::vk_sample_count_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineMultisampleStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -17,7 +17,7 @@ use vk::vk_memory_type::*;
 use vk::vk_memory_heap::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryProperties {
     pub memory_type_count: u32,
     pub memory_types: [RawVkMemoryType; 32],

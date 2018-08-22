@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::khr::vk_surface_format::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceFormat2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

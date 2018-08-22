@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_component_swizzle::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkComponentMapping {
     pub r: RawVkComponentSwizzle,
     pub g: RawVkComponentSwizzle,

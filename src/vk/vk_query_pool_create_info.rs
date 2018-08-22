@@ -19,7 +19,7 @@ use vk::vk_query_type::*;
 use vk::vk_query_pipeline_statistic_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkQueryPoolCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

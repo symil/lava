@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::khr::vk_display_mode_properties::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayModeProperties2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

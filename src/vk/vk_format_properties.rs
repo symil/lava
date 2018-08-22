@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_format_feature_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkFormatProperties {
     pub linear_tiling_features: RawVkFormatFeatureFlags,
     pub optimal_tiling_features: RawVkFormatFeatureFlags,

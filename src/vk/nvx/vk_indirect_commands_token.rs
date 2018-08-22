@@ -17,7 +17,7 @@ use vk::nvx::vk_indirect_commands_token_type::*;
 use vk::vk_buffer::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkIndirectCommandsToken {
     pub token_type: RawVkIndirectCommandsTokenType,
     pub buffer: RawVkBuffer,

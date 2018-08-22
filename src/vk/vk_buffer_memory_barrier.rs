@@ -18,7 +18,7 @@ use vk::vk_access_flags::*;
 use vk::vk_buffer::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferMemoryBarrier {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

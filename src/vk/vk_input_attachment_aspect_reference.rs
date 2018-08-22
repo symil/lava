@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_image_aspect_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkInputAttachmentAspectReference {
     pub subpass: u32,
     pub input_attachment_index: u32,

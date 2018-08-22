@@ -30,7 +30,7 @@ use vk::vk_render_pass::*;
 use vk::vk_pipeline::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkGraphicsPipelineCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

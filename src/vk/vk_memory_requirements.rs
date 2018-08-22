@@ -15,7 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryRequirements {
     pub size: u64,
     pub alignment: u64,

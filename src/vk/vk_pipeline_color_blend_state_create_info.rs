@@ -19,7 +19,7 @@ use vk::vk_logic_op::*;
 use vk::vk_pipeline_color_blend_attachment_state::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

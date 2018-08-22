@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_descriptor_type::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorUpdateTemplateEntry {
     pub dst_binding: u32,
     pub dst_array_element: u32,

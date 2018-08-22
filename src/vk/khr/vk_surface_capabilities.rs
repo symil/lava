@@ -19,7 +19,7 @@ use vk::khr::vk_composite_alpha_flags::*;
 use vk::vk_image_usage_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities {
     pub min_image_count: u32,
     pub max_image_count: u32,

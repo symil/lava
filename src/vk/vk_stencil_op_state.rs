@@ -17,7 +17,7 @@ use vk::vk_stencil_op::*;
 use vk::vk_compare_op::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkStencilOpState {
     pub fail_op: RawVkStencilOp,
     pub pass_op: RawVkStencilOp,

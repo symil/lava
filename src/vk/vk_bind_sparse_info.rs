@@ -20,7 +20,7 @@ use vk::vk_sparse_image_opaque_memory_bind_info::*;
 use vk::vk_sparse_image_memory_bind_info::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkBindSparseInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

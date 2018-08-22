@@ -27,7 +27,7 @@ use vk::khr::vk_present_mode::*;
 use vk::khr::vk_swapchain::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSwapchainCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

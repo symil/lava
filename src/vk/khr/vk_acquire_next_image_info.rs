@@ -19,7 +19,7 @@ use vk::vk_semaphore::*;
 use vk::vk_fence::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkAcquireNextImageInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

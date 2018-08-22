@@ -25,7 +25,7 @@ use vk::vk_sharing_mode::*;
 use vk::vk_image_layout::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkImageCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

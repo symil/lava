@@ -18,7 +18,7 @@ use vk::vk_extent_2d::*;
 use vk::khr::vk_surface_transform_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayProperties {
     pub display: RawVkDisplay,
     pub display_name: *const c_char,

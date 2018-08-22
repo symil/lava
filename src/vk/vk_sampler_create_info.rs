@@ -22,7 +22,7 @@ use vk::vk_compare_op::*;
 use vk::vk_border_color::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

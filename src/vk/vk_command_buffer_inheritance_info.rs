@@ -20,7 +20,7 @@ use vk::vk_query_control_flags::*;
 use vk::vk_query_pipeline_statistic_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferInheritanceInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

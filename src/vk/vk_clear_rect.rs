@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_rect_2d::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkClearRect {
     pub rect: RawVkRect2D,
     pub base_array_layer: u32,

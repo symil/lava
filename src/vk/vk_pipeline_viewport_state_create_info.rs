@@ -19,7 +19,7 @@ use vk::vk_viewport::*;
 use vk::vk_rect_2d::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

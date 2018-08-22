@@ -17,7 +17,7 @@ use vk::vk_extent_3d::*;
 use vk::vk_sample_count_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkImageFormatProperties {
     pub max_extent: RawVkExtent3D,
     pub max_mip_levels: u32,

@@ -18,7 +18,7 @@ use vk::vk_command_buffer_usage_flags::*;
 use vk::vk_command_buffer_inheritance_info::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferBeginInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

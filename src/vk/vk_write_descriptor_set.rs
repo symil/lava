@@ -21,7 +21,7 @@ use vk::vk_descriptor_buffer_info::*;
 use vk::vk_buffer_view::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSet {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

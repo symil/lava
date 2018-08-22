@@ -19,7 +19,7 @@ use vk::vk_buffer_usage_flags::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalBufferInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

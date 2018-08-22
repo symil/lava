@@ -19,7 +19,7 @@ use vk::vk_render_pass::*;
 use vk::vk_image_view::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkFramebufferCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

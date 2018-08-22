@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_vertex_input_rate::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkVertexInputBindingDescription {
     pub binding: u32,
     pub stride: u32,

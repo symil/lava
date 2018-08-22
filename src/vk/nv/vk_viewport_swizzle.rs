@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::nv::vk_viewport_coordinate_swizzle::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkViewportSwizzle {
     pub x: RawVkViewportCoordinateSwizzle,
     pub y: RawVkViewportCoordinateSwizzle,

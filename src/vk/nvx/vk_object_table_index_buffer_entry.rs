@@ -19,7 +19,7 @@ use vk::vk_buffer::*;
 use vk::vk_index_type::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableIndexBufferEntry {
     pub type_: RawVkObjectEntryType,
     pub flags: RawVkObjectEntryUsageFlags,

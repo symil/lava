@@ -18,7 +18,7 @@ use vk::vk_image_view::*;
 use vk::vk_image_layout::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorImageInfo {
     pub sampler: RawVkSampler,
     pub image_view: RawVkImageView,

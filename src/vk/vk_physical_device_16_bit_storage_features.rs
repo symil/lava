@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevice16BitStorageFeatures {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

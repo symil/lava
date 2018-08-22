@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::nv::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkExportMemoryAllocateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

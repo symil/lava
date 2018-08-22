@@ -18,7 +18,7 @@ use vk::vk_access_flags::*;
 use vk::vk_dependency_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDependency {
     pub src_subpass: u32,
     pub dst_subpass: u32,

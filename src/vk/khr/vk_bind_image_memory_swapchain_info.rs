@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::khr::vk_swapchain::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemorySwapchainInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -18,7 +18,7 @@ use vk::nv::vk_external_memory_feature_flags::*;
 use vk::nv::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalImageFormatProperties {
     pub image_format_properties: RawVkImageFormatProperties,
     pub external_memory_features: RawVkExternalMemoryFeatureFlags,

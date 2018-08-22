@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::vk_memory_allocate_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryAllocateFlagsInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

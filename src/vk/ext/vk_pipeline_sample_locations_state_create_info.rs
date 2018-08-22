@@ -17,7 +17,7 @@ use vk::vk_structure_type::*;
 use vk::ext::vk_sample_locations_info::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineSampleLocationsStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

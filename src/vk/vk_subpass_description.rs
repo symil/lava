@@ -18,7 +18,7 @@ use vk::vk_pipeline_bind_point::*;
 use vk::vk_attachment_reference::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDescription {
     pub flags: RawVkSubpassDescriptionFlags,
     pub pipeline_bind_point: RawVkPipelineBindPoint,

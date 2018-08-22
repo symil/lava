@@ -19,7 +19,7 @@ use vk::vk_compare_op::*;
 use vk::vk_stencil_op_state::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineDepthStencilStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

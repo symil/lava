@@ -19,7 +19,7 @@ use vk::vk_access_flags::*;
 use vk::vk_dependency_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDependency2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -5,7 +5,7 @@ use std::mem;
 use utils::vk_traits::*;
 
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Copy, Clone)]
 pub union RawVkClearColorValue {
     float32: [f32; 4],
     int32: [i32; 4],

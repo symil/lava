@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_memory_property_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryType {
     pub property_flags: RawVkMemoryPropertyFlags,
     pub heap_index: u32,

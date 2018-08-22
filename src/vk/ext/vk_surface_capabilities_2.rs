@@ -21,7 +21,7 @@ use vk::vk_image_usage_flags::*;
 use vk::ext::vk_surface_counter_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

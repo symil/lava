@@ -18,7 +18,7 @@ use vk::nvx::vk_object_entry_usage_flags::*;
 use vk::vk_pipeline::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTablePipelineEntry {
     pub type_: RawVkObjectEntryType,
     pub flags: RawVkObjectEntryUsageFlags,

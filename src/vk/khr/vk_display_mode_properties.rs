@@ -17,7 +17,7 @@ use vk::khr::vk_display_mode::*;
 use vk::khr::vk_display_mode_parameters::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayModeProperties {
     pub display_mode: RawVkDisplayMode,
     pub parameters: RawVkDisplayModeParameters,

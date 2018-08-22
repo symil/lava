@@ -20,7 +20,7 @@ use vk::vk_subpass_description::*;
 use vk::vk_subpass_dependency::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

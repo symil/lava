@@ -16,7 +16,7 @@ use vk::vk_device::*;
 use vk::vk_image_aspect_flags::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSubresourceRange {
     pub aspect_mask: RawVkImageAspectFlags,
     pub base_mip_level: u32,

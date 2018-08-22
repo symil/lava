@@ -18,7 +18,7 @@ use vk::vk_pipeline_dynamic_state_create_flags::*;
 use vk::vk_dynamic_state::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineDynamicStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

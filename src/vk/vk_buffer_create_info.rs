@@ -19,7 +19,7 @@ use vk::vk_buffer_usage_flags::*;
 use vk::vk_sharing_mode::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

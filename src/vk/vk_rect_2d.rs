@@ -17,7 +17,7 @@ use vk::vk_offset_2d::*;
 use vk::vk_extent_2d::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkRect2D {
     pub offset: RawVkOffset2D,
     pub extent: RawVkExtent2D,

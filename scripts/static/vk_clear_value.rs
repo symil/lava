@@ -6,6 +6,7 @@ use vk::vk_clear_color_value::*;
 use vk::vk_clear_depth_stencil_value::*;
 
 #[repr(C)]
+#[derive(Copy, Clone)]
 pub union RawVkClearValue {
     pub color: RawVkClearColorValue,
     pub depth_stencil: RawVkClearDepthStencilValue

@@ -20,7 +20,7 @@ use vk::vk_image::*;
 use vk::vk_image_subresource_range::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkImageMemoryBarrier {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -68,11 +68,7 @@ function genRawStructDeclaration(cDef) {
     const derivedTraits = [];
     
     if (!cDef.cFields.some(field => (field.arraySize && +field.arraySize > 32) || field.typeName === 'VkPhysicalDeviceProperties')) {
-        derivedTraits.push('Debug');
-    }
-
-    if (cDef.rawTypeName === 'RawVkClearDepthStencilValue') {
-        derivedTraits.push('Copy', 'Clone');
+        derivedTraits.push('Debug', 'Copy', 'Clone');
     }
 
     return [

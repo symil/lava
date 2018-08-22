@@ -19,7 +19,7 @@ use vk::khr::vk_swapchain::*;
 use vk::vk_result::*;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
