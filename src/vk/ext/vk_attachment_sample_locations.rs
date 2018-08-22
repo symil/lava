@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::ext::vk_sample_locations_info::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkAttachmentSampleLocations {
     pub attachment_index: u32,
     pub sample_locations_info: RawVkSampleLocationsInfo,

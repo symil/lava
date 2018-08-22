@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkBufferCopy {
     pub src_offset: u64,
     pub dst_offset: u64,

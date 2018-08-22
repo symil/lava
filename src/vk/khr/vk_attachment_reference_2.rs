@@ -18,6 +18,7 @@ use vk::vk_image_layout::*;
 use vk::vk_image_aspect_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkAttachmentReference2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

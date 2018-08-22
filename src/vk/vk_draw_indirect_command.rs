@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDrawIndirectCommand {
     pub vertex_count: u32,
     pub instance_count: u32,

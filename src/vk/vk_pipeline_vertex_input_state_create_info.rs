@@ -19,6 +19,7 @@ use vk::vk_vertex_input_binding_description::*;
 use vk::vk_vertex_input_attribute_description::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineVertexInputStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

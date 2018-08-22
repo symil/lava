@@ -19,6 +19,7 @@ use vk::ext::vk_discard_rectangle_mode::*;
 use vk::vk_rect_2d::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineDiscardRectangleStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

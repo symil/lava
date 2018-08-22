@@ -19,6 +19,7 @@ use vk::ext::vk_debug_utils_label::*;
 use vk::ext::vk_debug_utils_object_name_info::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDebugUtilsMessengerCallbackData {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -1,7 +1,14 @@
+use std::fmt::*;
 use std::mem;
 use utils::vk_traits::*;
 
-pub type RawVkClearColorValue = [u32; 4];
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub union RawVkClearColorValue {
+    float32: [f32; 4],
+    int32: [i32; 4],
+    uint32: [u32; 4]
+}
 
 #[derive(Debug, Clone)]
 pub enum VkClearColorValue {
@@ -10,13 +17,23 @@ pub enum VkClearColorValue {
     U([u32; 4])
 }
 
+impl Debug for RawVkClearColorValue {
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        write!(f, "{:?}", unsafe { self.float32 } )
+    }
+}
+
 impl VkWrappedType<RawVkClearColorValue> for VkClearColorValue {
     fn vk_to_raw(value: &VkClearColorValue, dst: &mut RawVkClearColorValue) {
-        unsafe {
-            *dst = match *value {
-                VkClearColorValue::F(array) => mem::transmute_copy(&array),
-                VkClearColorValue::I(array) => mem::transmute_copy(&array),
-                VkClearColorValue::U(array) => array
+        match *value {
+            VkClearColorValue::F(array) => {
+                *dst = RawVkClearColorValue { float32: array };
+            },
+            VkClearColorValue::I(array) => {
+                *dst = RawVkClearColorValue { int32: array };
+            },
+            VkClearColorValue::U(array) => {
+                *dst = RawVkClearColorValue { uint32: array };
             }
         }
     }

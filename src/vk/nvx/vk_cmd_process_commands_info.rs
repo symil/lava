@@ -21,6 +21,7 @@ use vk::vk_command_buffer::*;
 use vk::vk_buffer::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkCmdProcessCommandsInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

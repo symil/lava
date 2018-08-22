@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSubresourceLayout {
     pub offset: u64,
     pub size: u64,

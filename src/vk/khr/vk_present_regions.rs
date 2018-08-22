@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::khr::vk_present_region::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPresentRegions {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

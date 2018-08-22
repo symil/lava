@@ -19,6 +19,7 @@ use vk::vk_pipeline_layout::*;
 use vk::vk_descriptor_set::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkObjectTableDescriptorSetEntry {
     pub type_: RawVkObjectEntryType,
     pub flags: RawVkObjectEntryUsageFlags,

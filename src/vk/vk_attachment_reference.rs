@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::vk_image_layout::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkAttachmentReference {
     pub attachment: u32,
     pub layout: RawVkImageLayout,

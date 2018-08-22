@@ -17,6 +17,7 @@ use vk::vk_shader_stage_flags::*;
 use vk::amd::vk_shader_resource_usage::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkShaderStatisticsInfo {
     pub shader_stage_mask: RawVkShaderStageFlags,
     pub resource_usage: RawVkShaderResourceUsage,

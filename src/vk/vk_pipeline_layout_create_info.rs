@@ -19,6 +19,7 @@ use vk::vk_descriptor_set_layout::*;
 use vk::vk_push_constant_range::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineLayoutCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -19,6 +19,7 @@ use vk::vk_device_queue_create_info::*;
 use vk::vk_physical_device_features::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDeviceCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

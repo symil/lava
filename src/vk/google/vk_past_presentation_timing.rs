@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPastPresentationTiming {
     pub present_id: u32,
     pub desired_present_time: u64,

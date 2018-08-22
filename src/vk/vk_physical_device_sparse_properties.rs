@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPhysicalDeviceSparseProperties {
     pub residency_standard_2_dblock_shape: u32,
     pub residency_standard_2_dmultisample_block_shape: u32,

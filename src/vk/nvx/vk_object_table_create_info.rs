@@ -18,6 +18,7 @@ use vk::nvx::vk_object_entry_type::*;
 use vk::nvx::vk_object_entry_usage_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkObjectTableCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

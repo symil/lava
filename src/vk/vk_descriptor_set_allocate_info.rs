@@ -18,6 +18,7 @@ use vk::vk_descriptor_pool::*;
 use vk::vk_descriptor_set_layout::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDescriptorSetAllocateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

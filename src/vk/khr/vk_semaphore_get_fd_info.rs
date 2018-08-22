@@ -18,6 +18,7 @@ use vk::vk_semaphore::*;
 use vk::vk_external_semaphore_handle_type_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSemaphoreGetFdInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

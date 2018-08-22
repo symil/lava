@@ -17,6 +17,7 @@ use vk::nvx::vk_object_entry_type::*;
 use vk::nvx::vk_object_entry_usage_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkObjectTableEntry {
     pub type_: RawVkObjectEntryType,
     pub flags: RawVkObjectEntryUsageFlags,

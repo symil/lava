@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::vk_descriptor_type::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDescriptorPoolSize {
     pub type_: RawVkDescriptorType,
     pub descriptor_count: u32,

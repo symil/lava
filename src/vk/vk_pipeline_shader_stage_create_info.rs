@@ -20,6 +20,7 @@ use vk::vk_shader_module::*;
 use vk::vk_specialization_info::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineShaderStageCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -18,6 +18,7 @@ use vk::khr::vk_display_mode_create_flags::*;
 use vk::khr::vk_display_mode_parameters::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDisplayModeCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

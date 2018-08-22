@@ -18,6 +18,7 @@ use vk::vk_buffer::*;
 use vk::ext::vk_conditional_rendering_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkConditionalRenderingBeginInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

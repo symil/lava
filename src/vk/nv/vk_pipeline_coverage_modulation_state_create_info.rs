@@ -18,6 +18,7 @@ use vk::nv::vk_pipeline_coverage_modulation_state_create_flags::*;
 use vk::nv::vk_coverage_modulation_mode::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineCoverageModulationStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

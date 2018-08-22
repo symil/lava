@@ -18,6 +18,7 @@ use vk::vk_descriptor_set_layout_create_flags::*;
 use vk::vk_descriptor_set_layout_binding::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDescriptorSetLayoutCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

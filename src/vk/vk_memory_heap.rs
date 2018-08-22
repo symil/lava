@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::vk_memory_heap_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkMemoryHeap {
     pub size: u64,
     pub flags: RawVkMemoryHeapFlags,

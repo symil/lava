@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkVertexInputBindingDivisorDescription {
     pub binding: u32,
     pub divisor: u32,

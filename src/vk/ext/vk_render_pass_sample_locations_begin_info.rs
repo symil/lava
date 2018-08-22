@@ -18,6 +18,7 @@ use vk::ext::vk_attachment_sample_locations::*;
 use vk::ext::vk_subpass_sample_locations::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkRenderPassSampleLocationsBeginInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

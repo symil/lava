@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::ext::vk_vertex_input_binding_divisor_description::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineVertexInputDivisorStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

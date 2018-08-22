@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::vk_tessellation_domain_origin::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineTessellationDomainOriginStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

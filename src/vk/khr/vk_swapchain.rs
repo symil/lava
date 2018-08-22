@@ -86,9 +86,9 @@ impl VkSwapchain {
         }
     }
     
-    pub fn acquire_next_image(&self, timeout: usize, semaphore: Option<&VkSemaphore>, fence: Option<&VkFence>) -> Result<usize, VkResult> {
+    pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<&VkSemaphore>, fence: Option<&VkFence>) -> Result<usize, VkResult> {
         unsafe {
-            let raw_timeout = vk_to_raw_value(&timeout);
+            let raw_timeout = timeout;
             let raw_semaphore = if semaphore.is_some() { vk_to_raw_value(semaphore.unwrap()) } else { 0 };
             let raw_fence = if fence.is_some() { vk_to_raw_value(fence.unwrap()) } else { 0 };
             let raw_image_index = &mut mem::uninitialized() as *mut u32;

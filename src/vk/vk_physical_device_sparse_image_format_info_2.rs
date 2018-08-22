@@ -21,6 +21,7 @@ use vk::vk_image_usage_flags::*;
 use vk::vk_image_tiling::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPhysicalDeviceSparseImageFormatInfo2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

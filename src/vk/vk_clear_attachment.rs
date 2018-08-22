@@ -17,6 +17,7 @@ use vk::vk_image_aspect_flags::*;
 use vk::vk_clear_value::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkClearAttachment {
     pub aspect_mask: RawVkImageAspectFlags,
     pub color_attachment: u32,

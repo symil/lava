@@ -22,6 +22,7 @@ use vk::vk_chroma_location::*;
 use vk::vk_filter::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSamplerYcbcrConversionCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

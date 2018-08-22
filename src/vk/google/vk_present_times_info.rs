@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::google::vk_present_time::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPresentTimesInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

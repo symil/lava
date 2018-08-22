@@ -18,6 +18,7 @@ use vk::vk_image::*;
 use vk::vk_buffer::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkMemoryDedicatedAllocateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

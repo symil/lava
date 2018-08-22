@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::khr::vk_rect_layer::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPresentRegion {
     pub rectangle_count: u32,
     pub rectangles: *mut RawVkRectLayer,

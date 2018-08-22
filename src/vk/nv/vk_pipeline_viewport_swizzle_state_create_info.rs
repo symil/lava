@@ -18,6 +18,7 @@ use vk::nv::vk_pipeline_viewport_swizzle_state_create_flags::*;
 use vk::nv::vk_viewport_swizzle::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineViewportSwizzleStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

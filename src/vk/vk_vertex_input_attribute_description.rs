@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::vk_format::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkVertexInputAttributeDescription {
     pub location: u32,
     pub binding: u32,

@@ -18,6 +18,7 @@ use vk::vk_external_fence_handle_type_flags::*;
 use vk::vk_external_fence_feature_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkExternalFenceProperties {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

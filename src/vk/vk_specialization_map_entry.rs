@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSpecializationMapEntry {
     pub constant_id: u32,
     pub offset: u32,

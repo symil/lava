@@ -21,6 +21,7 @@ use vk::vk_attachment_store_op::*;
 use vk::vk_image_layout::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkAttachmentDescription {
     pub flags: RawVkAttachmentDescriptionFlags,
     pub format: RawVkFormat,

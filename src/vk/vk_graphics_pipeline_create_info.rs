@@ -30,6 +30,7 @@ use vk::vk_render_pass::*;
 use vk::vk_pipeline::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkGraphicsPipelineCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
@@ -81,7 +82,7 @@ pub struct VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 
     pub dynamic_state: Option<&'u VkPipelineDynamicStateCreateInfo<'v>>,
     pub layout: &'w VkPipelineLayout,
     pub render_pass: &'x VkRenderPass,
-    pub subpass: usize,
+    pub subpass: u32,
     pub base_pipeline_handle: Option<&'y VkPipeline>,
     pub base_pipeline_index: isize,
 }
@@ -118,7 +119,7 @@ impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's,
         dst.dynamic_state = new_ptr_vk_value_checked(src.dynamic_state);
         dst.layout = vk_to_raw_value(src.layout);
         dst.render_pass = vk_to_raw_value(src.render_pass);
-        dst.subpass = vk_to_raw_value(&src.subpass);
+        dst.subpass = src.subpass;
         dst.base_pipeline_handle = if src.base_pipeline_handle.is_some() { vk_to_raw_value(src.base_pipeline_handle.unwrap()) } else { 0 };
         dst.base_pipeline_index = vk_to_raw_value(&src.base_pipeline_index);
     }

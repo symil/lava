@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPhysicalDeviceExternalImageFormatInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -17,6 +17,7 @@ use vk::vk_queue_flags::*;
 use vk::vk_extent_3d::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkQueueFamilyProperties {
     pub queue_flags: RawVkQueueFlags,
     pub queue_count: u32,

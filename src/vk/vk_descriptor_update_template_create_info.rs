@@ -22,6 +22,7 @@ use vk::vk_pipeline_bind_point::*;
 use vk::vk_pipeline_layout::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDescriptorUpdateTemplateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

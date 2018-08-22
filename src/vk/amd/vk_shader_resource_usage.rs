@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkShaderResourceUsage {
     pub num_used_vgprs: u32,
     pub num_used_sgprs: u32,

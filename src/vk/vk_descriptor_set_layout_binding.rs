@@ -18,6 +18,7 @@ use vk::vk_shader_stage_flags::*;
 use vk::vk_sampler::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDescriptorSetLayoutBinding {
     pub binding: u32,
     pub descriptor_type: RawVkDescriptorType,

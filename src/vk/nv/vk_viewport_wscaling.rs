@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkViewportWScaling {
     pub xcoeff: f32,
     pub ycoeff: f32,

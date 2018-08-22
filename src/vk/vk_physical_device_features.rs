@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPhysicalDeviceFeatures {
     pub robust_buffer_access: u32,
     pub full_draw_index_uint_32: u32,

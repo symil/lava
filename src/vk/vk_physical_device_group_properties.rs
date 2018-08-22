@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::vk_physical_device::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPhysicalDeviceGroupProperties {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

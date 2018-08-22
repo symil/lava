@@ -15,6 +15,7 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct RawVkClearDepthStencilValue {
     pub depth: f32,
     pub stencil: u32,

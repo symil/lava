@@ -18,6 +18,7 @@ use vk::nvx::vk_object_entry_usage_flags::*;
 use vk::vk_buffer::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkObjectTableVertexBufferEntry {
     pub type_: RawVkObjectEntryType,
     pub flags: RawVkObjectEntryUsageFlags,

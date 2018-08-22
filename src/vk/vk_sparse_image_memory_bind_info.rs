@@ -17,6 +17,7 @@ use vk::vk_image::*;
 use vk::vk_sparse_image_memory_bind::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSparseImageMemoryBindInfo {
     pub image: RawVkImage,
     pub bind_count: u32,

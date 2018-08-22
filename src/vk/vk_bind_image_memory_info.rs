@@ -18,6 +18,7 @@ use vk::vk_image::*;
 use vk::vk_device_memory::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkBindImageMemoryInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::khr::vk_display_mode::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDisplayPlaneInfo2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

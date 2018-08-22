@@ -18,6 +18,7 @@ use vk::vk_blend_op::*;
 use vk::vk_color_component_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineColorBlendAttachmentState {
     pub blend_enable: u32,
     pub src_color_blend_factor: RawVkBlendFactor,

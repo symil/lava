@@ -19,6 +19,7 @@ use vk::vk_buffer::*;
 use vk::vk_format::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkBufferViewCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

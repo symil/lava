@@ -18,6 +18,7 @@ use vk::vk_extent_3d::*;
 use vk::vk_sparse_image_format_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSparseImageFormatProperties {
     pub aspect_mask: RawVkImageAspectFlags,
     pub image_granularity: RawVkExtent3D,

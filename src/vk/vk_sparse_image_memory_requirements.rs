@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::vk_sparse_image_format_properties::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSparseImageMemoryRequirements {
     pub format_properties: RawVkSparseImageFormatProperties,
     pub image_mip_tail_first_lod: u32,

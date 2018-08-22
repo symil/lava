@@ -18,6 +18,7 @@ use vk::vk_sample_count_flags::*;
 use vk::vk_extent_2d::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPhysicalDeviceSampleLocationsProperties {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

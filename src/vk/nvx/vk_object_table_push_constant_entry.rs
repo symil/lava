@@ -19,6 +19,7 @@ use vk::vk_pipeline_layout::*;
 use vk::vk_shader_stage_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkObjectTablePushConstantEntry {
     pub type_: RawVkObjectEntryType,
     pub flags: RawVkObjectEntryUsageFlags,

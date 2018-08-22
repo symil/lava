@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::vk_version::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkApplicationInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

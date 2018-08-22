@@ -19,6 +19,7 @@ use vk::nvx::vk_indirect_commands_layout_usage_flags::*;
 use vk::nvx::vk_indirect_commands_layout_token::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkIndirectCommandsLayoutCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

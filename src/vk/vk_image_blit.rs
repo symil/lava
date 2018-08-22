@@ -17,6 +17,7 @@ use vk::vk_image_subresource_layers::*;
 use vk::vk_offset_3d::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkImageBlit {
     pub src_subresource: RawVkImageSubresourceLayers,
     pub src_offsets: [RawVkOffset3D; 2],

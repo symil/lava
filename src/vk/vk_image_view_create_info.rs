@@ -22,6 +22,7 @@ use vk::vk_component_mapping::*;
 use vk::vk_image_subresource_range::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkImageViewCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

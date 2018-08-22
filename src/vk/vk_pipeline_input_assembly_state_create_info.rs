@@ -18,6 +18,7 @@ use vk::vk_pipeline_input_assembly_state_create_flags::*;
 use vk::vk_primitive_topology::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineInputAssemblyStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

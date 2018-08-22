@@ -18,6 +18,7 @@ use vk::vk_descriptor_pool_create_flags::*;
 use vk::vk_descriptor_pool_size::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDescriptorPoolCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

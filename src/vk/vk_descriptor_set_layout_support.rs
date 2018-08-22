@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDescriptorSetLayoutSupport {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -21,6 +21,7 @@ use vk::khr::vk_display_plane_alpha_flags::*;
 use vk::vk_extent_2d::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDisplaySurfaceCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

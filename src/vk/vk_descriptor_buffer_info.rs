@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::vk_buffer::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDescriptorBufferInfo {
     pub buffer: RawVkBuffer,
     pub offset: u64,

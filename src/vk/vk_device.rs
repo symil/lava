@@ -201,12 +201,12 @@ impl VkDevice {
         }
     }
     
-    pub fn wait_for_fences(&self, fences: &[&VkFence], wait_all: bool, timeout: usize) -> Result<(), VkResult> {
+    pub fn wait_for_fences(&self, fences: &[&VkFence], wait_all: bool, timeout: u64) -> Result<(), VkResult> {
         unsafe {
             let raw_fence_count = fences.len() as u32;
             let raw_fences = new_ptr_vk_array_from_ref(fences);
             let raw_wait_all = vk_to_raw_value(&wait_all);
-            let raw_timeout = vk_to_raw_value(&timeout);
+            let raw_timeout = timeout;
             let vk_result = ((&*self._fn_table).vkWaitForFences)(self._handle, raw_fence_count, raw_fences, raw_wait_all, raw_timeout);
             if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_ptr(raw_fences);

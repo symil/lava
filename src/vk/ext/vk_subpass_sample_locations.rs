@@ -16,6 +16,7 @@ use vk::vk_device::*;
 use vk::ext::vk_sample_locations_info::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSubpassSampleLocations {
     pub subpass_index: u32,
     pub sample_locations_info: RawVkSampleLocationsInfo,
@@ -23,13 +24,13 @@ pub struct RawVkSubpassSampleLocations {
 
 #[derive(Debug, Clone)]
 pub struct VkSubpassSampleLocations<'a> {
-    pub subpass_index: usize,
+    pub subpass_index: u32,
     pub sample_locations_info: VkSampleLocationsInfo<'a>,
 }
 
 impl<'a> VkWrappedType<RawVkSubpassSampleLocations> for VkSubpassSampleLocations<'a> {
     fn vk_to_raw(src: &VkSubpassSampleLocations, dst: &mut RawVkSubpassSampleLocations) {
-        dst.subpass_index = vk_to_raw_value(&src.subpass_index);
+        dst.subpass_index = src.subpass_index;
         dst.sample_locations_info = vk_to_raw_value(&src.sample_locations_info);
     }
 }

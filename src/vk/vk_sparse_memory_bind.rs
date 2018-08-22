@@ -17,6 +17,7 @@ use vk::vk_device_memory::*;
 use vk::vk_sparse_memory_bind_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSparseMemoryBind {
     pub resource_offset: u64,
     pub size: u64,

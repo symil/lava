@@ -20,6 +20,7 @@ use vk::vk_pipeline_layout::*;
 use vk::vk_pipeline::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkComputePipelineCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

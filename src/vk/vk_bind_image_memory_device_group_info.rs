@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::vk_rect_2d::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkBindImageMemoryDeviceGroupInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

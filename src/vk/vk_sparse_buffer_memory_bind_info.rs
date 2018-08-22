@@ -17,6 +17,7 @@ use vk::vk_buffer::*;
 use vk::vk_sparse_memory_bind::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSparseBufferMemoryBindInfo {
     pub buffer: RawVkBuffer,
     pub bind_count: u32,

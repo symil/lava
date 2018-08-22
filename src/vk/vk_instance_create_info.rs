@@ -18,6 +18,7 @@ use vk::vk_instance_create_flags::*;
 use vk::vk_application_info::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkInstanceCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

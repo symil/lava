@@ -19,6 +19,7 @@ use vk::vk_semaphore::*;
 use vk::vk_fence::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkAcquireNextImageInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
@@ -32,7 +33,7 @@ pub struct RawVkAcquireNextImageInfo {
 #[derive(Debug, Clone)]
 pub struct VkAcquireNextImageInfo<'a, 'b, 'c> {
     pub swapchain: &'a VkSwapchain,
-    pub timeout: usize,
+    pub timeout: u64,
     pub semaphore: Option<&'b VkSemaphore>,
     pub fence: Option<&'c VkFence>,
     pub device_mask: u32,
@@ -43,7 +44,7 @@ impl<'a, 'b, 'c> VkWrappedType<RawVkAcquireNextImageInfo> for VkAcquireNextImage
         dst.s_type = vk_to_raw_value(&VkStructureType::AcquireNextImageInfoKhr);
         dst.next = ptr::null();
         dst.swapchain = vk_to_raw_value(src.swapchain);
-        dst.timeout = vk_to_raw_value(&src.timeout);
+        dst.timeout = src.timeout;
         dst.semaphore = if src.semaphore.is_some() { vk_to_raw_value(src.semaphore.unwrap()) } else { 0 };
         dst.fence = if src.fence.is_some() { vk_to_raw_value(src.fence.unwrap()) } else { 0 };
         dst.device_mask = src.device_mask;

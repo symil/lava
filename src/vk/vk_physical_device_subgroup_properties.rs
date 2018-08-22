@@ -18,6 +18,7 @@ use vk::vk_shader_stage_flags::*;
 use vk::vk_subgroup_feature_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPhysicalDeviceSubgroupProperties {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

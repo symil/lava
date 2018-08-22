@@ -17,6 +17,7 @@ use vk::vk_structure_type::*;
 use vk::ext::vk_debug_report_object_type::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkDebugMarkerObjectTagInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

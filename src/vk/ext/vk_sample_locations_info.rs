@@ -19,6 +19,7 @@ use vk::vk_extent_2d::*;
 use vk::ext::vk_sample_location::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkSampleLocationsInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,

@@ -20,6 +20,7 @@ use vk::vk_query_control_flags::*;
 use vk::vk_query_pipeline_statistic_flags::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkCommandBufferInheritanceInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
@@ -34,7 +35,7 @@ pub struct RawVkCommandBufferInheritanceInfo {
 #[derive(Debug, Clone)]
 pub struct VkCommandBufferInheritanceInfo<'a, 'b> {
     pub render_pass: Option<&'a VkRenderPass>,
-    pub subpass: usize,
+    pub subpass: u32,
     pub framebuffer: Option<&'b VkFramebuffer>,
     pub occlusion_query_enable: bool,
     pub query_flags: VkQueryControlFlags,
@@ -46,7 +47,7 @@ impl<'a, 'b> VkWrappedType<RawVkCommandBufferInheritanceInfo> for VkCommandBuffe
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferInheritanceInfo);
         dst.next = ptr::null();
         dst.render_pass = if src.render_pass.is_some() { vk_to_raw_value(src.render_pass.unwrap()) } else { 0 };
-        dst.subpass = vk_to_raw_value(&src.subpass);
+        dst.subpass = src.subpass;
         dst.framebuffer = if src.framebuffer.is_some() { vk_to_raw_value(src.framebuffer.unwrap()) } else { 0 };
         dst.occlusion_query_enable = vk_to_raw_value(&src.occlusion_query_enable);
         dst.query_flags = vk_to_raw_value(&src.query_flags);

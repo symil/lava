@@ -20,6 +20,7 @@ use vk::vk_cull_mode_flags::*;
 use vk::vk_front_face::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct RawVkPipelineRasterizationStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
