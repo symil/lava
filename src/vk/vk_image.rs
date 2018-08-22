@@ -62,12 +62,13 @@ impl VkImage {
         self._handle
     }
     
-    pub fn bind_memory(&self, memory: &VkDeviceMemory, memory_offset: usize) -> VkResult {
+    pub fn bind_memory(&self, memory: &VkDeviceMemory, memory_offset: usize) -> Result<(), VkResult> {
         unsafe {
             let raw_memory = vk_to_raw_value(memory);
             let raw_memory_offset = vk_to_raw_value(&memory_offset);
             let vk_result = ((&*self._fn_table).vkBindImageMemory)(self._parent_device, self._handle, raw_memory, raw_memory_offset);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
     

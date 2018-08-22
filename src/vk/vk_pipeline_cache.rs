@@ -84,13 +84,14 @@ impl VkPipelineCache {
         }
     }
     
-    pub fn merge(&self, src_caches: &[&VkPipelineCache]) -> VkResult {
+    pub fn merge(&self, src_caches: &[&VkPipelineCache]) -> Result<(), VkResult> {
         unsafe {
             let raw_src_cache_count = src_caches.len() as u32;
             let raw_src_caches = new_ptr_vk_array_from_ref(src_caches);
             let vk_result = ((&*self._fn_table).vkMergePipelineCaches)(self._parent_device, self._handle, raw_src_cache_count, raw_src_caches);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_ptr(raw_src_caches);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
 }

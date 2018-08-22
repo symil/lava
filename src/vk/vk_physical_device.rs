@@ -768,11 +768,12 @@ impl VkPhysicalDevice {
         }
     }
     
-    pub fn release_display(&self, display: &khr::VkDisplay) -> VkResult {
+    pub fn release_display(&self, display: &khr::VkDisplay) -> Result<(), VkResult> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
             let vk_result = ((&*self._fn_table).vkReleaseDisplayEXT)(self._handle, raw_display);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
     

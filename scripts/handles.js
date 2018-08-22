@@ -358,9 +358,12 @@ function functionToMethod(handle, func) {
         
         returnStatement = returnVkResult ? `Ok(${wrappedResultVarName})` : wrappedResultVarName;
     } else if (returnVkResult) {
-        returnType = 'VkResult';
-        statements.push(`let vk_result = ${functionCall};`);
-        returnStatement = `RawVkResult::vk_to_wrapped(&vk_result)`;
+        returnType = 'Result<(), VkResult>';
+        statements.push(
+            `let vk_result = ${functionCall};`,
+            `if vk_result != ${VK_SUCCESS} { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }`
+        );
+        returnStatement = `Ok(())`;
     } else {
         statements.push(`${functionCall};`);
     }

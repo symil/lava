@@ -62,41 +62,45 @@ impl VkQueue {
         self._handle
     }
     
-    pub fn submit(&self, submits: &[VkSubmitInfo], fence: Option<&VkFence>) -> VkResult {
+    pub fn submit(&self, submits: &[VkSubmitInfo], fence: Option<&VkFence>) -> Result<(), VkResult> {
         unsafe {
             let raw_submit_count = submits.len() as u32;
             let raw_submits = new_ptr_vk_array(submits);
             let raw_fence = if fence.is_some() { vk_to_raw_value(fence.unwrap()) } else { 0 };
             let vk_result = ((&*self._fn_table).vkQueueSubmit)(self._handle, raw_submit_count, raw_submits, raw_fence);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array(raw_submit_count as usize, raw_submits);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
-    pub fn wait_idle(&self) -> VkResult {
+    pub fn wait_idle(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkQueueWaitIdle)(self._handle);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
     
-    pub fn bind_sparse(&self, bind_info: &[VkBindSparseInfo], fence: Option<&VkFence>) -> VkResult {
+    pub fn bind_sparse(&self, bind_info: &[VkBindSparseInfo], fence: Option<&VkFence>) -> Result<(), VkResult> {
         unsafe {
             let raw_bind_info_count = bind_info.len() as u32;
             let raw_bind_info = new_ptr_vk_array(bind_info);
             let raw_fence = if fence.is_some() { vk_to_raw_value(fence.unwrap()) } else { 0 };
             let vk_result = ((&*self._fn_table).vkQueueBindSparse)(self._handle, raw_bind_info_count, raw_bind_info, raw_fence);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
-    pub fn present(&self, present_info: &khr::VkPresentInfo) -> VkResult {
+    pub fn present(&self, present_info: &khr::VkPresentInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_present_info = new_ptr_vk_value(present_info);
             let vk_result = ((&*self._fn_table).vkQueuePresentKHR)(self._handle, raw_present_info);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_present_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     

@@ -68,7 +68,7 @@ impl VkQueryPool {
         }
     }
     
-    pub fn get_results(&self, first_query: usize, query_count: usize, data: &mut [c_void], stride: usize, flags: VkQueryResultFlags) -> VkResult {
+    pub fn get_results(&self, first_query: usize, query_count: usize, data: &mut [c_void], stride: usize, flags: VkQueryResultFlags) -> Result<(), VkResult> {
         unsafe {
             let raw_first_query = vk_to_raw_value(&first_query);
             let raw_query_count = vk_to_raw_value(&query_count);
@@ -77,7 +77,8 @@ impl VkQueryPool {
             let raw_stride = vk_to_raw_value(&stride);
             let raw_flags = vk_to_raw_value(&flags);
             let vk_result = ((&*self._fn_table).vkGetQueryPoolResults)(self._parent_device, self._handle, raw_first_query, raw_query_count, raw_data_size, raw_data, raw_stride, raw_flags);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
 }

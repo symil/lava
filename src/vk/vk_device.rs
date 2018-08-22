@@ -85,10 +85,11 @@ impl VkDevice {
         }
     }
     
-    pub fn wait_idle(&self) -> VkResult {
+    pub fn wait_idle(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkDeviceWaitIdle)(self._handle);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
     
@@ -117,7 +118,7 @@ impl VkDevice {
         }
     }
     
-    pub fn map_memory(&self, memory: &VkDeviceMemory, offset: usize, size: usize, flags: VkMemoryMapFlags, data: *mut *mut c_void) -> VkResult {
+    pub fn map_memory(&self, memory: &VkDeviceMemory, offset: usize, size: usize, flags: VkMemoryMapFlags, data: *mut *mut c_void) -> Result<(), VkResult> {
         unsafe {
             let raw_memory = vk_to_raw_value(memory);
             let raw_offset = vk_to_raw_value(&offset);
@@ -125,7 +126,8 @@ impl VkDevice {
             let raw_flags = vk_to_raw_value(&flags);
             let raw_data = data;
             let vk_result = ((&*self._fn_table).vkMapMemory)(self._handle, raw_memory, raw_offset, raw_size, raw_flags, raw_data);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
     
@@ -136,23 +138,25 @@ impl VkDevice {
         }
     }
     
-    pub fn flush_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> VkResult {
+    pub fn flush_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> Result<(), VkResult> {
         unsafe {
             let raw_memory_range_count = memory_ranges.len() as u32;
             let raw_memory_ranges = new_ptr_vk_array(memory_ranges);
             let vk_result = ((&*self._fn_table).vkFlushMappedMemoryRanges)(self._handle, raw_memory_range_count, raw_memory_ranges);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array(raw_memory_range_count as usize, raw_memory_ranges);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
-    pub fn invalidate_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> VkResult {
+    pub fn invalidate_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> Result<(), VkResult> {
         unsafe {
             let raw_memory_range_count = memory_ranges.len() as u32;
             let raw_memory_ranges = new_ptr_vk_array(memory_ranges);
             let vk_result = ((&*self._fn_table).vkInvalidateMappedMemoryRanges)(self._handle, raw_memory_range_count, raw_memory_ranges);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array(raw_memory_range_count as usize, raw_memory_ranges);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
@@ -186,25 +190,27 @@ impl VkDevice {
         }
     }
     
-    pub fn reset_fences(&self, fences: &[&VkFence]) -> VkResult {
+    pub fn reset_fences(&self, fences: &[&VkFence]) -> Result<(), VkResult> {
         unsafe {
             let raw_fence_count = fences.len() as u32;
             let raw_fences = new_ptr_vk_array_from_ref(fences);
             let vk_result = ((&*self._fn_table).vkResetFences)(self._handle, raw_fence_count, raw_fences);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_ptr(raw_fences);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
-    pub fn wait_for_fences(&self, fences: &[&VkFence], wait_all: bool, timeout: usize) -> VkResult {
+    pub fn wait_for_fences(&self, fences: &[&VkFence], wait_all: bool, timeout: usize) -> Result<(), VkResult> {
         unsafe {
             let raw_fence_count = fences.len() as u32;
             let raw_fences = new_ptr_vk_array_from_ref(fences);
             let raw_wait_all = vk_to_raw_value(&wait_all);
             let raw_timeout = vk_to_raw_value(&timeout);
             let vk_result = ((&*self._fn_table).vkWaitForFences)(self._handle, raw_fence_count, raw_fences, raw_wait_all, raw_timeout);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_ptr(raw_fences);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
@@ -576,23 +582,25 @@ impl VkDevice {
         }
     }
     
-    pub fn bind_buffer_memory_2(&self, bind_infos: &[VkBindBufferMemoryInfo]) -> VkResult {
+    pub fn bind_buffer_memory_2(&self, bind_infos: &[VkBindBufferMemoryInfo]) -> Result<(), VkResult> {
         unsafe {
             let raw_bind_info_count = bind_infos.len() as u32;
             let raw_bind_infos = new_ptr_vk_array(bind_infos);
             let vk_result = ((&*self._fn_table).vkBindBufferMemory2)(self._handle, raw_bind_info_count, raw_bind_infos);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_infos);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
-    pub fn bind_image_memory_2(&self, bind_infos: &[VkBindImageMemoryInfo]) -> VkResult {
+    pub fn bind_image_memory_2(&self, bind_infos: &[VkBindImageMemoryInfo]) -> Result<(), VkResult> {
         unsafe {
             let raw_bind_info_count = bind_infos.len() as u32;
             let raw_bind_infos = new_ptr_vk_array(bind_infos);
             let vk_result = ((&*self._fn_table).vkBindImageMemory2)(self._handle, raw_bind_info_count, raw_bind_infos);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_infos);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
@@ -856,12 +864,13 @@ impl VkDevice {
         }
     }
     
-    pub fn import_semaphore_fd(&self, import_semaphore_fd_info: &khr::VkImportSemaphoreFdInfo) -> VkResult {
+    pub fn import_semaphore_fd(&self, import_semaphore_fd_info: &khr::VkImportSemaphoreFdInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_import_semaphore_fd_info = new_ptr_vk_value(import_semaphore_fd_info);
             let vk_result = ((&*self._fn_table).vkImportSemaphoreFdKHR)(self._handle, raw_import_semaphore_fd_info);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_import_semaphore_fd_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
@@ -897,12 +906,13 @@ impl VkDevice {
         }
     }
     
-    pub fn import_fence_fd(&self, import_fence_fd_info: &khr::VkImportFenceFdInfo) -> VkResult {
+    pub fn import_fence_fd(&self, import_fence_fd_info: &khr::VkImportFenceFdInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_import_fence_fd_info = new_ptr_vk_value(import_fence_fd_info);
             let vk_result = ((&*self._fn_table).vkImportFenceFdKHR)(self._handle, raw_import_fence_fd_info);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_import_fence_fd_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
@@ -920,21 +930,23 @@ impl VkDevice {
         }
     }
     
-    pub fn debug_marker_set_object_tag(&self, tag_info: &ext::VkDebugMarkerObjectTagInfo) -> VkResult {
+    pub fn debug_marker_set_object_tag(&self, tag_info: &ext::VkDebugMarkerObjectTagInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_tag_info = new_ptr_vk_value(tag_info);
             let vk_result = ((&*self._fn_table).vkDebugMarkerSetObjectTagEXT)(self._handle, raw_tag_info);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_tag_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
-    pub fn debug_marker_set_object_name(&self, name_info: &ext::VkDebugMarkerObjectNameInfo) -> VkResult {
+    pub fn debug_marker_set_object_name(&self, name_info: &ext::VkDebugMarkerObjectNameInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_name_info = new_ptr_vk_value(name_info);
             let vk_result = ((&*self._fn_table).vkDebugMarkerSetObjectNameEXT)(self._handle, raw_name_info);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_name_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
@@ -974,13 +986,14 @@ impl VkDevice {
         }
     }
     
-    pub fn display_power_control(&self, display: &khr::VkDisplay, display_power_info: &ext::VkDisplayPowerInfo) -> VkResult {
+    pub fn display_power_control(&self, display: &khr::VkDisplay, display_power_info: &ext::VkDisplayPowerInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
             let raw_display_power_info = new_ptr_vk_value(display_power_info);
             let vk_result = ((&*self._fn_table).vkDisplayPowerControlEXT)(self._handle, raw_display, raw_display_power_info);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_display_power_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
@@ -1032,21 +1045,23 @@ impl VkDevice {
         }
     }
     
-    pub fn set_debug_utils_object_name(&self, name_info: &ext::VkDebugUtilsObjectNameInfo) -> VkResult {
+    pub fn set_debug_utils_object_name(&self, name_info: &ext::VkDebugUtilsObjectNameInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_name_info = new_ptr_vk_value(name_info);
             let vk_result = ((&*self._fn_table).vkSetDebugUtilsObjectNameEXT)(self._handle, raw_name_info);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_name_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
-    pub fn set_debug_utils_object_tag(&self, tag_info: &ext::VkDebugUtilsObjectTagInfo) -> VkResult {
+    pub fn set_debug_utils_object_tag(&self, tag_info: &ext::VkDebugUtilsObjectTagInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_tag_info = new_ptr_vk_value(tag_info);
             let vk_result = ((&*self._fn_table).vkSetDebugUtilsObjectTagEXT)(self._handle, raw_tag_info);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_tag_info);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     

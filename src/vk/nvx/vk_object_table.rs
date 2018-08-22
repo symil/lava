@@ -68,27 +68,29 @@ impl VkObjectTable {
         }
     }
     
-    pub fn register_objects(&self, object_table_entries: &[&nvx::VkObjectTableEntry], object_indices: &[usize]) -> VkResult {
+    pub fn register_objects(&self, object_table_entries: &[&nvx::VkObjectTableEntry], object_indices: &[usize]) -> Result<(), VkResult> {
         unsafe {
             let raw_object_count = cmp::max(object_table_entries.len(), object_indices.len()) as u32;
             let raw_object_table_entries = new_ptr_vk_array_array(object_table_entries);
             let raw_object_indices = new_ptr_vk_array(object_indices);
             let vk_result = ((&*self._fn_table).vkRegisterObjectsNVX)(self._parent_device, self._handle, raw_object_count, raw_object_table_entries, raw_object_indices);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array_array(raw_object_count as usize, raw_object_table_entries);
             free_ptr(raw_object_indices);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
     
-    pub fn unregister_objects(&self, object_entry_types: &[nvx::VkObjectEntryType], object_indices: &[usize]) -> VkResult {
+    pub fn unregister_objects(&self, object_entry_types: &[nvx::VkObjectEntryType], object_indices: &[usize]) -> Result<(), VkResult> {
         unsafe {
             let raw_object_count = cmp::max(object_entry_types.len(), object_indices.len()) as u32;
             let raw_object_entry_types = new_ptr_vk_array(object_entry_types);
             let raw_object_indices = new_ptr_vk_array(object_indices);
             let vk_result = ((&*self._fn_table).vkUnregisterObjectsNVX)(self._parent_device, self._handle, raw_object_count, raw_object_entry_types, raw_object_indices);
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_ptr(raw_object_entry_types);
             free_ptr(raw_object_indices);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            Ok(())
         }
     }
 }

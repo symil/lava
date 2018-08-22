@@ -68,24 +68,27 @@ impl VkEvent {
         }
     }
     
-    pub fn get_status(&self) -> VkResult {
+    pub fn get_status(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkGetEventStatus)(self._parent_device, self._handle);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
     
-    pub fn set(&self) -> VkResult {
+    pub fn set(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkSetEvent)(self._parent_device, self._handle);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
     
-    pub fn reset(&self) -> VkResult {
+    pub fn reset(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkResetEvent)(self._parent_device, self._handle);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
 }

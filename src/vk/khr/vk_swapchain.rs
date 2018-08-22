@@ -101,10 +101,11 @@ impl VkSwapchain {
         }
     }
     
-    pub fn get_status(&self) -> VkResult {
+    pub fn get_status(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkGetSwapchainStatusKHR)(self._parent_device, self._handle);
-            RawVkResult::vk_to_wrapped(&vk_result)
+            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            Ok(())
         }
     }
     
