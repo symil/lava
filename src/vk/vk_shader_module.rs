@@ -48,6 +48,12 @@ impl Default for VkShaderModule {
     }
 }
 
+impl PartialEq for VkShaderModule {
+    fn eq(&self, other: &VkShaderModule) -> bool {
+        self._handle == other._handle
+    }
+}
+
 impl VkSetup for VkShaderModule {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

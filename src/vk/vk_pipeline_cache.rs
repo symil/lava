@@ -48,6 +48,12 @@ impl Default for VkPipelineCache {
     }
 }
 
+impl PartialEq for VkPipelineCache {
+    fn eq(&self, other: &VkPipelineCache) -> bool {
+        self._handle == other._handle
+    }
+}
+
 impl VkSetup for VkPipelineCache {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

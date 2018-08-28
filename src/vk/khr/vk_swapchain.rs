@@ -48,6 +48,12 @@ impl Default for VkSwapchain {
     }
 }
 
+impl PartialEq for VkSwapchain {
+    fn eq(&self, other: &VkSwapchain) -> bool {
+        self._handle == other._handle
+    }
+}
+
 impl VkSetup for VkSwapchain {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

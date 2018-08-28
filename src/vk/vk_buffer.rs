@@ -48,6 +48,12 @@ impl Default for VkBuffer {
     }
 }
 
+impl PartialEq for VkBuffer {
+    fn eq(&self, other: &VkBuffer) -> bool {
+        self._handle == other._handle
+    }
+}
+
 impl VkSetup for VkBuffer {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

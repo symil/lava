@@ -48,6 +48,12 @@ impl Default for VkDescriptorUpdateTemplate {
     }
 }
 
+impl PartialEq for VkDescriptorUpdateTemplate {
+    fn eq(&self, other: &VkDescriptorUpdateTemplate) -> bool {
+        self._handle == other._handle
+    }
+}
+
 impl VkSetup for VkDescriptorUpdateTemplate {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

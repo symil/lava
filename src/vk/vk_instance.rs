@@ -48,6 +48,12 @@ impl Default for VkInstance {
     }
 }
 
+impl PartialEq for VkInstance {
+    fn eq(&self, other: &VkInstance) -> bool {
+        self._handle == other._handle
+    }
+}
+
 impl VkSetup for VkInstance {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

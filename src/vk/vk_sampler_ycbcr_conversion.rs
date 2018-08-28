@@ -48,6 +48,12 @@ impl Default for VkSamplerYcbcrConversion {
     }
 }
 
+impl PartialEq for VkSamplerYcbcrConversion {
+    fn eq(&self, other: &VkSamplerYcbcrConversion) -> bool {
+        self._handle == other._handle
+    }
+}
+
 impl VkSetup for VkSamplerYcbcrConversion {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

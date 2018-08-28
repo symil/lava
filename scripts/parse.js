@@ -302,7 +302,7 @@ function parseFunctions() {
         const words = str.replace(/VKAPI_ATTR|VKAPI_CALL/g, '').trim().split(/\W+/, 2);
         const type = words[0];
         const name = words[1];
-        
+
         const args = str.substring(str.indexOf('(') + 1, str.indexOf(')')).split(',').map(x => x.trim()).map(argStr => {
             const argInfo = parseField(argStr);
 
@@ -314,6 +314,8 @@ function parseFunctions() {
         });
 
         let xml = VK_XML.commands.command.find(c => (c.proto && c.proto.name === name) || c.name === name);
+        let successCodes = null;
+        let errorCodes = null;
         
         if (xml) {
             if (xml.alias) {
@@ -321,6 +323,9 @@ function parseFunctions() {
                 xml = VK_XML.commands.command.find(c => c.proto && c.proto.name === xml.alias)
             }
     
+            successCodes = (xml.successcodes ? xml.successcodes.split(',') : []);
+            errorCodes = (xml.errorcodes ? xml.errorcodes.split(',') : []);
+
             const xmlParams = Array.isArray(xml.param) ? xml.param : [xml.param];
     
             if (!xmlParams) {
@@ -354,7 +359,7 @@ function parseFunctions() {
             }
         }
 
-        return { name, type, args };
+        return { name, type, args, successCodes, errorCodes };
     }).filter(f => f);
 
     return functions;

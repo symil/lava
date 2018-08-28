@@ -48,6 +48,12 @@ impl Default for VkDebugUtilsMessenger {
     }
 }
 
+impl PartialEq for VkDebugUtilsMessenger {
+    fn eq(&self, other: &VkDebugUtilsMessenger) -> bool {
+        self._handle == other._handle
+    }
+}
+
 impl VkSetup for VkDebugUtilsMessenger {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;
