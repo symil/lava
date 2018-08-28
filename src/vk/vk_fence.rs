@@ -54,6 +54,12 @@ impl PartialEq for VkFence {
     }
 }
 
+impl AsRef<VkFence> for VkFence {
+    fn as_ref(&self) -> &VkFence {
+        self
+    }
+}
+
 impl VkSetup for VkFence {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

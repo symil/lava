@@ -54,6 +54,12 @@ impl PartialEq for VkBufferView {
     }
 }
 
+impl AsRef<VkBufferView> for VkBufferView {
+    fn as_ref(&self) -> &VkBufferView {
+        self
+    }
+}
+
 impl VkSetup for VkBufferView {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

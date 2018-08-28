@@ -54,6 +54,12 @@ impl PartialEq for VkRenderPass {
     }
 }
 
+impl AsRef<VkRenderPass> for VkRenderPass {
+    fn as_ref(&self) -> &VkRenderPass {
+        self
+    }
+}
+
 impl VkSetup for VkRenderPass {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

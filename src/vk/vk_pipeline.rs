@@ -54,6 +54,12 @@ impl PartialEq for VkPipeline {
     }
 }
 
+impl AsRef<VkPipeline> for VkPipeline {
+    fn as_ref(&self) -> &VkPipeline {
+        self
+    }
+}
+
 impl VkSetup for VkPipeline {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

@@ -54,6 +54,12 @@ impl PartialEq for VkValidationCache {
     }
 }
 
+impl AsRef<VkValidationCache> for VkValidationCache {
+    fn as_ref(&self) -> &VkValidationCache {
+        self
+    }
+}
+
 impl VkSetup for VkValidationCache {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

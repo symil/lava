@@ -114,7 +114,7 @@ pub fn new_ptr_vk_array_checked<R, W : VkWrappedType<R>>(array: Option<&[W]>) ->
     }
 }
 
-pub fn new_ptr_vk_array_from_ref<R, W : VkWrappedType<R>>(array: &[&W]) -> *mut R {
+pub fn new_ptr_vk_array_from_ref<R, W : VkWrappedType<R>, T: AsRef<W>>(array: &[T]) -> *mut R {
     unsafe {
         if array.len() == 0 {
             return ptr::null_mut()
@@ -125,14 +125,14 @@ pub fn new_ptr_vk_array_from_ref<R, W : VkWrappedType<R>>(array: &[&W]) -> *mut 
 
         for i in 0..array.len() {
             let dst = ptr.add(i).as_mut().unwrap();
-            W::vk_to_raw(array[i], dst);
+            W::vk_to_raw(array[i].as_ref(), dst);
         }
 
         ptr
     }
 }
 
-pub fn new_ptr_vk_array_checked_from_ref<R, W : VkWrappedType<R>>(array: Option<&[&W]>) -> *mut R {
+pub fn new_ptr_vk_array_checked_from_ref<R, W : VkWrappedType<R>, T: AsRef<W>>(array: Option<&[T]>) -> *mut R {
     match array {
         Some(v) => new_ptr_vk_array_from_ref(v),
         None => ptr::null_mut()

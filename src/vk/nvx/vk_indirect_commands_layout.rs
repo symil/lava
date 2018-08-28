@@ -54,6 +54,12 @@ impl PartialEq for VkIndirectCommandsLayout {
     }
 }
 
+impl AsRef<VkIndirectCommandsLayout> for VkIndirectCommandsLayout {
+    fn as_ref(&self) -> &VkIndirectCommandsLayout {
+        self
+    }
+}
+
 impl VkSetup for VkIndirectCommandsLayout {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

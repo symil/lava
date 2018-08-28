@@ -54,6 +54,12 @@ impl PartialEq for VkQueryPool {
     }
 }
 
+impl AsRef<VkQueryPool> for VkQueryPool {
+    fn as_ref(&self) -> &VkQueryPool {
+        self
+    }
+}
+
 impl VkSetup for VkQueryPool {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

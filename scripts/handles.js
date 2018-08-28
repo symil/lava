@@ -31,6 +31,7 @@ function generateVkHandleDefinition(def) {
         genVkWrappedTypeTrait(def),
         genDefaultTrait(def),
         genPartialEqTrait(def),
+        genAsRefTrait(def),
         genVkSetupTrait(def),
         genSpecialMethods(def),
         genMethods(def)
@@ -158,6 +159,16 @@ function genPartialEqTrait(def) {
         `impl PartialEq for ${def.wrappedTypeName}`, [
             `fn eq(&self, other: &${def.wrappedTypeName}) -> bool`, [
                 `self._handle == other._handle`
+            ]
+        ]
+    ];  
+}
+
+function genAsRefTrait(def) {
+    return [
+        `impl AsRef<${def.wrappedTypeName}> for ${def.wrappedTypeName}`, [
+            `fn as_ref(&self) -> &${def.wrappedTypeName}`, [
+                `self`
             ]
         ]
     ];  

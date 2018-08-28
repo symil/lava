@@ -54,6 +54,12 @@ impl PartialEq for VkObjectTable {
     }
 }
 
+impl AsRef<VkObjectTable> for VkObjectTable {
+    fn as_ref(&self) -> &VkObjectTable {
+        self
+    }
+}
+
 impl VkSetup for VkObjectTable {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

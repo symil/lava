@@ -54,6 +54,12 @@ impl PartialEq for VkDeviceMemory {
     }
 }
 
+impl AsRef<VkDeviceMemory> for VkDeviceMemory {
+    fn as_ref(&self) -> &VkDeviceMemory {
+        self
+    }
+}
+
 impl VkSetup for VkDeviceMemory {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

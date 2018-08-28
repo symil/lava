@@ -189,14 +189,18 @@ function canHaveStaticValue(def) {
     }
 }
 
-class LetterCounter {
+class GenericsIdCounter {
     constructor() {
-        this._counter = 0;
-        this._initialized = false;
+        this._lifetimeCounter = 0;
+        this._typeCounter = 0;
     }
 
-    next() {
-        return "'" + String.fromCharCode('a'.charCodeAt(0) + this._counter++);
+    nextLifetimeId() {
+        return "'" + String.fromCharCode('a'.charCodeAt(0) + this._lifetimeCounter++);
+    }
+
+    nextTypeId() {
+        return String.fromCharCode('A'.charCodeAt(0) + this._typeCounter++);
     }
 }
 
@@ -207,8 +211,8 @@ class LifetimeTree {
         this._children = [];
     }
 
-    add(counter) {
-        const child = new LifetimeTree(counter && counter.next(), this._letter || this._parentLetter);
+    add(genericsIdCounter) {
+        const child = new LifetimeTree(genericsIdCounter && genericsIdCounter.nextLifetimeId(), this._letter || this._parentLetter);
         this._children.push(child);
 
         return child;
@@ -259,12 +263,22 @@ class LifetimeTree {
     }
 }
 
-function assignLifetimes(fields, counter, root) {
-    counter = counter || new LetterCounter();
-    root = root || new LifetimeTree();
+class GenericsTypeList {
+    constructor() {
+        this._mapping = {};
+    }
+
+    add(genericsIdCounter, typeDefinition) {
+        this._mapping[genericsIdCounter.]
+    }
+}
+
+function assignLifetimes(fields, counter, rootLifetimeTree) {
+    counter = counter || new GenericsIdCounter();
+    rootLifetimeTree = rootLifetimeTree || new LifetimeTree();
 
     for (let field of fields) {
-        let tree = root;
+        let tree = rootLifetimeTree;
 
         if (field.wrappedType) {
             if (field.wrappedType.includes('&')) {
@@ -294,7 +308,7 @@ function assignLifetimes(fields, counter, root) {
         }
     }
 
-    return root;
+    return rootLifetimeTree;
 }
 
 module.exports = {

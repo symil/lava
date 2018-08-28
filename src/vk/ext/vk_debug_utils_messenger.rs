@@ -54,6 +54,12 @@ impl PartialEq for VkDebugUtilsMessenger {
     }
 }
 
+impl AsRef<VkDebugUtilsMessenger> for VkDebugUtilsMessenger {
+    fn as_ref(&self) -> &VkDebugUtilsMessenger {
+        self
+    }
+}
+
 impl VkSetup for VkDebugUtilsMessenger {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;
