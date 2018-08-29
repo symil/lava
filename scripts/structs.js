@@ -12,7 +12,7 @@ function generateVkStructDefinition(cDef) {
         cFields: cDef.fields
     };
 
-    const lifetimeTree = assignLifetimes(def.fields);
+    const lifetimeTree = assignGenerics(def.fields);
 
     def.lifetimes = lifetimeTree.getSpecs();
     def.lifetimesRestrictions = lifetimeTree.getRestrictions();
@@ -204,95 +204,50 @@ class GenericsIdCounter {
     }
 }
 
-class LifetimeTree {
-    constructor(letter, parentLetter) {
-        this._letter = letter;
-        this._parentLetter = parentLetter;
-        this._children = [];
-    }
+function getGenericsInfo(generics) {
+    const keys = Object.keys(generics);
+    const lifetimes = keys.filter(key => key.startsWith("'"));
+    const types = keys.filter(key => !key.startsWith("'"));
 
-    add(genericsIdCounter) {
-        const child = new LifetimeTree(genericsIdCounter && genericsIdCounter.nextLifetimeId(), this._letter || this._parentLetter);
-        this._children.push(child);
+    const ids = lifetimes.concat(types);
+    const restrictions = ids.filter(id => generics[id]).map(id => `        ${id}: ${generics[id]},\n`);
 
-        return child;
-    }
-
-    _collect(obj = {}) {
-        if (this._letter) {
-            obj[this._letter] = this._parentLetter;
-        }
-
-        this._children.forEach(child => child._collect(obj));
-
-        return obj;
-    }
-
-    letter() {
-        return this._letter;
-    }
-
-    getSpecs() {
-        const letters = Object.keys(this._collect());
-
-        if (!letters.length) {
-            return '';
-        }
-
-        return `<${letters.join(', ')}>`;
-    }
-
-    getRestrictions() {
-        const restrictions = Object.entries(this._collect()).filter(entry => entry[1]);
-
-        if (!restrictions.length) {
-            return '';
-        }
-
-        return `\n    where\n${restrictions.map(([key, value]) => `        ${key}: ${value},\n`).join('')}`
-    }
-
-    getStatics() {
-        const letters = Object.keys(this._collect());
-
-        if (!letters.length) {
-            return '';
-        }
-
-        return `<${letters.map(() => "'static").join(', ')}>`;
-    }
+    return  {
+        specs: ids.length ? `<${ids.join(', ')}>` : '',
+        restrictions: restrictions.length ? `\n    where\n${restrictions.join('')}` : '',
+        typeSpecs: types.length ? `<${types.join(', ')}>` : '',
+        typeRestrictions: types.length ? `\n    where\n${types.map(type => `        ${type}: ${generics[type]},\n`).join('')}` : ''
+    };
 }
 
-class GenericsTypeList {
-    constructor() {
-        this._mapping = {};
-    }
-
-    add(genericsIdCounter, typeDefinition) {
-        this._mapping[genericsIdCounter.]
-    }
-}
-
-function assignLifetimes(fields, counter, rootLifetimeTree) {
+function assignGenerics(fields, counter, parentLifetime) {
     counter = counter || new GenericsIdCounter();
-    rootLifetimeTree = rootLifetimeTree || new LifetimeTree();
+
+    const generics = {};
+    const baseParentLifetime = parentLifetime;
 
     for (let field of fields) {
-        let tree = rootLifetimeTree;
+        parentLifetime = baseParentLifetime;
 
         if (field.wrappedType) {
+            // let strippedType = field.wrappedType.replace(/^Option<(.*)>$/, '$1');
+
             if (field.wrappedType.includes('&')) {
-                tree = tree.add(counter);
-                field.wrappedType = field.wrappedType.replace('&', `&${tree.letter()} `);
+                const lifetime = counter.nextLifetimeId();
+                generics[lifetime] = parentLifetime;
+                field.wrappedType = field.wrappedType.replace('&', `&${lifetime} `);
+                parentLifetime = lifetime
 
                 if (field.wrappedType.includes(`[&str]`)) {
-                    tree = tree.add(counter);
-                    field.wrappedType = field.wrappedType.replace('[&str]', `[&${tree.letter()} str]`);
+                    const type = counter.nextTypeId();
+                    generics[type] = `AsRef<str>`;
+                    field.wrappedType = field.wrappedType.replace('[&str]', `[${type}]`);
                 }
 
                 if (field.wrappedType.includes(`[&${field.wrappedTypeName}]`)) {
-                    tree = tree.add(counter);
-                    field.wrappedType = field.wrappedType.replace(`[&${field.wrappedTypeName}]`, `[&${tree.letter()} ${field.wrappedTypeName}]`);
+                    const type = counter.nextTypeId();
+                    generics[type] = `AsRef<${field.wrappedTypeName}>`;
+                    field.wrappedType = field.wrappedType.replace(`[&${field.wrappedTypeName}]`, `[${type}]`);
                 }
             }
 
@@ -301,14 +256,15 @@ function assignLifetimes(fields, counter, rootLifetimeTree) {
 
                 if (structDef) {
                     const structFields = getFieldsInformation(structDef.fields, structDef.name);
-                    tree = assignLifetimes(structFields, counter, tree.add(null));
-                    field.wrappedType = field.wrappedType.replace(field.wrappedTypeName, field.wrappedTypeName + tree.getSpecs());
+                    const fieldGenerics = assignGenerics(structFields, counter, parentLifetime);
+                    field.wrappedType = field.wrappedType.replace(field.wrappedTypeName, field.wrappedTypeName + getGenericsInfo(fieldGenerics).specs);
+                    Object.assign(generics, fieldGenerics);
                 }
             }
         }
     }
 
-    return rootLifetimeTree;
+    return generics;
 }
 
 module.exports = {
