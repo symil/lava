@@ -54,12 +54,6 @@ impl PartialEq for VkDebugReportCallback {
     }
 }
 
-impl AsRef<VkDebugReportCallback> for VkDebugReportCallback {
-    fn as_ref(&self) -> &VkDebugReportCallback {
-        self
-    }
-}
-
 impl VkSetup for VkDebugReportCallback {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

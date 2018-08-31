@@ -54,12 +54,6 @@ impl PartialEq for VkFramebuffer {
     }
 }
 
-impl AsRef<VkFramebuffer> for VkFramebuffer {
-    fn as_ref(&self) -> &VkFramebuffer {
-        self
-    }
-}
-
 impl VkSetup for VkFramebuffer {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

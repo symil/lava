@@ -54,12 +54,6 @@ impl PartialEq for VkImageView {
     }
 }
 
-impl AsRef<VkImageView> for VkImageView {
-    fn as_ref(&self) -> &VkImageView {
-        self
-    }
-}
-
 impl VkSetup for VkImageView {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

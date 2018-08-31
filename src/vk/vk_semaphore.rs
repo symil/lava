@@ -54,12 +54,6 @@ impl PartialEq for VkSemaphore {
     }
 }
 
-impl AsRef<VkSemaphore> for VkSemaphore {
-    fn as_ref(&self) -> &VkSemaphore {
-        self
-    }
-}
-
 impl VkSetup for VkSemaphore {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

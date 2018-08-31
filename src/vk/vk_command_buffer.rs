@@ -54,12 +54,6 @@ impl PartialEq for VkCommandBuffer {
     }
 }
 
-impl AsRef<VkCommandBuffer> for VkCommandBuffer {
-    fn as_ref(&self) -> &VkCommandBuffer {
-        self
-    }
-}
-
 impl VkSetup for VkCommandBuffer {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

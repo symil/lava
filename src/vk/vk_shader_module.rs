@@ -54,12 +54,6 @@ impl PartialEq for VkShaderModule {
     }
 }
 
-impl AsRef<VkShaderModule> for VkShaderModule {
-    fn as_ref(&self) -> &VkShaderModule {
-        self
-    }
-}
-
 impl VkSetup for VkShaderModule {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

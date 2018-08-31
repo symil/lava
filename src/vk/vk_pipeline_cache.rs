@@ -54,12 +54,6 @@ impl PartialEq for VkPipelineCache {
     }
 }
 
-impl AsRef<VkPipelineCache> for VkPipelineCache {
-    fn as_ref(&self) -> &VkPipelineCache {
-        self
-    }
-}
-
 impl VkSetup for VkPipelineCache {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

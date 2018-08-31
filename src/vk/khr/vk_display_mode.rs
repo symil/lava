@@ -54,12 +54,6 @@ impl PartialEq for VkDisplayMode {
     }
 }
 
-impl AsRef<VkDisplayMode> for VkDisplayMode {
-    fn as_ref(&self) -> &VkDisplayMode {
-        self
-    }
-}
-
 impl VkSetup for VkDisplayMode {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

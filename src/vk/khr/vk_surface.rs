@@ -54,12 +54,6 @@ impl PartialEq for VkSurface {
     }
 }
 
-impl AsRef<VkSurface> for VkSurface {
-    fn as_ref(&self) -> &VkSurface {
-        self
-    }
-}
-
 impl VkSetup for VkSurface {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;

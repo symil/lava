@@ -12,7 +12,7 @@ function generateVkStructDefinition(cDef) {
         cFields: cDef.fields
     };
 
-    const lifetimeTree = assignGenerics(def.fields);
+    const lifetimeTree = assignLifetimes(def.fields);
 
     def.lifetimes = lifetimeTree.getSpecs();
     def.lifetimesRestrictions = lifetimeTree.getRestrictions();
@@ -189,65 +189,96 @@ function canHaveStaticValue(def) {
     }
 }
 
-class GenericsIdCounter {
+class LetterCounter {
     constructor() {
-        this._lifetimeCounter = 0;
-        this._typeCounter = 0;
+        this._counter = 0;
+        this._initialized = false;
     }
 
-    nextLifetimeId() {
-        return "'" + String.fromCharCode('a'.charCodeAt(0) + this._lifetimeCounter++);
-    }
-
-    nextTypeId() {
-        return String.fromCharCode('A'.charCodeAt(0) + this._typeCounter++);
+    next() {
+        return "'" + String.fromCharCode('a'.charCodeAt(0) + this._counter++);
     }
 }
 
-function getGenericsInfo(generics) {
-    const keys = Object.keys(generics);
-    const lifetimes = keys.filter(key => key.startsWith("'"));
-    const types = keys.filter(key => !key.startsWith("'"));
+class LifetimeTree {
+    constructor(letter, parentLetter) {
+        this._letter = letter;
+        this._parentLetter = parentLetter;
+        this._children = [];
+    }
 
-    const ids = lifetimes.concat(types);
-    const restrictions = ids.filter(id => generics[id]).map(id => `        ${id}: ${generics[id]},\n`);
+    add(counter) {
+        const child = new LifetimeTree(counter && counter.next(), this._letter || this._parentLetter);
+        this._children.push(child);
 
-    return  {
-        specs: ids.length ? `<${ids.join(', ')}>` : '',
-        restrictions: restrictions.length ? `\n    where\n${restrictions.join('')}` : '',
-        typeSpecs: types.length ? `<${types.join(', ')}>` : '',
-        typeRestrictions: types.length ? `\n    where\n${types.map(type => `        ${type}: ${generics[type]},\n`).join('')}` : ''
-    };
+        return child;
+    }
+
+    _collect(obj = {}) {
+        if (this._letter) {
+            obj[this._letter] = this._parentLetter;
+        }
+
+        this._children.forEach(child => child._collect(obj));
+
+        return obj;
+    }
+
+    letter() {
+        return this._letter;
+    }
+
+    getSpecs() {
+        const letters = Object.keys(this._collect());
+
+        if (!letters.length) {
+            return '';
+        }
+
+        return `<${letters.join(', ')}>`;
+    }
+
+    getRestrictions() {
+        const restrictions = Object.entries(this._collect()).filter(entry => entry[1]);
+
+        if (!restrictions.length) {
+            return '';
+        }
+
+        return `\n    where\n${restrictions.map(([key, value]) => `        ${key}: ${value},\n`).join('')}`
+    }
+
+    getStatics() {
+        const letters = Object.keys(this._collect());
+
+        if (!letters.length) {
+            return '';
+        }
+
+        return `<${letters.map(() => "'static").join(', ')}>`;
+    }
 }
 
-function assignGenerics(fields, counter, parentLifetime) {
-    counter = counter || new GenericsIdCounter();
-
-    const generics = {};
-    const baseParentLifetime = parentLifetime;
+function assignLifetimes(fields, counter, root) {
+    counter = counter || new LetterCounter();
+    root = root || new LifetimeTree();
 
     for (let field of fields) {
-        parentLifetime = baseParentLifetime;
+        let tree = root;
 
         if (field.wrappedType) {
-            // let strippedType = field.wrappedType.replace(/^Option<(.*)>$/, '$1');
-
             if (field.wrappedType.includes('&')) {
-                const lifetime = counter.nextLifetimeId();
-                generics[lifetime] = parentLifetime;
-                field.wrappedType = field.wrappedType.replace('&', `&${lifetime} `);
-                parentLifetime = lifetime
+                tree = tree.add(counter);
+                field.wrappedType = field.wrappedType.replace('&', `&${tree.letter()} `);
 
                 if (field.wrappedType.includes(`[&str]`)) {
-                    const type = counter.nextTypeId();
-                    generics[type] = `AsRef<str>`;
-                    field.wrappedType = field.wrappedType.replace('[&str]', `[${type}]`);
+                    tree = tree.add(counter);
+                    field.wrappedType = field.wrappedType.replace('[&str]', `[&${tree.letter()} str]`);
                 }
 
                 if (field.wrappedType.includes(`[&${field.wrappedTypeName}]`)) {
-                    const type = counter.nextTypeId();
-                    generics[type] = `AsRef<${field.wrappedTypeName}>`;
-                    field.wrappedType = field.wrappedType.replace(`[&${field.wrappedTypeName}]`, `[${type}]`);
+                    tree = tree.add(counter);
+                    field.wrappedType = field.wrappedType.replace(`[&${field.wrappedTypeName}]`, `[&${tree.letter()} ${field.wrappedTypeName}]`);
                 }
             }
 
@@ -256,15 +287,14 @@ function assignGenerics(fields, counter, parentLifetime) {
 
                 if (structDef) {
                     const structFields = getFieldsInformation(structDef.fields, structDef.name);
-                    const fieldGenerics = assignGenerics(structFields, counter, parentLifetime);
-                    field.wrappedType = field.wrappedType.replace(field.wrappedTypeName, field.wrappedTypeName + getGenericsInfo(fieldGenerics).specs);
-                    Object.assign(generics, fieldGenerics);
+                    tree = assignLifetimes(structFields, counter, tree.add(null));
+                    field.wrappedType = field.wrappedType.replace(field.wrappedTypeName, field.wrappedTypeName + tree.getSpecs());
                 }
             }
         }
     }
 
-    return generics;
+    return root;
 }
 
 module.exports = {

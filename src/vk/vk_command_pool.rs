@@ -54,12 +54,6 @@ impl PartialEq for VkCommandPool {
     }
 }
 
-impl AsRef<VkCommandPool> for VkCommandPool {
-    fn as_ref(&self) -> &VkCommandPool {
-        self
-    }
-}
-
 impl VkSetup for VkCommandPool {
     fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
         self._parent_instance = instance;
