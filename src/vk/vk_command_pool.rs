@@ -78,8 +78,7 @@ impl VkCommandPool {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
             let vk_result = ((&*self._fn_table).vkResetCommandPool)(self._parent_device, self._handle, raw_flags);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     

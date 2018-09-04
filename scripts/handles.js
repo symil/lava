@@ -284,10 +284,11 @@ function functionToMethod(handle, func) {
     let returnType = null;
 
     if (createSomething) {
-        const wrappedFunctionCall = returnVkResult
-            ? `let vk_result = ${functionCall};\nif vk_result != ${VK_SUCCESS} { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }`
-            : `${functionCall};`;
+        if (returnVkResult) {
+            statements.push(`let mut vk_result = ${VK_SUCCESS};`);
+        }
 
+        const wrappedFunctionCall = returnVkResult ? `vk_result = ${functionCall};` : `${functionCall};`;
         const createdType = func.argsInfo.last();
         const createdRawTypeName = prefixWithExtension(createdType.extension, createdType.rawTypeName);
         const createdWrappedTypeName = prefixWithExtension(createdType.extension, createdType.wrappedTypeName);
@@ -300,7 +301,7 @@ function functionToMethod(handle, func) {
 
         if (!createList) {
             statements.push(
-                `let ${rawResultName} = &mut mem::uninitialized() as *mut ${createdRawTypeName};`,
+                `let ${rawResultName} = &mut mem::zeroed() as *mut ${createdRawTypeName};`,
                 ``,
                 wrappedFunctionCall,
                 ``,
@@ -315,16 +316,26 @@ function functionToMethod(handle, func) {
                 const parentInstance = isInstance ? `*${rawResultName}` : `self._parent_instance`;
                 const parentDevice = isDevice ? `*${rawResultName}` : (isInstance ? VK_NULL_HANDLE : `self._parent_device`);
 
-                statements.push(
+                const setupStatements = [
                     `let fn_table = ${functionTable};`,
                     `let parent_instance = ${parentInstance};`,
                     `let parent_device = ${parentDevice};`,
                     `VkSetup::vk_setup(&mut ${wrappedResultVarName}, fn_table, parent_instance, parent_device);`
-                );
+                ];
+
+                if (returnVkResult) {
+                    statements.push(`if vk_result == ${VK_SUCCESS}`, setupStatements);
+                } else {
+                    for (const statement of setupStatements) {
+                        statements.push(statement);
+                    }
+                }
             }
 
             if (resutlIsStruct) {
-                freeStataments.push(`${createdRawTypeName}::vk_free(${rawResultName}.as_mut().unwrap());`)
+                freeStataments.push(
+                    `${createdRawTypeName}::vk_free(${rawResultName}.as_mut().unwrap());`
+                );
             }
         } else {
             const rawCountName = getCountVarNameValue(lastArg.countField, getRawVarName);
@@ -332,13 +343,13 @@ function functionToMethod(handle, func) {
             if (beforeLastArgIsCountPtr) {
                 statements.push(
                     `let mut ${rawResultName} : *mut ${createdRawTypeName} = ptr::null_mut();`,
-                    `let ${rawCountName} = &mut mem::uninitialized() as *mut ${func.argsInfo.beforeLast().rawTypeName};`,
+                    `let ${rawCountName} = &mut mem::zeroed() as *mut ${func.argsInfo.beforeLast().rawTypeName};`,
                     wrappedFunctionCall
                 );
             }
 
             statements.push(
-                `${beforeLastArgIsCountPtr ? '' : 'let '}${rawResultName} = malloc((${beforeLastArgIsCountPtr ? '*' : ''}${rawCountName} as usize) * mem::size_of::<${createdRawTypeName}>()) as *mut ${createdRawTypeName};`,
+                `${beforeLastArgIsCountPtr ? '' : 'let '}${rawResultName} = calloc(${beforeLastArgIsCountPtr ? '*' : ''}${rawCountName} as usize, mem::size_of::<${createdRawTypeName}>()) as *mut ${createdRawTypeName};`,
                 ``,
                 wrappedFunctionCall,
                 ``,
@@ -346,9 +357,13 @@ function functionToMethod(handle, func) {
             );
 
             if (setupResult) {
-                statements.push(
-                    `for elt in &mut ${wrappedResultVarName} { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }`
-                );
+                const setupStatement = `for elt in &mut ${wrappedResultVarName} { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }`;
+
+                if (returnVkResult) {
+                    statements.push(`if vk_result == ${VK_SUCCESS}`, [ setupStatement ]);
+                } else {
+                    statements.push(setupStatement);
+                }
             }
 
             if (createdType.freeRaw) {
@@ -363,18 +378,21 @@ function functionToMethod(handle, func) {
         }
 
         if (returnVkResult) {
-            returnType = `Result<${returnType}, VkResult>`;
+            returnType = `Result<${returnType}, (VkResult, ${returnType})>`;
+            returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(${wrappedResultVarName}) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ${wrappedResultVarName})) }`
+        } else {
+            returnStatement = wrappedResultVarName;
         }
-
-        
-        returnStatement = returnVkResult ? `Ok(${wrappedResultVarName})` : wrappedResultVarName;
     } else if (returnVkResult) {
-        returnType = 'Result<(), VkResult>';
-        statements.push(
-            `let vk_result = ${functionCall};`,
-            `if vk_result != ${VK_SUCCESS} { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }`
-        );
-        returnStatement = `Ok(())`;
+        statements.push(`let vk_result = ${functionCall};`);
+
+        if (methodName === 'get_status') {
+            returnType = `VkResult`;
+            returnStatement = `RawVkResult::vk_to_wrapped(&vk_result)`;
+        } else {
+            returnType = 'Result<(), VkResult>';
+            returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }`
+        }
     } else {
         statements.push(`${functionCall};`);
     }

@@ -91,75 +91,81 @@ impl VkInstance {
         }
     }
     
-    pub fn enumerate_physical_devices(&self) -> Result<Vec<VkPhysicalDevice>, VkResult> {
+    pub fn enumerate_physical_devices(&self) -> Result<Vec<VkPhysicalDevice>, (VkResult, Vec<VkPhysicalDevice>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_physical_devices : *mut RawVkPhysicalDevice = ptr::null_mut();
-            let raw_physical_device_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkEnumeratePhysicalDevices)(self._handle, raw_physical_device_count, raw_physical_devices);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_physical_devices = malloc((*raw_physical_device_count as usize) * mem::size_of::<RawVkPhysicalDevice>()) as *mut RawVkPhysicalDevice;
+            let raw_physical_device_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkEnumeratePhysicalDevices)(self._handle, raw_physical_device_count, raw_physical_devices);
+            raw_physical_devices = calloc(*raw_physical_device_count as usize, mem::size_of::<RawVkPhysicalDevice>()) as *mut RawVkPhysicalDevice;
             
-            let vk_result = ((&*self._fn_table).vkEnumeratePhysicalDevices)(self._handle, raw_physical_device_count, raw_physical_devices);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkEnumeratePhysicalDevices)(self._handle, raw_physical_device_count, raw_physical_devices);
             
             let mut physical_devices = new_vk_array(*raw_physical_device_count, raw_physical_devices);
-            for elt in &mut physical_devices { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut physical_devices { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_ptr(raw_physical_devices);
-            Ok(physical_devices)
+            if vk_result == 0 { Ok(physical_devices) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), physical_devices)) }
         }
     }
     
-    pub fn enumerate_physical_device_groups(&self) -> Result<Vec<VkPhysicalDeviceGroupProperties>, VkResult> {
+    pub fn enumerate_physical_device_groups(&self) -> Result<Vec<VkPhysicalDeviceGroupProperties>, (VkResult, Vec<VkPhysicalDeviceGroupProperties>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_physical_device_group_properties : *mut RawVkPhysicalDeviceGroupProperties = ptr::null_mut();
-            let raw_physical_device_group_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkEnumeratePhysicalDeviceGroups)(self._handle, raw_physical_device_group_count, raw_physical_device_group_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_physical_device_group_properties = malloc((*raw_physical_device_group_count as usize) * mem::size_of::<RawVkPhysicalDeviceGroupProperties>()) as *mut RawVkPhysicalDeviceGroupProperties;
+            let raw_physical_device_group_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkEnumeratePhysicalDeviceGroups)(self._handle, raw_physical_device_group_count, raw_physical_device_group_properties);
+            raw_physical_device_group_properties = calloc(*raw_physical_device_group_count as usize, mem::size_of::<RawVkPhysicalDeviceGroupProperties>()) as *mut RawVkPhysicalDeviceGroupProperties;
             
-            let vk_result = ((&*self._fn_table).vkEnumeratePhysicalDeviceGroups)(self._handle, raw_physical_device_group_count, raw_physical_device_group_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkEnumeratePhysicalDeviceGroups)(self._handle, raw_physical_device_group_count, raw_physical_device_group_properties);
             
             let mut physical_device_group_properties = new_vk_array(*raw_physical_device_group_count, raw_physical_device_group_properties);
-            for elt in &mut physical_device_group_properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut physical_device_group_properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_physical_device_group_count as usize, raw_physical_device_group_properties);
-            Ok(physical_device_group_properties)
+            if vk_result == 0 { Ok(physical_device_group_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), physical_device_group_properties)) }
         }
     }
     
-    pub fn create_display_plane_surface(&self, create_info: &khr::VkDisplaySurfaceCreateInfo) -> Result<khr::VkSurface, VkResult> {
+    pub fn create_display_plane_surface(&self, create_info: &khr::VkDisplaySurfaceCreateInfo) -> Result<khr::VkSurface, (VkResult, khr::VkSurface)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
-            let raw_surface = &mut mem::uninitialized() as *mut khr::RawVkSurface;
+            let mut vk_result = 0;
+            let raw_surface = &mut mem::zeroed() as *mut khr::RawVkSurface;
             
-            let vk_result = ((&*self._fn_table).vkCreateDisplayPlaneSurfaceKHR)(self._handle, raw_create_info, ptr::null(), raw_surface);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkCreateDisplayPlaneSurfaceKHR)(self._handle, raw_create_info, ptr::null(), raw_surface);
             
             let mut surface = new_vk_value(raw_surface);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut surface, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut surface, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_create_info);
-            Ok(surface)
+            if vk_result == 0 { Ok(surface) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface)) }
         }
     }
     
-    pub fn create_debug_report_callback(&self, create_info: &ext::VkDebugReportCallbackCreateInfo) -> Result<ext::VkDebugReportCallback, VkResult> {
+    pub fn create_debug_report_callback(&self, create_info: &ext::VkDebugReportCallbackCreateInfo) -> Result<ext::VkDebugReportCallback, (VkResult, ext::VkDebugReportCallback)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
-            let raw_callback = &mut mem::uninitialized() as *mut ext::RawVkDebugReportCallback;
+            let mut vk_result = 0;
+            let raw_callback = &mut mem::zeroed() as *mut ext::RawVkDebugReportCallback;
             
-            let vk_result = ((&*self._fn_table).vkCreateDebugReportCallbackEXT)(self._handle, raw_create_info, ptr::null(), raw_callback);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkCreateDebugReportCallbackEXT)(self._handle, raw_create_info, ptr::null(), raw_callback);
             
             let mut callback = new_vk_value(raw_callback);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut callback, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut callback, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_create_info);
-            Ok(callback)
+            if vk_result == 0 { Ok(callback) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), callback)) }
         }
     }
     
@@ -178,21 +184,23 @@ impl VkInstance {
         }
     }
     
-    pub fn create_debug_utils_messenger(&self, create_info: &ext::VkDebugUtilsMessengerCreateInfo) -> Result<ext::VkDebugUtilsMessenger, VkResult> {
+    pub fn create_debug_utils_messenger(&self, create_info: &ext::VkDebugUtilsMessengerCreateInfo) -> Result<ext::VkDebugUtilsMessenger, (VkResult, ext::VkDebugUtilsMessenger)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
-            let raw_messenger = &mut mem::uninitialized() as *mut ext::RawVkDebugUtilsMessenger;
+            let mut vk_result = 0;
+            let raw_messenger = &mut mem::zeroed() as *mut ext::RawVkDebugUtilsMessenger;
             
-            let vk_result = ((&*self._fn_table).vkCreateDebugUtilsMessengerEXT)(self._handle, raw_create_info, ptr::null(), raw_messenger);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkCreateDebugUtilsMessengerEXT)(self._handle, raw_create_info, ptr::null(), raw_messenger);
             
             let mut messenger = new_vk_value(raw_messenger);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut messenger, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut messenger, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_create_info);
-            Ok(messenger)
+            if vk_result == 0 { Ok(messenger) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), messenger)) }
         }
     }
     

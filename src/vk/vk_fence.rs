@@ -74,11 +74,10 @@ impl VkFence {
         }
     }
     
-    pub fn get_status(&self) -> Result<(), VkResult> {
+    pub fn get_status(&self) -> VkResult {
         unsafe {
             let vk_result = ((&*self._fn_table).vkGetFenceStatus)(self._parent_device, self._handle);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            RawVkResult::vk_to_wrapped(&vk_result)
         }
     }
 }

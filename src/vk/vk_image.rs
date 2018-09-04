@@ -73,14 +73,13 @@ impl VkImage {
             let raw_memory = vk_to_raw_value(memory);
             let raw_memory_offset = vk_to_raw_value(&memory_offset);
             let vk_result = ((&*self._fn_table).vkBindImageMemory)(self._parent_device, self._handle, raw_memory, raw_memory_offset);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
     pub fn get_memory_requirements(&self) -> VkMemoryRequirements {
         unsafe {
-            let raw_memory_requirements = &mut mem::uninitialized() as *mut RawVkMemoryRequirements;
+            let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements;
             
             ((&*self._fn_table).vkGetImageMemoryRequirements)(self._parent_device, self._handle, raw_memory_requirements);
             
@@ -97,9 +96,9 @@ impl VkImage {
     pub fn get_sparse_memory_requirements(&self) -> Vec<VkSparseImageMemoryRequirements> {
         unsafe {
             let mut raw_sparse_memory_requirements : *mut RawVkSparseImageMemoryRequirements = ptr::null_mut();
-            let raw_sparse_memory_requirement_count = &mut mem::uninitialized() as *mut u32;
+            let raw_sparse_memory_requirement_count = &mut mem::zeroed() as *mut u32;
             ((&*self._fn_table).vkGetImageSparseMemoryRequirements)(self._parent_device, self._handle, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
-            raw_sparse_memory_requirements = malloc((*raw_sparse_memory_requirement_count as usize) * mem::size_of::<RawVkSparseImageMemoryRequirements>()) as *mut RawVkSparseImageMemoryRequirements;
+            raw_sparse_memory_requirements = calloc(*raw_sparse_memory_requirement_count as usize, mem::size_of::<RawVkSparseImageMemoryRequirements>()) as *mut RawVkSparseImageMemoryRequirements;
             
             ((&*self._fn_table).vkGetImageSparseMemoryRequirements)(self._parent_device, self._handle, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
             
@@ -119,7 +118,7 @@ impl VkImage {
     pub fn get_subresource_layout(&self, subresource: &VkImageSubresource) -> VkSubresourceLayout {
         unsafe {
             let raw_subresource = new_ptr_vk_value(subresource);
-            let raw_layout = &mut mem::uninitialized() as *mut RawVkSubresourceLayout;
+            let raw_layout = &mut mem::zeroed() as *mut RawVkSubresourceLayout;
             
             ((&*self._fn_table).vkGetImageSubresourceLayout)(self._parent_device, self._handle, raw_subresource, raw_layout);
             

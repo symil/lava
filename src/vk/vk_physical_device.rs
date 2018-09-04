@@ -70,7 +70,7 @@ impl VkPhysicalDevice {
     
     pub fn get_features(&self) -> VkPhysicalDeviceFeatures {
         unsafe {
-            let raw_features = &mut mem::uninitialized() as *mut RawVkPhysicalDeviceFeatures;
+            let raw_features = &mut mem::zeroed() as *mut RawVkPhysicalDeviceFeatures;
             
             ((&*self._fn_table).vkGetPhysicalDeviceFeatures)(self._handle, raw_features);
             
@@ -87,7 +87,7 @@ impl VkPhysicalDevice {
     pub fn get_format_properties(&self, format: VkFormat) -> VkFormatProperties {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
-            let raw_format_properties = &mut mem::uninitialized() as *mut RawVkFormatProperties;
+            let raw_format_properties = &mut mem::zeroed() as *mut RawVkFormatProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceFormatProperties)(self._handle, raw_format, raw_format_properties);
             
@@ -101,31 +101,33 @@ impl VkPhysicalDevice {
         }
     }
     
-    pub fn get_image_format_properties(&self, format: VkFormat, type_: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags) -> Result<VkImageFormatProperties, VkResult> {
+    pub fn get_image_format_properties(&self, format: VkFormat, type_: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags) -> Result<VkImageFormatProperties, (VkResult, VkImageFormatProperties)> {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
             let raw_type_ = vk_to_raw_value(&type_);
             let raw_tiling = vk_to_raw_value(&tiling);
             let raw_usage = vk_to_raw_value(&usage);
             let raw_flags = vk_to_raw_value(&flags);
-            let raw_image_format_properties = &mut mem::uninitialized() as *mut RawVkImageFormatProperties;
+            let mut vk_result = 0;
+            let raw_image_format_properties = &mut mem::zeroed() as *mut RawVkImageFormatProperties;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceImageFormatProperties)(self._handle, raw_format, raw_type_, raw_tiling, raw_usage, raw_flags, raw_image_format_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceImageFormatProperties)(self._handle, raw_format, raw_type_, raw_tiling, raw_usage, raw_flags, raw_image_format_properties);
             
             let mut image_format_properties = new_vk_value(raw_image_format_properties);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut image_format_properties, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut image_format_properties, fn_table, parent_instance, parent_device);
+            }
             RawVkImageFormatProperties::vk_free(raw_image_format_properties.as_mut().unwrap());
-            Ok(image_format_properties)
+            if vk_result == 0 { Ok(image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image_format_properties)) }
         }
     }
     
     pub fn get_properties(&self) -> VkPhysicalDeviceProperties {
         unsafe {
-            let raw_properties = &mut mem::uninitialized() as *mut RawVkPhysicalDeviceProperties;
+            let raw_properties = &mut mem::zeroed() as *mut RawVkPhysicalDeviceProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceProperties)(self._handle, raw_properties);
             
@@ -142,9 +144,9 @@ impl VkPhysicalDevice {
     pub fn get_queue_family_properties(&self) -> Vec<VkQueueFamilyProperties> {
         unsafe {
             let mut raw_queue_family_properties : *mut RawVkQueueFamilyProperties = ptr::null_mut();
-            let raw_queue_family_property_count = &mut mem::uninitialized() as *mut u32;
+            let raw_queue_family_property_count = &mut mem::zeroed() as *mut u32;
             ((&*self._fn_table).vkGetPhysicalDeviceQueueFamilyProperties)(self._handle, raw_queue_family_property_count, raw_queue_family_properties);
-            raw_queue_family_properties = malloc((*raw_queue_family_property_count as usize) * mem::size_of::<RawVkQueueFamilyProperties>()) as *mut RawVkQueueFamilyProperties;
+            raw_queue_family_properties = calloc(*raw_queue_family_property_count as usize, mem::size_of::<RawVkQueueFamilyProperties>()) as *mut RawVkQueueFamilyProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceQueueFamilyProperties)(self._handle, raw_queue_family_property_count, raw_queue_family_properties);
             
@@ -157,7 +159,7 @@ impl VkPhysicalDevice {
     
     pub fn get_memory_properties(&self) -> VkPhysicalDeviceMemoryProperties {
         unsafe {
-            let raw_memory_properties = &mut mem::uninitialized() as *mut RawVkPhysicalDeviceMemoryProperties;
+            let raw_memory_properties = &mut mem::zeroed() as *mut RawVkPhysicalDeviceMemoryProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceMemoryProperties)(self._handle, raw_memory_properties);
             
@@ -171,59 +173,63 @@ impl VkPhysicalDevice {
         }
     }
     
-    pub fn create_device(&self, create_info: &VkDeviceCreateInfo) -> Result<VkDevice, VkResult> {
+    pub fn create_device(&self, create_info: &VkDeviceCreateInfo) -> Result<VkDevice, (VkResult, VkDevice)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
-            let raw_device = &mut mem::uninitialized() as *mut RawVkDevice;
+            let mut vk_result = 0;
+            let raw_device = &mut mem::zeroed() as *mut RawVkDevice;
             
-            let vk_result = ((&*self._fn_table).vkCreateDevice)(self._handle, raw_create_info, ptr::null(), raw_device);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkCreateDevice)(self._handle, raw_create_info, ptr::null(), raw_device);
             
             let mut device = new_vk_value(raw_device);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = *raw_device;
-            VkSetup::vk_setup(&mut device, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = *raw_device;
+                VkSetup::vk_setup(&mut device, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_create_info);
-            Ok(device)
+            if vk_result == 0 { Ok(device) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), device)) }
         }
     }
     
-    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, VkResult> {
+    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
         unsafe {
             let raw_layer_name = new_ptr_string_checked(layer_name);
+            let mut vk_result = 0;
             let mut raw_properties : *mut RawVkExtensionProperties = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkEnumerateDeviceExtensionProperties)(self._handle, raw_layer_name, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<RawVkExtensionProperties>()) as *mut RawVkExtensionProperties;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkEnumerateDeviceExtensionProperties)(self._handle, raw_layer_name, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<RawVkExtensionProperties>()) as *mut RawVkExtensionProperties;
             
-            let vk_result = ((&*self._fn_table).vkEnumerateDeviceExtensionProperties)(self._handle, raw_layer_name, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkEnumerateDeviceExtensionProperties)(self._handle, raw_layer_name, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_ptr(raw_layer_name);
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn enumerate_device_layer_properties(&self) -> Result<Vec<VkLayerProperties>, VkResult> {
+    pub fn enumerate_device_layer_properties(&self) -> Result<Vec<VkLayerProperties>, (VkResult, Vec<VkLayerProperties>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_properties : *mut RawVkLayerProperties = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkEnumerateDeviceLayerProperties)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<RawVkLayerProperties>()) as *mut RawVkLayerProperties;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkEnumerateDeviceLayerProperties)(self._handle, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<RawVkLayerProperties>()) as *mut RawVkLayerProperties;
             
-            let vk_result = ((&*self._fn_table).vkEnumerateDeviceLayerProperties)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkEnumerateDeviceLayerProperties)(self._handle, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
@@ -235,9 +241,9 @@ impl VkPhysicalDevice {
             let raw_usage = vk_to_raw_value(&usage);
             let raw_tiling = vk_to_raw_value(&tiling);
             let mut raw_properties : *mut RawVkSparseImageFormatProperties = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
             ((&*self._fn_table).vkGetPhysicalDeviceSparseImageFormatProperties)(self._handle, raw_format, raw_type_, raw_samples, raw_usage, raw_tiling, raw_property_count, raw_properties);
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<RawVkSparseImageFormatProperties>()) as *mut RawVkSparseImageFormatProperties;
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<RawVkSparseImageFormatProperties>()) as *mut RawVkSparseImageFormatProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceSparseImageFormatProperties)(self._handle, raw_format, raw_type_, raw_samples, raw_usage, raw_tiling, raw_property_count, raw_properties);
             
@@ -250,7 +256,7 @@ impl VkPhysicalDevice {
     
     pub fn get_features_2(&self) -> VkPhysicalDeviceFeatures2 {
         unsafe {
-            let raw_features = &mut mem::uninitialized() as *mut RawVkPhysicalDeviceFeatures2;
+            let raw_features = &mut mem::zeroed() as *mut RawVkPhysicalDeviceFeatures2;
             
             ((&*self._fn_table).vkGetPhysicalDeviceFeatures2)(self._handle, raw_features);
             
@@ -266,7 +272,7 @@ impl VkPhysicalDevice {
     
     pub fn get_properties_2(&self) -> VkPhysicalDeviceProperties2 {
         unsafe {
-            let raw_properties = &mut mem::uninitialized() as *mut RawVkPhysicalDeviceProperties2;
+            let raw_properties = &mut mem::zeroed() as *mut RawVkPhysicalDeviceProperties2;
             
             ((&*self._fn_table).vkGetPhysicalDeviceProperties2)(self._handle, raw_properties);
             
@@ -283,7 +289,7 @@ impl VkPhysicalDevice {
     pub fn get_format_properties_2(&self, format: VkFormat) -> VkFormatProperties2 {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
-            let raw_format_properties = &mut mem::uninitialized() as *mut RawVkFormatProperties2;
+            let raw_format_properties = &mut mem::zeroed() as *mut RawVkFormatProperties2;
             
             ((&*self._fn_table).vkGetPhysicalDeviceFormatProperties2)(self._handle, raw_format, raw_format_properties);
             
@@ -297,31 +303,33 @@ impl VkPhysicalDevice {
         }
     }
     
-    pub fn get_image_format_properties_2(&self, image_format_info: &VkPhysicalDeviceImageFormatInfo2) -> Result<VkImageFormatProperties2, VkResult> {
+    pub fn get_image_format_properties_2(&self, image_format_info: &VkPhysicalDeviceImageFormatInfo2) -> Result<VkImageFormatProperties2, (VkResult, VkImageFormatProperties2)> {
         unsafe {
             let raw_image_format_info = new_ptr_vk_value(image_format_info);
-            let raw_image_format_properties = &mut mem::uninitialized() as *mut RawVkImageFormatProperties2;
+            let mut vk_result = 0;
+            let raw_image_format_properties = &mut mem::zeroed() as *mut RawVkImageFormatProperties2;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceImageFormatProperties2)(self._handle, raw_image_format_info, raw_image_format_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceImageFormatProperties2)(self._handle, raw_image_format_info, raw_image_format_properties);
             
             let mut image_format_properties = new_vk_value(raw_image_format_properties);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut image_format_properties, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut image_format_properties, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_image_format_info);
             RawVkImageFormatProperties2::vk_free(raw_image_format_properties.as_mut().unwrap());
-            Ok(image_format_properties)
+            if vk_result == 0 { Ok(image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image_format_properties)) }
         }
     }
     
     pub fn get_queue_family_properties_2(&self) -> Vec<VkQueueFamilyProperties2> {
         unsafe {
             let mut raw_queue_family_properties : *mut RawVkQueueFamilyProperties2 = ptr::null_mut();
-            let raw_queue_family_property_count = &mut mem::uninitialized() as *mut u32;
+            let raw_queue_family_property_count = &mut mem::zeroed() as *mut u32;
             ((&*self._fn_table).vkGetPhysicalDeviceQueueFamilyProperties2)(self._handle, raw_queue_family_property_count, raw_queue_family_properties);
-            raw_queue_family_properties = malloc((*raw_queue_family_property_count as usize) * mem::size_of::<RawVkQueueFamilyProperties2>()) as *mut RawVkQueueFamilyProperties2;
+            raw_queue_family_properties = calloc(*raw_queue_family_property_count as usize, mem::size_of::<RawVkQueueFamilyProperties2>()) as *mut RawVkQueueFamilyProperties2;
             
             ((&*self._fn_table).vkGetPhysicalDeviceQueueFamilyProperties2)(self._handle, raw_queue_family_property_count, raw_queue_family_properties);
             
@@ -334,7 +342,7 @@ impl VkPhysicalDevice {
     
     pub fn get_memory_properties_2(&self) -> VkPhysicalDeviceMemoryProperties2 {
         unsafe {
-            let raw_memory_properties = &mut mem::uninitialized() as *mut RawVkPhysicalDeviceMemoryProperties2;
+            let raw_memory_properties = &mut mem::zeroed() as *mut RawVkPhysicalDeviceMemoryProperties2;
             
             ((&*self._fn_table).vkGetPhysicalDeviceMemoryProperties2)(self._handle, raw_memory_properties);
             
@@ -352,9 +360,9 @@ impl VkPhysicalDevice {
         unsafe {
             let raw_format_info = new_ptr_vk_value(format_info);
             let mut raw_properties : *mut RawVkSparseImageFormatProperties2 = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
             ((&*self._fn_table).vkGetPhysicalDeviceSparseImageFormatProperties2)(self._handle, raw_format_info, raw_property_count, raw_properties);
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<RawVkSparseImageFormatProperties2>()) as *mut RawVkSparseImageFormatProperties2;
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<RawVkSparseImageFormatProperties2>()) as *mut RawVkSparseImageFormatProperties2;
             
             ((&*self._fn_table).vkGetPhysicalDeviceSparseImageFormatProperties2)(self._handle, raw_format_info, raw_property_count, raw_properties);
             
@@ -369,7 +377,7 @@ impl VkPhysicalDevice {
     pub fn get_external_buffer_properties(&self, external_buffer_info: &VkPhysicalDeviceExternalBufferInfo) -> VkExternalBufferProperties {
         unsafe {
             let raw_external_buffer_info = new_ptr_vk_value(external_buffer_info);
-            let raw_external_buffer_properties = &mut mem::uninitialized() as *mut RawVkExternalBufferProperties;
+            let raw_external_buffer_properties = &mut mem::zeroed() as *mut RawVkExternalBufferProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceExternalBufferProperties)(self._handle, raw_external_buffer_info, raw_external_buffer_properties);
             
@@ -387,7 +395,7 @@ impl VkPhysicalDevice {
     pub fn get_external_fence_properties(&self, external_fence_info: &VkPhysicalDeviceExternalFenceInfo) -> VkExternalFenceProperties {
         unsafe {
             let raw_external_fence_info = new_ptr_vk_value(external_fence_info);
-            let raw_external_fence_properties = &mut mem::uninitialized() as *mut RawVkExternalFenceProperties;
+            let raw_external_fence_properties = &mut mem::zeroed() as *mut RawVkExternalFenceProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceExternalFenceProperties)(self._handle, raw_external_fence_info, raw_external_fence_properties);
             
@@ -405,7 +413,7 @@ impl VkPhysicalDevice {
     pub fn get_external_semaphore_properties(&self, external_semaphore_info: &VkPhysicalDeviceExternalSemaphoreInfo) -> VkExternalSemaphoreProperties {
         unsafe {
             let raw_external_semaphore_info = new_ptr_vk_value(external_semaphore_info);
-            let raw_external_semaphore_properties = &mut mem::uninitialized() as *mut RawVkExternalSemaphoreProperties;
+            let raw_external_semaphore_properties = &mut mem::zeroed() as *mut RawVkExternalSemaphoreProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceExternalSemaphoreProperties)(self._handle, raw_external_semaphore_info, raw_external_semaphore_properties);
             
@@ -420,320 +428,339 @@ impl VkPhysicalDevice {
         }
     }
     
-    pub fn get_surface_support(&self, queue_family_index: usize, surface: &khr::VkSurface) -> Result<bool, VkResult> {
+    pub fn get_surface_support(&self, queue_family_index: usize, surface: &khr::VkSurface) -> Result<bool, (VkResult, bool)> {
         unsafe {
             let raw_queue_family_index = vk_to_raw_value(&queue_family_index);
             let raw_surface = vk_to_raw_value(surface);
-            let raw_supported = &mut mem::uninitialized() as *mut u32;
+            let mut vk_result = 0;
+            let raw_supported = &mut mem::zeroed() as *mut u32;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceSupportKHR)(self._handle, raw_queue_family_index, raw_surface, raw_supported);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceSupportKHR)(self._handle, raw_queue_family_index, raw_surface, raw_supported);
             
             let supported = new_vk_value(raw_supported);
-            Ok(supported)
+            if vk_result == 0 { Ok(supported) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), supported)) }
         }
     }
     
-    pub fn get_surface_capabilities(&self, surface: &khr::VkSurface) -> Result<khr::VkSurfaceCapabilities, VkResult> {
+    pub fn get_surface_capabilities(&self, surface: &khr::VkSurface) -> Result<khr::VkSurfaceCapabilities, (VkResult, khr::VkSurfaceCapabilities)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
-            let raw_surface_capabilities = &mut mem::uninitialized() as *mut khr::RawVkSurfaceCapabilities;
+            let mut vk_result = 0;
+            let raw_surface_capabilities = &mut mem::zeroed() as *mut khr::RawVkSurfaceCapabilities;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceCapabilitiesKHR)(self._handle, raw_surface, raw_surface_capabilities);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceCapabilitiesKHR)(self._handle, raw_surface, raw_surface_capabilities);
             
             let mut surface_capabilities = new_vk_value(raw_surface_capabilities);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+            }
             khr::RawVkSurfaceCapabilities::vk_free(raw_surface_capabilities.as_mut().unwrap());
-            Ok(surface_capabilities)
+            if vk_result == 0 { Ok(surface_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_capabilities)) }
         }
     }
     
-    pub fn get_surface_formats(&self, surface: &khr::VkSurface) -> Result<Vec<khr::VkSurfaceFormat>, VkResult> {
+    pub fn get_surface_formats(&self, surface: &khr::VkSurface) -> Result<Vec<khr::VkSurfaceFormat>, (VkResult, Vec<khr::VkSurfaceFormat>)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
+            let mut vk_result = 0;
             let mut raw_surface_formats : *mut khr::RawVkSurfaceFormat = ptr::null_mut();
-            let raw_surface_format_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceFormatsKHR)(self._handle, raw_surface, raw_surface_format_count, raw_surface_formats);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_surface_formats = malloc((*raw_surface_format_count as usize) * mem::size_of::<khr::RawVkSurfaceFormat>()) as *mut khr::RawVkSurfaceFormat;
+            let raw_surface_format_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceFormatsKHR)(self._handle, raw_surface, raw_surface_format_count, raw_surface_formats);
+            raw_surface_formats = calloc(*raw_surface_format_count as usize, mem::size_of::<khr::RawVkSurfaceFormat>()) as *mut khr::RawVkSurfaceFormat;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceFormatsKHR)(self._handle, raw_surface, raw_surface_format_count, raw_surface_formats);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceFormatsKHR)(self._handle, raw_surface, raw_surface_format_count, raw_surface_formats);
             
             let mut surface_formats = new_vk_array(*raw_surface_format_count, raw_surface_formats);
-            for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_surface_format_count as usize, raw_surface_formats);
-            Ok(surface_formats)
+            if vk_result == 0 { Ok(surface_formats) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_formats)) }
         }
     }
     
-    pub fn get_surface_present_modes(&self, surface: &khr::VkSurface) -> Result<Vec<khr::VkPresentMode>, VkResult> {
+    pub fn get_surface_present_modes(&self, surface: &khr::VkSurface) -> Result<Vec<khr::VkPresentMode>, (VkResult, Vec<khr::VkPresentMode>)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
+            let mut vk_result = 0;
             let mut raw_present_modes : *mut khr::RawVkPresentMode = ptr::null_mut();
-            let raw_present_mode_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfacePresentModesKHR)(self._handle, raw_surface, raw_present_mode_count, raw_present_modes);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_present_modes = malloc((*raw_present_mode_count as usize) * mem::size_of::<khr::RawVkPresentMode>()) as *mut khr::RawVkPresentMode;
+            let raw_present_mode_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfacePresentModesKHR)(self._handle, raw_surface, raw_present_mode_count, raw_present_modes);
+            raw_present_modes = calloc(*raw_present_mode_count as usize, mem::size_of::<khr::RawVkPresentMode>()) as *mut khr::RawVkPresentMode;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfacePresentModesKHR)(self._handle, raw_surface, raw_present_mode_count, raw_present_modes);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfacePresentModesKHR)(self._handle, raw_surface, raw_present_mode_count, raw_present_modes);
             
             let present_modes = new_vk_array(*raw_present_mode_count, raw_present_modes);
             free_ptr(raw_present_modes);
-            Ok(present_modes)
+            if vk_result == 0 { Ok(present_modes) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), present_modes)) }
         }
     }
     
-    pub fn get_present_rectangles(&self, surface: &khr::VkSurface) -> Result<Vec<VkRect2D>, VkResult> {
+    pub fn get_present_rectangles(&self, surface: &khr::VkSurface) -> Result<Vec<VkRect2D>, (VkResult, Vec<VkRect2D>)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
+            let mut vk_result = 0;
             let mut raw_rects : *mut RawVkRect2D = ptr::null_mut();
-            let raw_rect_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDevicePresentRectanglesKHR)(self._handle, raw_surface, raw_rect_count, raw_rects);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_rects = malloc((*raw_rect_count as usize) * mem::size_of::<RawVkRect2D>()) as *mut RawVkRect2D;
+            let raw_rect_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDevicePresentRectanglesKHR)(self._handle, raw_surface, raw_rect_count, raw_rects);
+            raw_rects = calloc(*raw_rect_count as usize, mem::size_of::<RawVkRect2D>()) as *mut RawVkRect2D;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDevicePresentRectanglesKHR)(self._handle, raw_surface, raw_rect_count, raw_rects);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDevicePresentRectanglesKHR)(self._handle, raw_surface, raw_rect_count, raw_rects);
             
             let mut rects = new_vk_array(*raw_rect_count, raw_rects);
-            for elt in &mut rects { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut rects { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_rect_count as usize, raw_rects);
-            Ok(rects)
+            if vk_result == 0 { Ok(rects) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), rects)) }
         }
     }
     
-    pub fn get_display_properties(&self) -> Result<Vec<khr::VkDisplayProperties>, VkResult> {
+    pub fn get_display_properties(&self) -> Result<Vec<khr::VkDisplayProperties>, (VkResult, Vec<khr::VkDisplayProperties>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_properties : *mut khr::RawVkDisplayProperties = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPropertiesKHR)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<khr::RawVkDisplayProperties>()) as *mut khr::RawVkDisplayProperties;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPropertiesKHR)(self._handle, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<khr::RawVkDisplayProperties>()) as *mut khr::RawVkDisplayProperties;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPropertiesKHR)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPropertiesKHR)(self._handle, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn get_display_plane_properties(&self) -> Result<Vec<khr::VkDisplayPlaneProperties>, VkResult> {
+    pub fn get_display_plane_properties(&self) -> Result<Vec<khr::VkDisplayPlaneProperties>, (VkResult, Vec<khr::VkDisplayPlaneProperties>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_properties : *mut khr::RawVkDisplayPlaneProperties = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPlanePropertiesKHR)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<khr::RawVkDisplayPlaneProperties>()) as *mut khr::RawVkDisplayPlaneProperties;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPlanePropertiesKHR)(self._handle, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<khr::RawVkDisplayPlaneProperties>()) as *mut khr::RawVkDisplayPlaneProperties;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPlanePropertiesKHR)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPlanePropertiesKHR)(self._handle, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn get_display_plane_supported_displays(&self, plane_index: usize) -> Result<Vec<khr::VkDisplay>, VkResult> {
+    pub fn get_display_plane_supported_displays(&self, plane_index: usize) -> Result<Vec<khr::VkDisplay>, (VkResult, Vec<khr::VkDisplay>)> {
         unsafe {
             let raw_plane_index = vk_to_raw_value(&plane_index);
+            let mut vk_result = 0;
             let mut raw_displays : *mut khr::RawVkDisplay = ptr::null_mut();
-            let raw_display_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetDisplayPlaneSupportedDisplaysKHR)(self._handle, raw_plane_index, raw_display_count, raw_displays);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_displays = malloc((*raw_display_count as usize) * mem::size_of::<khr::RawVkDisplay>()) as *mut khr::RawVkDisplay;
+            let raw_display_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetDisplayPlaneSupportedDisplaysKHR)(self._handle, raw_plane_index, raw_display_count, raw_displays);
+            raw_displays = calloc(*raw_display_count as usize, mem::size_of::<khr::RawVkDisplay>()) as *mut khr::RawVkDisplay;
             
-            let vk_result = ((&*self._fn_table).vkGetDisplayPlaneSupportedDisplaysKHR)(self._handle, raw_plane_index, raw_display_count, raw_displays);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetDisplayPlaneSupportedDisplaysKHR)(self._handle, raw_plane_index, raw_display_count, raw_displays);
             
             let mut displays = new_vk_array(*raw_display_count, raw_displays);
-            for elt in &mut displays { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut displays { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_ptr(raw_displays);
-            Ok(displays)
+            if vk_result == 0 { Ok(displays) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), displays)) }
         }
     }
     
-    pub fn get_display_mode_properties(&self, display: &khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties>, VkResult> {
+    pub fn get_display_mode_properties(&self, display: &khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties>, (VkResult, Vec<khr::VkDisplayModeProperties>)> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
+            let mut vk_result = 0;
             let mut raw_properties : *mut khr::RawVkDisplayModeProperties = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetDisplayModePropertiesKHR)(self._handle, raw_display, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<khr::RawVkDisplayModeProperties>()) as *mut khr::RawVkDisplayModeProperties;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetDisplayModePropertiesKHR)(self._handle, raw_display, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<khr::RawVkDisplayModeProperties>()) as *mut khr::RawVkDisplayModeProperties;
             
-            let vk_result = ((&*self._fn_table).vkGetDisplayModePropertiesKHR)(self._handle, raw_display, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetDisplayModePropertiesKHR)(self._handle, raw_display, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn create_display_mode(&self, display: &khr::VkDisplay, create_info: &khr::VkDisplayModeCreateInfo) -> Result<khr::VkDisplayMode, VkResult> {
+    pub fn create_display_mode(&self, display: &khr::VkDisplay, create_info: &khr::VkDisplayModeCreateInfo) -> Result<khr::VkDisplayMode, (VkResult, khr::VkDisplayMode)> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
             let raw_create_info = new_ptr_vk_value(create_info);
-            let raw_mode = &mut mem::uninitialized() as *mut khr::RawVkDisplayMode;
+            let mut vk_result = 0;
+            let raw_mode = &mut mem::zeroed() as *mut khr::RawVkDisplayMode;
             
-            let vk_result = ((&*self._fn_table).vkCreateDisplayModeKHR)(self._handle, raw_display, raw_create_info, ptr::null(), raw_mode);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkCreateDisplayModeKHR)(self._handle, raw_display, raw_create_info, ptr::null(), raw_mode);
             
             let mut mode = new_vk_value(raw_mode);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut mode, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut mode, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_create_info);
-            Ok(mode)
+            if vk_result == 0 { Ok(mode) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), mode)) }
         }
     }
     
-    pub fn get_display_plane_capabilities(&self, mode: &khr::VkDisplayMode, plane_index: usize) -> Result<khr::VkDisplayPlaneCapabilities, VkResult> {
+    pub fn get_display_plane_capabilities(&self, mode: &khr::VkDisplayMode, plane_index: usize) -> Result<khr::VkDisplayPlaneCapabilities, (VkResult, khr::VkDisplayPlaneCapabilities)> {
         unsafe {
             let raw_mode = vk_to_raw_value(mode);
             let raw_plane_index = vk_to_raw_value(&plane_index);
-            let raw_capabilities = &mut mem::uninitialized() as *mut khr::RawVkDisplayPlaneCapabilities;
+            let mut vk_result = 0;
+            let raw_capabilities = &mut mem::zeroed() as *mut khr::RawVkDisplayPlaneCapabilities;
             
-            let vk_result = ((&*self._fn_table).vkGetDisplayPlaneCapabilitiesKHR)(self._handle, raw_mode, raw_plane_index, raw_capabilities);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetDisplayPlaneCapabilitiesKHR)(self._handle, raw_mode, raw_plane_index, raw_capabilities);
             
             let mut capabilities = new_vk_value(raw_capabilities);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut capabilities, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut capabilities, fn_table, parent_instance, parent_device);
+            }
             khr::RawVkDisplayPlaneCapabilities::vk_free(raw_capabilities.as_mut().unwrap());
-            Ok(capabilities)
+            if vk_result == 0 { Ok(capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), capabilities)) }
         }
     }
     
-    pub fn get_surface_capabilities_2(&self, surface_info: &khr::VkPhysicalDeviceSurfaceInfo2) -> Result<khr::VkSurfaceCapabilities2, VkResult> {
+    pub fn get_surface_capabilities_2(&self, surface_info: &khr::VkPhysicalDeviceSurfaceInfo2) -> Result<khr::VkSurfaceCapabilities2, (VkResult, khr::VkSurfaceCapabilities2)> {
         unsafe {
             let raw_surface_info = new_ptr_vk_value(surface_info);
-            let raw_surface_capabilities = &mut mem::uninitialized() as *mut khr::RawVkSurfaceCapabilities2;
+            let mut vk_result = 0;
+            let raw_surface_capabilities = &mut mem::zeroed() as *mut khr::RawVkSurfaceCapabilities2;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceCapabilities2KHR)(self._handle, raw_surface_info, raw_surface_capabilities);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceCapabilities2KHR)(self._handle, raw_surface_info, raw_surface_capabilities);
             
             let mut surface_capabilities = new_vk_value(raw_surface_capabilities);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_surface_info);
             khr::RawVkSurfaceCapabilities2::vk_free(raw_surface_capabilities.as_mut().unwrap());
-            Ok(surface_capabilities)
+            if vk_result == 0 { Ok(surface_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_capabilities)) }
         }
     }
     
-    pub fn get_surface_formats_2(&self, surface_info: &khr::VkPhysicalDeviceSurfaceInfo2) -> Result<Vec<khr::VkSurfaceFormat2>, VkResult> {
+    pub fn get_surface_formats_2(&self, surface_info: &khr::VkPhysicalDeviceSurfaceInfo2) -> Result<Vec<khr::VkSurfaceFormat2>, (VkResult, Vec<khr::VkSurfaceFormat2>)> {
         unsafe {
             let raw_surface_info = new_ptr_vk_value(surface_info);
+            let mut vk_result = 0;
             let mut raw_surface_formats : *mut khr::RawVkSurfaceFormat2 = ptr::null_mut();
-            let raw_surface_format_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceFormats2KHR)(self._handle, raw_surface_info, raw_surface_format_count, raw_surface_formats);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_surface_formats = malloc((*raw_surface_format_count as usize) * mem::size_of::<khr::RawVkSurfaceFormat2>()) as *mut khr::RawVkSurfaceFormat2;
+            let raw_surface_format_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceFormats2KHR)(self._handle, raw_surface_info, raw_surface_format_count, raw_surface_formats);
+            raw_surface_formats = calloc(*raw_surface_format_count as usize, mem::size_of::<khr::RawVkSurfaceFormat2>()) as *mut khr::RawVkSurfaceFormat2;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceFormats2KHR)(self._handle, raw_surface_info, raw_surface_format_count, raw_surface_formats);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceFormats2KHR)(self._handle, raw_surface_info, raw_surface_format_count, raw_surface_formats);
             
             let mut surface_formats = new_vk_array(*raw_surface_format_count, raw_surface_formats);
-            for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr(raw_surface_info);
             free_vk_ptr_array(*raw_surface_format_count as usize, raw_surface_formats);
-            Ok(surface_formats)
+            if vk_result == 0 { Ok(surface_formats) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_formats)) }
         }
     }
     
-    pub fn get_display_properties_2(&self) -> Result<Vec<khr::VkDisplayProperties2>, VkResult> {
+    pub fn get_display_properties_2(&self) -> Result<Vec<khr::VkDisplayProperties2>, (VkResult, Vec<khr::VkDisplayProperties2>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_properties : *mut khr::RawVkDisplayProperties2 = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayProperties2KHR)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<khr::RawVkDisplayProperties2>()) as *mut khr::RawVkDisplayProperties2;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayProperties2KHR)(self._handle, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<khr::RawVkDisplayProperties2>()) as *mut khr::RawVkDisplayProperties2;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayProperties2KHR)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayProperties2KHR)(self._handle, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn get_display_plane_properties_2(&self) -> Result<Vec<khr::VkDisplayPlaneProperties2>, VkResult> {
+    pub fn get_display_plane_properties_2(&self) -> Result<Vec<khr::VkDisplayPlaneProperties2>, (VkResult, Vec<khr::VkDisplayPlaneProperties2>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_properties : *mut khr::RawVkDisplayPlaneProperties2 = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPlaneProperties2KHR)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<khr::RawVkDisplayPlaneProperties2>()) as *mut khr::RawVkDisplayPlaneProperties2;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPlaneProperties2KHR)(self._handle, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<khr::RawVkDisplayPlaneProperties2>()) as *mut khr::RawVkDisplayPlaneProperties2;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPlaneProperties2KHR)(self._handle, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceDisplayPlaneProperties2KHR)(self._handle, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn get_display_mode_properties_2(&self, display: &khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties2>, VkResult> {
+    pub fn get_display_mode_properties_2(&self, display: &khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties2>, (VkResult, Vec<khr::VkDisplayModeProperties2>)> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
+            let mut vk_result = 0;
             let mut raw_properties : *mut khr::RawVkDisplayModeProperties2 = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetDisplayModeProperties2KHR)(self._handle, raw_display, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<khr::RawVkDisplayModeProperties2>()) as *mut khr::RawVkDisplayModeProperties2;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetDisplayModeProperties2KHR)(self._handle, raw_display, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<khr::RawVkDisplayModeProperties2>()) as *mut khr::RawVkDisplayModeProperties2;
             
-            let vk_result = ((&*self._fn_table).vkGetDisplayModeProperties2KHR)(self._handle, raw_display, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetDisplayModeProperties2KHR)(self._handle, raw_display, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn get_display_plane_capabilities_2(&self, display_plane_info: &khr::VkDisplayPlaneInfo2) -> Result<khr::VkDisplayPlaneCapabilities2, VkResult> {
+    pub fn get_display_plane_capabilities_2(&self, display_plane_info: &khr::VkDisplayPlaneInfo2) -> Result<khr::VkDisplayPlaneCapabilities2, (VkResult, khr::VkDisplayPlaneCapabilities2)> {
         unsafe {
             let raw_display_plane_info = new_ptr_vk_value(display_plane_info);
-            let raw_capabilities = &mut mem::uninitialized() as *mut khr::RawVkDisplayPlaneCapabilities2;
+            let mut vk_result = 0;
+            let raw_capabilities = &mut mem::zeroed() as *mut khr::RawVkDisplayPlaneCapabilities2;
             
-            let vk_result = ((&*self._fn_table).vkGetDisplayPlaneCapabilities2KHR)(self._handle, raw_display_plane_info, raw_capabilities);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetDisplayPlaneCapabilities2KHR)(self._handle, raw_display_plane_info, raw_capabilities);
             
             let mut capabilities = new_vk_value(raw_capabilities);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut capabilities, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut capabilities, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_display_plane_info);
             khr::RawVkDisplayPlaneCapabilities2::vk_free(raw_capabilities.as_mut().unwrap());
-            Ok(capabilities)
+            if vk_result == 0 { Ok(capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), capabilities)) }
         }
     }
     
-    pub fn get_external_image_format_properties(&self, format: VkFormat, type_: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags, external_handle_type: nv::VkExternalMemoryHandleTypeFlags) -> Result<nv::VkExternalImageFormatProperties, VkResult> {
+    pub fn get_external_image_format_properties(&self, format: VkFormat, type_: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags, external_handle_type: nv::VkExternalMemoryHandleTypeFlags) -> Result<nv::VkExternalImageFormatProperties, (VkResult, nv::VkExternalImageFormatProperties)> {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
             let raw_type_ = vk_to_raw_value(&type_);
@@ -741,25 +768,27 @@ impl VkPhysicalDevice {
             let raw_usage = vk_to_raw_value(&usage);
             let raw_flags = vk_to_raw_value(&flags);
             let raw_external_handle_type = vk_to_raw_value(&external_handle_type);
-            let raw_external_image_format_properties = &mut mem::uninitialized() as *mut nv::RawVkExternalImageFormatProperties;
+            let mut vk_result = 0;
+            let raw_external_image_format_properties = &mut mem::zeroed() as *mut nv::RawVkExternalImageFormatProperties;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceExternalImageFormatPropertiesNV)(self._handle, raw_format, raw_type_, raw_tiling, raw_usage, raw_flags, raw_external_handle_type, raw_external_image_format_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceExternalImageFormatPropertiesNV)(self._handle, raw_format, raw_type_, raw_tiling, raw_usage, raw_flags, raw_external_handle_type, raw_external_image_format_properties);
             
             let mut external_image_format_properties = new_vk_value(raw_external_image_format_properties);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut external_image_format_properties, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut external_image_format_properties, fn_table, parent_instance, parent_device);
+            }
             nv::RawVkExternalImageFormatProperties::vk_free(raw_external_image_format_properties.as_mut().unwrap());
-            Ok(external_image_format_properties)
+            if vk_result == 0 { Ok(external_image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), external_image_format_properties)) }
         }
     }
     
     pub fn get_generated_commands_properties(&self, features: &nvx::VkDeviceGeneratedCommandsFeatures) -> nvx::VkDeviceGeneratedCommandsLimits {
         unsafe {
             let raw_features = new_ptr_vk_value(features);
-            let raw_limits = &mut mem::uninitialized() as *mut nvx::RawVkDeviceGeneratedCommandsLimits;
+            let raw_limits = &mut mem::zeroed() as *mut nvx::RawVkDeviceGeneratedCommandsLimits;
             
             ((&*self._fn_table).vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX)(self._handle, raw_features, raw_limits);
             
@@ -778,33 +807,34 @@ impl VkPhysicalDevice {
         unsafe {
             let raw_display = vk_to_raw_value(display);
             let vk_result = ((&*self._fn_table).vkReleaseDisplayEXT)(self._handle, raw_display);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
-    pub fn get_surface_capabilities_2_ext(&self, surface: &khr::VkSurface) -> Result<ext::VkSurfaceCapabilities2, VkResult> {
+    pub fn get_surface_capabilities_2_ext(&self, surface: &khr::VkSurface) -> Result<ext::VkSurfaceCapabilities2, (VkResult, ext::VkSurfaceCapabilities2)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
-            let raw_surface_capabilities = &mut mem::uninitialized() as *mut ext::RawVkSurfaceCapabilities2;
+            let mut vk_result = 0;
+            let raw_surface_capabilities = &mut mem::zeroed() as *mut ext::RawVkSurfaceCapabilities2;
             
-            let vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceCapabilities2EXT)(self._handle, raw_surface, raw_surface_capabilities);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfaceCapabilities2EXT)(self._handle, raw_surface, raw_surface_capabilities);
             
             let mut surface_capabilities = new_vk_value(raw_surface_capabilities);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+            }
             ext::RawVkSurfaceCapabilities2::vk_free(raw_surface_capabilities.as_mut().unwrap());
-            Ok(surface_capabilities)
+            if vk_result == 0 { Ok(surface_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_capabilities)) }
         }
     }
     
     pub fn get_multisample_properties(&self, samples: VkSampleCountFlags) -> ext::VkMultisampleProperties {
         unsafe {
             let raw_samples = vk_to_raw_value(&samples);
-            let raw_multisample_properties = &mut mem::uninitialized() as *mut ext::RawVkMultisampleProperties;
+            let raw_multisample_properties = &mut mem::zeroed() as *mut ext::RawVkMultisampleProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceMultisamplePropertiesEXT)(self._handle, raw_samples, raw_multisample_properties);
             

@@ -79,25 +79,23 @@ impl VkValidationCache {
             let raw_src_cache_count = src_caches.len() as u32;
             let raw_src_caches = new_ptr_vk_array_from_ref(src_caches);
             let vk_result = ((&*self._fn_table).vkMergeValidationCachesEXT)(self._parent_device, self._handle, raw_src_cache_count, raw_src_caches);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_ptr(raw_src_caches);
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
-    pub fn get_data(&self) -> Result<Vec<c_void>, VkResult> {
+    pub fn get_data(&self) -> Result<Vec<c_void>, (VkResult, Vec<c_void>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_data : *mut c_void = ptr::null_mut();
-            let raw_data_size = &mut mem::uninitialized() as *mut usize;
-            let vk_result = ((&*self._fn_table).vkGetValidationCacheDataEXT)(self._parent_device, self._handle, raw_data_size, raw_data);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_data = malloc((*raw_data_size as usize) * mem::size_of::<c_void>()) as *mut c_void;
+            let raw_data_size = &mut mem::zeroed() as *mut usize;
+            vk_result = ((&*self._fn_table).vkGetValidationCacheDataEXT)(self._parent_device, self._handle, raw_data_size, raw_data);
+            raw_data = calloc(*raw_data_size as usize, mem::size_of::<c_void>()) as *mut c_void;
             
-            let vk_result = ((&*self._fn_table).vkGetValidationCacheDataEXT)(self._parent_device, self._handle, raw_data_size, raw_data);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetValidationCacheDataEXT)(self._parent_device, self._handle, raw_data_size, raw_data);
             
             let data = Vec::from_raw_parts(raw_data, *raw_data_size, *raw_data_size);
-            Ok(data)
+            if vk_result == 0 { Ok(data) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), data)) }
         }
     }
 }

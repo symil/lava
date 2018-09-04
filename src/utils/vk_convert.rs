@@ -102,7 +102,11 @@ pub fn new_array<T : Copy>(length: u32, ptr: *const T) -> Vec<T> {
 
 pub fn new_string(ptr: *const c_char) -> String {
     unsafe {
-        String::from_utf8_unchecked(CStr::from_ptr(ptr).to_bytes().to_vec())
+        if ptr.is_null() {
+            String::from("")
+        } else {
+            String::from_utf8_unchecked(CStr::from_ptr(ptr).to_bytes().to_vec())
+        }
     }
 }
 

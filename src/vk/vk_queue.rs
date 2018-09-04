@@ -74,17 +74,15 @@ impl VkQueue {
             let raw_submits = new_ptr_vk_array(submits);
             let raw_fence = if fence.is_some() { vk_to_raw_value(fence.unwrap()) } else { 0 };
             let vk_result = ((&*self._fn_table).vkQueueSubmit)(self._handle, raw_submit_count, raw_submits, raw_fence);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array(raw_submit_count as usize, raw_submits);
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
     pub fn wait_idle(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkQueueWaitIdle)(self._handle);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
@@ -94,9 +92,8 @@ impl VkQueue {
             let raw_bind_info = new_ptr_vk_array(bind_info);
             let raw_fence = if fence.is_some() { vk_to_raw_value(fence.unwrap()) } else { 0 };
             let vk_result = ((&*self._fn_table).vkQueueBindSparse)(self._handle, raw_bind_info_count, raw_bind_info, raw_fence);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_info);
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
@@ -104,9 +101,8 @@ impl VkQueue {
         unsafe {
             let raw_present_info = new_ptr_vk_value(present_info);
             let vk_result = ((&*self._fn_table).vkQueuePresentKHR)(self._handle, raw_present_info);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_present_info);
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
@@ -135,9 +131,9 @@ impl VkQueue {
     pub fn get_checkpoint_data(&self) -> Vec<nv::VkCheckpointData> {
         unsafe {
             let mut raw_checkpoint_data : *mut nv::RawVkCheckpointData = ptr::null_mut();
-            let raw_checkpoint_data_count = &mut mem::uninitialized() as *mut u32;
+            let raw_checkpoint_data_count = &mut mem::zeroed() as *mut u32;
             ((&*self._fn_table).vkGetQueueCheckpointDataNV)(self._handle, raw_checkpoint_data_count, raw_checkpoint_data);
-            raw_checkpoint_data = malloc((*raw_checkpoint_data_count as usize) * mem::size_of::<nv::RawVkCheckpointData>()) as *mut nv::RawVkCheckpointData;
+            raw_checkpoint_data = calloc(*raw_checkpoint_data_count as usize, mem::size_of::<nv::RawVkCheckpointData>()) as *mut nv::RawVkCheckpointData;
             
             ((&*self._fn_table).vkGetQueueCheckpointDataNV)(self._handle, raw_checkpoint_data_count, raw_checkpoint_data);
             

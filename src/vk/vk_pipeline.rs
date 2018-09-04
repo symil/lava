@@ -74,21 +74,20 @@ impl VkPipeline {
         }
     }
     
-    pub fn get_shader_info(&self, shader_stage: VkShaderStageFlags, info_type: amd::VkShaderInfoType) -> Result<Vec<c_void>, VkResult> {
+    pub fn get_shader_info(&self, shader_stage: VkShaderStageFlags, info_type: amd::VkShaderInfoType) -> Result<Vec<c_void>, (VkResult, Vec<c_void>)> {
         unsafe {
             let raw_shader_stage = vk_to_raw_value(&shader_stage);
             let raw_info_type = vk_to_raw_value(&info_type);
+            let mut vk_result = 0;
             let mut raw_info : *mut c_void = ptr::null_mut();
-            let raw_info_size = &mut mem::uninitialized() as *mut usize;
-            let vk_result = ((&*self._fn_table).vkGetShaderInfoAMD)(self._parent_device, self._handle, raw_shader_stage, raw_info_type, raw_info_size, raw_info);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_info = malloc((*raw_info_size as usize) * mem::size_of::<c_void>()) as *mut c_void;
+            let raw_info_size = &mut mem::zeroed() as *mut usize;
+            vk_result = ((&*self._fn_table).vkGetShaderInfoAMD)(self._parent_device, self._handle, raw_shader_stage, raw_info_type, raw_info_size, raw_info);
+            raw_info = calloc(*raw_info_size as usize, mem::size_of::<c_void>()) as *mut c_void;
             
-            let vk_result = ((&*self._fn_table).vkGetShaderInfoAMD)(self._parent_device, self._handle, raw_shader_stage, raw_info_type, raw_info_size, raw_info);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetShaderInfoAMD)(self._parent_device, self._handle, raw_shader_stage, raw_info_type, raw_info_size, raw_info);
             
             let info = Vec::from_raw_parts(raw_info, *raw_info_size, *raw_info_size);
-            Ok(info)
+            if vk_result == 0 { Ok(info) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), info)) }
         }
     }
 }

@@ -74,92 +74,95 @@ impl VkSwapchain {
         }
     }
     
-    pub fn get_images(&self) -> Result<Vec<VkImage>, VkResult> {
+    pub fn get_images(&self) -> Result<Vec<VkImage>, (VkResult, Vec<VkImage>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_swapchain_images : *mut RawVkImage = ptr::null_mut();
-            let raw_swapchain_image_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetSwapchainImagesKHR)(self._parent_device, self._handle, raw_swapchain_image_count, raw_swapchain_images);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_swapchain_images = malloc((*raw_swapchain_image_count as usize) * mem::size_of::<RawVkImage>()) as *mut RawVkImage;
+            let raw_swapchain_image_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetSwapchainImagesKHR)(self._parent_device, self._handle, raw_swapchain_image_count, raw_swapchain_images);
+            raw_swapchain_images = calloc(*raw_swapchain_image_count as usize, mem::size_of::<RawVkImage>()) as *mut RawVkImage;
             
-            let vk_result = ((&*self._fn_table).vkGetSwapchainImagesKHR)(self._parent_device, self._handle, raw_swapchain_image_count, raw_swapchain_images);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetSwapchainImagesKHR)(self._parent_device, self._handle, raw_swapchain_image_count, raw_swapchain_images);
             
             let mut swapchain_images = new_vk_array(*raw_swapchain_image_count, raw_swapchain_images);
-            for elt in &mut swapchain_images { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut swapchain_images { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_ptr(raw_swapchain_images);
-            Ok(swapchain_images)
+            if vk_result == 0 { Ok(swapchain_images) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), swapchain_images)) }
         }
     }
     
-    pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<&VkSemaphore>, fence: Option<&VkFence>) -> Result<usize, VkResult> {
+    pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<&VkSemaphore>, fence: Option<&VkFence>) -> Result<usize, (VkResult, usize)> {
         unsafe {
             let raw_timeout = timeout;
             let raw_semaphore = if semaphore.is_some() { vk_to_raw_value(semaphore.unwrap()) } else { 0 };
             let raw_fence = if fence.is_some() { vk_to_raw_value(fence.unwrap()) } else { 0 };
-            let raw_image_index = &mut mem::uninitialized() as *mut u32;
+            let mut vk_result = 0;
+            let raw_image_index = &mut mem::zeroed() as *mut u32;
             
-            let vk_result = ((&*self._fn_table).vkAcquireNextImageKHR)(self._parent_device, self._handle, raw_timeout, raw_semaphore, raw_fence, raw_image_index);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkAcquireNextImageKHR)(self._parent_device, self._handle, raw_timeout, raw_semaphore, raw_fence, raw_image_index);
             
             let image_index = new_vk_value(raw_image_index);
-            Ok(image_index)
+            if vk_result == 0 { Ok(image_index) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image_index)) }
         }
     }
     
-    pub fn get_status(&self) -> Result<(), VkResult> {
+    pub fn get_status(&self) -> VkResult {
         unsafe {
             let vk_result = ((&*self._fn_table).vkGetSwapchainStatusKHR)(self._parent_device, self._handle);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            RawVkResult::vk_to_wrapped(&vk_result)
         }
     }
     
-    pub fn get_counter(&self, counter: ext::VkSurfaceCounterFlags) -> Result<usize, VkResult> {
+    pub fn get_counter(&self, counter: ext::VkSurfaceCounterFlags) -> Result<usize, (VkResult, usize)> {
         unsafe {
             let raw_counter = vk_to_raw_value(&counter);
-            let raw_counter_value = &mut mem::uninitialized() as *mut u64;
+            let mut vk_result = 0;
+            let raw_counter_value = &mut mem::zeroed() as *mut u64;
             
-            let vk_result = ((&*self._fn_table).vkGetSwapchainCounterEXT)(self._parent_device, self._handle, raw_counter, raw_counter_value);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetSwapchainCounterEXT)(self._parent_device, self._handle, raw_counter, raw_counter_value);
             
             let counter_value = new_vk_value(raw_counter_value);
-            Ok(counter_value)
+            if vk_result == 0 { Ok(counter_value) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), counter_value)) }
         }
     }
     
-    pub fn get_refresh_cycle_duration(&self) -> Result<google::VkRefreshCycleDuration, VkResult> {
+    pub fn get_refresh_cycle_duration(&self) -> Result<google::VkRefreshCycleDuration, (VkResult, google::VkRefreshCycleDuration)> {
         unsafe {
-            let raw_display_timing_properties = &mut mem::uninitialized() as *mut google::RawVkRefreshCycleDuration;
+            let mut vk_result = 0;
+            let raw_display_timing_properties = &mut mem::zeroed() as *mut google::RawVkRefreshCycleDuration;
             
-            let vk_result = ((&*self._fn_table).vkGetRefreshCycleDurationGOOGLE)(self._parent_device, self._handle, raw_display_timing_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetRefreshCycleDurationGOOGLE)(self._parent_device, self._handle, raw_display_timing_properties);
             
             let mut display_timing_properties = new_vk_value(raw_display_timing_properties);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut display_timing_properties, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut display_timing_properties, fn_table, parent_instance, parent_device);
+            }
             google::RawVkRefreshCycleDuration::vk_free(raw_display_timing_properties.as_mut().unwrap());
-            Ok(display_timing_properties)
+            if vk_result == 0 { Ok(display_timing_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), display_timing_properties)) }
         }
     }
     
-    pub fn get_past_presentation_timing(&self) -> Result<Vec<google::VkPastPresentationTiming>, VkResult> {
+    pub fn get_past_presentation_timing(&self) -> Result<Vec<google::VkPastPresentationTiming>, (VkResult, Vec<google::VkPastPresentationTiming>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_presentation_timings : *mut google::RawVkPastPresentationTiming = ptr::null_mut();
-            let raw_presentation_timing_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = ((&*self._fn_table).vkGetPastPresentationTimingGOOGLE)(self._parent_device, self._handle, raw_presentation_timing_count, raw_presentation_timings);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_presentation_timings = malloc((*raw_presentation_timing_count as usize) * mem::size_of::<google::RawVkPastPresentationTiming>()) as *mut google::RawVkPastPresentationTiming;
+            let raw_presentation_timing_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPastPresentationTimingGOOGLE)(self._parent_device, self._handle, raw_presentation_timing_count, raw_presentation_timings);
+            raw_presentation_timings = calloc(*raw_presentation_timing_count as usize, mem::size_of::<google::RawVkPastPresentationTiming>()) as *mut google::RawVkPastPresentationTiming;
             
-            let vk_result = ((&*self._fn_table).vkGetPastPresentationTimingGOOGLE)(self._parent_device, self._handle, raw_presentation_timing_count, raw_presentation_timings);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = ((&*self._fn_table).vkGetPastPresentationTimingGOOGLE)(self._parent_device, self._handle, raw_presentation_timing_count, raw_presentation_timings);
             
             let mut presentation_timings = new_vk_array(*raw_presentation_timing_count, raw_presentation_timings);
-            for elt in &mut presentation_timings { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            if vk_result == 0 {
+                for elt in &mut presentation_timings { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            }
             free_vk_ptr_array(*raw_presentation_timing_count as usize, raw_presentation_timings);
-            Ok(presentation_timings)
+            if vk_result == 0 { Ok(presentation_timings) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), presentation_timings)) }
         }
     }
 }

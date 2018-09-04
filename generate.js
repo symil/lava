@@ -26,7 +26,7 @@ async function main() {
         process.exit();
     }
 
-    if (!argv.includes('--no-download')) {
+    if (!argv.includes('--no-download') && !argv.includes('-n')) {
         const tagOptionIndex = argv.indexOf('--tag');
         const tag = tagOptionIndex !== -1 ? argv[tagOptionIndex + 1] : 'master';
 

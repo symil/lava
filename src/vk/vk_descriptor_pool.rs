@@ -78,8 +78,7 @@ impl VkDescriptorPool {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
             let vk_result = ((&*self._fn_table).vkResetDescriptorPool)(self._parent_device, self._handle, raw_flags);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
@@ -88,9 +87,8 @@ impl VkDescriptorPool {
             let raw_descriptor_set_count = descriptor_sets.len() as u32;
             let raw_descriptor_sets = new_ptr_vk_array_from_ref(descriptor_sets);
             let vk_result = ((&*self._fn_table).vkFreeDescriptorSets)(self._parent_device, self._handle, raw_descriptor_set_count, raw_descriptor_sets);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_ptr(raw_descriptor_sets);
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
 }

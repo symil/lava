@@ -72,17 +72,15 @@ impl VkCommandBuffer {
         unsafe {
             let raw_begin_info = new_ptr_vk_value(begin_info);
             let vk_result = ((&*self._fn_table).vkBeginCommandBuffer)(self._handle, raw_begin_info);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             free_vk_ptr(raw_begin_info);
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
     pub fn end(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkEndCommandBuffer)(self._handle);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
@@ -90,8 +88,7 @@ impl VkCommandBuffer {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
             let vk_result = ((&*self._fn_table).vkResetCommandBuffer)(self._handle, raw_flags);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     

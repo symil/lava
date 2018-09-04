@@ -73,14 +73,13 @@ impl VkBuffer {
             let raw_memory = vk_to_raw_value(memory);
             let raw_memory_offset = vk_to_raw_value(&memory_offset);
             let vk_result = ((&*self._fn_table).vkBindBufferMemory)(self._parent_device, self._handle, raw_memory, raw_memory_offset);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            Ok(())
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
     pub fn get_memory_requirements(&self) -> VkMemoryRequirements {
         unsafe {
-            let raw_memory_requirements = &mut mem::uninitialized() as *mut RawVkMemoryRequirements;
+            let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements;
             
             ((&*self._fn_table).vkGetBufferMemoryRequirements)(self._parent_device, self._handle, raw_memory_requirements);
             

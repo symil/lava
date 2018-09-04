@@ -13,69 +13,69 @@ pub struct Vk;
 
 impl Vk {
     
-    pub fn create_instance(create_info: &VkInstanceCreateInfo) -> Result<VkInstance, VkResult> {
+    pub fn create_instance(create_info: &VkInstanceCreateInfo) -> Result<VkInstance, (VkResult, VkInstance)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
-            let raw_instance = &mut mem::uninitialized() as *mut RawVkInstance;
+            let mut vk_result = 0;
+            let raw_instance = &mut mem::zeroed() as *mut RawVkInstance;
             
-            let vk_result = vkCreateInstance(raw_create_info, ptr::null(), raw_instance);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = vkCreateInstance(raw_create_info, ptr::null(), raw_instance);
             
             let mut instance = new_vk_value(raw_instance);
-            let fn_table = Box::into_raw(Box::new(VkInstanceFunctionTable::new(*raw_instance)));
-            let parent_instance = *raw_instance;
-            let parent_device = 0;
-            VkSetup::vk_setup(&mut instance, fn_table, parent_instance, parent_device);
+            if vk_result == 0 {
+                let fn_table = Box::into_raw(Box::new(VkInstanceFunctionTable::new(*raw_instance)));
+                let parent_instance = *raw_instance;
+                let parent_device = 0;
+                VkSetup::vk_setup(&mut instance, fn_table, parent_instance, parent_device);
+            }
             free_vk_ptr(raw_create_info);
-            Ok(instance)
+            if vk_result == 0 { Ok(instance) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), instance)) }
         }
     }
     
-    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, VkResult> {
+    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
         unsafe {
             let raw_layer_name = new_ptr_string_checked(layer_name);
+            let mut vk_result = 0;
             let mut raw_properties : *mut RawVkExtensionProperties = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = vkEnumerateInstanceExtensionProperties(raw_layer_name, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<RawVkExtensionProperties>()) as *mut RawVkExtensionProperties;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = vkEnumerateInstanceExtensionProperties(raw_layer_name, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<RawVkExtensionProperties>()) as *mut RawVkExtensionProperties;
             
-            let vk_result = vkEnumerateInstanceExtensionProperties(raw_layer_name, raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = vkEnumerateInstanceExtensionProperties(raw_layer_name, raw_property_count, raw_properties);
             
             let properties = new_vk_array(*raw_property_count, raw_properties);
             free_ptr(raw_layer_name);
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn enumerate_instance_layer_properties() -> Result<Vec<VkLayerProperties>, VkResult> {
+    pub fn enumerate_instance_layer_properties() -> Result<Vec<VkLayerProperties>, (VkResult, Vec<VkLayerProperties>)> {
         unsafe {
+            let mut vk_result = 0;
             let mut raw_properties : *mut RawVkLayerProperties = ptr::null_mut();
-            let raw_property_count = &mut mem::uninitialized() as *mut u32;
-            let vk_result = vkEnumerateInstanceLayerProperties(raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-            raw_properties = malloc((*raw_property_count as usize) * mem::size_of::<RawVkLayerProperties>()) as *mut RawVkLayerProperties;
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = vkEnumerateInstanceLayerProperties(raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<RawVkLayerProperties>()) as *mut RawVkLayerProperties;
             
-            let vk_result = vkEnumerateInstanceLayerProperties(raw_property_count, raw_properties);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = vkEnumerateInstanceLayerProperties(raw_property_count, raw_properties);
             
             let properties = new_vk_array(*raw_property_count, raw_properties);
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
-            Ok(properties)
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
-    pub fn enumerate_instance_version() -> Result<VkVersion, VkResult> {
+    pub fn enumerate_instance_version() -> Result<VkVersion, (VkResult, VkVersion)> {
         unsafe {
-            let raw_api_version = &mut mem::uninitialized() as *mut u32;
+            let mut vk_result = 0;
+            let raw_api_version = &mut mem::zeroed() as *mut u32;
             
-            let vk_result = vkEnumerateInstanceVersion(raw_api_version);
-            if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            vk_result = vkEnumerateInstanceVersion(raw_api_version);
             
             let api_version = new_vk_value(raw_api_version);
-            Ok(api_version)
+            if vk_result == 0 { Ok(api_version) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), api_version)) }
         }
     }
 }

@@ -76,7 +76,7 @@ impl VkRenderPass {
     
     pub fn get_render_area_granularity(&self) -> VkExtent2D {
         unsafe {
-            let raw_granularity = &mut mem::uninitialized() as *mut RawVkExtent2D;
+            let raw_granularity = &mut mem::zeroed() as *mut RawVkExtent2D;
             
             ((&*self._fn_table).vkGetRenderAreaGranularity)(self._parent_device, self._handle, raw_granularity);
             
