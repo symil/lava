@@ -8,6 +8,7 @@ use std::os::raw::c_char;
 use std::ptr;
 use std::mem;
 use std::cmp;
+use std::slice;
 use vk::*;
 
 pub type RawVkDevice = u64;
@@ -125,15 +126,19 @@ impl VkDevice {
         }
     }
     
-    pub fn map_memory(&self, memory: &VkDeviceMemory, offset: usize, size: usize, flags: VkMemoryMapFlags, data: *mut *mut c_void) -> Result<(), VkResult> {
+    pub fn map_memory(&self, memory: &VkDeviceMemory, offset: usize, size: usize, flags: VkMemoryMapFlags) -> Result<&'static mut [c_void], (VkResult, &'static mut [c_void])> {
         unsafe {
             let raw_memory = vk_to_raw_value(memory);
             let raw_offset = vk_to_raw_value(&offset);
             let raw_size = vk_to_raw_value(&size);
             let raw_flags = vk_to_raw_value(&flags);
-            let raw_data = data;
-            let vk_result = ((&*self._fn_table).vkMapMemory)(self._handle, raw_memory, raw_offset, raw_size, raw_flags, raw_data);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            let mut vk_result = 0;
+            let raw_data = &mut mem::zeroed() as *mut *mut c_void;
+            
+            vk_result = ((&*self._fn_table).vkMapMemory)(self._handle, raw_memory, raw_offset, raw_size, raw_flags, raw_data);
+            
+            let data = slice::from_raw_parts_mut(*raw_data, size);
+            if vk_result == 0 { Ok(data) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), data)) }
         }
     }
     

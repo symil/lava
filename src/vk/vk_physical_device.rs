@@ -8,6 +8,7 @@ use std::os::raw::c_char;
 use std::ptr;
 use std::mem;
 use std::cmp;
+use std::slice;
 use vk::*;
 
 pub type RawVkPhysicalDevice = u64;

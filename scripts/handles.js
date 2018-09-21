@@ -47,6 +47,7 @@ function genUses() {
         'std::ptr',
         'std::mem',
         'std::cmp',
+        'std::slice',
         `vk::*`
     ]);
 
@@ -222,7 +223,7 @@ function functionToMethod(handle, func) {
 
     const lastArg = func.args.last();
     const beforeLastArg = func.args.beforeLast();
-    const createSomething = lastArg.isPointer && !lastArg.isConst && lastArg.fullType !== 'void**';
+    const createSomething = lastArg.isPointer && !lastArg.isConst;
     const beforeLastArgIsCountPtr = createSomething && beforeLastArg && !!beforeLastArg.countFor.length && beforeLastArg.isPointer;
     const createList = createSomething && lastArg.countField;
     const returnVkResult = func.type === 'VkResult';
@@ -278,6 +279,7 @@ function functionToMethod(handle, func) {
         throw new Error(`function ${func.name} returns an array but does not take a count, need manual review`);
     }
 
+    const isVkMapMemory = func.name === 'vkMapMemory';
     const funcNameValue = handle ? `((&*self._fn_table).${func.name})` : func.name;
     const functionCall = `${funcNameValue}(${functionRustArgs.join(', ')})`;
 
@@ -290,8 +292,13 @@ function functionToMethod(handle, func) {
 
         const wrappedFunctionCall = returnVkResult ? `vk_result = ${functionCall};` : `${functionCall};`;
         const createdType = func.argsInfo.last();
-        const createdRawTypeName = prefixWithExtension(createdType.extension, createdType.rawTypeName);
-        const createdWrappedTypeName = prefixWithExtension(createdType.extension, createdType.wrappedTypeName);
+        let createdRawTypeName = prefixWithExtension(createdType.extension, createdType.rawTypeName);
+        let createdWrappedTypeName = prefixWithExtension(createdType.extension, createdType.wrappedTypeName);
+
+        if (isVkMapMemory) {
+            createdRawTypeName = '*mut c_void';
+            createdWrappedTypeName = `&'static mut [c_void]`;
+        }
 
         const setupResult = createdType.typeName === 'VkInstance' || (handle && isStructOrHandle(createdType));
         const resutlIsStruct = isStruct(createdType);
@@ -307,6 +314,10 @@ function functionToMethod(handle, func) {
                 ``,
                 `let${setupResult ? ' mut' : ''} ${wrappedResultVarName} = ${createdType.toWrapped(getRawVarName)};`,
             );
+
+            if (isVkMapMemory) {
+                statements[statements.length - 1] = `let ${wrappedResultVarName} = slice::from_raw_parts_mut(*${rawResultName}, size);`
+            }
 
             if (setupResult) {
                 const isInstance = createdType.typeName === 'VkInstance';
