@@ -1,6 +1,6 @@
-# Lava: a Rust wrapper for the Vulkan API
+# Lava
 
-Wrapper to manipulate the Vulkan API more conveniently than with bindings:
+Wrapper to manipulate the Vulkan API in Rust more conveniently than with bindings:
 
 - removes the need to specify the structure type when sending structures to Vulkan
 - takes care of making double Vulkan calls when necessary (e.g when retrieving a list of Vulkan objects)
