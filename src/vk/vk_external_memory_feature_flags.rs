@@ -58,3 +58,13 @@ impl VkExternalMemoryFeatureFlags {
         }
     }
 }
+
+impl VkExternalMemoryFeatureFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.dedicated_only { 0x00000001 } else { 0 }
+        + if self.exportable { 0x00000002 } else { 0 }
+        + if self.importable { 0x00000004 } else { 0 }
+    }
+}

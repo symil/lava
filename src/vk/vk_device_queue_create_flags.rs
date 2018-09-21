@@ -46,3 +46,11 @@ impl VkDeviceQueueCreateFlags {
         }
     }
 }
+
+impl VkDeviceQueueCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.protected { 0x00000001 } else { 0 }
+    }
+}

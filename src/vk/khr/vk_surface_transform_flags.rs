@@ -94,3 +94,19 @@ impl VkSurfaceTransformFlags {
         }
     }
 }
+
+impl VkSurfaceTransformFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.identity { 0x00000001 } else { 0 }
+        + if self.rotate_90 { 0x00000002 } else { 0 }
+        + if self.rotate_180 { 0x00000004 } else { 0 }
+        + if self.rotate_270 { 0x00000008 } else { 0 }
+        + if self.horizontal_mirror { 0x00000010 } else { 0 }
+        + if self.horizontal_mirror_rotate_90 { 0x00000020 } else { 0 }
+        + if self.horizontal_mirror_rotate_180 { 0x00000040 } else { 0 }
+        + if self.horizontal_mirror_rotate_270 { 0x00000080 } else { 0 }
+        + if self.inherit { 0x00000100 } else { 0 }
+    }
+}

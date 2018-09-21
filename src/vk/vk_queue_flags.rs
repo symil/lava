@@ -70,3 +70,15 @@ impl VkQueueFlags {
         }
     }
 }
+
+impl VkQueueFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.graphics { 0x00000001 } else { 0 }
+        + if self.compute { 0x00000002 } else { 0 }
+        + if self.transfer { 0x00000004 } else { 0 }
+        + if self.sparse_binding { 0x00000008 } else { 0 }
+        + if self.protected { 0x00000010 } else { 0 }
+    }
+}

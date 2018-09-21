@@ -82,3 +82,17 @@ impl VkImageAspectFlags {
         }
     }
 }
+
+impl VkImageAspectFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.color { 0x00000001 } else { 0 }
+        + if self.depth { 0x00000002 } else { 0 }
+        + if self.stencil { 0x00000004 } else { 0 }
+        + if self.metadata { 0x00000008 } else { 0 }
+        + if self.plane_0 { 0x00000010 } else { 0 }
+        + if self.plane_1 { 0x00000020 } else { 0 }
+        + if self.plane_2 { 0x00000040 } else { 0 }
+    }
+}

@@ -82,3 +82,17 @@ impl VkSampleCountFlags {
         }
     }
 }
+
+impl VkSampleCountFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self._1 { 0x00000001 } else { 0 }
+        + if self._2 { 0x00000002 } else { 0 }
+        + if self._4 { 0x00000004 } else { 0 }
+        + if self._8 { 0x00000008 } else { 0 }
+        + if self._16 { 0x00000010 } else { 0 }
+        + if self._32 { 0x00000020 } else { 0 }
+        + if self._64 { 0x00000040 } else { 0 }
+    }
+}

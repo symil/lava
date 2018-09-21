@@ -58,3 +58,13 @@ impl VkCommandBufferUsageFlags {
         }
     }
 }
+
+impl VkCommandBufferUsageFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.one_time_submit { 0x00000001 } else { 0 }
+        + if self.render_pass_continue { 0x00000002 } else { 0 }
+        + if self.simultaneous_use { 0x00000004 } else { 0 }
+    }
+}

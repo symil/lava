@@ -46,3 +46,11 @@ impl VkMemoryAllocateFlags {
         }
     }
 }
+
+impl VkMemoryAllocateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.device_mask { 0x00000001 } else { 0 }
+    }
+}

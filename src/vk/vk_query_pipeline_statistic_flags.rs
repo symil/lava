@@ -106,3 +106,21 @@ impl VkQueryPipelineStatisticFlags {
         }
     }
 }
+
+impl VkQueryPipelineStatisticFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.input_assembly_vertices { 0x00000001 } else { 0 }
+        + if self.input_assembly_primitives { 0x00000002 } else { 0 }
+        + if self.vertex_shader_invocations { 0x00000004 } else { 0 }
+        + if self.geometry_shader_invocations { 0x00000008 } else { 0 }
+        + if self.geometry_shader_primitives { 0x00000010 } else { 0 }
+        + if self.clipping_invocations { 0x00000020 } else { 0 }
+        + if self.clipping_primitives { 0x00000040 } else { 0 }
+        + if self.fragment_shader_invocations { 0x00000080 } else { 0 }
+        + if self.tessellation_control_shader_patches { 0x00000100 } else { 0 }
+        + if self.tessellation_evaluation_shader_invocations { 0x00000200 } else { 0 }
+        + if self.compute_shader_invocations { 0x00000400 } else { 0 }
+    }
+}

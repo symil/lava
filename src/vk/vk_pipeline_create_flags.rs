@@ -70,3 +70,15 @@ impl VkPipelineCreateFlags {
         }
     }
 }
+
+impl VkPipelineCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.disable_optimization { 0x00000001 } else { 0 }
+        + if self.allow_derivatives { 0x00000002 } else { 0 }
+        + if self.derivative { 0x00000004 } else { 0 }
+        + if self.view_index_from_device_index { 0x00000008 } else { 0 }
+        + if self.dispatch_base { 0x00000010 } else { 0 }
+    }
+}

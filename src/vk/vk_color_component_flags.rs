@@ -64,3 +64,14 @@ impl VkColorComponentFlags {
         }
     }
 }
+
+impl VkColorComponentFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.r { 0x00000001 } else { 0 }
+        + if self.g { 0x00000002 } else { 0 }
+        + if self.b { 0x00000004 } else { 0 }
+        + if self.a { 0x00000008 } else { 0 }
+    }
+}

@@ -64,3 +64,14 @@ impl VkDebugUtilsMessageSeverityFlags {
         }
     }
 }
+
+impl VkDebugUtilsMessageSeverityFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.verbose { 0x00000001 } else { 0 }
+        + if self.info { 0x00000010 } else { 0 }
+        + if self.warning { 0x00000100 } else { 0 }
+        + if self.error { 0x00001000 } else { 0 }
+    }
+}

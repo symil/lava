@@ -70,3 +70,15 @@ impl VkExternalSemaphoreHandleTypeFlags {
         }
     }
 }
+
+impl VkExternalSemaphoreHandleTypeFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.opaque_fd { 0x00000001 } else { 0 }
+        + if self.opaque_win_32 { 0x00000002 } else { 0 }
+        + if self.opaque_win_32_kmt { 0x00000004 } else { 0 }
+        + if self.d_3d_12_fence { 0x00000008 } else { 0 }
+        + if self.sync_fd { 0x00000010 } else { 0 }
+    }
+}

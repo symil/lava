@@ -45,3 +45,10 @@ impl VkQueryPoolCreateFlags {
         }
     }
 }
+
+impl VkQueryPoolCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+}

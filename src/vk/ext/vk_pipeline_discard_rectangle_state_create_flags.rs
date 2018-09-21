@@ -45,3 +45,10 @@ impl VkPipelineDiscardRectangleStateCreateFlags {
         }
     }
 }
+
+impl VkPipelineDiscardRectangleStateCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+}

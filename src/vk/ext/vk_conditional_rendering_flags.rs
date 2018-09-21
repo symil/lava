@@ -46,3 +46,11 @@ impl VkConditionalRenderingFlags {
         }
     }
 }
+
+impl VkConditionalRenderingFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.inverted { 0x00000001 } else { 0 }
+    }
+}

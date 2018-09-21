@@ -64,3 +64,14 @@ impl VkBufferCreateFlags {
         }
     }
 }
+
+impl VkBufferCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.sparse_binding { 0x00000001 } else { 0 }
+        + if self.sparse_residency { 0x00000002 } else { 0 }
+        + if self.sparse_aliased { 0x00000004 } else { 0 }
+        + if self.protected { 0x00000008 } else { 0 }
+    }
+}

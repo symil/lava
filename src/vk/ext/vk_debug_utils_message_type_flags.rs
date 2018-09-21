@@ -58,3 +58,13 @@ impl VkDebugUtilsMessageTypeFlags {
         }
     }
 }
+
+impl VkDebugUtilsMessageTypeFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.general { 0x00000001 } else { 0 }
+        + if self.validation { 0x00000002 } else { 0 }
+        + if self.performance { 0x00000004 } else { 0 }
+    }
+}

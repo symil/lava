@@ -76,3 +76,16 @@ impl VkMemoryPropertyFlags {
         }
     }
 }
+
+impl VkMemoryPropertyFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.device_local { 0x00000001 } else { 0 }
+        + if self.host_visible { 0x00000002 } else { 0 }
+        + if self.host_coherent { 0x00000004 } else { 0 }
+        + if self.host_cached { 0x00000008 } else { 0 }
+        + if self.lazily_allocated { 0x00000010 } else { 0 }
+        + if self.protected { 0x00000020 } else { 0 }
+    }
+}

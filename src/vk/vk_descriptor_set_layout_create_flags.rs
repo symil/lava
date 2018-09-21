@@ -52,3 +52,12 @@ impl VkDescriptorSetLayoutCreateFlags {
         }
     }
 }
+
+impl VkDescriptorSetLayoutCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.push_descriptor_khr { 0x00000001 } else { 0 }
+        + if self.update_after_bind_pool_ext { 0x00000002 } else { 0 }
+    }
+}

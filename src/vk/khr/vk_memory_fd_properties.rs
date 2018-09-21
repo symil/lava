@@ -25,13 +25,13 @@ pub struct RawVkMemoryFdProperties {
 
 #[derive(Debug, Clone)]
 pub struct VkMemoryFdProperties {
-    pub memory_type_bits: usize,
+    pub memory_type_bits: u32,
 }
 
 impl VkRawType<VkMemoryFdProperties> for RawVkMemoryFdProperties {
     fn vk_to_wrapped(src: &RawVkMemoryFdProperties) -> VkMemoryFdProperties {
         VkMemoryFdProperties {
-            memory_type_bits: u32::vk_to_wrapped(&src.memory_type_bits),
+            memory_type_bits: src.memory_type_bits,
         }
     }
 }
@@ -40,7 +40,7 @@ impl VkWrappedType<RawVkMemoryFdProperties> for VkMemoryFdProperties {
     fn vk_to_raw(src: &VkMemoryFdProperties, dst: &mut RawVkMemoryFdProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryFdPropertiesKhr);
         dst.next = ptr::null();
-        dst.memory_type_bits = vk_to_raw_value(&src.memory_type_bits);
+        dst.memory_type_bits = src.memory_type_bits;
     }
 }
 

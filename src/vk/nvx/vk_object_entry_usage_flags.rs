@@ -52,3 +52,12 @@ impl VkObjectEntryUsageFlags {
         }
     }
 }
+
+impl VkObjectEntryUsageFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.graphics { 0x00000001 } else { 0 }
+        + if self.compute { 0x00000002 } else { 0 }
+    }
+}

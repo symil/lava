@@ -94,3 +94,19 @@ impl VkSubgroupFeatureFlags {
         }
     }
 }
+
+impl VkSubgroupFeatureFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.basic { 0x00000001 } else { 0 }
+        + if self.vote { 0x00000002 } else { 0 }
+        + if self.arithmetic { 0x00000004 } else { 0 }
+        + if self.ballot { 0x00000008 } else { 0 }
+        + if self.shuffle { 0x00000010 } else { 0 }
+        + if self.shuffle_relative { 0x00000020 } else { 0 }
+        + if self.clustered { 0x00000040 } else { 0 }
+        + if self.quad { 0x00000080 } else { 0 }
+        + if self.partitioned_nv { 0x00000100 } else { 0 }
+    }
+}

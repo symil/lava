@@ -64,3 +64,14 @@ impl VkDisplayPlaneAlphaFlags {
         }
     }
 }
+
+impl VkDisplayPlaneAlphaFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.opaque { 0x00000001 } else { 0 }
+        + if self.global { 0x00000002 } else { 0 }
+        + if self.per_pixel { 0x00000004 } else { 0 }
+        + if self.per_pixel_premultiplied { 0x00000008 } else { 0 }
+    }
+}

@@ -64,3 +64,14 @@ impl VkIndirectCommandsLayoutUsageFlags {
         }
     }
 }
+
+impl VkIndirectCommandsLayoutUsageFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.unordered_sequences { 0x00000001 } else { 0 }
+        + if self.sparse_sequences { 0x00000002 } else { 0 }
+        + if self.empty_executions { 0x00000004 } else { 0 }
+        + if self.indexed_sequences { 0x00000008 } else { 0 }
+    }
+}

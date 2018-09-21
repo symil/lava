@@ -154,3 +154,29 @@ impl VkPipelineStageFlags {
         }
     }
 }
+
+impl VkPipelineStageFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.top_of_pipe { 0x00000001 } else { 0 }
+        + if self.draw_indirect { 0x00000002 } else { 0 }
+        + if self.vertex_input { 0x00000004 } else { 0 }
+        + if self.vertex_shader { 0x00000008 } else { 0 }
+        + if self.tessellation_control_shader { 0x00000010 } else { 0 }
+        + if self.tessellation_evaluation_shader { 0x00000020 } else { 0 }
+        + if self.geometry_shader { 0x00000040 } else { 0 }
+        + if self.fragment_shader { 0x00000080 } else { 0 }
+        + if self.early_fragment_tests { 0x00000100 } else { 0 }
+        + if self.late_fragment_tests { 0x00000200 } else { 0 }
+        + if self.color_attachment_output { 0x00000400 } else { 0 }
+        + if self.compute_shader { 0x00000800 } else { 0 }
+        + if self.transfer { 0x00001000 } else { 0 }
+        + if self.bottom_of_pipe { 0x00002000 } else { 0 }
+        + if self.host { 0x00004000 } else { 0 }
+        + if self.all_graphics { 0x00008000 } else { 0 }
+        + if self.all_commands { 0x00010000 } else { 0 }
+        + if self.conditional_rendering_ext { 0x00040000 } else { 0 }
+        + if self.command_process_nvx { 0x00020000 } else { 0 }
+    }
+}

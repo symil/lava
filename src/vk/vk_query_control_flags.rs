@@ -46,3 +46,11 @@ impl VkQueryControlFlags {
         }
     }
 }
+
+impl VkQueryControlFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.precise { 0x00000001 } else { 0 }
+    }
+}

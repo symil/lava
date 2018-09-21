@@ -184,3 +184,34 @@ impl VkFormatFeatureFlags {
         }
     }
 }
+
+impl VkFormatFeatureFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.sampled_image { 0x00000001 } else { 0 }
+        + if self.storage_image { 0x00000002 } else { 0 }
+        + if self.storage_image_atomic { 0x00000004 } else { 0 }
+        + if self.uniform_texel_buffer { 0x00000008 } else { 0 }
+        + if self.storage_texel_buffer { 0x00000010 } else { 0 }
+        + if self.storage_texel_buffer_atomic { 0x00000020 } else { 0 }
+        + if self.vertex_buffer { 0x00000040 } else { 0 }
+        + if self.color_attachment { 0x00000080 } else { 0 }
+        + if self.color_attachment_blend { 0x00000100 } else { 0 }
+        + if self.depth_stencil_attachment { 0x00000200 } else { 0 }
+        + if self.blit_src { 0x00000400 } else { 0 }
+        + if self.blit_dst { 0x00000800 } else { 0 }
+        + if self.sampled_image_filter_linear { 0x00001000 } else { 0 }
+        + if self.transfer_src { 0x00004000 } else { 0 }
+        + if self.transfer_dst { 0x00008000 } else { 0 }
+        + if self.midpoint_chroma_samples { 0x00020000 } else { 0 }
+        + if self.sampled_image_ycbcr_conversion_linear_filter { 0x00040000 } else { 0 }
+        + if self.sampled_image_ycbcr_conversion_separate_reconstruction_filter { 0x00080000 } else { 0 }
+        + if self.sampled_image_ycbcr_conversion_chroma_reconstruction_explicit { 0x00100000 } else { 0 }
+        + if self.sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable { 0x00200000 } else { 0 }
+        + if self.disjoint { 0x00400000 } else { 0 }
+        + if self.cosited_chroma_samples { 0x00800000 } else { 0 }
+        + if self.sampled_image_filter_cubic_img { 0x00002000 } else { 0 }
+        + if self.sampled_image_filter_minmax_ext { 0x00010000 } else { 0 }
+    }
+}

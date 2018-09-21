@@ -166,3 +166,31 @@ impl VkAccessFlags {
         }
     }
 }
+
+impl VkAccessFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.indirect_command_read { 0x00000001 } else { 0 }
+        + if self.index_read { 0x00000002 } else { 0 }
+        + if self.vertex_attribute_read { 0x00000004 } else { 0 }
+        + if self.uniform_read { 0x00000008 } else { 0 }
+        + if self.input_attachment_read { 0x00000010 } else { 0 }
+        + if self.shader_read { 0x00000020 } else { 0 }
+        + if self.shader_write { 0x00000040 } else { 0 }
+        + if self.color_attachment_read { 0x00000080 } else { 0 }
+        + if self.color_attachment_write { 0x00000100 } else { 0 }
+        + if self.depth_stencil_attachment_read { 0x00000200 } else { 0 }
+        + if self.depth_stencil_attachment_write { 0x00000400 } else { 0 }
+        + if self.transfer_read { 0x00000800 } else { 0 }
+        + if self.transfer_write { 0x00001000 } else { 0 }
+        + if self.host_read { 0x00002000 } else { 0 }
+        + if self.host_write { 0x00004000 } else { 0 }
+        + if self.memory_read { 0x00008000 } else { 0 }
+        + if self.memory_write { 0x00010000 } else { 0 }
+        + if self.conditional_rendering_read_ext { 0x00100000 } else { 0 }
+        + if self.command_process_read_nvx { 0x00020000 } else { 0 }
+        + if self.command_process_write_nvx { 0x00040000 } else { 0 }
+        + if self.color_attachment_read_noncoherent_ext { 0x00080000 } else { 0 }
+    }
+}

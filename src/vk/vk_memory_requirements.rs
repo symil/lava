@@ -26,7 +26,7 @@ pub struct RawVkMemoryRequirements {
 pub struct VkMemoryRequirements {
     pub size: usize,
     pub alignment: usize,
-    pub memory_type_bits: usize,
+    pub memory_type_bits: u32,
 }
 
 impl VkRawType<VkMemoryRequirements> for RawVkMemoryRequirements {
@@ -34,7 +34,7 @@ impl VkRawType<VkMemoryRequirements> for RawVkMemoryRequirements {
         VkMemoryRequirements {
             size: u64::vk_to_wrapped(&src.size),
             alignment: u64::vk_to_wrapped(&src.alignment),
-            memory_type_bits: u32::vk_to_wrapped(&src.memory_type_bits),
+            memory_type_bits: src.memory_type_bits,
         }
     }
 }
@@ -43,7 +43,7 @@ impl VkWrappedType<RawVkMemoryRequirements> for VkMemoryRequirements {
     fn vk_to_raw(src: &VkMemoryRequirements, dst: &mut RawVkMemoryRequirements) {
         dst.size = vk_to_raw_value(&src.size);
         dst.alignment = vk_to_raw_value(&src.alignment);
-        dst.memory_type_bits = vk_to_raw_value(&src.memory_type_bits);
+        dst.memory_type_bits = src.memory_type_bits;
     }
 }
 

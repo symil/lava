@@ -64,3 +64,14 @@ impl VkDescriptorBindingFlags {
         }
     }
 }
+
+impl VkDescriptorBindingFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.update_after_bind { 0x00000001 } else { 0 }
+        + if self.update_unused_while_pending { 0x00000002 } else { 0 }
+        + if self.partially_bound { 0x00000004 } else { 0 }
+        + if self.variable_descriptor_count { 0x00000008 } else { 0 }
+    }
+}

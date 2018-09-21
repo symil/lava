@@ -58,3 +58,13 @@ impl VkDependencyFlags {
         }
     }
 }
+
+impl VkDependencyFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.by_region { 0x00000001 } else { 0 }
+        + if self.device_group { 0x00000004 } else { 0 }
+        + if self.view_local { 0x00000002 } else { 0 }
+    }
+}

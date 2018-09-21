@@ -45,3 +45,10 @@ impl VkShaderModuleCreateFlags {
         }
     }
 }
+
+impl VkShaderModuleCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+}

@@ -183,9 +183,9 @@ pub struct VkPhysicalDeviceLimits {
     pub max_compute_work_group_count: [usize; 3],
     pub max_compute_work_group_invocations: usize,
     pub max_compute_work_group_size: [usize; 3],
-    pub sub_pixel_precision_bits: usize,
-    pub sub_texel_precision_bits: usize,
-    pub mipmap_precision_bits: usize,
+    pub sub_pixel_precision_bits: u32,
+    pub sub_texel_precision_bits: u32,
+    pub mipmap_precision_bits: u32,
     pub max_draw_indexed_index_value: usize,
     pub max_draw_indirect_count: usize,
     pub max_sampler_lod_bias: f32,
@@ -193,7 +193,7 @@ pub struct VkPhysicalDeviceLimits {
     pub max_viewports: usize,
     pub max_viewport_dimensions: [usize; 2],
     pub viewport_bounds_range: [f32; 2],
-    pub viewport_sub_pixel_bits: usize,
+    pub viewport_sub_pixel_bits: u32,
     pub min_memory_map_alignment: usize,
     pub min_texel_buffer_offset_alignment: usize,
     pub min_uniform_buffer_offset_alignment: usize,
@@ -204,7 +204,7 @@ pub struct VkPhysicalDeviceLimits {
     pub max_texel_gather_offset: usize,
     pub min_interpolation_offset: f32,
     pub max_interpolation_offset: f32,
-    pub sub_pixel_interpolation_offset_bits: usize,
+    pub sub_pixel_interpolation_offset_bits: u32,
     pub max_framebuffer_width: usize,
     pub max_framebuffer_height: usize,
     pub max_framebuffer_layers: usize,
@@ -294,9 +294,9 @@ impl VkRawType<VkPhysicalDeviceLimits> for RawVkPhysicalDeviceLimits {
             max_compute_work_group_count: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); vk_to_wrapped_array(&src.max_compute_work_group_count, &mut dst_array); dst_array },
             max_compute_work_group_invocations: u32::vk_to_wrapped(&src.max_compute_work_group_invocations),
             max_compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); vk_to_wrapped_array(&src.max_compute_work_group_size, &mut dst_array); dst_array },
-            sub_pixel_precision_bits: u32::vk_to_wrapped(&src.sub_pixel_precision_bits),
-            sub_texel_precision_bits: u32::vk_to_wrapped(&src.sub_texel_precision_bits),
-            mipmap_precision_bits: u32::vk_to_wrapped(&src.mipmap_precision_bits),
+            sub_pixel_precision_bits: src.sub_pixel_precision_bits,
+            sub_texel_precision_bits: src.sub_texel_precision_bits,
+            mipmap_precision_bits: src.mipmap_precision_bits,
             max_draw_indexed_index_value: u32::vk_to_wrapped(&src.max_draw_indexed_index_value),
             max_draw_indirect_count: u32::vk_to_wrapped(&src.max_draw_indirect_count),
             max_sampler_lod_bias: src.max_sampler_lod_bias,
@@ -304,7 +304,7 @@ impl VkRawType<VkPhysicalDeviceLimits> for RawVkPhysicalDeviceLimits {
             max_viewports: u32::vk_to_wrapped(&src.max_viewports),
             max_viewport_dimensions: unsafe { let mut dst_array : [usize; 2] = mem::uninitialized(); vk_to_wrapped_array(&src.max_viewport_dimensions, &mut dst_array); dst_array },
             viewport_bounds_range: unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.viewport_bounds_range, &mut dst_array); dst_array },
-            viewport_sub_pixel_bits: u32::vk_to_wrapped(&src.viewport_sub_pixel_bits),
+            viewport_sub_pixel_bits: src.viewport_sub_pixel_bits,
             min_memory_map_alignment: src.min_memory_map_alignment,
             min_texel_buffer_offset_alignment: u64::vk_to_wrapped(&src.min_texel_buffer_offset_alignment),
             min_uniform_buffer_offset_alignment: u64::vk_to_wrapped(&src.min_uniform_buffer_offset_alignment),
@@ -315,7 +315,7 @@ impl VkRawType<VkPhysicalDeviceLimits> for RawVkPhysicalDeviceLimits {
             max_texel_gather_offset: u32::vk_to_wrapped(&src.max_texel_gather_offset),
             min_interpolation_offset: src.min_interpolation_offset,
             max_interpolation_offset: src.max_interpolation_offset,
-            sub_pixel_interpolation_offset_bits: u32::vk_to_wrapped(&src.sub_pixel_interpolation_offset_bits),
+            sub_pixel_interpolation_offset_bits: src.sub_pixel_interpolation_offset_bits,
             max_framebuffer_width: u32::vk_to_wrapped(&src.max_framebuffer_width),
             max_framebuffer_height: u32::vk_to_wrapped(&src.max_framebuffer_height),
             max_framebuffer_layers: u32::vk_to_wrapped(&src.max_framebuffer_layers),
@@ -406,9 +406,9 @@ impl VkWrappedType<RawVkPhysicalDeviceLimits> for VkPhysicalDeviceLimits {
         dst.max_compute_work_group_count = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_compute_work_group_count, &mut dst_array); dst_array };
         dst.max_compute_work_group_invocations = vk_to_raw_value(&src.max_compute_work_group_invocations);
         dst.max_compute_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_compute_work_group_size, &mut dst_array); dst_array };
-        dst.sub_pixel_precision_bits = vk_to_raw_value(&src.sub_pixel_precision_bits);
-        dst.sub_texel_precision_bits = vk_to_raw_value(&src.sub_texel_precision_bits);
-        dst.mipmap_precision_bits = vk_to_raw_value(&src.mipmap_precision_bits);
+        dst.sub_pixel_precision_bits = src.sub_pixel_precision_bits;
+        dst.sub_texel_precision_bits = src.sub_texel_precision_bits;
+        dst.mipmap_precision_bits = src.mipmap_precision_bits;
         dst.max_draw_indexed_index_value = vk_to_raw_value(&src.max_draw_indexed_index_value);
         dst.max_draw_indirect_count = vk_to_raw_value(&src.max_draw_indirect_count);
         dst.max_sampler_lod_bias = src.max_sampler_lod_bias;
@@ -416,7 +416,7 @@ impl VkWrappedType<RawVkPhysicalDeviceLimits> for VkPhysicalDeviceLimits {
         dst.max_viewports = vk_to_raw_value(&src.max_viewports);
         dst.max_viewport_dimensions = unsafe { let mut dst_array : [u32; 2] = mem::uninitialized(); vk_to_raw_array(&src.max_viewport_dimensions, &mut dst_array); dst_array };
         dst.viewport_bounds_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.viewport_bounds_range, &mut dst_array); dst_array };
-        dst.viewport_sub_pixel_bits = vk_to_raw_value(&src.viewport_sub_pixel_bits);
+        dst.viewport_sub_pixel_bits = src.viewport_sub_pixel_bits;
         dst.min_memory_map_alignment = src.min_memory_map_alignment;
         dst.min_texel_buffer_offset_alignment = vk_to_raw_value(&src.min_texel_buffer_offset_alignment);
         dst.min_uniform_buffer_offset_alignment = vk_to_raw_value(&src.min_uniform_buffer_offset_alignment);
@@ -427,7 +427,7 @@ impl VkWrappedType<RawVkPhysicalDeviceLimits> for VkPhysicalDeviceLimits {
         dst.max_texel_gather_offset = vk_to_raw_value(&src.max_texel_gather_offset);
         dst.min_interpolation_offset = src.min_interpolation_offset;
         dst.max_interpolation_offset = src.max_interpolation_offset;
-        dst.sub_pixel_interpolation_offset_bits = vk_to_raw_value(&src.sub_pixel_interpolation_offset_bits);
+        dst.sub_pixel_interpolation_offset_bits = src.sub_pixel_interpolation_offset_bits;
         dst.max_framebuffer_width = vk_to_raw_value(&src.max_framebuffer_width);
         dst.max_framebuffer_height = vk_to_raw_value(&src.max_framebuffer_height);
         dst.max_framebuffer_layers = vk_to_raw_value(&src.max_framebuffer_layers);

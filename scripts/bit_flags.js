@@ -38,7 +38,8 @@ function generateVkBitFlagsDefinition(cDef) {
         genImplVkRawType(cDef),
         genImplVkWrappedType(cDef),
         genImplDefault(cDef),
-        genImplFlags(cDef)
+        genImplFlags(cDef),
+        genImplAsUint(cDef)
     ];
 }
 
@@ -96,6 +97,16 @@ function genImplDefault(def) {
 function formatBitFlagsFieldName(name) {
     return toSnakeCase(name)
         .replace(/^(\d)/, '_$1');
+}
+
+function genImplAsUint(def) {
+    return [
+        `impl ${def.wrappedTypeName}`, [
+            `\npub fn to_u32(&self) -> u32`, [
+                `0${def.fields.map(field => `\n+ if self.${field.varName} { ${field.value} } else { 0 }`).join('')}`
+            ]
+        ]
+    ];
 }
 
 function genImplFlags(def) {

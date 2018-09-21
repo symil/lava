@@ -52,3 +52,12 @@ impl VkSubpassDescriptionFlags {
         }
     }
 }
+
+impl VkSubpassDescriptionFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.per_view_attributes_nvx { 0x00000001 } else { 0 }
+        + if self.per_view_position_x_only_nvx { 0x00000002 } else { 0 }
+    }
+}

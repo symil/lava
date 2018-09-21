@@ -70,3 +70,15 @@ impl VkDebugReportFlags {
         }
     }
 }
+
+impl VkDebugReportFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.information { 0x00000001 } else { 0 }
+        + if self.warning { 0x00000002 } else { 0 }
+        + if self.performance_warning { 0x00000004 } else { 0 }
+        + if self.error { 0x00000008 } else { 0 }
+        + if self.debug { 0x00000010 } else { 0 }
+    }
+}

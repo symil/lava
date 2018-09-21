@@ -45,3 +45,10 @@ impl VkDisplayModeCreateFlags {
         }
     }
 }
+
+impl VkDisplayModeCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+}

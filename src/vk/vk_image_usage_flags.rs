@@ -88,3 +88,18 @@ impl VkImageUsageFlags {
         }
     }
 }
+
+impl VkImageUsageFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.transfer_src { 0x00000001 } else { 0 }
+        + if self.transfer_dst { 0x00000002 } else { 0 }
+        + if self.sampled { 0x00000004 } else { 0 }
+        + if self.storage { 0x00000008 } else { 0 }
+        + if self.color_attachment { 0x00000010 } else { 0 }
+        + if self.depth_stencil_attachment { 0x00000020 } else { 0 }
+        + if self.transient_attachment { 0x00000040 } else { 0 }
+        + if self.input_attachment { 0x00000080 } else { 0 }
+    }
+}

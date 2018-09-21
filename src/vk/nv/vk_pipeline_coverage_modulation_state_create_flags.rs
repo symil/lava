@@ -45,3 +45,10 @@ impl VkPipelineCoverageModulationStateCreateFlags {
         }
     }
 }
+
+impl VkPipelineCoverageModulationStateCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+}

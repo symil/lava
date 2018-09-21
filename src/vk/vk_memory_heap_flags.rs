@@ -52,3 +52,12 @@ impl VkMemoryHeapFlags {
         }
     }
 }
+
+impl VkMemoryHeapFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.device_local { 0x00000001 } else { 0 }
+        + if self.multi_instance { 0x00000002 } else { 0 }
+    }
+}

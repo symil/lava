@@ -177,7 +177,7 @@ const INT_FIELD_NAMES = ['x', 'y', 'z', 'width', 'height', 'layers', 'timeout'];
 
 function fieldNameIsInt(field) {
     return INT_FIELD_NAMES.includes(field.name) ||
-        /(mask|version)/i.test(field.name) ||
+        /(mask|version|(bits$))/i.test(field.name) ||
         /subpass/i.test(field.name);
 }
 

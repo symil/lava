@@ -58,3 +58,13 @@ impl VkStencilFaceFlags {
         }
     }
 }
+
+impl VkStencilFaceFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.front { 0x00000001 } else { 0 }
+        + if self.back { 0x00000002 } else { 0 }
+        + if self._and_back { 0x00000003 } else { 0 }
+    }
+}

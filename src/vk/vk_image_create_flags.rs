@@ -118,3 +118,23 @@ impl VkImageCreateFlags {
         }
     }
 }
+
+impl VkImageCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.sparse_binding { 0x00000001 } else { 0 }
+        + if self.sparse_residency { 0x00000002 } else { 0 }
+        + if self.sparse_aliased { 0x00000004 } else { 0 }
+        + if self.mutable_format { 0x00000008 } else { 0 }
+        + if self.cube_compatible { 0x00000010 } else { 0 }
+        + if self.alias { 0x00000400 } else { 0 }
+        + if self.split_instance_bind_regions { 0x00000040 } else { 0 }
+        + if self._2d_array_compatible { 0x00000020 } else { 0 }
+        + if self.block_texel_view_compatible { 0x00000080 } else { 0 }
+        + if self.extended_usage { 0x00000100 } else { 0 }
+        + if self.protected { 0x00000800 } else { 0 }
+        + if self.disjoint { 0x00000200 } else { 0 }
+        + if self.sample_locations_compatible_depth_ext { 0x00001000 } else { 0 }
+    }
+}

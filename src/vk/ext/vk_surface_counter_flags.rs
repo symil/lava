@@ -46,3 +46,11 @@ impl VkSurfaceCounterFlags {
         }
     }
 }
+
+impl VkSurfaceCounterFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.vblank { 0x00000001 } else { 0 }
+    }
+}

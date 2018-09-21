@@ -58,3 +58,13 @@ impl VkCullModeFlags {
         }
     }
 }
+
+impl VkCullModeFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.front { 0x00000001 } else { 0 }
+        + if self.back { 0x00000002 } else { 0 }
+        + if self.front_and_back { 0x00000003 } else { 0 }
+    }
+}

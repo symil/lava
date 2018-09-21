@@ -52,3 +52,12 @@ impl VkSwapchainCreateFlags {
         }
     }
 }
+
+impl VkSwapchainCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.split_instance_bind_regions { 0x00000001 } else { 0 }
+        + if self.protected { 0x00000002 } else { 0 }
+    }
+}

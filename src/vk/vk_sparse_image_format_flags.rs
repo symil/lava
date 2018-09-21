@@ -58,3 +58,13 @@ impl VkSparseImageFormatFlags {
         }
     }
 }
+
+impl VkSparseImageFormatFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.single_miptail { 0x00000001 } else { 0 }
+        + if self.aligned_mip_size { 0x00000002 } else { 0 }
+        + if self.nonstandard_block_size { 0x00000004 } else { 0 }
+    }
+}

@@ -106,3 +106,21 @@ impl VkExternalMemoryHandleTypeFlags {
         }
     }
 }
+
+impl VkExternalMemoryHandleTypeFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.opaque_fd { 0x00000001 } else { 0 }
+        + if self.opaque_win_32 { 0x00000002 } else { 0 }
+        + if self.opaque_win_32_kmt { 0x00000004 } else { 0 }
+        + if self.d_3d_11_texture { 0x00000008 } else { 0 }
+        + if self.d_3d_11_texture_kmt { 0x00000010 } else { 0 }
+        + if self.d_3d_12_heap { 0x00000020 } else { 0 }
+        + if self.d_3d_12_resource { 0x00000040 } else { 0 }
+        + if self.dma_buf_ext { 0x00000200 } else { 0 }
+        + if self.android_hardware_buffer_android { 0x00000400 } else { 0 }
+        + if self.host_allocation_ext { 0x00000080 } else { 0 }
+        + if self.host_mapped_foreign_memory_ext { 0x00000100 } else { 0 }
+    }
+}

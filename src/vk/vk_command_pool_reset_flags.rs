@@ -46,3 +46,11 @@ impl VkCommandPoolResetFlags {
         }
     }
 }
+
+impl VkCommandPoolResetFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.release_resources { 0x00000001 } else { 0 }
+    }
+}

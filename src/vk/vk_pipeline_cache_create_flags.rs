@@ -45,3 +45,10 @@ impl VkPipelineCacheCreateFlags {
         }
     }
 }
+
+impl VkPipelineCacheCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+}

@@ -46,3 +46,11 @@ impl VkSparseMemoryBindFlags {
         }
     }
 }
+
+impl VkSparseMemoryBindFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.metadata { 0x00000001 } else { 0 }
+    }
+}

@@ -46,3 +46,11 @@ impl VkAttachmentDescriptionFlags {
         }
     }
 }
+
+impl VkAttachmentDescriptionFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.may_alias { 0x00000001 } else { 0 }
+    }
+}

@@ -64,3 +64,14 @@ impl VkDeviceGroupPresentModeFlags {
         }
     }
 }
+
+impl VkDeviceGroupPresentModeFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.local { 0x00000001 } else { 0 }
+        + if self.remote { 0x00000002 } else { 0 }
+        + if self.sum { 0x00000004 } else { 0 }
+        + if self.local_multi_device { 0x00000008 } else { 0 }
+    }
+}

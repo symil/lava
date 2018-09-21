@@ -46,3 +46,11 @@ impl VkFenceCreateFlags {
         }
     }
 }
+
+impl VkFenceCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.signaled { 0x00000001 } else { 0 }
+    }
+}

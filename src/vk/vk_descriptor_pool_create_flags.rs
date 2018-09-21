@@ -52,3 +52,12 @@ impl VkDescriptorPoolCreateFlags {
         }
     }
 }
+
+impl VkDescriptorPoolCreateFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.free_descriptor_set { 0x00000001 } else { 0 }
+        + if self.update_after_bind_ext { 0x00000002 } else { 0 }
+    }
+}

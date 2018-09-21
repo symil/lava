@@ -64,3 +64,14 @@ impl VkPeerMemoryFeatureFlags {
         }
     }
 }
+
+impl VkPeerMemoryFeatureFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.copy_src { 0x00000001 } else { 0 }
+        + if self.copy_dst { 0x00000002 } else { 0 }
+        + if self.generic_src { 0x00000004 } else { 0 }
+        + if self.generic_dst { 0x00000008 } else { 0 }
+    }
+}

@@ -64,3 +64,14 @@ impl VkCompositeAlphaFlags {
         }
     }
 }
+
+impl VkCompositeAlphaFlags {
+    
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.opaque { 0x00000001 } else { 0 }
+        + if self.pre_multiplied { 0x00000002 } else { 0 }
+        + if self.post_multiplied { 0x00000004 } else { 0 }
+        + if self.inherit { 0x00000008 } else { 0 }
+    }
+}
