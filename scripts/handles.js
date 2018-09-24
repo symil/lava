@@ -284,6 +284,7 @@ function functionToMethod(handle, func) {
     const functionCall = `${funcNameValue}(${functionRustArgs.join(', ')})`;
 
     let returnType = null;
+    let generics = '';
 
     if (createSomething) {
         if (returnVkResult) {
@@ -297,7 +298,8 @@ function functionToMethod(handle, func) {
 
         if (isVkMapMemory) {
             createdRawTypeName = '*mut c_void';
-            createdWrappedTypeName = `&'static mut [c_void]`;
+            createdWrappedTypeName = `&'a mut [c_void]`;
+            generics = `<'a>`;
         }
 
         const setupResult = createdType.typeName === 'VkInstance' || (handle && isStructOrHandle(createdType));
@@ -422,7 +424,7 @@ function functionToMethod(handle, func) {
     }
 
     return [
-        `\npub fn ${methodName}(${argList})${returnInfo}`,
+        `\npub fn ${methodName}${generics}(${argList})${returnInfo}`,
         [`unsafe`, allStatements]
     ];
 }

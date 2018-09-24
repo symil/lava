@@ -126,7 +126,7 @@ impl VkDevice {
         }
     }
     
-    pub fn map_memory(&self, memory: &VkDeviceMemory, offset: usize, size: usize, flags: VkMemoryMapFlags) -> Result<&'static mut [c_void], (VkResult, &'static mut [c_void])> {
+    pub fn map_memory<'a>(&self, memory: &VkDeviceMemory, offset: usize, size: usize, flags: VkMemoryMapFlags) -> Result<&'a mut [c_void], (VkResult, &'a mut [c_void])> {
         unsafe {
             let raw_memory = vk_to_raw_value(memory);
             let raw_offset = vk_to_raw_value(&offset);
