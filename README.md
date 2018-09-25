@@ -32,7 +32,7 @@ It comes with the following restrictions (that should be lifted in the future):
 Add this dependency to your `Cargo.toml` file:
 ```
 [dependencies]
-lava = "0.1.0"
+lava = "0.2.0"
 ```
 
 ## Examples
@@ -89,6 +89,10 @@ let surface = instance.create_surface(
     |handle, allocator, surface| unsafe { glfwCreateWindowSurface(handle, window, allocator, surface) }
 ).expect("Failed to create surface from glfw window");
 ```
+
+## Tutorial
+
+Implementation of [vulkan-tutorial](https://vulkan-tutorial.com/) using Lava can be found [here](https://github.com/Ytawo/vk-intro).
 
 ## Manual build
 
