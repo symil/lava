@@ -107,7 +107,7 @@ new source files in `src/vk/`.
 
 ## Warning
 
-This is very much a work in progress. Most of the API has not been tested.
+This is very much a work in progress.
 
 ## License
 
