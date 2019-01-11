@@ -133,4 +133,23 @@ impl VkImage {
             layout
         }
     }
+    
+    pub fn get_drm_format_modifier_properties(&self) -> Result<ext::VkImageDrmFormatModifierProperties, (VkResult, ext::VkImageDrmFormatModifierProperties)> {
+        unsafe {
+            let mut vk_result = 0;
+            let raw_properties = &mut mem::zeroed() as *mut ext::RawVkImageDrmFormatModifierProperties;
+            
+            vk_result = ((&*self._fn_table).vkGetImageDrmFormatModifierPropertiesEXT)(self._parent_device, self._handle, raw_properties);
+            
+            let mut properties = new_vk_value(raw_properties);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                let parent_instance = self._parent_instance;
+                let parent_device = self._parent_device;
+                VkSetup::vk_setup(&mut properties, fn_table, parent_instance, parent_device);
+            }
+            ext::RawVkImageDrmFormatModifierProperties::vk_free(raw_properties.as_mut().unwrap());
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
+        }
+    }
 }

@@ -71,8 +71,8 @@ pub struct VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 
 {
     pub flags: VkPipelineCreateFlags,
     pub stages: &'a [VkPipelineShaderStageCreateInfo<'b, 'c, 'd, 'e, 'f>],
-    pub vertex_input_state: &'g VkPipelineVertexInputStateCreateInfo<'h, 'i>,
-    pub input_assembly_state: &'j VkPipelineInputAssemblyStateCreateInfo,
+    pub vertex_input_state: Option<&'g VkPipelineVertexInputStateCreateInfo<'h, 'i>>,
+    pub input_assembly_state: Option<&'j VkPipelineInputAssemblyStateCreateInfo>,
     pub tessellation_state: Option<&'k VkPipelineTessellationStateCreateInfo>,
     pub viewport_state: Option<&'l VkPipelineViewportStateCreateInfo<'m, 'n>>,
     pub rasterization_state: &'o VkPipelineRasterizationStateCreateInfo,
@@ -108,8 +108,8 @@ impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's,
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage_count = src.stages.len() as u32;
         dst.stages = new_ptr_vk_array(src.stages);
-        dst.vertex_input_state = new_ptr_vk_value(src.vertex_input_state);
-        dst.input_assembly_state = new_ptr_vk_value(src.input_assembly_state);
+        dst.vertex_input_state = new_ptr_vk_value_checked(src.vertex_input_state);
+        dst.input_assembly_state = new_ptr_vk_value_checked(src.input_assembly_state);
         dst.tessellation_state = new_ptr_vk_value_checked(src.tessellation_state);
         dst.viewport_state = new_ptr_vk_value_checked(src.viewport_state);
         dst.rasterization_state = new_ptr_vk_value(src.rasterization_state);
@@ -130,8 +130,8 @@ impl Default for VkGraphicsPipelineCreateInfo<'static, 'static, 'static, 'static
         VkGraphicsPipelineCreateInfo {
             flags: VkPipelineCreateFlags::default(),
             stages: &[],
-            vertex_input_state: vk_null_ref(),
-            input_assembly_state: vk_null_ref(),
+            vertex_input_state: None,
+            input_assembly_state: None,
             tessellation_state: None,
             viewport_state: None,
             rasterization_state: vk_null_ref(),

@@ -20,6 +20,8 @@ pub enum VkImageLayout {
     DepthAttachmentStencilReadOnlyOptimal = 1000117001,
     PresentSrcKhr = 1000001002,
     SharedPresentKhr = 1000111000,
+    ShadingRateOptimalNv = 1000164003,
+    FragmentDensityMapOptimalExt = 1000218000,
 }
 
 impl VkRawType<VkImageLayout> for RawVkImageLayout {

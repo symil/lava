@@ -128,20 +128,4 @@ impl VkQueue {
             free_vk_ptr(raw_label_info);
         }
     }
-    
-    pub fn get_checkpoint_data(&self) -> Vec<nv::VkCheckpointData> {
-        unsafe {
-            let mut raw_checkpoint_data : *mut nv::RawVkCheckpointData = ptr::null_mut();
-            let raw_checkpoint_data_count = &mut mem::zeroed() as *mut u32;
-            ((&*self._fn_table).vkGetQueueCheckpointDataNV)(self._handle, raw_checkpoint_data_count, raw_checkpoint_data);
-            raw_checkpoint_data = calloc(*raw_checkpoint_data_count as usize, mem::size_of::<nv::RawVkCheckpointData>()) as *mut nv::RawVkCheckpointData;
-            
-            ((&*self._fn_table).vkGetQueueCheckpointDataNV)(self._handle, raw_checkpoint_data_count, raw_checkpoint_data);
-            
-            let mut checkpoint_data = new_vk_array(*raw_checkpoint_data_count, raw_checkpoint_data);
-            for elt in &mut checkpoint_data { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
-            free_vk_ptr_array(*raw_checkpoint_data_count as usize, raw_checkpoint_data);
-            checkpoint_data
-        }
-    }
 }

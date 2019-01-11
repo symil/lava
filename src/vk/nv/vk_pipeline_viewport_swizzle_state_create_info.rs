@@ -30,7 +30,7 @@ pub struct RawVkPipelineViewportSwizzleStateCreateInfo {
 #[derive(Debug, Clone)]
 pub struct VkPipelineViewportSwizzleStateCreateInfo<'a> {
     pub flags: VkPipelineViewportSwizzleStateCreateFlags,
-    pub viewport_swizzles: Option<&'a [VkViewportSwizzle]>,
+    pub viewport_swizzles: &'a [VkViewportSwizzle],
 }
 
 impl<'a> VkWrappedType<RawVkPipelineViewportSwizzleStateCreateInfo> for VkPipelineViewportSwizzleStateCreateInfo<'a> {
@@ -38,8 +38,8 @@ impl<'a> VkWrappedType<RawVkPipelineViewportSwizzleStateCreateInfo> for VkPipeli
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportSwizzleStateCreateInfoNv);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.viewport_count = get_array_option_len(src.viewport_swizzles) as u32;
-        dst.viewport_swizzles = new_ptr_vk_array_checked(src.viewport_swizzles);
+        dst.viewport_count = src.viewport_swizzles.len() as u32;
+        dst.viewport_swizzles = new_ptr_vk_array(src.viewport_swizzles);
     }
 }
 
@@ -47,7 +47,7 @@ impl Default for VkPipelineViewportSwizzleStateCreateInfo<'static> {
     fn default() -> VkPipelineViewportSwizzleStateCreateInfo<'static> {
         VkPipelineViewportSwizzleStateCreateInfo {
             flags: VkPipelineViewportSwizzleStateCreateFlags::default(),
-            viewport_swizzles: None,
+            viewport_swizzles: &[],
         }
     }
 }

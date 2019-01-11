@@ -11,6 +11,7 @@ pub struct VkPipelineCreateFlags {
     pub derivative: bool,
     pub view_index_from_device_index: bool,
     pub dispatch_base: bool,
+    pub defer_compile_nv: bool,
 }
 
 impl VkRawType<VkPipelineCreateFlags> for RawVkPipelineCreateFlags {
@@ -21,6 +22,7 @@ impl VkRawType<VkPipelineCreateFlags> for RawVkPipelineCreateFlags {
             derivative: (src & 0x00000004) != 0,
             view_index_from_device_index: (src & 0x00000008) != 0,
             dispatch_base: (src & 0x00000010) != 0,
+            defer_compile_nv: (src & 0x00000020) != 0,
         }
     }
 }
@@ -33,6 +35,7 @@ impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {
         if src.derivative { *dst |= 0x00000004; }
         if src.view_index_from_device_index { *dst |= 0x00000008; }
         if src.dispatch_base { *dst |= 0x00000010; }
+        if src.defer_compile_nv { *dst |= 0x00000020; }
     }
 }
 
@@ -44,6 +47,7 @@ impl Default for VkPipelineCreateFlags {
             derivative: false,
             view_index_from_device_index: false,
             dispatch_base: false,
+            defer_compile_nv: false,
         }
     }
 }
@@ -57,6 +61,7 @@ impl VkPipelineCreateFlags {
             derivative: false,
             view_index_from_device_index: false,
             dispatch_base: false,
+            defer_compile_nv: false,
         }
     }
     
@@ -67,6 +72,7 @@ impl VkPipelineCreateFlags {
             derivative: true,
             view_index_from_device_index: true,
             dispatch_base: true,
+            defer_compile_nv: true,
         }
     }
 }
@@ -80,5 +86,6 @@ impl VkPipelineCreateFlags {
         + if self.derivative { 0x00000004 } else { 0 }
         + if self.view_index_from_device_index { 0x00000008 } else { 0 }
         + if self.dispatch_base { 0x00000010 } else { 0 }
+        + if self.defer_compile_nv { 0x00000020 } else { 0 }
     }
 }

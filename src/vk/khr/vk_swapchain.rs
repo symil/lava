@@ -128,42 +128,4 @@ impl VkSwapchain {
             if vk_result == 0 { Ok(counter_value) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), counter_value)) }
         }
     }
-    
-    pub fn get_refresh_cycle_duration(&self) -> Result<google::VkRefreshCycleDuration, (VkResult, google::VkRefreshCycleDuration)> {
-        unsafe {
-            let mut vk_result = 0;
-            let raw_display_timing_properties = &mut mem::zeroed() as *mut google::RawVkRefreshCycleDuration;
-            
-            vk_result = ((&*self._fn_table).vkGetRefreshCycleDurationGOOGLE)(self._parent_device, self._handle, raw_display_timing_properties);
-            
-            let mut display_timing_properties = new_vk_value(raw_display_timing_properties);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut display_timing_properties, fn_table, parent_instance, parent_device);
-            }
-            google::RawVkRefreshCycleDuration::vk_free(raw_display_timing_properties.as_mut().unwrap());
-            if vk_result == 0 { Ok(display_timing_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), display_timing_properties)) }
-        }
-    }
-    
-    pub fn get_past_presentation_timing(&self) -> Result<Vec<google::VkPastPresentationTiming>, (VkResult, Vec<google::VkPastPresentationTiming>)> {
-        unsafe {
-            let mut vk_result = 0;
-            let mut raw_presentation_timings : *mut google::RawVkPastPresentationTiming = ptr::null_mut();
-            let raw_presentation_timing_count = &mut mem::zeroed() as *mut u32;
-            vk_result = ((&*self._fn_table).vkGetPastPresentationTimingGOOGLE)(self._parent_device, self._handle, raw_presentation_timing_count, raw_presentation_timings);
-            raw_presentation_timings = calloc(*raw_presentation_timing_count as usize, mem::size_of::<google::RawVkPastPresentationTiming>()) as *mut google::RawVkPastPresentationTiming;
-            
-            vk_result = ((&*self._fn_table).vkGetPastPresentationTimingGOOGLE)(self._parent_device, self._handle, raw_presentation_timing_count, raw_presentation_timings);
-            
-            let mut presentation_timings = new_vk_array(*raw_presentation_timing_count, raw_presentation_timings);
-            if vk_result == 0 {
-                for elt in &mut presentation_timings { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
-            }
-            free_vk_ptr_array(*raw_presentation_timing_count as usize, raw_presentation_timings);
-            if vk_result == 0 { Ok(presentation_timings) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), presentation_timings)) }
-        }
-    }
 }

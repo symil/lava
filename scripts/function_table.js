@@ -1,5 +1,5 @@
 const {
-    getFieldsInformation,
+    getFieldsInformation
 } = require('./utils');
 
 function generateFunctionTableDefinition(functions) {

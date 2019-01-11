@@ -27,22 +27,22 @@ pub struct RawVkDescriptorSetLayoutBindingFlagsCreateInfo {
 
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {
-    pub binding_flags: &'a [VkDescriptorBindingFlags],
+    pub binding_flags: Option<&'a [VkDescriptorBindingFlags]>,
 }
 
 impl<'a> VkWrappedType<RawVkDescriptorSetLayoutBindingFlagsCreateInfo> for VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {
     fn vk_to_raw(src: &VkDescriptorSetLayoutBindingFlagsCreateInfo, dst: &mut RawVkDescriptorSetLayoutBindingFlagsCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetLayoutBindingFlagsCreateInfoExt);
         dst.next = ptr::null();
-        dst.binding_count = src.binding_flags.len() as u32;
-        dst.binding_flags = new_ptr_vk_array(src.binding_flags);
+        dst.binding_count = get_array_option_len(src.binding_flags) as u32;
+        dst.binding_flags = new_ptr_vk_array_checked(src.binding_flags);
     }
 }
 
 impl Default for VkDescriptorSetLayoutBindingFlagsCreateInfo<'static> {
     fn default() -> VkDescriptorSetLayoutBindingFlagsCreateInfo<'static> {
         VkDescriptorSetLayoutBindingFlagsCreateInfo {
-            binding_flags: &[],
+            binding_flags: None,
         }
     }
 }

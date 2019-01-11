@@ -29,7 +29,7 @@ pub struct RawVkPipelineViewportWScalingStateCreateInfo {
 #[derive(Debug, Clone)]
 pub struct VkPipelineViewportWScalingStateCreateInfo<'a> {
     pub viewport_wscaling_enable: bool,
-    pub viewport_wscalings: &'a [VkViewportWScaling],
+    pub viewport_wscalings: Option<&'a [VkViewportWScaling]>,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineViewportWScalingStateCreateInfo> for VkPipelineViewportWScalingStateCreateInfo<'a> {
@@ -37,8 +37,8 @@ impl<'a> VkWrappedType<RawVkPipelineViewportWScalingStateCreateInfo> for VkPipel
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportWScalingStateCreateInfoNv);
         dst.next = ptr::null();
         dst.viewport_wscaling_enable = vk_to_raw_value(&src.viewport_wscaling_enable);
-        dst.viewport_count = src.viewport_wscalings.len() as u32;
-        dst.viewport_wscalings = new_ptr_vk_array(src.viewport_wscalings);
+        dst.viewport_count = get_array_option_len(src.viewport_wscalings) as u32;
+        dst.viewport_wscalings = new_ptr_vk_array_checked(src.viewport_wscalings);
     }
 }
 
@@ -46,7 +46,7 @@ impl Default for VkPipelineViewportWScalingStateCreateInfo<'static> {
     fn default() -> VkPipelineViewportWScalingStateCreateInfo<'static> {
         VkPipelineViewportWScalingStateCreateInfo {
             viewport_wscaling_enable: false,
-            viewport_wscalings: &[],
+            viewport_wscalings: None,
         }
     }
 }

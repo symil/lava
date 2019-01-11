@@ -18,7 +18,9 @@ pub struct VkImageCreateFlags {
     pub extended_usage: bool,
     pub protected: bool,
     pub disjoint: bool,
+    pub corner_sampled_nv: bool,
     pub sample_locations_compatible_depth_ext: bool,
+    pub subsampled_ext: bool,
 }
 
 impl VkRawType<VkImageCreateFlags> for RawVkImageCreateFlags {
@@ -36,7 +38,9 @@ impl VkRawType<VkImageCreateFlags> for RawVkImageCreateFlags {
             extended_usage: (src & 0x00000100) != 0,
             protected: (src & 0x00000800) != 0,
             disjoint: (src & 0x00000200) != 0,
+            corner_sampled_nv: (src & 0x00002000) != 0,
             sample_locations_compatible_depth_ext: (src & 0x00001000) != 0,
+            subsampled_ext: (src & 0x00004000) != 0,
         }
     }
 }
@@ -56,7 +60,9 @@ impl VkWrappedType<RawVkImageCreateFlags> for VkImageCreateFlags {
         if src.extended_usage { *dst |= 0x00000100; }
         if src.protected { *dst |= 0x00000800; }
         if src.disjoint { *dst |= 0x00000200; }
+        if src.corner_sampled_nv { *dst |= 0x00002000; }
         if src.sample_locations_compatible_depth_ext { *dst |= 0x00001000; }
+        if src.subsampled_ext { *dst |= 0x00004000; }
     }
 }
 
@@ -75,7 +81,9 @@ impl Default for VkImageCreateFlags {
             extended_usage: false,
             protected: false,
             disjoint: false,
+            corner_sampled_nv: false,
             sample_locations_compatible_depth_ext: false,
+            subsampled_ext: false,
         }
     }
 }
@@ -96,7 +104,9 @@ impl VkImageCreateFlags {
             extended_usage: false,
             protected: false,
             disjoint: false,
+            corner_sampled_nv: false,
             sample_locations_compatible_depth_ext: false,
+            subsampled_ext: false,
         }
     }
     
@@ -114,7 +124,9 @@ impl VkImageCreateFlags {
             extended_usage: true,
             protected: true,
             disjoint: true,
+            corner_sampled_nv: true,
             sample_locations_compatible_depth_ext: true,
+            subsampled_ext: true,
         }
     }
 }
@@ -135,6 +147,8 @@ impl VkImageCreateFlags {
         + if self.extended_usage { 0x00000100 } else { 0 }
         + if self.protected { 0x00000800 } else { 0 }
         + if self.disjoint { 0x00000200 } else { 0 }
+        + if self.corner_sampled_nv { 0x00002000 } else { 0 }
         + if self.sample_locations_compatible_depth_ext { 0x00001000 } else { 0 }
+        + if self.subsampled_ext { 0x00004000 } else { 0 }
     }
 }

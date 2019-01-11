@@ -68,10 +68,4 @@ impl VkIndirectCommandsLayout {
     pub fn handle(&self) -> u64 {
         self._handle
     }
-    
-    pub fn destroy(&self) {
-        unsafe {
-            ((&*self._fn_table).vkDestroyIndirectCommandsLayoutNVX)(self._parent_device, self._handle, ptr::null());
-        }
-    }
 }

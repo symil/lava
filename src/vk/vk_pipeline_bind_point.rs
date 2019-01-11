@@ -9,6 +9,7 @@ pub type RawVkPipelineBindPoint = i32;
 pub enum VkPipelineBindPoint {
     Graphics = 0,
     Compute = 1,
+    RayTracingNv = 1000165000,
 }
 
 impl VkRawType<VkPipelineBindPoint> for RawVkPipelineBindPoint {

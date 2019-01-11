@@ -13,6 +13,10 @@ pub struct VkImageAspectFlags {
     pub plane_0: bool,
     pub plane_1: bool,
     pub plane_2: bool,
+    pub memory_plane_0_ext: bool,
+    pub memory_plane_1_ext: bool,
+    pub memory_plane_2_ext: bool,
+    pub memory_plane_3_ext: bool,
 }
 
 impl VkRawType<VkImageAspectFlags> for RawVkImageAspectFlags {
@@ -25,6 +29,10 @@ impl VkRawType<VkImageAspectFlags> for RawVkImageAspectFlags {
             plane_0: (src & 0x00000010) != 0,
             plane_1: (src & 0x00000020) != 0,
             plane_2: (src & 0x00000040) != 0,
+            memory_plane_0_ext: (src & 0x00000080) != 0,
+            memory_plane_1_ext: (src & 0x00000100) != 0,
+            memory_plane_2_ext: (src & 0x00000200) != 0,
+            memory_plane_3_ext: (src & 0x00000400) != 0,
         }
     }
 }
@@ -39,6 +47,10 @@ impl VkWrappedType<RawVkImageAspectFlags> for VkImageAspectFlags {
         if src.plane_0 { *dst |= 0x00000010; }
         if src.plane_1 { *dst |= 0x00000020; }
         if src.plane_2 { *dst |= 0x00000040; }
+        if src.memory_plane_0_ext { *dst |= 0x00000080; }
+        if src.memory_plane_1_ext { *dst |= 0x00000100; }
+        if src.memory_plane_2_ext { *dst |= 0x00000200; }
+        if src.memory_plane_3_ext { *dst |= 0x00000400; }
     }
 }
 
@@ -52,6 +64,10 @@ impl Default for VkImageAspectFlags {
             plane_0: false,
             plane_1: false,
             plane_2: false,
+            memory_plane_0_ext: false,
+            memory_plane_1_ext: false,
+            memory_plane_2_ext: false,
+            memory_plane_3_ext: false,
         }
     }
 }
@@ -67,6 +83,10 @@ impl VkImageAspectFlags {
             plane_0: false,
             plane_1: false,
             plane_2: false,
+            memory_plane_0_ext: false,
+            memory_plane_1_ext: false,
+            memory_plane_2_ext: false,
+            memory_plane_3_ext: false,
         }
     }
     
@@ -79,6 +99,10 @@ impl VkImageAspectFlags {
             plane_0: true,
             plane_1: true,
             plane_2: true,
+            memory_plane_0_ext: true,
+            memory_plane_1_ext: true,
+            memory_plane_2_ext: true,
+            memory_plane_3_ext: true,
         }
     }
 }
@@ -94,5 +118,9 @@ impl VkImageAspectFlags {
         + if self.plane_0 { 0x00000010 } else { 0 }
         + if self.plane_1 { 0x00000020 } else { 0 }
         + if self.plane_2 { 0x00000040 } else { 0 }
+        + if self.memory_plane_0_ext { 0x00000080 } else { 0 }
+        + if self.memory_plane_1_ext { 0x00000100 } else { 0 }
+        + if self.memory_plane_2_ext { 0x00000200 } else { 0 }
+        + if self.memory_plane_3_ext { 0x00000400 } else { 0 }
     }
 }

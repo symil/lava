@@ -43,6 +43,7 @@ pub enum VkDebugReportObjectType {
     ValidationCacheExt = 33,
     SamplerYcbcrConversion = 1000156000,
     DescriptorUpdateTemplate = 1000085000,
+    AccelerationStructureNv = 1000165000,
 }
 
 impl VkRawType<VkDebugReportObjectType> for RawVkDebugReportObjectType {

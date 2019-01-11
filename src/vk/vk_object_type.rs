@@ -44,6 +44,7 @@ pub enum VkObjectType {
     IndirectCommandsLayoutNvx = 1000086001,
     DebugUtilsMessengerExt = 1000128000,
     ValidationCacheExt = 1000160000,
+    AccelerationStructureNv = 1000165000,
 }
 
 impl VkRawType<VkObjectType> for RawVkObjectType {

@@ -34,8 +34,10 @@ pub enum VkResult {
     ErrorIncompatibleDisplayKhr = -1000003001,
     ErrorValidationFailedExt = -1000011001,
     ErrorInvalidShaderNv = -1000012000,
+    ErrorInvalidDrmFormatModifierPlaneLayoutExt = -1000158000,
     ErrorFragmentationExt = -1000161000,
     ErrorNotPermittedExt = -1000174001,
+    ErrorInvalidDeviceAddressExt = -1000244000,
 }
 
 impl VkRawType<VkResult> for RawVkResult {

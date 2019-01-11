@@ -15,7 +15,11 @@ pub struct VkBufferUsageFlags {
     pub index_buffer: bool,
     pub vertex_buffer: bool,
     pub indirect_buffer: bool,
+    pub transform_feedback_buffer_ext: bool,
+    pub transform_feedback_counter_buffer_ext: bool,
     pub conditional_rendering_ext: bool,
+    pub ray_tracing_nv: bool,
+    pub shader_device_address_ext: bool,
 }
 
 impl VkRawType<VkBufferUsageFlags> for RawVkBufferUsageFlags {
@@ -30,7 +34,11 @@ impl VkRawType<VkBufferUsageFlags> for RawVkBufferUsageFlags {
             index_buffer: (src & 0x00000040) != 0,
             vertex_buffer: (src & 0x00000080) != 0,
             indirect_buffer: (src & 0x00000100) != 0,
+            transform_feedback_buffer_ext: (src & 0x00000800) != 0,
+            transform_feedback_counter_buffer_ext: (src & 0x00001000) != 0,
             conditional_rendering_ext: (src & 0x00000200) != 0,
+            ray_tracing_nv: (src & 0x00000400) != 0,
+            shader_device_address_ext: (src & 0x00020000) != 0,
         }
     }
 }
@@ -47,7 +55,11 @@ impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
         if src.index_buffer { *dst |= 0x00000040; }
         if src.vertex_buffer { *dst |= 0x00000080; }
         if src.indirect_buffer { *dst |= 0x00000100; }
+        if src.transform_feedback_buffer_ext { *dst |= 0x00000800; }
+        if src.transform_feedback_counter_buffer_ext { *dst |= 0x00001000; }
         if src.conditional_rendering_ext { *dst |= 0x00000200; }
+        if src.ray_tracing_nv { *dst |= 0x00000400; }
+        if src.shader_device_address_ext { *dst |= 0x00020000; }
     }
 }
 
@@ -63,7 +75,11 @@ impl Default for VkBufferUsageFlags {
             index_buffer: false,
             vertex_buffer: false,
             indirect_buffer: false,
+            transform_feedback_buffer_ext: false,
+            transform_feedback_counter_buffer_ext: false,
             conditional_rendering_ext: false,
+            ray_tracing_nv: false,
+            shader_device_address_ext: false,
         }
     }
 }
@@ -81,7 +97,11 @@ impl VkBufferUsageFlags {
             index_buffer: false,
             vertex_buffer: false,
             indirect_buffer: false,
+            transform_feedback_buffer_ext: false,
+            transform_feedback_counter_buffer_ext: false,
             conditional_rendering_ext: false,
+            ray_tracing_nv: false,
+            shader_device_address_ext: false,
         }
     }
     
@@ -96,7 +116,11 @@ impl VkBufferUsageFlags {
             index_buffer: true,
             vertex_buffer: true,
             indirect_buffer: true,
+            transform_feedback_buffer_ext: true,
+            transform_feedback_counter_buffer_ext: true,
             conditional_rendering_ext: true,
+            ray_tracing_nv: true,
+            shader_device_address_ext: true,
         }
     }
 }
@@ -114,6 +138,10 @@ impl VkBufferUsageFlags {
         + if self.index_buffer { 0x00000040 } else { 0 }
         + if self.vertex_buffer { 0x00000080 } else { 0 }
         + if self.indirect_buffer { 0x00000100 } else { 0 }
+        + if self.transform_feedback_buffer_ext { 0x00000800 } else { 0 }
+        + if self.transform_feedback_counter_buffer_ext { 0x00001000 } else { 0 }
         + if self.conditional_rendering_ext { 0x00000200 } else { 0 }
+        + if self.ray_tracing_nv { 0x00000400 } else { 0 }
+        + if self.shader_device_address_ext { 0x00020000 } else { 0 }
     }
 }

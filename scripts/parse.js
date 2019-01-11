@@ -47,11 +47,18 @@ function get(obj, type) {
     return (obj[type.extension] || {})[type.typeName];
 }
 
+function isAllowedFunction(func) {
+    const allowedExtensions = ['EXT', 'KHR'];
+    const hasExtension = /[A-Z]{2}$/.test(func.name);
+
+    return !hasExtension || allowedExtensions.some(ext => func.name.endsWith(ext));
+}
+
 function getAllEnums() { return getAll(ENUMS); }
 function getAllBitFlags() { return getAll(BIT_FLAGS); }
 function getAllStructs() { return getAll(STRUCTS); }
 function getAllHandles() { return getAll(HANDLES); }
-function getAllFunctions() { bootstrap(); return FUNCTIONS.slice(); }
+function getAllFunctions() { bootstrap(); return FUNCTIONS.slice().filter(isAllowedFunction); }
 
 function getEnumByName(name) { return getByName(ENUMS, name); }
 function getBitFlagsByName(name) { return getByName(BIT_FLAGS, name); }

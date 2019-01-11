@@ -219,7 +219,8 @@ function idFunction(name) {
 }
 
 function functionToMethod(handle, func) {
-    // if (func.name === 'vkGetValidationCacheDataEXT') console.log(func.args)
+    // const DEBUG = func.name === 'vkGetAccelerationStructureHandleNV';
+    // if (DEBUG) console.log(func.args);
 
     const lastArg = func.args.last();
     const beforeLastArg = func.args.beforeLast();

@@ -761,49 +761,6 @@ impl VkPhysicalDevice {
         }
     }
     
-    pub fn get_external_image_format_properties(&self, format: VkFormat, type_: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags, external_handle_type: nv::VkExternalMemoryHandleTypeFlags) -> Result<nv::VkExternalImageFormatProperties, (VkResult, nv::VkExternalImageFormatProperties)> {
-        unsafe {
-            let raw_format = vk_to_raw_value(&format);
-            let raw_type_ = vk_to_raw_value(&type_);
-            let raw_tiling = vk_to_raw_value(&tiling);
-            let raw_usage = vk_to_raw_value(&usage);
-            let raw_flags = vk_to_raw_value(&flags);
-            let raw_external_handle_type = vk_to_raw_value(&external_handle_type);
-            let mut vk_result = 0;
-            let raw_external_image_format_properties = &mut mem::zeroed() as *mut nv::RawVkExternalImageFormatProperties;
-            
-            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceExternalImageFormatPropertiesNV)(self._handle, raw_format, raw_type_, raw_tiling, raw_usage, raw_flags, raw_external_handle_type, raw_external_image_format_properties);
-            
-            let mut external_image_format_properties = new_vk_value(raw_external_image_format_properties);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut external_image_format_properties, fn_table, parent_instance, parent_device);
-            }
-            nv::RawVkExternalImageFormatProperties::vk_free(raw_external_image_format_properties.as_mut().unwrap());
-            if vk_result == 0 { Ok(external_image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), external_image_format_properties)) }
-        }
-    }
-    
-    pub fn get_generated_commands_properties(&self, features: &nvx::VkDeviceGeneratedCommandsFeatures) -> nvx::VkDeviceGeneratedCommandsLimits {
-        unsafe {
-            let raw_features = new_ptr_vk_value(features);
-            let raw_limits = &mut mem::zeroed() as *mut nvx::RawVkDeviceGeneratedCommandsLimits;
-            
-            ((&*self._fn_table).vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX)(self._handle, raw_features, raw_limits);
-            
-            let mut limits = new_vk_value(raw_limits);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut limits, fn_table, parent_instance, parent_device);
-            free_vk_ptr(raw_features);
-            nvx::RawVkDeviceGeneratedCommandsLimits::vk_free(raw_limits.as_mut().unwrap());
-            limits
-        }
-    }
-    
     pub fn release_display(&self, display: &khr::VkDisplay) -> Result<(), VkResult> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
@@ -846,6 +803,22 @@ impl VkPhysicalDevice {
             VkSetup::vk_setup(&mut multisample_properties, fn_table, parent_instance, parent_device);
             ext::RawVkMultisampleProperties::vk_free(raw_multisample_properties.as_mut().unwrap());
             multisample_properties
+        }
+    }
+    
+    pub fn get_calibrateable_time_domains(&self) -> Result<Vec<ext::VkTimeDomain>, (VkResult, Vec<ext::VkTimeDomain>)> {
+        unsafe {
+            let mut vk_result = 0;
+            let mut raw_time_domains : *mut ext::RawVkTimeDomain = ptr::null_mut();
+            let raw_time_domain_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceCalibrateableTimeDomainsEXT)(self._handle, raw_time_domain_count, raw_time_domains);
+            raw_time_domains = calloc(*raw_time_domain_count as usize, mem::size_of::<ext::RawVkTimeDomain>()) as *mut ext::RawVkTimeDomain;
+            
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceCalibrateableTimeDomainsEXT)(self._handle, raw_time_domain_count, raw_time_domains);
+            
+            let time_domains = new_vk_array(*raw_time_domain_count, raw_time_domains);
+            free_ptr(raw_time_domains);
+            if vk_result == 0 { Ok(time_domains) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), time_domains)) }
         }
     }
 }

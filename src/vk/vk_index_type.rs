@@ -9,6 +9,7 @@ pub type RawVkIndexType = i32;
 pub enum VkIndexType {
     Uint16 = 0,
     Uint32 = 1,
+    NoneNv = 1000165000,
 }
 
 impl VkRawType<VkIndexType> for RawVkIndexType {

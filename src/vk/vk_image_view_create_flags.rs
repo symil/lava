@@ -6,13 +6,13 @@ pub type RawVkImageViewCreateFlags = u32;
 
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageViewCreateFlags {
-    
+    pub fragment_density_map_dynamic_ext: bool,
 }
 
 impl VkRawType<VkImageViewCreateFlags> for RawVkImageViewCreateFlags {
     fn vk_to_wrapped(src: &RawVkImageViewCreateFlags) -> VkImageViewCreateFlags {
         VkImageViewCreateFlags {
-            
+            fragment_density_map_dynamic_ext: (src & 0x00000001) != 0,
         }
     }
 }
@@ -20,13 +20,14 @@ impl VkRawType<VkImageViewCreateFlags> for RawVkImageViewCreateFlags {
 impl VkWrappedType<RawVkImageViewCreateFlags> for VkImageViewCreateFlags {
     fn vk_to_raw(src: &VkImageViewCreateFlags, dst: &mut RawVkImageViewCreateFlags) {
         *dst = 0;
+        if src.fragment_density_map_dynamic_ext { *dst |= 0x00000001; }
     }
 }
 
 impl Default for VkImageViewCreateFlags {
     fn default() -> VkImageViewCreateFlags {
         VkImageViewCreateFlags {
-            
+            fragment_density_map_dynamic_ext: false,
         }
     }
 }
@@ -35,13 +36,13 @@ impl VkImageViewCreateFlags {
     
     pub fn none() -> VkImageViewCreateFlags {
         VkImageViewCreateFlags {
-            
+            fragment_density_map_dynamic_ext: false,
         }
     }
     
     pub fn all() -> VkImageViewCreateFlags {
         VkImageViewCreateFlags {
-            
+            fragment_density_map_dynamic_ext: true,
         }
     }
 }
@@ -50,5 +51,6 @@ impl VkImageViewCreateFlags {
     
     pub fn to_u32(&self) -> u32 {
         0
+        + if self.fragment_density_map_dynamic_ext { 0x00000001 } else { 0 }
     }
 }

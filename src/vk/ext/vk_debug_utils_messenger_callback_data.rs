@@ -46,8 +46,8 @@ pub struct VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     pub message_id_name: Option<&'a str>,
     pub message_id_number: isize,
     pub message: &'b str,
-    pub queue_labels: Option<&'c [VkDebugUtilsLabel<'d>]>,
-    pub cmd_buf_labels: Option<&'e [VkDebugUtilsLabel<'f>]>,
+    pub queue_labels: &'c [VkDebugUtilsLabel<'d>],
+    pub cmd_buf_labels: &'e [VkDebugUtilsLabel<'f>],
     pub objects: &'g [VkDebugUtilsObjectNameInfo<'h>],
 }
 
@@ -64,10 +64,10 @@ impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkWrappedType<RawVkDebugUtilsMessengerCallb
         dst.message_id_name = new_ptr_string_checked(src.message_id_name);
         dst.message_id_number = vk_to_raw_value(&src.message_id_number);
         dst.message = new_ptr_string(src.message);
-        dst.queue_label_count = get_array_option_len(src.queue_labels) as u32;
-        dst.queue_labels = new_ptr_vk_array_checked(src.queue_labels);
-        dst.cmd_buf_label_count = get_array_option_len(src.cmd_buf_labels) as u32;
-        dst.cmd_buf_labels = new_ptr_vk_array_checked(src.cmd_buf_labels);
+        dst.queue_label_count = src.queue_labels.len() as u32;
+        dst.queue_labels = new_ptr_vk_array(src.queue_labels);
+        dst.cmd_buf_label_count = src.cmd_buf_labels.len() as u32;
+        dst.cmd_buf_labels = new_ptr_vk_array(src.cmd_buf_labels);
         dst.object_count = src.objects.len() as u32;
         dst.objects = new_ptr_vk_array(src.objects);
     }
@@ -80,8 +80,8 @@ impl Default for VkDebugUtilsMessengerCallbackData<'static, 'static, 'static, 's
             message_id_name: None,
             message_id_number: 0,
             message: "",
-            queue_labels: None,
-            cmd_buf_labels: None,
+            queue_labels: &[],
+            cmd_buf_labels: &[],
             objects: &[],
         }
     }

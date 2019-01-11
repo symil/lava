@@ -662,27 +662,72 @@ impl VkCommandBuffer {
         }
     }
     
-    pub fn cmd_draw_indirect_count_amd(&self, buffer: &VkBuffer, offset: usize, count_buffer: &VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+    pub fn cmd_bind_transform_feedback_buffers(&self, first_binding: usize, buffers: &[&VkBuffer], offsets: &[usize], sizes: Option<&[usize]>) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
-            let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(count_buffer);
-            let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
-            let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
-            let raw_stride = vk_to_raw_value(&stride);
-            ((&*self._fn_table).vkCmdDrawIndirectCountAMD)(self._handle, raw_buffer, raw_offset, raw_count_buffer, raw_count_buffer_offset, raw_max_draw_count, raw_stride);
+            let raw_first_binding = vk_to_raw_value(&first_binding);
+            let raw_binding_count = cmp::max(cmp::max(buffers.len(), offsets.len()), get_array_option_len(sizes)) as u32;
+            let raw_buffers = new_ptr_vk_array_from_ref(buffers);
+            let raw_offsets = new_ptr_vk_array(offsets);
+            let raw_sizes = new_ptr_vk_array_checked(sizes);
+            ((&*self._fn_table).vkCmdBindTransformFeedbackBuffersEXT)(self._handle, raw_first_binding, raw_binding_count, raw_buffers, raw_offsets, raw_sizes);
+            free_ptr(raw_buffers);
+            free_ptr(raw_offsets);
+            free_ptr(raw_sizes);
         }
     }
     
-    pub fn cmd_draw_indexed_indirect_count_amd(&self, buffer: &VkBuffer, offset: usize, count_buffer: &VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+    pub fn cmd_begin_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: Option<&[&VkBuffer]>, counter_buffer_offsets: Option<&[usize]>) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
-            let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(count_buffer);
-            let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
-            let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
-            let raw_stride = vk_to_raw_value(&stride);
-            ((&*self._fn_table).vkCmdDrawIndexedIndirectCountAMD)(self._handle, raw_buffer, raw_offset, raw_count_buffer, raw_count_buffer_offset, raw_max_draw_count, raw_stride);
+            let raw_first_counter_buffer = vk_to_raw_value(&first_counter_buffer);
+            let raw_counter_buffer_count = cmp::max(get_array_option_len(counter_buffers), get_array_option_len(counter_buffer_offsets)) as u32;
+            let raw_counter_buffers = new_ptr_vk_array_checked_from_ref(counter_buffers);
+            let raw_counter_buffer_offsets = new_ptr_vk_array_checked(counter_buffer_offsets);
+            ((&*self._fn_table).vkCmdBeginTransformFeedbackEXT)(self._handle, raw_first_counter_buffer, raw_counter_buffer_count, raw_counter_buffers, raw_counter_buffer_offsets);
+            free_ptr(raw_counter_buffers);
+            free_ptr(raw_counter_buffer_offsets);
+        }
+    }
+    
+    pub fn cmd_end_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: Option<&[&VkBuffer]>, counter_buffer_offsets: Option<&[usize]>) {
+        unsafe {
+            let raw_first_counter_buffer = vk_to_raw_value(&first_counter_buffer);
+            let raw_counter_buffer_count = cmp::max(get_array_option_len(counter_buffers), get_array_option_len(counter_buffer_offsets)) as u32;
+            let raw_counter_buffers = new_ptr_vk_array_checked_from_ref(counter_buffers);
+            let raw_counter_buffer_offsets = new_ptr_vk_array_checked(counter_buffer_offsets);
+            ((&*self._fn_table).vkCmdEndTransformFeedbackEXT)(self._handle, raw_first_counter_buffer, raw_counter_buffer_count, raw_counter_buffers, raw_counter_buffer_offsets);
+            free_ptr(raw_counter_buffers);
+            free_ptr(raw_counter_buffer_offsets);
+        }
+    }
+    
+    pub fn cmd_begin_query_indexed(&self, query_pool: &VkQueryPool, query: usize, flags: VkQueryControlFlags, index: usize) {
+        unsafe {
+            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query = vk_to_raw_value(&query);
+            let raw_flags = vk_to_raw_value(&flags);
+            let raw_index = vk_to_raw_value(&index);
+            ((&*self._fn_table).vkCmdBeginQueryIndexedEXT)(self._handle, raw_query_pool, raw_query, raw_flags, raw_index);
+        }
+    }
+    
+    pub fn cmd_end_query_indexed(&self, query_pool: &VkQueryPool, query: usize, index: usize) {
+        unsafe {
+            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query = vk_to_raw_value(&query);
+            let raw_index = vk_to_raw_value(&index);
+            ((&*self._fn_table).vkCmdEndQueryIndexedEXT)(self._handle, raw_query_pool, raw_query, raw_index);
+        }
+    }
+    
+    pub fn cmd_draw_indirect_byte_count(&self, instance_count: usize, first_instance: usize, counter_buffer: &VkBuffer, counter_buffer_offset: usize, counter_offset: usize, vertex_stride: usize) {
+        unsafe {
+            let raw_instance_count = vk_to_raw_value(&instance_count);
+            let raw_first_instance = vk_to_raw_value(&first_instance);
+            let raw_counter_buffer = vk_to_raw_value(counter_buffer);
+            let raw_counter_buffer_offset = vk_to_raw_value(&counter_buffer_offset);
+            let raw_counter_offset = vk_to_raw_value(&counter_offset);
+            let raw_vertex_stride = vk_to_raw_value(&vertex_stride);
+            ((&*self._fn_table).vkCmdDrawIndirectByteCountEXT)(self._handle, raw_instance_count, raw_first_instance, raw_counter_buffer, raw_counter_buffer_offset, raw_counter_offset, raw_vertex_stride);
         }
     }
     
@@ -697,32 +742,6 @@ impl VkCommandBuffer {
     pub fn cmd_end_conditional_rendering(&self) {
         unsafe {
             ((&*self._fn_table).vkCmdEndConditionalRenderingEXT)(self._handle);
-        }
-    }
-    
-    pub fn cmd_process_commands(&self, process_commands_info: &nvx::VkCmdProcessCommandsInfo) {
-        unsafe {
-            let raw_process_commands_info = new_ptr_vk_value(process_commands_info);
-            ((&*self._fn_table).vkCmdProcessCommandsNVX)(self._handle, raw_process_commands_info);
-            free_vk_ptr(raw_process_commands_info);
-        }
-    }
-    
-    pub fn cmd_reserve_space_for_commands(&self, reserve_space_info: &nvx::VkCmdReserveSpaceForCommandsInfo) {
-        unsafe {
-            let raw_reserve_space_info = new_ptr_vk_value(reserve_space_info);
-            ((&*self._fn_table).vkCmdReserveSpaceForCommandsNVX)(self._handle, raw_reserve_space_info);
-            free_vk_ptr(raw_reserve_space_info);
-        }
-    }
-    
-    pub fn cmd_set_viewport_wscaling(&self, first_viewport: usize, viewport_wscalings: &[nv::VkViewportWScaling]) {
-        unsafe {
-            let raw_first_viewport = vk_to_raw_value(&first_viewport);
-            let raw_viewport_count = viewport_wscalings.len() as u32;
-            let raw_viewport_wscalings = new_ptr_vk_array(viewport_wscalings);
-            ((&*self._fn_table).vkCmdSetViewportWScalingNV)(self._handle, raw_first_viewport, raw_viewport_count, raw_viewport_wscalings);
-            free_vk_ptr_array(raw_viewport_count as usize, raw_viewport_wscalings);
         }
     }
     
@@ -763,23 +782,6 @@ impl VkCommandBuffer {
             let raw_sample_locations_info = new_ptr_vk_value(sample_locations_info);
             ((&*self._fn_table).vkCmdSetSampleLocationsEXT)(self._handle, raw_sample_locations_info);
             free_vk_ptr(raw_sample_locations_info);
-        }
-    }
-    
-    pub fn cmd_write_buffer_marker(&self, pipeline_stage: VkPipelineStageFlags, dst_buffer: &VkBuffer, dst_offset: usize, marker: usize) {
-        unsafe {
-            let raw_pipeline_stage = vk_to_raw_value(&pipeline_stage);
-            let raw_dst_buffer = vk_to_raw_value(dst_buffer);
-            let raw_dst_offset = vk_to_raw_value(&dst_offset);
-            let raw_marker = vk_to_raw_value(&marker);
-            ((&*self._fn_table).vkCmdWriteBufferMarkerAMD)(self._handle, raw_pipeline_stage, raw_dst_buffer, raw_dst_offset, raw_marker);
-        }
-    }
-    
-    pub fn cmd_set_checkpoint(&self, checkpoint_marker: &c_void) {
-        unsafe {
-            let raw_checkpoint_marker = checkpoint_marker as *const c_void;
-            ((&*self._fn_table).vkCmdSetCheckpointNV)(self._handle, raw_checkpoint_marker);
         }
     }
 }

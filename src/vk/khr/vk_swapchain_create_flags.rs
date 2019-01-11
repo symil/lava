@@ -8,6 +8,7 @@ pub type RawVkSwapchainCreateFlags = u32;
 pub struct VkSwapchainCreateFlags {
     pub split_instance_bind_regions: bool,
     pub protected: bool,
+    pub mutable_format: bool,
 }
 
 impl VkRawType<VkSwapchainCreateFlags> for RawVkSwapchainCreateFlags {
@@ -15,6 +16,7 @@ impl VkRawType<VkSwapchainCreateFlags> for RawVkSwapchainCreateFlags {
         VkSwapchainCreateFlags {
             split_instance_bind_regions: (src & 0x00000001) != 0,
             protected: (src & 0x00000002) != 0,
+            mutable_format: (src & 0x00000004) != 0,
         }
     }
 }
@@ -24,6 +26,7 @@ impl VkWrappedType<RawVkSwapchainCreateFlags> for VkSwapchainCreateFlags {
         *dst = 0;
         if src.split_instance_bind_regions { *dst |= 0x00000001; }
         if src.protected { *dst |= 0x00000002; }
+        if src.mutable_format { *dst |= 0x00000004; }
     }
 }
 
@@ -32,6 +35,7 @@ impl Default for VkSwapchainCreateFlags {
         VkSwapchainCreateFlags {
             split_instance_bind_regions: false,
             protected: false,
+            mutable_format: false,
         }
     }
 }
@@ -42,6 +46,7 @@ impl VkSwapchainCreateFlags {
         VkSwapchainCreateFlags {
             split_instance_bind_regions: false,
             protected: false,
+            mutable_format: false,
         }
     }
     
@@ -49,6 +54,7 @@ impl VkSwapchainCreateFlags {
         VkSwapchainCreateFlags {
             split_instance_bind_regions: true,
             protected: true,
+            mutable_format: true,
         }
     }
 }
@@ -59,5 +65,6 @@ impl VkSwapchainCreateFlags {
         0
         + if self.split_instance_bind_regions { 0x00000001 } else { 0 }
         + if self.protected { 0x00000002 } else { 0 }
+        + if self.mutable_format { 0x00000004 } else { 0 }
     }
 }

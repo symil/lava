@@ -1007,46 +1007,6 @@ impl VkDevice {
         }
     }
     
-    pub fn create_indirect_commands_layout(&self, create_info: &nvx::VkIndirectCommandsLayoutCreateInfo) -> Result<nvx::VkIndirectCommandsLayout, (VkResult, nvx::VkIndirectCommandsLayout)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_indirect_commands_layout = &mut mem::zeroed() as *mut nvx::RawVkIndirectCommandsLayout;
-            
-            vk_result = ((&*self._fn_table).vkCreateIndirectCommandsLayoutNVX)(self._handle, raw_create_info, ptr::null(), raw_indirect_commands_layout);
-            
-            let mut indirect_commands_layout = new_vk_value(raw_indirect_commands_layout);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut indirect_commands_layout, fn_table, parent_instance, parent_device);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(indirect_commands_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), indirect_commands_layout)) }
-        }
-    }
-    
-    pub fn create_object_table(&self, create_info: &nvx::VkObjectTableCreateInfo) -> Result<nvx::VkObjectTable, (VkResult, nvx::VkObjectTable)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_object_table = &mut mem::zeroed() as *mut nvx::RawVkObjectTable;
-            
-            vk_result = ((&*self._fn_table).vkCreateObjectTableNVX)(self._handle, raw_create_info, ptr::null(), raw_object_table);
-            
-            let mut object_table = new_vk_value(raw_object_table);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut object_table, fn_table, parent_instance, parent_device);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(object_table) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), object_table)) }
-        }
-    }
-    
     pub fn display_power_control(&self, display: &khr::VkDisplay, display_power_info: &ext::VkDisplayPowerInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
@@ -1165,6 +1125,23 @@ impl VkDevice {
             }
             ext::RawVkMemoryHostPointerProperties::vk_free(raw_memory_host_pointer_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(memory_host_pointer_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), memory_host_pointer_properties)) }
+        }
+    }
+    
+    pub fn get_calibrated_timestamps(&self, timestamp_infos: &[ext::VkCalibratedTimestampInfo], timestamps: &[usize]) -> Result<usize, (VkResult, usize)> {
+        unsafe {
+            let raw_timestamp_count = timestamp_infos.len() as u32;
+            let raw_timestamp_infos = new_ptr_vk_array(timestamp_infos);
+            let raw_timestamps = new_ptr_vk_array(timestamps);
+            let mut vk_result = 0;
+            let raw_max_deviation = &mut mem::zeroed() as *mut u64;
+            
+            vk_result = ((&*self._fn_table).vkGetCalibratedTimestampsEXT)(self._handle, raw_timestamp_count, raw_timestamp_infos, raw_timestamps, raw_max_deviation);
+            
+            let max_deviation = new_vk_value(raw_max_deviation);
+            free_vk_ptr_array(raw_timestamp_count as usize, raw_timestamp_infos);
+            free_ptr(raw_timestamps);
+            if vk_result == 0 { Ok(max_deviation) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), max_deviation)) }
         }
     }
 }

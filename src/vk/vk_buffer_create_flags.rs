@@ -10,6 +10,7 @@ pub struct VkBufferCreateFlags {
     pub sparse_residency: bool,
     pub sparse_aliased: bool,
     pub protected: bool,
+    pub device_address_capture_replay_ext: bool,
 }
 
 impl VkRawType<VkBufferCreateFlags> for RawVkBufferCreateFlags {
@@ -19,6 +20,7 @@ impl VkRawType<VkBufferCreateFlags> for RawVkBufferCreateFlags {
             sparse_residency: (src & 0x00000002) != 0,
             sparse_aliased: (src & 0x00000004) != 0,
             protected: (src & 0x00000008) != 0,
+            device_address_capture_replay_ext: (src & 0x00000010) != 0,
         }
     }
 }
@@ -30,6 +32,7 @@ impl VkWrappedType<RawVkBufferCreateFlags> for VkBufferCreateFlags {
         if src.sparse_residency { *dst |= 0x00000002; }
         if src.sparse_aliased { *dst |= 0x00000004; }
         if src.protected { *dst |= 0x00000008; }
+        if src.device_address_capture_replay_ext { *dst |= 0x00000010; }
     }
 }
 
@@ -40,6 +43,7 @@ impl Default for VkBufferCreateFlags {
             sparse_residency: false,
             sparse_aliased: false,
             protected: false,
+            device_address_capture_replay_ext: false,
         }
     }
 }
@@ -52,6 +56,7 @@ impl VkBufferCreateFlags {
             sparse_residency: false,
             sparse_aliased: false,
             protected: false,
+            device_address_capture_replay_ext: false,
         }
     }
     
@@ -61,6 +66,7 @@ impl VkBufferCreateFlags {
             sparse_residency: true,
             sparse_aliased: true,
             protected: true,
+            device_address_capture_replay_ext: true,
         }
     }
 }
@@ -73,5 +79,6 @@ impl VkBufferCreateFlags {
         + if self.sparse_residency { 0x00000002 } else { 0 }
         + if self.sparse_aliased { 0x00000004 } else { 0 }
         + if self.protected { 0x00000008 } else { 0 }
+        + if self.device_address_capture_replay_ext { 0x00000010 } else { 0 }
     }
 }

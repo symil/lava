@@ -14,6 +14,8 @@ pub struct VkImageUsageFlags {
     pub depth_stencil_attachment: bool,
     pub transient_attachment: bool,
     pub input_attachment: bool,
+    pub shading_rate_image_nv: bool,
+    pub fragment_density_map_ext: bool,
 }
 
 impl VkRawType<VkImageUsageFlags> for RawVkImageUsageFlags {
@@ -27,6 +29,8 @@ impl VkRawType<VkImageUsageFlags> for RawVkImageUsageFlags {
             depth_stencil_attachment: (src & 0x00000020) != 0,
             transient_attachment: (src & 0x00000040) != 0,
             input_attachment: (src & 0x00000080) != 0,
+            shading_rate_image_nv: (src & 0x00000100) != 0,
+            fragment_density_map_ext: (src & 0x00000200) != 0,
         }
     }
 }
@@ -42,6 +46,8 @@ impl VkWrappedType<RawVkImageUsageFlags> for VkImageUsageFlags {
         if src.depth_stencil_attachment { *dst |= 0x00000020; }
         if src.transient_attachment { *dst |= 0x00000040; }
         if src.input_attachment { *dst |= 0x00000080; }
+        if src.shading_rate_image_nv { *dst |= 0x00000100; }
+        if src.fragment_density_map_ext { *dst |= 0x00000200; }
     }
 }
 
@@ -56,6 +62,8 @@ impl Default for VkImageUsageFlags {
             depth_stencil_attachment: false,
             transient_attachment: false,
             input_attachment: false,
+            shading_rate_image_nv: false,
+            fragment_density_map_ext: false,
         }
     }
 }
@@ -72,6 +80,8 @@ impl VkImageUsageFlags {
             depth_stencil_attachment: false,
             transient_attachment: false,
             input_attachment: false,
+            shading_rate_image_nv: false,
+            fragment_density_map_ext: false,
         }
     }
     
@@ -85,6 +95,8 @@ impl VkImageUsageFlags {
             depth_stencil_attachment: true,
             transient_attachment: true,
             input_attachment: true,
+            shading_rate_image_nv: true,
+            fragment_density_map_ext: true,
         }
     }
 }
@@ -101,5 +113,7 @@ impl VkImageUsageFlags {
         + if self.depth_stencil_attachment { 0x00000020 } else { 0 }
         + if self.transient_attachment { 0x00000040 } else { 0 }
         + if self.input_attachment { 0x00000080 } else { 0 }
+        + if self.shading_rate_image_nv { 0x00000100 } else { 0 }
+        + if self.fragment_density_map_ext { 0x00000200 } else { 0 }
     }
 }

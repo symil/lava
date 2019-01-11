@@ -19,6 +19,9 @@ pub enum VkDynamicState {
     ViewportWScalingNv = 1000087000,
     DiscardRectangleExt = 1000099000,
     SampleLocationsExt = 1000143000,
+    ViewportShadingRatePaletteNv = 1000164004,
+    ViewportCoarseSampleOrderNv = 1000164006,
+    ExclusiveScissorNv = 1000205001,
 }
 
 impl VkRawType<VkDynamicState> for RawVkDynamicState {
