@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_validation_cache_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkValidationCacheCreateInfo<'a> {
+    pub flags: VkValidationCacheCreateFlags,
+    pub initial_data_size: usize,
+    pub initial_data: &'a c_void,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkValidationCacheCreateInfo {
@@ -24,13 +31,6 @@ pub struct RawVkValidationCacheCreateInfo {
     pub flags: RawVkValidationCacheCreateFlags,
     pub initial_data_size: usize,
     pub initial_data: *const c_void,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkValidationCacheCreateInfo<'a> {
-    pub flags: VkValidationCacheCreateFlags,
-    pub initial_data_size: usize,
-    pub initial_data: &'a c_void,
 }
 
 impl<'a> VkWrappedType<RawVkValidationCacheCreateInfo> for VkValidationCacheCreateInfo<'a> {

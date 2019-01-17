@@ -16,6 +16,14 @@ use vk::vk_device::*;
 use vk::vk_image_subresource_layers::*;
 use vk::vk_offset_3d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageBlit {
+    pub src_subresource: VkImageSubresourceLayers,
+    pub src_offsets: [VkOffset3D; 2],
+    pub dst_subresource: VkImageSubresourceLayers,
+    pub dst_offsets: [VkOffset3D; 2],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageBlit {
@@ -25,12 +33,13 @@ pub struct RawVkImageBlit {
     pub dst_offsets: [RawVkOffset3D; 2],
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageBlit {
-    pub src_subresource: VkImageSubresourceLayers,
-    pub src_offsets: [VkOffset3D; 2],
-    pub dst_subresource: VkImageSubresourceLayers,
-    pub dst_offsets: [VkOffset3D; 2],
+impl VkWrappedType<RawVkImageBlit> for VkImageBlit {
+    fn vk_to_raw(src: &VkImageBlit, dst: &mut RawVkImageBlit) {
+        dst.src_subresource = vk_to_raw_value(&src.src_subresource);
+        dst.src_offsets = unsafe { let mut dst_array : [RawVkOffset3D; 2] = mem::uninitialized(); vk_to_raw_array(&src.src_offsets, &mut dst_array); dst_array };
+        dst.dst_subresource = vk_to_raw_value(&src.dst_subresource);
+        dst.dst_offsets = unsafe { let mut dst_array : [RawVkOffset3D; 2] = mem::uninitialized(); vk_to_raw_array(&src.dst_offsets, &mut dst_array); dst_array };
+    }
 }
 
 impl VkRawType<VkImageBlit> for RawVkImageBlit {
@@ -41,15 +50,6 @@ impl VkRawType<VkImageBlit> for RawVkImageBlit {
             dst_subresource: RawVkImageSubresourceLayers::vk_to_wrapped(&src.dst_subresource),
             dst_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::uninitialized(); vk_to_wrapped_array(&src.dst_offsets, &mut dst_array); dst_array },
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageBlit> for VkImageBlit {
-    fn vk_to_raw(src: &VkImageBlit, dst: &mut RawVkImageBlit) {
-        dst.src_subresource = vk_to_raw_value(&src.src_subresource);
-        dst.src_offsets = unsafe { let mut dst_array : [RawVkOffset3D; 2] = mem::uninitialized(); vk_to_raw_array(&src.src_offsets, &mut dst_array); dst_array };
-        dst.dst_subresource = vk_to_raw_value(&src.dst_subresource);
-        dst.dst_offsets = unsafe { let mut dst_array : [RawVkOffset3D; 2] = mem::uninitialized(); vk_to_raw_array(&src.dst_offsets, &mut dst_array); dst_array };
     }
 }
 

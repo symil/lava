@@ -14,6 +14,13 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDispatchIndirectCommand {
+    pub x: u32,
+    pub y: u32,
+    pub z: u32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDispatchIndirectCommand {
@@ -22,11 +29,12 @@ pub struct RawVkDispatchIndirectCommand {
     pub z: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDispatchIndirectCommand {
-    pub x: u32,
-    pub y: u32,
-    pub z: u32,
+impl VkWrappedType<RawVkDispatchIndirectCommand> for VkDispatchIndirectCommand {
+    fn vk_to_raw(src: &VkDispatchIndirectCommand, dst: &mut RawVkDispatchIndirectCommand) {
+        dst.x = src.x;
+        dst.y = src.y;
+        dst.z = src.z;
+    }
 }
 
 impl VkRawType<VkDispatchIndirectCommand> for RawVkDispatchIndirectCommand {
@@ -36,14 +44,6 @@ impl VkRawType<VkDispatchIndirectCommand> for RawVkDispatchIndirectCommand {
             y: src.y,
             z: src.z,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDispatchIndirectCommand> for VkDispatchIndirectCommand {
-    fn vk_to_raw(src: &VkDispatchIndirectCommand, dst: &mut RawVkDispatchIndirectCommand) {
-        dst.x = src.x;
-        dst.y = src.y;
-        dst.z = src.z;
     }
 }
 

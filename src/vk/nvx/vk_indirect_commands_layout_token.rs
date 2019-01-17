@@ -15,6 +15,14 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::nvx::vk_indirect_commands_token_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkIndirectCommandsLayoutToken {
+    pub token_type: VkIndirectCommandsTokenType,
+    pub binding_unit: usize,
+    pub dynamic_count: usize,
+    pub divisor: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkIndirectCommandsLayoutToken {
@@ -24,12 +32,13 @@ pub struct RawVkIndirectCommandsLayoutToken {
     pub divisor: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkIndirectCommandsLayoutToken {
-    pub token_type: VkIndirectCommandsTokenType,
-    pub binding_unit: usize,
-    pub dynamic_count: usize,
-    pub divisor: usize,
+impl VkWrappedType<RawVkIndirectCommandsLayoutToken> for VkIndirectCommandsLayoutToken {
+    fn vk_to_raw(src: &VkIndirectCommandsLayoutToken, dst: &mut RawVkIndirectCommandsLayoutToken) {
+        dst.token_type = vk_to_raw_value(&src.token_type);
+        dst.binding_unit = vk_to_raw_value(&src.binding_unit);
+        dst.dynamic_count = vk_to_raw_value(&src.dynamic_count);
+        dst.divisor = vk_to_raw_value(&src.divisor);
+    }
 }
 
 impl VkRawType<VkIndirectCommandsLayoutToken> for RawVkIndirectCommandsLayoutToken {
@@ -40,15 +49,6 @@ impl VkRawType<VkIndirectCommandsLayoutToken> for RawVkIndirectCommandsLayoutTok
             dynamic_count: u32::vk_to_wrapped(&src.dynamic_count),
             divisor: u32::vk_to_wrapped(&src.divisor),
         }
-    }
-}
-
-impl VkWrappedType<RawVkIndirectCommandsLayoutToken> for VkIndirectCommandsLayoutToken {
-    fn vk_to_raw(src: &VkIndirectCommandsLayoutToken, dst: &mut RawVkIndirectCommandsLayoutToken) {
-        dst.token_type = vk_to_raw_value(&src.token_type);
-        dst.binding_unit = vk_to_raw_value(&src.binding_unit);
-        dst.dynamic_count = vk_to_raw_value(&src.dynamic_count);
-        dst.divisor = vk_to_raw_value(&src.divisor);
     }
 }
 

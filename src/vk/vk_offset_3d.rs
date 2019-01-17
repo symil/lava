@@ -14,6 +14,13 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkOffset3D {
+    pub x: i32,
+    pub y: i32,
+    pub z: i32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkOffset3D {
@@ -22,11 +29,12 @@ pub struct RawVkOffset3D {
     pub z: i32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkOffset3D {
-    pub x: i32,
-    pub y: i32,
-    pub z: i32,
+impl VkWrappedType<RawVkOffset3D> for VkOffset3D {
+    fn vk_to_raw(src: &VkOffset3D, dst: &mut RawVkOffset3D) {
+        dst.x = src.x;
+        dst.y = src.y;
+        dst.z = src.z;
+    }
 }
 
 impl VkRawType<VkOffset3D> for RawVkOffset3D {
@@ -36,14 +44,6 @@ impl VkRawType<VkOffset3D> for RawVkOffset3D {
             y: src.y,
             z: src.z,
         }
-    }
-}
-
-impl VkWrappedType<RawVkOffset3D> for VkOffset3D {
-    fn vk_to_raw(src: &VkOffset3D, dst: &mut RawVkOffset3D) {
-        dst.x = src.x;
-        dst.y = src.y;
-        dst.z = src.z;
     }
 }
 

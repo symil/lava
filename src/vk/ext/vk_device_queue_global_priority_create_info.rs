@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_queue_global_priority::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceQueueGlobalPriorityCreateInfo {
+    pub global_priority: VkQueueGlobalPriority,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceQueueGlobalPriorityCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkDeviceQueueGlobalPriorityCreateInfo {
     pub global_priority: RawVkQueueGlobalPriority,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceQueueGlobalPriorityCreateInfo {
-    pub global_priority: VkQueueGlobalPriority,
+impl VkWrappedType<RawVkDeviceQueueGlobalPriorityCreateInfo> for VkDeviceQueueGlobalPriorityCreateInfo {
+    fn vk_to_raw(src: &VkDeviceQueueGlobalPriorityCreateInfo, dst: &mut RawVkDeviceQueueGlobalPriorityCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceQueueGlobalPriorityCreateInfoExt);
+        dst.next = ptr::null();
+        dst.global_priority = vk_to_raw_value(&src.global_priority);
+    }
 }
 
 impl VkRawType<VkDeviceQueueGlobalPriorityCreateInfo> for RawVkDeviceQueueGlobalPriorityCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkDeviceQueueGlobalPriorityCreateInfo> for RawVkDeviceQueueGlobal
         VkDeviceQueueGlobalPriorityCreateInfo {
             global_priority: RawVkQueueGlobalPriority::vk_to_wrapped(&src.global_priority),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceQueueGlobalPriorityCreateInfo> for VkDeviceQueueGlobalPriorityCreateInfo {
-    fn vk_to_raw(src: &VkDeviceQueueGlobalPriorityCreateInfo, dst: &mut RawVkDeviceQueueGlobalPriorityCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceQueueGlobalPriorityCreateInfoExt);
-        dst.next = ptr::null();
-        dst.global_priority = vk_to_raw_value(&src.global_priority);
     }
 }
 

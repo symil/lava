@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkShaderStageFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkShaderStageFlags {
     pub vertex: bool,
@@ -21,6 +19,29 @@ pub struct VkShaderStageFlags {
     pub callable_nv: bool,
     pub task_nv: bool,
     pub mesh_nv: bool,
+}
+
+pub type RawVkShaderStageFlags = u32;
+
+impl VkWrappedType<RawVkShaderStageFlags> for VkShaderStageFlags {
+    fn vk_to_raw(src: &VkShaderStageFlags, dst: &mut RawVkShaderStageFlags) {
+        *dst = 0;
+        if src.vertex { *dst |= 0x00000001; }
+        if src.tessellation_control { *dst |= 0x00000002; }
+        if src.tessellation_evaluation { *dst |= 0x00000004; }
+        if src.geometry { *dst |= 0x00000008; }
+        if src.fragment { *dst |= 0x00000010; }
+        if src.compute { *dst |= 0x00000020; }
+        if src.all_graphics { *dst |= 0x0000001F; }
+        if src.raygen_nv { *dst |= 0x00000100; }
+        if src.any_hit_nv { *dst |= 0x00000200; }
+        if src.closest_hit_nv { *dst |= 0x00000400; }
+        if src.miss_nv { *dst |= 0x00000800; }
+        if src.intersection_nv { *dst |= 0x00001000; }
+        if src.callable_nv { *dst |= 0x00002000; }
+        if src.task_nv { *dst |= 0x00000040; }
+        if src.mesh_nv { *dst |= 0x00000080; }
+    }
 }
 
 impl VkRawType<VkShaderStageFlags> for RawVkShaderStageFlags {
@@ -42,27 +63,6 @@ impl VkRawType<VkShaderStageFlags> for RawVkShaderStageFlags {
             task_nv: (src & 0x00000040) != 0,
             mesh_nv: (src & 0x00000080) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkShaderStageFlags> for VkShaderStageFlags {
-    fn vk_to_raw(src: &VkShaderStageFlags, dst: &mut RawVkShaderStageFlags) {
-        *dst = 0;
-        if src.vertex { *dst |= 0x00000001; }
-        if src.tessellation_control { *dst |= 0x00000002; }
-        if src.tessellation_evaluation { *dst |= 0x00000004; }
-        if src.geometry { *dst |= 0x00000008; }
-        if src.fragment { *dst |= 0x00000010; }
-        if src.compute { *dst |= 0x00000020; }
-        if src.all_graphics { *dst |= 0x0000001F; }
-        if src.raygen_nv { *dst |= 0x00000100; }
-        if src.any_hit_nv { *dst |= 0x00000200; }
-        if src.closest_hit_nv { *dst |= 0x00000400; }
-        if src.miss_nv { *dst |= 0x00000800; }
-        if src.intersection_nv { *dst |= 0x00001000; }
-        if src.callable_nv { *dst |= 0x00002000; }
-        if src.task_nv { *dst |= 0x00000040; }
-        if src.mesh_nv { *dst |= 0x00000080; }
     }
 }
 

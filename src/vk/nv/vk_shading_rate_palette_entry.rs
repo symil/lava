@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkShadingRatePaletteEntry = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkShadingRatePaletteEntry {
@@ -21,17 +19,19 @@ pub enum VkShadingRatePaletteEntry {
     _1InvocationPer4X4Pixels = 11,
 }
 
+pub type RawVkShadingRatePaletteEntry = i32;
+
+impl VkWrappedType<RawVkShadingRatePaletteEntry> for VkShadingRatePaletteEntry {
+    fn vk_to_raw(src: &VkShadingRatePaletteEntry, dst: &mut RawVkShadingRatePaletteEntry) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkShadingRatePaletteEntry> for RawVkShadingRatePaletteEntry {
     fn vk_to_wrapped(src: &RawVkShadingRatePaletteEntry) -> VkShadingRatePaletteEntry {
         unsafe {
             *((src as *const i32) as *const VkShadingRatePaletteEntry)
         }
-    }
-}
-
-impl VkWrappedType<RawVkShadingRatePaletteEntry> for VkShadingRatePaletteEntry {
-    fn vk_to_raw(src: &VkShadingRatePaletteEntry, dst: &mut RawVkShadingRatePaletteEntry) {
-        *dst = *src as i32
     }
 }
 

@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_swapchain::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageSwapchainCreateInfo<'a> {
+    pub swapchain: Option<&'a VkSwapchain>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSwapchainCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub swapchain: RawVkSwapchain,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImageSwapchainCreateInfo<'a> {
-    pub swapchain: Option<&'a VkSwapchain>,
 }
 
 impl<'a> VkWrappedType<RawVkImageSwapchainCreateInfo> for VkImageSwapchainCreateInfo<'a> {

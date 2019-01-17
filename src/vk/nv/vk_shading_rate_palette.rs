@@ -15,16 +15,16 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::nv::vk_shading_rate_palette_entry::*;
 
+#[derive(Debug, Clone)]
+pub struct VkShadingRatePalette<'a> {
+    pub shading_rate_palette_entries: &'a [VkShadingRatePaletteEntry],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShadingRatePalette {
     pub shading_rate_palette_entry_count: u32,
     pub shading_rate_palette_entries: *mut RawVkShadingRatePaletteEntry,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkShadingRatePalette<'a> {
-    pub shading_rate_palette_entries: &'a [VkShadingRatePaletteEntry],
 }
 
 impl<'a> VkWrappedType<RawVkShadingRatePalette> for VkShadingRatePalette<'a> {

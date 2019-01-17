@@ -1,4 +1,4 @@
-const { toSnakeCase, getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle, isOutputHandleStruct } = require('./utils');
+const { getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle, isOutputHandleStruct } = require('./utils');
 const { getStruct } = require('./parse');
 const { genImplFlags } = require('./bit_flags');
 
@@ -31,10 +31,10 @@ function generateVkStructDefinition(cDef) {
 
     return [
         genUses(def),
-        genRawStructDeclaration(def),
         getWrappedStructDeclaration(def),
-        genImplVkRawType(def),
+        genRawStructDeclaration(def),
         genImplVkWrappedType(def),
+        genImplVkRawType(def),
         genImplDefault(def),
         genImplVkSetup(def),
         genImplVkFree(def),

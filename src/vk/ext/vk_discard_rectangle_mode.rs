@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDiscardRectangleMode = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDiscardRectangleMode {
@@ -11,17 +9,19 @@ pub enum VkDiscardRectangleMode {
     Exclusive = 1,
 }
 
+pub type RawVkDiscardRectangleMode = i32;
+
+impl VkWrappedType<RawVkDiscardRectangleMode> for VkDiscardRectangleMode {
+    fn vk_to_raw(src: &VkDiscardRectangleMode, dst: &mut RawVkDiscardRectangleMode) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkDiscardRectangleMode> for RawVkDiscardRectangleMode {
     fn vk_to_wrapped(src: &RawVkDiscardRectangleMode) -> VkDiscardRectangleMode {
         unsafe {
             *((src as *const i32) as *const VkDiscardRectangleMode)
         }
-    }
-}
-
-impl VkWrappedType<RawVkDiscardRectangleMode> for VkDiscardRectangleMode {
-    fn vk_to_raw(src: &VkDiscardRectangleMode, dst: &mut RawVkDiscardRectangleMode) {
-        *dst = *src as i32
     }
 }
 

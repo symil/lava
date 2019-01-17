@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkQueryPipelineStatisticFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryPipelineStatisticFlags {
     pub input_assembly_vertices: bool,
@@ -17,6 +15,25 @@ pub struct VkQueryPipelineStatisticFlags {
     pub tessellation_control_shader_patches: bool,
     pub tessellation_evaluation_shader_invocations: bool,
     pub compute_shader_invocations: bool,
+}
+
+pub type RawVkQueryPipelineStatisticFlags = u32;
+
+impl VkWrappedType<RawVkQueryPipelineStatisticFlags> for VkQueryPipelineStatisticFlags {
+    fn vk_to_raw(src: &VkQueryPipelineStatisticFlags, dst: &mut RawVkQueryPipelineStatisticFlags) {
+        *dst = 0;
+        if src.input_assembly_vertices { *dst |= 0x00000001; }
+        if src.input_assembly_primitives { *dst |= 0x00000002; }
+        if src.vertex_shader_invocations { *dst |= 0x00000004; }
+        if src.geometry_shader_invocations { *dst |= 0x00000008; }
+        if src.geometry_shader_primitives { *dst |= 0x00000010; }
+        if src.clipping_invocations { *dst |= 0x00000020; }
+        if src.clipping_primitives { *dst |= 0x00000040; }
+        if src.fragment_shader_invocations { *dst |= 0x00000080; }
+        if src.tessellation_control_shader_patches { *dst |= 0x00000100; }
+        if src.tessellation_evaluation_shader_invocations { *dst |= 0x00000200; }
+        if src.compute_shader_invocations { *dst |= 0x00000400; }
+    }
 }
 
 impl VkRawType<VkQueryPipelineStatisticFlags> for RawVkQueryPipelineStatisticFlags {
@@ -34,23 +51,6 @@ impl VkRawType<VkQueryPipelineStatisticFlags> for RawVkQueryPipelineStatisticFla
             tessellation_evaluation_shader_invocations: (src & 0x00000200) != 0,
             compute_shader_invocations: (src & 0x00000400) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueryPipelineStatisticFlags> for VkQueryPipelineStatisticFlags {
-    fn vk_to_raw(src: &VkQueryPipelineStatisticFlags, dst: &mut RawVkQueryPipelineStatisticFlags) {
-        *dst = 0;
-        if src.input_assembly_vertices { *dst |= 0x00000001; }
-        if src.input_assembly_primitives { *dst |= 0x00000002; }
-        if src.vertex_shader_invocations { *dst |= 0x00000004; }
-        if src.geometry_shader_invocations { *dst |= 0x00000008; }
-        if src.geometry_shader_primitives { *dst |= 0x00000010; }
-        if src.clipping_invocations { *dst |= 0x00000020; }
-        if src.clipping_primitives { *dst |= 0x00000040; }
-        if src.fragment_shader_invocations { *dst |= 0x00000080; }
-        if src.tessellation_control_shader_patches { *dst |= 0x00000100; }
-        if src.tessellation_evaluation_shader_invocations { *dst |= 0x00000200; }
-        if src.compute_shader_invocations { *dst |= 0x00000400; }
     }
 }
 

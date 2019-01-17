@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_sampler_reduction_mode::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSamplerReductionModeCreateInfo {
+    pub reduction_mode: VkSamplerReductionMode,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerReductionModeCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkSamplerReductionModeCreateInfo {
     pub reduction_mode: RawVkSamplerReductionMode,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSamplerReductionModeCreateInfo {
-    pub reduction_mode: VkSamplerReductionMode,
+impl VkWrappedType<RawVkSamplerReductionModeCreateInfo> for VkSamplerReductionModeCreateInfo {
+    fn vk_to_raw(src: &VkSamplerReductionModeCreateInfo, dst: &mut RawVkSamplerReductionModeCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SamplerReductionModeCreateInfoExt);
+        dst.next = ptr::null();
+        dst.reduction_mode = vk_to_raw_value(&src.reduction_mode);
+    }
 }
 
 impl VkRawType<VkSamplerReductionModeCreateInfo> for RawVkSamplerReductionModeCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkSamplerReductionModeCreateInfo> for RawVkSamplerReductionModeCr
         VkSamplerReductionModeCreateInfo {
             reduction_mode: RawVkSamplerReductionMode::vk_to_wrapped(&src.reduction_mode),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSamplerReductionModeCreateInfo> for VkSamplerReductionModeCreateInfo {
-    fn vk_to_raw(src: &VkSamplerReductionModeCreateInfo, dst: &mut RawVkSamplerReductionModeCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SamplerReductionModeCreateInfoExt);
-        dst.next = ptr::null();
-        dst.reduction_mode = vk_to_raw_value(&src.reduction_mode);
     }
 }
 

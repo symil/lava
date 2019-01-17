@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_display_plane_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayPlaneProperties2 {
+    pub display_plane_properties: VkDisplayPlaneProperties,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneProperties2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub display_plane_properties: RawVkDisplayPlaneProperties,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDisplayPlaneProperties2 {
-    pub display_plane_properties: VkDisplayPlaneProperties,
 }
 
 impl VkRawType<VkDisplayPlaneProperties2> for RawVkDisplayPlaneProperties2 {

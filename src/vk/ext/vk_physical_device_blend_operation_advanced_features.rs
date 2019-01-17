@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceBlendOperationAdvancedFeatures {
+    pub advanced_blend_coherent_operations: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceBlendOperationAdvancedFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceBlendOperationAdvancedFeatures {
     pub advanced_blend_coherent_operations: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceBlendOperationAdvancedFeatures {
-    pub advanced_blend_coherent_operations: bool,
+impl VkWrappedType<RawVkPhysicalDeviceBlendOperationAdvancedFeatures> for VkPhysicalDeviceBlendOperationAdvancedFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceBlendOperationAdvancedFeatures, dst: &mut RawVkPhysicalDeviceBlendOperationAdvancedFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBlendOperationAdvancedFeaturesExt);
+        dst.next = ptr::null();
+        dst.advanced_blend_coherent_operations = vk_to_raw_value(&src.advanced_blend_coherent_operations);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceBlendOperationAdvancedFeatures> for RawVkPhysicalDeviceBlendOperationAdvancedFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceBlendOperationAdvancedFeatures> for RawVkPhysical
         VkPhysicalDeviceBlendOperationAdvancedFeatures {
             advanced_blend_coherent_operations: u32::vk_to_wrapped(&src.advanced_blend_coherent_operations),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceBlendOperationAdvancedFeatures> for VkPhysicalDeviceBlendOperationAdvancedFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceBlendOperationAdvancedFeatures, dst: &mut RawVkPhysicalDeviceBlendOperationAdvancedFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBlendOperationAdvancedFeaturesExt);
-        dst.next = ptr::null();
-        dst.advanced_blend_coherent_operations = vk_to_raw_value(&src.advanced_blend_coherent_operations);
     }
 }
 

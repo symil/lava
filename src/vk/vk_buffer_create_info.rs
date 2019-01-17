@@ -18,6 +18,15 @@ use vk::vk_buffer_create_flags::*;
 use vk::vk_buffer_usage_flags::*;
 use vk::vk_sharing_mode::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBufferCreateInfo<'a> {
+    pub flags: VkBufferCreateFlags,
+    pub size: usize,
+    pub usage: VkBufferUsageFlags,
+    pub sharing_mode: VkSharingMode,
+    pub queue_family_indices: &'a [usize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferCreateInfo {
@@ -29,15 +38,6 @@ pub struct RawVkBufferCreateInfo {
     pub sharing_mode: RawVkSharingMode,
     pub queue_family_index_count: u32,
     pub queue_family_indices: *mut u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBufferCreateInfo<'a> {
-    pub flags: VkBufferCreateFlags,
-    pub size: usize,
-    pub usage: VkBufferUsageFlags,
-    pub sharing_mode: VkSharingMode,
-    pub queue_family_indices: &'a [usize],
 }
 
 impl<'a> VkWrappedType<RawVkBufferCreateInfo> for VkBufferCreateInfo<'a> {

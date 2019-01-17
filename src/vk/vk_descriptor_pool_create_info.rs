@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_descriptor_pool_create_flags::*;
 use vk::vk_descriptor_pool_size::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorPoolCreateInfo<'a> {
+    pub flags: VkDescriptorPoolCreateFlags,
+    pub max_sets: usize,
+    pub pool_sizes: &'a [VkDescriptorPoolSize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorPoolCreateInfo {
@@ -26,13 +33,6 @@ pub struct RawVkDescriptorPoolCreateInfo {
     pub max_sets: u32,
     pub pool_size_count: u32,
     pub pool_sizes: *mut RawVkDescriptorPoolSize,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDescriptorPoolCreateInfo<'a> {
-    pub flags: VkDescriptorPoolCreateFlags,
-    pub max_sets: usize,
-    pub pool_sizes: &'a [VkDescriptorPoolSize],
 }
 
 impl<'a> VkWrappedType<RawVkDescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfo<'a> {

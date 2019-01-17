@@ -2,13 +2,22 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDependencyFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDependencyFlags {
     pub by_region: bool,
     pub device_group: bool,
     pub view_local: bool,
+}
+
+pub type RawVkDependencyFlags = u32;
+
+impl VkWrappedType<RawVkDependencyFlags> for VkDependencyFlags {
+    fn vk_to_raw(src: &VkDependencyFlags, dst: &mut RawVkDependencyFlags) {
+        *dst = 0;
+        if src.by_region { *dst |= 0x00000001; }
+        if src.device_group { *dst |= 0x00000004; }
+        if src.view_local { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkDependencyFlags> for RawVkDependencyFlags {
@@ -18,15 +27,6 @@ impl VkRawType<VkDependencyFlags> for RawVkDependencyFlags {
             device_group: (src & 0x00000004) != 0,
             view_local: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDependencyFlags> for VkDependencyFlags {
-    fn vk_to_raw(src: &VkDependencyFlags, dst: &mut RawVkDependencyFlags) {
-        *dst = 0;
-        if src.by_region { *dst |= 0x00000001; }
-        if src.device_group { *dst |= 0x00000004; }
-        if src.view_local { *dst |= 0x00000002; }
     }
 }
 

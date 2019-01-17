@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_external_semaphore_handle_type_flags::*;
 use vk::vk_external_semaphore_feature_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExternalSemaphoreProperties {
+    pub export_from_imported_handle_types: VkExternalSemaphoreHandleTypeFlags,
+    pub compatible_handle_types: VkExternalSemaphoreHandleTypeFlags,
+    pub external_semaphore_features: VkExternalSemaphoreFeatureFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalSemaphoreProperties {
@@ -27,11 +34,14 @@ pub struct RawVkExternalSemaphoreProperties {
     pub external_semaphore_features: RawVkExternalSemaphoreFeatureFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExternalSemaphoreProperties {
-    pub export_from_imported_handle_types: VkExternalSemaphoreHandleTypeFlags,
-    pub compatible_handle_types: VkExternalSemaphoreHandleTypeFlags,
-    pub external_semaphore_features: VkExternalSemaphoreFeatureFlags,
+impl VkWrappedType<RawVkExternalSemaphoreProperties> for VkExternalSemaphoreProperties {
+    fn vk_to_raw(src: &VkExternalSemaphoreProperties, dst: &mut RawVkExternalSemaphoreProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalSemaphoreProperties);
+        dst.next = ptr::null();
+        dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
+        dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
+        dst.external_semaphore_features = vk_to_raw_value(&src.external_semaphore_features);
+    }
 }
 
 impl VkRawType<VkExternalSemaphoreProperties> for RawVkExternalSemaphoreProperties {
@@ -41,16 +51,6 @@ impl VkRawType<VkExternalSemaphoreProperties> for RawVkExternalSemaphoreProperti
             compatible_handle_types: RawVkExternalSemaphoreHandleTypeFlags::vk_to_wrapped(&src.compatible_handle_types),
             external_semaphore_features: RawVkExternalSemaphoreFeatureFlags::vk_to_wrapped(&src.external_semaphore_features),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalSemaphoreProperties> for VkExternalSemaphoreProperties {
-    fn vk_to_raw(src: &VkExternalSemaphoreProperties, dst: &mut RawVkExternalSemaphoreProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalSemaphoreProperties);
-        dst.next = ptr::null();
-        dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
-        dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
-        dst.external_semaphore_features = vk_to_raw_value(&src.external_semaphore_features);
     }
 }
 

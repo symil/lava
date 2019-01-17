@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkImageCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageCreateFlags {
     pub sparse_binding: bool,
@@ -21,6 +19,29 @@ pub struct VkImageCreateFlags {
     pub corner_sampled_nv: bool,
     pub sample_locations_compatible_depth_ext: bool,
     pub subsampled_ext: bool,
+}
+
+pub type RawVkImageCreateFlags = u32;
+
+impl VkWrappedType<RawVkImageCreateFlags> for VkImageCreateFlags {
+    fn vk_to_raw(src: &VkImageCreateFlags, dst: &mut RawVkImageCreateFlags) {
+        *dst = 0;
+        if src.sparse_binding { *dst |= 0x00000001; }
+        if src.sparse_residency { *dst |= 0x00000002; }
+        if src.sparse_aliased { *dst |= 0x00000004; }
+        if src.mutable_format { *dst |= 0x00000008; }
+        if src.cube_compatible { *dst |= 0x00000010; }
+        if src.alias { *dst |= 0x00000400; }
+        if src.split_instance_bind_regions { *dst |= 0x00000040; }
+        if src._2d_array_compatible { *dst |= 0x00000020; }
+        if src.block_texel_view_compatible { *dst |= 0x00000080; }
+        if src.extended_usage { *dst |= 0x00000100; }
+        if src.protected { *dst |= 0x00000800; }
+        if src.disjoint { *dst |= 0x00000200; }
+        if src.corner_sampled_nv { *dst |= 0x00002000; }
+        if src.sample_locations_compatible_depth_ext { *dst |= 0x00001000; }
+        if src.subsampled_ext { *dst |= 0x00004000; }
+    }
 }
 
 impl VkRawType<VkImageCreateFlags> for RawVkImageCreateFlags {
@@ -42,27 +63,6 @@ impl VkRawType<VkImageCreateFlags> for RawVkImageCreateFlags {
             sample_locations_compatible_depth_ext: (src & 0x00001000) != 0,
             subsampled_ext: (src & 0x00004000) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageCreateFlags> for VkImageCreateFlags {
-    fn vk_to_raw(src: &VkImageCreateFlags, dst: &mut RawVkImageCreateFlags) {
-        *dst = 0;
-        if src.sparse_binding { *dst |= 0x00000001; }
-        if src.sparse_residency { *dst |= 0x00000002; }
-        if src.sparse_aliased { *dst |= 0x00000004; }
-        if src.mutable_format { *dst |= 0x00000008; }
-        if src.cube_compatible { *dst |= 0x00000010; }
-        if src.alias { *dst |= 0x00000400; }
-        if src.split_instance_bind_regions { *dst |= 0x00000040; }
-        if src._2d_array_compatible { *dst |= 0x00000020; }
-        if src.block_texel_view_compatible { *dst |= 0x00000080; }
-        if src.extended_usage { *dst |= 0x00000100; }
-        if src.protected { *dst |= 0x00000800; }
-        if src.disjoint { *dst |= 0x00000200; }
-        if src.corner_sampled_nv { *dst |= 0x00002000; }
-        if src.sample_locations_compatible_depth_ext { *dst |= 0x00001000; }
-        if src.subsampled_ext { *dst |= 0x00004000; }
     }
 }
 

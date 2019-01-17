@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkAccessFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkAccessFlags {
     pub indirect_command_read: bool,
@@ -34,6 +32,42 @@ pub struct VkAccessFlags {
     pub acceleration_structure_read_nv: bool,
     pub acceleration_structure_write_nv: bool,
     pub fragment_density_map_read_ext: bool,
+}
+
+pub type RawVkAccessFlags = u32;
+
+impl VkWrappedType<RawVkAccessFlags> for VkAccessFlags {
+    fn vk_to_raw(src: &VkAccessFlags, dst: &mut RawVkAccessFlags) {
+        *dst = 0;
+        if src.indirect_command_read { *dst |= 0x00000001; }
+        if src.index_read { *dst |= 0x00000002; }
+        if src.vertex_attribute_read { *dst |= 0x00000004; }
+        if src.uniform_read { *dst |= 0x00000008; }
+        if src.input_attachment_read { *dst |= 0x00000010; }
+        if src.shader_read { *dst |= 0x00000020; }
+        if src.shader_write { *dst |= 0x00000040; }
+        if src.color_attachment_read { *dst |= 0x00000080; }
+        if src.color_attachment_write { *dst |= 0x00000100; }
+        if src.depth_stencil_attachment_read { *dst |= 0x00000200; }
+        if src.depth_stencil_attachment_write { *dst |= 0x00000400; }
+        if src.transfer_read { *dst |= 0x00000800; }
+        if src.transfer_write { *dst |= 0x00001000; }
+        if src.host_read { *dst |= 0x00002000; }
+        if src.host_write { *dst |= 0x00004000; }
+        if src.memory_read { *dst |= 0x00008000; }
+        if src.memory_write { *dst |= 0x00010000; }
+        if src.transform_feedback_write_ext { *dst |= 0x02000000; }
+        if src.transform_feedback_counter_read_ext { *dst |= 0x04000000; }
+        if src.transform_feedback_counter_write_ext { *dst |= 0x08000000; }
+        if src.conditional_rendering_read_ext { *dst |= 0x00100000; }
+        if src.command_process_read_nvx { *dst |= 0x00020000; }
+        if src.command_process_write_nvx { *dst |= 0x00040000; }
+        if src.color_attachment_read_noncoherent_ext { *dst |= 0x00080000; }
+        if src.shading_rate_image_read_nv { *dst |= 0x00800000; }
+        if src.acceleration_structure_read_nv { *dst |= 0x00200000; }
+        if src.acceleration_structure_write_nv { *dst |= 0x00400000; }
+        if src.fragment_density_map_read_ext { *dst |= 0x01000000; }
+    }
 }
 
 impl VkRawType<VkAccessFlags> for RawVkAccessFlags {
@@ -68,40 +102,6 @@ impl VkRawType<VkAccessFlags> for RawVkAccessFlags {
             acceleration_structure_write_nv: (src & 0x00400000) != 0,
             fragment_density_map_read_ext: (src & 0x01000000) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkAccessFlags> for VkAccessFlags {
-    fn vk_to_raw(src: &VkAccessFlags, dst: &mut RawVkAccessFlags) {
-        *dst = 0;
-        if src.indirect_command_read { *dst |= 0x00000001; }
-        if src.index_read { *dst |= 0x00000002; }
-        if src.vertex_attribute_read { *dst |= 0x00000004; }
-        if src.uniform_read { *dst |= 0x00000008; }
-        if src.input_attachment_read { *dst |= 0x00000010; }
-        if src.shader_read { *dst |= 0x00000020; }
-        if src.shader_write { *dst |= 0x00000040; }
-        if src.color_attachment_read { *dst |= 0x00000080; }
-        if src.color_attachment_write { *dst |= 0x00000100; }
-        if src.depth_stencil_attachment_read { *dst |= 0x00000200; }
-        if src.depth_stencil_attachment_write { *dst |= 0x00000400; }
-        if src.transfer_read { *dst |= 0x00000800; }
-        if src.transfer_write { *dst |= 0x00001000; }
-        if src.host_read { *dst |= 0x00002000; }
-        if src.host_write { *dst |= 0x00004000; }
-        if src.memory_read { *dst |= 0x00008000; }
-        if src.memory_write { *dst |= 0x00010000; }
-        if src.transform_feedback_write_ext { *dst |= 0x02000000; }
-        if src.transform_feedback_counter_read_ext { *dst |= 0x04000000; }
-        if src.transform_feedback_counter_write_ext { *dst |= 0x08000000; }
-        if src.conditional_rendering_read_ext { *dst |= 0x00100000; }
-        if src.command_process_read_nvx { *dst |= 0x00020000; }
-        if src.command_process_write_nvx { *dst |= 0x00040000; }
-        if src.color_attachment_read_noncoherent_ext { *dst |= 0x00080000; }
-        if src.shading_rate_image_read_nv { *dst |= 0x00800000; }
-        if src.acceleration_structure_read_nv { *dst |= 0x00200000; }
-        if src.acceleration_structure_write_nv { *dst |= 0x00400000; }
-        if src.fragment_density_map_read_ext { *dst |= 0x01000000; }
     }
 }
 

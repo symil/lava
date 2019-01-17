@@ -15,6 +15,15 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGeneratedCommandsLimits {
+    pub max_indirect_commands_layout_token_count: usize,
+    pub max_object_entry_counts: usize,
+    pub min_sequence_count_buffer_offset_alignment: usize,
+    pub min_sequence_index_buffer_offset_alignment: usize,
+    pub min_commands_token_buffer_offset_alignment: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGeneratedCommandsLimits {
@@ -27,13 +36,16 @@ pub struct RawVkDeviceGeneratedCommandsLimits {
     pub min_commands_token_buffer_offset_alignment: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceGeneratedCommandsLimits {
-    pub max_indirect_commands_layout_token_count: usize,
-    pub max_object_entry_counts: usize,
-    pub min_sequence_count_buffer_offset_alignment: usize,
-    pub min_sequence_index_buffer_offset_alignment: usize,
-    pub min_commands_token_buffer_offset_alignment: usize,
+impl VkWrappedType<RawVkDeviceGeneratedCommandsLimits> for VkDeviceGeneratedCommandsLimits {
+    fn vk_to_raw(src: &VkDeviceGeneratedCommandsLimits, dst: &mut RawVkDeviceGeneratedCommandsLimits) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGeneratedCommandsLimitsNvx);
+        dst.next = ptr::null();
+        dst.max_indirect_commands_layout_token_count = vk_to_raw_value(&src.max_indirect_commands_layout_token_count);
+        dst.max_object_entry_counts = vk_to_raw_value(&src.max_object_entry_counts);
+        dst.min_sequence_count_buffer_offset_alignment = vk_to_raw_value(&src.min_sequence_count_buffer_offset_alignment);
+        dst.min_sequence_index_buffer_offset_alignment = vk_to_raw_value(&src.min_sequence_index_buffer_offset_alignment);
+        dst.min_commands_token_buffer_offset_alignment = vk_to_raw_value(&src.min_commands_token_buffer_offset_alignment);
+    }
 }
 
 impl VkRawType<VkDeviceGeneratedCommandsLimits> for RawVkDeviceGeneratedCommandsLimits {
@@ -45,18 +57,6 @@ impl VkRawType<VkDeviceGeneratedCommandsLimits> for RawVkDeviceGeneratedCommands
             min_sequence_index_buffer_offset_alignment: u32::vk_to_wrapped(&src.min_sequence_index_buffer_offset_alignment),
             min_commands_token_buffer_offset_alignment: u32::vk_to_wrapped(&src.min_commands_token_buffer_offset_alignment),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceGeneratedCommandsLimits> for VkDeviceGeneratedCommandsLimits {
-    fn vk_to_raw(src: &VkDeviceGeneratedCommandsLimits, dst: &mut RawVkDeviceGeneratedCommandsLimits) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGeneratedCommandsLimitsNvx);
-        dst.next = ptr::null();
-        dst.max_indirect_commands_layout_token_count = vk_to_raw_value(&src.max_indirect_commands_layout_token_count);
-        dst.max_object_entry_counts = vk_to_raw_value(&src.max_object_entry_counts);
-        dst.min_sequence_count_buffer_offset_alignment = vk_to_raw_value(&src.min_sequence_count_buffer_offset_alignment);
-        dst.min_sequence_index_buffer_offset_alignment = vk_to_raw_value(&src.min_sequence_index_buffer_offset_alignment);
-        dst.min_commands_token_buffer_offset_alignment = vk_to_raw_value(&src.min_commands_token_buffer_offset_alignment);
     }
 }
 

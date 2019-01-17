@@ -20,22 +20,6 @@ use vk::nv::vk_ray_tracing_shader_group_create_info::*;
 use vk::vk_pipeline_layout::*;
 use vk::vk_pipeline::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkRayTracingPipelineCreateInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub flags: RawVkPipelineCreateFlags,
-    pub stage_count: u32,
-    pub stages: *mut RawVkPipelineShaderStageCreateInfo,
-    pub group_count: u32,
-    pub groups: *mut RawVkRayTracingShaderGroupCreateInfo,
-    pub max_recursion_depth: u32,
-    pub layout: RawVkPipelineLayout,
-    pub base_pipeline_handle: RawVkPipeline,
-    pub base_pipeline_index: i32,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkRayTracingPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>
     where
@@ -52,6 +36,22 @@ pub struct VkRayTracingPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>
     pub layout: &'h VkPipelineLayout,
     pub base_pipeline_handle: Option<&'i VkPipeline>,
     pub base_pipeline_index: isize,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkRayTracingPipelineCreateInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineCreateFlags,
+    pub stage_count: u32,
+    pub stages: *mut RawVkPipelineShaderStageCreateInfo,
+    pub group_count: u32,
+    pub groups: *mut RawVkRayTracingShaderGroupCreateInfo,
+    pub max_recursion_depth: u32,
+    pub layout: RawVkPipelineLayout,
+    pub base_pipeline_handle: RawVkPipeline,
+    pub base_pipeline_index: i32,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i> VkWrappedType<RawVkRayTracingPipelineCreateInfo> for VkRayTracingPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>

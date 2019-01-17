@@ -17,6 +17,12 @@ use vk::vk_structure_type::*;
 use vk::vk_image::*;
 use vk::vk_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDedicatedAllocationMemoryAllocateInfo<'a, 'b> {
+    pub image: Option<&'a VkImage>,
+    pub buffer: Option<&'b VkBuffer>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDedicatedAllocationMemoryAllocateInfo {
@@ -24,12 +30,6 @@ pub struct RawVkDedicatedAllocationMemoryAllocateInfo {
     pub next: *const c_void,
     pub image: RawVkImage,
     pub buffer: RawVkBuffer,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDedicatedAllocationMemoryAllocateInfo<'a, 'b> {
-    pub image: Option<&'a VkImage>,
-    pub buffer: Option<&'b VkBuffer>,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkDedicatedAllocationMemoryAllocateInfo> for VkDedicatedAllocationMemoryAllocateInfo<'a, 'b> {

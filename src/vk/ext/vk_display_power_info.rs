@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_display_power_state::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayPowerInfo {
+    pub power_state: VkDisplayPowerState,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPowerInfo {
@@ -24,9 +29,12 @@ pub struct RawVkDisplayPowerInfo {
     pub power_state: RawVkDisplayPowerState,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDisplayPowerInfo {
-    pub power_state: VkDisplayPowerState,
+impl VkWrappedType<RawVkDisplayPowerInfo> for VkDisplayPowerInfo {
+    fn vk_to_raw(src: &VkDisplayPowerInfo, dst: &mut RawVkDisplayPowerInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPowerInfoExt);
+        dst.next = ptr::null();
+        dst.power_state = vk_to_raw_value(&src.power_state);
+    }
 }
 
 impl VkRawType<VkDisplayPowerInfo> for RawVkDisplayPowerInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkDisplayPowerInfo> for RawVkDisplayPowerInfo {
         VkDisplayPowerInfo {
             power_state: RawVkDisplayPowerState::vk_to_wrapped(&src.power_state),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayPowerInfo> for VkDisplayPowerInfo {
-    fn vk_to_raw(src: &VkDisplayPowerInfo, dst: &mut RawVkDisplayPowerInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPowerInfoExt);
-        dst.next = ptr::null();
-        dst.power_state = vk_to_raw_value(&src.power_state);
     }
 }
 

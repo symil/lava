@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_rect_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBindImageMemoryDeviceGroupInfo<'a, 'b> {
+    pub device_indices: &'a [usize],
+    pub split_instance_bind_regions: &'b [VkRect2D],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemoryDeviceGroupInfo {
@@ -25,12 +31,6 @@ pub struct RawVkBindImageMemoryDeviceGroupInfo {
     pub device_indices: *mut u32,
     pub split_instance_bind_region_count: u32,
     pub split_instance_bind_regions: *mut RawVkRect2D,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBindImageMemoryDeviceGroupInfo<'a, 'b> {
-    pub device_indices: &'a [usize],
-    pub split_instance_bind_regions: &'b [VkRect2D],
 }
 
 impl<'a, 'b> VkWrappedType<RawVkBindImageMemoryDeviceGroupInfo> for VkBindImageMemoryDeviceGroupInfo<'a, 'b> {

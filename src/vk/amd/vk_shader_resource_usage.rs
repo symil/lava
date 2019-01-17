@@ -14,6 +14,15 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkShaderResourceUsage {
+    pub num_used_vgprs: usize,
+    pub num_used_sgprs: usize,
+    pub lds_size_per_local_work_group: usize,
+    pub lds_usage_size_in_bytes: usize,
+    pub scratch_mem_usage_in_bytes: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShaderResourceUsage {
@@ -24,13 +33,14 @@ pub struct RawVkShaderResourceUsage {
     pub scratch_mem_usage_in_bytes: usize,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkShaderResourceUsage {
-    pub num_used_vgprs: usize,
-    pub num_used_sgprs: usize,
-    pub lds_size_per_local_work_group: usize,
-    pub lds_usage_size_in_bytes: usize,
-    pub scratch_mem_usage_in_bytes: usize,
+impl VkWrappedType<RawVkShaderResourceUsage> for VkShaderResourceUsage {
+    fn vk_to_raw(src: &VkShaderResourceUsage, dst: &mut RawVkShaderResourceUsage) {
+        dst.num_used_vgprs = vk_to_raw_value(&src.num_used_vgprs);
+        dst.num_used_sgprs = vk_to_raw_value(&src.num_used_sgprs);
+        dst.lds_size_per_local_work_group = vk_to_raw_value(&src.lds_size_per_local_work_group);
+        dst.lds_usage_size_in_bytes = src.lds_usage_size_in_bytes;
+        dst.scratch_mem_usage_in_bytes = src.scratch_mem_usage_in_bytes;
+    }
 }
 
 impl VkRawType<VkShaderResourceUsage> for RawVkShaderResourceUsage {
@@ -42,16 +52,6 @@ impl VkRawType<VkShaderResourceUsage> for RawVkShaderResourceUsage {
             lds_usage_size_in_bytes: src.lds_usage_size_in_bytes,
             scratch_mem_usage_in_bytes: src.scratch_mem_usage_in_bytes,
         }
-    }
-}
-
-impl VkWrappedType<RawVkShaderResourceUsage> for VkShaderResourceUsage {
-    fn vk_to_raw(src: &VkShaderResourceUsage, dst: &mut RawVkShaderResourceUsage) {
-        dst.num_used_vgprs = vk_to_raw_value(&src.num_used_vgprs);
-        dst.num_used_sgprs = vk_to_raw_value(&src.num_used_sgprs);
-        dst.lds_size_per_local_work_group = vk_to_raw_value(&src.lds_size_per_local_work_group);
-        dst.lds_usage_size_in_bytes = src.lds_usage_size_in_bytes;
-        dst.scratch_mem_usage_in_bytes = src.scratch_mem_usage_in_bytes;
     }
 }
 

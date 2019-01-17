@@ -24,6 +24,22 @@ use vk::vk_image_usage_flags::*;
 use vk::vk_sharing_mode::*;
 use vk::vk_image_layout::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageCreateInfo<'a> {
+    pub flags: VkImageCreateFlags,
+    pub image_type: VkImageType,
+    pub format: VkFormat,
+    pub extent: VkExtent3D,
+    pub mip_levels: usize,
+    pub array_layers: usize,
+    pub samples: VkSampleCountFlags,
+    pub tiling: VkImageTiling,
+    pub usage: VkImageUsageFlags,
+    pub sharing_mode: VkSharingMode,
+    pub queue_family_indices: &'a [usize],
+    pub initial_layout: VkImageLayout,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageCreateInfo {
@@ -42,22 +58,6 @@ pub struct RawVkImageCreateInfo {
     pub queue_family_index_count: u32,
     pub queue_family_indices: *mut u32,
     pub initial_layout: RawVkImageLayout,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImageCreateInfo<'a> {
-    pub flags: VkImageCreateFlags,
-    pub image_type: VkImageType,
-    pub format: VkFormat,
-    pub extent: VkExtent3D,
-    pub mip_levels: usize,
-    pub array_layers: usize,
-    pub samples: VkSampleCountFlags,
-    pub tiling: VkImageTiling,
-    pub usage: VkImageUsageFlags,
-    pub sharing_mode: VkSharingMode,
-    pub queue_family_indices: &'a [usize],
-    pub initial_layout: VkImageLayout,
 }
 
 impl<'a> VkWrappedType<RawVkImageCreateInfo> for VkImageCreateInfo<'a> {

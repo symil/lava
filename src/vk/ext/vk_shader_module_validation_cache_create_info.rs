@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_validation_cache::*;
 
+#[derive(Debug, Clone)]
+pub struct VkShaderModuleValidationCacheCreateInfo<'a> {
+    pub validation_cache: &'a VkValidationCache,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShaderModuleValidationCacheCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub validation_cache: RawVkValidationCache,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkShaderModuleValidationCacheCreateInfo<'a> {
-    pub validation_cache: &'a VkValidationCache,
 }
 
 impl<'a> VkWrappedType<RawVkShaderModuleValidationCacheCreateInfo> for VkShaderModuleValidationCacheCreateInfo<'a> {

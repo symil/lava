@@ -1,19 +1,8 @@
 const {
     toPascalCase,
-    toUpperCase,
     getRawVkTypeName,
     getWrappedVkTypeName,
-    findEnumPrefix,
-    getConstVkValueName,
-    getFullWrappedType,
-    getFullRawType,
-    blockToString,
-    isCount,
-    areCountAndArray,
-    isPlural,
-    cToRustVarName,
-    argToString,
-    getFieldInformation
+    findEnumPrefix
 } = require('./utils');
 
 function generateVkEnumDefinition(cDef) {
@@ -32,11 +21,11 @@ function generateVkEnumDefinition(cDef) {
 
     return [
         genUses(),
-        genRawType(cDef),
         genWrappedType(cDef),
-        genImplVkRawType(cDef),
+        genRawType(cDef),
         genImplVkWrappedType(cDef),
-        genImplDefault(cDef),
+        genImplVkRawType(cDef),
+        genImplDefault(cDef)
     ];
 }
 

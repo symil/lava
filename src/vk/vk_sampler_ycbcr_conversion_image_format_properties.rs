@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSamplerYcbcrConversionImageFormatProperties {
+    pub combined_image_sampler_descriptor_count: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionImageFormatProperties {
@@ -23,9 +28,12 @@ pub struct RawVkSamplerYcbcrConversionImageFormatProperties {
     pub combined_image_sampler_descriptor_count: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSamplerYcbcrConversionImageFormatProperties {
-    pub combined_image_sampler_descriptor_count: usize,
+impl VkWrappedType<RawVkSamplerYcbcrConversionImageFormatProperties> for VkSamplerYcbcrConversionImageFormatProperties {
+    fn vk_to_raw(src: &VkSamplerYcbcrConversionImageFormatProperties, dst: &mut RawVkSamplerYcbcrConversionImageFormatProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SamplerYcbcrConversionImageFormatProperties);
+        dst.next = ptr::null();
+        dst.combined_image_sampler_descriptor_count = vk_to_raw_value(&src.combined_image_sampler_descriptor_count);
+    }
 }
 
 impl VkRawType<VkSamplerYcbcrConversionImageFormatProperties> for RawVkSamplerYcbcrConversionImageFormatProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkSamplerYcbcrConversionImageFormatProperties> for RawVkSamplerYc
         VkSamplerYcbcrConversionImageFormatProperties {
             combined_image_sampler_descriptor_count: u32::vk_to_wrapped(&src.combined_image_sampler_descriptor_count),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSamplerYcbcrConversionImageFormatProperties> for VkSamplerYcbcrConversionImageFormatProperties {
-    fn vk_to_raw(src: &VkSamplerYcbcrConversionImageFormatProperties, dst: &mut RawVkSamplerYcbcrConversionImageFormatProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SamplerYcbcrConversionImageFormatProperties);
-        dst.next = ptr::null();
-        dst.combined_image_sampler_descriptor_count = vk_to_raw_value(&src.combined_image_sampler_descriptor_count);
     }
 }
 

@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_swapchain::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBindImageMemorySwapchainInfo<'a> {
+    pub swapchain: &'a VkSwapchain,
+    pub image_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemorySwapchainInfo {
@@ -23,12 +29,6 @@ pub struct RawVkBindImageMemorySwapchainInfo {
     pub next: *const c_void,
     pub swapchain: RawVkSwapchain,
     pub image_index: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBindImageMemorySwapchainInfo<'a> {
-    pub swapchain: &'a VkSwapchain,
-    pub image_index: usize,
 }
 
 impl<'a> VkWrappedType<RawVkBindImageMemorySwapchainInfo> for VkBindImageMemorySwapchainInfo<'a> {

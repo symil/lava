@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_image_usage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageViewUsageCreateInfo {
+    pub usage: VkImageUsageFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageViewUsageCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkImageViewUsageCreateInfo {
     pub usage: RawVkImageUsageFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageViewUsageCreateInfo {
-    pub usage: VkImageUsageFlags,
+impl VkWrappedType<RawVkImageViewUsageCreateInfo> for VkImageViewUsageCreateInfo {
+    fn vk_to_raw(src: &VkImageViewUsageCreateInfo, dst: &mut RawVkImageViewUsageCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ImageViewUsageCreateInfo);
+        dst.next = ptr::null();
+        dst.usage = vk_to_raw_value(&src.usage);
+    }
 }
 
 impl VkRawType<VkImageViewUsageCreateInfo> for RawVkImageViewUsageCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkImageViewUsageCreateInfo> for RawVkImageViewUsageCreateInfo {
         VkImageViewUsageCreateInfo {
             usage: RawVkImageUsageFlags::vk_to_wrapped(&src.usage),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageViewUsageCreateInfo> for VkImageViewUsageCreateInfo {
-    fn vk_to_raw(src: &VkImageViewUsageCreateInfo, dst: &mut RawVkImageViewUsageCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ImageViewUsageCreateInfo);
-        dst.next = ptr::null();
-        dst.usage = vk_to_raw_value(&src.usage);
     }
 }
 

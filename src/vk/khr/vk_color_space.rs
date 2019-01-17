@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkColorSpace = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkColorSpace {
@@ -24,17 +22,19 @@ pub enum VkColorSpace {
     ExtendedSrgbNonlinearExt = 1000104014,
 }
 
+pub type RawVkColorSpace = i32;
+
+impl VkWrappedType<RawVkColorSpace> for VkColorSpace {
+    fn vk_to_raw(src: &VkColorSpace, dst: &mut RawVkColorSpace) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkColorSpace> for RawVkColorSpace {
     fn vk_to_wrapped(src: &RawVkColorSpace) -> VkColorSpace {
         unsafe {
             *((src as *const i32) as *const VkColorSpace)
         }
-    }
-}
-
-impl VkWrappedType<RawVkColorSpace> for VkColorSpace {
-    fn vk_to_raw(src: &VkColorSpace, dst: &mut RawVkColorSpace) {
-        *dst = *src as i32
     }
 }
 

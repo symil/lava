@@ -16,15 +16,6 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::nv::vk_acceleration_structure_info::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkAccelerationStructureCreateInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub compacted_size: u64,
-    pub info: RawVkAccelerationStructureInfo,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkAccelerationStructureCreateInfo<'a, 'b, 'c, 'd, 'e>
     where
@@ -35,6 +26,15 @@ pub struct VkAccelerationStructureCreateInfo<'a, 'b, 'c, 'd, 'e>
 {
     pub compacted_size: usize,
     pub info: VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkAccelerationStructureCreateInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub compacted_size: u64,
+    pub info: RawVkAccelerationStructureInfo,
 }
 
 impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkAccelerationStructureCreateInfo> for VkAccelerationStructureCreateInfo<'a, 'b, 'c, 'd, 'e>

@@ -17,6 +17,19 @@ use vk::khr::vk_display_plane_alpha_flags::*;
 use vk::vk_offset_2d::*;
 use vk::vk_extent_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayPlaneCapabilities {
+    pub supported_alpha: VkDisplayPlaneAlphaFlags,
+    pub min_src_position: VkOffset2D,
+    pub max_src_position: VkOffset2D,
+    pub min_src_extent: VkExtent2D,
+    pub max_src_extent: VkExtent2D,
+    pub min_dst_position: VkOffset2D,
+    pub max_dst_position: VkOffset2D,
+    pub min_dst_extent: VkExtent2D,
+    pub max_dst_extent: VkExtent2D,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneCapabilities {
@@ -31,17 +44,18 @@ pub struct RawVkDisplayPlaneCapabilities {
     pub max_dst_extent: RawVkExtent2D,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDisplayPlaneCapabilities {
-    pub supported_alpha: VkDisplayPlaneAlphaFlags,
-    pub min_src_position: VkOffset2D,
-    pub max_src_position: VkOffset2D,
-    pub min_src_extent: VkExtent2D,
-    pub max_src_extent: VkExtent2D,
-    pub min_dst_position: VkOffset2D,
-    pub max_dst_position: VkOffset2D,
-    pub min_dst_extent: VkExtent2D,
-    pub max_dst_extent: VkExtent2D,
+impl VkWrappedType<RawVkDisplayPlaneCapabilities> for VkDisplayPlaneCapabilities {
+    fn vk_to_raw(src: &VkDisplayPlaneCapabilities, dst: &mut RawVkDisplayPlaneCapabilities) {
+        dst.supported_alpha = vk_to_raw_value(&src.supported_alpha);
+        dst.min_src_position = vk_to_raw_value(&src.min_src_position);
+        dst.max_src_position = vk_to_raw_value(&src.max_src_position);
+        dst.min_src_extent = vk_to_raw_value(&src.min_src_extent);
+        dst.max_src_extent = vk_to_raw_value(&src.max_src_extent);
+        dst.min_dst_position = vk_to_raw_value(&src.min_dst_position);
+        dst.max_dst_position = vk_to_raw_value(&src.max_dst_position);
+        dst.min_dst_extent = vk_to_raw_value(&src.min_dst_extent);
+        dst.max_dst_extent = vk_to_raw_value(&src.max_dst_extent);
+    }
 }
 
 impl VkRawType<VkDisplayPlaneCapabilities> for RawVkDisplayPlaneCapabilities {
@@ -57,20 +71,6 @@ impl VkRawType<VkDisplayPlaneCapabilities> for RawVkDisplayPlaneCapabilities {
             min_dst_extent: RawVkExtent2D::vk_to_wrapped(&src.min_dst_extent),
             max_dst_extent: RawVkExtent2D::vk_to_wrapped(&src.max_dst_extent),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayPlaneCapabilities> for VkDisplayPlaneCapabilities {
-    fn vk_to_raw(src: &VkDisplayPlaneCapabilities, dst: &mut RawVkDisplayPlaneCapabilities) {
-        dst.supported_alpha = vk_to_raw_value(&src.supported_alpha);
-        dst.min_src_position = vk_to_raw_value(&src.min_src_position);
-        dst.max_src_position = vk_to_raw_value(&src.max_src_position);
-        dst.min_src_extent = vk_to_raw_value(&src.min_src_extent);
-        dst.max_src_extent = vk_to_raw_value(&src.max_src_extent);
-        dst.min_dst_position = vk_to_raw_value(&src.min_dst_position);
-        dst.max_dst_position = vk_to_raw_value(&src.max_dst_position);
-        dst.min_dst_extent = vk_to_raw_value(&src.min_dst_extent);
-        dst.max_dst_extent = vk_to_raw_value(&src.max_dst_extent);
     }
 }
 

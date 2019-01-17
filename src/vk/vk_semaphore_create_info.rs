@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_semaphore_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSemaphoreCreateInfo {
+    pub flags: VkSemaphoreCreateFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSemaphoreCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkSemaphoreCreateInfo {
     pub flags: RawVkSemaphoreCreateFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSemaphoreCreateInfo {
-    pub flags: VkSemaphoreCreateFlags,
+impl VkWrappedType<RawVkSemaphoreCreateInfo> for VkSemaphoreCreateInfo {
+    fn vk_to_raw(src: &VkSemaphoreCreateInfo, dst: &mut RawVkSemaphoreCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SemaphoreCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+    }
 }
 
 impl VkRawType<VkSemaphoreCreateInfo> for RawVkSemaphoreCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkSemaphoreCreateInfo> for RawVkSemaphoreCreateInfo {
         VkSemaphoreCreateInfo {
             flags: RawVkSemaphoreCreateFlags::vk_to_wrapped(&src.flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSemaphoreCreateInfo> for VkSemaphoreCreateInfo {
-    fn vk_to_raw(src: &VkSemaphoreCreateInfo, dst: &mut RawVkSemaphoreCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SemaphoreCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 

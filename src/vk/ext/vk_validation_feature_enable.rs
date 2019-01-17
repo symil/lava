@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkValidationFeatureEnable = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkValidationFeatureEnable {
@@ -11,17 +9,19 @@ pub enum VkValidationFeatureEnable {
     GpuAssistedReserveBindingSlot = 1,
 }
 
+pub type RawVkValidationFeatureEnable = i32;
+
+impl VkWrappedType<RawVkValidationFeatureEnable> for VkValidationFeatureEnable {
+    fn vk_to_raw(src: &VkValidationFeatureEnable, dst: &mut RawVkValidationFeatureEnable) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkValidationFeatureEnable> for RawVkValidationFeatureEnable {
     fn vk_to_wrapped(src: &RawVkValidationFeatureEnable) -> VkValidationFeatureEnable {
         unsafe {
             *((src as *const i32) as *const VkValidationFeatureEnable)
         }
-    }
-}
-
-impl VkWrappedType<RawVkValidationFeatureEnable> for VkValidationFeatureEnable {
-    fn vk_to_raw(src: &VkValidationFeatureEnable, dst: &mut RawVkValidationFeatureEnable) {
-        *dst = *src as i32
     }
 }
 

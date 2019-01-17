@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceCornerSampledImageFeatures {
+    pub corner_sampled_image: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceCornerSampledImageFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceCornerSampledImageFeatures {
     pub corner_sampled_image: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceCornerSampledImageFeatures {
-    pub corner_sampled_image: bool,
+impl VkWrappedType<RawVkPhysicalDeviceCornerSampledImageFeatures> for VkPhysicalDeviceCornerSampledImageFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceCornerSampledImageFeatures, dst: &mut RawVkPhysicalDeviceCornerSampledImageFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceCornerSampledImageFeaturesNv);
+        dst.next = ptr::null();
+        dst.corner_sampled_image = vk_to_raw_value(&src.corner_sampled_image);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceCornerSampledImageFeatures> for RawVkPhysicalDeviceCornerSampledImageFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceCornerSampledImageFeatures> for RawVkPhysicalDevi
         VkPhysicalDeviceCornerSampledImageFeatures {
             corner_sampled_image: u32::vk_to_wrapped(&src.corner_sampled_image),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceCornerSampledImageFeatures> for VkPhysicalDeviceCornerSampledImageFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceCornerSampledImageFeatures, dst: &mut RawVkPhysicalDeviceCornerSampledImageFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceCornerSampledImageFeaturesNv);
-        dst.next = ptr::null();
-        dst.corner_sampled_image = vk_to_raw_value(&src.corner_sampled_image);
     }
 }
 

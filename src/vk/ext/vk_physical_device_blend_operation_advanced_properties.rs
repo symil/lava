@@ -15,6 +15,16 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceBlendOperationAdvancedProperties {
+    pub advanced_blend_max_color_attachments: usize,
+    pub advanced_blend_independent_blend: bool,
+    pub advanced_blend_non_premultiplied_src_color: bool,
+    pub advanced_blend_non_premultiplied_dst_color: bool,
+    pub advanced_blend_correlated_overlap: bool,
+    pub advanced_blend_all_operations: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceBlendOperationAdvancedProperties {
@@ -28,14 +38,17 @@ pub struct RawVkPhysicalDeviceBlendOperationAdvancedProperties {
     pub advanced_blend_all_operations: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceBlendOperationAdvancedProperties {
-    pub advanced_blend_max_color_attachments: usize,
-    pub advanced_blend_independent_blend: bool,
-    pub advanced_blend_non_premultiplied_src_color: bool,
-    pub advanced_blend_non_premultiplied_dst_color: bool,
-    pub advanced_blend_correlated_overlap: bool,
-    pub advanced_blend_all_operations: bool,
+impl VkWrappedType<RawVkPhysicalDeviceBlendOperationAdvancedProperties> for VkPhysicalDeviceBlendOperationAdvancedProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceBlendOperationAdvancedProperties, dst: &mut RawVkPhysicalDeviceBlendOperationAdvancedProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBlendOperationAdvancedPropertiesExt);
+        dst.next = ptr::null();
+        dst.advanced_blend_max_color_attachments = vk_to_raw_value(&src.advanced_blend_max_color_attachments);
+        dst.advanced_blend_independent_blend = vk_to_raw_value(&src.advanced_blend_independent_blend);
+        dst.advanced_blend_non_premultiplied_src_color = vk_to_raw_value(&src.advanced_blend_non_premultiplied_src_color);
+        dst.advanced_blend_non_premultiplied_dst_color = vk_to_raw_value(&src.advanced_blend_non_premultiplied_dst_color);
+        dst.advanced_blend_correlated_overlap = vk_to_raw_value(&src.advanced_blend_correlated_overlap);
+        dst.advanced_blend_all_operations = vk_to_raw_value(&src.advanced_blend_all_operations);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceBlendOperationAdvancedProperties> for RawVkPhysicalDeviceBlendOperationAdvancedProperties {
@@ -48,19 +61,6 @@ impl VkRawType<VkPhysicalDeviceBlendOperationAdvancedProperties> for RawVkPhysic
             advanced_blend_correlated_overlap: u32::vk_to_wrapped(&src.advanced_blend_correlated_overlap),
             advanced_blend_all_operations: u32::vk_to_wrapped(&src.advanced_blend_all_operations),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceBlendOperationAdvancedProperties> for VkPhysicalDeviceBlendOperationAdvancedProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceBlendOperationAdvancedProperties, dst: &mut RawVkPhysicalDeviceBlendOperationAdvancedProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBlendOperationAdvancedPropertiesExt);
-        dst.next = ptr::null();
-        dst.advanced_blend_max_color_attachments = vk_to_raw_value(&src.advanced_blend_max_color_attachments);
-        dst.advanced_blend_independent_blend = vk_to_raw_value(&src.advanced_blend_independent_blend);
-        dst.advanced_blend_non_premultiplied_src_color = vk_to_raw_value(&src.advanced_blend_non_premultiplied_src_color);
-        dst.advanced_blend_non_premultiplied_dst_color = vk_to_raw_value(&src.advanced_blend_non_premultiplied_dst_color);
-        dst.advanced_blend_correlated_overlap = vk_to_raw_value(&src.advanced_blend_correlated_overlap);
-        dst.advanced_blend_all_operations = vk_to_raw_value(&src.advanced_blend_all_operations);
     }
 }
 

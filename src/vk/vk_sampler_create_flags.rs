@@ -2,12 +2,20 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSamplerCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSamplerCreateFlags {
     pub subsampled_ext: bool,
     pub subsampled_coarse_reconstruction_ext: bool,
+}
+
+pub type RawVkSamplerCreateFlags = u32;
+
+impl VkWrappedType<RawVkSamplerCreateFlags> for VkSamplerCreateFlags {
+    fn vk_to_raw(src: &VkSamplerCreateFlags, dst: &mut RawVkSamplerCreateFlags) {
+        *dst = 0;
+        if src.subsampled_ext { *dst |= 0x00000001; }
+        if src.subsampled_coarse_reconstruction_ext { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkSamplerCreateFlags> for RawVkSamplerCreateFlags {
@@ -16,14 +24,6 @@ impl VkRawType<VkSamplerCreateFlags> for RawVkSamplerCreateFlags {
             subsampled_ext: (src & 0x00000001) != 0,
             subsampled_coarse_reconstruction_ext: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSamplerCreateFlags> for VkSamplerCreateFlags {
-    fn vk_to_raw(src: &VkSamplerCreateFlags, dst: &mut RawVkSamplerCreateFlags) {
-        *dst = 0;
-        if src.subsampled_ext { *dst |= 0x00000001; }
-        if src.subsampled_coarse_reconstruction_ext { *dst |= 0x00000002; }
     }
 }
 

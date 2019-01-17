@@ -18,6 +18,14 @@ use vk::nvx::vk_object_entry_usage_flags::*;
 use vk::vk_pipeline_layout::*;
 use vk::vk_descriptor_set::*;
 
+#[derive(Debug, Clone)]
+pub struct VkObjectTableDescriptorSetEntry<'a, 'b> {
+    pub type_: VkObjectEntryType,
+    pub flags: VkObjectEntryUsageFlags,
+    pub pipeline_layout: &'a VkPipelineLayout,
+    pub descriptor_set: &'b VkDescriptorSet,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableDescriptorSetEntry {
@@ -25,14 +33,6 @@ pub struct RawVkObjectTableDescriptorSetEntry {
     pub flags: RawVkObjectEntryUsageFlags,
     pub pipeline_layout: RawVkPipelineLayout,
     pub descriptor_set: RawVkDescriptorSet,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkObjectTableDescriptorSetEntry<'a, 'b> {
-    pub type_: VkObjectEntryType,
-    pub flags: VkObjectEntryUsageFlags,
-    pub pipeline_layout: &'a VkPipelineLayout,
-    pub descriptor_set: &'b VkDescriptorSet,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkObjectTableDescriptorSetEntry> for VkObjectTableDescriptorSetEntry<'a, 'b> {

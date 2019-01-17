@@ -2,12 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkValidationCacheHeaderVersion = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkValidationCacheHeaderVersion {
     One = 1,
+}
+
+pub type RawVkValidationCacheHeaderVersion = i32;
+
+impl VkWrappedType<RawVkValidationCacheHeaderVersion> for VkValidationCacheHeaderVersion {
+    fn vk_to_raw(src: &VkValidationCacheHeaderVersion, dst: &mut RawVkValidationCacheHeaderVersion) {
+        *dst = *src as i32
+    }
 }
 
 impl VkRawType<VkValidationCacheHeaderVersion> for RawVkValidationCacheHeaderVersion {
@@ -15,12 +21,6 @@ impl VkRawType<VkValidationCacheHeaderVersion> for RawVkValidationCacheHeaderVer
         unsafe {
             *((src as *const i32) as *const VkValidationCacheHeaderVersion)
         }
-    }
-}
-
-impl VkWrappedType<RawVkValidationCacheHeaderVersion> for VkValidationCacheHeaderVersion {
-    fn vk_to_raw(src: &VkValidationCacheHeaderVersion, dst: &mut RawVkValidationCacheHeaderVersion) {
-        *dst = *src as i32
     }
 }
 

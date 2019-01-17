@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSubpassEndInfo {
+    
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassEndInfo {
@@ -22,9 +27,11 @@ pub struct RawVkSubpassEndInfo {
     pub next: *const c_void,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSubpassEndInfo {
-    
+impl VkWrappedType<RawVkSubpassEndInfo> for VkSubpassEndInfo {
+    fn vk_to_raw(src: &VkSubpassEndInfo, dst: &mut RawVkSubpassEndInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SubpassEndInfoKhr);
+        dst.next = ptr::null();
+    }
 }
 
 impl VkRawType<VkSubpassEndInfo> for RawVkSubpassEndInfo {
@@ -32,13 +39,6 @@ impl VkRawType<VkSubpassEndInfo> for RawVkSubpassEndInfo {
         VkSubpassEndInfo {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkSubpassEndInfo> for VkSubpassEndInfo {
-    fn vk_to_raw(src: &VkSubpassEndInfo, dst: &mut RawVkSubpassEndInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SubpassEndInfoKhr);
-        dst.next = ptr::null();
     }
 }
 

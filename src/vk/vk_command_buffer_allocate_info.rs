@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_command_pool::*;
 use vk::vk_command_buffer_level::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCommandBufferAllocateInfo<'a> {
+    pub command_pool: &'a VkCommandPool,
+    pub level: VkCommandBufferLevel,
+    pub command_buffer_count: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferAllocateInfo {
@@ -25,13 +32,6 @@ pub struct RawVkCommandBufferAllocateInfo {
     pub command_pool: RawVkCommandPool,
     pub level: RawVkCommandBufferLevel,
     pub command_buffer_count: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkCommandBufferAllocateInfo<'a> {
-    pub command_pool: &'a VkCommandPool,
-    pub level: VkCommandBufferLevel,
-    pub command_buffer_count: usize,
 }
 
 impl<'a> VkWrappedType<RawVkCommandBufferAllocateInfo> for VkCommandBufferAllocateInfo<'a> {

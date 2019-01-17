@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_display_mode::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayPlaneInfo2<'a> {
+    pub mode: &'a VkDisplayMode,
+    pub plane_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneInfo2 {
@@ -23,12 +29,6 @@ pub struct RawVkDisplayPlaneInfo2 {
     pub next: *const c_void,
     pub mode: RawVkDisplayMode,
     pub plane_index: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDisplayPlaneInfo2<'a> {
-    pub mode: &'a VkDisplayMode,
-    pub plane_index: usize,
 }
 
 impl<'a> VkWrappedType<RawVkDisplayPlaneInfo2> for VkDisplayPlaneInfo2<'a> {

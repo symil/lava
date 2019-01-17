@@ -17,6 +17,14 @@ use vk::vk_structure_type::*;
 use vk::khr::vk_driver_id::*;
 use vk::khr::vk_conformance_version::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceDriverProperties {
+    pub driver_id: VkDriverId,
+    pub driver_name: String,
+    pub driver_info: String,
+    pub conformance_version: VkConformanceVersion,
+}
+
 #[repr(C)]
 pub struct RawVkPhysicalDeviceDriverProperties {
     pub s_type: RawVkStructureType,
@@ -25,14 +33,6 @@ pub struct RawVkPhysicalDeviceDriverProperties {
     pub driver_name: [c_char; 256],
     pub driver_info: [c_char; 256],
     pub conformance_version: RawVkConformanceVersion,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceDriverProperties {
-    pub driver_id: VkDriverId,
-    pub driver_name: String,
-    pub driver_info: String,
-    pub conformance_version: VkConformanceVersion,
 }
 
 impl VkRawType<VkPhysicalDeviceDriverProperties> for RawVkPhysicalDeviceDriverProperties {

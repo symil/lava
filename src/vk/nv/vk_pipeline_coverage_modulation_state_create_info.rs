@@ -17,6 +17,14 @@ use vk::vk_structure_type::*;
 use vk::nv::vk_pipeline_coverage_modulation_state_create_flags::*;
 use vk::nv::vk_coverage_modulation_mode::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineCoverageModulationStateCreateInfo<'a> {
+    pub flags: VkPipelineCoverageModulationStateCreateFlags,
+    pub coverage_modulation_mode: VkCoverageModulationMode,
+    pub coverage_modulation_table_enable: bool,
+    pub coverage_modulation_table: Option<&'a [f32]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineCoverageModulationStateCreateInfo {
@@ -27,14 +35,6 @@ pub struct RawVkPipelineCoverageModulationStateCreateInfo {
     pub coverage_modulation_table_enable: u32,
     pub coverage_modulation_table_count: u32,
     pub coverage_modulation_table: *const f32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineCoverageModulationStateCreateInfo<'a> {
-    pub flags: VkPipelineCoverageModulationStateCreateFlags,
-    pub coverage_modulation_mode: VkCoverageModulationMode,
-    pub coverage_modulation_table_enable: bool,
-    pub coverage_modulation_table: Option<&'a [f32]>,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineCoverageModulationStateCreateInfo> for VkPipelineCoverageModulationStateCreateInfo<'a> {

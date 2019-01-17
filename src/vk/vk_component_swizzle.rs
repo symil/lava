@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkComponentSwizzle = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkComponentSwizzle {
@@ -16,17 +14,19 @@ pub enum VkComponentSwizzle {
     A = 6,
 }
 
+pub type RawVkComponentSwizzle = i32;
+
+impl VkWrappedType<RawVkComponentSwizzle> for VkComponentSwizzle {
+    fn vk_to_raw(src: &VkComponentSwizzle, dst: &mut RawVkComponentSwizzle) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkComponentSwizzle> for RawVkComponentSwizzle {
     fn vk_to_wrapped(src: &RawVkComponentSwizzle) -> VkComponentSwizzle {
         unsafe {
             *((src as *const i32) as *const VkComponentSwizzle)
         }
-    }
-}
-
-impl VkWrappedType<RawVkComponentSwizzle> for VkComponentSwizzle {
-    fn vk_to_raw(src: &VkComponentSwizzle, dst: &mut RawVkComponentSwizzle) {
-        *dst = *src as i32
     }
 }
 

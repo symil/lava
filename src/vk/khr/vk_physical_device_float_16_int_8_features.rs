@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceFloat16Int8Features {
+    pub shader_float_16: bool,
+    pub shader_int_8: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFloat16Int8Features {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceFloat16Int8Features {
     pub shader_int_8: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceFloat16Int8Features {
-    pub shader_float_16: bool,
-    pub shader_int_8: bool,
+impl VkWrappedType<RawVkPhysicalDeviceFloat16Int8Features> for VkPhysicalDeviceFloat16Int8Features {
+    fn vk_to_raw(src: &VkPhysicalDeviceFloat16Int8Features, dst: &mut RawVkPhysicalDeviceFloat16Int8Features) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFloat16Int8FeaturesKhr);
+        dst.next = ptr::null();
+        dst.shader_float_16 = vk_to_raw_value(&src.shader_float_16);
+        dst.shader_int_8 = vk_to_raw_value(&src.shader_int_8);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceFloat16Int8Features> for RawVkPhysicalDeviceFloat16Int8Features {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceFloat16Int8Features> for RawVkPhysicalDeviceFloat
             shader_float_16: u32::vk_to_wrapped(&src.shader_float_16),
             shader_int_8: u32::vk_to_wrapped(&src.shader_int_8),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceFloat16Int8Features> for VkPhysicalDeviceFloat16Int8Features {
-    fn vk_to_raw(src: &VkPhysicalDeviceFloat16Int8Features, dst: &mut RawVkPhysicalDeviceFloat16Int8Features) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFloat16Int8FeaturesKhr);
-        dst.next = ptr::null();
-        dst.shader_float_16 = vk_to_raw_value(&src.shader_float_16);
-        dst.shader_int_8 = vk_to_raw_value(&src.shader_int_8);
     }
 }
 

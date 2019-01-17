@@ -17,19 +17,19 @@ use vk::vk_sampler::*;
 use vk::vk_image_view::*;
 use vk::vk_image_layout::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorImageInfo<'a, 'b> {
+    pub sampler: &'a VkSampler,
+    pub image_view: &'b VkImageView,
+    pub image_layout: VkImageLayout,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorImageInfo {
     pub sampler: RawVkSampler,
     pub image_view: RawVkImageView,
     pub image_layout: RawVkImageLayout,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDescriptorImageInfo<'a, 'b> {
-    pub sampler: &'a VkSampler,
-    pub image_view: &'b VkImageView,
-    pub image_layout: VkImageLayout,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkDescriptorImageInfo> for VkDescriptorImageInfo<'a, 'b> {

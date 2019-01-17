@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkBlendOp = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkBlendOp {
@@ -60,17 +58,19 @@ pub enum VkBlendOp {
     BlueExt = 1000148045,
 }
 
+pub type RawVkBlendOp = i32;
+
+impl VkWrappedType<RawVkBlendOp> for VkBlendOp {
+    fn vk_to_raw(src: &VkBlendOp, dst: &mut RawVkBlendOp) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkBlendOp> for RawVkBlendOp {
     fn vk_to_wrapped(src: &RawVkBlendOp) -> VkBlendOp {
         unsafe {
             *((src as *const i32) as *const VkBlendOp)
         }
-    }
-}
-
-impl VkWrappedType<RawVkBlendOp> for VkBlendOp {
-    fn vk_to_raw(src: &VkBlendOp, dst: &mut RawVkBlendOp) {
-        *dst = *src as i32
     }
 }
 

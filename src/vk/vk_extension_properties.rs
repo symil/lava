@@ -14,15 +14,15 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
-#[repr(C)]
-pub struct RawVkExtensionProperties {
-    pub extension_name: [c_char; 256],
-    pub spec_version: u32,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkExtensionProperties {
     pub extension_name: String,
+    pub spec_version: u32,
+}
+
+#[repr(C)]
+pub struct RawVkExtensionProperties {
+    pub extension_name: [c_char; 256],
     pub spec_version: u32,
 }
 

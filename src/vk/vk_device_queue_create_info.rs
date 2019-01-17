@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_device_queue_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceQueueCreateInfo<'a> {
+    pub flags: VkDeviceQueueCreateFlags,
+    pub queue_family_index: usize,
+    pub queue_priorities: &'a [f32],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceQueueCreateInfo {
@@ -25,13 +32,6 @@ pub struct RawVkDeviceQueueCreateInfo {
     pub queue_family_index: u32,
     pub queue_count: u32,
     pub queue_priorities: *const f32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDeviceQueueCreateInfo<'a> {
-    pub flags: VkDeviceQueueCreateFlags,
-    pub queue_family_index: usize,
-    pub queue_priorities: &'a [f32],
 }
 
 impl<'a> VkWrappedType<RawVkDeviceQueueCreateInfo> for VkDeviceQueueCreateInfo<'a> {

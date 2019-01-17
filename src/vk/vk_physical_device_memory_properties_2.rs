@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_physical_device_memory_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMemoryProperties2 {
+    pub memory_properties: VkPhysicalDeviceMemoryProperties,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryProperties2 {
@@ -24,9 +29,12 @@ pub struct RawVkPhysicalDeviceMemoryProperties2 {
     pub memory_properties: RawVkPhysicalDeviceMemoryProperties,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMemoryProperties2 {
-    pub memory_properties: VkPhysicalDeviceMemoryProperties,
+impl VkWrappedType<RawVkPhysicalDeviceMemoryProperties2> for VkPhysicalDeviceMemoryProperties2 {
+    fn vk_to_raw(src: &VkPhysicalDeviceMemoryProperties2, dst: &mut RawVkPhysicalDeviceMemoryProperties2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryProperties2);
+        dst.next = ptr::null();
+        dst.memory_properties = vk_to_raw_value(&src.memory_properties);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMemoryProperties2> for RawVkPhysicalDeviceMemoryProperties2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkPhysicalDeviceMemoryProperties2> for RawVkPhysicalDeviceMemoryP
         VkPhysicalDeviceMemoryProperties2 {
             memory_properties: RawVkPhysicalDeviceMemoryProperties::vk_to_wrapped(&src.memory_properties),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMemoryProperties2> for VkPhysicalDeviceMemoryProperties2 {
-    fn vk_to_raw(src: &VkPhysicalDeviceMemoryProperties2, dst: &mut RawVkPhysicalDeviceMemoryProperties2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryProperties2);
-        dst.next = ptr::null();
-        dst.memory_properties = vk_to_raw_value(&src.memory_properties);
     }
 }
 

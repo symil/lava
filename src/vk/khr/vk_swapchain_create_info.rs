@@ -26,6 +26,25 @@ use vk::khr::vk_composite_alpha_flags::*;
 use vk::khr::vk_present_mode::*;
 use vk::khr::vk_swapchain::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSwapchainCreateInfo<'a, 'b, 'c> {
+    pub flags: VkSwapchainCreateFlags,
+    pub surface: &'a VkSurface,
+    pub min_image_count: usize,
+    pub image_format: VkFormat,
+    pub image_color_space: VkColorSpace,
+    pub image_extent: VkExtent2D,
+    pub image_array_layers: usize,
+    pub image_usage: VkImageUsageFlags,
+    pub image_sharing_mode: VkSharingMode,
+    pub queue_family_indices: &'b [usize],
+    pub pre_transform: VkSurfaceTransformFlags,
+    pub composite_alpha: VkCompositeAlphaFlags,
+    pub present_mode: VkPresentMode,
+    pub clipped: bool,
+    pub old_swapchain: Option<&'c VkSwapchain>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSwapchainCreateInfo {
@@ -47,25 +66,6 @@ pub struct RawVkSwapchainCreateInfo {
     pub present_mode: RawVkPresentMode,
     pub clipped: u32,
     pub old_swapchain: RawVkSwapchain,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSwapchainCreateInfo<'a, 'b, 'c> {
-    pub flags: VkSwapchainCreateFlags,
-    pub surface: &'a VkSurface,
-    pub min_image_count: usize,
-    pub image_format: VkFormat,
-    pub image_color_space: VkColorSpace,
-    pub image_extent: VkExtent2D,
-    pub image_array_layers: usize,
-    pub image_usage: VkImageUsageFlags,
-    pub image_sharing_mode: VkSharingMode,
-    pub queue_family_indices: &'b [usize],
-    pub pre_transform: VkSurfaceTransformFlags,
-    pub composite_alpha: VkCompositeAlphaFlags,
-    pub present_mode: VkPresentMode,
-    pub clipped: bool,
-    pub old_swapchain: Option<&'c VkSwapchain>,
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkSwapchainCreateInfo> for VkSwapchainCreateInfo<'a, 'b, 'c> {

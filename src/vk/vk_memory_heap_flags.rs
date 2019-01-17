@@ -2,12 +2,20 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkMemoryHeapFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryHeapFlags {
     pub device_local: bool,
     pub multi_instance: bool,
+}
+
+pub type RawVkMemoryHeapFlags = u32;
+
+impl VkWrappedType<RawVkMemoryHeapFlags> for VkMemoryHeapFlags {
+    fn vk_to_raw(src: &VkMemoryHeapFlags, dst: &mut RawVkMemoryHeapFlags) {
+        *dst = 0;
+        if src.device_local { *dst |= 0x00000001; }
+        if src.multi_instance { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkMemoryHeapFlags> for RawVkMemoryHeapFlags {
@@ -16,14 +24,6 @@ impl VkRawType<VkMemoryHeapFlags> for RawVkMemoryHeapFlags {
             device_local: (src & 0x00000001) != 0,
             multi_instance: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryHeapFlags> for VkMemoryHeapFlags {
-    fn vk_to_raw(src: &VkMemoryHeapFlags, dst: &mut RawVkMemoryHeapFlags) {
-        *dst = 0;
-        if src.device_local { *dst |= 0x00000001; }
-        if src.multi_instance { *dst |= 0x00000002; }
     }
 }
 

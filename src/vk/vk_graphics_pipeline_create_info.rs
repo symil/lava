@@ -29,30 +29,6 @@ use vk::vk_pipeline_layout::*;
 use vk::vk_render_pass::*;
 use vk::vk_pipeline::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkGraphicsPipelineCreateInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub flags: RawVkPipelineCreateFlags,
-    pub stage_count: u32,
-    pub stages: *mut RawVkPipelineShaderStageCreateInfo,
-    pub vertex_input_state: *mut RawVkPipelineVertexInputStateCreateInfo,
-    pub input_assembly_state: *mut RawVkPipelineInputAssemblyStateCreateInfo,
-    pub tessellation_state: *mut RawVkPipelineTessellationStateCreateInfo,
-    pub viewport_state: *mut RawVkPipelineViewportStateCreateInfo,
-    pub rasterization_state: *mut RawVkPipelineRasterizationStateCreateInfo,
-    pub multisample_state: *mut RawVkPipelineMultisampleStateCreateInfo,
-    pub depth_stencil_state: *mut RawVkPipelineDepthStencilStateCreateInfo,
-    pub color_blend_state: *mut RawVkPipelineColorBlendStateCreateInfo,
-    pub dynamic_state: *mut RawVkPipelineDynamicStateCreateInfo,
-    pub layout: RawVkPipelineLayout,
-    pub render_pass: RawVkRenderPass,
-    pub subpass: u32,
-    pub base_pipeline_handle: RawVkPipeline,
-    pub base_pipeline_index: i32,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y>
     where
@@ -85,6 +61,30 @@ pub struct VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 
     pub subpass: u32,
     pub base_pipeline_handle: Option<&'y VkPipeline>,
     pub base_pipeline_index: isize,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkGraphicsPipelineCreateInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineCreateFlags,
+    pub stage_count: u32,
+    pub stages: *mut RawVkPipelineShaderStageCreateInfo,
+    pub vertex_input_state: *mut RawVkPipelineVertexInputStateCreateInfo,
+    pub input_assembly_state: *mut RawVkPipelineInputAssemblyStateCreateInfo,
+    pub tessellation_state: *mut RawVkPipelineTessellationStateCreateInfo,
+    pub viewport_state: *mut RawVkPipelineViewportStateCreateInfo,
+    pub rasterization_state: *mut RawVkPipelineRasterizationStateCreateInfo,
+    pub multisample_state: *mut RawVkPipelineMultisampleStateCreateInfo,
+    pub depth_stencil_state: *mut RawVkPipelineDepthStencilStateCreateInfo,
+    pub color_blend_state: *mut RawVkPipelineColorBlendStateCreateInfo,
+    pub dynamic_state: *mut RawVkPipelineDynamicStateCreateInfo,
+    pub layout: RawVkPipelineLayout,
+    pub render_pass: RawVkRenderPass,
+    pub subpass: u32,
+    pub base_pipeline_handle: RawVkPipeline,
+    pub base_pipeline_index: i32,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y> VkWrappedType<RawVkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y>

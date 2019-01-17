@@ -17,6 +17,18 @@ use vk::vk_structure_type::*;
 use vk::nvx::vk_object_entry_type::*;
 use vk::nvx::vk_object_entry_usage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkObjectTableCreateInfo<'a, 'b, 'c> {
+    pub object_entry_types: &'a [VkObjectEntryType],
+    pub object_entry_counts: &'b [usize],
+    pub object_entry_usage_flags: &'c [VkObjectEntryUsageFlags],
+    pub max_uniform_buffers_per_descriptor: usize,
+    pub max_storage_buffers_per_descriptor: usize,
+    pub max_storage_images_per_descriptor: usize,
+    pub max_sampled_images_per_descriptor: usize,
+    pub max_pipeline_layouts: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableCreateInfo {
@@ -31,18 +43,6 @@ pub struct RawVkObjectTableCreateInfo {
     pub max_storage_images_per_descriptor: u32,
     pub max_sampled_images_per_descriptor: u32,
     pub max_pipeline_layouts: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkObjectTableCreateInfo<'a, 'b, 'c> {
-    pub object_entry_types: &'a [VkObjectEntryType],
-    pub object_entry_counts: &'b [usize],
-    pub object_entry_usage_flags: &'c [VkObjectEntryUsageFlags],
-    pub max_uniform_buffers_per_descriptor: usize,
-    pub max_storage_buffers_per_descriptor: usize,
-    pub max_storage_images_per_descriptor: usize,
-    pub max_sampled_images_per_descriptor: usize,
-    pub max_pipeline_layouts: usize,
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkObjectTableCreateInfo> for VkObjectTableCreateInfo<'a, 'b, 'c> {

@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkTextureLODGatherFormatProperties {
+    pub supports_texture_gather_lodbias_amd: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkTextureLODGatherFormatProperties {
@@ -23,9 +28,12 @@ pub struct RawVkTextureLODGatherFormatProperties {
     pub supports_texture_gather_lodbias_amd: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkTextureLODGatherFormatProperties {
-    pub supports_texture_gather_lodbias_amd: bool,
+impl VkWrappedType<RawVkTextureLODGatherFormatProperties> for VkTextureLODGatherFormatProperties {
+    fn vk_to_raw(src: &VkTextureLODGatherFormatProperties, dst: &mut RawVkTextureLODGatherFormatProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::TextureLodGatherFormatPropertiesAmd);
+        dst.next = ptr::null();
+        dst.supports_texture_gather_lodbias_amd = vk_to_raw_value(&src.supports_texture_gather_lodbias_amd);
+    }
 }
 
 impl VkRawType<VkTextureLODGatherFormatProperties> for RawVkTextureLODGatherFormatProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkTextureLODGatherFormatProperties> for RawVkTextureLODGatherForm
         VkTextureLODGatherFormatProperties {
             supports_texture_gather_lodbias_amd: u32::vk_to_wrapped(&src.supports_texture_gather_lodbias_amd),
         }
-    }
-}
-
-impl VkWrappedType<RawVkTextureLODGatherFormatProperties> for VkTextureLODGatherFormatProperties {
-    fn vk_to_raw(src: &VkTextureLODGatherFormatProperties, dst: &mut RawVkTextureLODGatherFormatProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::TextureLodGatherFormatPropertiesAmd);
-        dst.next = ptr::null();
-        dst.supports_texture_gather_lodbias_amd = vk_to_raw_value(&src.supports_texture_gather_lodbias_amd);
     }
 }
 

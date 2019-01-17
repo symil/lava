@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceShadingRateImageFeatures {
+    pub shading_rate_image: bool,
+    pub shading_rate_coarse_sample_order: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShadingRateImageFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceShadingRateImageFeatures {
     pub shading_rate_coarse_sample_order: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceShadingRateImageFeatures {
-    pub shading_rate_image: bool,
-    pub shading_rate_coarse_sample_order: bool,
+impl VkWrappedType<RawVkPhysicalDeviceShadingRateImageFeatures> for VkPhysicalDeviceShadingRateImageFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceShadingRateImageFeatures, dst: &mut RawVkPhysicalDeviceShadingRateImageFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShadingRateImageFeaturesNv);
+        dst.next = ptr::null();
+        dst.shading_rate_image = vk_to_raw_value(&src.shading_rate_image);
+        dst.shading_rate_coarse_sample_order = vk_to_raw_value(&src.shading_rate_coarse_sample_order);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceShadingRateImageFeatures> for RawVkPhysicalDeviceShadingRateImageFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceShadingRateImageFeatures> for RawVkPhysicalDevice
             shading_rate_image: u32::vk_to_wrapped(&src.shading_rate_image),
             shading_rate_coarse_sample_order: u32::vk_to_wrapped(&src.shading_rate_coarse_sample_order),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceShadingRateImageFeatures> for VkPhysicalDeviceShadingRateImageFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceShadingRateImageFeatures, dst: &mut RawVkPhysicalDeviceShadingRateImageFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShadingRateImageFeaturesNv);
-        dst.next = ptr::null();
-        dst.shading_rate_image = vk_to_raw_value(&src.shading_rate_image);
-        dst.shading_rate_coarse_sample_order = vk_to_raw_value(&src.shading_rate_coarse_sample_order);
     }
 }
 

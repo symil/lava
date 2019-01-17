@@ -15,6 +15,14 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDevicePCIBusInfoProperties {
+    pub pci_domain: usize,
+    pub pci_bus: usize,
+    pub pci_device: usize,
+    pub pci_function: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevicePCIBusInfoProperties {
@@ -26,12 +34,15 @@ pub struct RawVkPhysicalDevicePCIBusInfoProperties {
     pub pci_function: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDevicePCIBusInfoProperties {
-    pub pci_domain: usize,
-    pub pci_bus: usize,
-    pub pci_device: usize,
-    pub pci_function: usize,
+impl VkWrappedType<RawVkPhysicalDevicePCIBusInfoProperties> for VkPhysicalDevicePCIBusInfoProperties {
+    fn vk_to_raw(src: &VkPhysicalDevicePCIBusInfoProperties, dst: &mut RawVkPhysicalDevicePCIBusInfoProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePciBusInfoPropertiesExt);
+        dst.next = ptr::null();
+        dst.pci_domain = vk_to_raw_value(&src.pci_domain);
+        dst.pci_bus = vk_to_raw_value(&src.pci_bus);
+        dst.pci_device = vk_to_raw_value(&src.pci_device);
+        dst.pci_function = vk_to_raw_value(&src.pci_function);
+    }
 }
 
 impl VkRawType<VkPhysicalDevicePCIBusInfoProperties> for RawVkPhysicalDevicePCIBusInfoProperties {
@@ -42,17 +53,6 @@ impl VkRawType<VkPhysicalDevicePCIBusInfoProperties> for RawVkPhysicalDevicePCIB
             pci_device: u32::vk_to_wrapped(&src.pci_device),
             pci_function: u32::vk_to_wrapped(&src.pci_function),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDevicePCIBusInfoProperties> for VkPhysicalDevicePCIBusInfoProperties {
-    fn vk_to_raw(src: &VkPhysicalDevicePCIBusInfoProperties, dst: &mut RawVkPhysicalDevicePCIBusInfoProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePciBusInfoPropertiesExt);
-        dst.next = ptr::null();
-        dst.pci_domain = vk_to_raw_value(&src.pci_domain);
-        dst.pci_bus = vk_to_raw_value(&src.pci_bus);
-        dst.pci_device = vk_to_raw_value(&src.pci_device);
-        dst.pci_function = vk_to_raw_value(&src.pci_function);
     }
 }
 

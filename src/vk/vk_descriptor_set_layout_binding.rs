@@ -17,16 +17,6 @@ use vk::vk_descriptor_type::*;
 use vk::vk_shader_stage_flags::*;
 use vk::vk_sampler::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkDescriptorSetLayoutBinding {
-    pub binding: u32,
-    pub descriptor_type: RawVkDescriptorType,
-    pub descriptor_count: u32,
-    pub stage_flags: RawVkShaderStageFlags,
-    pub immutable_samplers: *mut RawVkSampler,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetLayoutBinding<'a, 'b>
     where
@@ -36,6 +26,16 @@ pub struct VkDescriptorSetLayoutBinding<'a, 'b>
     pub descriptor_type: VkDescriptorType,
     pub stage_flags: VkShaderStageFlags,
     pub immutable_samplers: Option<&'a [&'b VkSampler]>,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkDescriptorSetLayoutBinding {
+    pub binding: u32,
+    pub descriptor_type: RawVkDescriptorType,
+    pub descriptor_count: u32,
+    pub stage_flags: RawVkShaderStageFlags,
+    pub immutable_samplers: *mut RawVkSampler,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkDescriptorSetLayoutBinding> for VkDescriptorSetLayoutBinding<'a, 'b>

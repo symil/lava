@@ -15,6 +15,14 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_format::*;
 
+#[derive(Debug, Clone)]
+pub struct VkVertexInputAttributeDescription {
+    pub location: usize,
+    pub binding: usize,
+    pub format: VkFormat,
+    pub offset: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkVertexInputAttributeDescription {
@@ -24,12 +32,13 @@ pub struct RawVkVertexInputAttributeDescription {
     pub offset: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkVertexInputAttributeDescription {
-    pub location: usize,
-    pub binding: usize,
-    pub format: VkFormat,
-    pub offset: usize,
+impl VkWrappedType<RawVkVertexInputAttributeDescription> for VkVertexInputAttributeDescription {
+    fn vk_to_raw(src: &VkVertexInputAttributeDescription, dst: &mut RawVkVertexInputAttributeDescription) {
+        dst.location = vk_to_raw_value(&src.location);
+        dst.binding = vk_to_raw_value(&src.binding);
+        dst.format = vk_to_raw_value(&src.format);
+        dst.offset = vk_to_raw_value(&src.offset);
+    }
 }
 
 impl VkRawType<VkVertexInputAttributeDescription> for RawVkVertexInputAttributeDescription {
@@ -40,15 +49,6 @@ impl VkRawType<VkVertexInputAttributeDescription> for RawVkVertexInputAttributeD
             format: RawVkFormat::vk_to_wrapped(&src.format),
             offset: u32::vk_to_wrapped(&src.offset),
         }
-    }
-}
-
-impl VkWrappedType<RawVkVertexInputAttributeDescription> for VkVertexInputAttributeDescription {
-    fn vk_to_raw(src: &VkVertexInputAttributeDescription, dst: &mut RawVkVertexInputAttributeDescription) {
-        dst.location = vk_to_raw_value(&src.location);
-        dst.binding = vk_to_raw_value(&src.binding);
-        dst.format = vk_to_raw_value(&src.format);
-        dst.offset = vk_to_raw_value(&src.offset);
     }
 }
 

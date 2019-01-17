@@ -17,6 +17,18 @@ use vk::vk_blend_factor::*;
 use vk::vk_blend_op::*;
 use vk::vk_color_component_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineColorBlendAttachmentState {
+    pub blend_enable: bool,
+    pub src_color_blend_factor: VkBlendFactor,
+    pub dst_color_blend_factor: VkBlendFactor,
+    pub color_blend_op: VkBlendOp,
+    pub src_alpha_blend_factor: VkBlendFactor,
+    pub dst_alpha_blend_factor: VkBlendFactor,
+    pub alpha_blend_op: VkBlendOp,
+    pub color_write_mask: VkColorComponentFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendAttachmentState {
@@ -30,16 +42,17 @@ pub struct RawVkPipelineColorBlendAttachmentState {
     pub color_write_mask: RawVkColorComponentFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineColorBlendAttachmentState {
-    pub blend_enable: bool,
-    pub src_color_blend_factor: VkBlendFactor,
-    pub dst_color_blend_factor: VkBlendFactor,
-    pub color_blend_op: VkBlendOp,
-    pub src_alpha_blend_factor: VkBlendFactor,
-    pub dst_alpha_blend_factor: VkBlendFactor,
-    pub alpha_blend_op: VkBlendOp,
-    pub color_write_mask: VkColorComponentFlags,
+impl VkWrappedType<RawVkPipelineColorBlendAttachmentState> for VkPipelineColorBlendAttachmentState {
+    fn vk_to_raw(src: &VkPipelineColorBlendAttachmentState, dst: &mut RawVkPipelineColorBlendAttachmentState) {
+        dst.blend_enable = vk_to_raw_value(&src.blend_enable);
+        dst.src_color_blend_factor = vk_to_raw_value(&src.src_color_blend_factor);
+        dst.dst_color_blend_factor = vk_to_raw_value(&src.dst_color_blend_factor);
+        dst.color_blend_op = vk_to_raw_value(&src.color_blend_op);
+        dst.src_alpha_blend_factor = vk_to_raw_value(&src.src_alpha_blend_factor);
+        dst.dst_alpha_blend_factor = vk_to_raw_value(&src.dst_alpha_blend_factor);
+        dst.alpha_blend_op = vk_to_raw_value(&src.alpha_blend_op);
+        dst.color_write_mask = vk_to_raw_value(&src.color_write_mask);
+    }
 }
 
 impl VkRawType<VkPipelineColorBlendAttachmentState> for RawVkPipelineColorBlendAttachmentState {
@@ -54,19 +67,6 @@ impl VkRawType<VkPipelineColorBlendAttachmentState> for RawVkPipelineColorBlendA
             alpha_blend_op: RawVkBlendOp::vk_to_wrapped(&src.alpha_blend_op),
             color_write_mask: RawVkColorComponentFlags::vk_to_wrapped(&src.color_write_mask),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineColorBlendAttachmentState> for VkPipelineColorBlendAttachmentState {
-    fn vk_to_raw(src: &VkPipelineColorBlendAttachmentState, dst: &mut RawVkPipelineColorBlendAttachmentState) {
-        dst.blend_enable = vk_to_raw_value(&src.blend_enable);
-        dst.src_color_blend_factor = vk_to_raw_value(&src.src_color_blend_factor);
-        dst.dst_color_blend_factor = vk_to_raw_value(&src.dst_color_blend_factor);
-        dst.color_blend_op = vk_to_raw_value(&src.color_blend_op);
-        dst.src_alpha_blend_factor = vk_to_raw_value(&src.src_alpha_blend_factor);
-        dst.dst_alpha_blend_factor = vk_to_raw_value(&src.dst_alpha_blend_factor);
-        dst.alpha_blend_op = vk_to_raw_value(&src.alpha_blend_op);
-        dst.color_write_mask = vk_to_raw_value(&src.color_write_mask);
     }
 }
 

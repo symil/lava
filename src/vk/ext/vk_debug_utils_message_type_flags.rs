@@ -2,13 +2,22 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDebugUtilsMessageTypeFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessageTypeFlags {
     pub general: bool,
     pub validation: bool,
     pub performance: bool,
+}
+
+pub type RawVkDebugUtilsMessageTypeFlags = u32;
+
+impl VkWrappedType<RawVkDebugUtilsMessageTypeFlags> for VkDebugUtilsMessageTypeFlags {
+    fn vk_to_raw(src: &VkDebugUtilsMessageTypeFlags, dst: &mut RawVkDebugUtilsMessageTypeFlags) {
+        *dst = 0;
+        if src.general { *dst |= 0x00000001; }
+        if src.validation { *dst |= 0x00000002; }
+        if src.performance { *dst |= 0x00000004; }
+    }
 }
 
 impl VkRawType<VkDebugUtilsMessageTypeFlags> for RawVkDebugUtilsMessageTypeFlags {
@@ -18,15 +27,6 @@ impl VkRawType<VkDebugUtilsMessageTypeFlags> for RawVkDebugUtilsMessageTypeFlags
             validation: (src & 0x00000002) != 0,
             performance: (src & 0x00000004) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDebugUtilsMessageTypeFlags> for VkDebugUtilsMessageTypeFlags {
-    fn vk_to_raw(src: &VkDebugUtilsMessageTypeFlags, dst: &mut RawVkDebugUtilsMessageTypeFlags) {
-        *dst = 0;
-        if src.general { *dst |= 0x00000001; }
-        if src.validation { *dst |= 0x00000002; }
-        if src.performance { *dst |= 0x00000004; }
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkQueueGlobalPriority = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkQueueGlobalPriority {
@@ -13,17 +11,19 @@ pub enum VkQueueGlobalPriority {
     Realtime = 1024,
 }
 
+pub type RawVkQueueGlobalPriority = i32;
+
+impl VkWrappedType<RawVkQueueGlobalPriority> for VkQueueGlobalPriority {
+    fn vk_to_raw(src: &VkQueueGlobalPriority, dst: &mut RawVkQueueGlobalPriority) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkQueueGlobalPriority> for RawVkQueueGlobalPriority {
     fn vk_to_wrapped(src: &RawVkQueueGlobalPriority) -> VkQueueGlobalPriority {
         unsafe {
             *((src as *const i32) as *const VkQueueGlobalPriority)
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueueGlobalPriority> for VkQueueGlobalPriority {
-    fn vk_to_raw(src: &VkQueueGlobalPriority, dst: &mut RawVkQueueGlobalPriority) {
-        *dst = *src as i32
     }
 }
 

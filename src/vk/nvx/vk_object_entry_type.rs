@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkObjectEntryType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkObjectEntryType {
@@ -14,17 +12,19 @@ pub enum VkObjectEntryType {
     PushConstant = 4,
 }
 
+pub type RawVkObjectEntryType = i32;
+
+impl VkWrappedType<RawVkObjectEntryType> for VkObjectEntryType {
+    fn vk_to_raw(src: &VkObjectEntryType, dst: &mut RawVkObjectEntryType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkObjectEntryType> for RawVkObjectEntryType {
     fn vk_to_wrapped(src: &RawVkObjectEntryType) -> VkObjectEntryType {
         unsafe {
             *((src as *const i32) as *const VkObjectEntryType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkObjectEntryType> for VkObjectEntryType {
-    fn vk_to_raw(src: &VkObjectEntryType, dst: &mut RawVkObjectEntryType) {
-        *dst = *src as i32
     }
 }
 

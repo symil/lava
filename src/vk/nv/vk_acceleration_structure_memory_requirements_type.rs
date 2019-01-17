@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkAccelerationStructureMemoryRequirementsType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkAccelerationStructureMemoryRequirementsType {
@@ -12,17 +10,19 @@ pub enum VkAccelerationStructureMemoryRequirementsType {
     UpdateScratch = 2,
 }
 
+pub type RawVkAccelerationStructureMemoryRequirementsType = i32;
+
+impl VkWrappedType<RawVkAccelerationStructureMemoryRequirementsType> for VkAccelerationStructureMemoryRequirementsType {
+    fn vk_to_raw(src: &VkAccelerationStructureMemoryRequirementsType, dst: &mut RawVkAccelerationStructureMemoryRequirementsType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkAccelerationStructureMemoryRequirementsType> for RawVkAccelerationStructureMemoryRequirementsType {
     fn vk_to_wrapped(src: &RawVkAccelerationStructureMemoryRequirementsType) -> VkAccelerationStructureMemoryRequirementsType {
         unsafe {
             *((src as *const i32) as *const VkAccelerationStructureMemoryRequirementsType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkAccelerationStructureMemoryRequirementsType> for VkAccelerationStructureMemoryRequirementsType {
-    fn vk_to_raw(src: &VkAccelerationStructureMemoryRequirementsType, dst: &mut RawVkAccelerationStructureMemoryRequirementsType) {
-        *dst = *src as i32
     }
 }
 

@@ -19,23 +19,6 @@ use vk::vk_sparse_buffer_memory_bind_info::*;
 use vk::vk_sparse_image_opaque_memory_bind_info::*;
 use vk::vk_sparse_image_memory_bind_info::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkBindSparseInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub wait_semaphore_count: u32,
-    pub wait_semaphores: *mut RawVkSemaphore,
-    pub buffer_bind_count: u32,
-    pub buffer_binds: *mut RawVkSparseBufferMemoryBindInfo,
-    pub image_opaque_bind_count: u32,
-    pub image_opaque_binds: *mut RawVkSparseImageOpaqueMemoryBindInfo,
-    pub image_bind_count: u32,
-    pub image_binds: *mut RawVkSparseImageMemoryBindInfo,
-    pub signal_semaphore_count: u32,
-    pub signal_semaphores: *mut RawVkSemaphore,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>
     where
@@ -56,6 +39,23 @@ pub struct VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 
     pub image_opaque_binds: &'g [VkSparseImageOpaqueMemoryBindInfo<'h, 'i, 'j>],
     pub image_binds: &'k [VkSparseImageMemoryBindInfo<'l, 'm, 'n>],
     pub signal_semaphores: &'o [&'p VkSemaphore],
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkBindSparseInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub wait_semaphore_count: u32,
+    pub wait_semaphores: *mut RawVkSemaphore,
+    pub buffer_bind_count: u32,
+    pub buffer_binds: *mut RawVkSparseBufferMemoryBindInfo,
+    pub image_opaque_bind_count: u32,
+    pub image_opaque_binds: *mut RawVkSparseImageOpaqueMemoryBindInfo,
+    pub image_bind_count: u32,
+    pub image_binds: *mut RawVkSparseImageMemoryBindInfo,
+    pub signal_semaphore_count: u32,
+    pub signal_semaphores: *mut RawVkSemaphore,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p> VkWrappedType<RawVkBindSparseInfo> for VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>

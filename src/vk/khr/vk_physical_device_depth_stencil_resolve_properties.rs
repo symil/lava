@@ -16,6 +16,14 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_resolve_mode_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceDepthStencilResolveProperties {
+    pub supported_depth_resolve_modes: VkResolveModeFlags,
+    pub supported_stencil_resolve_modes: VkResolveModeFlags,
+    pub independent_resolve_none: bool,
+    pub independent_resolve: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDepthStencilResolveProperties {
@@ -27,12 +35,15 @@ pub struct RawVkPhysicalDeviceDepthStencilResolveProperties {
     pub independent_resolve: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceDepthStencilResolveProperties {
-    pub supported_depth_resolve_modes: VkResolveModeFlags,
-    pub supported_stencil_resolve_modes: VkResolveModeFlags,
-    pub independent_resolve_none: bool,
-    pub independent_resolve: bool,
+impl VkWrappedType<RawVkPhysicalDeviceDepthStencilResolveProperties> for VkPhysicalDeviceDepthStencilResolveProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceDepthStencilResolveProperties, dst: &mut RawVkPhysicalDeviceDepthStencilResolveProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDepthStencilResolvePropertiesKhr);
+        dst.next = ptr::null();
+        dst.supported_depth_resolve_modes = vk_to_raw_value(&src.supported_depth_resolve_modes);
+        dst.supported_stencil_resolve_modes = vk_to_raw_value(&src.supported_stencil_resolve_modes);
+        dst.independent_resolve_none = vk_to_raw_value(&src.independent_resolve_none);
+        dst.independent_resolve = vk_to_raw_value(&src.independent_resolve);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceDepthStencilResolveProperties> for RawVkPhysicalDeviceDepthStencilResolveProperties {
@@ -43,17 +54,6 @@ impl VkRawType<VkPhysicalDeviceDepthStencilResolveProperties> for RawVkPhysicalD
             independent_resolve_none: u32::vk_to_wrapped(&src.independent_resolve_none),
             independent_resolve: u32::vk_to_wrapped(&src.independent_resolve),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceDepthStencilResolveProperties> for VkPhysicalDeviceDepthStencilResolveProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceDepthStencilResolveProperties, dst: &mut RawVkPhysicalDeviceDepthStencilResolveProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDepthStencilResolvePropertiesKhr);
-        dst.next = ptr::null();
-        dst.supported_depth_resolve_modes = vk_to_raw_value(&src.supported_depth_resolve_modes);
-        dst.supported_stencil_resolve_modes = vk_to_raw_value(&src.supported_stencil_resolve_modes);
-        dst.independent_resolve_none = vk_to_raw_value(&src.independent_resolve_none);
-        dst.independent_resolve = vk_to_raw_value(&src.independent_resolve);
     }
 }
 

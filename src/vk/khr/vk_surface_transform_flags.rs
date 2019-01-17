@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSurfaceTransformFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSurfaceTransformFlags {
     pub identity: bool,
@@ -15,6 +13,23 @@ pub struct VkSurfaceTransformFlags {
     pub horizontal_mirror_rotate_180: bool,
     pub horizontal_mirror_rotate_270: bool,
     pub inherit: bool,
+}
+
+pub type RawVkSurfaceTransformFlags = u32;
+
+impl VkWrappedType<RawVkSurfaceTransformFlags> for VkSurfaceTransformFlags {
+    fn vk_to_raw(src: &VkSurfaceTransformFlags, dst: &mut RawVkSurfaceTransformFlags) {
+        *dst = 0;
+        if src.identity { *dst |= 0x00000001; }
+        if src.rotate_90 { *dst |= 0x00000002; }
+        if src.rotate_180 { *dst |= 0x00000004; }
+        if src.rotate_270 { *dst |= 0x00000008; }
+        if src.horizontal_mirror { *dst |= 0x00000010; }
+        if src.horizontal_mirror_rotate_90 { *dst |= 0x00000020; }
+        if src.horizontal_mirror_rotate_180 { *dst |= 0x00000040; }
+        if src.horizontal_mirror_rotate_270 { *dst |= 0x00000080; }
+        if src.inherit { *dst |= 0x00000100; }
+    }
 }
 
 impl VkRawType<VkSurfaceTransformFlags> for RawVkSurfaceTransformFlags {
@@ -30,21 +45,6 @@ impl VkRawType<VkSurfaceTransformFlags> for RawVkSurfaceTransformFlags {
             horizontal_mirror_rotate_270: (src & 0x00000080) != 0,
             inherit: (src & 0x00000100) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSurfaceTransformFlags> for VkSurfaceTransformFlags {
-    fn vk_to_raw(src: &VkSurfaceTransformFlags, dst: &mut RawVkSurfaceTransformFlags) {
-        *dst = 0;
-        if src.identity { *dst |= 0x00000001; }
-        if src.rotate_90 { *dst |= 0x00000002; }
-        if src.rotate_180 { *dst |= 0x00000004; }
-        if src.rotate_270 { *dst |= 0x00000008; }
-        if src.horizontal_mirror { *dst |= 0x00000010; }
-        if src.horizontal_mirror_rotate_90 { *dst |= 0x00000020; }
-        if src.horizontal_mirror_rotate_180 { *dst |= 0x00000040; }
-        if src.horizontal_mirror_rotate_270 { *dst |= 0x00000080; }
-        if src.inherit { *dst |= 0x00000100; }
     }
 }
 

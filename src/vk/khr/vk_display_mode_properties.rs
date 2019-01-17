@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::khr::vk_display_mode::*;
 use vk::khr::vk_display_mode_parameters::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayModeProperties {
+    pub display_mode: VkDisplayMode,
+    pub parameters: VkDisplayModeParameters,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayModeProperties {
     pub display_mode: RawVkDisplayMode,
     pub parameters: RawVkDisplayModeParameters,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDisplayModeProperties {
-    pub display_mode: VkDisplayMode,
-    pub parameters: VkDisplayModeParameters,
 }
 
 impl VkRawType<VkDisplayModeProperties> for RawVkDisplayModeProperties {

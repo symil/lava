@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGroupBindSparseInfo {
+    pub resource_device_index: usize,
+    pub memory_device_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupBindSparseInfo {
@@ -24,10 +30,13 @@ pub struct RawVkDeviceGroupBindSparseInfo {
     pub memory_device_index: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceGroupBindSparseInfo {
-    pub resource_device_index: usize,
-    pub memory_device_index: usize,
+impl VkWrappedType<RawVkDeviceGroupBindSparseInfo> for VkDeviceGroupBindSparseInfo {
+    fn vk_to_raw(src: &VkDeviceGroupBindSparseInfo, dst: &mut RawVkDeviceGroupBindSparseInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupBindSparseInfo);
+        dst.next = ptr::null();
+        dst.resource_device_index = vk_to_raw_value(&src.resource_device_index);
+        dst.memory_device_index = vk_to_raw_value(&src.memory_device_index);
+    }
 }
 
 impl VkRawType<VkDeviceGroupBindSparseInfo> for RawVkDeviceGroupBindSparseInfo {
@@ -36,15 +45,6 @@ impl VkRawType<VkDeviceGroupBindSparseInfo> for RawVkDeviceGroupBindSparseInfo {
             resource_device_index: u32::vk_to_wrapped(&src.resource_device_index),
             memory_device_index: u32::vk_to_wrapped(&src.memory_device_index),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceGroupBindSparseInfo> for VkDeviceGroupBindSparseInfo {
-    fn vk_to_raw(src: &VkDeviceGroupBindSparseInfo, dst: &mut RawVkDeviceGroupBindSparseInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupBindSparseInfo);
-        dst.next = ptr::null();
-        dst.resource_device_index = vk_to_raw_value(&src.resource_device_index);
-        dst.memory_device_index = vk_to_raw_value(&src.memory_device_index);
     }
 }
 

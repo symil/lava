@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageDrmFormatModifierListCreateInfo<'a> {
+    pub drm_format_modifiers: &'a [usize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageDrmFormatModifierListCreateInfo {
@@ -22,11 +27,6 @@ pub struct RawVkImageDrmFormatModifierListCreateInfo {
     pub next: *const c_void,
     pub drm_format_modifier_count: u32,
     pub drm_format_modifiers: *mut u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImageDrmFormatModifierListCreateInfo<'a> {
-    pub drm_format_modifiers: &'a [usize],
 }
 
 impl<'a> VkWrappedType<RawVkImageDrmFormatModifierListCreateInfo> for VkImageDrmFormatModifierListCreateInfo<'a> {

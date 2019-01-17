@@ -14,6 +14,15 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSubresourceLayout {
+    pub offset: usize,
+    pub size: usize,
+    pub row_pitch: usize,
+    pub array_pitch: usize,
+    pub depth_pitch: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubresourceLayout {
@@ -24,13 +33,14 @@ pub struct RawVkSubresourceLayout {
     pub depth_pitch: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSubresourceLayout {
-    pub offset: usize,
-    pub size: usize,
-    pub row_pitch: usize,
-    pub array_pitch: usize,
-    pub depth_pitch: usize,
+impl VkWrappedType<RawVkSubresourceLayout> for VkSubresourceLayout {
+    fn vk_to_raw(src: &VkSubresourceLayout, dst: &mut RawVkSubresourceLayout) {
+        dst.offset = vk_to_raw_value(&src.offset);
+        dst.size = vk_to_raw_value(&src.size);
+        dst.row_pitch = vk_to_raw_value(&src.row_pitch);
+        dst.array_pitch = vk_to_raw_value(&src.array_pitch);
+        dst.depth_pitch = vk_to_raw_value(&src.depth_pitch);
+    }
 }
 
 impl VkRawType<VkSubresourceLayout> for RawVkSubresourceLayout {
@@ -42,16 +52,6 @@ impl VkRawType<VkSubresourceLayout> for RawVkSubresourceLayout {
             array_pitch: u64::vk_to_wrapped(&src.array_pitch),
             depth_pitch: u64::vk_to_wrapped(&src.depth_pitch),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSubresourceLayout> for VkSubresourceLayout {
-    fn vk_to_raw(src: &VkSubresourceLayout, dst: &mut RawVkSubresourceLayout) {
-        dst.offset = vk_to_raw_value(&src.offset);
-        dst.size = vk_to_raw_value(&src.size);
-        dst.row_pitch = vk_to_raw_value(&src.row_pitch);
-        dst.array_pitch = vk_to_raw_value(&src.array_pitch);
-        dst.depth_pitch = vk_to_raw_value(&src.depth_pitch);
     }
 }
 

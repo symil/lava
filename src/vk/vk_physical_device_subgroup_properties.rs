@@ -17,6 +17,14 @@ use vk::vk_structure_type::*;
 use vk::vk_shader_stage_flags::*;
 use vk::vk_subgroup_feature_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceSubgroupProperties {
+    pub subgroup_size: usize,
+    pub supported_stages: VkShaderStageFlags,
+    pub supported_operations: VkSubgroupFeatureFlags,
+    pub quad_operations_in_all_stages: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSubgroupProperties {
@@ -28,12 +36,15 @@ pub struct RawVkPhysicalDeviceSubgroupProperties {
     pub quad_operations_in_all_stages: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceSubgroupProperties {
-    pub subgroup_size: usize,
-    pub supported_stages: VkShaderStageFlags,
-    pub supported_operations: VkSubgroupFeatureFlags,
-    pub quad_operations_in_all_stages: bool,
+impl VkWrappedType<RawVkPhysicalDeviceSubgroupProperties> for VkPhysicalDeviceSubgroupProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceSubgroupProperties, dst: &mut RawVkPhysicalDeviceSubgroupProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSubgroupProperties);
+        dst.next = ptr::null();
+        dst.subgroup_size = vk_to_raw_value(&src.subgroup_size);
+        dst.supported_stages = vk_to_raw_value(&src.supported_stages);
+        dst.supported_operations = vk_to_raw_value(&src.supported_operations);
+        dst.quad_operations_in_all_stages = vk_to_raw_value(&src.quad_operations_in_all_stages);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceSubgroupProperties> for RawVkPhysicalDeviceSubgroupProperties {
@@ -44,17 +55,6 @@ impl VkRawType<VkPhysicalDeviceSubgroupProperties> for RawVkPhysicalDeviceSubgro
             supported_operations: RawVkSubgroupFeatureFlags::vk_to_wrapped(&src.supported_operations),
             quad_operations_in_all_stages: u32::vk_to_wrapped(&src.quad_operations_in_all_stages),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceSubgroupProperties> for VkPhysicalDeviceSubgroupProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceSubgroupProperties, dst: &mut RawVkPhysicalDeviceSubgroupProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSubgroupProperties);
-        dst.next = ptr::null();
-        dst.subgroup_size = vk_to_raw_value(&src.subgroup_size);
-        dst.supported_stages = vk_to_raw_value(&src.supported_stages);
-        dst.supported_operations = vk_to_raw_value(&src.supported_operations);
-        dst.quad_operations_in_all_stages = vk_to_raw_value(&src.quad_operations_in_all_stages);
     }
 }
 

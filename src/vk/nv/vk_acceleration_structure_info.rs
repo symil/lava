@@ -18,18 +18,6 @@ use vk::nv::vk_acceleration_structure_type::*;
 use vk::nv::vk_build_acceleration_structure_flags::*;
 use vk::nv::vk_geometry::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkAccelerationStructureInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub type_: RawVkAccelerationStructureType,
-    pub flags: RawVkBuildAccelerationStructureFlags,
-    pub instance_count: u32,
-    pub geometry_count: u32,
-    pub geometries: *mut RawVkGeometry,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>
     where
@@ -42,6 +30,18 @@ pub struct VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>
     pub flags: VkBuildAccelerationStructureFlags,
     pub instance_count: usize,
     pub geometries: &'a [VkGeometry<'b, 'c, 'd, 'e>],
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkAccelerationStructureInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub type_: RawVkAccelerationStructureType,
+    pub flags: RawVkBuildAccelerationStructureFlags,
+    pub instance_count: u32,
+    pub geometry_count: u32,
+    pub geometries: *mut RawVkGeometry,
 }
 
 impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkAccelerationStructureInfo> for VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>

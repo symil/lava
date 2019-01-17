@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryPriorityAllocateInfo {
+    pub priority: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryPriorityAllocateInfo {
@@ -23,9 +28,12 @@ pub struct RawVkMemoryPriorityAllocateInfo {
     pub priority: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryPriorityAllocateInfo {
-    pub priority: f32,
+impl VkWrappedType<RawVkMemoryPriorityAllocateInfo> for VkMemoryPriorityAllocateInfo {
+    fn vk_to_raw(src: &VkMemoryPriorityAllocateInfo, dst: &mut RawVkMemoryPriorityAllocateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryPriorityAllocateInfoExt);
+        dst.next = ptr::null();
+        dst.priority = src.priority;
+    }
 }
 
 impl VkRawType<VkMemoryPriorityAllocateInfo> for RawVkMemoryPriorityAllocateInfo {
@@ -33,14 +41,6 @@ impl VkRawType<VkMemoryPriorityAllocateInfo> for RawVkMemoryPriorityAllocateInfo
         VkMemoryPriorityAllocateInfo {
             priority: src.priority,
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryPriorityAllocateInfo> for VkMemoryPriorityAllocateInfo {
-    fn vk_to_raw(src: &VkMemoryPriorityAllocateInfo, dst: &mut RawVkMemoryPriorityAllocateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryPriorityAllocateInfoExt);
-        dst.next = ptr::null();
-        dst.priority = src.priority;
     }
 }
 

@@ -2,12 +2,20 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSubpassDescriptionFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSubpassDescriptionFlags {
     pub per_view_attributes_nvx: bool,
     pub per_view_position_x_only_nvx: bool,
+}
+
+pub type RawVkSubpassDescriptionFlags = u32;
+
+impl VkWrappedType<RawVkSubpassDescriptionFlags> for VkSubpassDescriptionFlags {
+    fn vk_to_raw(src: &VkSubpassDescriptionFlags, dst: &mut RawVkSubpassDescriptionFlags) {
+        *dst = 0;
+        if src.per_view_attributes_nvx { *dst |= 0x00000001; }
+        if src.per_view_position_x_only_nvx { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkSubpassDescriptionFlags> for RawVkSubpassDescriptionFlags {
@@ -16,14 +24,6 @@ impl VkRawType<VkSubpassDescriptionFlags> for RawVkSubpassDescriptionFlags {
             per_view_attributes_nvx: (src & 0x00000001) != 0,
             per_view_position_x_only_nvx: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSubpassDescriptionFlags> for VkSubpassDescriptionFlags {
-    fn vk_to_raw(src: &VkSubpassDescriptionFlags, dst: &mut RawVkSubpassDescriptionFlags) {
-        *dst = 0;
-        if src.per_view_attributes_nvx { *dst |= 0x00000001; }
-        if src.per_view_position_x_only_nvx { *dst |= 0x00000002; }
     }
 }
 

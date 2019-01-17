@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDeviceCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDeviceCreateFlags {
     
+}
+
+pub type RawVkDeviceCreateFlags = u32;
+
+impl VkWrappedType<RawVkDeviceCreateFlags> for VkDeviceCreateFlags {
+    fn vk_to_raw(src: &VkDeviceCreateFlags, dst: &mut RawVkDeviceCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkDeviceCreateFlags> for RawVkDeviceCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkDeviceCreateFlags> for RawVkDeviceCreateFlags {
         VkDeviceCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceCreateFlags> for VkDeviceCreateFlags {
-    fn vk_to_raw(src: &VkDeviceCreateFlags, dst: &mut RawVkDeviceCreateFlags) {
-        *dst = 0;
     }
 }
 

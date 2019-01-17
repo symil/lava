@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {
+    pub descriptor_counts: &'a [usize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetVariableDescriptorCountAllocateInfo {
@@ -22,11 +27,6 @@ pub struct RawVkDescriptorSetVariableDescriptorCountAllocateInfo {
     pub next: *const c_void,
     pub descriptor_set_count: u32,
     pub descriptor_counts: *mut u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {
-    pub descriptor_counts: &'a [usize],
 }
 
 impl<'a> VkWrappedType<RawVkDescriptorSetVariableDescriptorCountAllocateInfo> for VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {

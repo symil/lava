@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineDynamicStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineDynamicStateCreateFlags {
     
+}
+
+pub type RawVkPipelineDynamicStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineDynamicStateCreateFlags> for VkPipelineDynamicStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineDynamicStateCreateFlags, dst: &mut RawVkPipelineDynamicStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineDynamicStateCreateFlags> for RawVkPipelineDynamicStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineDynamicStateCreateFlags> for RawVkPipelineDynamicStateC
         VkPipelineDynamicStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineDynamicStateCreateFlags> for VkPipelineDynamicStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineDynamicStateCreateFlags, dst: &mut RawVkPipelineDynamicStateCreateFlags) {
-        *dst = 0;
     }
 }
 

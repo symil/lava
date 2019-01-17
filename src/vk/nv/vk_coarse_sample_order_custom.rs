@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::nv::vk_shading_rate_palette_entry::*;
 use vk::nv::vk_coarse_sample_location::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCoarseSampleOrderCustom<'a> {
+    pub shading_rate: VkShadingRatePaletteEntry,
+    pub sample_count: usize,
+    pub sample_locations: &'a [VkCoarseSampleLocation],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCoarseSampleOrderCustom {
@@ -23,13 +30,6 @@ pub struct RawVkCoarseSampleOrderCustom {
     pub sample_count: u32,
     pub sample_location_count: u32,
     pub sample_locations: *mut RawVkCoarseSampleLocation,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkCoarseSampleOrderCustom<'a> {
-    pub shading_rate: VkShadingRatePaletteEntry,
-    pub sample_count: usize,
-    pub sample_locations: &'a [VkCoarseSampleLocation],
 }
 
 impl<'a> VkWrappedType<RawVkCoarseSampleOrderCustom> for VkCoarseSampleOrderCustom<'a> {

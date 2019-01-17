@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::nvx::vk_object_entry_type::*;
 use vk::nvx::vk_object_entry_usage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkObjectTableEntry {
+    pub type_: VkObjectEntryType,
+    pub flags: VkObjectEntryUsageFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableEntry {
@@ -23,10 +29,11 @@ pub struct RawVkObjectTableEntry {
     pub flags: RawVkObjectEntryUsageFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkObjectTableEntry {
-    pub type_: VkObjectEntryType,
-    pub flags: VkObjectEntryUsageFlags,
+impl VkWrappedType<RawVkObjectTableEntry> for VkObjectTableEntry {
+    fn vk_to_raw(src: &VkObjectTableEntry, dst: &mut RawVkObjectTableEntry) {
+        dst.type_ = vk_to_raw_value(&src.type_);
+        dst.flags = vk_to_raw_value(&src.flags);
+    }
 }
 
 impl VkRawType<VkObjectTableEntry> for RawVkObjectTableEntry {
@@ -35,13 +42,6 @@ impl VkRawType<VkObjectTableEntry> for RawVkObjectTableEntry {
             type_: RawVkObjectEntryType::vk_to_wrapped(&src.type_),
             flags: RawVkObjectEntryUsageFlags::vk_to_wrapped(&src.flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkObjectTableEntry> for VkObjectTableEntry {
-    fn vk_to_raw(src: &VkObjectTableEntry, dst: &mut RawVkObjectTableEntry) {
-        dst.type_ = vk_to_raw_value(&src.type_);
-        dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 

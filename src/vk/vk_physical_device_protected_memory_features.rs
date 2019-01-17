@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceProtectedMemoryFeatures {
+    pub protected_memory: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceProtectedMemoryFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceProtectedMemoryFeatures {
     pub protected_memory: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceProtectedMemoryFeatures {
-    pub protected_memory: bool,
+impl VkWrappedType<RawVkPhysicalDeviceProtectedMemoryFeatures> for VkPhysicalDeviceProtectedMemoryFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceProtectedMemoryFeatures, dst: &mut RawVkPhysicalDeviceProtectedMemoryFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceProtectedMemoryFeatures);
+        dst.next = ptr::null();
+        dst.protected_memory = vk_to_raw_value(&src.protected_memory);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceProtectedMemoryFeatures> for RawVkPhysicalDeviceProtectedMemoryFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceProtectedMemoryFeatures> for RawVkPhysicalDeviceP
         VkPhysicalDeviceProtectedMemoryFeatures {
             protected_memory: u32::vk_to_wrapped(&src.protected_memory),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceProtectedMemoryFeatures> for VkPhysicalDeviceProtectedMemoryFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceProtectedMemoryFeatures, dst: &mut RawVkPhysicalDeviceProtectedMemoryFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceProtectedMemoryFeatures);
-        dst.next = ptr::null();
-        dst.protected_memory = vk_to_raw_value(&src.protected_memory);
     }
 }
 

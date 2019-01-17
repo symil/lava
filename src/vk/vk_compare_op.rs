@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCompareOp = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkCompareOp {
@@ -17,17 +15,19 @@ pub enum VkCompareOp {
     Always = 7,
 }
 
+pub type RawVkCompareOp = i32;
+
+impl VkWrappedType<RawVkCompareOp> for VkCompareOp {
+    fn vk_to_raw(src: &VkCompareOp, dst: &mut RawVkCompareOp) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkCompareOp> for RawVkCompareOp {
     fn vk_to_wrapped(src: &RawVkCompareOp) -> VkCompareOp {
         unsafe {
             *((src as *const i32) as *const VkCompareOp)
         }
-    }
-}
-
-impl VkWrappedType<RawVkCompareOp> for VkCompareOp {
-    fn vk_to_raw(src: &VkCompareOp, dst: &mut RawVkCompareOp) {
-        *dst = *src as i32
     }
 }
 

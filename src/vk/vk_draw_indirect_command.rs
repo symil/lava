@@ -14,6 +14,14 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDrawIndirectCommand {
+    pub vertex_count: usize,
+    pub instance_count: usize,
+    pub first_vertex: usize,
+    pub first_instance: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrawIndirectCommand {
@@ -23,12 +31,13 @@ pub struct RawVkDrawIndirectCommand {
     pub first_instance: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDrawIndirectCommand {
-    pub vertex_count: usize,
-    pub instance_count: usize,
-    pub first_vertex: usize,
-    pub first_instance: usize,
+impl VkWrappedType<RawVkDrawIndirectCommand> for VkDrawIndirectCommand {
+    fn vk_to_raw(src: &VkDrawIndirectCommand, dst: &mut RawVkDrawIndirectCommand) {
+        dst.vertex_count = vk_to_raw_value(&src.vertex_count);
+        dst.instance_count = vk_to_raw_value(&src.instance_count);
+        dst.first_vertex = vk_to_raw_value(&src.first_vertex);
+        dst.first_instance = vk_to_raw_value(&src.first_instance);
+    }
 }
 
 impl VkRawType<VkDrawIndirectCommand> for RawVkDrawIndirectCommand {
@@ -39,15 +48,6 @@ impl VkRawType<VkDrawIndirectCommand> for RawVkDrawIndirectCommand {
             first_vertex: u32::vk_to_wrapped(&src.first_vertex),
             first_instance: u32::vk_to_wrapped(&src.first_instance),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDrawIndirectCommand> for VkDrawIndirectCommand {
-    fn vk_to_raw(src: &VkDrawIndirectCommand, dst: &mut RawVkDrawIndirectCommand) {
-        dst.vertex_count = vk_to_raw_value(&src.vertex_count);
-        dst.instance_count = vk_to_raw_value(&src.instance_count);
-        dst.first_vertex = vk_to_raw_value(&src.first_vertex);
-        dst.first_instance = vk_to_raw_value(&src.first_instance);
     }
 }
 

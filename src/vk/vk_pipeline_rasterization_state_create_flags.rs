@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineRasterizationStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineRasterizationStateCreateFlags {
     
+}
+
+pub type RawVkPipelineRasterizationStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineRasterizationStateCreateFlags> for VkPipelineRasterizationStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineRasterizationStateCreateFlags, dst: &mut RawVkPipelineRasterizationStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineRasterizationStateCreateFlags> for RawVkPipelineRasterizationStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineRasterizationStateCreateFlags> for RawVkPipelineRasteri
         VkPipelineRasterizationStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineRasterizationStateCreateFlags> for VkPipelineRasterizationStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineRasterizationStateCreateFlags, dst: &mut RawVkPipelineRasterizationStateCreateFlags) {
-        *dst = 0;
     }
 }
 

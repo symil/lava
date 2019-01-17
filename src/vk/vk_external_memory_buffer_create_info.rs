@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExternalMemoryBufferCreateInfo {
+    pub handle_types: VkExternalMemoryHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalMemoryBufferCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkExternalMemoryBufferCreateInfo {
     pub handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExternalMemoryBufferCreateInfo {
-    pub handle_types: VkExternalMemoryHandleTypeFlags,
+impl VkWrappedType<RawVkExternalMemoryBufferCreateInfo> for VkExternalMemoryBufferCreateInfo {
+    fn vk_to_raw(src: &VkExternalMemoryBufferCreateInfo, dst: &mut RawVkExternalMemoryBufferCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalMemoryBufferCreateInfo);
+        dst.next = ptr::null();
+        dst.handle_types = vk_to_raw_value(&src.handle_types);
+    }
 }
 
 impl VkRawType<VkExternalMemoryBufferCreateInfo> for RawVkExternalMemoryBufferCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkExternalMemoryBufferCreateInfo> for RawVkExternalMemoryBufferCr
         VkExternalMemoryBufferCreateInfo {
             handle_types: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.handle_types),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalMemoryBufferCreateInfo> for VkExternalMemoryBufferCreateInfo {
-    fn vk_to_raw(src: &VkExternalMemoryBufferCreateInfo, dst: &mut RawVkExternalMemoryBufferCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalMemoryBufferCreateInfo);
-        dst.next = ptr::null();
-        dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }
 

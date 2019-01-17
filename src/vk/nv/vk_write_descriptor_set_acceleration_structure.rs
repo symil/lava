@@ -16,6 +16,14 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::nv::vk_acceleration_structure::*;
 
+#[derive(Debug, Clone)]
+pub struct VkWriteDescriptorSetAccelerationStructure<'a, 'b>
+    where
+        'b: 'a,
+{
+    pub acceleration_structures: &'a [&'b VkAccelerationStructure],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSetAccelerationStructure {
@@ -23,14 +31,6 @@ pub struct RawVkWriteDescriptorSetAccelerationStructure {
     pub next: *const c_void,
     pub acceleration_structure_count: u32,
     pub acceleration_structures: *mut RawVkAccelerationStructure,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkWriteDescriptorSetAccelerationStructure<'a, 'b>
-    where
-        'b: 'a,
-{
-    pub acceleration_structures: &'a [&'b VkAccelerationStructure],
 }
 
 impl<'a, 'b> VkWrappedType<RawVkWriteDescriptorSetAccelerationStructure> for VkWriteDescriptorSetAccelerationStructure<'a, 'b>

@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineMultisampleStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineMultisampleStateCreateFlags {
     
+}
+
+pub type RawVkPipelineMultisampleStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineMultisampleStateCreateFlags> for VkPipelineMultisampleStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineMultisampleStateCreateFlags, dst: &mut RawVkPipelineMultisampleStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineMultisampleStateCreateFlags> for RawVkPipelineMultisampleStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineMultisampleStateCreateFlags> for RawVkPipelineMultisamp
         VkPipelineMultisampleStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineMultisampleStateCreateFlags> for VkPipelineMultisampleStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineMultisampleStateCreateFlags, dst: &mut RawVkPipelineMultisampleStateCreateFlags) {
-        *dst = 0;
     }
 }
 

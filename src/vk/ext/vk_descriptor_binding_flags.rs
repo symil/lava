@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDescriptorBindingFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorBindingFlags {
     pub update_after_bind: bool,
     pub update_unused_while_pending: bool,
     pub partially_bound: bool,
     pub variable_descriptor_count: bool,
+}
+
+pub type RawVkDescriptorBindingFlags = u32;
+
+impl VkWrappedType<RawVkDescriptorBindingFlags> for VkDescriptorBindingFlags {
+    fn vk_to_raw(src: &VkDescriptorBindingFlags, dst: &mut RawVkDescriptorBindingFlags) {
+        *dst = 0;
+        if src.update_after_bind { *dst |= 0x00000001; }
+        if src.update_unused_while_pending { *dst |= 0x00000002; }
+        if src.partially_bound { *dst |= 0x00000004; }
+        if src.variable_descriptor_count { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkDescriptorBindingFlags> for RawVkDescriptorBindingFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkDescriptorBindingFlags> for RawVkDescriptorBindingFlags {
             partially_bound: (src & 0x00000004) != 0,
             variable_descriptor_count: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorBindingFlags> for VkDescriptorBindingFlags {
-    fn vk_to_raw(src: &VkDescriptorBindingFlags, dst: &mut RawVkDescriptorBindingFlags) {
-        *dst = 0;
-        if src.update_after_bind { *dst |= 0x00000001; }
-        if src.update_unused_while_pending { *dst |= 0x00000002; }
-        if src.partially_bound { *dst |= 0x00000004; }
-        if src.variable_descriptor_count { *dst |= 0x00000008; }
     }
 }
 

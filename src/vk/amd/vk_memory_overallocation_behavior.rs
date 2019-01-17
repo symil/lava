@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkMemoryOverallocationBehavior = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkMemoryOverallocationBehavior {
@@ -12,17 +10,19 @@ pub enum VkMemoryOverallocationBehavior {
     Disallowed = 2,
 }
 
+pub type RawVkMemoryOverallocationBehavior = i32;
+
+impl VkWrappedType<RawVkMemoryOverallocationBehavior> for VkMemoryOverallocationBehavior {
+    fn vk_to_raw(src: &VkMemoryOverallocationBehavior, dst: &mut RawVkMemoryOverallocationBehavior) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkMemoryOverallocationBehavior> for RawVkMemoryOverallocationBehavior {
     fn vk_to_wrapped(src: &RawVkMemoryOverallocationBehavior) -> VkMemoryOverallocationBehavior {
         unsafe {
             *((src as *const i32) as *const VkMemoryOverallocationBehavior)
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryOverallocationBehavior> for VkMemoryOverallocationBehavior {
-    fn vk_to_raw(src: &VkMemoryOverallocationBehavior, dst: &mut RawVkMemoryOverallocationBehavior) {
-        *dst = *src as i32
     }
 }
 

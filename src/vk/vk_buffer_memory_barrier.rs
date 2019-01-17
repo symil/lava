@@ -17,6 +17,17 @@ use vk::vk_structure_type::*;
 use vk::vk_access_flags::*;
 use vk::vk_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBufferMemoryBarrier<'a> {
+    pub src_access_mask: VkAccessFlags,
+    pub dst_access_mask: VkAccessFlags,
+    pub src_queue_family_index: usize,
+    pub dst_queue_family_index: usize,
+    pub buffer: &'a VkBuffer,
+    pub offset: usize,
+    pub size: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferMemoryBarrier {
@@ -29,17 +40,6 @@ pub struct RawVkBufferMemoryBarrier {
     pub buffer: RawVkBuffer,
     pub offset: u64,
     pub size: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBufferMemoryBarrier<'a> {
-    pub src_access_mask: VkAccessFlags,
-    pub dst_access_mask: VkAccessFlags,
-    pub src_queue_family_index: usize,
-    pub dst_queue_family_index: usize,
-    pub buffer: &'a VkBuffer,
-    pub offset: usize,
-    pub size: usize,
 }
 
 impl<'a> VkWrappedType<RawVkBufferMemoryBarrier> for VkBufferMemoryBarrier<'a> {

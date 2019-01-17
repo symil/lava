@@ -16,19 +16,19 @@ use vk::vk_device::*;
 use vk::vk_image_aspect_flags::*;
 use vk::vk_clear_value::*;
 
+#[derive(Debug, Clone)]
+pub struct VkClearAttachment {
+    pub aspect_mask: VkImageAspectFlags,
+    pub color_attachment: usize,
+    pub clear_value: VkClearValue,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkClearAttachment {
     pub aspect_mask: RawVkImageAspectFlags,
     pub color_attachment: u32,
     pub clear_value: RawVkClearValue,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkClearAttachment {
-    pub aspect_mask: VkImageAspectFlags,
-    pub color_attachment: usize,
-    pub clear_value: VkClearValue,
 }
 
 impl VkWrappedType<RawVkClearAttachment> for VkClearAttachment {

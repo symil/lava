@@ -15,6 +15,20 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceTransformFeedbackProperties {
+    pub max_transform_feedback_streams: usize,
+    pub max_transform_feedback_buffers: usize,
+    pub max_transform_feedback_buffer_size: usize,
+    pub max_transform_feedback_stream_data_size: usize,
+    pub max_transform_feedback_buffer_data_size: usize,
+    pub max_transform_feedback_buffer_data_stride: usize,
+    pub transform_feedback_queries: bool,
+    pub transform_feedback_streams_lines_triangles: bool,
+    pub transform_feedback_rasterization_stream_select: bool,
+    pub transform_feedback_draw: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceTransformFeedbackProperties {
@@ -32,18 +46,21 @@ pub struct RawVkPhysicalDeviceTransformFeedbackProperties {
     pub transform_feedback_draw: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceTransformFeedbackProperties {
-    pub max_transform_feedback_streams: usize,
-    pub max_transform_feedback_buffers: usize,
-    pub max_transform_feedback_buffer_size: usize,
-    pub max_transform_feedback_stream_data_size: usize,
-    pub max_transform_feedback_buffer_data_size: usize,
-    pub max_transform_feedback_buffer_data_stride: usize,
-    pub transform_feedback_queries: bool,
-    pub transform_feedback_streams_lines_triangles: bool,
-    pub transform_feedback_rasterization_stream_select: bool,
-    pub transform_feedback_draw: bool,
+impl VkWrappedType<RawVkPhysicalDeviceTransformFeedbackProperties> for VkPhysicalDeviceTransformFeedbackProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceTransformFeedbackProperties, dst: &mut RawVkPhysicalDeviceTransformFeedbackProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceTransformFeedbackPropertiesExt);
+        dst.next = ptr::null();
+        dst.max_transform_feedback_streams = vk_to_raw_value(&src.max_transform_feedback_streams);
+        dst.max_transform_feedback_buffers = vk_to_raw_value(&src.max_transform_feedback_buffers);
+        dst.max_transform_feedback_buffer_size = vk_to_raw_value(&src.max_transform_feedback_buffer_size);
+        dst.max_transform_feedback_stream_data_size = vk_to_raw_value(&src.max_transform_feedback_stream_data_size);
+        dst.max_transform_feedback_buffer_data_size = vk_to_raw_value(&src.max_transform_feedback_buffer_data_size);
+        dst.max_transform_feedback_buffer_data_stride = vk_to_raw_value(&src.max_transform_feedback_buffer_data_stride);
+        dst.transform_feedback_queries = vk_to_raw_value(&src.transform_feedback_queries);
+        dst.transform_feedback_streams_lines_triangles = vk_to_raw_value(&src.transform_feedback_streams_lines_triangles);
+        dst.transform_feedback_rasterization_stream_select = vk_to_raw_value(&src.transform_feedback_rasterization_stream_select);
+        dst.transform_feedback_draw = vk_to_raw_value(&src.transform_feedback_draw);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceTransformFeedbackProperties> for RawVkPhysicalDeviceTransformFeedbackProperties {
@@ -60,23 +77,6 @@ impl VkRawType<VkPhysicalDeviceTransformFeedbackProperties> for RawVkPhysicalDev
             transform_feedback_rasterization_stream_select: u32::vk_to_wrapped(&src.transform_feedback_rasterization_stream_select),
             transform_feedback_draw: u32::vk_to_wrapped(&src.transform_feedback_draw),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceTransformFeedbackProperties> for VkPhysicalDeviceTransformFeedbackProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceTransformFeedbackProperties, dst: &mut RawVkPhysicalDeviceTransformFeedbackProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceTransformFeedbackPropertiesExt);
-        dst.next = ptr::null();
-        dst.max_transform_feedback_streams = vk_to_raw_value(&src.max_transform_feedback_streams);
-        dst.max_transform_feedback_buffers = vk_to_raw_value(&src.max_transform_feedback_buffers);
-        dst.max_transform_feedback_buffer_size = vk_to_raw_value(&src.max_transform_feedback_buffer_size);
-        dst.max_transform_feedback_stream_data_size = vk_to_raw_value(&src.max_transform_feedback_stream_data_size);
-        dst.max_transform_feedback_buffer_data_size = vk_to_raw_value(&src.max_transform_feedback_buffer_data_size);
-        dst.max_transform_feedback_buffer_data_stride = vk_to_raw_value(&src.max_transform_feedback_buffer_data_stride);
-        dst.transform_feedback_queries = vk_to_raw_value(&src.transform_feedback_queries);
-        dst.transform_feedback_streams_lines_triangles = vk_to_raw_value(&src.transform_feedback_streams_lines_triangles);
-        dst.transform_feedback_rasterization_stream_select = vk_to_raw_value(&src.transform_feedback_rasterization_stream_select);
-        dst.transform_feedback_draw = vk_to_raw_value(&src.transform_feedback_draw);
     }
 }
 

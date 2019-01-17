@@ -15,6 +15,18 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceRayTracingProperties {
+    pub shader_group_handle_size: usize,
+    pub max_recursion_depth: usize,
+    pub max_shader_group_stride: usize,
+    pub shader_group_base_alignment: usize,
+    pub max_geometry_count: usize,
+    pub max_instance_count: usize,
+    pub max_triangle_count: usize,
+    pub max_descriptor_set_acceleration_structures: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceRayTracingProperties {
@@ -30,16 +42,19 @@ pub struct RawVkPhysicalDeviceRayTracingProperties {
     pub max_descriptor_set_acceleration_structures: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceRayTracingProperties {
-    pub shader_group_handle_size: usize,
-    pub max_recursion_depth: usize,
-    pub max_shader_group_stride: usize,
-    pub shader_group_base_alignment: usize,
-    pub max_geometry_count: usize,
-    pub max_instance_count: usize,
-    pub max_triangle_count: usize,
-    pub max_descriptor_set_acceleration_structures: usize,
+impl VkWrappedType<RawVkPhysicalDeviceRayTracingProperties> for VkPhysicalDeviceRayTracingProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceRayTracingProperties, dst: &mut RawVkPhysicalDeviceRayTracingProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceRayTracingPropertiesNv);
+        dst.next = ptr::null();
+        dst.shader_group_handle_size = vk_to_raw_value(&src.shader_group_handle_size);
+        dst.max_recursion_depth = vk_to_raw_value(&src.max_recursion_depth);
+        dst.max_shader_group_stride = vk_to_raw_value(&src.max_shader_group_stride);
+        dst.shader_group_base_alignment = vk_to_raw_value(&src.shader_group_base_alignment);
+        dst.max_geometry_count = vk_to_raw_value(&src.max_geometry_count);
+        dst.max_instance_count = vk_to_raw_value(&src.max_instance_count);
+        dst.max_triangle_count = vk_to_raw_value(&src.max_triangle_count);
+        dst.max_descriptor_set_acceleration_structures = vk_to_raw_value(&src.max_descriptor_set_acceleration_structures);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceRayTracingProperties> for RawVkPhysicalDeviceRayTracingProperties {
@@ -54,21 +69,6 @@ impl VkRawType<VkPhysicalDeviceRayTracingProperties> for RawVkPhysicalDeviceRayT
             max_triangle_count: u64::vk_to_wrapped(&src.max_triangle_count),
             max_descriptor_set_acceleration_structures: u32::vk_to_wrapped(&src.max_descriptor_set_acceleration_structures),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceRayTracingProperties> for VkPhysicalDeviceRayTracingProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceRayTracingProperties, dst: &mut RawVkPhysicalDeviceRayTracingProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceRayTracingPropertiesNv);
-        dst.next = ptr::null();
-        dst.shader_group_handle_size = vk_to_raw_value(&src.shader_group_handle_size);
-        dst.max_recursion_depth = vk_to_raw_value(&src.max_recursion_depth);
-        dst.max_shader_group_stride = vk_to_raw_value(&src.max_shader_group_stride);
-        dst.shader_group_base_alignment = vk_to_raw_value(&src.shader_group_base_alignment);
-        dst.max_geometry_count = vk_to_raw_value(&src.max_geometry_count);
-        dst.max_instance_count = vk_to_raw_value(&src.max_instance_count);
-        dst.max_triangle_count = vk_to_raw_value(&src.max_triangle_count);
-        dst.max_descriptor_set_acceleration_structures = vk_to_raw_value(&src.max_descriptor_set_acceleration_structures);
     }
 }
 

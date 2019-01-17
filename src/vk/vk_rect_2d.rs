@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_offset_2d::*;
 use vk::vk_extent_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkRect2D {
+    pub offset: VkOffset2D,
+    pub extent: VkExtent2D,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRect2D {
@@ -23,10 +29,11 @@ pub struct RawVkRect2D {
     pub extent: RawVkExtent2D,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkRect2D {
-    pub offset: VkOffset2D,
-    pub extent: VkExtent2D,
+impl VkWrappedType<RawVkRect2D> for VkRect2D {
+    fn vk_to_raw(src: &VkRect2D, dst: &mut RawVkRect2D) {
+        dst.offset = vk_to_raw_value(&src.offset);
+        dst.extent = vk_to_raw_value(&src.extent);
+    }
 }
 
 impl VkRawType<VkRect2D> for RawVkRect2D {
@@ -35,13 +42,6 @@ impl VkRawType<VkRect2D> for RawVkRect2D {
             offset: RawVkOffset2D::vk_to_wrapped(&src.offset),
             extent: RawVkExtent2D::vk_to_wrapped(&src.extent),
         }
-    }
-}
-
-impl VkWrappedType<RawVkRect2D> for VkRect2D {
-    fn vk_to_raw(src: &VkRect2D, dst: &mut RawVkRect2D) {
-        dst.offset = vk_to_raw_value(&src.offset);
-        dst.extent = vk_to_raw_value(&src.extent);
     }
 }
 

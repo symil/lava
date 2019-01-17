@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkFormatFeatureFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkFormatFeatureFlags {
     pub sampled_image: bool,
@@ -31,6 +29,39 @@ pub struct VkFormatFeatureFlags {
     pub sampled_image_filter_cubic_img: bool,
     pub sampled_image_filter_minmax_ext: bool,
     pub fragment_density_map_ext: bool,
+}
+
+pub type RawVkFormatFeatureFlags = u32;
+
+impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {
+    fn vk_to_raw(src: &VkFormatFeatureFlags, dst: &mut RawVkFormatFeatureFlags) {
+        *dst = 0;
+        if src.sampled_image { *dst |= 0x00000001; }
+        if src.storage_image { *dst |= 0x00000002; }
+        if src.storage_image_atomic { *dst |= 0x00000004; }
+        if src.uniform_texel_buffer { *dst |= 0x00000008; }
+        if src.storage_texel_buffer { *dst |= 0x00000010; }
+        if src.storage_texel_buffer_atomic { *dst |= 0x00000020; }
+        if src.vertex_buffer { *dst |= 0x00000040; }
+        if src.color_attachment { *dst |= 0x00000080; }
+        if src.color_attachment_blend { *dst |= 0x00000100; }
+        if src.depth_stencil_attachment { *dst |= 0x00000200; }
+        if src.blit_src { *dst |= 0x00000400; }
+        if src.blit_dst { *dst |= 0x00000800; }
+        if src.sampled_image_filter_linear { *dst |= 0x00001000; }
+        if src.transfer_src { *dst |= 0x00004000; }
+        if src.transfer_dst { *dst |= 0x00008000; }
+        if src.midpoint_chroma_samples { *dst |= 0x00020000; }
+        if src.sampled_image_ycbcr_conversion_linear_filter { *dst |= 0x00040000; }
+        if src.sampled_image_ycbcr_conversion_separate_reconstruction_filter { *dst |= 0x00080000; }
+        if src.sampled_image_ycbcr_conversion_chroma_reconstruction_explicit { *dst |= 0x00100000; }
+        if src.sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable { *dst |= 0x00200000; }
+        if src.disjoint { *dst |= 0x00400000; }
+        if src.cosited_chroma_samples { *dst |= 0x00800000; }
+        if src.sampled_image_filter_cubic_img { *dst |= 0x00002000; }
+        if src.sampled_image_filter_minmax_ext { *dst |= 0x00010000; }
+        if src.fragment_density_map_ext { *dst |= 0x01000000; }
+    }
 }
 
 impl VkRawType<VkFormatFeatureFlags> for RawVkFormatFeatureFlags {
@@ -62,37 +93,6 @@ impl VkRawType<VkFormatFeatureFlags> for RawVkFormatFeatureFlags {
             sampled_image_filter_minmax_ext: (src & 0x00010000) != 0,
             fragment_density_map_ext: (src & 0x01000000) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {
-    fn vk_to_raw(src: &VkFormatFeatureFlags, dst: &mut RawVkFormatFeatureFlags) {
-        *dst = 0;
-        if src.sampled_image { *dst |= 0x00000001; }
-        if src.storage_image { *dst |= 0x00000002; }
-        if src.storage_image_atomic { *dst |= 0x00000004; }
-        if src.uniform_texel_buffer { *dst |= 0x00000008; }
-        if src.storage_texel_buffer { *dst |= 0x00000010; }
-        if src.storage_texel_buffer_atomic { *dst |= 0x00000020; }
-        if src.vertex_buffer { *dst |= 0x00000040; }
-        if src.color_attachment { *dst |= 0x00000080; }
-        if src.color_attachment_blend { *dst |= 0x00000100; }
-        if src.depth_stencil_attachment { *dst |= 0x00000200; }
-        if src.blit_src { *dst |= 0x00000400; }
-        if src.blit_dst { *dst |= 0x00000800; }
-        if src.sampled_image_filter_linear { *dst |= 0x00001000; }
-        if src.transfer_src { *dst |= 0x00004000; }
-        if src.transfer_dst { *dst |= 0x00008000; }
-        if src.midpoint_chroma_samples { *dst |= 0x00020000; }
-        if src.sampled_image_ycbcr_conversion_linear_filter { *dst |= 0x00040000; }
-        if src.sampled_image_ycbcr_conversion_separate_reconstruction_filter { *dst |= 0x00080000; }
-        if src.sampled_image_ycbcr_conversion_chroma_reconstruction_explicit { *dst |= 0x00100000; }
-        if src.sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable { *dst |= 0x00200000; }
-        if src.disjoint { *dst |= 0x00400000; }
-        if src.cosited_chroma_samples { *dst |= 0x00800000; }
-        if src.sampled_image_filter_cubic_img { *dst |= 0x00002000; }
-        if src.sampled_image_filter_minmax_ext { *dst |= 0x00010000; }
-        if src.fragment_density_map_ext { *dst |= 0x01000000; }
     }
 }
 

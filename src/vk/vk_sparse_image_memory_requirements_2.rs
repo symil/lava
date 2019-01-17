@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_sparse_image_memory_requirements::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSparseImageMemoryRequirements2 {
+    pub memory_requirements: VkSparseImageMemoryRequirements,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageMemoryRequirements2 {
@@ -24,9 +29,12 @@ pub struct RawVkSparseImageMemoryRequirements2 {
     pub memory_requirements: RawVkSparseImageMemoryRequirements,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSparseImageMemoryRequirements2 {
-    pub memory_requirements: VkSparseImageMemoryRequirements,
+impl VkWrappedType<RawVkSparseImageMemoryRequirements2> for VkSparseImageMemoryRequirements2 {
+    fn vk_to_raw(src: &VkSparseImageMemoryRequirements2, dst: &mut RawVkSparseImageMemoryRequirements2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SparseImageMemoryRequirements2);
+        dst.next = ptr::null();
+        dst.memory_requirements = vk_to_raw_value(&src.memory_requirements);
+    }
 }
 
 impl VkRawType<VkSparseImageMemoryRequirements2> for RawVkSparseImageMemoryRequirements2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkSparseImageMemoryRequirements2> for RawVkSparseImageMemoryRequi
         VkSparseImageMemoryRequirements2 {
             memory_requirements: RawVkSparseImageMemoryRequirements::vk_to_wrapped(&src.memory_requirements),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSparseImageMemoryRequirements2> for VkSparseImageMemoryRequirements2 {
-    fn vk_to_raw(src: &VkSparseImageMemoryRequirements2, dst: &mut RawVkSparseImageMemoryRequirements2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SparseImageMemoryRequirements2);
-        dst.next = ptr::null();
-        dst.memory_requirements = vk_to_raw_value(&src.memory_requirements);
     }
 }
 

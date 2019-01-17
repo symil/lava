@@ -15,6 +15,15 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_image_aspect_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageSubresourceRange {
+    pub aspect_mask: VkImageAspectFlags,
+    pub base_mip_level: usize,
+    pub level_count: usize,
+    pub base_array_layer: usize,
+    pub layer_count: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSubresourceRange {
@@ -25,13 +34,14 @@ pub struct RawVkImageSubresourceRange {
     pub layer_count: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageSubresourceRange {
-    pub aspect_mask: VkImageAspectFlags,
-    pub base_mip_level: usize,
-    pub level_count: usize,
-    pub base_array_layer: usize,
-    pub layer_count: usize,
+impl VkWrappedType<RawVkImageSubresourceRange> for VkImageSubresourceRange {
+    fn vk_to_raw(src: &VkImageSubresourceRange, dst: &mut RawVkImageSubresourceRange) {
+        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
+        dst.base_mip_level = vk_to_raw_value(&src.base_mip_level);
+        dst.level_count = vk_to_raw_value(&src.level_count);
+        dst.base_array_layer = vk_to_raw_value(&src.base_array_layer);
+        dst.layer_count = vk_to_raw_value(&src.layer_count);
+    }
 }
 
 impl VkRawType<VkImageSubresourceRange> for RawVkImageSubresourceRange {
@@ -43,16 +53,6 @@ impl VkRawType<VkImageSubresourceRange> for RawVkImageSubresourceRange {
             base_array_layer: u32::vk_to_wrapped(&src.base_array_layer),
             layer_count: u32::vk_to_wrapped(&src.layer_count),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageSubresourceRange> for VkImageSubresourceRange {
-    fn vk_to_raw(src: &VkImageSubresourceRange, dst: &mut RawVkImageSubresourceRange) {
-        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
-        dst.base_mip_level = vk_to_raw_value(&src.base_mip_level);
-        dst.level_count = vk_to_raw_value(&src.level_count);
-        dst.base_array_layer = vk_to_raw_value(&src.base_array_layer);
-        dst.layer_count = vk_to_raw_value(&src.layer_count);
     }
 }
 

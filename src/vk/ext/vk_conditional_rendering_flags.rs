@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkConditionalRenderingFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkConditionalRenderingFlags {
     pub inverted: bool,
+}
+
+pub type RawVkConditionalRenderingFlags = u32;
+
+impl VkWrappedType<RawVkConditionalRenderingFlags> for VkConditionalRenderingFlags {
+    fn vk_to_raw(src: &VkConditionalRenderingFlags, dst: &mut RawVkConditionalRenderingFlags) {
+        *dst = 0;
+        if src.inverted { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkConditionalRenderingFlags> for RawVkConditionalRenderingFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkConditionalRenderingFlags> for RawVkConditionalRenderingFlags {
         VkConditionalRenderingFlags {
             inverted: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkConditionalRenderingFlags> for VkConditionalRenderingFlags {
-    fn vk_to_raw(src: &VkConditionalRenderingFlags, dst: &mut RawVkConditionalRenderingFlags) {
-        *dst = 0;
-        if src.inverted { *dst |= 0x00000001; }
     }
 }
 

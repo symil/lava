@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_attachment_reference::*;
 
+#[derive(Debug, Clone)]
+pub struct VkRenderPassFragmentDensityMapCreateInfo {
+    pub fragment_density_map_attachment: VkAttachmentReference,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassFragmentDensityMapCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkRenderPassFragmentDensityMapCreateInfo {
     pub fragment_density_map_attachment: RawVkAttachmentReference,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkRenderPassFragmentDensityMapCreateInfo {
-    pub fragment_density_map_attachment: VkAttachmentReference,
+impl VkWrappedType<RawVkRenderPassFragmentDensityMapCreateInfo> for VkRenderPassFragmentDensityMapCreateInfo {
+    fn vk_to_raw(src: &VkRenderPassFragmentDensityMapCreateInfo, dst: &mut RawVkRenderPassFragmentDensityMapCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassFragmentDensityMapCreateInfoExt);
+        dst.next = ptr::null();
+        dst.fragment_density_map_attachment = vk_to_raw_value(&src.fragment_density_map_attachment);
+    }
 }
 
 impl VkRawType<VkRenderPassFragmentDensityMapCreateInfo> for RawVkRenderPassFragmentDensityMapCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkRenderPassFragmentDensityMapCreateInfo> for RawVkRenderPassFrag
         VkRenderPassFragmentDensityMapCreateInfo {
             fragment_density_map_attachment: RawVkAttachmentReference::vk_to_wrapped(&src.fragment_density_map_attachment),
         }
-    }
-}
-
-impl VkWrappedType<RawVkRenderPassFragmentDensityMapCreateInfo> for VkRenderPassFragmentDensityMapCreateInfo {
-    fn vk_to_raw(src: &VkRenderPassFragmentDensityMapCreateInfo, dst: &mut RawVkRenderPassFragmentDensityMapCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassFragmentDensityMapCreateInfoExt);
-        dst.next = ptr::null();
-        dst.fragment_density_map_attachment = vk_to_raw_value(&src.fragment_density_map_attachment);
     }
 }
 

@@ -14,6 +14,12 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPresentTime {
+    pub present_id: usize,
+    pub desired_present_time: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentTime {
@@ -21,10 +27,11 @@ pub struct RawVkPresentTime {
     pub desired_present_time: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPresentTime {
-    pub present_id: usize,
-    pub desired_present_time: usize,
+impl VkWrappedType<RawVkPresentTime> for VkPresentTime {
+    fn vk_to_raw(src: &VkPresentTime, dst: &mut RawVkPresentTime) {
+        dst.present_id = vk_to_raw_value(&src.present_id);
+        dst.desired_present_time = vk_to_raw_value(&src.desired_present_time);
+    }
 }
 
 impl VkRawType<VkPresentTime> for RawVkPresentTime {
@@ -33,13 +40,6 @@ impl VkRawType<VkPresentTime> for RawVkPresentTime {
             present_id: u32::vk_to_wrapped(&src.present_id),
             desired_present_time: u64::vk_to_wrapped(&src.desired_present_time),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPresentTime> for VkPresentTime {
-    fn vk_to_raw(src: &VkPresentTime, dst: &mut RawVkPresentTime) {
-        dst.present_id = vk_to_raw_value(&src.present_id);
-        dst.desired_present_time = vk_to_raw_value(&src.desired_present_time);
     }
 }
 

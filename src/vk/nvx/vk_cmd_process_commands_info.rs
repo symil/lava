@@ -20,6 +20,22 @@ use vk::nvx::vk_indirect_commands_token::*;
 use vk::vk_command_buffer::*;
 use vk::vk_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCmdProcessCommandsInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
+    where
+        'd: 'c,
+{
+    pub object_table: &'a VkObjectTable,
+    pub indirect_commands_layout: &'b VkIndirectCommandsLayout,
+    pub indirect_commands_tokens: &'c [VkIndirectCommandsToken<'d>],
+    pub max_sequences_count: usize,
+    pub target_command_buffer: Option<&'e VkCommandBuffer>,
+    pub sequences_count_buffer: Option<&'f VkBuffer>,
+    pub sequences_count_offset: usize,
+    pub sequences_index_buffer: Option<&'g VkBuffer>,
+    pub sequences_index_offset: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCmdProcessCommandsInfo {
@@ -35,22 +51,6 @@ pub struct RawVkCmdProcessCommandsInfo {
     pub sequences_count_offset: u64,
     pub sequences_index_buffer: RawVkBuffer,
     pub sequences_index_offset: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkCmdProcessCommandsInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'd: 'c,
-{
-    pub object_table: &'a VkObjectTable,
-    pub indirect_commands_layout: &'b VkIndirectCommandsLayout,
-    pub indirect_commands_tokens: &'c [VkIndirectCommandsToken<'d>],
-    pub max_sequences_count: usize,
-    pub target_command_buffer: Option<&'e VkCommandBuffer>,
-    pub sequences_count_buffer: Option<&'f VkBuffer>,
-    pub sequences_count_offset: usize,
-    pub sequences_index_buffer: Option<&'g VkBuffer>,
-    pub sequences_index_offset: usize,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkCmdProcessCommandsInfo> for VkCmdProcessCommandsInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>

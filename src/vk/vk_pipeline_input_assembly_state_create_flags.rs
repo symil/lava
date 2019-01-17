@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineInputAssemblyStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineInputAssemblyStateCreateFlags {
     
+}
+
+pub type RawVkPipelineInputAssemblyStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineInputAssemblyStateCreateFlags> for VkPipelineInputAssemblyStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineInputAssemblyStateCreateFlags, dst: &mut RawVkPipelineInputAssemblyStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineInputAssemblyStateCreateFlags> for RawVkPipelineInputAssemblyStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineInputAssemblyStateCreateFlags> for RawVkPipelineInputAs
         VkPipelineInputAssemblyStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineInputAssemblyStateCreateFlags> for VkPipelineInputAssemblyStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineInputAssemblyStateCreateFlags, dst: &mut RawVkPipelineInputAssemblyStateCreateFlags) {
-        *dst = 0;
     }
 }
 

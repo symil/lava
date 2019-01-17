@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkConservativeRasterizationMode = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkConservativeRasterizationMode {
@@ -12,17 +10,19 @@ pub enum VkConservativeRasterizationMode {
     Underestimate = 2,
 }
 
+pub type RawVkConservativeRasterizationMode = i32;
+
+impl VkWrappedType<RawVkConservativeRasterizationMode> for VkConservativeRasterizationMode {
+    fn vk_to_raw(src: &VkConservativeRasterizationMode, dst: &mut RawVkConservativeRasterizationMode) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkConservativeRasterizationMode> for RawVkConservativeRasterizationMode {
     fn vk_to_wrapped(src: &RawVkConservativeRasterizationMode) -> VkConservativeRasterizationMode {
         unsafe {
             *((src as *const i32) as *const VkConservativeRasterizationMode)
         }
-    }
-}
-
-impl VkWrappedType<RawVkConservativeRasterizationMode> for VkConservativeRasterizationMode {
-    fn vk_to_raw(src: &VkConservativeRasterizationMode, dst: &mut RawVkConservativeRasterizationMode) {
-        *dst = *src as i32
     }
 }
 

@@ -17,6 +17,12 @@ use vk::vk_structure_type::*;
 use vk::vk_device_memory::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryGetFdInfo<'a> {
+    pub memory: &'a VkDeviceMemory,
+    pub handle_type: VkExternalMemoryHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryGetFdInfo {
@@ -24,12 +30,6 @@ pub struct RawVkMemoryGetFdInfo {
     pub next: *const c_void,
     pub memory: RawVkDeviceMemory,
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkMemoryGetFdInfo<'a> {
-    pub memory: &'a VkDeviceMemory,
-    pub handle_type: VkExternalMemoryHandleTypeFlags,
 }
 
 impl<'a> VkWrappedType<RawVkMemoryGetFdInfo> for VkMemoryGetFdInfo<'a> {

@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_rect_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineViewportExclusiveScissorStateCreateInfo<'a> {
+    pub exclusive_scissors: Option<&'a [VkRect2D]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportExclusiveScissorStateCreateInfo {
@@ -23,11 +28,6 @@ pub struct RawVkPipelineViewportExclusiveScissorStateCreateInfo {
     pub next: *const c_void,
     pub exclusive_scissor_count: u32,
     pub exclusive_scissors: *mut RawVkRect2D,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineViewportExclusiveScissorStateCreateInfo<'a> {
-    pub exclusive_scissors: Option<&'a [VkRect2D]>,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineViewportExclusiveScissorStateCreateInfo> for VkPipelineViewportExclusiveScissorStateCreateInfo<'a> {

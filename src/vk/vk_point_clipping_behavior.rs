@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPointClippingBehavior = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPointClippingBehavior {
@@ -11,17 +9,19 @@ pub enum VkPointClippingBehavior {
     UserClipPlanesOnly = 1,
 }
 
+pub type RawVkPointClippingBehavior = i32;
+
+impl VkWrappedType<RawVkPointClippingBehavior> for VkPointClippingBehavior {
+    fn vk_to_raw(src: &VkPointClippingBehavior, dst: &mut RawVkPointClippingBehavior) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkPointClippingBehavior> for RawVkPointClippingBehavior {
     fn vk_to_wrapped(src: &RawVkPointClippingBehavior) -> VkPointClippingBehavior {
         unsafe {
             *((src as *const i32) as *const VkPointClippingBehavior)
         }
-    }
-}
-
-impl VkWrappedType<RawVkPointClippingBehavior> for VkPointClippingBehavior {
-    fn vk_to_raw(src: &VkPointClippingBehavior, dst: &mut RawVkPointClippingBehavior) {
-        *dst = *src as i32
     }
 }
 

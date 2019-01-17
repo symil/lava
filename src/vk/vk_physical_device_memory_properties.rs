@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_memory_type::*;
 use vk::vk_memory_heap::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMemoryProperties {
+    pub memory_types: Vec<VkMemoryType>,
+    pub memory_heaps: Vec<VkMemoryHeap>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryProperties {
@@ -25,10 +31,13 @@ pub struct RawVkPhysicalDeviceMemoryProperties {
     pub memory_heaps: [RawVkMemoryHeap; 16],
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMemoryProperties {
-    pub memory_types: Vec<VkMemoryType>,
-    pub memory_heaps: Vec<VkMemoryHeap>,
+impl VkWrappedType<RawVkPhysicalDeviceMemoryProperties> for VkPhysicalDeviceMemoryProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceMemoryProperties, dst: &mut RawVkPhysicalDeviceMemoryProperties) {
+        dst.memory_type_count = src.memory_types.len() as u32;
+        dst.memory_types = unsafe { let mut dst_array : [RawVkMemoryType; 32] = mem::uninitialized(); vk_to_raw_array(&src.memory_types, &mut dst_array); dst_array };
+        dst.memory_heap_count = src.memory_heaps.len() as u32;
+        dst.memory_heaps = unsafe { let mut dst_array : [RawVkMemoryHeap; 16] = mem::uninitialized(); vk_to_raw_array(&src.memory_heaps, &mut dst_array); dst_array };
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMemoryProperties> for RawVkPhysicalDeviceMemoryProperties {
@@ -37,15 +46,6 @@ impl VkRawType<VkPhysicalDeviceMemoryProperties> for RawVkPhysicalDeviceMemoryPr
             memory_types: new_vk_array(src.memory_type_count, src.memory_types.as_ptr()),
             memory_heaps: new_vk_array(src.memory_heap_count, src.memory_heaps.as_ptr()),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMemoryProperties> for VkPhysicalDeviceMemoryProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceMemoryProperties, dst: &mut RawVkPhysicalDeviceMemoryProperties) {
-        dst.memory_type_count = src.memory_types.len() as u32;
-        dst.memory_types = unsafe { let mut dst_array : [RawVkMemoryType; 32] = mem::uninitialized(); vk_to_raw_array(&src.memory_types, &mut dst_array); dst_array };
-        dst.memory_heap_count = src.memory_heaps.len() as u32;
-        dst.memory_heaps = unsafe { let mut dst_array : [RawVkMemoryHeap; 16] = mem::uninitialized(); vk_to_raw_array(&src.memory_heaps, &mut dst_array); dst_array };
     }
 }
 

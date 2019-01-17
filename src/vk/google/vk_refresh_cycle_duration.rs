@@ -14,15 +14,21 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkRefreshCycleDuration {
+    pub refresh_duration: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRefreshCycleDuration {
     pub refresh_duration: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkRefreshCycleDuration {
-    pub refresh_duration: usize,
+impl VkWrappedType<RawVkRefreshCycleDuration> for VkRefreshCycleDuration {
+    fn vk_to_raw(src: &VkRefreshCycleDuration, dst: &mut RawVkRefreshCycleDuration) {
+        dst.refresh_duration = vk_to_raw_value(&src.refresh_duration);
+    }
 }
 
 impl VkRawType<VkRefreshCycleDuration> for RawVkRefreshCycleDuration {
@@ -30,12 +36,6 @@ impl VkRawType<VkRefreshCycleDuration> for RawVkRefreshCycleDuration {
         VkRefreshCycleDuration {
             refresh_duration: u64::vk_to_wrapped(&src.refresh_duration),
         }
-    }
-}
-
-impl VkWrappedType<RawVkRefreshCycleDuration> for VkRefreshCycleDuration {
-    fn vk_to_raw(src: &VkRefreshCycleDuration, dst: &mut RawVkRefreshCycleDuration) {
-        dst.refresh_duration = vk_to_raw_value(&src.refresh_duration);
     }
 }
 

@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceVariablePointerFeatures {
+    pub variable_pointers_storage_buffer: bool,
+    pub variable_pointers: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVariablePointerFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceVariablePointerFeatures {
     pub variable_pointers: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceVariablePointerFeatures {
-    pub variable_pointers_storage_buffer: bool,
-    pub variable_pointers: bool,
+impl VkWrappedType<RawVkPhysicalDeviceVariablePointerFeatures> for VkPhysicalDeviceVariablePointerFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceVariablePointerFeatures, dst: &mut RawVkPhysicalDeviceVariablePointerFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVariablePointerFeatures);
+        dst.next = ptr::null();
+        dst.variable_pointers_storage_buffer = vk_to_raw_value(&src.variable_pointers_storage_buffer);
+        dst.variable_pointers = vk_to_raw_value(&src.variable_pointers);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceVariablePointerFeatures> for RawVkPhysicalDeviceVariablePointerFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceVariablePointerFeatures> for RawVkPhysicalDeviceV
             variable_pointers_storage_buffer: u32::vk_to_wrapped(&src.variable_pointers_storage_buffer),
             variable_pointers: u32::vk_to_wrapped(&src.variable_pointers),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceVariablePointerFeatures> for VkPhysicalDeviceVariablePointerFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceVariablePointerFeatures, dst: &mut RawVkPhysicalDeviceVariablePointerFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVariablePointerFeatures);
-        dst.next = ptr::null();
-        dst.variable_pointers_storage_buffer = vk_to_raw_value(&src.variable_pointers_storage_buffer);
-        dst.variable_pointers = vk_to_raw_value(&src.variable_pointers);
     }
 }
 

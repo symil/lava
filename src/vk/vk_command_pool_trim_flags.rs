@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCommandPoolTrimFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandPoolTrimFlags {
     
+}
+
+pub type RawVkCommandPoolTrimFlags = u32;
+
+impl VkWrappedType<RawVkCommandPoolTrimFlags> for VkCommandPoolTrimFlags {
+    fn vk_to_raw(src: &VkCommandPoolTrimFlags, dst: &mut RawVkCommandPoolTrimFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkCommandPoolTrimFlags> for RawVkCommandPoolTrimFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkCommandPoolTrimFlags> for RawVkCommandPoolTrimFlags {
         VkCommandPoolTrimFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkCommandPoolTrimFlags> for VkCommandPoolTrimFlags {
-    fn vk_to_raw(src: &VkCommandPoolTrimFlags, dst: &mut RawVkCommandPoolTrimFlags) {
-        *dst = 0;
     }
 }
 

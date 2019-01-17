@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDebugUtilsMessageSeverityFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessageSeverityFlags {
     pub verbose: bool,
     pub info: bool,
     pub warning: bool,
     pub error: bool,
+}
+
+pub type RawVkDebugUtilsMessageSeverityFlags = u32;
+
+impl VkWrappedType<RawVkDebugUtilsMessageSeverityFlags> for VkDebugUtilsMessageSeverityFlags {
+    fn vk_to_raw(src: &VkDebugUtilsMessageSeverityFlags, dst: &mut RawVkDebugUtilsMessageSeverityFlags) {
+        *dst = 0;
+        if src.verbose { *dst |= 0x00000001; }
+        if src.info { *dst |= 0x00000010; }
+        if src.warning { *dst |= 0x00000100; }
+        if src.error { *dst |= 0x00001000; }
+    }
 }
 
 impl VkRawType<VkDebugUtilsMessageSeverityFlags> for RawVkDebugUtilsMessageSeverityFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkDebugUtilsMessageSeverityFlags> for RawVkDebugUtilsMessageSever
             warning: (src & 0x00000100) != 0,
             error: (src & 0x00001000) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDebugUtilsMessageSeverityFlags> for VkDebugUtilsMessageSeverityFlags {
-    fn vk_to_raw(src: &VkDebugUtilsMessageSeverityFlags, dst: &mut RawVkDebugUtilsMessageSeverityFlags) {
-        *dst = 0;
-        if src.verbose { *dst |= 0x00000001; }
-        if src.info { *dst |= 0x00000010; }
-        if src.warning { *dst |= 0x00000100; }
-        if src.error { *dst |= 0x00001000; }
     }
 }
 

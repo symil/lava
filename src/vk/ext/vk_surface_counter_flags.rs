@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSurfaceCounterFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSurfaceCounterFlags {
     pub vblank: bool,
+}
+
+pub type RawVkSurfaceCounterFlags = u32;
+
+impl VkWrappedType<RawVkSurfaceCounterFlags> for VkSurfaceCounterFlags {
+    fn vk_to_raw(src: &VkSurfaceCounterFlags, dst: &mut RawVkSurfaceCounterFlags) {
+        *dst = 0;
+        if src.vblank { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkSurfaceCounterFlags> for RawVkSurfaceCounterFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkSurfaceCounterFlags> for RawVkSurfaceCounterFlags {
         VkSurfaceCounterFlags {
             vblank: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSurfaceCounterFlags> for VkSurfaceCounterFlags {
-    fn vk_to_raw(src: &VkSurfaceCounterFlags, dst: &mut RawVkSurfaceCounterFlags) {
-        *dst = 0;
-        if src.vblank { *dst |= 0x00000001; }
     }
 }
 

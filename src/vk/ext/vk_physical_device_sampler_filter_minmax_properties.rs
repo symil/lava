@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceSamplerFilterMinmaxProperties {
+    pub filter_minmax_single_component_formats: bool,
+    pub filter_minmax_image_component_mapping: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSamplerFilterMinmaxProperties {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceSamplerFilterMinmaxProperties {
     pub filter_minmax_image_component_mapping: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceSamplerFilterMinmaxProperties {
-    pub filter_minmax_single_component_formats: bool,
-    pub filter_minmax_image_component_mapping: bool,
+impl VkWrappedType<RawVkPhysicalDeviceSamplerFilterMinmaxProperties> for VkPhysicalDeviceSamplerFilterMinmaxProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceSamplerFilterMinmaxProperties, dst: &mut RawVkPhysicalDeviceSamplerFilterMinmaxProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSamplerFilterMinmaxPropertiesExt);
+        dst.next = ptr::null();
+        dst.filter_minmax_single_component_formats = vk_to_raw_value(&src.filter_minmax_single_component_formats);
+        dst.filter_minmax_image_component_mapping = vk_to_raw_value(&src.filter_minmax_image_component_mapping);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceSamplerFilterMinmaxProperties> for RawVkPhysicalDeviceSamplerFilterMinmaxProperties {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceSamplerFilterMinmaxProperties> for RawVkPhysicalD
             filter_minmax_single_component_formats: u32::vk_to_wrapped(&src.filter_minmax_single_component_formats),
             filter_minmax_image_component_mapping: u32::vk_to_wrapped(&src.filter_minmax_image_component_mapping),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceSamplerFilterMinmaxProperties> for VkPhysicalDeviceSamplerFilterMinmaxProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceSamplerFilterMinmaxProperties, dst: &mut RawVkPhysicalDeviceSamplerFilterMinmaxProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSamplerFilterMinmaxPropertiesExt);
-        dst.next = ptr::null();
-        dst.filter_minmax_single_component_formats = vk_to_raw_value(&src.filter_minmax_single_component_formats);
-        dst.filter_minmax_image_component_mapping = vk_to_raw_value(&src.filter_minmax_image_component_mapping);
     }
 }
 

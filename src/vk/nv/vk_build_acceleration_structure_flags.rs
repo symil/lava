@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkBuildAccelerationStructureFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkBuildAccelerationStructureFlags {
     pub allow_update: bool,
@@ -11,6 +9,19 @@ pub struct VkBuildAccelerationStructureFlags {
     pub prefer_fast_trace: bool,
     pub prefer_fast_build: bool,
     pub low_memory: bool,
+}
+
+pub type RawVkBuildAccelerationStructureFlags = u32;
+
+impl VkWrappedType<RawVkBuildAccelerationStructureFlags> for VkBuildAccelerationStructureFlags {
+    fn vk_to_raw(src: &VkBuildAccelerationStructureFlags, dst: &mut RawVkBuildAccelerationStructureFlags) {
+        *dst = 0;
+        if src.allow_update { *dst |= 0x00000001; }
+        if src.allow_compaction { *dst |= 0x00000002; }
+        if src.prefer_fast_trace { *dst |= 0x00000004; }
+        if src.prefer_fast_build { *dst |= 0x00000008; }
+        if src.low_memory { *dst |= 0x00000010; }
+    }
 }
 
 impl VkRawType<VkBuildAccelerationStructureFlags> for RawVkBuildAccelerationStructureFlags {
@@ -22,17 +33,6 @@ impl VkRawType<VkBuildAccelerationStructureFlags> for RawVkBuildAccelerationStru
             prefer_fast_build: (src & 0x00000008) != 0,
             low_memory: (src & 0x00000010) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkBuildAccelerationStructureFlags> for VkBuildAccelerationStructureFlags {
-    fn vk_to_raw(src: &VkBuildAccelerationStructureFlags, dst: &mut RawVkBuildAccelerationStructureFlags) {
-        *dst = 0;
-        if src.allow_update { *dst |= 0x00000001; }
-        if src.allow_compaction { *dst |= 0x00000002; }
-        if src.prefer_fast_trace { *dst |= 0x00000004; }
-        if src.prefer_fast_build { *dst |= 0x00000008; }
-        if src.low_memory { *dst |= 0x00000010; }
     }
 }
 

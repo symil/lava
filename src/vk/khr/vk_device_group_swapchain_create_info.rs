@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_device_group_present_mode_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGroupSwapchainCreateInfo {
+    pub modes: VkDeviceGroupPresentModeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupSwapchainCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkDeviceGroupSwapchainCreateInfo {
     pub modes: RawVkDeviceGroupPresentModeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceGroupSwapchainCreateInfo {
-    pub modes: VkDeviceGroupPresentModeFlags,
+impl VkWrappedType<RawVkDeviceGroupSwapchainCreateInfo> for VkDeviceGroupSwapchainCreateInfo {
+    fn vk_to_raw(src: &VkDeviceGroupSwapchainCreateInfo, dst: &mut RawVkDeviceGroupSwapchainCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupSwapchainCreateInfoKhr);
+        dst.next = ptr::null();
+        dst.modes = vk_to_raw_value(&src.modes);
+    }
 }
 
 impl VkRawType<VkDeviceGroupSwapchainCreateInfo> for RawVkDeviceGroupSwapchainCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkDeviceGroupSwapchainCreateInfo> for RawVkDeviceGroupSwapchainCr
         VkDeviceGroupSwapchainCreateInfo {
             modes: RawVkDeviceGroupPresentModeFlags::vk_to_wrapped(&src.modes),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceGroupSwapchainCreateInfo> for VkDeviceGroupSwapchainCreateInfo {
-    fn vk_to_raw(src: &VkDeviceGroupSwapchainCreateInfo, dst: &mut RawVkDeviceGroupSwapchainCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupSwapchainCreateInfoKhr);
-        dst.next = ptr::null();
-        dst.modes = vk_to_raw_value(&src.modes);
     }
 }
 

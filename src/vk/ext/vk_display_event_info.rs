@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_display_event_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayEventInfo {
+    pub display_event: VkDisplayEventType,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayEventInfo {
@@ -24,9 +29,12 @@ pub struct RawVkDisplayEventInfo {
     pub display_event: RawVkDisplayEventType,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDisplayEventInfo {
-    pub display_event: VkDisplayEventType,
+impl VkWrappedType<RawVkDisplayEventInfo> for VkDisplayEventInfo {
+    fn vk_to_raw(src: &VkDisplayEventInfo, dst: &mut RawVkDisplayEventInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DisplayEventInfoExt);
+        dst.next = ptr::null();
+        dst.display_event = vk_to_raw_value(&src.display_event);
+    }
 }
 
 impl VkRawType<VkDisplayEventInfo> for RawVkDisplayEventInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkDisplayEventInfo> for RawVkDisplayEventInfo {
         VkDisplayEventInfo {
             display_event: RawVkDisplayEventType::vk_to_wrapped(&src.display_event),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayEventInfo> for VkDisplayEventInfo {
-    fn vk_to_raw(src: &VkDisplayEventInfo, dst: &mut RawVkDisplayEventInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DisplayEventInfoExt);
-        dst.next = ptr::null();
-        dst.display_event = vk_to_raw_value(&src.display_event);
     }
 }
 

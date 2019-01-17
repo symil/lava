@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_image_layout::*;
 use vk::vk_image_aspect_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkAttachmentReference2 {
+    pub attachment: usize,
+    pub layout: VkImageLayout,
+    pub aspect_mask: VkImageAspectFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAttachmentReference2 {
@@ -27,11 +34,14 @@ pub struct RawVkAttachmentReference2 {
     pub aspect_mask: RawVkImageAspectFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkAttachmentReference2 {
-    pub attachment: usize,
-    pub layout: VkImageLayout,
-    pub aspect_mask: VkImageAspectFlags,
+impl VkWrappedType<RawVkAttachmentReference2> for VkAttachmentReference2 {
+    fn vk_to_raw(src: &VkAttachmentReference2, dst: &mut RawVkAttachmentReference2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::AttachmentReference2Khr);
+        dst.next = ptr::null();
+        dst.attachment = vk_to_raw_value(&src.attachment);
+        dst.layout = vk_to_raw_value(&src.layout);
+        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
+    }
 }
 
 impl VkRawType<VkAttachmentReference2> for RawVkAttachmentReference2 {
@@ -41,16 +51,6 @@ impl VkRawType<VkAttachmentReference2> for RawVkAttachmentReference2 {
             layout: RawVkImageLayout::vk_to_wrapped(&src.layout),
             aspect_mask: RawVkImageAspectFlags::vk_to_wrapped(&src.aspect_mask),
         }
-    }
-}
-
-impl VkWrappedType<RawVkAttachmentReference2> for VkAttachmentReference2 {
-    fn vk_to_raw(src: &VkAttachmentReference2, dst: &mut RawVkAttachmentReference2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::AttachmentReference2Khr);
-        dst.next = ptr::null();
-        dst.attachment = vk_to_raw_value(&src.attachment);
-        dst.layout = vk_to_raw_value(&src.layout);
-        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
     }
 }
 

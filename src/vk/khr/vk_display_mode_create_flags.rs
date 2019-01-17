@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDisplayModeCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDisplayModeCreateFlags {
     
+}
+
+pub type RawVkDisplayModeCreateFlags = u32;
+
+impl VkWrappedType<RawVkDisplayModeCreateFlags> for VkDisplayModeCreateFlags {
+    fn vk_to_raw(src: &VkDisplayModeCreateFlags, dst: &mut RawVkDisplayModeCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkDisplayModeCreateFlags> for RawVkDisplayModeCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkDisplayModeCreateFlags> for RawVkDisplayModeCreateFlags {
         VkDisplayModeCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayModeCreateFlags> for VkDisplayModeCreateFlags {
-    fn vk_to_raw(src: &VkDisplayModeCreateFlags, dst: &mut RawVkDisplayModeCreateFlags) {
-        *dst = 0;
     }
 }
 

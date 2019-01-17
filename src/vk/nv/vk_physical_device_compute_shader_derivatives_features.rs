@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceComputeShaderDerivativesFeatures {
+    pub compute_derivative_group_quads: bool,
+    pub compute_derivative_group_linear: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceComputeShaderDerivativesFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceComputeShaderDerivativesFeatures {
     pub compute_derivative_group_linear: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceComputeShaderDerivativesFeatures {
-    pub compute_derivative_group_quads: bool,
-    pub compute_derivative_group_linear: bool,
+impl VkWrappedType<RawVkPhysicalDeviceComputeShaderDerivativesFeatures> for VkPhysicalDeviceComputeShaderDerivativesFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceComputeShaderDerivativesFeatures, dst: &mut RawVkPhysicalDeviceComputeShaderDerivativesFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceComputeShaderDerivativesFeaturesNv);
+        dst.next = ptr::null();
+        dst.compute_derivative_group_quads = vk_to_raw_value(&src.compute_derivative_group_quads);
+        dst.compute_derivative_group_linear = vk_to_raw_value(&src.compute_derivative_group_linear);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceComputeShaderDerivativesFeatures> for RawVkPhysicalDeviceComputeShaderDerivativesFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceComputeShaderDerivativesFeatures> for RawVkPhysic
             compute_derivative_group_quads: u32::vk_to_wrapped(&src.compute_derivative_group_quads),
             compute_derivative_group_linear: u32::vk_to_wrapped(&src.compute_derivative_group_linear),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceComputeShaderDerivativesFeatures> for VkPhysicalDeviceComputeShaderDerivativesFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceComputeShaderDerivativesFeatures, dst: &mut RawVkPhysicalDeviceComputeShaderDerivativesFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceComputeShaderDerivativesFeaturesNv);
-        dst.next = ptr::null();
-        dst.compute_derivative_group_quads = vk_to_raw_value(&src.compute_derivative_group_quads);
-        dst.compute_derivative_group_linear = vk_to_raw_value(&src.compute_derivative_group_linear);
     }
 }
 

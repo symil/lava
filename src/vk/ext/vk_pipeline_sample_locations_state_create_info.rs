@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_sample_locations_info::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineSampleLocationsStateCreateInfo<'a> {
+    pub sample_locations_enable: bool,
+    pub sample_locations_info: VkSampleLocationsInfo<'a>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineSampleLocationsStateCreateInfo {
@@ -23,12 +29,6 @@ pub struct RawVkPipelineSampleLocationsStateCreateInfo {
     pub next: *const c_void,
     pub sample_locations_enable: u32,
     pub sample_locations_info: RawVkSampleLocationsInfo,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineSampleLocationsStateCreateInfo<'a> {
-    pub sample_locations_enable: bool,
-    pub sample_locations_info: VkSampleLocationsInfo<'a>,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineSampleLocationsStateCreateInfo> for VkPipelineSampleLocationsStateCreateInfo<'a> {

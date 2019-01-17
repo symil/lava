@@ -17,6 +17,15 @@ use vk::vk_structure_type::*;
 use vk::nv::vk_coarse_sample_order_type::*;
 use vk::nv::vk_coarse_sample_order_custom::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineViewportCoarseSampleOrderStateCreateInfo<'a, 'b>
+    where
+        'b: 'a,
+{
+    pub sample_order_type: VkCoarseSampleOrderType,
+    pub custom_sample_orders: &'a [VkCoarseSampleOrderCustom<'b>],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportCoarseSampleOrderStateCreateInfo {
@@ -25,15 +34,6 @@ pub struct RawVkPipelineViewportCoarseSampleOrderStateCreateInfo {
     pub sample_order_type: RawVkCoarseSampleOrderType,
     pub custom_sample_order_count: u32,
     pub custom_sample_orders: *mut RawVkCoarseSampleOrderCustom,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineViewportCoarseSampleOrderStateCreateInfo<'a, 'b>
-    where
-        'b: 'a,
-{
-    pub sample_order_type: VkCoarseSampleOrderType,
-    pub custom_sample_orders: &'a [VkCoarseSampleOrderCustom<'b>],
 }
 
 impl<'a, 'b> VkWrappedType<RawVkPipelineViewportCoarseSampleOrderStateCreateInfo> for VkPipelineViewportCoarseSampleOrderStateCreateInfo<'a, 'b>

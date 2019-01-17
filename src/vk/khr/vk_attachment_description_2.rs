@@ -21,6 +21,19 @@ use vk::vk_attachment_load_op::*;
 use vk::vk_attachment_store_op::*;
 use vk::vk_image_layout::*;
 
+#[derive(Debug, Clone)]
+pub struct VkAttachmentDescription2 {
+    pub flags: VkAttachmentDescriptionFlags,
+    pub format: VkFormat,
+    pub samples: VkSampleCountFlags,
+    pub load_op: VkAttachmentLoadOp,
+    pub store_op: VkAttachmentStoreOp,
+    pub stencil_load_op: VkAttachmentLoadOp,
+    pub stencil_store_op: VkAttachmentStoreOp,
+    pub initial_layout: VkImageLayout,
+    pub final_layout: VkImageLayout,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAttachmentDescription2 {
@@ -37,17 +50,20 @@ pub struct RawVkAttachmentDescription2 {
     pub final_layout: RawVkImageLayout,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkAttachmentDescription2 {
-    pub flags: VkAttachmentDescriptionFlags,
-    pub format: VkFormat,
-    pub samples: VkSampleCountFlags,
-    pub load_op: VkAttachmentLoadOp,
-    pub store_op: VkAttachmentStoreOp,
-    pub stencil_load_op: VkAttachmentLoadOp,
-    pub stencil_store_op: VkAttachmentStoreOp,
-    pub initial_layout: VkImageLayout,
-    pub final_layout: VkImageLayout,
+impl VkWrappedType<RawVkAttachmentDescription2> for VkAttachmentDescription2 {
+    fn vk_to_raw(src: &VkAttachmentDescription2, dst: &mut RawVkAttachmentDescription2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::AttachmentDescription2Khr);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.format = vk_to_raw_value(&src.format);
+        dst.samples = vk_to_raw_value(&src.samples);
+        dst.load_op = vk_to_raw_value(&src.load_op);
+        dst.store_op = vk_to_raw_value(&src.store_op);
+        dst.stencil_load_op = vk_to_raw_value(&src.stencil_load_op);
+        dst.stencil_store_op = vk_to_raw_value(&src.stencil_store_op);
+        dst.initial_layout = vk_to_raw_value(&src.initial_layout);
+        dst.final_layout = vk_to_raw_value(&src.final_layout);
+    }
 }
 
 impl VkRawType<VkAttachmentDescription2> for RawVkAttachmentDescription2 {
@@ -63,22 +79,6 @@ impl VkRawType<VkAttachmentDescription2> for RawVkAttachmentDescription2 {
             initial_layout: RawVkImageLayout::vk_to_wrapped(&src.initial_layout),
             final_layout: RawVkImageLayout::vk_to_wrapped(&src.final_layout),
         }
-    }
-}
-
-impl VkWrappedType<RawVkAttachmentDescription2> for VkAttachmentDescription2 {
-    fn vk_to_raw(src: &VkAttachmentDescription2, dst: &mut RawVkAttachmentDescription2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::AttachmentDescription2Khr);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.format = vk_to_raw_value(&src.format);
-        dst.samples = vk_to_raw_value(&src.samples);
-        dst.load_op = vk_to_raw_value(&src.load_op);
-        dst.store_op = vk_to_raw_value(&src.store_op);
-        dst.stencil_load_op = vk_to_raw_value(&src.stencil_load_op);
-        dst.stencil_store_op = vk_to_raw_value(&src.stencil_store_op);
-        dst.initial_layout = vk_to_raw_value(&src.initial_layout);
-        dst.final_layout = vk_to_raw_value(&src.final_layout);
     }
 }
 

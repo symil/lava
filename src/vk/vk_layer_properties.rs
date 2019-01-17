@@ -14,20 +14,20 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
-#[repr(C)]
-pub struct RawVkLayerProperties {
-    pub layer_name: [c_char; 256],
-    pub spec_version: u32,
-    pub implementation_version: u32,
-    pub description: [c_char; 256],
-}
-
 #[derive(Debug, Clone)]
 pub struct VkLayerProperties {
     pub layer_name: String,
     pub spec_version: u32,
     pub implementation_version: u32,
     pub description: String,
+}
+
+#[repr(C)]
+pub struct RawVkLayerProperties {
+    pub layer_name: [c_char; 256],
+    pub spec_version: u32,
+    pub implementation_version: u32,
+    pub description: [c_char; 256],
 }
 
 impl VkRawType<VkLayerProperties> for RawVkLayerProperties {

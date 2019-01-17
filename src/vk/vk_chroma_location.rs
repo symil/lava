@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkChromaLocation = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkChromaLocation {
@@ -11,17 +9,19 @@ pub enum VkChromaLocation {
     Midpoint = 1,
 }
 
+pub type RawVkChromaLocation = i32;
+
+impl VkWrappedType<RawVkChromaLocation> for VkChromaLocation {
+    fn vk_to_raw(src: &VkChromaLocation, dst: &mut RawVkChromaLocation) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkChromaLocation> for RawVkChromaLocation {
     fn vk_to_wrapped(src: &RawVkChromaLocation) -> VkChromaLocation {
         unsafe {
             *((src as *const i32) as *const VkChromaLocation)
         }
-    }
-}
-
-impl VkWrappedType<RawVkChromaLocation> for VkChromaLocation {
-    fn vk_to_raw(src: &VkChromaLocation, dst: &mut RawVkChromaLocation) {
-        *dst = *src as i32
     }
 }
 

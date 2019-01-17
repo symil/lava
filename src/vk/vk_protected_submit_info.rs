@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkProtectedSubmitInfo {
+    pub protected_submit: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkProtectedSubmitInfo {
@@ -23,9 +28,12 @@ pub struct RawVkProtectedSubmitInfo {
     pub protected_submit: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkProtectedSubmitInfo {
-    pub protected_submit: bool,
+impl VkWrappedType<RawVkProtectedSubmitInfo> for VkProtectedSubmitInfo {
+    fn vk_to_raw(src: &VkProtectedSubmitInfo, dst: &mut RawVkProtectedSubmitInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ProtectedSubmitInfo);
+        dst.next = ptr::null();
+        dst.protected_submit = vk_to_raw_value(&src.protected_submit);
+    }
 }
 
 impl VkRawType<VkProtectedSubmitInfo> for RawVkProtectedSubmitInfo {
@@ -33,14 +41,6 @@ impl VkRawType<VkProtectedSubmitInfo> for RawVkProtectedSubmitInfo {
         VkProtectedSubmitInfo {
             protected_submit: u32::vk_to_wrapped(&src.protected_submit),
         }
-    }
-}
-
-impl VkWrappedType<RawVkProtectedSubmitInfo> for VkProtectedSubmitInfo {
-    fn vk_to_raw(src: &VkProtectedSubmitInfo, dst: &mut RawVkProtectedSubmitInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ProtectedSubmitInfo);
-        dst.next = ptr::null();
-        dst.protected_submit = vk_to_raw_value(&src.protected_submit);
     }
 }
 

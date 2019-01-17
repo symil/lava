@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_image_usage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageStencilUsageCreateInfo {
+    pub stencil_usage: VkImageUsageFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageStencilUsageCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkImageStencilUsageCreateInfo {
     pub stencil_usage: RawVkImageUsageFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageStencilUsageCreateInfo {
-    pub stencil_usage: VkImageUsageFlags,
+impl VkWrappedType<RawVkImageStencilUsageCreateInfo> for VkImageStencilUsageCreateInfo {
+    fn vk_to_raw(src: &VkImageStencilUsageCreateInfo, dst: &mut RawVkImageStencilUsageCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ImageStencilUsageCreateInfoExt);
+        dst.next = ptr::null();
+        dst.stencil_usage = vk_to_raw_value(&src.stencil_usage);
+    }
 }
 
 impl VkRawType<VkImageStencilUsageCreateInfo> for RawVkImageStencilUsageCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkImageStencilUsageCreateInfo> for RawVkImageStencilUsageCreateIn
         VkImageStencilUsageCreateInfo {
             stencil_usage: RawVkImageUsageFlags::vk_to_wrapped(&src.stencil_usage),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageStencilUsageCreateInfo> for VkImageStencilUsageCreateInfo {
-    fn vk_to_raw(src: &VkImageStencilUsageCreateInfo, dst: &mut RawVkImageStencilUsageCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ImageStencilUsageCreateInfoExt);
-        dst.next = ptr::null();
-        dst.stencil_usage = vk_to_raw_value(&src.stencil_usage);
     }
 }
 

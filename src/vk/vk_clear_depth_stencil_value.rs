@@ -14,6 +14,12 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkClearDepthStencilValue {
+    pub depth: f32,
+    pub stencil: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkClearDepthStencilValue {
@@ -21,10 +27,11 @@ pub struct RawVkClearDepthStencilValue {
     pub stencil: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkClearDepthStencilValue {
-    pub depth: f32,
-    pub stencil: usize,
+impl VkWrappedType<RawVkClearDepthStencilValue> for VkClearDepthStencilValue {
+    fn vk_to_raw(src: &VkClearDepthStencilValue, dst: &mut RawVkClearDepthStencilValue) {
+        dst.depth = src.depth;
+        dst.stencil = vk_to_raw_value(&src.stencil);
+    }
 }
 
 impl VkRawType<VkClearDepthStencilValue> for RawVkClearDepthStencilValue {
@@ -33,13 +40,6 @@ impl VkRawType<VkClearDepthStencilValue> for RawVkClearDepthStencilValue {
             depth: src.depth,
             stencil: u32::vk_to_wrapped(&src.stencil),
         }
-    }
-}
-
-impl VkWrappedType<RawVkClearDepthStencilValue> for VkClearDepthStencilValue {
-    fn vk_to_raw(src: &VkClearDepthStencilValue, dst: &mut RawVkClearDepthStencilValue) {
-        dst.depth = src.depth;
-        dst.stencil = vk_to_raw_value(&src.stencil);
     }
 }
 

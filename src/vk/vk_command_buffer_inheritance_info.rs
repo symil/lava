@@ -19,6 +19,16 @@ use vk::vk_framebuffer::*;
 use vk::vk_query_control_flags::*;
 use vk::vk_query_pipeline_statistic_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCommandBufferInheritanceInfo<'a, 'b> {
+    pub render_pass: Option<&'a VkRenderPass>,
+    pub subpass: u32,
+    pub framebuffer: Option<&'b VkFramebuffer>,
+    pub occlusion_query_enable: bool,
+    pub query_flags: VkQueryControlFlags,
+    pub pipeline_statistics: VkQueryPipelineStatisticFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferInheritanceInfo {
@@ -30,16 +40,6 @@ pub struct RawVkCommandBufferInheritanceInfo {
     pub occlusion_query_enable: u32,
     pub query_flags: RawVkQueryControlFlags,
     pub pipeline_statistics: RawVkQueryPipelineStatisticFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkCommandBufferInheritanceInfo<'a, 'b> {
-    pub render_pass: Option<&'a VkRenderPass>,
-    pub subpass: u32,
-    pub framebuffer: Option<&'b VkFramebuffer>,
-    pub occlusion_query_enable: bool,
-    pub query_flags: VkQueryControlFlags,
-    pub pipeline_statistics: VkQueryPipelineStatisticFlags,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkCommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfo<'a, 'b> {

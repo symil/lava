@@ -16,19 +16,19 @@ use vk::vk_device::*;
 use vk::nvx::vk_indirect_commands_token_type::*;
 use vk::vk_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkIndirectCommandsToken<'a> {
+    pub token_type: VkIndirectCommandsTokenType,
+    pub buffer: &'a VkBuffer,
+    pub offset: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkIndirectCommandsToken {
     pub token_type: RawVkIndirectCommandsTokenType,
     pub buffer: RawVkBuffer,
     pub offset: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkIndirectCommandsToken<'a> {
-    pub token_type: VkIndirectCommandsTokenType,
-    pub buffer: &'a VkBuffer,
-    pub offset: usize,
 }
 
 impl<'a> VkWrappedType<RawVkIndirectCommandsToken> for VkIndirectCommandsToken<'a> {

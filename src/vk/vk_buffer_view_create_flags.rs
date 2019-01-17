@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkBufferViewCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkBufferViewCreateFlags {
     
+}
+
+pub type RawVkBufferViewCreateFlags = u32;
+
+impl VkWrappedType<RawVkBufferViewCreateFlags> for VkBufferViewCreateFlags {
+    fn vk_to_raw(src: &VkBufferViewCreateFlags, dst: &mut RawVkBufferViewCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkBufferViewCreateFlags> for RawVkBufferViewCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkBufferViewCreateFlags> for RawVkBufferViewCreateFlags {
         VkBufferViewCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkBufferViewCreateFlags> for VkBufferViewCreateFlags {
-    fn vk_to_raw(src: &VkBufferViewCreateFlags, dst: &mut RawVkBufferViewCreateFlags) {
-        *dst = 0;
     }
 }
 

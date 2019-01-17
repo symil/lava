@@ -18,6 +18,20 @@ use vk::vk_pipeline_depth_stencil_state_create_flags::*;
 use vk::vk_compare_op::*;
 use vk::vk_stencil_op_state::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineDepthStencilStateCreateInfo {
+    pub flags: VkPipelineDepthStencilStateCreateFlags,
+    pub depth_test_enable: bool,
+    pub depth_write_enable: bool,
+    pub depth_compare_op: VkCompareOp,
+    pub depth_bounds_test_enable: bool,
+    pub stencil_test_enable: bool,
+    pub front: VkStencilOpState,
+    pub back: VkStencilOpState,
+    pub min_depth_bounds: f32,
+    pub max_depth_bounds: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineDepthStencilStateCreateInfo {
@@ -35,18 +49,21 @@ pub struct RawVkPipelineDepthStencilStateCreateInfo {
     pub max_depth_bounds: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineDepthStencilStateCreateInfo {
-    pub flags: VkPipelineDepthStencilStateCreateFlags,
-    pub depth_test_enable: bool,
-    pub depth_write_enable: bool,
-    pub depth_compare_op: VkCompareOp,
-    pub depth_bounds_test_enable: bool,
-    pub stencil_test_enable: bool,
-    pub front: VkStencilOpState,
-    pub back: VkStencilOpState,
-    pub min_depth_bounds: f32,
-    pub max_depth_bounds: f32,
+impl VkWrappedType<RawVkPipelineDepthStencilStateCreateInfo> for VkPipelineDepthStencilStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineDepthStencilStateCreateInfo, dst: &mut RawVkPipelineDepthStencilStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineDepthStencilStateCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.depth_test_enable = vk_to_raw_value(&src.depth_test_enable);
+        dst.depth_write_enable = vk_to_raw_value(&src.depth_write_enable);
+        dst.depth_compare_op = vk_to_raw_value(&src.depth_compare_op);
+        dst.depth_bounds_test_enable = vk_to_raw_value(&src.depth_bounds_test_enable);
+        dst.stencil_test_enable = vk_to_raw_value(&src.stencil_test_enable);
+        dst.front = vk_to_raw_value(&src.front);
+        dst.back = vk_to_raw_value(&src.back);
+        dst.min_depth_bounds = src.min_depth_bounds;
+        dst.max_depth_bounds = src.max_depth_bounds;
+    }
 }
 
 impl VkRawType<VkPipelineDepthStencilStateCreateInfo> for RawVkPipelineDepthStencilStateCreateInfo {
@@ -63,23 +80,6 @@ impl VkRawType<VkPipelineDepthStencilStateCreateInfo> for RawVkPipelineDepthSten
             min_depth_bounds: src.min_depth_bounds,
             max_depth_bounds: src.max_depth_bounds,
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineDepthStencilStateCreateInfo> for VkPipelineDepthStencilStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineDepthStencilStateCreateInfo, dst: &mut RawVkPipelineDepthStencilStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineDepthStencilStateCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.depth_test_enable = vk_to_raw_value(&src.depth_test_enable);
-        dst.depth_write_enable = vk_to_raw_value(&src.depth_write_enable);
-        dst.depth_compare_op = vk_to_raw_value(&src.depth_compare_op);
-        dst.depth_bounds_test_enable = vk_to_raw_value(&src.depth_bounds_test_enable);
-        dst.stencil_test_enable = vk_to_raw_value(&src.stencil_test_enable);
-        dst.front = vk_to_raw_value(&src.front);
-        dst.back = vk_to_raw_value(&src.back);
-        dst.min_depth_bounds = src.min_depth_bounds;
-        dst.max_depth_bounds = src.max_depth_bounds;
     }
 }
 

@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMultiviewProperties {
+    pub max_multiview_view_count: usize,
+    pub max_multiview_instance_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMultiviewProperties {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceMultiviewProperties {
     pub max_multiview_instance_index: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMultiviewProperties {
-    pub max_multiview_view_count: usize,
-    pub max_multiview_instance_index: usize,
+impl VkWrappedType<RawVkPhysicalDeviceMultiviewProperties> for VkPhysicalDeviceMultiviewProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceMultiviewProperties, dst: &mut RawVkPhysicalDeviceMultiviewProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewProperties);
+        dst.next = ptr::null();
+        dst.max_multiview_view_count = vk_to_raw_value(&src.max_multiview_view_count);
+        dst.max_multiview_instance_index = vk_to_raw_value(&src.max_multiview_instance_index);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMultiviewProperties> for RawVkPhysicalDeviceMultiviewProperties {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceMultiviewProperties> for RawVkPhysicalDeviceMulti
             max_multiview_view_count: u32::vk_to_wrapped(&src.max_multiview_view_count),
             max_multiview_instance_index: u32::vk_to_wrapped(&src.max_multiview_instance_index),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMultiviewProperties> for VkPhysicalDeviceMultiviewProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceMultiviewProperties, dst: &mut RawVkPhysicalDeviceMultiviewProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewProperties);
-        dst.next = ptr::null();
-        dst.max_multiview_view_count = vk_to_raw_value(&src.max_multiview_view_count);
-        dst.max_multiview_instance_index = vk_to_raw_value(&src.max_multiview_instance_index);
     }
 }
 

@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_format::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageFormatListCreateInfo<'a> {
+    pub view_formats: &'a [VkFormat],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageFormatListCreateInfo {
@@ -23,11 +28,6 @@ pub struct RawVkImageFormatListCreateInfo {
     pub next: *const c_void,
     pub view_format_count: u32,
     pub view_formats: *mut RawVkFormat,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImageFormatListCreateInfo<'a> {
-    pub view_formats: &'a [VkFormat],
 }
 
 impl<'a> VkWrappedType<RawVkImageFormatListCreateInfo> for VkImageFormatListCreateInfo<'a> {

@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkMemoryMapFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryMapFlags {
     
+}
+
+pub type RawVkMemoryMapFlags = u32;
+
+impl VkWrappedType<RawVkMemoryMapFlags> for VkMemoryMapFlags {
+    fn vk_to_raw(src: &VkMemoryMapFlags, dst: &mut RawVkMemoryMapFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkMemoryMapFlags> for RawVkMemoryMapFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkMemoryMapFlags> for RawVkMemoryMapFlags {
         VkMemoryMapFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryMapFlags> for VkMemoryMapFlags {
-    fn vk_to_raw(src: &VkMemoryMapFlags, dst: &mut RawVkMemoryMapFlags) {
-        *dst = 0;
     }
 }
 

@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceRepresentativeFragmentTestFeatures {
+    pub representative_fragment_test: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceRepresentativeFragmentTestFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceRepresentativeFragmentTestFeatures {
     pub representative_fragment_test: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceRepresentativeFragmentTestFeatures {
-    pub representative_fragment_test: bool,
+impl VkWrappedType<RawVkPhysicalDeviceRepresentativeFragmentTestFeatures> for VkPhysicalDeviceRepresentativeFragmentTestFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceRepresentativeFragmentTestFeatures, dst: &mut RawVkPhysicalDeviceRepresentativeFragmentTestFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceRepresentativeFragmentTestFeaturesNv);
+        dst.next = ptr::null();
+        dst.representative_fragment_test = vk_to_raw_value(&src.representative_fragment_test);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceRepresentativeFragmentTestFeatures> for RawVkPhysicalDeviceRepresentativeFragmentTestFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceRepresentativeFragmentTestFeatures> for RawVkPhys
         VkPhysicalDeviceRepresentativeFragmentTestFeatures {
             representative_fragment_test: u32::vk_to_wrapped(&src.representative_fragment_test),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceRepresentativeFragmentTestFeatures> for VkPhysicalDeviceRepresentativeFragmentTestFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceRepresentativeFragmentTestFeatures, dst: &mut RawVkPhysicalDeviceRepresentativeFragmentTestFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceRepresentativeFragmentTestFeaturesNv);
-        dst.next = ptr::null();
-        dst.representative_fragment_test = vk_to_raw_value(&src.representative_fragment_test);
     }
 }
 

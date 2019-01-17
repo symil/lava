@@ -14,6 +14,15 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDrawIndexedIndirectCommand {
+    pub index_count: usize,
+    pub instance_count: usize,
+    pub first_index: usize,
+    pub vertex_offset: isize,
+    pub first_instance: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrawIndexedIndirectCommand {
@@ -24,13 +33,14 @@ pub struct RawVkDrawIndexedIndirectCommand {
     pub first_instance: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDrawIndexedIndirectCommand {
-    pub index_count: usize,
-    pub instance_count: usize,
-    pub first_index: usize,
-    pub vertex_offset: isize,
-    pub first_instance: usize,
+impl VkWrappedType<RawVkDrawIndexedIndirectCommand> for VkDrawIndexedIndirectCommand {
+    fn vk_to_raw(src: &VkDrawIndexedIndirectCommand, dst: &mut RawVkDrawIndexedIndirectCommand) {
+        dst.index_count = vk_to_raw_value(&src.index_count);
+        dst.instance_count = vk_to_raw_value(&src.instance_count);
+        dst.first_index = vk_to_raw_value(&src.first_index);
+        dst.vertex_offset = vk_to_raw_value(&src.vertex_offset);
+        dst.first_instance = vk_to_raw_value(&src.first_instance);
+    }
 }
 
 impl VkRawType<VkDrawIndexedIndirectCommand> for RawVkDrawIndexedIndirectCommand {
@@ -42,16 +52,6 @@ impl VkRawType<VkDrawIndexedIndirectCommand> for RawVkDrawIndexedIndirectCommand
             vertex_offset: i32::vk_to_wrapped(&src.vertex_offset),
             first_instance: u32::vk_to_wrapped(&src.first_instance),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDrawIndexedIndirectCommand> for VkDrawIndexedIndirectCommand {
-    fn vk_to_raw(src: &VkDrawIndexedIndirectCommand, dst: &mut RawVkDrawIndexedIndirectCommand) {
-        dst.index_count = vk_to_raw_value(&src.index_count);
-        dst.instance_count = vk_to_raw_value(&src.instance_count);
-        dst.first_index = vk_to_raw_value(&src.first_index);
-        dst.vertex_offset = vk_to_raw_value(&src.vertex_offset);
-        dst.first_instance = vk_to_raw_value(&src.first_instance);
     }
 }
 

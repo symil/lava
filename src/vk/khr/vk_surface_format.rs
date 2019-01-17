@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_format::*;
 use vk::khr::vk_color_space::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSurfaceFormat {
+    pub format: VkFormat,
+    pub color_space: VkColorSpace,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceFormat {
@@ -23,10 +29,11 @@ pub struct RawVkSurfaceFormat {
     pub color_space: RawVkColorSpace,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSurfaceFormat {
-    pub format: VkFormat,
-    pub color_space: VkColorSpace,
+impl VkWrappedType<RawVkSurfaceFormat> for VkSurfaceFormat {
+    fn vk_to_raw(src: &VkSurfaceFormat, dst: &mut RawVkSurfaceFormat) {
+        dst.format = vk_to_raw_value(&src.format);
+        dst.color_space = vk_to_raw_value(&src.color_space);
+    }
 }
 
 impl VkRawType<VkSurfaceFormat> for RawVkSurfaceFormat {
@@ -35,13 +42,6 @@ impl VkRawType<VkSurfaceFormat> for RawVkSurfaceFormat {
             format: RawVkFormat::vk_to_wrapped(&src.format),
             color_space: RawVkColorSpace::vk_to_wrapped(&src.color_space),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSurfaceFormat> for VkSurfaceFormat {
-    fn vk_to_raw(src: &VkSurfaceFormat, dst: &mut RawVkSurfaceFormat) {
-        dst.format = vk_to_raw_value(&src.format);
-        dst.color_space = vk_to_raw_value(&src.color_space);
     }
 }
 

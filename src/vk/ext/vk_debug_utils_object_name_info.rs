@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_object_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDebugUtilsObjectNameInfo<'a> {
+    pub object_type: VkObjectType,
+    pub object_handle: usize,
+    pub object_name: Option<&'a str>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsObjectNameInfo {
@@ -24,13 +31,6 @@ pub struct RawVkDebugUtilsObjectNameInfo {
     pub object_type: RawVkObjectType,
     pub object_handle: u64,
     pub object_name: *mut c_char,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDebugUtilsObjectNameInfo<'a> {
-    pub object_type: VkObjectType,
-    pub object_handle: usize,
-    pub object_name: Option<&'a str>,
 }
 
 impl<'a> VkWrappedType<RawVkDebugUtilsObjectNameInfo> for VkDebugUtilsObjectNameInfo<'a> {

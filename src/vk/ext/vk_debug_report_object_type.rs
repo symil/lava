@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDebugReportObjectType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDebugReportObjectType {
@@ -46,17 +44,19 @@ pub enum VkDebugReportObjectType {
     AccelerationStructureNv = 1000165000,
 }
 
+pub type RawVkDebugReportObjectType = i32;
+
+impl VkWrappedType<RawVkDebugReportObjectType> for VkDebugReportObjectType {
+    fn vk_to_raw(src: &VkDebugReportObjectType, dst: &mut RawVkDebugReportObjectType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkDebugReportObjectType> for RawVkDebugReportObjectType {
     fn vk_to_wrapped(src: &RawVkDebugReportObjectType) -> VkDebugReportObjectType {
         unsafe {
             *((src as *const i32) as *const VkDebugReportObjectType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkDebugReportObjectType> for VkDebugReportObjectType {
-    fn vk_to_raw(src: &VkDebugReportObjectType, dst: &mut RawVkDebugReportObjectType) {
-        *dst = *src as i32
     }
 }
 

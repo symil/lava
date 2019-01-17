@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkRayTracingShaderGroupType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkRayTracingShaderGroupType {
@@ -12,17 +10,19 @@ pub enum VkRayTracingShaderGroupType {
     ProceduralHitGroup = 2,
 }
 
+pub type RawVkRayTracingShaderGroupType = i32;
+
+impl VkWrappedType<RawVkRayTracingShaderGroupType> for VkRayTracingShaderGroupType {
+    fn vk_to_raw(src: &VkRayTracingShaderGroupType, dst: &mut RawVkRayTracingShaderGroupType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkRayTracingShaderGroupType> for RawVkRayTracingShaderGroupType {
     fn vk_to_wrapped(src: &RawVkRayTracingShaderGroupType) -> VkRayTracingShaderGroupType {
         unsafe {
             *((src as *const i32) as *const VkRayTracingShaderGroupType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkRayTracingShaderGroupType> for VkRayTracingShaderGroupType {
-    fn vk_to_raw(src: &VkRayTracingShaderGroupType, dst: &mut RawVkRayTracingShaderGroupType) {
-        *dst = *src as i32
     }
 }
 

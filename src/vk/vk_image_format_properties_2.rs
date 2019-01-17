@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_image_format_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageFormatProperties2 {
+    pub image_format_properties: VkImageFormatProperties,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageFormatProperties2 {
@@ -24,9 +29,12 @@ pub struct RawVkImageFormatProperties2 {
     pub image_format_properties: RawVkImageFormatProperties,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageFormatProperties2 {
-    pub image_format_properties: VkImageFormatProperties,
+impl VkWrappedType<RawVkImageFormatProperties2> for VkImageFormatProperties2 {
+    fn vk_to_raw(src: &VkImageFormatProperties2, dst: &mut RawVkImageFormatProperties2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ImageFormatProperties2);
+        dst.next = ptr::null();
+        dst.image_format_properties = vk_to_raw_value(&src.image_format_properties);
+    }
 }
 
 impl VkRawType<VkImageFormatProperties2> for RawVkImageFormatProperties2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkImageFormatProperties2> for RawVkImageFormatProperties2 {
         VkImageFormatProperties2 {
             image_format_properties: RawVkImageFormatProperties::vk_to_wrapped(&src.image_format_properties),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageFormatProperties2> for VkImageFormatProperties2 {
-    fn vk_to_raw(src: &VkImageFormatProperties2, dst: &mut RawVkImageFormatProperties2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ImageFormatProperties2);
-        dst.next = ptr::null();
-        dst.image_format_properties = vk_to_raw_value(&src.image_format_properties);
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkAccelerationStructureType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkAccelerationStructureType {
@@ -11,17 +9,19 @@ pub enum VkAccelerationStructureType {
     BottomLevel = 1,
 }
 
+pub type RawVkAccelerationStructureType = i32;
+
+impl VkWrappedType<RawVkAccelerationStructureType> for VkAccelerationStructureType {
+    fn vk_to_raw(src: &VkAccelerationStructureType, dst: &mut RawVkAccelerationStructureType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkAccelerationStructureType> for RawVkAccelerationStructureType {
     fn vk_to_wrapped(src: &RawVkAccelerationStructureType) -> VkAccelerationStructureType {
         unsafe {
             *((src as *const i32) as *const VkAccelerationStructureType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkAccelerationStructureType> for VkAccelerationStructureType {
-    fn vk_to_raw(src: &VkAccelerationStructureType, dst: &mut RawVkAccelerationStructureType) {
-        *dst = *src as i32
     }
 }
 

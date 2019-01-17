@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceExclusiveScissorFeatures {
+    pub exclusive_scissor: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExclusiveScissorFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceExclusiveScissorFeatures {
     pub exclusive_scissor: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceExclusiveScissorFeatures {
-    pub exclusive_scissor: bool,
+impl VkWrappedType<RawVkPhysicalDeviceExclusiveScissorFeatures> for VkPhysicalDeviceExclusiveScissorFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceExclusiveScissorFeatures, dst: &mut RawVkPhysicalDeviceExclusiveScissorFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExclusiveScissorFeaturesNv);
+        dst.next = ptr::null();
+        dst.exclusive_scissor = vk_to_raw_value(&src.exclusive_scissor);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceExclusiveScissorFeatures> for RawVkPhysicalDeviceExclusiveScissorFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceExclusiveScissorFeatures> for RawVkPhysicalDevice
         VkPhysicalDeviceExclusiveScissorFeatures {
             exclusive_scissor: u32::vk_to_wrapped(&src.exclusive_scissor),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceExclusiveScissorFeatures> for VkPhysicalDeviceExclusiveScissorFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceExclusiveScissorFeatures, dst: &mut RawVkPhysicalDeviceExclusiveScissorFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExclusiveScissorFeaturesNv);
-        dst.next = ptr::null();
-        dst.exclusive_scissor = vk_to_raw_value(&src.exclusive_scissor);
     }
 }
 

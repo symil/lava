@@ -15,6 +15,19 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceConservativeRasterizationProperties {
+    pub primitive_overestimation_size: f32,
+    pub max_extra_primitive_overestimation_size: f32,
+    pub extra_primitive_overestimation_size_granularity: f32,
+    pub primitive_underestimation: bool,
+    pub conservative_point_and_line_rasterization: bool,
+    pub degenerate_triangles_rasterized: bool,
+    pub degenerate_lines_rasterized: bool,
+    pub fully_covered_fragment_shader_input_variable: bool,
+    pub conservative_rasterization_post_depth_coverage: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceConservativeRasterizationProperties {
@@ -31,17 +44,20 @@ pub struct RawVkPhysicalDeviceConservativeRasterizationProperties {
     pub conservative_rasterization_post_depth_coverage: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceConservativeRasterizationProperties {
-    pub primitive_overestimation_size: f32,
-    pub max_extra_primitive_overestimation_size: f32,
-    pub extra_primitive_overestimation_size_granularity: f32,
-    pub primitive_underestimation: bool,
-    pub conservative_point_and_line_rasterization: bool,
-    pub degenerate_triangles_rasterized: bool,
-    pub degenerate_lines_rasterized: bool,
-    pub fully_covered_fragment_shader_input_variable: bool,
-    pub conservative_rasterization_post_depth_coverage: bool,
+impl VkWrappedType<RawVkPhysicalDeviceConservativeRasterizationProperties> for VkPhysicalDeviceConservativeRasterizationProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceConservativeRasterizationProperties, dst: &mut RawVkPhysicalDeviceConservativeRasterizationProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceConservativeRasterizationPropertiesExt);
+        dst.next = ptr::null();
+        dst.primitive_overestimation_size = src.primitive_overestimation_size;
+        dst.max_extra_primitive_overestimation_size = src.max_extra_primitive_overestimation_size;
+        dst.extra_primitive_overestimation_size_granularity = src.extra_primitive_overestimation_size_granularity;
+        dst.primitive_underestimation = vk_to_raw_value(&src.primitive_underestimation);
+        dst.conservative_point_and_line_rasterization = vk_to_raw_value(&src.conservative_point_and_line_rasterization);
+        dst.degenerate_triangles_rasterized = vk_to_raw_value(&src.degenerate_triangles_rasterized);
+        dst.degenerate_lines_rasterized = vk_to_raw_value(&src.degenerate_lines_rasterized);
+        dst.fully_covered_fragment_shader_input_variable = vk_to_raw_value(&src.fully_covered_fragment_shader_input_variable);
+        dst.conservative_rasterization_post_depth_coverage = vk_to_raw_value(&src.conservative_rasterization_post_depth_coverage);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceConservativeRasterizationProperties> for RawVkPhysicalDeviceConservativeRasterizationProperties {
@@ -57,22 +73,6 @@ impl VkRawType<VkPhysicalDeviceConservativeRasterizationProperties> for RawVkPhy
             fully_covered_fragment_shader_input_variable: u32::vk_to_wrapped(&src.fully_covered_fragment_shader_input_variable),
             conservative_rasterization_post_depth_coverage: u32::vk_to_wrapped(&src.conservative_rasterization_post_depth_coverage),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceConservativeRasterizationProperties> for VkPhysicalDeviceConservativeRasterizationProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceConservativeRasterizationProperties, dst: &mut RawVkPhysicalDeviceConservativeRasterizationProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceConservativeRasterizationPropertiesExt);
-        dst.next = ptr::null();
-        dst.primitive_overestimation_size = src.primitive_overestimation_size;
-        dst.max_extra_primitive_overestimation_size = src.max_extra_primitive_overestimation_size;
-        dst.extra_primitive_overestimation_size_granularity = src.extra_primitive_overestimation_size_granularity;
-        dst.primitive_underestimation = vk_to_raw_value(&src.primitive_underestimation);
-        dst.conservative_point_and_line_rasterization = vk_to_raw_value(&src.conservative_point_and_line_rasterization);
-        dst.degenerate_triangles_rasterized = vk_to_raw_value(&src.degenerate_triangles_rasterized);
-        dst.degenerate_lines_rasterized = vk_to_raw_value(&src.degenerate_lines_rasterized);
-        dst.fully_covered_fragment_shader_input_variable = vk_to_raw_value(&src.fully_covered_fragment_shader_input_variable);
-        dst.conservative_rasterization_post_depth_coverage = vk_to_raw_value(&src.conservative_rasterization_post_depth_coverage);
     }
 }
 

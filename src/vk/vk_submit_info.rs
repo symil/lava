@@ -18,6 +18,19 @@ use vk::vk_semaphore::*;
 use vk::vk_pipeline_stage_flags::*;
 use vk::vk_command_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSubmitInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
+    where
+        'b: 'a,
+        'e: 'd,
+        'g: 'f,
+{
+    pub wait_semaphores: &'a [&'b VkSemaphore],
+    pub wait_dst_stage_mask: &'c [VkPipelineStageFlags],
+    pub command_buffers: &'d [&'e VkCommandBuffer],
+    pub signal_semaphores: &'f [&'g VkSemaphore],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubmitInfo {
@@ -30,19 +43,6 @@ pub struct RawVkSubmitInfo {
     pub command_buffers: *mut RawVkCommandBuffer,
     pub signal_semaphore_count: u32,
     pub signal_semaphores: *mut RawVkSemaphore,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSubmitInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'b: 'a,
-        'e: 'd,
-        'g: 'f,
-{
-    pub wait_semaphores: &'a [&'b VkSemaphore],
-    pub wait_dst_stage_mask: &'c [VkPipelineStageFlags],
-    pub command_buffers: &'d [&'e VkCommandBuffer],
-    pub signal_semaphores: &'f [&'g VkSemaphore],
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkSubmitInfo> for VkSubmitInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>

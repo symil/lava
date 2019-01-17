@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineDepthStencilStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineDepthStencilStateCreateFlags {
     
+}
+
+pub type RawVkPipelineDepthStencilStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineDepthStencilStateCreateFlags> for VkPipelineDepthStencilStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineDepthStencilStateCreateFlags, dst: &mut RawVkPipelineDepthStencilStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineDepthStencilStateCreateFlags> for RawVkPipelineDepthStencilStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineDepthStencilStateCreateFlags> for RawVkPipelineDepthSte
         VkPipelineDepthStencilStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineDepthStencilStateCreateFlags> for VkPipelineDepthStencilStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineDepthStencilStateCreateFlags, dst: &mut RawVkPipelineDepthStencilStateCreateFlags) {
-        *dst = 0;
     }
 }
 

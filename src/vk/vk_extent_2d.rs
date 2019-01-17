@@ -14,6 +14,12 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExtent2D {
+    pub width: u32,
+    pub height: u32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExtent2D {
@@ -21,10 +27,11 @@ pub struct RawVkExtent2D {
     pub height: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExtent2D {
-    pub width: u32,
-    pub height: u32,
+impl VkWrappedType<RawVkExtent2D> for VkExtent2D {
+    fn vk_to_raw(src: &VkExtent2D, dst: &mut RawVkExtent2D) {
+        dst.width = src.width;
+        dst.height = src.height;
+    }
 }
 
 impl VkRawType<VkExtent2D> for RawVkExtent2D {
@@ -33,13 +40,6 @@ impl VkRawType<VkExtent2D> for RawVkExtent2D {
             width: src.width,
             height: src.height,
         }
-    }
-}
-
-impl VkWrappedType<RawVkExtent2D> for VkExtent2D {
-    fn vk_to_raw(src: &VkExtent2D, dst: &mut RawVkExtent2D) {
-        dst.width = src.width;
-        dst.height = src.height;
     }
 }
 

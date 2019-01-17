@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkIndexType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkIndexType {
@@ -12,17 +10,19 @@ pub enum VkIndexType {
     NoneNv = 1000165000,
 }
 
+pub type RawVkIndexType = i32;
+
+impl VkWrappedType<RawVkIndexType> for VkIndexType {
+    fn vk_to_raw(src: &VkIndexType, dst: &mut RawVkIndexType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkIndexType> for RawVkIndexType {
     fn vk_to_wrapped(src: &RawVkIndexType) -> VkIndexType {
         unsafe {
             *((src as *const i32) as *const VkIndexType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkIndexType> for VkIndexType {
-    fn vk_to_raw(src: &VkIndexType, dst: &mut RawVkIndexType) {
-        *dst = *src as i32
     }
 }
 

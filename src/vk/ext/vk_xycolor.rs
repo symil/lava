@@ -14,6 +14,12 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkXYColor {
+    pub x: f32,
+    pub y: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkXYColor {
@@ -21,10 +27,11 @@ pub struct RawVkXYColor {
     pub y: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkXYColor {
-    pub x: f32,
-    pub y: f32,
+impl VkWrappedType<RawVkXYColor> for VkXYColor {
+    fn vk_to_raw(src: &VkXYColor, dst: &mut RawVkXYColor) {
+        dst.x = src.x;
+        dst.y = src.y;
+    }
 }
 
 impl VkRawType<VkXYColor> for RawVkXYColor {
@@ -33,13 +40,6 @@ impl VkRawType<VkXYColor> for RawVkXYColor {
             x: src.x,
             y: src.y,
         }
-    }
-}
-
-impl VkWrappedType<RawVkXYColor> for VkXYColor {
-    fn vk_to_raw(src: &VkXYColor, dst: &mut RawVkXYColor) {
-        dst.x = src.x;
-        dst.y = src.y;
     }
 }
 

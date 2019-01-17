@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceExternalImageFormatInfo {
+    pub handle_type: VkExternalMemoryHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalImageFormatInfo {
@@ -24,9 +29,12 @@ pub struct RawVkPhysicalDeviceExternalImageFormatInfo {
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceExternalImageFormatInfo {
-    pub handle_type: VkExternalMemoryHandleTypeFlags,
+impl VkWrappedType<RawVkPhysicalDeviceExternalImageFormatInfo> for VkPhysicalDeviceExternalImageFormatInfo {
+    fn vk_to_raw(src: &VkPhysicalDeviceExternalImageFormatInfo, dst: &mut RawVkPhysicalDeviceExternalImageFormatInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalImageFormatInfo);
+        dst.next = ptr::null();
+        dst.handle_type = vk_to_raw_value(&src.handle_type);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceExternalImageFormatInfo> for RawVkPhysicalDeviceExternalImageFormatInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkPhysicalDeviceExternalImageFormatInfo> for RawVkPhysicalDeviceE
         VkPhysicalDeviceExternalImageFormatInfo {
             handle_type: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.handle_type),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceExternalImageFormatInfo> for VkPhysicalDeviceExternalImageFormatInfo {
-    fn vk_to_raw(src: &VkPhysicalDeviceExternalImageFormatInfo, dst: &mut RawVkPhysicalDeviceExternalImageFormatInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalImageFormatInfo);
-        dst.next = ptr::null();
-        dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }
 

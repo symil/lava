@@ -19,18 +19,6 @@ use vk::vk_pipeline_shader_stage_create_info::*;
 use vk::vk_pipeline_layout::*;
 use vk::vk_pipeline::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkComputePipelineCreateInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub flags: RawVkPipelineCreateFlags,
-    pub stage: RawVkPipelineShaderStageCreateInfo,
-    pub layout: RawVkPipelineLayout,
-    pub base_pipeline_handle: RawVkPipeline,
-    pub base_pipeline_index: i32,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkComputePipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
     where
@@ -42,6 +30,18 @@ pub struct VkComputePipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
     pub layout: &'f VkPipelineLayout,
     pub base_pipeline_handle: Option<&'g VkPipeline>,
     pub base_pipeline_index: isize,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkComputePipelineCreateInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineCreateFlags,
+    pub stage: RawVkPipelineShaderStageCreateInfo,
+    pub layout: RawVkPipelineLayout,
+    pub base_pipeline_handle: RawVkPipeline,
+    pub base_pipeline_index: i32,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkComputePipelineCreateInfo> for VkComputePipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>

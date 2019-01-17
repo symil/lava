@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_device_memory::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMappedMemoryRange<'a> {
+    pub memory: &'a VkDeviceMemory,
+    pub offset: usize,
+    pub size: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMappedMemoryRange {
@@ -24,13 +31,6 @@ pub struct RawVkMappedMemoryRange {
     pub memory: RawVkDeviceMemory,
     pub offset: u64,
     pub size: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkMappedMemoryRange<'a> {
-    pub memory: &'a VkDeviceMemory,
-    pub offset: usize,
-    pub size: usize,
 }
 
 impl<'a> VkWrappedType<RawVkMappedMemoryRange> for VkMappedMemoryRange<'a> {

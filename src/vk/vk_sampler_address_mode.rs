@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSamplerAddressMode = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSamplerAddressMode {
@@ -14,17 +12,19 @@ pub enum VkSamplerAddressMode {
     MirrorClampToEdge = 4,
 }
 
+pub type RawVkSamplerAddressMode = i32;
+
+impl VkWrappedType<RawVkSamplerAddressMode> for VkSamplerAddressMode {
+    fn vk_to_raw(src: &VkSamplerAddressMode, dst: &mut RawVkSamplerAddressMode) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkSamplerAddressMode> for RawVkSamplerAddressMode {
     fn vk_to_wrapped(src: &RawVkSamplerAddressMode) -> VkSamplerAddressMode {
         unsafe {
             *((src as *const i32) as *const VkSamplerAddressMode)
         }
-    }
-}
-
-impl VkWrappedType<RawVkSamplerAddressMode> for VkSamplerAddressMode {
-    fn vk_to_raw(src: &VkSamplerAddressMode, dst: &mut RawVkSamplerAddressMode) {
-        *dst = *src as i32
     }
 }
 

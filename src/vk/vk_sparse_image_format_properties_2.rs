@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_sparse_image_format_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSparseImageFormatProperties2 {
+    pub properties: VkSparseImageFormatProperties,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageFormatProperties2 {
@@ -24,9 +29,12 @@ pub struct RawVkSparseImageFormatProperties2 {
     pub properties: RawVkSparseImageFormatProperties,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSparseImageFormatProperties2 {
-    pub properties: VkSparseImageFormatProperties,
+impl VkWrappedType<RawVkSparseImageFormatProperties2> for VkSparseImageFormatProperties2 {
+    fn vk_to_raw(src: &VkSparseImageFormatProperties2, dst: &mut RawVkSparseImageFormatProperties2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SparseImageFormatProperties2);
+        dst.next = ptr::null();
+        dst.properties = vk_to_raw_value(&src.properties);
+    }
 }
 
 impl VkRawType<VkSparseImageFormatProperties2> for RawVkSparseImageFormatProperties2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkSparseImageFormatProperties2> for RawVkSparseImageFormatPropert
         VkSparseImageFormatProperties2 {
             properties: RawVkSparseImageFormatProperties::vk_to_wrapped(&src.properties),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSparseImageFormatProperties2> for VkSparseImageFormatProperties2 {
-    fn vk_to_raw(src: &VkSparseImageFormatProperties2, dst: &mut RawVkSparseImageFormatProperties2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SparseImageFormatProperties2);
-        dst.next = ptr::null();
-        dst.properties = vk_to_raw_value(&src.properties);
     }
 }
 

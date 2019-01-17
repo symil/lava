@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageDrmFormatModifierProperties {
+    pub drm_format_modifier: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageDrmFormatModifierProperties {
@@ -23,9 +28,12 @@ pub struct RawVkImageDrmFormatModifierProperties {
     pub drm_format_modifier: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageDrmFormatModifierProperties {
-    pub drm_format_modifier: usize,
+impl VkWrappedType<RawVkImageDrmFormatModifierProperties> for VkImageDrmFormatModifierProperties {
+    fn vk_to_raw(src: &VkImageDrmFormatModifierProperties, dst: &mut RawVkImageDrmFormatModifierProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ImageDrmFormatModifierPropertiesExt);
+        dst.next = ptr::null();
+        dst.drm_format_modifier = vk_to_raw_value(&src.drm_format_modifier);
+    }
 }
 
 impl VkRawType<VkImageDrmFormatModifierProperties> for RawVkImageDrmFormatModifierProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkImageDrmFormatModifierProperties> for RawVkImageDrmFormatModifi
         VkImageDrmFormatModifierProperties {
             drm_format_modifier: u64::vk_to_wrapped(&src.drm_format_modifier),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageDrmFormatModifierProperties> for VkImageDrmFormatModifierProperties {
-    fn vk_to_raw(src: &VkImageDrmFormatModifierProperties, dst: &mut RawVkImageDrmFormatModifierProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ImageDrmFormatModifierPropertiesExt);
-        dst.next = ptr::null();
-        dst.drm_format_modifier = vk_to_raw_value(&src.drm_format_modifier);
     }
 }
 

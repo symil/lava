@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkFrontFace = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkFrontFace {
@@ -11,17 +9,19 @@ pub enum VkFrontFace {
     Clockwise = 1,
 }
 
+pub type RawVkFrontFace = i32;
+
+impl VkWrappedType<RawVkFrontFace> for VkFrontFace {
+    fn vk_to_raw(src: &VkFrontFace, dst: &mut RawVkFrontFace) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkFrontFace> for RawVkFrontFace {
     fn vk_to_wrapped(src: &RawVkFrontFace) -> VkFrontFace {
         unsafe {
             *((src as *const i32) as *const VkFrontFace)
         }
-    }
-}
-
-impl VkWrappedType<RawVkFrontFace> for VkFrontFace {
-    fn vk_to_raw(src: &VkFrontFace, dst: &mut RawVkFrontFace) {
-        *dst = *src as i32
     }
 }
 

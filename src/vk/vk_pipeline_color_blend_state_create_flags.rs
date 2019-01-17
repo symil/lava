@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineColorBlendStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineColorBlendStateCreateFlags {
     
+}
+
+pub type RawVkPipelineColorBlendStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineColorBlendStateCreateFlags> for VkPipelineColorBlendStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineColorBlendStateCreateFlags, dst: &mut RawVkPipelineColorBlendStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineColorBlendStateCreateFlags> for RawVkPipelineColorBlendStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineColorBlendStateCreateFlags> for RawVkPipelineColorBlend
         VkPipelineColorBlendStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineColorBlendStateCreateFlags> for VkPipelineColorBlendStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineColorBlendStateCreateFlags, dst: &mut RawVkPipelineColorBlendStateCreateFlags) {
-        *dst = 0;
     }
 }
 

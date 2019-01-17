@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_extent_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceShadingRateImageProperties {
+    pub shading_rate_texel_size: VkExtent2D,
+    pub shading_rate_palette_size: usize,
+    pub shading_rate_max_coarse_samples: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShadingRateImageProperties {
@@ -26,11 +33,14 @@ pub struct RawVkPhysicalDeviceShadingRateImageProperties {
     pub shading_rate_max_coarse_samples: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceShadingRateImageProperties {
-    pub shading_rate_texel_size: VkExtent2D,
-    pub shading_rate_palette_size: usize,
-    pub shading_rate_max_coarse_samples: usize,
+impl VkWrappedType<RawVkPhysicalDeviceShadingRateImageProperties> for VkPhysicalDeviceShadingRateImageProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceShadingRateImageProperties, dst: &mut RawVkPhysicalDeviceShadingRateImageProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShadingRateImagePropertiesNv);
+        dst.next = ptr::null();
+        dst.shading_rate_texel_size = vk_to_raw_value(&src.shading_rate_texel_size);
+        dst.shading_rate_palette_size = vk_to_raw_value(&src.shading_rate_palette_size);
+        dst.shading_rate_max_coarse_samples = vk_to_raw_value(&src.shading_rate_max_coarse_samples);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceShadingRateImageProperties> for RawVkPhysicalDeviceShadingRateImageProperties {
@@ -40,16 +50,6 @@ impl VkRawType<VkPhysicalDeviceShadingRateImageProperties> for RawVkPhysicalDevi
             shading_rate_palette_size: u32::vk_to_wrapped(&src.shading_rate_palette_size),
             shading_rate_max_coarse_samples: u32::vk_to_wrapped(&src.shading_rate_max_coarse_samples),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceShadingRateImageProperties> for VkPhysicalDeviceShadingRateImageProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceShadingRateImageProperties, dst: &mut RawVkPhysicalDeviceShadingRateImageProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShadingRateImagePropertiesNv);
-        dst.next = ptr::null();
-        dst.shading_rate_texel_size = vk_to_raw_value(&src.shading_rate_texel_size);
-        dst.shading_rate_palette_size = vk_to_raw_value(&src.shading_rate_palette_size);
-        dst.shading_rate_max_coarse_samples = vk_to_raw_value(&src.shading_rate_max_coarse_samples);
     }
 }
 

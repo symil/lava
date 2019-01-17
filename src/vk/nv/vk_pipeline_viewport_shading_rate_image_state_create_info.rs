@@ -16,6 +16,15 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::nv::vk_shading_rate_palette::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineViewportShadingRateImageStateCreateInfo<'a, 'b>
+    where
+        'b: 'a,
+{
+    pub shading_rate_image_enable: bool,
+    pub shading_rate_palettes: Option<&'a [VkShadingRatePalette<'b>]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportShadingRateImageStateCreateInfo {
@@ -24,15 +33,6 @@ pub struct RawVkPipelineViewportShadingRateImageStateCreateInfo {
     pub shading_rate_image_enable: u32,
     pub viewport_count: u32,
     pub shading_rate_palettes: *mut RawVkShadingRatePalette,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineViewportShadingRateImageStateCreateInfo<'a, 'b>
-    where
-        'b: 'a,
-{
-    pub shading_rate_image_enable: bool,
-    pub shading_rate_palettes: Option<&'a [VkShadingRatePalette<'b>]>,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkPipelineViewportShadingRateImageStateCreateInfo> for VkPipelineViewportShadingRateImageStateCreateInfo<'a, 'b>

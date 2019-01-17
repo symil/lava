@@ -17,19 +17,19 @@ use vk::nvx::vk_object_entry_type::*;
 use vk::nvx::vk_object_entry_usage_flags::*;
 use vk::vk_pipeline::*;
 
+#[derive(Debug, Clone)]
+pub struct VkObjectTablePipelineEntry<'a> {
+    pub type_: VkObjectEntryType,
+    pub flags: VkObjectEntryUsageFlags,
+    pub pipeline: &'a VkPipeline,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTablePipelineEntry {
     pub type_: RawVkObjectEntryType,
     pub flags: RawVkObjectEntryUsageFlags,
     pub pipeline: RawVkPipeline,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkObjectTablePipelineEntry<'a> {
-    pub type_: VkObjectEntryType,
-    pub flags: VkObjectEntryUsageFlags,
-    pub pipeline: &'a VkPipeline,
 }
 
 impl<'a> VkWrappedType<RawVkObjectTablePipelineEntry> for VkObjectTablePipelineEntry<'a> {

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkImageUsageFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageUsageFlags {
     pub transfer_src: bool,
@@ -16,6 +14,24 @@ pub struct VkImageUsageFlags {
     pub input_attachment: bool,
     pub shading_rate_image_nv: bool,
     pub fragment_density_map_ext: bool,
+}
+
+pub type RawVkImageUsageFlags = u32;
+
+impl VkWrappedType<RawVkImageUsageFlags> for VkImageUsageFlags {
+    fn vk_to_raw(src: &VkImageUsageFlags, dst: &mut RawVkImageUsageFlags) {
+        *dst = 0;
+        if src.transfer_src { *dst |= 0x00000001; }
+        if src.transfer_dst { *dst |= 0x00000002; }
+        if src.sampled { *dst |= 0x00000004; }
+        if src.storage { *dst |= 0x00000008; }
+        if src.color_attachment { *dst |= 0x00000010; }
+        if src.depth_stencil_attachment { *dst |= 0x00000020; }
+        if src.transient_attachment { *dst |= 0x00000040; }
+        if src.input_attachment { *dst |= 0x00000080; }
+        if src.shading_rate_image_nv { *dst |= 0x00000100; }
+        if src.fragment_density_map_ext { *dst |= 0x00000200; }
+    }
 }
 
 impl VkRawType<VkImageUsageFlags> for RawVkImageUsageFlags {
@@ -32,22 +48,6 @@ impl VkRawType<VkImageUsageFlags> for RawVkImageUsageFlags {
             shading_rate_image_nv: (src & 0x00000100) != 0,
             fragment_density_map_ext: (src & 0x00000200) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageUsageFlags> for VkImageUsageFlags {
-    fn vk_to_raw(src: &VkImageUsageFlags, dst: &mut RawVkImageUsageFlags) {
-        *dst = 0;
-        if src.transfer_src { *dst |= 0x00000001; }
-        if src.transfer_dst { *dst |= 0x00000002; }
-        if src.sampled { *dst |= 0x00000004; }
-        if src.storage { *dst |= 0x00000008; }
-        if src.color_attachment { *dst |= 0x00000010; }
-        if src.depth_stencil_attachment { *dst |= 0x00000020; }
-        if src.transient_attachment { *dst |= 0x00000040; }
-        if src.input_attachment { *dst |= 0x00000080; }
-        if src.shading_rate_image_nv { *dst |= 0x00000100; }
-        if src.fragment_density_map_ext { *dst |= 0x00000200; }
     }
 }
 

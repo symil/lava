@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkQueryControlFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryControlFlags {
     pub precise: bool,
+}
+
+pub type RawVkQueryControlFlags = u32;
+
+impl VkWrappedType<RawVkQueryControlFlags> for VkQueryControlFlags {
+    fn vk_to_raw(src: &VkQueryControlFlags, dst: &mut RawVkQueryControlFlags) {
+        *dst = 0;
+        if src.precise { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkQueryControlFlags> for RawVkQueryControlFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkQueryControlFlags> for RawVkQueryControlFlags {
         VkQueryControlFlags {
             precise: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueryControlFlags> for VkQueryControlFlags {
-    fn vk_to_raw(src: &VkQueryControlFlags, dst: &mut RawVkQueryControlFlags) {
-        *dst = 0;
-        if src.precise { *dst |= 0x00000001; }
     }
 }
 

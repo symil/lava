@@ -17,6 +17,17 @@ use vk::vk_pipeline_stage_flags::*;
 use vk::vk_access_flags::*;
 use vk::vk_dependency_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSubpassDependency {
+    pub src_subpass: u32,
+    pub dst_subpass: u32,
+    pub src_stage_mask: VkPipelineStageFlags,
+    pub dst_stage_mask: VkPipelineStageFlags,
+    pub src_access_mask: VkAccessFlags,
+    pub dst_access_mask: VkAccessFlags,
+    pub dependency_flags: VkDependencyFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDependency {
@@ -29,15 +40,16 @@ pub struct RawVkSubpassDependency {
     pub dependency_flags: RawVkDependencyFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSubpassDependency {
-    pub src_subpass: u32,
-    pub dst_subpass: u32,
-    pub src_stage_mask: VkPipelineStageFlags,
-    pub dst_stage_mask: VkPipelineStageFlags,
-    pub src_access_mask: VkAccessFlags,
-    pub dst_access_mask: VkAccessFlags,
-    pub dependency_flags: VkDependencyFlags,
+impl VkWrappedType<RawVkSubpassDependency> for VkSubpassDependency {
+    fn vk_to_raw(src: &VkSubpassDependency, dst: &mut RawVkSubpassDependency) {
+        dst.src_subpass = src.src_subpass;
+        dst.dst_subpass = src.dst_subpass;
+        dst.src_stage_mask = vk_to_raw_value(&src.src_stage_mask);
+        dst.dst_stage_mask = vk_to_raw_value(&src.dst_stage_mask);
+        dst.src_access_mask = vk_to_raw_value(&src.src_access_mask);
+        dst.dst_access_mask = vk_to_raw_value(&src.dst_access_mask);
+        dst.dependency_flags = vk_to_raw_value(&src.dependency_flags);
+    }
 }
 
 impl VkRawType<VkSubpassDependency> for RawVkSubpassDependency {
@@ -51,18 +63,6 @@ impl VkRawType<VkSubpassDependency> for RawVkSubpassDependency {
             dst_access_mask: RawVkAccessFlags::vk_to_wrapped(&src.dst_access_mask),
             dependency_flags: RawVkDependencyFlags::vk_to_wrapped(&src.dependency_flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSubpassDependency> for VkSubpassDependency {
-    fn vk_to_raw(src: &VkSubpassDependency, dst: &mut RawVkSubpassDependency) {
-        dst.src_subpass = src.src_subpass;
-        dst.dst_subpass = src.dst_subpass;
-        dst.src_stage_mask = vk_to_raw_value(&src.src_stage_mask);
-        dst.dst_stage_mask = vk_to_raw_value(&src.dst_stage_mask);
-        dst.src_access_mask = vk_to_raw_value(&src.src_access_mask);
-        dst.dst_access_mask = vk_to_raw_value(&src.dst_access_mask);
-        dst.dependency_flags = vk_to_raw_value(&src.dependency_flags);
     }
 }
 

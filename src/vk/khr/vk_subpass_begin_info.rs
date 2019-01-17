@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_subpass_contents::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSubpassBeginInfo {
+    pub contents: VkSubpassContents,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassBeginInfo {
@@ -24,9 +29,12 @@ pub struct RawVkSubpassBeginInfo {
     pub contents: RawVkSubpassContents,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSubpassBeginInfo {
-    pub contents: VkSubpassContents,
+impl VkWrappedType<RawVkSubpassBeginInfo> for VkSubpassBeginInfo {
+    fn vk_to_raw(src: &VkSubpassBeginInfo, dst: &mut RawVkSubpassBeginInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SubpassBeginInfoKhr);
+        dst.next = ptr::null();
+        dst.contents = vk_to_raw_value(&src.contents);
+    }
 }
 
 impl VkRawType<VkSubpassBeginInfo> for RawVkSubpassBeginInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkSubpassBeginInfo> for RawVkSubpassBeginInfo {
         VkSubpassBeginInfo {
             contents: RawVkSubpassContents::vk_to_wrapped(&src.contents),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSubpassBeginInfo> for VkSubpassBeginInfo {
-    fn vk_to_raw(src: &VkSubpassBeginInfo, dst: &mut RawVkSubpassBeginInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SubpassBeginInfoKhr);
-        dst.next = ptr::null();
-        dst.contents = vk_to_raw_value(&src.contents);
     }
 }
 

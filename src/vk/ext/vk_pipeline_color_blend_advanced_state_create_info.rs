@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_blend_overlap::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineColorBlendAdvancedStateCreateInfo {
+    pub src_premultiplied: bool,
+    pub dst_premultiplied: bool,
+    pub blend_overlap: VkBlendOverlap,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendAdvancedStateCreateInfo {
@@ -26,11 +33,14 @@ pub struct RawVkPipelineColorBlendAdvancedStateCreateInfo {
     pub blend_overlap: RawVkBlendOverlap,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineColorBlendAdvancedStateCreateInfo {
-    pub src_premultiplied: bool,
-    pub dst_premultiplied: bool,
-    pub blend_overlap: VkBlendOverlap,
+impl VkWrappedType<RawVkPipelineColorBlendAdvancedStateCreateInfo> for VkPipelineColorBlendAdvancedStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineColorBlendAdvancedStateCreateInfo, dst: &mut RawVkPipelineColorBlendAdvancedStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineColorBlendAdvancedStateCreateInfoExt);
+        dst.next = ptr::null();
+        dst.src_premultiplied = vk_to_raw_value(&src.src_premultiplied);
+        dst.dst_premultiplied = vk_to_raw_value(&src.dst_premultiplied);
+        dst.blend_overlap = vk_to_raw_value(&src.blend_overlap);
+    }
 }
 
 impl VkRawType<VkPipelineColorBlendAdvancedStateCreateInfo> for RawVkPipelineColorBlendAdvancedStateCreateInfo {
@@ -40,16 +50,6 @@ impl VkRawType<VkPipelineColorBlendAdvancedStateCreateInfo> for RawVkPipelineCol
             dst_premultiplied: u32::vk_to_wrapped(&src.dst_premultiplied),
             blend_overlap: RawVkBlendOverlap::vk_to_wrapped(&src.blend_overlap),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineColorBlendAdvancedStateCreateInfo> for VkPipelineColorBlendAdvancedStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineColorBlendAdvancedStateCreateInfo, dst: &mut RawVkPipelineColorBlendAdvancedStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineColorBlendAdvancedStateCreateInfoExt);
-        dst.next = ptr::null();
-        dst.src_premultiplied = vk_to_raw_value(&src.src_premultiplied);
-        dst.dst_premultiplied = vk_to_raw_value(&src.dst_premultiplied);
-        dst.blend_overlap = vk_to_raw_value(&src.blend_overlap);
     }
 }
 

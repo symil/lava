@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkImageAspectFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageAspectFlags {
     pub color: bool,
@@ -17,6 +15,25 @@ pub struct VkImageAspectFlags {
     pub memory_plane_1_ext: bool,
     pub memory_plane_2_ext: bool,
     pub memory_plane_3_ext: bool,
+}
+
+pub type RawVkImageAspectFlags = u32;
+
+impl VkWrappedType<RawVkImageAspectFlags> for VkImageAspectFlags {
+    fn vk_to_raw(src: &VkImageAspectFlags, dst: &mut RawVkImageAspectFlags) {
+        *dst = 0;
+        if src.color { *dst |= 0x00000001; }
+        if src.depth { *dst |= 0x00000002; }
+        if src.stencil { *dst |= 0x00000004; }
+        if src.metadata { *dst |= 0x00000008; }
+        if src.plane_0 { *dst |= 0x00000010; }
+        if src.plane_1 { *dst |= 0x00000020; }
+        if src.plane_2 { *dst |= 0x00000040; }
+        if src.memory_plane_0_ext { *dst |= 0x00000080; }
+        if src.memory_plane_1_ext { *dst |= 0x00000100; }
+        if src.memory_plane_2_ext { *dst |= 0x00000200; }
+        if src.memory_plane_3_ext { *dst |= 0x00000400; }
+    }
 }
 
 impl VkRawType<VkImageAspectFlags> for RawVkImageAspectFlags {
@@ -34,23 +51,6 @@ impl VkRawType<VkImageAspectFlags> for RawVkImageAspectFlags {
             memory_plane_2_ext: (src & 0x00000200) != 0,
             memory_plane_3_ext: (src & 0x00000400) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageAspectFlags> for VkImageAspectFlags {
-    fn vk_to_raw(src: &VkImageAspectFlags, dst: &mut RawVkImageAspectFlags) {
-        *dst = 0;
-        if src.color { *dst |= 0x00000001; }
-        if src.depth { *dst |= 0x00000002; }
-        if src.stencil { *dst |= 0x00000004; }
-        if src.metadata { *dst |= 0x00000008; }
-        if src.plane_0 { *dst |= 0x00000010; }
-        if src.plane_1 { *dst |= 0x00000020; }
-        if src.plane_2 { *dst |= 0x00000040; }
-        if src.memory_plane_0_ext { *dst |= 0x00000080; }
-        if src.memory_plane_1_ext { *dst |= 0x00000100; }
-        if src.memory_plane_2_ext { *dst |= 0x00000200; }
-        if src.memory_plane_3_ext { *dst |= 0x00000400; }
     }
 }
 

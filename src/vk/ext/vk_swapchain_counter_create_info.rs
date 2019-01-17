@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_surface_counter_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSwapchainCounterCreateInfo {
+    pub surface_counters: VkSurfaceCounterFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSwapchainCounterCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkSwapchainCounterCreateInfo {
     pub surface_counters: RawVkSurfaceCounterFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSwapchainCounterCreateInfo {
-    pub surface_counters: VkSurfaceCounterFlags,
+impl VkWrappedType<RawVkSwapchainCounterCreateInfo> for VkSwapchainCounterCreateInfo {
+    fn vk_to_raw(src: &VkSwapchainCounterCreateInfo, dst: &mut RawVkSwapchainCounterCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SwapchainCounterCreateInfoExt);
+        dst.next = ptr::null();
+        dst.surface_counters = vk_to_raw_value(&src.surface_counters);
+    }
 }
 
 impl VkRawType<VkSwapchainCounterCreateInfo> for RawVkSwapchainCounterCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkSwapchainCounterCreateInfo> for RawVkSwapchainCounterCreateInfo
         VkSwapchainCounterCreateInfo {
             surface_counters: RawVkSurfaceCounterFlags::vk_to_wrapped(&src.surface_counters),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSwapchainCounterCreateInfo> for VkSwapchainCounterCreateInfo {
-    fn vk_to_raw(src: &VkSwapchainCounterCreateInfo, dst: &mut RawVkSwapchainCounterCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SwapchainCounterCreateInfoExt);
-        dst.next = ptr::null();
-        dst.surface_counters = vk_to_raw_value(&src.surface_counters);
     }
 }
 

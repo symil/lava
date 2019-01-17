@@ -16,6 +16,15 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_debug_report_object_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDebugMarkerObjectTagInfo<'a> {
+    pub object_type: VkDebugReportObjectType,
+    pub object: usize,
+    pub tag_name: usize,
+    pub tag_size: usize,
+    pub tag: &'a c_void,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugMarkerObjectTagInfo {
@@ -26,15 +35,6 @@ pub struct RawVkDebugMarkerObjectTagInfo {
     pub tag_name: u64,
     pub tag_size: usize,
     pub tag: *const c_void,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDebugMarkerObjectTagInfo<'a> {
-    pub object_type: VkDebugReportObjectType,
-    pub object: usize,
-    pub tag_name: usize,
-    pub tag_size: usize,
-    pub tag: &'a c_void,
 }
 
 impl<'a> VkWrappedType<RawVkDebugMarkerObjectTagInfo> for VkDebugMarkerObjectTagInfo<'a> {

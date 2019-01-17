@@ -2,12 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkInternalAllocationType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkInternalAllocationType {
     Executable = 0,
+}
+
+pub type RawVkInternalAllocationType = i32;
+
+impl VkWrappedType<RawVkInternalAllocationType> for VkInternalAllocationType {
+    fn vk_to_raw(src: &VkInternalAllocationType, dst: &mut RawVkInternalAllocationType) {
+        *dst = *src as i32
+    }
 }
 
 impl VkRawType<VkInternalAllocationType> for RawVkInternalAllocationType {
@@ -15,12 +21,6 @@ impl VkRawType<VkInternalAllocationType> for RawVkInternalAllocationType {
         unsafe {
             *((src as *const i32) as *const VkInternalAllocationType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkInternalAllocationType> for VkInternalAllocationType {
-    fn vk_to_raw(src: &VkInternalAllocationType, dst: &mut RawVkInternalAllocationType) {
-        *dst = *src as i32
     }
 }
 

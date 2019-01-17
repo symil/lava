@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkImageType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkImageType {
@@ -12,17 +10,19 @@ pub enum VkImageType {
     _3d = 2,
 }
 
+pub type RawVkImageType = i32;
+
+impl VkWrappedType<RawVkImageType> for VkImageType {
+    fn vk_to_raw(src: &VkImageType, dst: &mut RawVkImageType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkImageType> for RawVkImageType {
     fn vk_to_wrapped(src: &RawVkImageType) -> VkImageType {
         unsafe {
             *((src as *const i32) as *const VkImageType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageType> for VkImageType {
-    fn vk_to_raw(src: &VkImageType, dst: &mut RawVkImageType) {
-        *dst = *src as i32
     }
 }
 

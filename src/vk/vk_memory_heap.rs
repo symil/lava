@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_memory_heap_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryHeap {
+    pub size: usize,
+    pub flags: VkMemoryHeapFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryHeap {
@@ -22,10 +28,11 @@ pub struct RawVkMemoryHeap {
     pub flags: RawVkMemoryHeapFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryHeap {
-    pub size: usize,
-    pub flags: VkMemoryHeapFlags,
+impl VkWrappedType<RawVkMemoryHeap> for VkMemoryHeap {
+    fn vk_to_raw(src: &VkMemoryHeap, dst: &mut RawVkMemoryHeap) {
+        dst.size = vk_to_raw_value(&src.size);
+        dst.flags = vk_to_raw_value(&src.flags);
+    }
 }
 
 impl VkRawType<VkMemoryHeap> for RawVkMemoryHeap {
@@ -34,13 +41,6 @@ impl VkRawType<VkMemoryHeap> for RawVkMemoryHeap {
             size: u64::vk_to_wrapped(&src.size),
             flags: RawVkMemoryHeapFlags::vk_to_wrapped(&src.flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryHeap> for VkMemoryHeap {
-    fn vk_to_raw(src: &VkMemoryHeap, dst: &mut RawVkMemoryHeap) {
-        dst.size = vk_to_raw_value(&src.size);
-        dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 

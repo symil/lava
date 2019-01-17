@@ -14,6 +14,13 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryRequirements {
+    pub size: usize,
+    pub alignment: usize,
+    pub memory_type_bits: u32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryRequirements {
@@ -22,11 +29,12 @@ pub struct RawVkMemoryRequirements {
     pub memory_type_bits: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryRequirements {
-    pub size: usize,
-    pub alignment: usize,
-    pub memory_type_bits: u32,
+impl VkWrappedType<RawVkMemoryRequirements> for VkMemoryRequirements {
+    fn vk_to_raw(src: &VkMemoryRequirements, dst: &mut RawVkMemoryRequirements) {
+        dst.size = vk_to_raw_value(&src.size);
+        dst.alignment = vk_to_raw_value(&src.alignment);
+        dst.memory_type_bits = src.memory_type_bits;
+    }
 }
 
 impl VkRawType<VkMemoryRequirements> for RawVkMemoryRequirements {
@@ -36,14 +44,6 @@ impl VkRawType<VkMemoryRequirements> for RawVkMemoryRequirements {
             alignment: u64::vk_to_wrapped(&src.alignment),
             memory_type_bits: src.memory_type_bits,
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryRequirements> for VkMemoryRequirements {
-    fn vk_to_raw(src: &VkMemoryRequirements, dst: &mut RawVkMemoryRequirements) {
-        dst.size = vk_to_raw_value(&src.size);
-        dst.alignment = vk_to_raw_value(&src.alignment);
-        dst.memory_type_bits = src.memory_type_bits;
     }
 }
 

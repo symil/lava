@@ -15,18 +15,18 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDebugUtilsLabel<'a> {
+    pub label_name: &'a str,
+    pub color: [f32; 4],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsLabel {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub label_name: *mut c_char,
-    pub color: [f32; 4],
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDebugUtilsLabel<'a> {
-    pub label_name: &'a str,
     pub color: [f32; 4],
 }
 

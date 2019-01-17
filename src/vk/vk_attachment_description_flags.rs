@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkAttachmentDescriptionFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkAttachmentDescriptionFlags {
     pub may_alias: bool,
+}
+
+pub type RawVkAttachmentDescriptionFlags = u32;
+
+impl VkWrappedType<RawVkAttachmentDescriptionFlags> for VkAttachmentDescriptionFlags {
+    fn vk_to_raw(src: &VkAttachmentDescriptionFlags, dst: &mut RawVkAttachmentDescriptionFlags) {
+        *dst = 0;
+        if src.may_alias { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkAttachmentDescriptionFlags> for RawVkAttachmentDescriptionFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkAttachmentDescriptionFlags> for RawVkAttachmentDescriptionFlags
         VkAttachmentDescriptionFlags {
             may_alias: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkAttachmentDescriptionFlags> for VkAttachmentDescriptionFlags {
-    fn vk_to_raw(src: &VkAttachmentDescriptionFlags, dst: &mut RawVkAttachmentDescriptionFlags) {
-        *dst = 0;
-        if src.may_alias { *dst |= 0x00000001; }
     }
 }
 

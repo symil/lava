@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_display_plane_capabilities::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayPlaneCapabilities2 {
+    pub capabilities: VkDisplayPlaneCapabilities,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneCapabilities2 {
@@ -24,9 +29,12 @@ pub struct RawVkDisplayPlaneCapabilities2 {
     pub capabilities: RawVkDisplayPlaneCapabilities,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDisplayPlaneCapabilities2 {
-    pub capabilities: VkDisplayPlaneCapabilities,
+impl VkWrappedType<RawVkDisplayPlaneCapabilities2> for VkDisplayPlaneCapabilities2 {
+    fn vk_to_raw(src: &VkDisplayPlaneCapabilities2, dst: &mut RawVkDisplayPlaneCapabilities2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPlaneCapabilities2Khr);
+        dst.next = ptr::null();
+        dst.capabilities = vk_to_raw_value(&src.capabilities);
+    }
 }
 
 impl VkRawType<VkDisplayPlaneCapabilities2> for RawVkDisplayPlaneCapabilities2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkDisplayPlaneCapabilities2> for RawVkDisplayPlaneCapabilities2 {
         VkDisplayPlaneCapabilities2 {
             capabilities: RawVkDisplayPlaneCapabilities::vk_to_wrapped(&src.capabilities),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayPlaneCapabilities2> for VkDisplayPlaneCapabilities2 {
-    fn vk_to_raw(src: &VkDisplayPlaneCapabilities2, dst: &mut RawVkDisplayPlaneCapabilities2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPlaneCapabilities2Khr);
-        dst.next = ptr::null();
-        dst.capabilities = vk_to_raw_value(&src.capabilities);
     }
 }
 

@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_surface_capabilities::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSurfaceCapabilities2 {
+    pub surface_capabilities: VkSurfaceCapabilities,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities2 {
@@ -24,9 +29,12 @@ pub struct RawVkSurfaceCapabilities2 {
     pub surface_capabilities: RawVkSurfaceCapabilities,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSurfaceCapabilities2 {
-    pub surface_capabilities: VkSurfaceCapabilities,
+impl VkWrappedType<RawVkSurfaceCapabilities2> for VkSurfaceCapabilities2 {
+    fn vk_to_raw(src: &VkSurfaceCapabilities2, dst: &mut RawVkSurfaceCapabilities2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceCapabilities2Khr);
+        dst.next = ptr::null();
+        dst.surface_capabilities = vk_to_raw_value(&src.surface_capabilities);
+    }
 }
 
 impl VkRawType<VkSurfaceCapabilities2> for RawVkSurfaceCapabilities2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkSurfaceCapabilities2> for RawVkSurfaceCapabilities2 {
         VkSurfaceCapabilities2 {
             surface_capabilities: RawVkSurfaceCapabilities::vk_to_wrapped(&src.surface_capabilities),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSurfaceCapabilities2> for VkSurfaceCapabilities2 {
-    fn vk_to_raw(src: &VkSurfaceCapabilities2, dst: &mut RawVkSurfaceCapabilities2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceCapabilities2Khr);
-        dst.next = ptr::null();
-        dst.surface_capabilities = vk_to_raw_value(&src.surface_capabilities);
     }
 }
 

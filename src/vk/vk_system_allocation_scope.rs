@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSystemAllocationScope = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSystemAllocationScope {
@@ -14,17 +12,19 @@ pub enum VkSystemAllocationScope {
     Instance = 4,
 }
 
+pub type RawVkSystemAllocationScope = i32;
+
+impl VkWrappedType<RawVkSystemAllocationScope> for VkSystemAllocationScope {
+    fn vk_to_raw(src: &VkSystemAllocationScope, dst: &mut RawVkSystemAllocationScope) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkSystemAllocationScope> for RawVkSystemAllocationScope {
     fn vk_to_wrapped(src: &RawVkSystemAllocationScope) -> VkSystemAllocationScope {
         unsafe {
             *((src as *const i32) as *const VkSystemAllocationScope)
         }
-    }
-}
-
-impl VkWrappedType<RawVkSystemAllocationScope> for VkSystemAllocationScope {
-    fn vk_to_raw(src: &VkSystemAllocationScope, dst: &mut RawVkSystemAllocationScope) {
-        *dst = *src as i32
     }
 }
 

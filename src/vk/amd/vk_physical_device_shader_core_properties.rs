@@ -15,6 +15,24 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceShaderCoreProperties {
+    pub shader_engine_count: usize,
+    pub shader_arrays_per_engine_count: usize,
+    pub compute_units_per_shader_array: usize,
+    pub simd_per_compute_unit: usize,
+    pub wavefronts_per_simd: usize,
+    pub wavefront_size: usize,
+    pub sgprs_per_simd: usize,
+    pub min_sgpr_allocation: usize,
+    pub max_sgpr_allocation: usize,
+    pub sgpr_allocation_granularity: usize,
+    pub vgprs_per_simd: usize,
+    pub min_vgpr_allocation: usize,
+    pub max_vgpr_allocation: usize,
+    pub vgpr_allocation_granularity: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShaderCoreProperties {
@@ -36,22 +54,25 @@ pub struct RawVkPhysicalDeviceShaderCoreProperties {
     pub vgpr_allocation_granularity: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceShaderCoreProperties {
-    pub shader_engine_count: usize,
-    pub shader_arrays_per_engine_count: usize,
-    pub compute_units_per_shader_array: usize,
-    pub simd_per_compute_unit: usize,
-    pub wavefronts_per_simd: usize,
-    pub wavefront_size: usize,
-    pub sgprs_per_simd: usize,
-    pub min_sgpr_allocation: usize,
-    pub max_sgpr_allocation: usize,
-    pub sgpr_allocation_granularity: usize,
-    pub vgprs_per_simd: usize,
-    pub min_vgpr_allocation: usize,
-    pub max_vgpr_allocation: usize,
-    pub vgpr_allocation_granularity: usize,
+impl VkWrappedType<RawVkPhysicalDeviceShaderCoreProperties> for VkPhysicalDeviceShaderCoreProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceShaderCoreProperties, dst: &mut RawVkPhysicalDeviceShaderCoreProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderCorePropertiesAmd);
+        dst.next = ptr::null();
+        dst.shader_engine_count = vk_to_raw_value(&src.shader_engine_count);
+        dst.shader_arrays_per_engine_count = vk_to_raw_value(&src.shader_arrays_per_engine_count);
+        dst.compute_units_per_shader_array = vk_to_raw_value(&src.compute_units_per_shader_array);
+        dst.simd_per_compute_unit = vk_to_raw_value(&src.simd_per_compute_unit);
+        dst.wavefronts_per_simd = vk_to_raw_value(&src.wavefronts_per_simd);
+        dst.wavefront_size = vk_to_raw_value(&src.wavefront_size);
+        dst.sgprs_per_simd = vk_to_raw_value(&src.sgprs_per_simd);
+        dst.min_sgpr_allocation = vk_to_raw_value(&src.min_sgpr_allocation);
+        dst.max_sgpr_allocation = vk_to_raw_value(&src.max_sgpr_allocation);
+        dst.sgpr_allocation_granularity = vk_to_raw_value(&src.sgpr_allocation_granularity);
+        dst.vgprs_per_simd = vk_to_raw_value(&src.vgprs_per_simd);
+        dst.min_vgpr_allocation = vk_to_raw_value(&src.min_vgpr_allocation);
+        dst.max_vgpr_allocation = vk_to_raw_value(&src.max_vgpr_allocation);
+        dst.vgpr_allocation_granularity = vk_to_raw_value(&src.vgpr_allocation_granularity);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceShaderCoreProperties> for RawVkPhysicalDeviceShaderCoreProperties {
@@ -72,27 +93,6 @@ impl VkRawType<VkPhysicalDeviceShaderCoreProperties> for RawVkPhysicalDeviceShad
             max_vgpr_allocation: u32::vk_to_wrapped(&src.max_vgpr_allocation),
             vgpr_allocation_granularity: u32::vk_to_wrapped(&src.vgpr_allocation_granularity),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceShaderCoreProperties> for VkPhysicalDeviceShaderCoreProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceShaderCoreProperties, dst: &mut RawVkPhysicalDeviceShaderCoreProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderCorePropertiesAmd);
-        dst.next = ptr::null();
-        dst.shader_engine_count = vk_to_raw_value(&src.shader_engine_count);
-        dst.shader_arrays_per_engine_count = vk_to_raw_value(&src.shader_arrays_per_engine_count);
-        dst.compute_units_per_shader_array = vk_to_raw_value(&src.compute_units_per_shader_array);
-        dst.simd_per_compute_unit = vk_to_raw_value(&src.simd_per_compute_unit);
-        dst.wavefronts_per_simd = vk_to_raw_value(&src.wavefronts_per_simd);
-        dst.wavefront_size = vk_to_raw_value(&src.wavefront_size);
-        dst.sgprs_per_simd = vk_to_raw_value(&src.sgprs_per_simd);
-        dst.min_sgpr_allocation = vk_to_raw_value(&src.min_sgpr_allocation);
-        dst.max_sgpr_allocation = vk_to_raw_value(&src.max_sgpr_allocation);
-        dst.sgpr_allocation_granularity = vk_to_raw_value(&src.sgpr_allocation_granularity);
-        dst.vgprs_per_simd = vk_to_raw_value(&src.vgprs_per_simd);
-        dst.min_vgpr_allocation = vk_to_raw_value(&src.min_vgpr_allocation);
-        dst.max_vgpr_allocation = vk_to_raw_value(&src.max_vgpr_allocation);
-        dst.vgpr_allocation_granularity = vk_to_raw_value(&src.vgpr_allocation_granularity);
     }
 }
 

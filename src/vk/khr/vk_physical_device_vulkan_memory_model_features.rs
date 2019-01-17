@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceVulkanMemoryModelFeatures {
+    pub vulkan_memory_model: bool,
+    pub vulkan_memory_model_device_scope: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVulkanMemoryModelFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceVulkanMemoryModelFeatures {
     pub vulkan_memory_model_device_scope: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceVulkanMemoryModelFeatures {
-    pub vulkan_memory_model: bool,
-    pub vulkan_memory_model_device_scope: bool,
+impl VkWrappedType<RawVkPhysicalDeviceVulkanMemoryModelFeatures> for VkPhysicalDeviceVulkanMemoryModelFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceVulkanMemoryModelFeatures, dst: &mut RawVkPhysicalDeviceVulkanMemoryModelFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVulkanMemoryModelFeaturesKhr);
+        dst.next = ptr::null();
+        dst.vulkan_memory_model = vk_to_raw_value(&src.vulkan_memory_model);
+        dst.vulkan_memory_model_device_scope = vk_to_raw_value(&src.vulkan_memory_model_device_scope);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceVulkanMemoryModelFeatures> for RawVkPhysicalDeviceVulkanMemoryModelFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceVulkanMemoryModelFeatures> for RawVkPhysicalDevic
             vulkan_memory_model: u32::vk_to_wrapped(&src.vulkan_memory_model),
             vulkan_memory_model_device_scope: u32::vk_to_wrapped(&src.vulkan_memory_model_device_scope),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceVulkanMemoryModelFeatures> for VkPhysicalDeviceVulkanMemoryModelFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceVulkanMemoryModelFeatures, dst: &mut RawVkPhysicalDeviceVulkanMemoryModelFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVulkanMemoryModelFeaturesKhr);
-        dst.next = ptr::null();
-        dst.vulkan_memory_model = vk_to_raw_value(&src.vulkan_memory_model);
-        dst.vulkan_memory_model_device_scope = vk_to_raw_value(&src.vulkan_memory_model_device_scope);
     }
 }
 

@@ -17,16 +17,6 @@ use vk::vk_structure_type::*;
 use vk::vk_descriptor_set_layout_create_flags::*;
 use vk::vk_descriptor_set_layout_binding::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkDescriptorSetLayoutCreateInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub flags: RawVkDescriptorSetLayoutCreateFlags,
-    pub binding_count: u32,
-    pub bindings: *mut RawVkDescriptorSetLayoutBinding,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
     where
@@ -35,6 +25,16 @@ pub struct VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
 {
     pub flags: VkDescriptorSetLayoutCreateFlags,
     pub bindings: &'a [VkDescriptorSetLayoutBinding<'b, 'c>],
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkDescriptorSetLayoutCreateInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkDescriptorSetLayoutCreateFlags,
+    pub binding_count: u32,
+    pub bindings: *mut RawVkDescriptorSetLayoutBinding,
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkDescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>

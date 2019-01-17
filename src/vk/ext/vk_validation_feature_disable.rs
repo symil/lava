@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkValidationFeatureDisable = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkValidationFeatureDisable {
@@ -16,17 +14,19 @@ pub enum VkValidationFeatureDisable {
     UniqueHandles = 6,
 }
 
+pub type RawVkValidationFeatureDisable = i32;
+
+impl VkWrappedType<RawVkValidationFeatureDisable> for VkValidationFeatureDisable {
+    fn vk_to_raw(src: &VkValidationFeatureDisable, dst: &mut RawVkValidationFeatureDisable) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkValidationFeatureDisable> for RawVkValidationFeatureDisable {
     fn vk_to_wrapped(src: &RawVkValidationFeatureDisable) -> VkValidationFeatureDisable {
         unsafe {
             *((src as *const i32) as *const VkValidationFeatureDisable)
         }
-    }
-}
-
-impl VkWrappedType<RawVkValidationFeatureDisable> for VkValidationFeatureDisable {
-    fn vk_to_raw(src: &VkValidationFeatureDisable, dst: &mut RawVkValidationFeatureDisable) {
-        *dst = *src as i32
     }
 }
 

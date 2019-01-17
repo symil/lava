@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkViewportCoordinateSwizzle = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkViewportCoordinateSwizzle {
@@ -17,17 +15,19 @@ pub enum VkViewportCoordinateSwizzle {
     NegativeW = 7,
 }
 
+pub type RawVkViewportCoordinateSwizzle = i32;
+
+impl VkWrappedType<RawVkViewportCoordinateSwizzle> for VkViewportCoordinateSwizzle {
+    fn vk_to_raw(src: &VkViewportCoordinateSwizzle, dst: &mut RawVkViewportCoordinateSwizzle) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkViewportCoordinateSwizzle> for RawVkViewportCoordinateSwizzle {
     fn vk_to_wrapped(src: &RawVkViewportCoordinateSwizzle) -> VkViewportCoordinateSwizzle {
         unsafe {
             *((src as *const i32) as *const VkViewportCoordinateSwizzle)
         }
-    }
-}
-
-impl VkWrappedType<RawVkViewportCoordinateSwizzle> for VkViewportCoordinateSwizzle {
-    fn vk_to_raw(src: &VkViewportCoordinateSwizzle, dst: &mut RawVkViewportCoordinateSwizzle) {
-        *dst = *src as i32
     }
 }
 

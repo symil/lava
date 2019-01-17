@@ -2,13 +2,22 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCommandBufferUsageFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandBufferUsageFlags {
     pub one_time_submit: bool,
     pub render_pass_continue: bool,
     pub simultaneous_use: bool,
+}
+
+pub type RawVkCommandBufferUsageFlags = u32;
+
+impl VkWrappedType<RawVkCommandBufferUsageFlags> for VkCommandBufferUsageFlags {
+    fn vk_to_raw(src: &VkCommandBufferUsageFlags, dst: &mut RawVkCommandBufferUsageFlags) {
+        *dst = 0;
+        if src.one_time_submit { *dst |= 0x00000001; }
+        if src.render_pass_continue { *dst |= 0x00000002; }
+        if src.simultaneous_use { *dst |= 0x00000004; }
+    }
 }
 
 impl VkRawType<VkCommandBufferUsageFlags> for RawVkCommandBufferUsageFlags {
@@ -18,15 +27,6 @@ impl VkRawType<VkCommandBufferUsageFlags> for RawVkCommandBufferUsageFlags {
             render_pass_continue: (src & 0x00000002) != 0,
             simultaneous_use: (src & 0x00000004) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkCommandBufferUsageFlags> for VkCommandBufferUsageFlags {
-    fn vk_to_raw(src: &VkCommandBufferUsageFlags, dst: &mut RawVkCommandBufferUsageFlags) {
-        *dst = 0;
-        if src.one_time_submit { *dst |= 0x00000001; }
-        if src.render_pass_continue { *dst |= 0x00000002; }
-        if src.simultaneous_use { *dst |= 0x00000004; }
     }
 }
 

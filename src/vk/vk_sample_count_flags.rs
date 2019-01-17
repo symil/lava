@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSampleCountFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSampleCountFlags {
     pub _1: bool,
@@ -13,6 +11,21 @@ pub struct VkSampleCountFlags {
     pub _16: bool,
     pub _32: bool,
     pub _64: bool,
+}
+
+pub type RawVkSampleCountFlags = u32;
+
+impl VkWrappedType<RawVkSampleCountFlags> for VkSampleCountFlags {
+    fn vk_to_raw(src: &VkSampleCountFlags, dst: &mut RawVkSampleCountFlags) {
+        *dst = 0;
+        if src._1 { *dst |= 0x00000001; }
+        if src._2 { *dst |= 0x00000002; }
+        if src._4 { *dst |= 0x00000004; }
+        if src._8 { *dst |= 0x00000008; }
+        if src._16 { *dst |= 0x00000010; }
+        if src._32 { *dst |= 0x00000020; }
+        if src._64 { *dst |= 0x00000040; }
+    }
 }
 
 impl VkRawType<VkSampleCountFlags> for RawVkSampleCountFlags {
@@ -26,19 +39,6 @@ impl VkRawType<VkSampleCountFlags> for RawVkSampleCountFlags {
             _32: (src & 0x00000020) != 0,
             _64: (src & 0x00000040) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSampleCountFlags> for VkSampleCountFlags {
-    fn vk_to_raw(src: &VkSampleCountFlags, dst: &mut RawVkSampleCountFlags) {
-        *dst = 0;
-        if src._1 { *dst |= 0x00000001; }
-        if src._2 { *dst |= 0x00000002; }
-        if src._4 { *dst |= 0x00000004; }
-        if src._8 { *dst |= 0x00000008; }
-        if src._16 { *dst |= 0x00000010; }
-        if src._32 { *dst |= 0x00000020; }
-        if src._64 { *dst |= 0x00000040; }
     }
 }
 

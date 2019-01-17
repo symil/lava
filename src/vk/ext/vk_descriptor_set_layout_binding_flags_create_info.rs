@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_descriptor_binding_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {
+    pub binding_flags: Option<&'a [VkDescriptorBindingFlags]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetLayoutBindingFlagsCreateInfo {
@@ -23,11 +28,6 @@ pub struct RawVkDescriptorSetLayoutBindingFlagsCreateInfo {
     pub next: *const c_void,
     pub binding_count: u32,
     pub binding_flags: *mut RawVkDescriptorBindingFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {
-    pub binding_flags: Option<&'a [VkDescriptorBindingFlags]>,
 }
 
 impl<'a> VkWrappedType<RawVkDescriptorSetLayoutBindingFlagsCreateInfo> for VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {

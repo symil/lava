@@ -18,6 +18,13 @@ use vk::vk_sample_count_flags::*;
 use vk::vk_extent_2d::*;
 use vk::ext::vk_sample_location::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSampleLocationsInfo<'a> {
+    pub sample_locations_per_pixel: VkSampleCountFlags,
+    pub sample_location_grid_size: VkExtent2D,
+    pub sample_locations: &'a [VkSampleLocation],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSampleLocationsInfo {
@@ -27,13 +34,6 @@ pub struct RawVkSampleLocationsInfo {
     pub sample_location_grid_size: RawVkExtent2D,
     pub sample_locations_count: u32,
     pub sample_locations: *mut RawVkSampleLocation,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSampleLocationsInfo<'a> {
-    pub sample_locations_per_pixel: VkSampleCountFlags,
-    pub sample_location_grid_size: VkExtent2D,
-    pub sample_locations: &'a [VkSampleLocation],
 }
 
 impl<'a> VkWrappedType<RawVkSampleLocationsInfo> for VkSampleLocationsInfo<'a> {

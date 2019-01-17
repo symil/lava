@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDebugReportFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugReportFlags {
     pub information: bool,
@@ -11,6 +9,19 @@ pub struct VkDebugReportFlags {
     pub performance_warning: bool,
     pub error: bool,
     pub debug: bool,
+}
+
+pub type RawVkDebugReportFlags = u32;
+
+impl VkWrappedType<RawVkDebugReportFlags> for VkDebugReportFlags {
+    fn vk_to_raw(src: &VkDebugReportFlags, dst: &mut RawVkDebugReportFlags) {
+        *dst = 0;
+        if src.information { *dst |= 0x00000001; }
+        if src.warning { *dst |= 0x00000002; }
+        if src.performance_warning { *dst |= 0x00000004; }
+        if src.error { *dst |= 0x00000008; }
+        if src.debug { *dst |= 0x00000010; }
+    }
 }
 
 impl VkRawType<VkDebugReportFlags> for RawVkDebugReportFlags {
@@ -22,17 +33,6 @@ impl VkRawType<VkDebugReportFlags> for RawVkDebugReportFlags {
             error: (src & 0x00000008) != 0,
             debug: (src & 0x00000010) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDebugReportFlags> for VkDebugReportFlags {
-    fn vk_to_raw(src: &VkDebugReportFlags, dst: &mut RawVkDebugReportFlags) {
-        *dst = 0;
-        if src.information { *dst |= 0x00000001; }
-        if src.warning { *dst |= 0x00000002; }
-        if src.performance_warning { *dst |= 0x00000004; }
-        if src.error { *dst |= 0x00000008; }
-        if src.debug { *dst |= 0x00000010; }
     }
 }
 

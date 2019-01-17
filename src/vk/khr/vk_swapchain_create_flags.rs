@@ -2,13 +2,22 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSwapchainCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSwapchainCreateFlags {
     pub split_instance_bind_regions: bool,
     pub protected: bool,
     pub mutable_format: bool,
+}
+
+pub type RawVkSwapchainCreateFlags = u32;
+
+impl VkWrappedType<RawVkSwapchainCreateFlags> for VkSwapchainCreateFlags {
+    fn vk_to_raw(src: &VkSwapchainCreateFlags, dst: &mut RawVkSwapchainCreateFlags) {
+        *dst = 0;
+        if src.split_instance_bind_regions { *dst |= 0x00000001; }
+        if src.protected { *dst |= 0x00000002; }
+        if src.mutable_format { *dst |= 0x00000004; }
+    }
 }
 
 impl VkRawType<VkSwapchainCreateFlags> for RawVkSwapchainCreateFlags {
@@ -18,15 +27,6 @@ impl VkRawType<VkSwapchainCreateFlags> for RawVkSwapchainCreateFlags {
             protected: (src & 0x00000002) != 0,
             mutable_format: (src & 0x00000004) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSwapchainCreateFlags> for VkSwapchainCreateFlags {
-    fn vk_to_raw(src: &VkSwapchainCreateFlags, dst: &mut RawVkSwapchainCreateFlags) {
-        *dst = 0;
-        if src.split_instance_bind_regions { *dst |= 0x00000001; }
-        if src.protected { *dst |= 0x00000002; }
-        if src.mutable_format { *dst |= 0x00000004; }
     }
 }
 

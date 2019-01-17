@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkShaderModuleCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkShaderModuleCreateFlags {
     
+}
+
+pub type RawVkShaderModuleCreateFlags = u32;
+
+impl VkWrappedType<RawVkShaderModuleCreateFlags> for VkShaderModuleCreateFlags {
+    fn vk_to_raw(src: &VkShaderModuleCreateFlags, dst: &mut RawVkShaderModuleCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkShaderModuleCreateFlags> for RawVkShaderModuleCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkShaderModuleCreateFlags> for RawVkShaderModuleCreateFlags {
         VkShaderModuleCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkShaderModuleCreateFlags> for VkShaderModuleCreateFlags {
-    fn vk_to_raw(src: &VkShaderModuleCreateFlags, dst: &mut RawVkShaderModuleCreateFlags) {
-        *dst = 0;
     }
 }
 

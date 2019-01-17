@@ -2,12 +2,20 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkGeometryFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkGeometryFlags {
     pub opaque: bool,
     pub no_duplicate_any_hit_invocation: bool,
+}
+
+pub type RawVkGeometryFlags = u32;
+
+impl VkWrappedType<RawVkGeometryFlags> for VkGeometryFlags {
+    fn vk_to_raw(src: &VkGeometryFlags, dst: &mut RawVkGeometryFlags) {
+        *dst = 0;
+        if src.opaque { *dst |= 0x00000001; }
+        if src.no_duplicate_any_hit_invocation { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkGeometryFlags> for RawVkGeometryFlags {
@@ -16,14 +24,6 @@ impl VkRawType<VkGeometryFlags> for RawVkGeometryFlags {
             opaque: (src & 0x00000001) != 0,
             no_duplicate_any_hit_invocation: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkGeometryFlags> for VkGeometryFlags {
-    fn vk_to_raw(src: &VkGeometryFlags, dst: &mut RawVkGeometryFlags) {
-        *dst = 0;
-        if src.opaque { *dst |= 0x00000001; }
-        if src.no_duplicate_any_hit_invocation { *dst |= 0x00000002; }
     }
 }
 

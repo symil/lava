@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_memory_allocate_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryAllocateFlagsInfo {
+    pub flags: VkMemoryAllocateFlags,
+    pub device_mask: u32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryAllocateFlagsInfo {
@@ -25,10 +31,13 @@ pub struct RawVkMemoryAllocateFlagsInfo {
     pub device_mask: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryAllocateFlagsInfo {
-    pub flags: VkMemoryAllocateFlags,
-    pub device_mask: u32,
+impl VkWrappedType<RawVkMemoryAllocateFlagsInfo> for VkMemoryAllocateFlagsInfo {
+    fn vk_to_raw(src: &VkMemoryAllocateFlagsInfo, dst: &mut RawVkMemoryAllocateFlagsInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryAllocateFlagsInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.device_mask = src.device_mask;
+    }
 }
 
 impl VkRawType<VkMemoryAllocateFlagsInfo> for RawVkMemoryAllocateFlagsInfo {
@@ -37,15 +46,6 @@ impl VkRawType<VkMemoryAllocateFlagsInfo> for RawVkMemoryAllocateFlagsInfo {
             flags: RawVkMemoryAllocateFlags::vk_to_wrapped(&src.flags),
             device_mask: src.device_mask,
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryAllocateFlagsInfo> for VkMemoryAllocateFlagsInfo {
-    fn vk_to_raw(src: &VkMemoryAllocateFlagsInfo, dst: &mut RawVkMemoryAllocateFlagsInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryAllocateFlagsInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.device_mask = src.device_mask;
     }
 }
 

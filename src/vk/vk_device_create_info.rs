@@ -18,6 +18,20 @@ use vk::vk_device_create_flags::*;
 use vk::vk_device_queue_create_info::*;
 use vk::vk_physical_device_features::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
+    where
+        'b: 'a,
+        'd: 'c,
+        'f: 'e,
+{
+    pub flags: VkDeviceCreateFlags,
+    pub queue_create_infos: &'a [VkDeviceQueueCreateInfo<'b>],
+    pub enabled_layer_names: &'c [&'d str],
+    pub enabled_extension_names: &'e [&'f str],
+    pub enabled_features: Option<&'g VkPhysicalDeviceFeatures>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceCreateInfo {
@@ -31,20 +45,6 @@ pub struct RawVkDeviceCreateInfo {
     pub enabled_extension_count: u32,
     pub enabled_extension_names: *mut *mut c_char,
     pub enabled_features: *mut RawVkPhysicalDeviceFeatures,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDeviceCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'b: 'a,
-        'd: 'c,
-        'f: 'e,
-{
-    pub flags: VkDeviceCreateFlags,
-    pub queue_create_infos: &'a [VkDeviceQueueCreateInfo<'b>],
-    pub enabled_layer_names: &'c [&'d str],
-    pub enabled_extension_names: &'e [&'f str],
-    pub enabled_features: Option<&'g VkPhysicalDeviceFeatures>,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkDeviceCreateInfo> for VkDeviceCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>

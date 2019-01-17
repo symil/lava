@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_pipeline_input_assembly_state_create_flags::*;
 use vk::vk_primitive_topology::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineInputAssemblyStateCreateInfo {
+    pub flags: VkPipelineInputAssemblyStateCreateFlags,
+    pub topology: VkPrimitiveTopology,
+    pub primitive_restart_enable: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineInputAssemblyStateCreateInfo {
@@ -27,11 +34,14 @@ pub struct RawVkPipelineInputAssemblyStateCreateInfo {
     pub primitive_restart_enable: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineInputAssemblyStateCreateInfo {
-    pub flags: VkPipelineInputAssemblyStateCreateFlags,
-    pub topology: VkPrimitiveTopology,
-    pub primitive_restart_enable: bool,
+impl VkWrappedType<RawVkPipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssemblyStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineInputAssemblyStateCreateInfo, dst: &mut RawVkPipelineInputAssemblyStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineInputAssemblyStateCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.topology = vk_to_raw_value(&src.topology);
+        dst.primitive_restart_enable = vk_to_raw_value(&src.primitive_restart_enable);
+    }
 }
 
 impl VkRawType<VkPipelineInputAssemblyStateCreateInfo> for RawVkPipelineInputAssemblyStateCreateInfo {
@@ -41,16 +51,6 @@ impl VkRawType<VkPipelineInputAssemblyStateCreateInfo> for RawVkPipelineInputAss
             topology: RawVkPrimitiveTopology::vk_to_wrapped(&src.topology),
             primitive_restart_enable: u32::vk_to_wrapped(&src.primitive_restart_enable),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssemblyStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineInputAssemblyStateCreateInfo, dst: &mut RawVkPipelineInputAssemblyStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineInputAssemblyStateCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.topology = vk_to_raw_value(&src.topology);
-        dst.primitive_restart_enable = vk_to_raw_value(&src.primitive_restart_enable);
     }
 }
 

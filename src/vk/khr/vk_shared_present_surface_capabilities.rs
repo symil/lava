@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_image_usage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSharedPresentSurfaceCapabilities {
+    pub shared_present_supported_usage_flags: VkImageUsageFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSharedPresentSurfaceCapabilities {
@@ -24,9 +29,12 @@ pub struct RawVkSharedPresentSurfaceCapabilities {
     pub shared_present_supported_usage_flags: RawVkImageUsageFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSharedPresentSurfaceCapabilities {
-    pub shared_present_supported_usage_flags: VkImageUsageFlags,
+impl VkWrappedType<RawVkSharedPresentSurfaceCapabilities> for VkSharedPresentSurfaceCapabilities {
+    fn vk_to_raw(src: &VkSharedPresentSurfaceCapabilities, dst: &mut RawVkSharedPresentSurfaceCapabilities) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SharedPresentSurfaceCapabilitiesKhr);
+        dst.next = ptr::null();
+        dst.shared_present_supported_usage_flags = vk_to_raw_value(&src.shared_present_supported_usage_flags);
+    }
 }
 
 impl VkRawType<VkSharedPresentSurfaceCapabilities> for RawVkSharedPresentSurfaceCapabilities {
@@ -34,14 +42,6 @@ impl VkRawType<VkSharedPresentSurfaceCapabilities> for RawVkSharedPresentSurface
         VkSharedPresentSurfaceCapabilities {
             shared_present_supported_usage_flags: RawVkImageUsageFlags::vk_to_wrapped(&src.shared_present_supported_usage_flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSharedPresentSurfaceCapabilities> for VkSharedPresentSurfaceCapabilities {
-    fn vk_to_raw(src: &VkSharedPresentSurfaceCapabilities, dst: &mut RawVkSharedPresentSurfaceCapabilities) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SharedPresentSurfaceCapabilitiesKhr);
-        dst.next = ptr::null();
-        dst.shared_present_supported_usage_flags = vk_to_raw_value(&src.shared_present_supported_usage_flags);
     }
 }
 

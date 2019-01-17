@@ -20,6 +20,21 @@ use vk::khr::vk_composite_alpha_flags::*;
 use vk::vk_image_usage_flags::*;
 use vk::ext::vk_surface_counter_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSurfaceCapabilities2 {
+    pub min_image_count: usize,
+    pub max_image_count: usize,
+    pub current_extent: VkExtent2D,
+    pub min_image_extent: VkExtent2D,
+    pub max_image_extent: VkExtent2D,
+    pub max_image_array_layers: usize,
+    pub supported_transforms: VkSurfaceTransformFlags,
+    pub current_transform: VkSurfaceTransformFlags,
+    pub supported_composite_alpha: VkCompositeAlphaFlags,
+    pub supported_usage_flags: VkImageUsageFlags,
+    pub supported_surface_counters: VkSurfaceCounterFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities2 {
@@ -38,19 +53,22 @@ pub struct RawVkSurfaceCapabilities2 {
     pub supported_surface_counters: RawVkSurfaceCounterFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSurfaceCapabilities2 {
-    pub min_image_count: usize,
-    pub max_image_count: usize,
-    pub current_extent: VkExtent2D,
-    pub min_image_extent: VkExtent2D,
-    pub max_image_extent: VkExtent2D,
-    pub max_image_array_layers: usize,
-    pub supported_transforms: VkSurfaceTransformFlags,
-    pub current_transform: VkSurfaceTransformFlags,
-    pub supported_composite_alpha: VkCompositeAlphaFlags,
-    pub supported_usage_flags: VkImageUsageFlags,
-    pub supported_surface_counters: VkSurfaceCounterFlags,
+impl VkWrappedType<RawVkSurfaceCapabilities2> for VkSurfaceCapabilities2 {
+    fn vk_to_raw(src: &VkSurfaceCapabilities2, dst: &mut RawVkSurfaceCapabilities2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceCapabilities2Ext);
+        dst.next = ptr::null();
+        dst.min_image_count = vk_to_raw_value(&src.min_image_count);
+        dst.max_image_count = vk_to_raw_value(&src.max_image_count);
+        dst.current_extent = vk_to_raw_value(&src.current_extent);
+        dst.min_image_extent = vk_to_raw_value(&src.min_image_extent);
+        dst.max_image_extent = vk_to_raw_value(&src.max_image_extent);
+        dst.max_image_array_layers = vk_to_raw_value(&src.max_image_array_layers);
+        dst.supported_transforms = vk_to_raw_value(&src.supported_transforms);
+        dst.current_transform = vk_to_raw_value(&src.current_transform);
+        dst.supported_composite_alpha = vk_to_raw_value(&src.supported_composite_alpha);
+        dst.supported_usage_flags = vk_to_raw_value(&src.supported_usage_flags);
+        dst.supported_surface_counters = vk_to_raw_value(&src.supported_surface_counters);
+    }
 }
 
 impl VkRawType<VkSurfaceCapabilities2> for RawVkSurfaceCapabilities2 {
@@ -68,24 +86,6 @@ impl VkRawType<VkSurfaceCapabilities2> for RawVkSurfaceCapabilities2 {
             supported_usage_flags: RawVkImageUsageFlags::vk_to_wrapped(&src.supported_usage_flags),
             supported_surface_counters: RawVkSurfaceCounterFlags::vk_to_wrapped(&src.supported_surface_counters),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSurfaceCapabilities2> for VkSurfaceCapabilities2 {
-    fn vk_to_raw(src: &VkSurfaceCapabilities2, dst: &mut RawVkSurfaceCapabilities2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceCapabilities2Ext);
-        dst.next = ptr::null();
-        dst.min_image_count = vk_to_raw_value(&src.min_image_count);
-        dst.max_image_count = vk_to_raw_value(&src.max_image_count);
-        dst.current_extent = vk_to_raw_value(&src.current_extent);
-        dst.min_image_extent = vk_to_raw_value(&src.min_image_extent);
-        dst.max_image_extent = vk_to_raw_value(&src.max_image_extent);
-        dst.max_image_array_layers = vk_to_raw_value(&src.max_image_array_layers);
-        dst.supported_transforms = vk_to_raw_value(&src.supported_transforms);
-        dst.current_transform = vk_to_raw_value(&src.current_transform);
-        dst.supported_composite_alpha = vk_to_raw_value(&src.supported_composite_alpha);
-        dst.supported_usage_flags = vk_to_raw_value(&src.supported_usage_flags);
-        dst.supported_surface_counters = vk_to_raw_value(&src.supported_surface_counters);
     }
 }
 

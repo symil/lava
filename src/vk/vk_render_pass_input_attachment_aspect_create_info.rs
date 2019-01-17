@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_input_attachment_aspect_reference::*;
 
+#[derive(Debug, Clone)]
+pub struct VkRenderPassInputAttachmentAspectCreateInfo<'a> {
+    pub aspect_references: &'a [VkInputAttachmentAspectReference],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassInputAttachmentAspectCreateInfo {
@@ -23,11 +28,6 @@ pub struct RawVkRenderPassInputAttachmentAspectCreateInfo {
     pub next: *const c_void,
     pub aspect_reference_count: u32,
     pub aspect_references: *mut RawVkInputAttachmentAspectReference,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkRenderPassInputAttachmentAspectCreateInfo<'a> {
-    pub aspect_references: &'a [VkInputAttachmentAspectReference],
 }
 
 impl<'a> VkWrappedType<RawVkRenderPassInputAttachmentAspectCreateInfo> for VkRenderPassInputAttachmentAspectCreateInfo<'a> {

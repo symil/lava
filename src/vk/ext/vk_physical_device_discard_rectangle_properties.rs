@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceDiscardRectangleProperties {
+    pub max_discard_rectangles: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDiscardRectangleProperties {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceDiscardRectangleProperties {
     pub max_discard_rectangles: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceDiscardRectangleProperties {
-    pub max_discard_rectangles: usize,
+impl VkWrappedType<RawVkPhysicalDeviceDiscardRectangleProperties> for VkPhysicalDeviceDiscardRectangleProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceDiscardRectangleProperties, dst: &mut RawVkPhysicalDeviceDiscardRectangleProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDiscardRectanglePropertiesExt);
+        dst.next = ptr::null();
+        dst.max_discard_rectangles = vk_to_raw_value(&src.max_discard_rectangles);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceDiscardRectangleProperties> for RawVkPhysicalDeviceDiscardRectangleProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceDiscardRectangleProperties> for RawVkPhysicalDevi
         VkPhysicalDeviceDiscardRectangleProperties {
             max_discard_rectangles: u32::vk_to_wrapped(&src.max_discard_rectangles),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceDiscardRectangleProperties> for VkPhysicalDeviceDiscardRectangleProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceDiscardRectangleProperties, dst: &mut RawVkPhysicalDeviceDiscardRectangleProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDiscardRectanglePropertiesExt);
-        dst.next = ptr::null();
-        dst.max_discard_rectangles = vk_to_raw_value(&src.max_discard_rectangles);
     }
 }
 

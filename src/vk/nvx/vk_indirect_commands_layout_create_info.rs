@@ -18,6 +18,13 @@ use vk::vk_pipeline_bind_point::*;
 use vk::nvx::vk_indirect_commands_layout_usage_flags::*;
 use vk::nvx::vk_indirect_commands_layout_token::*;
 
+#[derive(Debug, Clone)]
+pub struct VkIndirectCommandsLayoutCreateInfo<'a> {
+    pub pipeline_bind_point: VkPipelineBindPoint,
+    pub flags: VkIndirectCommandsLayoutUsageFlags,
+    pub tokens: &'a [VkIndirectCommandsLayoutToken],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkIndirectCommandsLayoutCreateInfo {
@@ -27,13 +34,6 @@ pub struct RawVkIndirectCommandsLayoutCreateInfo {
     pub flags: RawVkIndirectCommandsLayoutUsageFlags,
     pub token_count: u32,
     pub tokens: *mut RawVkIndirectCommandsLayoutToken,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkIndirectCommandsLayoutCreateInfo<'a> {
-    pub pipeline_bind_point: VkPipelineBindPoint,
-    pub flags: VkIndirectCommandsLayoutUsageFlags,
-    pub tokens: &'a [VkIndirectCommandsLayoutToken],
 }
 
 impl<'a> VkWrappedType<RawVkIndirectCommandsLayoutCreateInfo> for VkIndirectCommandsLayoutCreateInfo<'a> {

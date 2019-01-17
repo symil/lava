@@ -16,6 +16,18 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_xycolor::*;
 
+#[derive(Debug, Clone)]
+pub struct VkHdrMetadata {
+    pub display_primary_red: VkXYColor,
+    pub display_primary_green: VkXYColor,
+    pub display_primary_blue: VkXYColor,
+    pub white_point: VkXYColor,
+    pub max_luminance: f32,
+    pub min_luminance: f32,
+    pub max_content_light_level: f32,
+    pub max_frame_average_light_level: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkHdrMetadata {
@@ -31,16 +43,19 @@ pub struct RawVkHdrMetadata {
     pub max_frame_average_light_level: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkHdrMetadata {
-    pub display_primary_red: VkXYColor,
-    pub display_primary_green: VkXYColor,
-    pub display_primary_blue: VkXYColor,
-    pub white_point: VkXYColor,
-    pub max_luminance: f32,
-    pub min_luminance: f32,
-    pub max_content_light_level: f32,
-    pub max_frame_average_light_level: f32,
+impl VkWrappedType<RawVkHdrMetadata> for VkHdrMetadata {
+    fn vk_to_raw(src: &VkHdrMetadata, dst: &mut RawVkHdrMetadata) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::HdrMetadataExt);
+        dst.next = ptr::null();
+        dst.display_primary_red = vk_to_raw_value(&src.display_primary_red);
+        dst.display_primary_green = vk_to_raw_value(&src.display_primary_green);
+        dst.display_primary_blue = vk_to_raw_value(&src.display_primary_blue);
+        dst.white_point = vk_to_raw_value(&src.white_point);
+        dst.max_luminance = src.max_luminance;
+        dst.min_luminance = src.min_luminance;
+        dst.max_content_light_level = src.max_content_light_level;
+        dst.max_frame_average_light_level = src.max_frame_average_light_level;
+    }
 }
 
 impl VkRawType<VkHdrMetadata> for RawVkHdrMetadata {
@@ -55,21 +70,6 @@ impl VkRawType<VkHdrMetadata> for RawVkHdrMetadata {
             max_content_light_level: src.max_content_light_level,
             max_frame_average_light_level: src.max_frame_average_light_level,
         }
-    }
-}
-
-impl VkWrappedType<RawVkHdrMetadata> for VkHdrMetadata {
-    fn vk_to_raw(src: &VkHdrMetadata, dst: &mut RawVkHdrMetadata) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::HdrMetadataExt);
-        dst.next = ptr::null();
-        dst.display_primary_red = vk_to_raw_value(&src.display_primary_red);
-        dst.display_primary_green = vk_to_raw_value(&src.display_primary_green);
-        dst.display_primary_blue = vk_to_raw_value(&src.display_primary_blue);
-        dst.white_point = vk_to_raw_value(&src.white_point);
-        dst.max_luminance = src.max_luminance;
-        dst.min_luminance = src.min_luminance;
-        dst.max_content_light_level = src.max_content_light_level;
-        dst.max_frame_average_light_level = src.max_frame_average_light_level;
     }
 }
 

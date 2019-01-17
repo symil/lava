@@ -18,6 +18,13 @@ use vk::vk_buffer_create_flags::*;
 use vk::vk_buffer_usage_flags::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceExternalBufferInfo {
+    pub flags: VkBufferCreateFlags,
+    pub usage: VkBufferUsageFlags,
+    pub handle_type: VkExternalMemoryHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalBufferInfo {
@@ -28,11 +35,14 @@ pub struct RawVkPhysicalDeviceExternalBufferInfo {
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceExternalBufferInfo {
-    pub flags: VkBufferCreateFlags,
-    pub usage: VkBufferUsageFlags,
-    pub handle_type: VkExternalMemoryHandleTypeFlags,
+impl VkWrappedType<RawVkPhysicalDeviceExternalBufferInfo> for VkPhysicalDeviceExternalBufferInfo {
+    fn vk_to_raw(src: &VkPhysicalDeviceExternalBufferInfo, dst: &mut RawVkPhysicalDeviceExternalBufferInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalBufferInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.usage = vk_to_raw_value(&src.usage);
+        dst.handle_type = vk_to_raw_value(&src.handle_type);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceExternalBufferInfo> for RawVkPhysicalDeviceExternalBufferInfo {
@@ -42,16 +52,6 @@ impl VkRawType<VkPhysicalDeviceExternalBufferInfo> for RawVkPhysicalDeviceExtern
             usage: RawVkBufferUsageFlags::vk_to_wrapped(&src.usage),
             handle_type: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.handle_type),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceExternalBufferInfo> for VkPhysicalDeviceExternalBufferInfo {
-    fn vk_to_raw(src: &VkPhysicalDeviceExternalBufferInfo, dst: &mut RawVkPhysicalDeviceExternalBufferInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalBufferInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.usage = vk_to_raw_value(&src.usage);
-        dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }
 

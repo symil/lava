@@ -14,6 +14,12 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSampleLocation {
+    pub x: f32,
+    pub y: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSampleLocation {
@@ -21,10 +27,11 @@ pub struct RawVkSampleLocation {
     pub y: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSampleLocation {
-    pub x: f32,
-    pub y: f32,
+impl VkWrappedType<RawVkSampleLocation> for VkSampleLocation {
+    fn vk_to_raw(src: &VkSampleLocation, dst: &mut RawVkSampleLocation) {
+        dst.x = src.x;
+        dst.y = src.y;
+    }
 }
 
 impl VkRawType<VkSampleLocation> for RawVkSampleLocation {
@@ -33,13 +40,6 @@ impl VkRawType<VkSampleLocation> for RawVkSampleLocation {
             x: src.x,
             y: src.y,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSampleLocation> for VkSampleLocation {
-    fn vk_to_raw(src: &VkSampleLocation, dst: &mut RawVkSampleLocation) {
-        dst.x = src.x;
-        dst.y = src.y;
     }
 }
 

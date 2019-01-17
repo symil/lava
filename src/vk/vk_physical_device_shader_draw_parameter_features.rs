@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceShaderDrawParameterFeatures {
+    pub shader_draw_parameters: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShaderDrawParameterFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceShaderDrawParameterFeatures {
     pub shader_draw_parameters: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceShaderDrawParameterFeatures {
-    pub shader_draw_parameters: bool,
+impl VkWrappedType<RawVkPhysicalDeviceShaderDrawParameterFeatures> for VkPhysicalDeviceShaderDrawParameterFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceShaderDrawParameterFeatures, dst: &mut RawVkPhysicalDeviceShaderDrawParameterFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderDrawParameterFeatures);
+        dst.next = ptr::null();
+        dst.shader_draw_parameters = vk_to_raw_value(&src.shader_draw_parameters);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceShaderDrawParameterFeatures> for RawVkPhysicalDeviceShaderDrawParameterFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceShaderDrawParameterFeatures> for RawVkPhysicalDev
         VkPhysicalDeviceShaderDrawParameterFeatures {
             shader_draw_parameters: u32::vk_to_wrapped(&src.shader_draw_parameters),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceShaderDrawParameterFeatures> for VkPhysicalDeviceShaderDrawParameterFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceShaderDrawParameterFeatures, dst: &mut RawVkPhysicalDeviceShaderDrawParameterFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderDrawParameterFeatures);
-        dst.next = ptr::null();
-        dst.shader_draw_parameters = vk_to_raw_value(&src.shader_draw_parameters);
     }
 }
 

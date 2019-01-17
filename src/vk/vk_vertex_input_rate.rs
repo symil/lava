@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkVertexInputRate = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkVertexInputRate {
@@ -11,17 +9,19 @@ pub enum VkVertexInputRate {
     Instance = 1,
 }
 
+pub type RawVkVertexInputRate = i32;
+
+impl VkWrappedType<RawVkVertexInputRate> for VkVertexInputRate {
+    fn vk_to_raw(src: &VkVertexInputRate, dst: &mut RawVkVertexInputRate) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkVertexInputRate> for RawVkVertexInputRate {
     fn vk_to_wrapped(src: &RawVkVertexInputRate) -> VkVertexInputRate {
         unsafe {
             *((src as *const i32) as *const VkVertexInputRate)
         }
-    }
-}
-
-impl VkWrappedType<RawVkVertexInputRate> for VkVertexInputRate {
-    fn vk_to_raw(src: &VkVertexInputRate, dst: &mut RawVkVertexInputRate) {
-        *dst = *src as i32
     }
 }
 

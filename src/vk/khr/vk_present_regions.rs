@@ -16,6 +16,14 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_present_region::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPresentRegions<'a, 'b>
+    where
+        'b: 'a,
+{
+    pub regions: Option<&'a [VkPresentRegion<'b>]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentRegions {
@@ -23,14 +31,6 @@ pub struct RawVkPresentRegions {
     pub next: *const c_void,
     pub swapchain_count: u32,
     pub regions: *mut RawVkPresentRegion,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPresentRegions<'a, 'b>
-    where
-        'b: 'a,
-{
-    pub regions: Option<&'a [VkPresentRegion<'b>]>,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkPresentRegions> for VkPresentRegions<'a, 'b>

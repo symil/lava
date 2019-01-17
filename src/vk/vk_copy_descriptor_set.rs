@@ -16,6 +16,17 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_descriptor_set::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCopyDescriptorSet<'a, 'b> {
+    pub src_set: &'a VkDescriptorSet,
+    pub src_binding: usize,
+    pub src_array_element: usize,
+    pub dst_set: &'b VkDescriptorSet,
+    pub dst_binding: usize,
+    pub dst_array_element: usize,
+    pub descriptor_count: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCopyDescriptorSet {
@@ -28,17 +39,6 @@ pub struct RawVkCopyDescriptorSet {
     pub dst_binding: u32,
     pub dst_array_element: u32,
     pub descriptor_count: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkCopyDescriptorSet<'a, 'b> {
-    pub src_set: &'a VkDescriptorSet,
-    pub src_binding: usize,
-    pub src_array_element: usize,
-    pub dst_set: &'b VkDescriptorSet,
-    pub dst_binding: usize,
-    pub dst_array_element: usize,
-    pub descriptor_count: usize,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkCopyDescriptorSet> for VkCopyDescriptorSet<'a, 'b> {

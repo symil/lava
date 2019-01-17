@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::nv::vk_viewport_wscaling::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineViewportWScalingStateCreateInfo<'a> {
+    pub viewport_wscaling_enable: bool,
+    pub viewport_wscalings: Option<&'a [VkViewportWScaling]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportWScalingStateCreateInfo {
@@ -24,12 +30,6 @@ pub struct RawVkPipelineViewportWScalingStateCreateInfo {
     pub viewport_wscaling_enable: u32,
     pub viewport_count: u32,
     pub viewport_wscalings: *mut RawVkViewportWScaling,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineViewportWScalingStateCreateInfo<'a> {
-    pub viewport_wscaling_enable: bool,
-    pub viewport_wscalings: Option<&'a [VkViewportWScaling]>,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineViewportWScalingStateCreateInfo> for VkPipelineViewportWScalingStateCreateInfo<'a> {

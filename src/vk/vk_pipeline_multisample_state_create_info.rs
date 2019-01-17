@@ -17,6 +17,17 @@ use vk::vk_structure_type::*;
 use vk::vk_pipeline_multisample_state_create_flags::*;
 use vk::vk_sample_count_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineMultisampleStateCreateInfo<'a> {
+    pub flags: VkPipelineMultisampleStateCreateFlags,
+    pub rasterization_samples: VkSampleCountFlags,
+    pub sample_shading_enable: bool,
+    pub min_sample_shading: f32,
+    pub sample_mask: Option<&'a [u32]>,
+    pub alpha_to_coverage_enable: bool,
+    pub alpha_to_one_enable: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineMultisampleStateCreateInfo {
@@ -29,17 +40,6 @@ pub struct RawVkPipelineMultisampleStateCreateInfo {
     pub sample_mask: *const u32,
     pub alpha_to_coverage_enable: u32,
     pub alpha_to_one_enable: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineMultisampleStateCreateInfo<'a> {
-    pub flags: VkPipelineMultisampleStateCreateFlags,
-    pub rasterization_samples: VkSampleCountFlags,
-    pub sample_shading_enable: bool,
-    pub min_sample_shading: f32,
-    pub sample_mask: Option<&'a [u32]>,
-    pub alpha_to_coverage_enable: bool,
-    pub alpha_to_one_enable: bool,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineMultisampleStateCreateInfo> for VkPipelineMultisampleStateCreateInfo<'a> {

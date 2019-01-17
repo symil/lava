@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineRepresentativeFragmentTestStateCreateInfo {
+    pub representative_fragment_test_enable: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRepresentativeFragmentTestStateCreateInfo {
@@ -23,9 +28,12 @@ pub struct RawVkPipelineRepresentativeFragmentTestStateCreateInfo {
     pub representative_fragment_test_enable: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineRepresentativeFragmentTestStateCreateInfo {
-    pub representative_fragment_test_enable: bool,
+impl VkWrappedType<RawVkPipelineRepresentativeFragmentTestStateCreateInfo> for VkPipelineRepresentativeFragmentTestStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineRepresentativeFragmentTestStateCreateInfo, dst: &mut RawVkPipelineRepresentativeFragmentTestStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRepresentativeFragmentTestStateCreateInfoNv);
+        dst.next = ptr::null();
+        dst.representative_fragment_test_enable = vk_to_raw_value(&src.representative_fragment_test_enable);
+    }
 }
 
 impl VkRawType<VkPipelineRepresentativeFragmentTestStateCreateInfo> for RawVkPipelineRepresentativeFragmentTestStateCreateInfo {
@@ -33,14 +41,6 @@ impl VkRawType<VkPipelineRepresentativeFragmentTestStateCreateInfo> for RawVkPip
         VkPipelineRepresentativeFragmentTestStateCreateInfo {
             representative_fragment_test_enable: u32::vk_to_wrapped(&src.representative_fragment_test_enable),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineRepresentativeFragmentTestStateCreateInfo> for VkPipelineRepresentativeFragmentTestStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineRepresentativeFragmentTestStateCreateInfo, dst: &mut RawVkPipelineRepresentativeFragmentTestStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRepresentativeFragmentTestStateCreateInfoNv);
-        dst.next = ptr::null();
-        dst.representative_fragment_test_enable = vk_to_raw_value(&src.representative_fragment_test_enable);
     }
 }
 

@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_shader_stage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPushConstantRange {
+    pub stage_flags: VkShaderStageFlags,
+    pub offset: usize,
+    pub size: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPushConstantRange {
@@ -23,11 +30,12 @@ pub struct RawVkPushConstantRange {
     pub size: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPushConstantRange {
-    pub stage_flags: VkShaderStageFlags,
-    pub offset: usize,
-    pub size: usize,
+impl VkWrappedType<RawVkPushConstantRange> for VkPushConstantRange {
+    fn vk_to_raw(src: &VkPushConstantRange, dst: &mut RawVkPushConstantRange) {
+        dst.stage_flags = vk_to_raw_value(&src.stage_flags);
+        dst.offset = vk_to_raw_value(&src.offset);
+        dst.size = vk_to_raw_value(&src.size);
+    }
 }
 
 impl VkRawType<VkPushConstantRange> for RawVkPushConstantRange {
@@ -37,14 +45,6 @@ impl VkRawType<VkPushConstantRange> for RawVkPushConstantRange {
             offset: u32::vk_to_wrapped(&src.offset),
             size: u32::vk_to_wrapped(&src.size),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPushConstantRange> for VkPushConstantRange {
-    fn vk_to_raw(src: &VkPushConstantRange, dst: &mut RawVkPushConstantRange) {
-        dst.stage_flags = vk_to_raw_value(&src.stage_flags);
-        dst.offset = vk_to_raw_value(&src.offset);
-        dst.size = vk_to_raw_value(&src.size);
     }
 }
 

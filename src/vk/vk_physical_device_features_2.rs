@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_physical_device_features::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceFeatures2 {
+    pub features: VkPhysicalDeviceFeatures,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFeatures2 {
@@ -24,9 +29,12 @@ pub struct RawVkPhysicalDeviceFeatures2 {
     pub features: RawVkPhysicalDeviceFeatures,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceFeatures2 {
-    pub features: VkPhysicalDeviceFeatures,
+impl VkWrappedType<RawVkPhysicalDeviceFeatures2> for VkPhysicalDeviceFeatures2 {
+    fn vk_to_raw(src: &VkPhysicalDeviceFeatures2, dst: &mut RawVkPhysicalDeviceFeatures2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFeatures2);
+        dst.next = ptr::null();
+        dst.features = vk_to_raw_value(&src.features);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceFeatures2> for RawVkPhysicalDeviceFeatures2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkPhysicalDeviceFeatures2> for RawVkPhysicalDeviceFeatures2 {
         VkPhysicalDeviceFeatures2 {
             features: RawVkPhysicalDeviceFeatures::vk_to_wrapped(&src.features),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceFeatures2> for VkPhysicalDeviceFeatures2 {
-    fn vk_to_raw(src: &VkPhysicalDeviceFeatures2, dst: &mut RawVkPhysicalDeviceFeatures2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFeatures2);
-        dst.next = ptr::null();
-        dst.features = vk_to_raw_value(&src.features);
     }
 }
 

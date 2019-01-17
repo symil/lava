@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryDedicatedRequirements {
+    pub prefers_dedicated_allocation: bool,
+    pub requires_dedicated_allocation: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryDedicatedRequirements {
@@ -24,10 +30,13 @@ pub struct RawVkMemoryDedicatedRequirements {
     pub requires_dedicated_allocation: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryDedicatedRequirements {
-    pub prefers_dedicated_allocation: bool,
-    pub requires_dedicated_allocation: bool,
+impl VkWrappedType<RawVkMemoryDedicatedRequirements> for VkMemoryDedicatedRequirements {
+    fn vk_to_raw(src: &VkMemoryDedicatedRequirements, dst: &mut RawVkMemoryDedicatedRequirements) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryDedicatedRequirements);
+        dst.next = ptr::null();
+        dst.prefers_dedicated_allocation = vk_to_raw_value(&src.prefers_dedicated_allocation);
+        dst.requires_dedicated_allocation = vk_to_raw_value(&src.requires_dedicated_allocation);
+    }
 }
 
 impl VkRawType<VkMemoryDedicatedRequirements> for RawVkMemoryDedicatedRequirements {
@@ -36,15 +45,6 @@ impl VkRawType<VkMemoryDedicatedRequirements> for RawVkMemoryDedicatedRequiremen
             prefers_dedicated_allocation: u32::vk_to_wrapped(&src.prefers_dedicated_allocation),
             requires_dedicated_allocation: u32::vk_to_wrapped(&src.requires_dedicated_allocation),
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryDedicatedRequirements> for VkMemoryDedicatedRequirements {
-    fn vk_to_raw(src: &VkMemoryDedicatedRequirements, dst: &mut RawVkMemoryDedicatedRequirements) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryDedicatedRequirements);
-        dst.next = ptr::null();
-        dst.prefers_dedicated_allocation = vk_to_raw_value(&src.prefers_dedicated_allocation);
-        dst.requires_dedicated_allocation = vk_to_raw_value(&src.requires_dedicated_allocation);
     }
 }
 

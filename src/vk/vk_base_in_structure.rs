@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBaseInStructure {
+    pub s_type: VkStructureType,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBaseInStructure {
@@ -22,9 +27,11 @@ pub struct RawVkBaseInStructure {
     pub next: *const c_void,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkBaseInStructure {
-    pub s_type: VkStructureType,
+impl VkWrappedType<RawVkBaseInStructure> for VkBaseInStructure {
+    fn vk_to_raw(src: &VkBaseInStructure, dst: &mut RawVkBaseInStructure) {
+        dst.s_type = vk_to_raw_value(&src.s_type);
+        dst.next = ptr::null();
+    }
 }
 
 impl VkRawType<VkBaseInStructure> for RawVkBaseInStructure {
@@ -32,13 +39,6 @@ impl VkRawType<VkBaseInStructure> for RawVkBaseInStructure {
         VkBaseInStructure {
             s_type: RawVkStructureType::vk_to_wrapped(&src.s_type),
         }
-    }
-}
-
-impl VkWrappedType<RawVkBaseInStructure> for VkBaseInStructure {
-    fn vk_to_raw(src: &VkBaseInStructure, dst: &mut RawVkBaseInStructure) {
-        dst.s_type = vk_to_raw_value(&src.s_type);
-        dst.next = ptr::null();
     }
 }
 

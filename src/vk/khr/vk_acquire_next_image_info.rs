@@ -18,6 +18,15 @@ use vk::khr::vk_swapchain::*;
 use vk::vk_semaphore::*;
 use vk::vk_fence::*;
 
+#[derive(Debug, Clone)]
+pub struct VkAcquireNextImageInfo<'a, 'b, 'c> {
+    pub swapchain: &'a VkSwapchain,
+    pub timeout: u64,
+    pub semaphore: Option<&'b VkSemaphore>,
+    pub fence: Option<&'c VkFence>,
+    pub device_mask: u32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAcquireNextImageInfo {
@@ -27,15 +36,6 @@ pub struct RawVkAcquireNextImageInfo {
     pub timeout: u64,
     pub semaphore: RawVkSemaphore,
     pub fence: RawVkFence,
-    pub device_mask: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkAcquireNextImageInfo<'a, 'b, 'c> {
-    pub swapchain: &'a VkSwapchain,
-    pub timeout: u64,
-    pub semaphore: Option<&'b VkSemaphore>,
-    pub fence: Option<&'c VkFence>,
     pub device_mask: u32,
 }
 

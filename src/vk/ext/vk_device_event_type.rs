@@ -2,12 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDeviceEventType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDeviceEventType {
     DisplayHotplug = 0,
+}
+
+pub type RawVkDeviceEventType = i32;
+
+impl VkWrappedType<RawVkDeviceEventType> for VkDeviceEventType {
+    fn vk_to_raw(src: &VkDeviceEventType, dst: &mut RawVkDeviceEventType) {
+        *dst = *src as i32
+    }
 }
 
 impl VkRawType<VkDeviceEventType> for RawVkDeviceEventType {
@@ -15,12 +21,6 @@ impl VkRawType<VkDeviceEventType> for RawVkDeviceEventType {
         unsafe {
             *((src as *const i32) as *const VkDeviceEventType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceEventType> for VkDeviceEventType {
-    fn vk_to_raw(src: &VkDeviceEventType, dst: &mut RawVkDeviceEventType) {
-        *dst = *src as i32
     }
 }
 

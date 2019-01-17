@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBufferMemoryRequirementsInfo2<'a> {
+    pub buffer: &'a VkBuffer,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferMemoryRequirementsInfo2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub buffer: RawVkBuffer,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBufferMemoryRequirementsInfo2<'a> {
-    pub buffer: &'a VkBuffer,
 }
 
 impl<'a> VkWrappedType<RawVkBufferMemoryRequirementsInfo2> for VkBufferMemoryRequirementsInfo2<'a> {

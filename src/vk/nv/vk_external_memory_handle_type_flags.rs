@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkExternalMemoryHandleTypeFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalMemoryHandleTypeFlags {
     pub opaque_win_32: bool,
     pub opaque_win_32_kmt: bool,
     pub d_3d_11_image: bool,
     pub d_3d_11_image_kmt: bool,
+}
+
+pub type RawVkExternalMemoryHandleTypeFlags = u32;
+
+impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandleTypeFlags {
+    fn vk_to_raw(src: &VkExternalMemoryHandleTypeFlags, dst: &mut RawVkExternalMemoryHandleTypeFlags) {
+        *dst = 0;
+        if src.opaque_win_32 { *dst |= 0x00000001; }
+        if src.opaque_win_32_kmt { *dst |= 0x00000002; }
+        if src.d_3d_11_image { *dst |= 0x00000004; }
+        if src.d_3d_11_image_kmt { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkExternalMemoryHandleTypeFlags> for RawVkExternalMemoryHandleTypeFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkExternalMemoryHandleTypeFlags> for RawVkExternalMemoryHandleTyp
             d_3d_11_image: (src & 0x00000004) != 0,
             d_3d_11_image_kmt: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandleTypeFlags {
-    fn vk_to_raw(src: &VkExternalMemoryHandleTypeFlags, dst: &mut RawVkExternalMemoryHandleTypeFlags) {
-        *dst = 0;
-        if src.opaque_win_32 { *dst |= 0x00000001; }
-        if src.opaque_win_32_kmt { *dst |= 0x00000002; }
-        if src.d_3d_11_image { *dst |= 0x00000004; }
-        if src.d_3d_11_image_kmt { *dst |= 0x00000008; }
     }
 }
 

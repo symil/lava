@@ -2,12 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineCacheHeaderVersion = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPipelineCacheHeaderVersion {
     One = 1,
+}
+
+pub type RawVkPipelineCacheHeaderVersion = i32;
+
+impl VkWrappedType<RawVkPipelineCacheHeaderVersion> for VkPipelineCacheHeaderVersion {
+    fn vk_to_raw(src: &VkPipelineCacheHeaderVersion, dst: &mut RawVkPipelineCacheHeaderVersion) {
+        *dst = *src as i32
+    }
 }
 
 impl VkRawType<VkPipelineCacheHeaderVersion> for RawVkPipelineCacheHeaderVersion {
@@ -15,12 +21,6 @@ impl VkRawType<VkPipelineCacheHeaderVersion> for RawVkPipelineCacheHeaderVersion
         unsafe {
             *((src as *const i32) as *const VkPipelineCacheHeaderVersion)
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineCacheHeaderVersion> for VkPipelineCacheHeaderVersion {
-    fn vk_to_raw(src: &VkPipelineCacheHeaderVersion, dst: &mut RawVkPipelineCacheHeaderVersion) {
-        *dst = *src as i32
     }
 }
 

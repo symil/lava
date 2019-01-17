@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkIndirectCommandsLayoutUsageFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkIndirectCommandsLayoutUsageFlags {
     pub unordered_sequences: bool,
     pub sparse_sequences: bool,
     pub empty_executions: bool,
     pub indexed_sequences: bool,
+}
+
+pub type RawVkIndirectCommandsLayoutUsageFlags = u32;
+
+impl VkWrappedType<RawVkIndirectCommandsLayoutUsageFlags> for VkIndirectCommandsLayoutUsageFlags {
+    fn vk_to_raw(src: &VkIndirectCommandsLayoutUsageFlags, dst: &mut RawVkIndirectCommandsLayoutUsageFlags) {
+        *dst = 0;
+        if src.unordered_sequences { *dst |= 0x00000001; }
+        if src.sparse_sequences { *dst |= 0x00000002; }
+        if src.empty_executions { *dst |= 0x00000004; }
+        if src.indexed_sequences { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkIndirectCommandsLayoutUsageFlags> for RawVkIndirectCommandsLayoutUsageFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkIndirectCommandsLayoutUsageFlags> for RawVkIndirectCommandsLayo
             empty_executions: (src & 0x00000004) != 0,
             indexed_sequences: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkIndirectCommandsLayoutUsageFlags> for VkIndirectCommandsLayoutUsageFlags {
-    fn vk_to_raw(src: &VkIndirectCommandsLayoutUsageFlags, dst: &mut RawVkIndirectCommandsLayoutUsageFlags) {
-        *dst = 0;
-        if src.unordered_sequences { *dst |= 0x00000001; }
-        if src.sparse_sequences { *dst |= 0x00000002; }
-        if src.empty_executions { *dst |= 0x00000004; }
-        if src.indexed_sequences { *dst |= 0x00000008; }
     }
 }
 

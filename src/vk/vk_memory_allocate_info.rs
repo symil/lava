@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryAllocateInfo {
+    pub allocation_size: usize,
+    pub memory_type_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryAllocateInfo {
@@ -24,10 +30,13 @@ pub struct RawVkMemoryAllocateInfo {
     pub memory_type_index: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryAllocateInfo {
-    pub allocation_size: usize,
-    pub memory_type_index: usize,
+impl VkWrappedType<RawVkMemoryAllocateInfo> for VkMemoryAllocateInfo {
+    fn vk_to_raw(src: &VkMemoryAllocateInfo, dst: &mut RawVkMemoryAllocateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryAllocateInfo);
+        dst.next = ptr::null();
+        dst.allocation_size = vk_to_raw_value(&src.allocation_size);
+        dst.memory_type_index = vk_to_raw_value(&src.memory_type_index);
+    }
 }
 
 impl VkRawType<VkMemoryAllocateInfo> for RawVkMemoryAllocateInfo {
@@ -36,15 +45,6 @@ impl VkRawType<VkMemoryAllocateInfo> for RawVkMemoryAllocateInfo {
             allocation_size: u64::vk_to_wrapped(&src.allocation_size),
             memory_type_index: u32::vk_to_wrapped(&src.memory_type_index),
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryAllocateInfo> for VkMemoryAllocateInfo {
-    fn vk_to_raw(src: &VkMemoryAllocateInfo, dst: &mut RawVkMemoryAllocateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryAllocateInfo);
-        dst.next = ptr::null();
-        dst.allocation_size = vk_to_raw_value(&src.allocation_size);
-        dst.memory_type_index = vk_to_raw_value(&src.memory_type_index);
     }
 }
 

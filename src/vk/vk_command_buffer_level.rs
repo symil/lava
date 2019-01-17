@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCommandBufferLevel = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkCommandBufferLevel {
@@ -11,17 +9,19 @@ pub enum VkCommandBufferLevel {
     Secondary = 1,
 }
 
+pub type RawVkCommandBufferLevel = i32;
+
+impl VkWrappedType<RawVkCommandBufferLevel> for VkCommandBufferLevel {
+    fn vk_to_raw(src: &VkCommandBufferLevel, dst: &mut RawVkCommandBufferLevel) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkCommandBufferLevel> for RawVkCommandBufferLevel {
     fn vk_to_wrapped(src: &RawVkCommandBufferLevel) -> VkCommandBufferLevel {
         unsafe {
             *((src as *const i32) as *const VkCommandBufferLevel)
         }
-    }
-}
-
-impl VkWrappedType<RawVkCommandBufferLevel> for VkCommandBufferLevel {
-    fn vk_to_raw(src: &VkCommandBufferLevel, dst: &mut RawVkCommandBufferLevel) {
-        *dst = *src as i32
     }
 }
 

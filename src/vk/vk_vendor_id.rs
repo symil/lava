@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkVendorId = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkVendorId {
@@ -12,17 +10,19 @@ pub enum VkVendorId {
     Kazan = 0x10003,
 }
 
+pub type RawVkVendorId = i32;
+
+impl VkWrappedType<RawVkVendorId> for VkVendorId {
+    fn vk_to_raw(src: &VkVendorId, dst: &mut RawVkVendorId) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkVendorId> for RawVkVendorId {
     fn vk_to_wrapped(src: &RawVkVendorId) -> VkVendorId {
         unsafe {
             *((src as *const i32) as *const VkVendorId)
         }
-    }
-}
-
-impl VkWrappedType<RawVkVendorId> for VkVendorId {
-    fn vk_to_raw(src: &VkVendorId, dst: &mut RawVkVendorId) {
-        *dst = *src as i32
     }
 }
 

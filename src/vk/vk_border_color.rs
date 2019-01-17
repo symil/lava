@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkBorderColor = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkBorderColor {
@@ -15,17 +13,19 @@ pub enum VkBorderColor {
     IntOpaqueWhite = 5,
 }
 
+pub type RawVkBorderColor = i32;
+
+impl VkWrappedType<RawVkBorderColor> for VkBorderColor {
+    fn vk_to_raw(src: &VkBorderColor, dst: &mut RawVkBorderColor) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkBorderColor> for RawVkBorderColor {
     fn vk_to_wrapped(src: &RawVkBorderColor) -> VkBorderColor {
         unsafe {
             *((src as *const i32) as *const VkBorderColor)
         }
-    }
-}
-
-impl VkWrappedType<RawVkBorderColor> for VkBorderColor {
-    fn vk_to_raw(src: &VkBorderColor, dst: &mut RawVkBorderColor) {
-        *dst = *src as i32
     }
 }
 

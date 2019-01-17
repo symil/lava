@@ -17,6 +17,16 @@ use vk::vk_image_subresource_layers::*;
 use vk::vk_offset_3d::*;
 use vk::vk_extent_3d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBufferImageCopy {
+    pub buffer_offset: usize,
+    pub buffer_row_length: usize,
+    pub buffer_image_height: usize,
+    pub image_subresource: VkImageSubresourceLayers,
+    pub image_offset: VkOffset3D,
+    pub image_extent: VkExtent3D,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferImageCopy {
@@ -28,14 +38,15 @@ pub struct RawVkBufferImageCopy {
     pub image_extent: RawVkExtent3D,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkBufferImageCopy {
-    pub buffer_offset: usize,
-    pub buffer_row_length: usize,
-    pub buffer_image_height: usize,
-    pub image_subresource: VkImageSubresourceLayers,
-    pub image_offset: VkOffset3D,
-    pub image_extent: VkExtent3D,
+impl VkWrappedType<RawVkBufferImageCopy> for VkBufferImageCopy {
+    fn vk_to_raw(src: &VkBufferImageCopy, dst: &mut RawVkBufferImageCopy) {
+        dst.buffer_offset = vk_to_raw_value(&src.buffer_offset);
+        dst.buffer_row_length = vk_to_raw_value(&src.buffer_row_length);
+        dst.buffer_image_height = vk_to_raw_value(&src.buffer_image_height);
+        dst.image_subresource = vk_to_raw_value(&src.image_subresource);
+        dst.image_offset = vk_to_raw_value(&src.image_offset);
+        dst.image_extent = vk_to_raw_value(&src.image_extent);
+    }
 }
 
 impl VkRawType<VkBufferImageCopy> for RawVkBufferImageCopy {
@@ -48,17 +59,6 @@ impl VkRawType<VkBufferImageCopy> for RawVkBufferImageCopy {
             image_offset: RawVkOffset3D::vk_to_wrapped(&src.image_offset),
             image_extent: RawVkExtent3D::vk_to_wrapped(&src.image_extent),
         }
-    }
-}
-
-impl VkWrappedType<RawVkBufferImageCopy> for VkBufferImageCopy {
-    fn vk_to_raw(src: &VkBufferImageCopy, dst: &mut RawVkBufferImageCopy) {
-        dst.buffer_offset = vk_to_raw_value(&src.buffer_offset);
-        dst.buffer_row_length = vk_to_raw_value(&src.buffer_row_length);
-        dst.buffer_image_height = vk_to_raw_value(&src.buffer_image_height);
-        dst.image_subresource = vk_to_raw_value(&src.image_subresource);
-        dst.image_offset = vk_to_raw_value(&src.image_offset);
-        dst.image_extent = vk_to_raw_value(&src.image_extent);
     }
 }
 

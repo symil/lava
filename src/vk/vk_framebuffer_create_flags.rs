@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkFramebufferCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkFramebufferCreateFlags {
     
+}
+
+pub type RawVkFramebufferCreateFlags = u32;
+
+impl VkWrappedType<RawVkFramebufferCreateFlags> for VkFramebufferCreateFlags {
+    fn vk_to_raw(src: &VkFramebufferCreateFlags, dst: &mut RawVkFramebufferCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkFramebufferCreateFlags> for RawVkFramebufferCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkFramebufferCreateFlags> for RawVkFramebufferCreateFlags {
         VkFramebufferCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkFramebufferCreateFlags> for VkFramebufferCreateFlags {
-    fn vk_to_raw(src: &VkFramebufferCreateFlags, dst: &mut RawVkFramebufferCreateFlags) {
-        *dst = 0;
     }
 }
 

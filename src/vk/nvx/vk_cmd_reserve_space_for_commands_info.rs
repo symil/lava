@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::nvx::vk_object_table::*;
 use vk::nvx::vk_indirect_commands_layout::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCmdReserveSpaceForCommandsInfo<'a, 'b> {
+    pub object_table: &'a VkObjectTable,
+    pub indirect_commands_layout: &'b VkIndirectCommandsLayout,
+    pub max_sequences_count: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCmdReserveSpaceForCommandsInfo {
@@ -25,13 +32,6 @@ pub struct RawVkCmdReserveSpaceForCommandsInfo {
     pub object_table: RawVkObjectTable,
     pub indirect_commands_layout: RawVkIndirectCommandsLayout,
     pub max_sequences_count: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkCmdReserveSpaceForCommandsInfo<'a, 'b> {
-    pub object_table: &'a VkObjectTable,
-    pub indirect_commands_layout: &'b VkIndirectCommandsLayout,
-    pub max_sequences_count: usize,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkCmdReserveSpaceForCommandsInfo> for VkCmdReserveSpaceForCommandsInfo<'a, 'b> {

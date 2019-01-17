@@ -18,6 +18,14 @@ use vk::vk_semaphore::*;
 use vk::vk_semaphore_import_flags::*;
 use vk::vk_external_semaphore_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImportSemaphoreFdInfo<'a> {
+    pub semaphore: &'a VkSemaphore,
+    pub flags: VkSemaphoreImportFlags,
+    pub handle_type: VkExternalSemaphoreHandleTypeFlags,
+    pub fd: i32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportSemaphoreFdInfo {
@@ -26,14 +34,6 @@ pub struct RawVkImportSemaphoreFdInfo {
     pub semaphore: RawVkSemaphore,
     pub flags: RawVkSemaphoreImportFlags,
     pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
-    pub fd: i32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImportSemaphoreFdInfo<'a> {
-    pub semaphore: &'a VkSemaphore,
-    pub flags: VkSemaphoreImportFlags,
-    pub handle_type: VkExternalSemaphoreHandleTypeFlags,
     pub fd: i32,
 }
 

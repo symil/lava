@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPhysicalDeviceType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPhysicalDeviceType {
@@ -14,17 +12,19 @@ pub enum VkPhysicalDeviceType {
     Cpu = 4,
 }
 
+pub type RawVkPhysicalDeviceType = i32;
+
+impl VkWrappedType<RawVkPhysicalDeviceType> for VkPhysicalDeviceType {
+    fn vk_to_raw(src: &VkPhysicalDeviceType, dst: &mut RawVkPhysicalDeviceType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkPhysicalDeviceType> for RawVkPhysicalDeviceType {
     fn vk_to_wrapped(src: &RawVkPhysicalDeviceType) -> VkPhysicalDeviceType {
         unsafe {
             *((src as *const i32) as *const VkPhysicalDeviceType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceType> for VkPhysicalDeviceType {
-    fn vk_to_raw(src: &VkPhysicalDeviceType, dst: &mut RawVkPhysicalDeviceType) {
-        *dst = *src as i32
     }
 }
 

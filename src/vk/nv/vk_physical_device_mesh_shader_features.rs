@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMeshShaderFeatures {
+    pub task_shader: bool,
+    pub mesh_shader: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMeshShaderFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceMeshShaderFeatures {
     pub mesh_shader: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMeshShaderFeatures {
-    pub task_shader: bool,
-    pub mesh_shader: bool,
+impl VkWrappedType<RawVkPhysicalDeviceMeshShaderFeatures> for VkPhysicalDeviceMeshShaderFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceMeshShaderFeatures, dst: &mut RawVkPhysicalDeviceMeshShaderFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMeshShaderFeaturesNv);
+        dst.next = ptr::null();
+        dst.task_shader = vk_to_raw_value(&src.task_shader);
+        dst.mesh_shader = vk_to_raw_value(&src.mesh_shader);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMeshShaderFeatures> for RawVkPhysicalDeviceMeshShaderFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceMeshShaderFeatures> for RawVkPhysicalDeviceMeshSh
             task_shader: u32::vk_to_wrapped(&src.task_shader),
             mesh_shader: u32::vk_to_wrapped(&src.mesh_shader),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMeshShaderFeatures> for VkPhysicalDeviceMeshShaderFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceMeshShaderFeatures, dst: &mut RawVkPhysicalDeviceMeshShaderFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMeshShaderFeaturesNv);
-        dst.next = ptr::null();
-        dst.task_shader = vk_to_raw_value(&src.task_shader);
-        dst.mesh_shader = vk_to_raw_value(&src.mesh_shader);
     }
 }
 

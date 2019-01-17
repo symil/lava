@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDevice8BitStorageFeatures {
+    pub storage_buffer_8_bit_access: bool,
+    pub uniform_and_storage_buffer_8_bit_access: bool,
+    pub storage_push_constant_8: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevice8BitStorageFeatures {
@@ -25,11 +32,14 @@ pub struct RawVkPhysicalDevice8BitStorageFeatures {
     pub storage_push_constant_8: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDevice8BitStorageFeatures {
-    pub storage_buffer_8_bit_access: bool,
-    pub uniform_and_storage_buffer_8_bit_access: bool,
-    pub storage_push_constant_8: bool,
+impl VkWrappedType<RawVkPhysicalDevice8BitStorageFeatures> for VkPhysicalDevice8BitStorageFeatures {
+    fn vk_to_raw(src: &VkPhysicalDevice8BitStorageFeatures, dst: &mut RawVkPhysicalDevice8BitStorageFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevice8bitStorageFeaturesKhr);
+        dst.next = ptr::null();
+        dst.storage_buffer_8_bit_access = vk_to_raw_value(&src.storage_buffer_8_bit_access);
+        dst.uniform_and_storage_buffer_8_bit_access = vk_to_raw_value(&src.uniform_and_storage_buffer_8_bit_access);
+        dst.storage_push_constant_8 = vk_to_raw_value(&src.storage_push_constant_8);
+    }
 }
 
 impl VkRawType<VkPhysicalDevice8BitStorageFeatures> for RawVkPhysicalDevice8BitStorageFeatures {
@@ -39,16 +49,6 @@ impl VkRawType<VkPhysicalDevice8BitStorageFeatures> for RawVkPhysicalDevice8BitS
             uniform_and_storage_buffer_8_bit_access: u32::vk_to_wrapped(&src.uniform_and_storage_buffer_8_bit_access),
             storage_push_constant_8: u32::vk_to_wrapped(&src.storage_push_constant_8),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDevice8BitStorageFeatures> for VkPhysicalDevice8BitStorageFeatures {
-    fn vk_to_raw(src: &VkPhysicalDevice8BitStorageFeatures, dst: &mut RawVkPhysicalDevice8BitStorageFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevice8bitStorageFeaturesKhr);
-        dst.next = ptr::null();
-        dst.storage_buffer_8_bit_access = vk_to_raw_value(&src.storage_buffer_8_bit_access);
-        dst.uniform_and_storage_buffer_8_bit_access = vk_to_raw_value(&src.uniform_and_storage_buffer_8_bit_access);
-        dst.storage_push_constant_8 = vk_to_raw_value(&src.storage_push_constant_8);
     }
 }
 

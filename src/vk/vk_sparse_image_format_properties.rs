@@ -17,6 +17,13 @@ use vk::vk_image_aspect_flags::*;
 use vk::vk_extent_3d::*;
 use vk::vk_sparse_image_format_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSparseImageFormatProperties {
+    pub aspect_mask: VkImageAspectFlags,
+    pub image_granularity: VkExtent3D,
+    pub flags: VkSparseImageFormatFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageFormatProperties {
@@ -25,11 +32,12 @@ pub struct RawVkSparseImageFormatProperties {
     pub flags: RawVkSparseImageFormatFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSparseImageFormatProperties {
-    pub aspect_mask: VkImageAspectFlags,
-    pub image_granularity: VkExtent3D,
-    pub flags: VkSparseImageFormatFlags,
+impl VkWrappedType<RawVkSparseImageFormatProperties> for VkSparseImageFormatProperties {
+    fn vk_to_raw(src: &VkSparseImageFormatProperties, dst: &mut RawVkSparseImageFormatProperties) {
+        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
+        dst.image_granularity = vk_to_raw_value(&src.image_granularity);
+        dst.flags = vk_to_raw_value(&src.flags);
+    }
 }
 
 impl VkRawType<VkSparseImageFormatProperties> for RawVkSparseImageFormatProperties {
@@ -39,14 +47,6 @@ impl VkRawType<VkSparseImageFormatProperties> for RawVkSparseImageFormatProperti
             image_granularity: RawVkExtent3D::vk_to_wrapped(&src.image_granularity),
             flags: RawVkSparseImageFormatFlags::vk_to_wrapped(&src.flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSparseImageFormatProperties> for VkSparseImageFormatProperties {
-    fn vk_to_raw(src: &VkSparseImageFormatProperties, dst: &mut RawVkSparseImageFormatProperties) {
-        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
-        dst.image_granularity = vk_to_raw_value(&src.image_granularity);
-        dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 

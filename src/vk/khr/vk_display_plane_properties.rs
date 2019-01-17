@@ -15,17 +15,17 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::khr::vk_display::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayPlaneProperties {
+    pub current_display: VkDisplay,
+    pub current_stack_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneProperties {
     pub current_display: RawVkDisplay,
     pub current_stack_index: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDisplayPlaneProperties {
-    pub current_display: VkDisplay,
-    pub current_stack_index: usize,
 }
 
 impl VkRawType<VkDisplayPlaneProperties> for RawVkDisplayPlaneProperties {

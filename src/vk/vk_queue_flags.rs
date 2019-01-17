@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkQueueFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueueFlags {
     pub graphics: bool,
@@ -11,6 +9,19 @@ pub struct VkQueueFlags {
     pub transfer: bool,
     pub sparse_binding: bool,
     pub protected: bool,
+}
+
+pub type RawVkQueueFlags = u32;
+
+impl VkWrappedType<RawVkQueueFlags> for VkQueueFlags {
+    fn vk_to_raw(src: &VkQueueFlags, dst: &mut RawVkQueueFlags) {
+        *dst = 0;
+        if src.graphics { *dst |= 0x00000001; }
+        if src.compute { *dst |= 0x00000002; }
+        if src.transfer { *dst |= 0x00000004; }
+        if src.sparse_binding { *dst |= 0x00000008; }
+        if src.protected { *dst |= 0x00000010; }
+    }
 }
 
 impl VkRawType<VkQueueFlags> for RawVkQueueFlags {
@@ -22,17 +33,6 @@ impl VkRawType<VkQueueFlags> for RawVkQueueFlags {
             sparse_binding: (src & 0x00000008) != 0,
             protected: (src & 0x00000010) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueueFlags> for VkQueueFlags {
-    fn vk_to_raw(src: &VkQueueFlags, dst: &mut RawVkQueueFlags) {
-        *dst = 0;
-        if src.graphics { *dst |= 0x00000001; }
-        if src.compute { *dst |= 0x00000002; }
-        if src.transfer { *dst |= 0x00000004; }
-        if src.sparse_binding { *dst |= 0x00000008; }
-        if src.protected { *dst |= 0x00000010; }
     }
 }
 

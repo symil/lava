@@ -20,6 +20,15 @@ use vk::vk_sample_count_flags::*;
 use vk::vk_image_usage_flags::*;
 use vk::vk_image_tiling::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceSparseImageFormatInfo2 {
+    pub format: VkFormat,
+    pub type_: VkImageType,
+    pub samples: VkSampleCountFlags,
+    pub usage: VkImageUsageFlags,
+    pub tiling: VkImageTiling,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSparseImageFormatInfo2 {
@@ -32,13 +41,16 @@ pub struct RawVkPhysicalDeviceSparseImageFormatInfo2 {
     pub tiling: RawVkImageTiling,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceSparseImageFormatInfo2 {
-    pub format: VkFormat,
-    pub type_: VkImageType,
-    pub samples: VkSampleCountFlags,
-    pub usage: VkImageUsageFlags,
-    pub tiling: VkImageTiling,
+impl VkWrappedType<RawVkPhysicalDeviceSparseImageFormatInfo2> for VkPhysicalDeviceSparseImageFormatInfo2 {
+    fn vk_to_raw(src: &VkPhysicalDeviceSparseImageFormatInfo2, dst: &mut RawVkPhysicalDeviceSparseImageFormatInfo2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSparseImageFormatInfo2);
+        dst.next = ptr::null();
+        dst.format = vk_to_raw_value(&src.format);
+        dst.type_ = vk_to_raw_value(&src.type_);
+        dst.samples = vk_to_raw_value(&src.samples);
+        dst.usage = vk_to_raw_value(&src.usage);
+        dst.tiling = vk_to_raw_value(&src.tiling);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceSparseImageFormatInfo2> for RawVkPhysicalDeviceSparseImageFormatInfo2 {
@@ -50,18 +62,6 @@ impl VkRawType<VkPhysicalDeviceSparseImageFormatInfo2> for RawVkPhysicalDeviceSp
             usage: RawVkImageUsageFlags::vk_to_wrapped(&src.usage),
             tiling: RawVkImageTiling::vk_to_wrapped(&src.tiling),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceSparseImageFormatInfo2> for VkPhysicalDeviceSparseImageFormatInfo2 {
-    fn vk_to_raw(src: &VkPhysicalDeviceSparseImageFormatInfo2, dst: &mut RawVkPhysicalDeviceSparseImageFormatInfo2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSparseImageFormatInfo2);
-        dst.next = ptr::null();
-        dst.format = vk_to_raw_value(&src.format);
-        dst.type_ = vk_to_raw_value(&src.type_);
-        dst.samples = vk_to_raw_value(&src.samples);
-        dst.usage = vk_to_raw_value(&src.usage);
-        dst.tiling = vk_to_raw_value(&src.tiling);
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPolygonMode = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPolygonMode {
@@ -13,17 +11,19 @@ pub enum VkPolygonMode {
     FillRectangleNv = 1000153000,
 }
 
+pub type RawVkPolygonMode = i32;
+
+impl VkWrappedType<RawVkPolygonMode> for VkPolygonMode {
+    fn vk_to_raw(src: &VkPolygonMode, dst: &mut RawVkPolygonMode) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkPolygonMode> for RawVkPolygonMode {
     fn vk_to_wrapped(src: &RawVkPolygonMode) -> VkPolygonMode {
         unsafe {
             *((src as *const i32) as *const VkPolygonMode)
         }
-    }
-}
-
-impl VkWrappedType<RawVkPolygonMode> for VkPolygonMode {
-    fn vk_to_raw(src: &VkPolygonMode, dst: &mut RawVkPolygonMode) {
-        *dst = *src as i32
     }
 }
 

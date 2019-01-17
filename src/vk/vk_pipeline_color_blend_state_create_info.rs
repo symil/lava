@@ -18,6 +18,15 @@ use vk::vk_pipeline_color_blend_state_create_flags::*;
 use vk::vk_logic_op::*;
 use vk::vk_pipeline_color_blend_attachment_state::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineColorBlendStateCreateInfo<'a> {
+    pub flags: VkPipelineColorBlendStateCreateFlags,
+    pub logic_op_enable: bool,
+    pub logic_op: VkLogicOp,
+    pub attachments: &'a [VkPipelineColorBlendAttachmentState],
+    pub blend_constants: [f32; 4],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendStateCreateInfo {
@@ -28,15 +37,6 @@ pub struct RawVkPipelineColorBlendStateCreateInfo {
     pub logic_op: RawVkLogicOp,
     pub attachment_count: u32,
     pub attachments: *mut RawVkPipelineColorBlendAttachmentState,
-    pub blend_constants: [f32; 4],
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineColorBlendStateCreateInfo<'a> {
-    pub flags: VkPipelineColorBlendStateCreateFlags,
-    pub logic_op_enable: bool,
-    pub logic_op: VkLogicOp,
-    pub attachments: &'a [VkPipelineColorBlendAttachmentState],
     pub blend_constants: [f32; 4],
 }
 

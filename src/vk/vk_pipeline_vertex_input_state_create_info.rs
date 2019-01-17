@@ -18,6 +18,13 @@ use vk::vk_pipeline_vertex_input_state_create_flags::*;
 use vk::vk_vertex_input_binding_description::*;
 use vk::vk_vertex_input_attribute_description::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineVertexInputStateCreateInfo<'a, 'b> {
+    pub flags: VkPipelineVertexInputStateCreateFlags,
+    pub vertex_binding_descriptions: &'a [VkVertexInputBindingDescription],
+    pub vertex_attribute_descriptions: &'b [VkVertexInputAttributeDescription],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineVertexInputStateCreateInfo {
@@ -28,13 +35,6 @@ pub struct RawVkPipelineVertexInputStateCreateInfo {
     pub vertex_binding_descriptions: *mut RawVkVertexInputBindingDescription,
     pub vertex_attribute_description_count: u32,
     pub vertex_attribute_descriptions: *mut RawVkVertexInputAttributeDescription,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineVertexInputStateCreateInfo<'a, 'b> {
-    pub flags: VkPipelineVertexInputStateCreateFlags,
-    pub vertex_binding_descriptions: &'a [VkVertexInputBindingDescription],
-    pub vertex_attribute_descriptions: &'b [VkVertexInputAttributeDescription],
 }
 
 impl<'a, 'b> VkWrappedType<RawVkPipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfo<'a, 'b> {

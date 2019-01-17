@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDevicePushDescriptorProperties {
+    pub max_push_descriptors: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevicePushDescriptorProperties {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDevicePushDescriptorProperties {
     pub max_push_descriptors: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDevicePushDescriptorProperties {
-    pub max_push_descriptors: usize,
+impl VkWrappedType<RawVkPhysicalDevicePushDescriptorProperties> for VkPhysicalDevicePushDescriptorProperties {
+    fn vk_to_raw(src: &VkPhysicalDevicePushDescriptorProperties, dst: &mut RawVkPhysicalDevicePushDescriptorProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePushDescriptorPropertiesKhr);
+        dst.next = ptr::null();
+        dst.max_push_descriptors = vk_to_raw_value(&src.max_push_descriptors);
+    }
 }
 
 impl VkRawType<VkPhysicalDevicePushDescriptorProperties> for RawVkPhysicalDevicePushDescriptorProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDevicePushDescriptorProperties> for RawVkPhysicalDevice
         VkPhysicalDevicePushDescriptorProperties {
             max_push_descriptors: u32::vk_to_wrapped(&src.max_push_descriptors),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDevicePushDescriptorProperties> for VkPhysicalDevicePushDescriptorProperties {
-    fn vk_to_raw(src: &VkPhysicalDevicePushDescriptorProperties, dst: &mut RawVkPhysicalDevicePushDescriptorProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePushDescriptorPropertiesKhr);
-        dst.next = ptr::null();
-        dst.max_push_descriptors = vk_to_raw_value(&src.max_push_descriptors);
     }
 }
 

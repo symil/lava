@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkExternalSemaphoreHandleTypeFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalSemaphoreHandleTypeFlags {
     pub opaque_fd: bool,
@@ -11,6 +9,19 @@ pub struct VkExternalSemaphoreHandleTypeFlags {
     pub opaque_win_32_kmt: bool,
     pub d_3d_12_fence: bool,
     pub sync_fd: bool,
+}
+
+pub type RawVkExternalSemaphoreHandleTypeFlags = u32;
+
+impl VkWrappedType<RawVkExternalSemaphoreHandleTypeFlags> for VkExternalSemaphoreHandleTypeFlags {
+    fn vk_to_raw(src: &VkExternalSemaphoreHandleTypeFlags, dst: &mut RawVkExternalSemaphoreHandleTypeFlags) {
+        *dst = 0;
+        if src.opaque_fd { *dst |= 0x00000001; }
+        if src.opaque_win_32 { *dst |= 0x00000002; }
+        if src.opaque_win_32_kmt { *dst |= 0x00000004; }
+        if src.d_3d_12_fence { *dst |= 0x00000008; }
+        if src.sync_fd { *dst |= 0x00000010; }
+    }
 }
 
 impl VkRawType<VkExternalSemaphoreHandleTypeFlags> for RawVkExternalSemaphoreHandleTypeFlags {
@@ -22,17 +33,6 @@ impl VkRawType<VkExternalSemaphoreHandleTypeFlags> for RawVkExternalSemaphoreHan
             d_3d_12_fence: (src & 0x00000008) != 0,
             sync_fd: (src & 0x00000010) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalSemaphoreHandleTypeFlags> for VkExternalSemaphoreHandleTypeFlags {
-    fn vk_to_raw(src: &VkExternalSemaphoreHandleTypeFlags, dst: &mut RawVkExternalSemaphoreHandleTypeFlags) {
-        *dst = 0;
-        if src.opaque_fd { *dst |= 0x00000001; }
-        if src.opaque_win_32 { *dst |= 0x00000002; }
-        if src.opaque_win_32_kmt { *dst |= 0x00000004; }
-        if src.d_3d_12_fence { *dst |= 0x00000008; }
-        if src.sync_fd { *dst |= 0x00000010; }
     }
 }
 

@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkQueryPoolCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryPoolCreateFlags {
     
+}
+
+pub type RawVkQueryPoolCreateFlags = u32;
+
+impl VkWrappedType<RawVkQueryPoolCreateFlags> for VkQueryPoolCreateFlags {
+    fn vk_to_raw(src: &VkQueryPoolCreateFlags, dst: &mut RawVkQueryPoolCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkQueryPoolCreateFlags> for RawVkQueryPoolCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkQueryPoolCreateFlags> for RawVkQueryPoolCreateFlags {
         VkQueryPoolCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueryPoolCreateFlags> for VkQueryPoolCreateFlags {
-    fn vk_to_raw(src: &VkQueryPoolCreateFlags, dst: &mut RawVkQueryPoolCreateFlags) {
-        *dst = 0;
     }
 }
 

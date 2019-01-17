@@ -15,6 +15,23 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMeshShaderProperties {
+    pub max_draw_mesh_tasks_count: usize,
+    pub max_task_work_group_invocations: usize,
+    pub max_task_work_group_size: [usize; 3],
+    pub max_task_total_memory_size: usize,
+    pub max_task_output_count: usize,
+    pub max_mesh_work_group_invocations: usize,
+    pub max_mesh_work_group_size: [usize; 3],
+    pub max_mesh_total_memory_size: usize,
+    pub max_mesh_output_vertices: usize,
+    pub max_mesh_output_primitives: usize,
+    pub max_mesh_multiview_view_count: usize,
+    pub mesh_output_per_vertex_granularity: usize,
+    pub mesh_output_per_primitive_granularity: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMeshShaderProperties {
@@ -35,21 +52,24 @@ pub struct RawVkPhysicalDeviceMeshShaderProperties {
     pub mesh_output_per_primitive_granularity: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMeshShaderProperties {
-    pub max_draw_mesh_tasks_count: usize,
-    pub max_task_work_group_invocations: usize,
-    pub max_task_work_group_size: [usize; 3],
-    pub max_task_total_memory_size: usize,
-    pub max_task_output_count: usize,
-    pub max_mesh_work_group_invocations: usize,
-    pub max_mesh_work_group_size: [usize; 3],
-    pub max_mesh_total_memory_size: usize,
-    pub max_mesh_output_vertices: usize,
-    pub max_mesh_output_primitives: usize,
-    pub max_mesh_multiview_view_count: usize,
-    pub mesh_output_per_vertex_granularity: usize,
-    pub mesh_output_per_primitive_granularity: usize,
+impl VkWrappedType<RawVkPhysicalDeviceMeshShaderProperties> for VkPhysicalDeviceMeshShaderProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceMeshShaderProperties, dst: &mut RawVkPhysicalDeviceMeshShaderProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMeshShaderPropertiesNv);
+        dst.next = ptr::null();
+        dst.max_draw_mesh_tasks_count = vk_to_raw_value(&src.max_draw_mesh_tasks_count);
+        dst.max_task_work_group_invocations = vk_to_raw_value(&src.max_task_work_group_invocations);
+        dst.max_task_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_task_work_group_size, &mut dst_array); dst_array };
+        dst.max_task_total_memory_size = vk_to_raw_value(&src.max_task_total_memory_size);
+        dst.max_task_output_count = vk_to_raw_value(&src.max_task_output_count);
+        dst.max_mesh_work_group_invocations = vk_to_raw_value(&src.max_mesh_work_group_invocations);
+        dst.max_mesh_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_mesh_work_group_size, &mut dst_array); dst_array };
+        dst.max_mesh_total_memory_size = vk_to_raw_value(&src.max_mesh_total_memory_size);
+        dst.max_mesh_output_vertices = vk_to_raw_value(&src.max_mesh_output_vertices);
+        dst.max_mesh_output_primitives = vk_to_raw_value(&src.max_mesh_output_primitives);
+        dst.max_mesh_multiview_view_count = vk_to_raw_value(&src.max_mesh_multiview_view_count);
+        dst.mesh_output_per_vertex_granularity = vk_to_raw_value(&src.mesh_output_per_vertex_granularity);
+        dst.mesh_output_per_primitive_granularity = vk_to_raw_value(&src.mesh_output_per_primitive_granularity);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMeshShaderProperties> for RawVkPhysicalDeviceMeshShaderProperties {
@@ -69,26 +89,6 @@ impl VkRawType<VkPhysicalDeviceMeshShaderProperties> for RawVkPhysicalDeviceMesh
             mesh_output_per_vertex_granularity: u32::vk_to_wrapped(&src.mesh_output_per_vertex_granularity),
             mesh_output_per_primitive_granularity: u32::vk_to_wrapped(&src.mesh_output_per_primitive_granularity),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMeshShaderProperties> for VkPhysicalDeviceMeshShaderProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceMeshShaderProperties, dst: &mut RawVkPhysicalDeviceMeshShaderProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMeshShaderPropertiesNv);
-        dst.next = ptr::null();
-        dst.max_draw_mesh_tasks_count = vk_to_raw_value(&src.max_draw_mesh_tasks_count);
-        dst.max_task_work_group_invocations = vk_to_raw_value(&src.max_task_work_group_invocations);
-        dst.max_task_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_task_work_group_size, &mut dst_array); dst_array };
-        dst.max_task_total_memory_size = vk_to_raw_value(&src.max_task_total_memory_size);
-        dst.max_task_output_count = vk_to_raw_value(&src.max_task_output_count);
-        dst.max_mesh_work_group_invocations = vk_to_raw_value(&src.max_mesh_work_group_invocations);
-        dst.max_mesh_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_mesh_work_group_size, &mut dst_array); dst_array };
-        dst.max_mesh_total_memory_size = vk_to_raw_value(&src.max_mesh_total_memory_size);
-        dst.max_mesh_output_vertices = vk_to_raw_value(&src.max_mesh_output_vertices);
-        dst.max_mesh_output_primitives = vk_to_raw_value(&src.max_mesh_output_primitives);
-        dst.max_mesh_multiview_view_count = vk_to_raw_value(&src.max_mesh_multiview_view_count);
-        dst.mesh_output_per_vertex_granularity = vk_to_raw_value(&src.mesh_output_per_vertex_granularity);
-        dst.mesh_output_per_primitive_granularity = vk_to_raw_value(&src.mesh_output_per_primitive_granularity);
     }
 }
 

@@ -2,13 +2,22 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSparseImageFormatFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSparseImageFormatFlags {
     pub single_miptail: bool,
     pub aligned_mip_size: bool,
     pub nonstandard_block_size: bool,
+}
+
+pub type RawVkSparseImageFormatFlags = u32;
+
+impl VkWrappedType<RawVkSparseImageFormatFlags> for VkSparseImageFormatFlags {
+    fn vk_to_raw(src: &VkSparseImageFormatFlags, dst: &mut RawVkSparseImageFormatFlags) {
+        *dst = 0;
+        if src.single_miptail { *dst |= 0x00000001; }
+        if src.aligned_mip_size { *dst |= 0x00000002; }
+        if src.nonstandard_block_size { *dst |= 0x00000004; }
+    }
 }
 
 impl VkRawType<VkSparseImageFormatFlags> for RawVkSparseImageFormatFlags {
@@ -18,15 +27,6 @@ impl VkRawType<VkSparseImageFormatFlags> for RawVkSparseImageFormatFlags {
             aligned_mip_size: (src & 0x00000002) != 0,
             nonstandard_block_size: (src & 0x00000004) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSparseImageFormatFlags> for VkSparseImageFormatFlags {
-    fn vk_to_raw(src: &VkSparseImageFormatFlags, dst: &mut RawVkSparseImageFormatFlags) {
-        *dst = 0;
-        if src.single_miptail { *dst |= 0x00000001; }
-        if src.aligned_mip_size { *dst |= 0x00000002; }
-        if src.nonstandard_block_size { *dst |= 0x00000004; }
     }
 }
 

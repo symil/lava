@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSparseMemoryBindFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSparseMemoryBindFlags {
     pub metadata: bool,
+}
+
+pub type RawVkSparseMemoryBindFlags = u32;
+
+impl VkWrappedType<RawVkSparseMemoryBindFlags> for VkSparseMemoryBindFlags {
+    fn vk_to_raw(src: &VkSparseMemoryBindFlags, dst: &mut RawVkSparseMemoryBindFlags) {
+        *dst = 0;
+        if src.metadata { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkSparseMemoryBindFlags> for RawVkSparseMemoryBindFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkSparseMemoryBindFlags> for RawVkSparseMemoryBindFlags {
         VkSparseMemoryBindFlags {
             metadata: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSparseMemoryBindFlags> for VkSparseMemoryBindFlags {
-    fn vk_to_raw(src: &VkSparseMemoryBindFlags, dst: &mut RawVkSparseMemoryBindFlags) {
-        *dst = 0;
-        if src.metadata { *dst |= 0x00000001; }
     }
 }
 

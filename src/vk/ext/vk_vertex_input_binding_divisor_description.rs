@@ -14,6 +14,12 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkVertexInputBindingDivisorDescription {
+    pub binding: usize,
+    pub divisor: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkVertexInputBindingDivisorDescription {
@@ -21,10 +27,11 @@ pub struct RawVkVertexInputBindingDivisorDescription {
     pub divisor: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkVertexInputBindingDivisorDescription {
-    pub binding: usize,
-    pub divisor: usize,
+impl VkWrappedType<RawVkVertexInputBindingDivisorDescription> for VkVertexInputBindingDivisorDescription {
+    fn vk_to_raw(src: &VkVertexInputBindingDivisorDescription, dst: &mut RawVkVertexInputBindingDivisorDescription) {
+        dst.binding = vk_to_raw_value(&src.binding);
+        dst.divisor = vk_to_raw_value(&src.divisor);
+    }
 }
 
 impl VkRawType<VkVertexInputBindingDivisorDescription> for RawVkVertexInputBindingDivisorDescription {
@@ -33,13 +40,6 @@ impl VkRawType<VkVertexInputBindingDivisorDescription> for RawVkVertexInputBindi
             binding: u32::vk_to_wrapped(&src.binding),
             divisor: u32::vk_to_wrapped(&src.divisor),
         }
-    }
-}
-
-impl VkWrappedType<RawVkVertexInputBindingDivisorDescription> for VkVertexInputBindingDivisorDescription {
-    fn vk_to_raw(src: &VkVertexInputBindingDivisorDescription, dst: &mut RawVkVertexInputBindingDivisorDescription) {
-        dst.binding = vk_to_raw_value(&src.binding);
-        dst.divisor = vk_to_raw_value(&src.divisor);
     }
 }
 

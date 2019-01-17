@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineShaderStageCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineShaderStageCreateFlags {
     
+}
+
+pub type RawVkPipelineShaderStageCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineShaderStageCreateFlags> for VkPipelineShaderStageCreateFlags {
+    fn vk_to_raw(src: &VkPipelineShaderStageCreateFlags, dst: &mut RawVkPipelineShaderStageCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineShaderStageCreateFlags> for RawVkPipelineShaderStageCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineShaderStageCreateFlags> for RawVkPipelineShaderStageCre
         VkPipelineShaderStageCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineShaderStageCreateFlags> for VkPipelineShaderStageCreateFlags {
-    fn vk_to_raw(src: &VkPipelineShaderStageCreateFlags, dst: &mut RawVkPipelineShaderStageCreateFlags) {
-        *dst = 0;
     }
 }
 

@@ -15,6 +15,15 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceIDProperties {
+    pub device_uuid: [u8; 16],
+    pub driver_uuid: [u8; 16],
+    pub device_luid: [u8; 8],
+    pub device_node_mask: u32,
+    pub device_luidvalid: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceIDProperties {
@@ -27,13 +36,16 @@ pub struct RawVkPhysicalDeviceIDProperties {
     pub device_luidvalid: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceIDProperties {
-    pub device_uuid: [u8; 16],
-    pub driver_uuid: [u8; 16],
-    pub device_luid: [u8; 8],
-    pub device_node_mask: u32,
-    pub device_luidvalid: bool,
+impl VkWrappedType<RawVkPhysicalDeviceIDProperties> for VkPhysicalDeviceIDProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceIDProperties, dst: &mut RawVkPhysicalDeviceIDProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceIdProperties);
+        dst.next = ptr::null();
+        dst.device_uuid = unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.device_uuid, &mut dst_array); dst_array };
+        dst.driver_uuid = unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.driver_uuid, &mut dst_array); dst_array };
+        dst.device_luid = unsafe { let mut dst_array : [u8; 8] = mem::uninitialized(); to_array(&src.device_luid, &mut dst_array); dst_array };
+        dst.device_node_mask = src.device_node_mask;
+        dst.device_luidvalid = vk_to_raw_value(&src.device_luidvalid);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceIDProperties> for RawVkPhysicalDeviceIDProperties {
@@ -45,18 +57,6 @@ impl VkRawType<VkPhysicalDeviceIDProperties> for RawVkPhysicalDeviceIDProperties
             device_node_mask: src.device_node_mask,
             device_luidvalid: u32::vk_to_wrapped(&src.device_luidvalid),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceIDProperties> for VkPhysicalDeviceIDProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceIDProperties, dst: &mut RawVkPhysicalDeviceIDProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceIdProperties);
-        dst.next = ptr::null();
-        dst.device_uuid = unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.device_uuid, &mut dst_array); dst_array };
-        dst.driver_uuid = unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.driver_uuid, &mut dst_array); dst_array };
-        dst.device_luid = unsafe { let mut dst_array : [u8; 8] = mem::uninitialized(); to_array(&src.device_luid, &mut dst_array); dst_array };
-        dst.device_node_mask = src.device_node_mask;
-        dst.device_luidvalid = vk_to_raw_value(&src.device_luidvalid);
     }
 }
 

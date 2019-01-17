@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSemaphoreImportFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSemaphoreImportFlags {
     pub temporary: bool,
+}
+
+pub type RawVkSemaphoreImportFlags = u32;
+
+impl VkWrappedType<RawVkSemaphoreImportFlags> for VkSemaphoreImportFlags {
+    fn vk_to_raw(src: &VkSemaphoreImportFlags, dst: &mut RawVkSemaphoreImportFlags) {
+        *dst = 0;
+        if src.temporary { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkSemaphoreImportFlags> for RawVkSemaphoreImportFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkSemaphoreImportFlags> for RawVkSemaphoreImportFlags {
         VkSemaphoreImportFlags {
             temporary: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSemaphoreImportFlags> for VkSemaphoreImportFlags {
-    fn vk_to_raw(src: &VkSemaphoreImportFlags, dst: &mut RawVkSemaphoreImportFlags) {
-        *dst = 0;
-        if src.temporary { *dst |= 0x00000001; }
     }
 }
 

@@ -18,6 +18,13 @@ use vk::nv::vk_geometry_type::*;
 use vk::nv::vk_geometry_data::*;
 use vk::nv::vk_geometry_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkGeometry<'a, 'b, 'c, 'd> {
+    pub geometry_type: VkGeometryType,
+    pub geometry: VkGeometryData<'a, 'b, 'c, 'd>,
+    pub flags: VkGeometryFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometry {
@@ -26,13 +33,6 @@ pub struct RawVkGeometry {
     pub geometry_type: RawVkGeometryType,
     pub geometry: RawVkGeometryData,
     pub flags: RawVkGeometryFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkGeometry<'a, 'b, 'c, 'd> {
-    pub geometry_type: VkGeometryType,
-    pub geometry: VkGeometryData<'a, 'b, 'c, 'd>,
-    pub flags: VkGeometryFlags,
 }
 
 impl<'a, 'b, 'c, 'd> VkWrappedType<RawVkGeometry> for VkGeometry<'a, 'b, 'c, 'd> {

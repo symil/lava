@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkRasterizationOrder = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkRasterizationOrder {
@@ -11,17 +9,19 @@ pub enum VkRasterizationOrder {
     Relaxed = 1,
 }
 
+pub type RawVkRasterizationOrder = i32;
+
+impl VkWrappedType<RawVkRasterizationOrder> for VkRasterizationOrder {
+    fn vk_to_raw(src: &VkRasterizationOrder, dst: &mut RawVkRasterizationOrder) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkRasterizationOrder> for RawVkRasterizationOrder {
     fn vk_to_wrapped(src: &RawVkRasterizationOrder) -> VkRasterizationOrder {
         unsafe {
             *((src as *const i32) as *const VkRasterizationOrder)
         }
-    }
-}
-
-impl VkWrappedType<RawVkRasterizationOrder> for VkRasterizationOrder {
-    fn vk_to_raw(src: &VkRasterizationOrder, dst: &mut RawVkRasterizationOrder) {
-        *dst = *src as i32
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSamplerYcbcrRange = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSamplerYcbcrRange {
@@ -11,17 +9,19 @@ pub enum VkSamplerYcbcrRange {
     ItuNarrow = 1,
 }
 
+pub type RawVkSamplerYcbcrRange = i32;
+
+impl VkWrappedType<RawVkSamplerYcbcrRange> for VkSamplerYcbcrRange {
+    fn vk_to_raw(src: &VkSamplerYcbcrRange, dst: &mut RawVkSamplerYcbcrRange) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkSamplerYcbcrRange> for RawVkSamplerYcbcrRange {
     fn vk_to_wrapped(src: &RawVkSamplerYcbcrRange) -> VkSamplerYcbcrRange {
         unsafe {
             *((src as *const i32) as *const VkSamplerYcbcrRange)
         }
-    }
-}
-
-impl VkWrappedType<RawVkSamplerYcbcrRange> for VkSamplerYcbcrRange {
-    fn vk_to_raw(src: &VkSamplerYcbcrRange, dst: &mut RawVkSamplerYcbcrRange) {
-        *dst = *src as i32
     }
 }
 

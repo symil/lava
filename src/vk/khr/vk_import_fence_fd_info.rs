@@ -18,6 +18,14 @@ use vk::vk_fence::*;
 use vk::vk_fence_import_flags::*;
 use vk::vk_external_fence_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImportFenceFdInfo<'a> {
+    pub fence: &'a VkFence,
+    pub flags: VkFenceImportFlags,
+    pub handle_type: VkExternalFenceHandleTypeFlags,
+    pub fd: i32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportFenceFdInfo {
@@ -26,14 +34,6 @@ pub struct RawVkImportFenceFdInfo {
     pub fence: RawVkFence,
     pub flags: RawVkFenceImportFlags,
     pub handle_type: RawVkExternalFenceHandleTypeFlags,
-    pub fd: i32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImportFenceFdInfo<'a> {
-    pub fence: &'a VkFence,
-    pub flags: VkFenceImportFlags,
-    pub handle_type: VkExternalFenceHandleTypeFlags,
     pub fd: i32,
 }
 

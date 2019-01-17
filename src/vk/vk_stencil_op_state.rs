@@ -16,6 +16,17 @@ use vk::vk_device::*;
 use vk::vk_stencil_op::*;
 use vk::vk_compare_op::*;
 
+#[derive(Debug, Clone)]
+pub struct VkStencilOpState {
+    pub fail_op: VkStencilOp,
+    pub pass_op: VkStencilOp,
+    pub depth_fail_op: VkStencilOp,
+    pub compare_op: VkCompareOp,
+    pub compare_mask: u32,
+    pub write_mask: u32,
+    pub reference: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkStencilOpState {
@@ -28,15 +39,16 @@ pub struct RawVkStencilOpState {
     pub reference: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkStencilOpState {
-    pub fail_op: VkStencilOp,
-    pub pass_op: VkStencilOp,
-    pub depth_fail_op: VkStencilOp,
-    pub compare_op: VkCompareOp,
-    pub compare_mask: u32,
-    pub write_mask: u32,
-    pub reference: usize,
+impl VkWrappedType<RawVkStencilOpState> for VkStencilOpState {
+    fn vk_to_raw(src: &VkStencilOpState, dst: &mut RawVkStencilOpState) {
+        dst.fail_op = vk_to_raw_value(&src.fail_op);
+        dst.pass_op = vk_to_raw_value(&src.pass_op);
+        dst.depth_fail_op = vk_to_raw_value(&src.depth_fail_op);
+        dst.compare_op = vk_to_raw_value(&src.compare_op);
+        dst.compare_mask = src.compare_mask;
+        dst.write_mask = src.write_mask;
+        dst.reference = vk_to_raw_value(&src.reference);
+    }
 }
 
 impl VkRawType<VkStencilOpState> for RawVkStencilOpState {
@@ -50,18 +62,6 @@ impl VkRawType<VkStencilOpState> for RawVkStencilOpState {
             write_mask: src.write_mask,
             reference: u32::vk_to_wrapped(&src.reference),
         }
-    }
-}
-
-impl VkWrappedType<RawVkStencilOpState> for VkStencilOpState {
-    fn vk_to_raw(src: &VkStencilOpState, dst: &mut RawVkStencilOpState) {
-        dst.fail_op = vk_to_raw_value(&src.fail_op);
-        dst.pass_op = vk_to_raw_value(&src.pass_op);
-        dst.depth_fail_op = vk_to_raw_value(&src.depth_fail_op);
-        dst.compare_op = vk_to_raw_value(&src.compare_op);
-        dst.compare_mask = src.compare_mask;
-        dst.write_mask = src.write_mask;
-        dst.reference = vk_to_raw_value(&src.reference);
     }
 }
 

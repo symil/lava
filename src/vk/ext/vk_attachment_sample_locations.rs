@@ -15,17 +15,17 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::ext::vk_sample_locations_info::*;
 
+#[derive(Debug, Clone)]
+pub struct VkAttachmentSampleLocations<'a> {
+    pub attachment_index: usize,
+    pub sample_locations_info: VkSampleLocationsInfo<'a>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAttachmentSampleLocations {
     pub attachment_index: u32,
     pub sample_locations_info: RawVkSampleLocationsInfo,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkAttachmentSampleLocations<'a> {
-    pub attachment_index: usize,
-    pub sample_locations_info: VkSampleLocationsInfo<'a>,
 }
 
 impl<'a> VkWrappedType<RawVkAttachmentSampleLocations> for VkAttachmentSampleLocations<'a> {

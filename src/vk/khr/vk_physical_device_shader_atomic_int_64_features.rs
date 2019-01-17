@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceShaderAtomicInt64Features {
+    pub shader_buffer_int_64_atomics: bool,
+    pub shader_shared_int_64_atomics: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShaderAtomicInt64Features {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceShaderAtomicInt64Features {
     pub shader_shared_int_64_atomics: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceShaderAtomicInt64Features {
-    pub shader_buffer_int_64_atomics: bool,
-    pub shader_shared_int_64_atomics: bool,
+impl VkWrappedType<RawVkPhysicalDeviceShaderAtomicInt64Features> for VkPhysicalDeviceShaderAtomicInt64Features {
+    fn vk_to_raw(src: &VkPhysicalDeviceShaderAtomicInt64Features, dst: &mut RawVkPhysicalDeviceShaderAtomicInt64Features) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderAtomicInt64FeaturesKhr);
+        dst.next = ptr::null();
+        dst.shader_buffer_int_64_atomics = vk_to_raw_value(&src.shader_buffer_int_64_atomics);
+        dst.shader_shared_int_64_atomics = vk_to_raw_value(&src.shader_shared_int_64_atomics);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceShaderAtomicInt64Features> for RawVkPhysicalDeviceShaderAtomicInt64Features {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceShaderAtomicInt64Features> for RawVkPhysicalDevic
             shader_buffer_int_64_atomics: u32::vk_to_wrapped(&src.shader_buffer_int_64_atomics),
             shader_shared_int_64_atomics: u32::vk_to_wrapped(&src.shader_shared_int_64_atomics),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceShaderAtomicInt64Features> for VkPhysicalDeviceShaderAtomicInt64Features {
-    fn vk_to_raw(src: &VkPhysicalDeviceShaderAtomicInt64Features, dst: &mut RawVkPhysicalDeviceShaderAtomicInt64Features) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderAtomicInt64FeaturesKhr);
-        dst.next = ptr::null();
-        dst.shader_buffer_int_64_atomics = vk_to_raw_value(&src.shader_buffer_int_64_atomics);
-        dst.shader_shared_int_64_atomics = vk_to_raw_value(&src.shader_shared_int_64_atomics);
     }
 }
 

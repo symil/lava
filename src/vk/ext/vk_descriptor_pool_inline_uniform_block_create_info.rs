@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorPoolInlineUniformBlockCreateInfo {
+    pub max_inline_uniform_block_bindings: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorPoolInlineUniformBlockCreateInfo {
@@ -23,9 +28,12 @@ pub struct RawVkDescriptorPoolInlineUniformBlockCreateInfo {
     pub max_inline_uniform_block_bindings: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDescriptorPoolInlineUniformBlockCreateInfo {
-    pub max_inline_uniform_block_bindings: usize,
+impl VkWrappedType<RawVkDescriptorPoolInlineUniformBlockCreateInfo> for VkDescriptorPoolInlineUniformBlockCreateInfo {
+    fn vk_to_raw(src: &VkDescriptorPoolInlineUniformBlockCreateInfo, dst: &mut RawVkDescriptorPoolInlineUniformBlockCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorPoolInlineUniformBlockCreateInfoExt);
+        dst.next = ptr::null();
+        dst.max_inline_uniform_block_bindings = vk_to_raw_value(&src.max_inline_uniform_block_bindings);
+    }
 }
 
 impl VkRawType<VkDescriptorPoolInlineUniformBlockCreateInfo> for RawVkDescriptorPoolInlineUniformBlockCreateInfo {
@@ -33,14 +41,6 @@ impl VkRawType<VkDescriptorPoolInlineUniformBlockCreateInfo> for RawVkDescriptor
         VkDescriptorPoolInlineUniformBlockCreateInfo {
             max_inline_uniform_block_bindings: u32::vk_to_wrapped(&src.max_inline_uniform_block_bindings),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorPoolInlineUniformBlockCreateInfo> for VkDescriptorPoolInlineUniformBlockCreateInfo {
-    fn vk_to_raw(src: &VkDescriptorPoolInlineUniformBlockCreateInfo, dst: &mut RawVkDescriptorPoolInlineUniformBlockCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorPoolInlineUniformBlockCreateInfoExt);
-        dst.next = ptr::null();
-        dst.max_inline_uniform_block_bindings = vk_to_raw_value(&src.max_inline_uniform_block_bindings);
     }
 }
 

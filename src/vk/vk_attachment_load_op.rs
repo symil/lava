@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkAttachmentLoadOp = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkAttachmentLoadOp {
@@ -12,17 +10,19 @@ pub enum VkAttachmentLoadOp {
     DontCare = 2,
 }
 
+pub type RawVkAttachmentLoadOp = i32;
+
+impl VkWrappedType<RawVkAttachmentLoadOp> for VkAttachmentLoadOp {
+    fn vk_to_raw(src: &VkAttachmentLoadOp, dst: &mut RawVkAttachmentLoadOp) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkAttachmentLoadOp> for RawVkAttachmentLoadOp {
     fn vk_to_wrapped(src: &RawVkAttachmentLoadOp) -> VkAttachmentLoadOp {
         unsafe {
             *((src as *const i32) as *const VkAttachmentLoadOp)
         }
-    }
-}
-
-impl VkWrappedType<RawVkAttachmentLoadOp> for VkAttachmentLoadOp {
-    fn vk_to_raw(src: &VkAttachmentLoadOp, dst: &mut RawVkAttachmentLoadOp) {
-        *dst = *src as i32
     }
 }
 

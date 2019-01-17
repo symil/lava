@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkBufferCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkBufferCreateFlags {
     pub sparse_binding: bool,
@@ -11,6 +9,19 @@ pub struct VkBufferCreateFlags {
     pub sparse_aliased: bool,
     pub protected: bool,
     pub device_address_capture_replay_ext: bool,
+}
+
+pub type RawVkBufferCreateFlags = u32;
+
+impl VkWrappedType<RawVkBufferCreateFlags> for VkBufferCreateFlags {
+    fn vk_to_raw(src: &VkBufferCreateFlags, dst: &mut RawVkBufferCreateFlags) {
+        *dst = 0;
+        if src.sparse_binding { *dst |= 0x00000001; }
+        if src.sparse_residency { *dst |= 0x00000002; }
+        if src.sparse_aliased { *dst |= 0x00000004; }
+        if src.protected { *dst |= 0x00000008; }
+        if src.device_address_capture_replay_ext { *dst |= 0x00000010; }
+    }
 }
 
 impl VkRawType<VkBufferCreateFlags> for RawVkBufferCreateFlags {
@@ -22,17 +33,6 @@ impl VkRawType<VkBufferCreateFlags> for RawVkBufferCreateFlags {
             protected: (src & 0x00000008) != 0,
             device_address_capture_replay_ext: (src & 0x00000010) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkBufferCreateFlags> for VkBufferCreateFlags {
-    fn vk_to_raw(src: &VkBufferCreateFlags, dst: &mut RawVkBufferCreateFlags) {
-        *dst = 0;
-        if src.sparse_binding { *dst |= 0x00000001; }
-        if src.sparse_residency { *dst |= 0x00000002; }
-        if src.sparse_aliased { *dst |= 0x00000004; }
-        if src.protected { *dst |= 0x00000008; }
-        if src.device_address_capture_replay_ext { *dst |= 0x00000010; }
     }
 }
 

@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceFragmentShaderBarycentricFeatures {
+    pub fragment_shader_barycentric: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFragmentShaderBarycentricFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceFragmentShaderBarycentricFeatures {
     pub fragment_shader_barycentric: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceFragmentShaderBarycentricFeatures {
-    pub fragment_shader_barycentric: bool,
+impl VkWrappedType<RawVkPhysicalDeviceFragmentShaderBarycentricFeatures> for VkPhysicalDeviceFragmentShaderBarycentricFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceFragmentShaderBarycentricFeatures, dst: &mut RawVkPhysicalDeviceFragmentShaderBarycentricFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentShaderBarycentricFeaturesNv);
+        dst.next = ptr::null();
+        dst.fragment_shader_barycentric = vk_to_raw_value(&src.fragment_shader_barycentric);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceFragmentShaderBarycentricFeatures> for RawVkPhysicalDeviceFragmentShaderBarycentricFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceFragmentShaderBarycentricFeatures> for RawVkPhysi
         VkPhysicalDeviceFragmentShaderBarycentricFeatures {
             fragment_shader_barycentric: u32::vk_to_wrapped(&src.fragment_shader_barycentric),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceFragmentShaderBarycentricFeatures> for VkPhysicalDeviceFragmentShaderBarycentricFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceFragmentShaderBarycentricFeatures, dst: &mut RawVkPhysicalDeviceFragmentShaderBarycentricFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentShaderBarycentricFeaturesNv);
-        dst.next = ptr::null();
-        dst.fragment_shader_barycentric = vk_to_raw_value(&src.fragment_shader_barycentric);
     }
 }
 

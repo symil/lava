@@ -17,6 +17,15 @@ use vk::vk_structure_type::*;
 use vk::vk_sample_count_flags::*;
 use vk::vk_extent_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceSampleLocationsProperties {
+    pub sample_location_sample_counts: VkSampleCountFlags,
+    pub max_sample_location_grid_size: VkExtent2D,
+    pub sample_location_coordinate_range: [f32; 2],
+    pub sample_location_sub_pixel_bits: u32,
+    pub variable_sample_locations: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSampleLocationsProperties {
@@ -29,13 +38,16 @@ pub struct RawVkPhysicalDeviceSampleLocationsProperties {
     pub variable_sample_locations: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceSampleLocationsProperties {
-    pub sample_location_sample_counts: VkSampleCountFlags,
-    pub max_sample_location_grid_size: VkExtent2D,
-    pub sample_location_coordinate_range: [f32; 2],
-    pub sample_location_sub_pixel_bits: u32,
-    pub variable_sample_locations: bool,
+impl VkWrappedType<RawVkPhysicalDeviceSampleLocationsProperties> for VkPhysicalDeviceSampleLocationsProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceSampleLocationsProperties, dst: &mut RawVkPhysicalDeviceSampleLocationsProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSampleLocationsPropertiesExt);
+        dst.next = ptr::null();
+        dst.sample_location_sample_counts = vk_to_raw_value(&src.sample_location_sample_counts);
+        dst.max_sample_location_grid_size = vk_to_raw_value(&src.max_sample_location_grid_size);
+        dst.sample_location_coordinate_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.sample_location_coordinate_range, &mut dst_array); dst_array };
+        dst.sample_location_sub_pixel_bits = src.sample_location_sub_pixel_bits;
+        dst.variable_sample_locations = vk_to_raw_value(&src.variable_sample_locations);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceSampleLocationsProperties> for RawVkPhysicalDeviceSampleLocationsProperties {
@@ -47,18 +59,6 @@ impl VkRawType<VkPhysicalDeviceSampleLocationsProperties> for RawVkPhysicalDevic
             sample_location_sub_pixel_bits: src.sample_location_sub_pixel_bits,
             variable_sample_locations: u32::vk_to_wrapped(&src.variable_sample_locations),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceSampleLocationsProperties> for VkPhysicalDeviceSampleLocationsProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceSampleLocationsProperties, dst: &mut RawVkPhysicalDeviceSampleLocationsProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSampleLocationsPropertiesExt);
-        dst.next = ptr::null();
-        dst.sample_location_sample_counts = vk_to_raw_value(&src.sample_location_sample_counts);
-        dst.max_sample_location_grid_size = vk_to_raw_value(&src.max_sample_location_grid_size);
-        dst.sample_location_coordinate_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.sample_location_coordinate_range, &mut dst_array); dst_array };
-        dst.sample_location_sub_pixel_bits = src.sample_location_sub_pixel_bits;
-        dst.variable_sample_locations = vk_to_raw_value(&src.variable_sample_locations);
     }
 }
 

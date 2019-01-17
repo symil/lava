@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryFdProperties {
+    pub memory_type_bits: u32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryFdProperties {
@@ -23,9 +28,12 @@ pub struct RawVkMemoryFdProperties {
     pub memory_type_bits: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryFdProperties {
-    pub memory_type_bits: u32,
+impl VkWrappedType<RawVkMemoryFdProperties> for VkMemoryFdProperties {
+    fn vk_to_raw(src: &VkMemoryFdProperties, dst: &mut RawVkMemoryFdProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryFdPropertiesKhr);
+        dst.next = ptr::null();
+        dst.memory_type_bits = src.memory_type_bits;
+    }
 }
 
 impl VkRawType<VkMemoryFdProperties> for RawVkMemoryFdProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkMemoryFdProperties> for RawVkMemoryFdProperties {
         VkMemoryFdProperties {
             memory_type_bits: src.memory_type_bits,
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryFdProperties> for VkMemoryFdProperties {
-    fn vk_to_raw(src: &VkMemoryFdProperties, dst: &mut RawVkMemoryFdProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryFdPropertiesKhr);
-        dst.next = ptr::null();
-        dst.memory_type_bits = src.memory_type_bits;
     }
 }
 

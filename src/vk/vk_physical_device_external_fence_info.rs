@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_fence_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceExternalFenceInfo {
+    pub handle_type: VkExternalFenceHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalFenceInfo {
@@ -24,9 +29,12 @@ pub struct RawVkPhysicalDeviceExternalFenceInfo {
     pub handle_type: RawVkExternalFenceHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceExternalFenceInfo {
-    pub handle_type: VkExternalFenceHandleTypeFlags,
+impl VkWrappedType<RawVkPhysicalDeviceExternalFenceInfo> for VkPhysicalDeviceExternalFenceInfo {
+    fn vk_to_raw(src: &VkPhysicalDeviceExternalFenceInfo, dst: &mut RawVkPhysicalDeviceExternalFenceInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalFenceInfo);
+        dst.next = ptr::null();
+        dst.handle_type = vk_to_raw_value(&src.handle_type);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceExternalFenceInfo> for RawVkPhysicalDeviceExternalFenceInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkPhysicalDeviceExternalFenceInfo> for RawVkPhysicalDeviceExterna
         VkPhysicalDeviceExternalFenceInfo {
             handle_type: RawVkExternalFenceHandleTypeFlags::vk_to_wrapped(&src.handle_type),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceExternalFenceInfo> for VkPhysicalDeviceExternalFenceInfo {
-    fn vk_to_raw(src: &VkPhysicalDeviceExternalFenceInfo, dst: &mut RawVkPhysicalDeviceExternalFenceInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalFenceInfo);
-        dst.next = ptr::null();
-        dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }
 

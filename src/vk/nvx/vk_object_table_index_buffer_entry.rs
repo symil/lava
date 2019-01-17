@@ -18,6 +18,14 @@ use vk::nvx::vk_object_entry_usage_flags::*;
 use vk::vk_buffer::*;
 use vk::vk_index_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkObjectTableIndexBufferEntry<'a> {
+    pub type_: VkObjectEntryType,
+    pub flags: VkObjectEntryUsageFlags,
+    pub buffer: &'a VkBuffer,
+    pub index_type: VkIndexType,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableIndexBufferEntry {
@@ -25,14 +33,6 @@ pub struct RawVkObjectTableIndexBufferEntry {
     pub flags: RawVkObjectEntryUsageFlags,
     pub buffer: RawVkBuffer,
     pub index_type: RawVkIndexType,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkObjectTableIndexBufferEntry<'a> {
-    pub type_: VkObjectEntryType,
-    pub flags: VkObjectEntryUsageFlags,
-    pub buffer: &'a VkBuffer,
-    pub index_type: VkIndexType,
 }
 
 impl<'a> VkWrappedType<RawVkObjectTableIndexBufferEntry> for VkObjectTableIndexBufferEntry<'a> {

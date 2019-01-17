@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_fence_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkFenceCreateInfo {
+    pub flags: VkFenceCreateFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFenceCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkFenceCreateInfo {
     pub flags: RawVkFenceCreateFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkFenceCreateInfo {
-    pub flags: VkFenceCreateFlags,
+impl VkWrappedType<RawVkFenceCreateInfo> for VkFenceCreateInfo {
+    fn vk_to_raw(src: &VkFenceCreateInfo, dst: &mut RawVkFenceCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::FenceCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+    }
 }
 
 impl VkRawType<VkFenceCreateInfo> for RawVkFenceCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkFenceCreateInfo> for RawVkFenceCreateInfo {
         VkFenceCreateInfo {
             flags: RawVkFenceCreateFlags::vk_to_wrapped(&src.flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkFenceCreateInfo> for VkFenceCreateInfo {
-    fn vk_to_raw(src: &VkFenceCreateInfo, dst: &mut RawVkFenceCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::FenceCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 

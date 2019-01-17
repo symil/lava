@@ -17,15 +17,6 @@ use vk::vk_structure_type::*;
 use vk::vk_command_buffer_usage_flags::*;
 use vk::vk_command_buffer_inheritance_info::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkCommandBufferBeginInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub flags: RawVkCommandBufferUsageFlags,
-    pub inheritance_info: *mut RawVkCommandBufferInheritanceInfo,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkCommandBufferBeginInfo<'a, 'b, 'c>
     where
@@ -34,6 +25,15 @@ pub struct VkCommandBufferBeginInfo<'a, 'b, 'c>
 {
     pub flags: VkCommandBufferUsageFlags,
     pub inheritance_info: Option<&'a VkCommandBufferInheritanceInfo<'b, 'c>>,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkCommandBufferBeginInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkCommandBufferUsageFlags,
+    pub inheritance_info: *mut RawVkCommandBufferInheritanceInfo,
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkCommandBufferBeginInfo> for VkCommandBufferBeginInfo<'a, 'b, 'c>

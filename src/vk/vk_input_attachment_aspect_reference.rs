@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_image_aspect_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkInputAttachmentAspectReference {
+    pub subpass: u32,
+    pub input_attachment_index: usize,
+    pub aspect_mask: VkImageAspectFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkInputAttachmentAspectReference {
@@ -23,11 +30,12 @@ pub struct RawVkInputAttachmentAspectReference {
     pub aspect_mask: RawVkImageAspectFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkInputAttachmentAspectReference {
-    pub subpass: u32,
-    pub input_attachment_index: usize,
-    pub aspect_mask: VkImageAspectFlags,
+impl VkWrappedType<RawVkInputAttachmentAspectReference> for VkInputAttachmentAspectReference {
+    fn vk_to_raw(src: &VkInputAttachmentAspectReference, dst: &mut RawVkInputAttachmentAspectReference) {
+        dst.subpass = src.subpass;
+        dst.input_attachment_index = vk_to_raw_value(&src.input_attachment_index);
+        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
+    }
 }
 
 impl VkRawType<VkInputAttachmentAspectReference> for RawVkInputAttachmentAspectReference {
@@ -37,14 +45,6 @@ impl VkRawType<VkInputAttachmentAspectReference> for RawVkInputAttachmentAspectR
             input_attachment_index: u32::vk_to_wrapped(&src.input_attachment_index),
             aspect_mask: RawVkImageAspectFlags::vk_to_wrapped(&src.aspect_mask),
         }
-    }
-}
-
-impl VkWrappedType<RawVkInputAttachmentAspectReference> for VkInputAttachmentAspectReference {
-    fn vk_to_raw(src: &VkInputAttachmentAspectReference, dst: &mut RawVkInputAttachmentAspectReference) {
-        dst.subpass = src.subpass;
-        dst.input_attachment_index = vk_to_raw_value(&src.input_attachment_index);
-        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
     }
 }
 

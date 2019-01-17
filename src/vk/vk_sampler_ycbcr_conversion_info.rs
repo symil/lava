@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_sampler_ycbcr_conversion::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSamplerYcbcrConversionInfo<'a> {
+    pub conversion: &'a VkSamplerYcbcrConversion,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub conversion: RawVkSamplerYcbcrConversion,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSamplerYcbcrConversionInfo<'a> {
-    pub conversion: &'a VkSamplerYcbcrConversion,
 }
 
 impl<'a> VkWrappedType<RawVkSamplerYcbcrConversionInfo> for VkSamplerYcbcrConversionInfo<'a> {

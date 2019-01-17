@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSubpassContents = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSubpassContents {
@@ -11,17 +9,19 @@ pub enum VkSubpassContents {
     SecondaryCommandBuffers = 1,
 }
 
+pub type RawVkSubpassContents = i32;
+
+impl VkWrappedType<RawVkSubpassContents> for VkSubpassContents {
+    fn vk_to_raw(src: &VkSubpassContents, dst: &mut RawVkSubpassContents) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkSubpassContents> for RawVkSubpassContents {
     fn vk_to_wrapped(src: &RawVkSubpassContents) -> VkSubpassContents {
         unsafe {
             *((src as *const i32) as *const VkSubpassContents)
         }
-    }
-}
-
-impl VkWrappedType<RawVkSubpassContents> for VkSubpassContents {
-    fn vk_to_raw(src: &VkSubpassContents, dst: &mut RawVkSubpassContents) {
-        *dst = *src as i32
     }
 }
 

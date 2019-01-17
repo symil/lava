@@ -17,6 +17,12 @@ use vk::vk_structure_type::*;
 use vk::nv::vk_acceleration_structure_memory_requirements_type::*;
 use vk::nv::vk_acceleration_structure::*;
 
+#[derive(Debug, Clone)]
+pub struct VkAccelerationStructureMemoryRequirementsInfo<'a> {
+    pub type_: VkAccelerationStructureMemoryRequirementsType,
+    pub acceleration_structure: &'a VkAccelerationStructure,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAccelerationStructureMemoryRequirementsInfo {
@@ -24,12 +30,6 @@ pub struct RawVkAccelerationStructureMemoryRequirementsInfo {
     pub next: *const c_void,
     pub type_: RawVkAccelerationStructureMemoryRequirementsType,
     pub acceleration_structure: RawVkAccelerationStructure,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkAccelerationStructureMemoryRequirementsInfo<'a> {
-    pub type_: VkAccelerationStructureMemoryRequirementsType,
-    pub acceleration_structure: &'a VkAccelerationStructure,
 }
 
 impl<'a> VkWrappedType<RawVkAccelerationStructureMemoryRequirementsInfo> for VkAccelerationStructureMemoryRequirementsInfo<'a> {

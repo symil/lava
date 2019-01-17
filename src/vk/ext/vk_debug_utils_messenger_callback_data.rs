@@ -18,6 +18,22 @@ use vk::ext::vk_debug_utils_messenger_callback_data_flags::*;
 use vk::ext::vk_debug_utils_label::*;
 use vk::ext::vk_debug_utils_object_name_info::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
+    where
+        'd: 'c,
+        'f: 'e,
+        'h: 'g,
+{
+    pub flags: VkDebugUtilsMessengerCallbackDataFlags,
+    pub message_id_name: Option<&'a str>,
+    pub message_id_number: isize,
+    pub message: &'b str,
+    pub queue_labels: &'c [VkDebugUtilsLabel<'d>],
+    pub cmd_buf_labels: &'e [VkDebugUtilsLabel<'f>],
+    pub objects: &'g [VkDebugUtilsObjectNameInfo<'h>],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsMessengerCallbackData {
@@ -33,22 +49,6 @@ pub struct RawVkDebugUtilsMessengerCallbackData {
     pub cmd_buf_labels: *mut RawVkDebugUtilsLabel,
     pub object_count: u32,
     pub objects: *mut RawVkDebugUtilsObjectNameInfo,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'd: 'c,
-        'f: 'e,
-        'h: 'g,
-{
-    pub flags: VkDebugUtilsMessengerCallbackDataFlags,
-    pub message_id_name: Option<&'a str>,
-    pub message_id_number: isize,
-    pub message: &'b str,
-    pub queue_labels: &'c [VkDebugUtilsLabel<'d>],
-    pub cmd_buf_labels: &'e [VkDebugUtilsLabel<'f>],
-    pub objects: &'g [VkDebugUtilsObjectNameInfo<'h>],
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkWrappedType<RawVkDebugUtilsMessengerCallbackData> for VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>

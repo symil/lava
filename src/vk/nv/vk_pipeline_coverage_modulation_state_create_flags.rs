@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineCoverageModulationStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineCoverageModulationStateCreateFlags {
     
+}
+
+pub type RawVkPipelineCoverageModulationStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineCoverageModulationStateCreateFlags> for VkPipelineCoverageModulationStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineCoverageModulationStateCreateFlags, dst: &mut RawVkPipelineCoverageModulationStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineCoverageModulationStateCreateFlags> for RawVkPipelineCoverageModulationStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineCoverageModulationStateCreateFlags> for RawVkPipelineCo
         VkPipelineCoverageModulationStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineCoverageModulationStateCreateFlags> for VkPipelineCoverageModulationStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineCoverageModulationStateCreateFlags, dst: &mut RawVkPipelineCoverageModulationStateCreateFlags) {
-        *dst = 0;
     }
 }
 

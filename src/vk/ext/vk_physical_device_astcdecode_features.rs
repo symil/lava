@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceASTCDecodeFeatures {
+    pub decode_mode_shared_exponent: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceASTCDecodeFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceASTCDecodeFeatures {
     pub decode_mode_shared_exponent: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceASTCDecodeFeatures {
-    pub decode_mode_shared_exponent: bool,
+impl VkWrappedType<RawVkPhysicalDeviceASTCDecodeFeatures> for VkPhysicalDeviceASTCDecodeFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceASTCDecodeFeatures, dst: &mut RawVkPhysicalDeviceASTCDecodeFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceAstcDecodeFeaturesExt);
+        dst.next = ptr::null();
+        dst.decode_mode_shared_exponent = vk_to_raw_value(&src.decode_mode_shared_exponent);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceASTCDecodeFeatures> for RawVkPhysicalDeviceASTCDecodeFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceASTCDecodeFeatures> for RawVkPhysicalDeviceASTCDe
         VkPhysicalDeviceASTCDecodeFeatures {
             decode_mode_shared_exponent: u32::vk_to_wrapped(&src.decode_mode_shared_exponent),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceASTCDecodeFeatures> for VkPhysicalDeviceASTCDecodeFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceASTCDecodeFeatures, dst: &mut RawVkPhysicalDeviceASTCDecodeFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceAstcDecodeFeaturesExt);
-        dst.next = ptr::null();
-        dst.decode_mode_shared_exponent = vk_to_raw_value(&src.decode_mode_shared_exponent);
     }
 }
 

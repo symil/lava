@@ -2,13 +2,22 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCommandPoolCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandPoolCreateFlags {
     pub transient: bool,
     pub reset_command_buffer: bool,
     pub protected: bool,
+}
+
+pub type RawVkCommandPoolCreateFlags = u32;
+
+impl VkWrappedType<RawVkCommandPoolCreateFlags> for VkCommandPoolCreateFlags {
+    fn vk_to_raw(src: &VkCommandPoolCreateFlags, dst: &mut RawVkCommandPoolCreateFlags) {
+        *dst = 0;
+        if src.transient { *dst |= 0x00000001; }
+        if src.reset_command_buffer { *dst |= 0x00000002; }
+        if src.protected { *dst |= 0x00000004; }
+    }
 }
 
 impl VkRawType<VkCommandPoolCreateFlags> for RawVkCommandPoolCreateFlags {
@@ -18,15 +27,6 @@ impl VkRawType<VkCommandPoolCreateFlags> for RawVkCommandPoolCreateFlags {
             reset_command_buffer: (src & 0x00000002) != 0,
             protected: (src & 0x00000004) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkCommandPoolCreateFlags> for VkCommandPoolCreateFlags {
-    fn vk_to_raw(src: &VkCommandPoolCreateFlags, dst: &mut RawVkCommandPoolCreateFlags) {
-        *dst = 0;
-        if src.transient { *dst |= 0x00000001; }
-        if src.reset_command_buffer { *dst |= 0x00000002; }
-        if src.protected { *dst |= 0x00000004; }
     }
 }
 

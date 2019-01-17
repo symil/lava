@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_drm_format_modifier_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDrmFormatModifierPropertiesList<'a> {
+    pub drm_format_modifier_properties: Option<&'a [VkDrmFormatModifierProperties]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrmFormatModifierPropertiesList {
@@ -23,11 +28,6 @@ pub struct RawVkDrmFormatModifierPropertiesList {
     pub next: *const c_void,
     pub drm_format_modifier_count: u32,
     pub drm_format_modifier_properties: *mut RawVkDrmFormatModifierProperties,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDrmFormatModifierPropertiesList<'a> {
-    pub drm_format_modifier_properties: Option<&'a [VkDrmFormatModifierProperties]>,
 }
 
 impl<'a> VkWrappedType<RawVkDrmFormatModifierPropertiesList> for VkDrmFormatModifierPropertiesList<'a> {

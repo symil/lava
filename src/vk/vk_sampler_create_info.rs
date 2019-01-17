@@ -21,6 +21,26 @@ use vk::vk_sampler_address_mode::*;
 use vk::vk_compare_op::*;
 use vk::vk_border_color::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSamplerCreateInfo {
+    pub flags: VkSamplerCreateFlags,
+    pub mag_filter: VkFilter,
+    pub min_filter: VkFilter,
+    pub mipmap_mode: VkSamplerMipmapMode,
+    pub address_mode_u: VkSamplerAddressMode,
+    pub address_mode_v: VkSamplerAddressMode,
+    pub address_mode_w: VkSamplerAddressMode,
+    pub mip_lod_bias: f32,
+    pub anisotropy_enable: bool,
+    pub max_anisotropy: f32,
+    pub compare_enable: bool,
+    pub compare_op: VkCompareOp,
+    pub min_lod: f32,
+    pub max_lod: f32,
+    pub border_color: VkBorderColor,
+    pub unnormalized_coordinates: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerCreateInfo {
@@ -44,24 +64,27 @@ pub struct RawVkSamplerCreateInfo {
     pub unnormalized_coordinates: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSamplerCreateInfo {
-    pub flags: VkSamplerCreateFlags,
-    pub mag_filter: VkFilter,
-    pub min_filter: VkFilter,
-    pub mipmap_mode: VkSamplerMipmapMode,
-    pub address_mode_u: VkSamplerAddressMode,
-    pub address_mode_v: VkSamplerAddressMode,
-    pub address_mode_w: VkSamplerAddressMode,
-    pub mip_lod_bias: f32,
-    pub anisotropy_enable: bool,
-    pub max_anisotropy: f32,
-    pub compare_enable: bool,
-    pub compare_op: VkCompareOp,
-    pub min_lod: f32,
-    pub max_lod: f32,
-    pub border_color: VkBorderColor,
-    pub unnormalized_coordinates: bool,
+impl VkWrappedType<RawVkSamplerCreateInfo> for VkSamplerCreateInfo {
+    fn vk_to_raw(src: &VkSamplerCreateInfo, dst: &mut RawVkSamplerCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SamplerCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.mag_filter = vk_to_raw_value(&src.mag_filter);
+        dst.min_filter = vk_to_raw_value(&src.min_filter);
+        dst.mipmap_mode = vk_to_raw_value(&src.mipmap_mode);
+        dst.address_mode_u = vk_to_raw_value(&src.address_mode_u);
+        dst.address_mode_v = vk_to_raw_value(&src.address_mode_v);
+        dst.address_mode_w = vk_to_raw_value(&src.address_mode_w);
+        dst.mip_lod_bias = src.mip_lod_bias;
+        dst.anisotropy_enable = vk_to_raw_value(&src.anisotropy_enable);
+        dst.max_anisotropy = src.max_anisotropy;
+        dst.compare_enable = vk_to_raw_value(&src.compare_enable);
+        dst.compare_op = vk_to_raw_value(&src.compare_op);
+        dst.min_lod = src.min_lod;
+        dst.max_lod = src.max_lod;
+        dst.border_color = vk_to_raw_value(&src.border_color);
+        dst.unnormalized_coordinates = vk_to_raw_value(&src.unnormalized_coordinates);
+    }
 }
 
 impl VkRawType<VkSamplerCreateInfo> for RawVkSamplerCreateInfo {
@@ -84,29 +107,6 @@ impl VkRawType<VkSamplerCreateInfo> for RawVkSamplerCreateInfo {
             border_color: RawVkBorderColor::vk_to_wrapped(&src.border_color),
             unnormalized_coordinates: u32::vk_to_wrapped(&src.unnormalized_coordinates),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSamplerCreateInfo> for VkSamplerCreateInfo {
-    fn vk_to_raw(src: &VkSamplerCreateInfo, dst: &mut RawVkSamplerCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SamplerCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.mag_filter = vk_to_raw_value(&src.mag_filter);
-        dst.min_filter = vk_to_raw_value(&src.min_filter);
-        dst.mipmap_mode = vk_to_raw_value(&src.mipmap_mode);
-        dst.address_mode_u = vk_to_raw_value(&src.address_mode_u);
-        dst.address_mode_v = vk_to_raw_value(&src.address_mode_v);
-        dst.address_mode_w = vk_to_raw_value(&src.address_mode_w);
-        dst.mip_lod_bias = src.mip_lod_bias;
-        dst.anisotropy_enable = vk_to_raw_value(&src.anisotropy_enable);
-        dst.max_anisotropy = src.max_anisotropy;
-        dst.compare_enable = vk_to_raw_value(&src.compare_enable);
-        dst.compare_op = vk_to_raw_value(&src.compare_op);
-        dst.min_lod = src.min_lod;
-        dst.max_lod = src.max_lod;
-        dst.border_color = vk_to_raw_value(&src.border_color);
-        dst.unnormalized_coordinates = vk_to_raw_value(&src.unnormalized_coordinates);
     }
 }
 

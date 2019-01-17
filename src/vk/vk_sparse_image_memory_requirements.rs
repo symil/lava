@@ -15,6 +15,15 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_sparse_image_format_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSparseImageMemoryRequirements {
+    pub format_properties: VkSparseImageFormatProperties,
+    pub image_mip_tail_first_lod: usize,
+    pub image_mip_tail_size: usize,
+    pub image_mip_tail_offset: usize,
+    pub image_mip_tail_stride: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageMemoryRequirements {
@@ -25,13 +34,14 @@ pub struct RawVkSparseImageMemoryRequirements {
     pub image_mip_tail_stride: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSparseImageMemoryRequirements {
-    pub format_properties: VkSparseImageFormatProperties,
-    pub image_mip_tail_first_lod: usize,
-    pub image_mip_tail_size: usize,
-    pub image_mip_tail_offset: usize,
-    pub image_mip_tail_stride: usize,
+impl VkWrappedType<RawVkSparseImageMemoryRequirements> for VkSparseImageMemoryRequirements {
+    fn vk_to_raw(src: &VkSparseImageMemoryRequirements, dst: &mut RawVkSparseImageMemoryRequirements) {
+        dst.format_properties = vk_to_raw_value(&src.format_properties);
+        dst.image_mip_tail_first_lod = vk_to_raw_value(&src.image_mip_tail_first_lod);
+        dst.image_mip_tail_size = vk_to_raw_value(&src.image_mip_tail_size);
+        dst.image_mip_tail_offset = vk_to_raw_value(&src.image_mip_tail_offset);
+        dst.image_mip_tail_stride = vk_to_raw_value(&src.image_mip_tail_stride);
+    }
 }
 
 impl VkRawType<VkSparseImageMemoryRequirements> for RawVkSparseImageMemoryRequirements {
@@ -43,16 +53,6 @@ impl VkRawType<VkSparseImageMemoryRequirements> for RawVkSparseImageMemoryRequir
             image_mip_tail_offset: u64::vk_to_wrapped(&src.image_mip_tail_offset),
             image_mip_tail_stride: u64::vk_to_wrapped(&src.image_mip_tail_stride),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSparseImageMemoryRequirements> for VkSparseImageMemoryRequirements {
-    fn vk_to_raw(src: &VkSparseImageMemoryRequirements, dst: &mut RawVkSparseImageMemoryRequirements) {
-        dst.format_properties = vk_to_raw_value(&src.format_properties);
-        dst.image_mip_tail_first_lod = vk_to_raw_value(&src.image_mip_tail_first_lod);
-        dst.image_mip_tail_size = vk_to_raw_value(&src.image_mip_tail_size);
-        dst.image_mip_tail_offset = vk_to_raw_value(&src.image_mip_tail_offset);
-        dst.image_mip_tail_stride = vk_to_raw_value(&src.image_mip_tail_stride);
     }
 }
 

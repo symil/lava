@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSemaphoreCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSemaphoreCreateFlags {
     
+}
+
+pub type RawVkSemaphoreCreateFlags = u32;
+
+impl VkWrappedType<RawVkSemaphoreCreateFlags> for VkSemaphoreCreateFlags {
+    fn vk_to_raw(src: &VkSemaphoreCreateFlags, dst: &mut RawVkSemaphoreCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkSemaphoreCreateFlags> for RawVkSemaphoreCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkSemaphoreCreateFlags> for RawVkSemaphoreCreateFlags {
         VkSemaphoreCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkSemaphoreCreateFlags> for VkSemaphoreCreateFlags {
-    fn vk_to_raw(src: &VkSemaphoreCreateFlags, dst: &mut RawVkSemaphoreCreateFlags) {
-        *dst = 0;
     }
 }
 

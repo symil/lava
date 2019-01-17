@@ -18,6 +18,15 @@ use vk::vk_buffer_view_create_flags::*;
 use vk::vk_buffer::*;
 use vk::vk_format::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBufferViewCreateInfo<'a> {
+    pub flags: VkBufferViewCreateFlags,
+    pub buffer: &'a VkBuffer,
+    pub format: VkFormat,
+    pub offset: usize,
+    pub range: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferViewCreateInfo {
@@ -28,15 +37,6 @@ pub struct RawVkBufferViewCreateInfo {
     pub format: RawVkFormat,
     pub offset: u64,
     pub range: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBufferViewCreateInfo<'a> {
-    pub flags: VkBufferViewCreateFlags,
-    pub buffer: &'a VkBuffer,
-    pub format: VkFormat,
-    pub offset: usize,
-    pub range: usize,
 }
 
 impl<'a> VkWrappedType<RawVkBufferViewCreateInfo> for VkBufferViewCreateInfo<'a> {

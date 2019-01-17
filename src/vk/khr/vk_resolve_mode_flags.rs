@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkResolveModeFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkResolveModeFlags {
     pub sample_zero: bool,
     pub average: bool,
     pub min: bool,
     pub max: bool,
+}
+
+pub type RawVkResolveModeFlags = u32;
+
+impl VkWrappedType<RawVkResolveModeFlags> for VkResolveModeFlags {
+    fn vk_to_raw(src: &VkResolveModeFlags, dst: &mut RawVkResolveModeFlags) {
+        *dst = 0;
+        if src.sample_zero { *dst |= 0x00000001; }
+        if src.average { *dst |= 0x00000002; }
+        if src.min { *dst |= 0x00000004; }
+        if src.max { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkResolveModeFlags> for RawVkResolveModeFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkResolveModeFlags> for RawVkResolveModeFlags {
             min: (src & 0x00000004) != 0,
             max: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkResolveModeFlags> for VkResolveModeFlags {
-    fn vk_to_raw(src: &VkResolveModeFlags, dst: &mut RawVkResolveModeFlags) {
-        *dst = 0;
-        if src.sample_zero { *dst |= 0x00000001; }
-        if src.average { *dst |= 0x00000002; }
-        if src.min { *dst |= 0x00000004; }
-        if src.max { *dst |= 0x00000008; }
     }
 }
 

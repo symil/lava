@@ -17,6 +17,14 @@ use vk::vk_structure_type::*;
 use vk::nv::vk_acceleration_structure::*;
 use vk::vk_device_memory::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBindAccelerationStructureMemoryInfo<'a, 'b, 'c> {
+    pub acceleration_structure: &'a VkAccelerationStructure,
+    pub memory: &'b VkDeviceMemory,
+    pub memory_offset: usize,
+    pub device_indices: &'c [usize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindAccelerationStructureMemoryInfo {
@@ -27,14 +35,6 @@ pub struct RawVkBindAccelerationStructureMemoryInfo {
     pub memory_offset: u64,
     pub device_index_count: u32,
     pub device_indices: *mut u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBindAccelerationStructureMemoryInfo<'a, 'b, 'c> {
-    pub acceleration_structure: &'a VkAccelerationStructure,
-    pub memory: &'b VkDeviceMemory,
-    pub memory_offset: usize,
-    pub device_indices: &'c [usize],
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkBindAccelerationStructureMemoryInfo> for VkBindAccelerationStructureMemoryInfo<'a, 'b, 'c> {

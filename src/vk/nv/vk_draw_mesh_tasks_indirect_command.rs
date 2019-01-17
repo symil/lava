@@ -14,6 +14,12 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDrawMeshTasksIndirectCommand {
+    pub task_count: usize,
+    pub first_task: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrawMeshTasksIndirectCommand {
@@ -21,10 +27,11 @@ pub struct RawVkDrawMeshTasksIndirectCommand {
     pub first_task: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDrawMeshTasksIndirectCommand {
-    pub task_count: usize,
-    pub first_task: usize,
+impl VkWrappedType<RawVkDrawMeshTasksIndirectCommand> for VkDrawMeshTasksIndirectCommand {
+    fn vk_to_raw(src: &VkDrawMeshTasksIndirectCommand, dst: &mut RawVkDrawMeshTasksIndirectCommand) {
+        dst.task_count = vk_to_raw_value(&src.task_count);
+        dst.first_task = vk_to_raw_value(&src.first_task);
+    }
 }
 
 impl VkRawType<VkDrawMeshTasksIndirectCommand> for RawVkDrawMeshTasksIndirectCommand {
@@ -33,13 +40,6 @@ impl VkRawType<VkDrawMeshTasksIndirectCommand> for RawVkDrawMeshTasksIndirectCom
             task_count: u32::vk_to_wrapped(&src.task_count),
             first_task: u32::vk_to_wrapped(&src.first_task),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDrawMeshTasksIndirectCommand> for VkDrawMeshTasksIndirectCommand {
-    fn vk_to_raw(src: &VkDrawMeshTasksIndirectCommand, dst: &mut RawVkDrawMeshTasksIndirectCommand) {
-        dst.task_count = vk_to_raw_value(&src.task_count);
-        dst.first_task = vk_to_raw_value(&src.first_task);
     }
 }
 

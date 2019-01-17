@@ -33,10 +33,10 @@ function generateVkBitFlagsDefinition(cDef) {
 
     return [
         genUses(),
-        genRawType(cDef),
         genWrappedType(cDef),
-        genImplVkRawType(cDef),
+        genRawType(cDef),
         genImplVkWrappedType(cDef),
+        genImplVkRawType(cDef),
         genImplDefault(cDef),
         genImplFlags(cDef),
         genImplAsUint(cDef)

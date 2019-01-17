@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExportMemoryAllocateInfo {
+    pub handle_types: VkExternalMemoryHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExportMemoryAllocateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkExportMemoryAllocateInfo {
     pub handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExportMemoryAllocateInfo {
-    pub handle_types: VkExternalMemoryHandleTypeFlags,
+impl VkWrappedType<RawVkExportMemoryAllocateInfo> for VkExportMemoryAllocateInfo {
+    fn vk_to_raw(src: &VkExportMemoryAllocateInfo, dst: &mut RawVkExportMemoryAllocateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ExportMemoryAllocateInfo);
+        dst.next = ptr::null();
+        dst.handle_types = vk_to_raw_value(&src.handle_types);
+    }
 }
 
 impl VkRawType<VkExportMemoryAllocateInfo> for RawVkExportMemoryAllocateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkExportMemoryAllocateInfo> for RawVkExportMemoryAllocateInfo {
         VkExportMemoryAllocateInfo {
             handle_types: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.handle_types),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExportMemoryAllocateInfo> for VkExportMemoryAllocateInfo {
-    fn vk_to_raw(src: &VkExportMemoryAllocateInfo, dst: &mut RawVkExportMemoryAllocateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ExportMemoryAllocateInfo);
-        dst.next = ptr::null();
-        dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }
 

@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCommandPoolResetFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandPoolResetFlags {
     pub release_resources: bool,
+}
+
+pub type RawVkCommandPoolResetFlags = u32;
+
+impl VkWrappedType<RawVkCommandPoolResetFlags> for VkCommandPoolResetFlags {
+    fn vk_to_raw(src: &VkCommandPoolResetFlags, dst: &mut RawVkCommandPoolResetFlags) {
+        *dst = 0;
+        if src.release_resources { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkCommandPoolResetFlags> for RawVkCommandPoolResetFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkCommandPoolResetFlags> for RawVkCommandPoolResetFlags {
         VkCommandPoolResetFlags {
             release_resources: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkCommandPoolResetFlags> for VkCommandPoolResetFlags {
-    fn vk_to_raw(src: &VkCommandPoolResetFlags, dst: &mut RawVkCommandPoolResetFlags) {
-        *dst = 0;
-        if src.release_resources { *dst |= 0x00000001; }
     }
 }
 

@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_rect_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGroupRenderPassBeginInfo<'a> {
+    pub device_mask: u32,
+    pub device_render_areas: &'a [VkRect2D],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupRenderPassBeginInfo {
@@ -24,12 +30,6 @@ pub struct RawVkDeviceGroupRenderPassBeginInfo {
     pub device_mask: u32,
     pub device_render_area_count: u32,
     pub device_render_areas: *mut RawVkRect2D,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDeviceGroupRenderPassBeginInfo<'a> {
-    pub device_mask: u32,
-    pub device_render_areas: &'a [VkRect2D],
 }
 
 impl<'a> VkWrappedType<RawVkDeviceGroupRenderPassBeginInfo> for VkDeviceGroupRenderPassBeginInfo<'a> {

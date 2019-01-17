@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_memory_property_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryType {
+    pub property_flags: VkMemoryPropertyFlags,
+    pub heap_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryType {
@@ -22,10 +28,11 @@ pub struct RawVkMemoryType {
     pub heap_index: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryType {
-    pub property_flags: VkMemoryPropertyFlags,
-    pub heap_index: usize,
+impl VkWrappedType<RawVkMemoryType> for VkMemoryType {
+    fn vk_to_raw(src: &VkMemoryType, dst: &mut RawVkMemoryType) {
+        dst.property_flags = vk_to_raw_value(&src.property_flags);
+        dst.heap_index = vk_to_raw_value(&src.heap_index);
+    }
 }
 
 impl VkRawType<VkMemoryType> for RawVkMemoryType {
@@ -34,13 +41,6 @@ impl VkRawType<VkMemoryType> for RawVkMemoryType {
             property_flags: RawVkMemoryPropertyFlags::vk_to_wrapped(&src.property_flags),
             heap_index: u32::vk_to_wrapped(&src.heap_index),
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryType> for VkMemoryType {
-    fn vk_to_raw(src: &VkMemoryType, dst: &mut RawVkMemoryType) {
-        dst.property_flags = vk_to_raw_value(&src.property_flags);
-        dst.heap_index = vk_to_raw_value(&src.heap_index);
     }
 }
 

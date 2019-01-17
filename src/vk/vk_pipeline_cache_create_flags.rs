@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineCacheCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineCacheCreateFlags {
     
+}
+
+pub type RawVkPipelineCacheCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineCacheCreateFlags> for VkPipelineCacheCreateFlags {
+    fn vk_to_raw(src: &VkPipelineCacheCreateFlags, dst: &mut RawVkPipelineCacheCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineCacheCreateFlags> for RawVkPipelineCacheCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineCacheCreateFlags> for RawVkPipelineCacheCreateFlags {
         VkPipelineCacheCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineCacheCreateFlags> for VkPipelineCacheCreateFlags {
-    fn vk_to_raw(src: &VkPipelineCacheCreateFlags, dst: &mut RawVkPipelineCacheCreateFlags) {
-        *dst = 0;
     }
 }
 

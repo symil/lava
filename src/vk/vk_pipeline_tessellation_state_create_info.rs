@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_pipeline_tessellation_state_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineTessellationStateCreateInfo {
+    pub flags: VkPipelineTessellationStateCreateFlags,
+    pub patch_control_points: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineTessellationStateCreateInfo {
@@ -25,10 +31,13 @@ pub struct RawVkPipelineTessellationStateCreateInfo {
     pub patch_control_points: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineTessellationStateCreateInfo {
-    pub flags: VkPipelineTessellationStateCreateFlags,
-    pub patch_control_points: usize,
+impl VkWrappedType<RawVkPipelineTessellationStateCreateInfo> for VkPipelineTessellationStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineTessellationStateCreateInfo, dst: &mut RawVkPipelineTessellationStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineTessellationStateCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.patch_control_points = vk_to_raw_value(&src.patch_control_points);
+    }
 }
 
 impl VkRawType<VkPipelineTessellationStateCreateInfo> for RawVkPipelineTessellationStateCreateInfo {
@@ -37,15 +46,6 @@ impl VkRawType<VkPipelineTessellationStateCreateInfo> for RawVkPipelineTessellat
             flags: RawVkPipelineTessellationStateCreateFlags::vk_to_wrapped(&src.flags),
             patch_control_points: u32::vk_to_wrapped(&src.patch_control_points),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineTessellationStateCreateInfo> for VkPipelineTessellationStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineTessellationStateCreateInfo, dst: &mut RawVkPipelineTessellationStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineTessellationStateCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.patch_control_points = vk_to_raw_value(&src.patch_control_points);
     }
 }
 

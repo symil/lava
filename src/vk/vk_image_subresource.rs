@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_image_aspect_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageSubresource {
+    pub aspect_mask: VkImageAspectFlags,
+    pub mip_level: usize,
+    pub array_layer: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSubresource {
@@ -23,11 +30,12 @@ pub struct RawVkImageSubresource {
     pub array_layer: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageSubresource {
-    pub aspect_mask: VkImageAspectFlags,
-    pub mip_level: usize,
-    pub array_layer: usize,
+impl VkWrappedType<RawVkImageSubresource> for VkImageSubresource {
+    fn vk_to_raw(src: &VkImageSubresource, dst: &mut RawVkImageSubresource) {
+        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
+        dst.mip_level = vk_to_raw_value(&src.mip_level);
+        dst.array_layer = vk_to_raw_value(&src.array_layer);
+    }
 }
 
 impl VkRawType<VkImageSubresource> for RawVkImageSubresource {
@@ -37,14 +45,6 @@ impl VkRawType<VkImageSubresource> for RawVkImageSubresource {
             mip_level: u32::vk_to_wrapped(&src.mip_level),
             array_layer: u32::vk_to_wrapped(&src.array_layer),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageSubresource> for VkImageSubresource {
-    fn vk_to_raw(src: &VkImageSubresource, dst: &mut RawVkImageSubresource) {
-        dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);
-        dst.mip_level = vk_to_raw_value(&src.mip_level);
-        dst.array_layer = vk_to_raw_value(&src.array_layer);
     }
 }
 

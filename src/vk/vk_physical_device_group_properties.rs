@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_physical_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceGroupProperties {
+    pub physical_devices: Vec<VkPhysicalDevice>,
+    pub subset_allocation: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceGroupProperties {
@@ -26,10 +32,14 @@ pub struct RawVkPhysicalDeviceGroupProperties {
     pub subset_allocation: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceGroupProperties {
-    pub physical_devices: Vec<VkPhysicalDevice>,
-    pub subset_allocation: bool,
+impl VkWrappedType<RawVkPhysicalDeviceGroupProperties> for VkPhysicalDeviceGroupProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceGroupProperties, dst: &mut RawVkPhysicalDeviceGroupProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceGroupProperties);
+        dst.next = ptr::null();
+        dst.physical_device_count = src.physical_devices.len() as u32;
+        dst.physical_devices = unsafe { let mut dst_array : [RawVkPhysicalDevice; 32] = mem::uninitialized(); vk_to_raw_array(&src.physical_devices, &mut dst_array); dst_array };
+        dst.subset_allocation = vk_to_raw_value(&src.subset_allocation);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceGroupProperties> for RawVkPhysicalDeviceGroupProperties {
@@ -38,16 +48,6 @@ impl VkRawType<VkPhysicalDeviceGroupProperties> for RawVkPhysicalDeviceGroupProp
             physical_devices: new_vk_array(src.physical_device_count, src.physical_devices.as_ptr()),
             subset_allocation: u32::vk_to_wrapped(&src.subset_allocation),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceGroupProperties> for VkPhysicalDeviceGroupProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceGroupProperties, dst: &mut RawVkPhysicalDeviceGroupProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceGroupProperties);
-        dst.next = ptr::null();
-        dst.physical_device_count = src.physical_devices.len() as u32;
-        dst.physical_devices = unsafe { let mut dst_array : [RawVkPhysicalDevice; 32] = mem::uninitialized(); vk_to_raw_array(&src.physical_devices, &mut dst_array); dst_array };
-        dst.subset_allocation = vk_to_raw_value(&src.subset_allocation);
     }
 }
 

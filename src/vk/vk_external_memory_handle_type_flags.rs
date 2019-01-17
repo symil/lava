@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkExternalMemoryHandleTypeFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalMemoryHandleTypeFlags {
     pub opaque_fd: bool,
@@ -17,6 +15,25 @@ pub struct VkExternalMemoryHandleTypeFlags {
     pub android_hardware_buffer_android: bool,
     pub host_allocation_ext: bool,
     pub host_mapped_foreign_memory_ext: bool,
+}
+
+pub type RawVkExternalMemoryHandleTypeFlags = u32;
+
+impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandleTypeFlags {
+    fn vk_to_raw(src: &VkExternalMemoryHandleTypeFlags, dst: &mut RawVkExternalMemoryHandleTypeFlags) {
+        *dst = 0;
+        if src.opaque_fd { *dst |= 0x00000001; }
+        if src.opaque_win_32 { *dst |= 0x00000002; }
+        if src.opaque_win_32_kmt { *dst |= 0x00000004; }
+        if src.d_3d_11_texture { *dst |= 0x00000008; }
+        if src.d_3d_11_texture_kmt { *dst |= 0x00000010; }
+        if src.d_3d_12_heap { *dst |= 0x00000020; }
+        if src.d_3d_12_resource { *dst |= 0x00000040; }
+        if src.dma_buf_ext { *dst |= 0x00000200; }
+        if src.android_hardware_buffer_android { *dst |= 0x00000400; }
+        if src.host_allocation_ext { *dst |= 0x00000080; }
+        if src.host_mapped_foreign_memory_ext { *dst |= 0x00000100; }
+    }
 }
 
 impl VkRawType<VkExternalMemoryHandleTypeFlags> for RawVkExternalMemoryHandleTypeFlags {
@@ -34,23 +51,6 @@ impl VkRawType<VkExternalMemoryHandleTypeFlags> for RawVkExternalMemoryHandleTyp
             host_allocation_ext: (src & 0x00000080) != 0,
             host_mapped_foreign_memory_ext: (src & 0x00000100) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandleTypeFlags {
-    fn vk_to_raw(src: &VkExternalMemoryHandleTypeFlags, dst: &mut RawVkExternalMemoryHandleTypeFlags) {
-        *dst = 0;
-        if src.opaque_fd { *dst |= 0x00000001; }
-        if src.opaque_win_32 { *dst |= 0x00000002; }
-        if src.opaque_win_32_kmt { *dst |= 0x00000004; }
-        if src.d_3d_11_texture { *dst |= 0x00000008; }
-        if src.d_3d_11_texture_kmt { *dst |= 0x00000010; }
-        if src.d_3d_12_heap { *dst |= 0x00000020; }
-        if src.d_3d_12_resource { *dst |= 0x00000040; }
-        if src.dma_buf_ext { *dst |= 0x00000200; }
-        if src.android_hardware_buffer_android { *dst |= 0x00000400; }
-        if src.host_allocation_ext { *dst |= 0x00000080; }
-        if src.host_mapped_foreign_memory_ext { *dst |= 0x00000100; }
     }
 }
 

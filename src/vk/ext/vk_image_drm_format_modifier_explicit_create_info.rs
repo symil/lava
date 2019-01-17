@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_subresource_layout::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageDrmFormatModifierExplicitCreateInfo<'a> {
+    pub drm_format_modifier: usize,
+    pub plane_layouts: &'a [VkSubresourceLayout],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageDrmFormatModifierExplicitCreateInfo {
@@ -24,12 +30,6 @@ pub struct RawVkImageDrmFormatModifierExplicitCreateInfo {
     pub drm_format_modifier: u64,
     pub drm_format_modifier_plane_count: u32,
     pub plane_layouts: *mut RawVkSubresourceLayout,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImageDrmFormatModifierExplicitCreateInfo<'a> {
-    pub drm_format_modifier: usize,
-    pub plane_layouts: &'a [VkSubresourceLayout],
 }
 
 impl<'a> VkWrappedType<RawVkImageDrmFormatModifierExplicitCreateInfo> for VkImageDrmFormatModifierExplicitCreateInfo<'a> {

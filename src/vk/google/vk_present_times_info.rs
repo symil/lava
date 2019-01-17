@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::google::vk_present_time::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPresentTimesInfo<'a> {
+    pub times: Option<&'a [VkPresentTime]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentTimesInfo {
@@ -23,11 +28,6 @@ pub struct RawVkPresentTimesInfo {
     pub next: *const c_void,
     pub swapchain_count: u32,
     pub times: *mut RawVkPresentTime,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPresentTimesInfo<'a> {
-    pub times: Option<&'a [VkPresentTime]>,
 }
 
 impl<'a> VkWrappedType<RawVkPresentTimesInfo> for VkPresentTimesInfo<'a> {

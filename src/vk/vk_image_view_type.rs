@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkImageViewType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkImageViewType {
@@ -16,17 +14,19 @@ pub enum VkImageViewType {
     CubeArray = 6,
 }
 
+pub type RawVkImageViewType = i32;
+
+impl VkWrappedType<RawVkImageViewType> for VkImageViewType {
+    fn vk_to_raw(src: &VkImageViewType, dst: &mut RawVkImageViewType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkImageViewType> for RawVkImageViewType {
     fn vk_to_wrapped(src: &RawVkImageViewType) -> VkImageViewType {
         unsafe {
             *((src as *const i32) as *const VkImageViewType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageViewType> for VkImageViewType {
-    fn vk_to_raw(src: &VkImageViewType, dst: &mut RawVkImageViewType) {
-        *dst = *src as i32
     }
 }
 

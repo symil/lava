@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_image_aspect_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBindImagePlaneMemoryInfo {
+    pub plane_aspect: VkImageAspectFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImagePlaneMemoryInfo {
@@ -24,9 +29,12 @@ pub struct RawVkBindImagePlaneMemoryInfo {
     pub plane_aspect: RawVkImageAspectFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkBindImagePlaneMemoryInfo {
-    pub plane_aspect: VkImageAspectFlags,
+impl VkWrappedType<RawVkBindImagePlaneMemoryInfo> for VkBindImagePlaneMemoryInfo {
+    fn vk_to_raw(src: &VkBindImagePlaneMemoryInfo, dst: &mut RawVkBindImagePlaneMemoryInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::BindImagePlaneMemoryInfo);
+        dst.next = ptr::null();
+        dst.plane_aspect = vk_to_raw_value(&src.plane_aspect);
+    }
 }
 
 impl VkRawType<VkBindImagePlaneMemoryInfo> for RawVkBindImagePlaneMemoryInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkBindImagePlaneMemoryInfo> for RawVkBindImagePlaneMemoryInfo {
         VkBindImagePlaneMemoryInfo {
             plane_aspect: RawVkImageAspectFlags::vk_to_wrapped(&src.plane_aspect),
         }
-    }
-}
-
-impl VkWrappedType<RawVkBindImagePlaneMemoryInfo> for VkBindImagePlaneMemoryInfo {
-    fn vk_to_raw(src: &VkBindImagePlaneMemoryInfo, dst: &mut RawVkBindImagePlaneMemoryInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::BindImagePlaneMemoryInfo);
-        dst.next = ptr::null();
-        dst.plane_aspect = vk_to_raw_value(&src.plane_aspect);
     }
 }
 

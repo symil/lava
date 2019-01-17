@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_rect_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkClearRect {
+    pub rect: VkRect2D,
+    pub base_array_layer: usize,
+    pub layer_count: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkClearRect {
@@ -23,11 +30,12 @@ pub struct RawVkClearRect {
     pub layer_count: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkClearRect {
-    pub rect: VkRect2D,
-    pub base_array_layer: usize,
-    pub layer_count: usize,
+impl VkWrappedType<RawVkClearRect> for VkClearRect {
+    fn vk_to_raw(src: &VkClearRect, dst: &mut RawVkClearRect) {
+        dst.rect = vk_to_raw_value(&src.rect);
+        dst.base_array_layer = vk_to_raw_value(&src.base_array_layer);
+        dst.layer_count = vk_to_raw_value(&src.layer_count);
+    }
 }
 
 impl VkRawType<VkClearRect> for RawVkClearRect {
@@ -37,14 +45,6 @@ impl VkRawType<VkClearRect> for RawVkClearRect {
             base_array_layer: u32::vk_to_wrapped(&src.base_array_layer),
             layer_count: u32::vk_to_wrapped(&src.layer_count),
         }
-    }
-}
-
-impl VkWrappedType<RawVkClearRect> for VkClearRect {
-    fn vk_to_raw(src: &VkClearRect, dst: &mut RawVkClearRect) {
-        dst.rect = vk_to_raw_value(&src.rect);
-        dst.base_array_layer = vk_to_raw_value(&src.base_array_layer);
-        dst.layer_count = vk_to_raw_value(&src.layer_count);
     }
 }
 

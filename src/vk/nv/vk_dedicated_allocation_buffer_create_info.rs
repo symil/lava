@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDedicatedAllocationBufferCreateInfo {
+    pub dedicated_allocation: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDedicatedAllocationBufferCreateInfo {
@@ -23,9 +28,12 @@ pub struct RawVkDedicatedAllocationBufferCreateInfo {
     pub dedicated_allocation: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDedicatedAllocationBufferCreateInfo {
-    pub dedicated_allocation: bool,
+impl VkWrappedType<RawVkDedicatedAllocationBufferCreateInfo> for VkDedicatedAllocationBufferCreateInfo {
+    fn vk_to_raw(src: &VkDedicatedAllocationBufferCreateInfo, dst: &mut RawVkDedicatedAllocationBufferCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DedicatedAllocationBufferCreateInfoNv);
+        dst.next = ptr::null();
+        dst.dedicated_allocation = vk_to_raw_value(&src.dedicated_allocation);
+    }
 }
 
 impl VkRawType<VkDedicatedAllocationBufferCreateInfo> for RawVkDedicatedAllocationBufferCreateInfo {
@@ -33,14 +41,6 @@ impl VkRawType<VkDedicatedAllocationBufferCreateInfo> for RawVkDedicatedAllocati
         VkDedicatedAllocationBufferCreateInfo {
             dedicated_allocation: u32::vk_to_wrapped(&src.dedicated_allocation),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDedicatedAllocationBufferCreateInfo> for VkDedicatedAllocationBufferCreateInfo {
-    fn vk_to_raw(src: &VkDedicatedAllocationBufferCreateInfo, dst: &mut RawVkDedicatedAllocationBufferCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DedicatedAllocationBufferCreateInfoNv);
-        dst.next = ptr::null();
-        dst.dedicated_allocation = vk_to_raw_value(&src.dedicated_allocation);
     }
 }
 

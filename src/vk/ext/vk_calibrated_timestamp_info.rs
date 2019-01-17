@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_time_domain::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCalibratedTimestampInfo {
+    pub time_domain: VkTimeDomain,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCalibratedTimestampInfo {
@@ -24,9 +29,12 @@ pub struct RawVkCalibratedTimestampInfo {
     pub time_domain: RawVkTimeDomain,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkCalibratedTimestampInfo {
-    pub time_domain: VkTimeDomain,
+impl VkWrappedType<RawVkCalibratedTimestampInfo> for VkCalibratedTimestampInfo {
+    fn vk_to_raw(src: &VkCalibratedTimestampInfo, dst: &mut RawVkCalibratedTimestampInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::CalibratedTimestampInfoExt);
+        dst.next = ptr::null();
+        dst.time_domain = vk_to_raw_value(&src.time_domain);
+    }
 }
 
 impl VkRawType<VkCalibratedTimestampInfo> for RawVkCalibratedTimestampInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkCalibratedTimestampInfo> for RawVkCalibratedTimestampInfo {
         VkCalibratedTimestampInfo {
             time_domain: RawVkTimeDomain::vk_to_wrapped(&src.time_domain),
         }
-    }
-}
-
-impl VkWrappedType<RawVkCalibratedTimestampInfo> for VkCalibratedTimestampInfo {
-    fn vk_to_raw(src: &VkCalibratedTimestampInfo, dst: &mut RawVkCalibratedTimestampInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::CalibratedTimestampInfoExt);
-        dst.next = ptr::null();
-        dst.time_domain = vk_to_raw_value(&src.time_domain);
     }
 }
 

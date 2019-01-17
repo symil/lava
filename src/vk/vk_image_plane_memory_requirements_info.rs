@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_image_aspect_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImagePlaneMemoryRequirementsInfo {
+    pub plane_aspect: VkImageAspectFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImagePlaneMemoryRequirementsInfo {
@@ -24,9 +29,12 @@ pub struct RawVkImagePlaneMemoryRequirementsInfo {
     pub plane_aspect: RawVkImageAspectFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImagePlaneMemoryRequirementsInfo {
-    pub plane_aspect: VkImageAspectFlags,
+impl VkWrappedType<RawVkImagePlaneMemoryRequirementsInfo> for VkImagePlaneMemoryRequirementsInfo {
+    fn vk_to_raw(src: &VkImagePlaneMemoryRequirementsInfo, dst: &mut RawVkImagePlaneMemoryRequirementsInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ImagePlaneMemoryRequirementsInfo);
+        dst.next = ptr::null();
+        dst.plane_aspect = vk_to_raw_value(&src.plane_aspect);
+    }
 }
 
 impl VkRawType<VkImagePlaneMemoryRequirementsInfo> for RawVkImagePlaneMemoryRequirementsInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkImagePlaneMemoryRequirementsInfo> for RawVkImagePlaneMemoryRequ
         VkImagePlaneMemoryRequirementsInfo {
             plane_aspect: RawVkImageAspectFlags::vk_to_wrapped(&src.plane_aspect),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImagePlaneMemoryRequirementsInfo> for VkImagePlaneMemoryRequirementsInfo {
-    fn vk_to_raw(src: &VkImagePlaneMemoryRequirementsInfo, dst: &mut RawVkImagePlaneMemoryRequirementsInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ImagePlaneMemoryRequirementsInfo);
-        dst.next = ptr::null();
-        dst.plane_aspect = vk_to_raw_value(&src.plane_aspect);
     }
 }
 

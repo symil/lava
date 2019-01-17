@@ -7,3 +7,9 @@ mod utils;
 mod vk;
 
 pub use vk::*;
+
+pub mod all {
+    pub use vk::*;
+    pub use vk::ext::*;
+    pub use vk::khr::*;
+}

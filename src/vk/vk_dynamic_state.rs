@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDynamicState = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDynamicState {
@@ -24,17 +22,19 @@ pub enum VkDynamicState {
     ExclusiveScissorNv = 1000205001,
 }
 
+pub type RawVkDynamicState = i32;
+
+impl VkWrappedType<RawVkDynamicState> for VkDynamicState {
+    fn vk_to_raw(src: &VkDynamicState, dst: &mut RawVkDynamicState) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkDynamicState> for RawVkDynamicState {
     fn vk_to_wrapped(src: &RawVkDynamicState) -> VkDynamicState {
         unsafe {
             *((src as *const i32) as *const VkDynamicState)
         }
-    }
-}
-
-impl VkWrappedType<RawVkDynamicState> for VkDynamicState {
-    fn vk_to_raw(src: &VkDynamicState, dst: &mut RawVkDynamicState) {
-        *dst = *src as i32
     }
 }
 

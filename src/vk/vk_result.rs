@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkResult = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkResult {
@@ -40,17 +38,19 @@ pub enum VkResult {
     ErrorInvalidDeviceAddressExt = -1000244000,
 }
 
+pub type RawVkResult = i32;
+
+impl VkWrappedType<RawVkResult> for VkResult {
+    fn vk_to_raw(src: &VkResult, dst: &mut RawVkResult) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkResult> for RawVkResult {
     fn vk_to_wrapped(src: &RawVkResult) -> VkResult {
         unsafe {
             *((src as *const i32) as *const VkResult)
         }
-    }
-}
-
-impl VkWrappedType<RawVkResult> for VkResult {
-    fn vk_to_raw(src: &VkResult, dst: &mut RawVkResult) {
-        *dst = *src as i32
     }
 }
 

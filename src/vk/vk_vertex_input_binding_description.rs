@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_vertex_input_rate::*;
 
+#[derive(Debug, Clone)]
+pub struct VkVertexInputBindingDescription {
+    pub binding: usize,
+    pub stride: usize,
+    pub input_rate: VkVertexInputRate,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkVertexInputBindingDescription {
@@ -23,11 +30,12 @@ pub struct RawVkVertexInputBindingDescription {
     pub input_rate: RawVkVertexInputRate,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkVertexInputBindingDescription {
-    pub binding: usize,
-    pub stride: usize,
-    pub input_rate: VkVertexInputRate,
+impl VkWrappedType<RawVkVertexInputBindingDescription> for VkVertexInputBindingDescription {
+    fn vk_to_raw(src: &VkVertexInputBindingDescription, dst: &mut RawVkVertexInputBindingDescription) {
+        dst.binding = vk_to_raw_value(&src.binding);
+        dst.stride = vk_to_raw_value(&src.stride);
+        dst.input_rate = vk_to_raw_value(&src.input_rate);
+    }
 }
 
 impl VkRawType<VkVertexInputBindingDescription> for RawVkVertexInputBindingDescription {
@@ -37,14 +45,6 @@ impl VkRawType<VkVertexInputBindingDescription> for RawVkVertexInputBindingDescr
             stride: u32::vk_to_wrapped(&src.stride),
             input_rate: RawVkVertexInputRate::vk_to_wrapped(&src.input_rate),
         }
-    }
-}
-
-impl VkWrappedType<RawVkVertexInputBindingDescription> for VkVertexInputBindingDescription {
-    fn vk_to_raw(src: &VkVertexInputBindingDescription, dst: &mut RawVkVertexInputBindingDescription) {
-        dst.binding = vk_to_raw_value(&src.binding);
-        dst.stride = vk_to_raw_value(&src.stride);
-        dst.input_rate = vk_to_raw_value(&src.input_rate);
     }
 }
 

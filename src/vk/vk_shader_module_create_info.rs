@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_shader_module_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkShaderModuleCreateInfo<'a> {
+    pub flags: VkShaderModuleCreateFlags,
+    pub code: &'a [u8],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShaderModuleCreateInfo {
@@ -24,12 +30,6 @@ pub struct RawVkShaderModuleCreateInfo {
     pub flags: RawVkShaderModuleCreateFlags,
     pub code_size: usize,
     pub code: *const u8,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkShaderModuleCreateInfo<'a> {
-    pub flags: VkShaderModuleCreateFlags,
-    pub code: &'a [u8],
 }
 
 impl<'a> VkWrappedType<RawVkShaderModuleCreateInfo> for VkShaderModuleCreateInfo<'a> {

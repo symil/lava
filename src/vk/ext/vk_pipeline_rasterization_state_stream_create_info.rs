@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_pipeline_rasterization_state_stream_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineRasterizationStateStreamCreateInfo {
+    pub flags: VkPipelineRasterizationStateStreamCreateFlags,
+    pub rasterization_stream: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationStateStreamCreateInfo {
@@ -25,10 +31,13 @@ pub struct RawVkPipelineRasterizationStateStreamCreateInfo {
     pub rasterization_stream: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineRasterizationStateStreamCreateInfo {
-    pub flags: VkPipelineRasterizationStateStreamCreateFlags,
-    pub rasterization_stream: usize,
+impl VkWrappedType<RawVkPipelineRasterizationStateStreamCreateInfo> for VkPipelineRasterizationStateStreamCreateInfo {
+    fn vk_to_raw(src: &VkPipelineRasterizationStateStreamCreateInfo, dst: &mut RawVkPipelineRasterizationStateStreamCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateStreamCreateInfoExt);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.rasterization_stream = vk_to_raw_value(&src.rasterization_stream);
+    }
 }
 
 impl VkRawType<VkPipelineRasterizationStateStreamCreateInfo> for RawVkPipelineRasterizationStateStreamCreateInfo {
@@ -37,15 +46,6 @@ impl VkRawType<VkPipelineRasterizationStateStreamCreateInfo> for RawVkPipelineRa
             flags: RawVkPipelineRasterizationStateStreamCreateFlags::vk_to_wrapped(&src.flags),
             rasterization_stream: u32::vk_to_wrapped(&src.rasterization_stream),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineRasterizationStateStreamCreateInfo> for VkPipelineRasterizationStateStreamCreateInfo {
-    fn vk_to_raw(src: &VkPipelineRasterizationStateStreamCreateInfo, dst: &mut RawVkPipelineRasterizationStateStreamCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateStreamCreateInfoExt);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.rasterization_stream = vk_to_raw_value(&src.rasterization_stream);
     }
 }
 

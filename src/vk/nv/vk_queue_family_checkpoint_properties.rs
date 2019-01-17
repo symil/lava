@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_pipeline_stage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkQueueFamilyCheckpointProperties {
+    pub checkpoint_execution_stage_mask: VkPipelineStageFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueueFamilyCheckpointProperties {
@@ -24,9 +29,12 @@ pub struct RawVkQueueFamilyCheckpointProperties {
     pub checkpoint_execution_stage_mask: RawVkPipelineStageFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkQueueFamilyCheckpointProperties {
-    pub checkpoint_execution_stage_mask: VkPipelineStageFlags,
+impl VkWrappedType<RawVkQueueFamilyCheckpointProperties> for VkQueueFamilyCheckpointProperties {
+    fn vk_to_raw(src: &VkQueueFamilyCheckpointProperties, dst: &mut RawVkQueueFamilyCheckpointProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::QueueFamilyCheckpointPropertiesNv);
+        dst.next = ptr::null();
+        dst.checkpoint_execution_stage_mask = vk_to_raw_value(&src.checkpoint_execution_stage_mask);
+    }
 }
 
 impl VkRawType<VkQueueFamilyCheckpointProperties> for RawVkQueueFamilyCheckpointProperties {
@@ -34,14 +42,6 @@ impl VkRawType<VkQueueFamilyCheckpointProperties> for RawVkQueueFamilyCheckpoint
         VkQueueFamilyCheckpointProperties {
             checkpoint_execution_stage_mask: RawVkPipelineStageFlags::vk_to_wrapped(&src.checkpoint_execution_stage_mask),
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueueFamilyCheckpointProperties> for VkQueueFamilyCheckpointProperties {
-    fn vk_to_raw(src: &VkQueueFamilyCheckpointProperties, dst: &mut RawVkQueueFamilyCheckpointProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::QueueFamilyCheckpointPropertiesNv);
-        dst.next = ptr::null();
-        dst.checkpoint_execution_stage_mask = vk_to_raw_value(&src.checkpoint_execution_stage_mask);
     }
 }
 

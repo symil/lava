@@ -16,6 +16,17 @@ use vk::vk_device::*;
 use vk::vk_shader_stage_flags::*;
 use vk::amd::vk_shader_resource_usage::*;
 
+#[derive(Debug, Clone)]
+pub struct VkShaderStatisticsInfo {
+    pub shader_stage_mask: VkShaderStageFlags,
+    pub resource_usage: VkShaderResourceUsage,
+    pub num_physical_vgprs: usize,
+    pub num_physical_sgprs: usize,
+    pub num_available_vgprs: usize,
+    pub num_available_sgprs: usize,
+    pub compute_work_group_size: [usize; 3],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShaderStatisticsInfo {
@@ -28,15 +39,16 @@ pub struct RawVkShaderStatisticsInfo {
     pub compute_work_group_size: [u32; 3],
 }
 
-#[derive(Debug, Clone)]
-pub struct VkShaderStatisticsInfo {
-    pub shader_stage_mask: VkShaderStageFlags,
-    pub resource_usage: VkShaderResourceUsage,
-    pub num_physical_vgprs: usize,
-    pub num_physical_sgprs: usize,
-    pub num_available_vgprs: usize,
-    pub num_available_sgprs: usize,
-    pub compute_work_group_size: [usize; 3],
+impl VkWrappedType<RawVkShaderStatisticsInfo> for VkShaderStatisticsInfo {
+    fn vk_to_raw(src: &VkShaderStatisticsInfo, dst: &mut RawVkShaderStatisticsInfo) {
+        dst.shader_stage_mask = vk_to_raw_value(&src.shader_stage_mask);
+        dst.resource_usage = vk_to_raw_value(&src.resource_usage);
+        dst.num_physical_vgprs = vk_to_raw_value(&src.num_physical_vgprs);
+        dst.num_physical_sgprs = vk_to_raw_value(&src.num_physical_sgprs);
+        dst.num_available_vgprs = vk_to_raw_value(&src.num_available_vgprs);
+        dst.num_available_sgprs = vk_to_raw_value(&src.num_available_sgprs);
+        dst.compute_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.compute_work_group_size, &mut dst_array); dst_array };
+    }
 }
 
 impl VkRawType<VkShaderStatisticsInfo> for RawVkShaderStatisticsInfo {
@@ -50,18 +62,6 @@ impl VkRawType<VkShaderStatisticsInfo> for RawVkShaderStatisticsInfo {
             num_available_sgprs: u32::vk_to_wrapped(&src.num_available_sgprs),
             compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); vk_to_wrapped_array(&src.compute_work_group_size, &mut dst_array); dst_array },
         }
-    }
-}
-
-impl VkWrappedType<RawVkShaderStatisticsInfo> for VkShaderStatisticsInfo {
-    fn vk_to_raw(src: &VkShaderStatisticsInfo, dst: &mut RawVkShaderStatisticsInfo) {
-        dst.shader_stage_mask = vk_to_raw_value(&src.shader_stage_mask);
-        dst.resource_usage = vk_to_raw_value(&src.resource_usage);
-        dst.num_physical_vgprs = vk_to_raw_value(&src.num_physical_vgprs);
-        dst.num_physical_sgprs = vk_to_raw_value(&src.num_physical_sgprs);
-        dst.num_available_vgprs = vk_to_raw_value(&src.num_available_vgprs);
-        dst.num_available_sgprs = vk_to_raw_value(&src.num_available_sgprs);
-        dst.compute_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.compute_work_group_size, &mut dst_array); dst_array };
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDisplayPowerState = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDisplayPowerState {
@@ -12,17 +10,19 @@ pub enum VkDisplayPowerState {
     On = 2,
 }
 
+pub type RawVkDisplayPowerState = i32;
+
+impl VkWrappedType<RawVkDisplayPowerState> for VkDisplayPowerState {
+    fn vk_to_raw(src: &VkDisplayPowerState, dst: &mut RawVkDisplayPowerState) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkDisplayPowerState> for RawVkDisplayPowerState {
     fn vk_to_wrapped(src: &RawVkDisplayPowerState) -> VkDisplayPowerState {
         unsafe {
             *((src as *const i32) as *const VkDisplayPowerState)
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayPowerState> for VkDisplayPowerState {
-    fn vk_to_raw(src: &VkDisplayPowerState, dst: &mut RawVkDisplayPowerState) {
-        *dst = *src as i32
     }
 }
 

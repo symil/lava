@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_point_clipping_behavior::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDevicePointClippingProperties {
+    pub point_clipping_behavior: VkPointClippingBehavior,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevicePointClippingProperties {
@@ -24,9 +29,12 @@ pub struct RawVkPhysicalDevicePointClippingProperties {
     pub point_clipping_behavior: RawVkPointClippingBehavior,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDevicePointClippingProperties {
-    pub point_clipping_behavior: VkPointClippingBehavior,
+impl VkWrappedType<RawVkPhysicalDevicePointClippingProperties> for VkPhysicalDevicePointClippingProperties {
+    fn vk_to_raw(src: &VkPhysicalDevicePointClippingProperties, dst: &mut RawVkPhysicalDevicePointClippingProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePointClippingProperties);
+        dst.next = ptr::null();
+        dst.point_clipping_behavior = vk_to_raw_value(&src.point_clipping_behavior);
+    }
 }
 
 impl VkRawType<VkPhysicalDevicePointClippingProperties> for RawVkPhysicalDevicePointClippingProperties {
@@ -34,14 +42,6 @@ impl VkRawType<VkPhysicalDevicePointClippingProperties> for RawVkPhysicalDeviceP
         VkPhysicalDevicePointClippingProperties {
             point_clipping_behavior: RawVkPointClippingBehavior::vk_to_wrapped(&src.point_clipping_behavior),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDevicePointClippingProperties> for VkPhysicalDevicePointClippingProperties {
-    fn vk_to_raw(src: &VkPhysicalDevicePointClippingProperties, dst: &mut RawVkPhysicalDevicePointClippingProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePointClippingProperties);
-        dst.next = ptr::null();
-        dst.point_clipping_behavior = vk_to_raw_value(&src.point_clipping_behavior);
     }
 }
 

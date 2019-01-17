@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkStencilOp = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkStencilOp {
@@ -17,17 +15,19 @@ pub enum VkStencilOp {
     DecrementAndWrap = 7,
 }
 
+pub type RawVkStencilOp = i32;
+
+impl VkWrappedType<RawVkStencilOp> for VkStencilOp {
+    fn vk_to_raw(src: &VkStencilOp, dst: &mut RawVkStencilOp) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkStencilOp> for RawVkStencilOp {
     fn vk_to_wrapped(src: &RawVkStencilOp) -> VkStencilOp {
         unsafe {
             *((src as *const i32) as *const VkStencilOp)
         }
-    }
-}
-
-impl VkWrappedType<RawVkStencilOp> for VkStencilOp {
-    fn vk_to_raw(src: &VkStencilOp, dst: &mut RawVkStencilOp) {
-        *dst = *src as i32
     }
 }
 

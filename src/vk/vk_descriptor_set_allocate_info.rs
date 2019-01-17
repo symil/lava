@@ -17,6 +17,15 @@ use vk::vk_structure_type::*;
 use vk::vk_descriptor_pool::*;
 use vk::vk_descriptor_set_layout::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorSetAllocateInfo<'a, 'b, 'c>
+    where
+        'c: 'b,
+{
+    pub descriptor_pool: &'a VkDescriptorPool,
+    pub set_layouts: &'b [&'c VkDescriptorSetLayout],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetAllocateInfo {
@@ -25,15 +34,6 @@ pub struct RawVkDescriptorSetAllocateInfo {
     pub descriptor_pool: RawVkDescriptorPool,
     pub descriptor_set_count: u32,
     pub set_layouts: *mut RawVkDescriptorSetLayout,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDescriptorSetAllocateInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
-    pub descriptor_pool: &'a VkDescriptorPool,
-    pub set_layouts: &'b [&'c VkDescriptorSetLayout],
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkDescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfo<'a, 'b, 'c>

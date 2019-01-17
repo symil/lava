@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_surface::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceSurfaceInfo2<'a> {
+    pub surface: &'a VkSurface,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSurfaceInfo2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub surface: RawVkSurface,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceSurfaceInfo2<'a> {
-    pub surface: &'a VkSurface,
 }
 
 impl<'a> VkWrappedType<RawVkPhysicalDeviceSurfaceInfo2> for VkPhysicalDeviceSurfaceInfo2<'a> {

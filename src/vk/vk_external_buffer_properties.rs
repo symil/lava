@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_memory_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExternalBufferProperties {
+    pub external_memory_properties: VkExternalMemoryProperties,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalBufferProperties {
@@ -24,9 +29,12 @@ pub struct RawVkExternalBufferProperties {
     pub external_memory_properties: RawVkExternalMemoryProperties,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExternalBufferProperties {
-    pub external_memory_properties: VkExternalMemoryProperties,
+impl VkWrappedType<RawVkExternalBufferProperties> for VkExternalBufferProperties {
+    fn vk_to_raw(src: &VkExternalBufferProperties, dst: &mut RawVkExternalBufferProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalBufferProperties);
+        dst.next = ptr::null();
+        dst.external_memory_properties = vk_to_raw_value(&src.external_memory_properties);
+    }
 }
 
 impl VkRawType<VkExternalBufferProperties> for RawVkExternalBufferProperties {
@@ -34,14 +42,6 @@ impl VkRawType<VkExternalBufferProperties> for RawVkExternalBufferProperties {
         VkExternalBufferProperties {
             external_memory_properties: RawVkExternalMemoryProperties::vk_to_wrapped(&src.external_memory_properties),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalBufferProperties> for VkExternalBufferProperties {
-    fn vk_to_raw(src: &VkExternalBufferProperties, dst: &mut RawVkExternalBufferProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalBufferProperties);
-        dst.next = ptr::null();
-        dst.external_memory_properties = vk_to_raw_value(&src.external_memory_properties);
     }
 }
 

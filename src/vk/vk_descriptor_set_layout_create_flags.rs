@@ -2,12 +2,20 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDescriptorSetLayoutCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorSetLayoutCreateFlags {
     pub push_descriptor_khr: bool,
     pub update_after_bind_pool_ext: bool,
+}
+
+pub type RawVkDescriptorSetLayoutCreateFlags = u32;
+
+impl VkWrappedType<RawVkDescriptorSetLayoutCreateFlags> for VkDescriptorSetLayoutCreateFlags {
+    fn vk_to_raw(src: &VkDescriptorSetLayoutCreateFlags, dst: &mut RawVkDescriptorSetLayoutCreateFlags) {
+        *dst = 0;
+        if src.push_descriptor_khr { *dst |= 0x00000001; }
+        if src.update_after_bind_pool_ext { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkDescriptorSetLayoutCreateFlags> for RawVkDescriptorSetLayoutCreateFlags {
@@ -16,14 +24,6 @@ impl VkRawType<VkDescriptorSetLayoutCreateFlags> for RawVkDescriptorSetLayoutCre
             push_descriptor_khr: (src & 0x00000001) != 0,
             update_after_bind_pool_ext: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorSetLayoutCreateFlags> for VkDescriptorSetLayoutCreateFlags {
-    fn vk_to_raw(src: &VkDescriptorSetLayoutCreateFlags, dst: &mut RawVkDescriptorSetLayoutCreateFlags) {
-        *dst = 0;
-        if src.push_descriptor_khr { *dst |= 0x00000001; }
-        if src.update_after_bind_pool_ext { *dst |= 0x00000002; }
     }
 }
 

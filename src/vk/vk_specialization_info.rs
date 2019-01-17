@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_specialization_map_entry::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSpecializationInfo<'a, 'b> {
+    pub map_entries: &'a [VkSpecializationMapEntry],
+    pub data_size: usize,
+    pub data: &'b c_void,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSpecializationInfo {
@@ -22,13 +29,6 @@ pub struct RawVkSpecializationInfo {
     pub map_entries: *mut RawVkSpecializationMapEntry,
     pub data_size: usize,
     pub data: *const c_void,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSpecializationInfo<'a, 'b> {
-    pub map_entries: &'a [VkSpecializationMapEntry],
-    pub data_size: usize,
-    pub data: &'b c_void,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkSpecializationInfo> for VkSpecializationInfo<'a, 'b> {

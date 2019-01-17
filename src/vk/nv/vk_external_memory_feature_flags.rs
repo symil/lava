@@ -2,13 +2,22 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkExternalMemoryFeatureFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalMemoryFeatureFlags {
     pub dedicated_only: bool,
     pub exportable: bool,
     pub importable: bool,
+}
+
+pub type RawVkExternalMemoryFeatureFlags = u32;
+
+impl VkWrappedType<RawVkExternalMemoryFeatureFlags> for VkExternalMemoryFeatureFlags {
+    fn vk_to_raw(src: &VkExternalMemoryFeatureFlags, dst: &mut RawVkExternalMemoryFeatureFlags) {
+        *dst = 0;
+        if src.dedicated_only { *dst |= 0x00000001; }
+        if src.exportable { *dst |= 0x00000002; }
+        if src.importable { *dst |= 0x00000004; }
+    }
 }
 
 impl VkRawType<VkExternalMemoryFeatureFlags> for RawVkExternalMemoryFeatureFlags {
@@ -18,15 +27,6 @@ impl VkRawType<VkExternalMemoryFeatureFlags> for RawVkExternalMemoryFeatureFlags
             exportable: (src & 0x00000002) != 0,
             importable: (src & 0x00000004) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalMemoryFeatureFlags> for VkExternalMemoryFeatureFlags {
-    fn vk_to_raw(src: &VkExternalMemoryFeatureFlags, dst: &mut RawVkExternalMemoryFeatureFlags) {
-        *dst = 0;
-        if src.dedicated_only { *dst |= 0x00000001; }
-        if src.exportable { *dst |= 0x00000002; }
-        if src.importable { *dst |= 0x00000004; }
     }
 }
 

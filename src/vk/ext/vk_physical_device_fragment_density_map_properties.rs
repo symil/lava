@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_extent_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceFragmentDensityMapProperties {
+    pub min_fragment_density_texel_size: VkExtent2D,
+    pub max_fragment_density_texel_size: VkExtent2D,
+    pub fragment_density_invocations: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFragmentDensityMapProperties {
@@ -26,11 +33,14 @@ pub struct RawVkPhysicalDeviceFragmentDensityMapProperties {
     pub fragment_density_invocations: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceFragmentDensityMapProperties {
-    pub min_fragment_density_texel_size: VkExtent2D,
-    pub max_fragment_density_texel_size: VkExtent2D,
-    pub fragment_density_invocations: bool,
+impl VkWrappedType<RawVkPhysicalDeviceFragmentDensityMapProperties> for VkPhysicalDeviceFragmentDensityMapProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceFragmentDensityMapProperties, dst: &mut RawVkPhysicalDeviceFragmentDensityMapProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentDensityMapPropertiesExt);
+        dst.next = ptr::null();
+        dst.min_fragment_density_texel_size = vk_to_raw_value(&src.min_fragment_density_texel_size);
+        dst.max_fragment_density_texel_size = vk_to_raw_value(&src.max_fragment_density_texel_size);
+        dst.fragment_density_invocations = vk_to_raw_value(&src.fragment_density_invocations);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceFragmentDensityMapProperties> for RawVkPhysicalDeviceFragmentDensityMapProperties {
@@ -40,16 +50,6 @@ impl VkRawType<VkPhysicalDeviceFragmentDensityMapProperties> for RawVkPhysicalDe
             max_fragment_density_texel_size: RawVkExtent2D::vk_to_wrapped(&src.max_fragment_density_texel_size),
             fragment_density_invocations: u32::vk_to_wrapped(&src.fragment_density_invocations),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceFragmentDensityMapProperties> for VkPhysicalDeviceFragmentDensityMapProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceFragmentDensityMapProperties, dst: &mut RawVkPhysicalDeviceFragmentDensityMapProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentDensityMapPropertiesExt);
-        dst.next = ptr::null();
-        dst.min_fragment_density_texel_size = vk_to_raw_value(&src.min_fragment_density_texel_size);
-        dst.max_fragment_density_texel_size = vk_to_raw_value(&src.max_fragment_density_texel_size);
-        dst.fragment_density_invocations = vk_to_raw_value(&src.fragment_density_invocations);
     }
 }
 

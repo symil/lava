@@ -17,19 +17,6 @@ use vk::vk_structure_type::*;
 use vk::vk_instance_create_flags::*;
 use vk::vk_application_info::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkInstanceCreateInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub flags: RawVkInstanceCreateFlags,
-    pub application_info: *mut RawVkApplicationInfo,
-    pub enabled_layer_count: u32,
-    pub enabled_layer_names: *mut *mut c_char,
-    pub enabled_extension_count: u32,
-    pub enabled_extension_names: *mut *mut c_char,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkInstanceCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
     where
@@ -42,6 +29,19 @@ pub struct VkInstanceCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
     pub application_info: Option<&'a VkApplicationInfo<'b, 'c>>,
     pub enabled_layer_names: &'d [&'e str],
     pub enabled_extension_names: &'f [&'g str],
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkInstanceCreateInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkInstanceCreateFlags,
+    pub application_info: *mut RawVkApplicationInfo,
+    pub enabled_layer_count: u32,
+    pub enabled_layer_names: *mut *mut c_char,
+    pub enabled_extension_count: u32,
+    pub enabled_extension_names: *mut *mut c_char,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkInstanceCreateInfo> for VkInstanceCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>

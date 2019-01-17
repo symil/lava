@@ -15,19 +15,19 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorBufferInfo<'a> {
+    pub buffer: &'a VkBuffer,
+    pub offset: usize,
+    pub range: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorBufferInfo {
     pub buffer: RawVkBuffer,
     pub offset: u64,
     pub range: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDescriptorBufferInfo<'a> {
-    pub buffer: &'a VkBuffer,
-    pub offset: usize,
-    pub range: usize,
 }
 
 impl<'a> VkWrappedType<RawVkDescriptorBufferInfo> for VkDescriptorBufferInfo<'a> {

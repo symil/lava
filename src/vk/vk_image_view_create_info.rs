@@ -21,6 +21,16 @@ use vk::vk_format::*;
 use vk::vk_component_mapping::*;
 use vk::vk_image_subresource_range::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageViewCreateInfo<'a> {
+    pub flags: VkImageViewCreateFlags,
+    pub image: &'a VkImage,
+    pub view_type: VkImageViewType,
+    pub format: VkFormat,
+    pub components: VkComponentMapping,
+    pub subresource_range: VkImageSubresourceRange,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageViewCreateInfo {
@@ -32,16 +42,6 @@ pub struct RawVkImageViewCreateInfo {
     pub format: RawVkFormat,
     pub components: RawVkComponentMapping,
     pub subresource_range: RawVkImageSubresourceRange,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImageViewCreateInfo<'a> {
-    pub flags: VkImageViewCreateFlags,
-    pub image: &'a VkImage,
-    pub view_type: VkImageViewType,
-    pub format: VkFormat,
-    pub components: VkComponentMapping,
-    pub subresource_range: VkImageSubresourceRange,
 }
 
 impl<'a> VkWrappedType<RawVkImageViewCreateInfo> for VkImageViewCreateInfo<'a> {

@@ -18,6 +18,21 @@ use vk::vk_buffer::*;
 use vk::vk_format::*;
 use vk::vk_index_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkGeometryTriangles<'a, 'b, 'c> {
+    pub vertex_data: Option<&'a VkBuffer>,
+    pub vertex_offset: usize,
+    pub vertex_count: usize,
+    pub vertex_stride: usize,
+    pub vertex_format: VkFormat,
+    pub index_data: Option<&'b VkBuffer>,
+    pub index_offset: usize,
+    pub index_count: usize,
+    pub index_type: VkIndexType,
+    pub transform_data: Option<&'c VkBuffer>,
+    pub transform_offset: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometryTriangles {
@@ -34,21 +49,6 @@ pub struct RawVkGeometryTriangles {
     pub index_type: RawVkIndexType,
     pub transform_data: RawVkBuffer,
     pub transform_offset: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkGeometryTriangles<'a, 'b, 'c> {
-    pub vertex_data: Option<&'a VkBuffer>,
-    pub vertex_offset: usize,
-    pub vertex_count: usize,
-    pub vertex_stride: usize,
-    pub vertex_format: VkFormat,
-    pub index_data: Option<&'b VkBuffer>,
-    pub index_offset: usize,
-    pub index_count: usize,
-    pub index_type: VkIndexType,
-    pub transform_data: Option<&'c VkBuffer>,
-    pub transform_offset: usize,
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkGeometryTriangles> for VkGeometryTriangles<'a, 'b, 'c> {

@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceScalarBlockLayoutFeatures {
+    pub scalar_block_layout: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceScalarBlockLayoutFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceScalarBlockLayoutFeatures {
     pub scalar_block_layout: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceScalarBlockLayoutFeatures {
-    pub scalar_block_layout: bool,
+impl VkWrappedType<RawVkPhysicalDeviceScalarBlockLayoutFeatures> for VkPhysicalDeviceScalarBlockLayoutFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceScalarBlockLayoutFeatures, dst: &mut RawVkPhysicalDeviceScalarBlockLayoutFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceScalarBlockLayoutFeaturesExt);
+        dst.next = ptr::null();
+        dst.scalar_block_layout = vk_to_raw_value(&src.scalar_block_layout);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceScalarBlockLayoutFeatures> for RawVkPhysicalDeviceScalarBlockLayoutFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceScalarBlockLayoutFeatures> for RawVkPhysicalDevic
         VkPhysicalDeviceScalarBlockLayoutFeatures {
             scalar_block_layout: u32::vk_to_wrapped(&src.scalar_block_layout),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceScalarBlockLayoutFeatures> for VkPhysicalDeviceScalarBlockLayoutFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceScalarBlockLayoutFeatures, dst: &mut RawVkPhysicalDeviceScalarBlockLayoutFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceScalarBlockLayoutFeaturesExt);
-        dst.next = ptr::null();
-        dst.scalar_block_layout = vk_to_raw_value(&src.scalar_block_layout);
     }
 }
 

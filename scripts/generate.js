@@ -109,7 +109,7 @@ function writeModFile(dirPath) {
     const content = [
         directories.map(name => `pub mod ${name};`),
         moduleNames.map(name => `pub mod ${name};`),
-        moduleNames.map(name => `pub use self::${name}::*;`),
+        moduleNames.filter(x => x !== 'vk').map(name => `pub use self::${name}::*;`),
     ].map(list => list.join('\n')).filter(x => x).join('\n\n');
 
     fs.writeFileSync(filePath, GENERATED_HEADER + content);

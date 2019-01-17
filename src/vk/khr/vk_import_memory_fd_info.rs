@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImportMemoryFdInfo {
+    pub handle_type: VkExternalMemoryHandleTypeFlags,
+    pub fd: i32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportMemoryFdInfo {
@@ -25,10 +31,13 @@ pub struct RawVkImportMemoryFdInfo {
     pub fd: i32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImportMemoryFdInfo {
-    pub handle_type: VkExternalMemoryHandleTypeFlags,
-    pub fd: i32,
+impl VkWrappedType<RawVkImportMemoryFdInfo> for VkImportMemoryFdInfo {
+    fn vk_to_raw(src: &VkImportMemoryFdInfo, dst: &mut RawVkImportMemoryFdInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ImportMemoryFdInfoKhr);
+        dst.next = ptr::null();
+        dst.handle_type = vk_to_raw_value(&src.handle_type);
+        dst.fd = src.fd;
+    }
 }
 
 impl VkRawType<VkImportMemoryFdInfo> for RawVkImportMemoryFdInfo {
@@ -37,15 +46,6 @@ impl VkRawType<VkImportMemoryFdInfo> for RawVkImportMemoryFdInfo {
             handle_type: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.handle_type),
             fd: src.fd,
         }
-    }
-}
-
-impl VkWrappedType<RawVkImportMemoryFdInfo> for VkImportMemoryFdInfo {
-    fn vk_to_raw(src: &VkImportMemoryFdInfo, dst: &mut RawVkImportMemoryFdInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ImportMemoryFdInfoKhr);
-        dst.next = ptr::null();
-        dst.handle_type = vk_to_raw_value(&src.handle_type);
-        dst.fd = src.fd;
     }
 }
 

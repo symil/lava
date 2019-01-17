@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceBufferAddressFeatures {
+    pub buffer_device_address: bool,
+    pub buffer_device_address_capture_replay: bool,
+    pub buffer_device_address_multi_device: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceBufferAddressFeatures {
@@ -25,11 +32,14 @@ pub struct RawVkPhysicalDeviceBufferAddressFeatures {
     pub buffer_device_address_multi_device: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceBufferAddressFeatures {
-    pub buffer_device_address: bool,
-    pub buffer_device_address_capture_replay: bool,
-    pub buffer_device_address_multi_device: bool,
+impl VkWrappedType<RawVkPhysicalDeviceBufferAddressFeatures> for VkPhysicalDeviceBufferAddressFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceBufferAddressFeatures, dst: &mut RawVkPhysicalDeviceBufferAddressFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBufferAddressFeaturesExt);
+        dst.next = ptr::null();
+        dst.buffer_device_address = vk_to_raw_value(&src.buffer_device_address);
+        dst.buffer_device_address_capture_replay = vk_to_raw_value(&src.buffer_device_address_capture_replay);
+        dst.buffer_device_address_multi_device = vk_to_raw_value(&src.buffer_device_address_multi_device);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceBufferAddressFeatures> for RawVkPhysicalDeviceBufferAddressFeatures {
@@ -39,16 +49,6 @@ impl VkRawType<VkPhysicalDeviceBufferAddressFeatures> for RawVkPhysicalDeviceBuf
             buffer_device_address_capture_replay: u32::vk_to_wrapped(&src.buffer_device_address_capture_replay),
             buffer_device_address_multi_device: u32::vk_to_wrapped(&src.buffer_device_address_multi_device),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceBufferAddressFeatures> for VkPhysicalDeviceBufferAddressFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceBufferAddressFeatures, dst: &mut RawVkPhysicalDeviceBufferAddressFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBufferAddressFeaturesExt);
-        dst.next = ptr::null();
-        dst.buffer_device_address = vk_to_raw_value(&src.buffer_device_address);
-        dst.buffer_device_address_capture_replay = vk_to_raw_value(&src.buffer_device_address_capture_replay);
-        dst.buffer_device_address_multi_device = vk_to_raw_value(&src.buffer_device_address_multi_device);
     }
 }
 

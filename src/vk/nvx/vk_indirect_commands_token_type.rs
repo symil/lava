@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkIndirectCommandsTokenType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkIndirectCommandsTokenType {
@@ -17,17 +15,19 @@ pub enum VkIndirectCommandsTokenType {
     Dispatch = 7,
 }
 
+pub type RawVkIndirectCommandsTokenType = i32;
+
+impl VkWrappedType<RawVkIndirectCommandsTokenType> for VkIndirectCommandsTokenType {
+    fn vk_to_raw(src: &VkIndirectCommandsTokenType, dst: &mut RawVkIndirectCommandsTokenType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkIndirectCommandsTokenType> for RawVkIndirectCommandsTokenType {
     fn vk_to_wrapped(src: &RawVkIndirectCommandsTokenType) -> VkIndirectCommandsTokenType {
         unsafe {
             *((src as *const i32) as *const VkIndirectCommandsTokenType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkIndirectCommandsTokenType> for VkIndirectCommandsTokenType {
-    fn vk_to_raw(src: &VkIndirectCommandsTokenType, dst: &mut RawVkIndirectCommandsTokenType) {
-        *dst = *src as i32
     }
 }
 

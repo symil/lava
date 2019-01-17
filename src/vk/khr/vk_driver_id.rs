@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDriverId = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDriverId {
@@ -19,17 +17,19 @@ pub enum VkDriverId {
     GooglePastel = 10,
 }
 
+pub type RawVkDriverId = i32;
+
+impl VkWrappedType<RawVkDriverId> for VkDriverId {
+    fn vk_to_raw(src: &VkDriverId, dst: &mut RawVkDriverId) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkDriverId> for RawVkDriverId {
     fn vk_to_wrapped(src: &RawVkDriverId) -> VkDriverId {
         unsafe {
             *((src as *const i32) as *const VkDriverId)
         }
-    }
-}
-
-impl VkWrappedType<RawVkDriverId> for VkDriverId {
-    fn vk_to_raw(src: &VkDriverId, dst: &mut RawVkDriverId) {
-        *dst = *src as i32
     }
 }
 

@@ -21,6 +21,17 @@ use vk::vk_descriptor_set_layout::*;
 use vk::vk_pipeline_bind_point::*;
 use vk::vk_pipeline_layout::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {
+    pub flags: VkDescriptorUpdateTemplateCreateFlags,
+    pub descriptor_update_entries: &'a [VkDescriptorUpdateTemplateEntry],
+    pub template_type: VkDescriptorUpdateTemplateType,
+    pub descriptor_set_layout: Option<&'b VkDescriptorSetLayout>,
+    pub pipeline_bind_point: VkPipelineBindPoint,
+    pub pipeline_layout: &'c VkPipelineLayout,
+    pub set: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorUpdateTemplateCreateInfo {
@@ -34,17 +45,6 @@ pub struct RawVkDescriptorUpdateTemplateCreateInfo {
     pub pipeline_bind_point: RawVkPipelineBindPoint,
     pub pipeline_layout: RawVkPipelineLayout,
     pub set: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {
-    pub flags: VkDescriptorUpdateTemplateCreateFlags,
-    pub descriptor_update_entries: &'a [VkDescriptorUpdateTemplateEntry],
-    pub template_type: VkDescriptorUpdateTemplateType,
-    pub descriptor_set_layout: Option<&'b VkDescriptorSetLayout>,
-    pub pipeline_bind_point: VkPipelineBindPoint,
-    pub pipeline_layout: &'c VkPipelineLayout,
-    pub set: usize,
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkDescriptorUpdateTemplateCreateInfo> for VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {

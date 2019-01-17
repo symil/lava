@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorSetVariableDescriptorCountLayoutSupport {
+    pub max_variable_descriptor_count: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetVariableDescriptorCountLayoutSupport {
@@ -23,9 +28,12 @@ pub struct RawVkDescriptorSetVariableDescriptorCountLayoutSupport {
     pub max_variable_descriptor_count: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDescriptorSetVariableDescriptorCountLayoutSupport {
-    pub max_variable_descriptor_count: usize,
+impl VkWrappedType<RawVkDescriptorSetVariableDescriptorCountLayoutSupport> for VkDescriptorSetVariableDescriptorCountLayoutSupport {
+    fn vk_to_raw(src: &VkDescriptorSetVariableDescriptorCountLayoutSupport, dst: &mut RawVkDescriptorSetVariableDescriptorCountLayoutSupport) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetVariableDescriptorCountLayoutSupportExt);
+        dst.next = ptr::null();
+        dst.max_variable_descriptor_count = vk_to_raw_value(&src.max_variable_descriptor_count);
+    }
 }
 
 impl VkRawType<VkDescriptorSetVariableDescriptorCountLayoutSupport> for RawVkDescriptorSetVariableDescriptorCountLayoutSupport {
@@ -33,14 +41,6 @@ impl VkRawType<VkDescriptorSetVariableDescriptorCountLayoutSupport> for RawVkDes
         VkDescriptorSetVariableDescriptorCountLayoutSupport {
             max_variable_descriptor_count: u32::vk_to_wrapped(&src.max_variable_descriptor_count),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorSetVariableDescriptorCountLayoutSupport> for VkDescriptorSetVariableDescriptorCountLayoutSupport {
-    fn vk_to_raw(src: &VkDescriptorSetVariableDescriptorCountLayoutSupport, dst: &mut RawVkDescriptorSetVariableDescriptorCountLayoutSupport) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetVariableDescriptorCountLayoutSupportExt);
-        dst.next = ptr::null();
-        dst.max_variable_descriptor_count = vk_to_raw_value(&src.max_variable_descriptor_count);
     }
 }
 

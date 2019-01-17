@@ -15,17 +15,17 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::ext::vk_sample_locations_info::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSubpassSampleLocations<'a> {
+    pub subpass_index: u32,
+    pub sample_locations_info: VkSampleLocationsInfo<'a>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassSampleLocations {
     pub subpass_index: u32,
     pub sample_locations_info: RawVkSampleLocationsInfo,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSubpassSampleLocations<'a> {
-    pub subpass_index: u32,
-    pub sample_locations_info: VkSampleLocationsInfo<'a>,
 }
 
 impl<'a> VkWrappedType<RawVkSubpassSampleLocations> for VkSubpassSampleLocations<'a> {

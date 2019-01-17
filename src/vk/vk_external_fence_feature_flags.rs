@@ -2,12 +2,20 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkExternalFenceFeatureFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalFenceFeatureFlags {
     pub exportable: bool,
     pub importable: bool,
+}
+
+pub type RawVkExternalFenceFeatureFlags = u32;
+
+impl VkWrappedType<RawVkExternalFenceFeatureFlags> for VkExternalFenceFeatureFlags {
+    fn vk_to_raw(src: &VkExternalFenceFeatureFlags, dst: &mut RawVkExternalFenceFeatureFlags) {
+        *dst = 0;
+        if src.exportable { *dst |= 0x00000001; }
+        if src.importable { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkExternalFenceFeatureFlags> for RawVkExternalFenceFeatureFlags {
@@ -16,14 +24,6 @@ impl VkRawType<VkExternalFenceFeatureFlags> for RawVkExternalFenceFeatureFlags {
             exportable: (src & 0x00000001) != 0,
             importable: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalFenceFeatureFlags> for VkExternalFenceFeatureFlags {
-    fn vk_to_raw(src: &VkExternalFenceFeatureFlags, dst: &mut RawVkExternalFenceFeatureFlags) {
-        *dst = 0;
-        if src.exportable { *dst |= 0x00000001; }
-        if src.importable { *dst |= 0x00000002; }
     }
 }
 

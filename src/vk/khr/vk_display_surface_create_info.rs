@@ -20,6 +20,18 @@ use vk::khr::vk_surface_transform_flags::*;
 use vk::khr::vk_display_plane_alpha_flags::*;
 use vk::vk_extent_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplaySurfaceCreateInfo<'a> {
+    pub flags: VkDisplaySurfaceCreateFlags,
+    pub display_mode: &'a VkDisplayMode,
+    pub plane_index: usize,
+    pub plane_stack_index: usize,
+    pub transform: VkSurfaceTransformFlags,
+    pub global_alpha: f32,
+    pub alpha_mode: VkDisplayPlaneAlphaFlags,
+    pub image_extent: VkExtent2D,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplaySurfaceCreateInfo {
@@ -33,18 +45,6 @@ pub struct RawVkDisplaySurfaceCreateInfo {
     pub global_alpha: f32,
     pub alpha_mode: RawVkDisplayPlaneAlphaFlags,
     pub image_extent: RawVkExtent2D,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDisplaySurfaceCreateInfo<'a> {
-    pub flags: VkDisplaySurfaceCreateFlags,
-    pub display_mode: &'a VkDisplayMode,
-    pub plane_index: usize,
-    pub plane_stack_index: usize,
-    pub transform: VkSurfaceTransformFlags,
-    pub global_alpha: f32,
-    pub alpha_mode: VkDisplayPlaneAlphaFlags,
-    pub image_extent: VkExtent2D,
 }
 
 impl<'a> VkWrappedType<RawVkDisplaySurfaceCreateInfo> for VkDisplaySurfaceCreateInfo<'a> {

@@ -15,6 +15,27 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceFloatControlsProperties {
+    pub separate_denorm_settings: bool,
+    pub separate_rounding_mode_settings: bool,
+    pub shader_signed_zero_inf_nan_preserve_float_16: bool,
+    pub shader_signed_zero_inf_nan_preserve_float_32: bool,
+    pub shader_signed_zero_inf_nan_preserve_float_64: bool,
+    pub shader_denorm_preserve_float_16: bool,
+    pub shader_denorm_preserve_float_32: bool,
+    pub shader_denorm_preserve_float_64: bool,
+    pub shader_denorm_flush_to_zero_float_16: bool,
+    pub shader_denorm_flush_to_zero_float_32: bool,
+    pub shader_denorm_flush_to_zero_float_64: bool,
+    pub shader_rounding_mode_rtefloat_16: bool,
+    pub shader_rounding_mode_rtefloat_32: bool,
+    pub shader_rounding_mode_rtefloat_64: bool,
+    pub shader_rounding_mode_rtzfloat_16: bool,
+    pub shader_rounding_mode_rtzfloat_32: bool,
+    pub shader_rounding_mode_rtzfloat_64: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFloatControlsProperties {
@@ -39,25 +60,28 @@ pub struct RawVkPhysicalDeviceFloatControlsProperties {
     pub shader_rounding_mode_rtzfloat_64: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceFloatControlsProperties {
-    pub separate_denorm_settings: bool,
-    pub separate_rounding_mode_settings: bool,
-    pub shader_signed_zero_inf_nan_preserve_float_16: bool,
-    pub shader_signed_zero_inf_nan_preserve_float_32: bool,
-    pub shader_signed_zero_inf_nan_preserve_float_64: bool,
-    pub shader_denorm_preserve_float_16: bool,
-    pub shader_denorm_preserve_float_32: bool,
-    pub shader_denorm_preserve_float_64: bool,
-    pub shader_denorm_flush_to_zero_float_16: bool,
-    pub shader_denorm_flush_to_zero_float_32: bool,
-    pub shader_denorm_flush_to_zero_float_64: bool,
-    pub shader_rounding_mode_rtefloat_16: bool,
-    pub shader_rounding_mode_rtefloat_32: bool,
-    pub shader_rounding_mode_rtefloat_64: bool,
-    pub shader_rounding_mode_rtzfloat_16: bool,
-    pub shader_rounding_mode_rtzfloat_32: bool,
-    pub shader_rounding_mode_rtzfloat_64: bool,
+impl VkWrappedType<RawVkPhysicalDeviceFloatControlsProperties> for VkPhysicalDeviceFloatControlsProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceFloatControlsProperties, dst: &mut RawVkPhysicalDeviceFloatControlsProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFloatControlsPropertiesKhr);
+        dst.next = ptr::null();
+        dst.separate_denorm_settings = vk_to_raw_value(&src.separate_denorm_settings);
+        dst.separate_rounding_mode_settings = vk_to_raw_value(&src.separate_rounding_mode_settings);
+        dst.shader_signed_zero_inf_nan_preserve_float_16 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_16);
+        dst.shader_signed_zero_inf_nan_preserve_float_32 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_32);
+        dst.shader_signed_zero_inf_nan_preserve_float_64 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_64);
+        dst.shader_denorm_preserve_float_16 = vk_to_raw_value(&src.shader_denorm_preserve_float_16);
+        dst.shader_denorm_preserve_float_32 = vk_to_raw_value(&src.shader_denorm_preserve_float_32);
+        dst.shader_denorm_preserve_float_64 = vk_to_raw_value(&src.shader_denorm_preserve_float_64);
+        dst.shader_denorm_flush_to_zero_float_16 = vk_to_raw_value(&src.shader_denorm_flush_to_zero_float_16);
+        dst.shader_denorm_flush_to_zero_float_32 = vk_to_raw_value(&src.shader_denorm_flush_to_zero_float_32);
+        dst.shader_denorm_flush_to_zero_float_64 = vk_to_raw_value(&src.shader_denorm_flush_to_zero_float_64);
+        dst.shader_rounding_mode_rtefloat_16 = vk_to_raw_value(&src.shader_rounding_mode_rtefloat_16);
+        dst.shader_rounding_mode_rtefloat_32 = vk_to_raw_value(&src.shader_rounding_mode_rtefloat_32);
+        dst.shader_rounding_mode_rtefloat_64 = vk_to_raw_value(&src.shader_rounding_mode_rtefloat_64);
+        dst.shader_rounding_mode_rtzfloat_16 = vk_to_raw_value(&src.shader_rounding_mode_rtzfloat_16);
+        dst.shader_rounding_mode_rtzfloat_32 = vk_to_raw_value(&src.shader_rounding_mode_rtzfloat_32);
+        dst.shader_rounding_mode_rtzfloat_64 = vk_to_raw_value(&src.shader_rounding_mode_rtzfloat_64);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceFloatControlsProperties> for RawVkPhysicalDeviceFloatControlsProperties {
@@ -81,30 +105,6 @@ impl VkRawType<VkPhysicalDeviceFloatControlsProperties> for RawVkPhysicalDeviceF
             shader_rounding_mode_rtzfloat_32: u32::vk_to_wrapped(&src.shader_rounding_mode_rtzfloat_32),
             shader_rounding_mode_rtzfloat_64: u32::vk_to_wrapped(&src.shader_rounding_mode_rtzfloat_64),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceFloatControlsProperties> for VkPhysicalDeviceFloatControlsProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceFloatControlsProperties, dst: &mut RawVkPhysicalDeviceFloatControlsProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFloatControlsPropertiesKhr);
-        dst.next = ptr::null();
-        dst.separate_denorm_settings = vk_to_raw_value(&src.separate_denorm_settings);
-        dst.separate_rounding_mode_settings = vk_to_raw_value(&src.separate_rounding_mode_settings);
-        dst.shader_signed_zero_inf_nan_preserve_float_16 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_16);
-        dst.shader_signed_zero_inf_nan_preserve_float_32 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_32);
-        dst.shader_signed_zero_inf_nan_preserve_float_64 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_64);
-        dst.shader_denorm_preserve_float_16 = vk_to_raw_value(&src.shader_denorm_preserve_float_16);
-        dst.shader_denorm_preserve_float_32 = vk_to_raw_value(&src.shader_denorm_preserve_float_32);
-        dst.shader_denorm_preserve_float_64 = vk_to_raw_value(&src.shader_denorm_preserve_float_64);
-        dst.shader_denorm_flush_to_zero_float_16 = vk_to_raw_value(&src.shader_denorm_flush_to_zero_float_16);
-        dst.shader_denorm_flush_to_zero_float_32 = vk_to_raw_value(&src.shader_denorm_flush_to_zero_float_32);
-        dst.shader_denorm_flush_to_zero_float_64 = vk_to_raw_value(&src.shader_denorm_flush_to_zero_float_64);
-        dst.shader_rounding_mode_rtefloat_16 = vk_to_raw_value(&src.shader_rounding_mode_rtefloat_16);
-        dst.shader_rounding_mode_rtefloat_32 = vk_to_raw_value(&src.shader_rounding_mode_rtefloat_32);
-        dst.shader_rounding_mode_rtefloat_64 = vk_to_raw_value(&src.shader_rounding_mode_rtefloat_64);
-        dst.shader_rounding_mode_rtzfloat_16 = vk_to_raw_value(&src.shader_rounding_mode_rtzfloat_16);
-        dst.shader_rounding_mode_rtzfloat_32 = vk_to_raw_value(&src.shader_rounding_mode_rtzfloat_32);
-        dst.shader_rounding_mode_rtzfloat_64 = vk_to_raw_value(&src.shader_rounding_mode_rtzfloat_64);
     }
 }
 

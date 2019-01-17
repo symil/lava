@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_device_group_present_mode_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGroupPresentInfo<'a> {
+    pub device_masks: &'a [u32],
+    pub mode: VkDeviceGroupPresentModeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupPresentInfo {
@@ -24,12 +30,6 @@ pub struct RawVkDeviceGroupPresentInfo {
     pub swapchain_count: u32,
     pub device_masks: *const u32,
     pub mode: RawVkDeviceGroupPresentModeFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDeviceGroupPresentInfo<'a> {
-    pub device_masks: &'a [u32],
-    pub mode: VkDeviceGroupPresentModeFlags,
 }
 
 impl<'a> VkWrappedType<RawVkDeviceGroupPresentInfo> for VkDeviceGroupPresentInfo<'a> {

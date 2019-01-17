@@ -15,6 +15,16 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_descriptor_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorUpdateTemplateEntry {
+    pub dst_binding: usize,
+    pub dst_array_element: usize,
+    pub descriptor_count: usize,
+    pub descriptor_type: VkDescriptorType,
+    pub offset: usize,
+    pub stride: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorUpdateTemplateEntry {
@@ -26,14 +36,15 @@ pub struct RawVkDescriptorUpdateTemplateEntry {
     pub stride: usize,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDescriptorUpdateTemplateEntry {
-    pub dst_binding: usize,
-    pub dst_array_element: usize,
-    pub descriptor_count: usize,
-    pub descriptor_type: VkDescriptorType,
-    pub offset: usize,
-    pub stride: usize,
+impl VkWrappedType<RawVkDescriptorUpdateTemplateEntry> for VkDescriptorUpdateTemplateEntry {
+    fn vk_to_raw(src: &VkDescriptorUpdateTemplateEntry, dst: &mut RawVkDescriptorUpdateTemplateEntry) {
+        dst.dst_binding = vk_to_raw_value(&src.dst_binding);
+        dst.dst_array_element = vk_to_raw_value(&src.dst_array_element);
+        dst.descriptor_count = vk_to_raw_value(&src.descriptor_count);
+        dst.descriptor_type = vk_to_raw_value(&src.descriptor_type);
+        dst.offset = src.offset;
+        dst.stride = src.stride;
+    }
 }
 
 impl VkRawType<VkDescriptorUpdateTemplateEntry> for RawVkDescriptorUpdateTemplateEntry {
@@ -46,17 +57,6 @@ impl VkRawType<VkDescriptorUpdateTemplateEntry> for RawVkDescriptorUpdateTemplat
             offset: src.offset,
             stride: src.stride,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorUpdateTemplateEntry> for VkDescriptorUpdateTemplateEntry {
-    fn vk_to_raw(src: &VkDescriptorUpdateTemplateEntry, dst: &mut RawVkDescriptorUpdateTemplateEntry) {
-        dst.dst_binding = vk_to_raw_value(&src.dst_binding);
-        dst.dst_array_element = vk_to_raw_value(&src.dst_array_element);
-        dst.descriptor_count = vk_to_raw_value(&src.descriptor_count);
-        dst.descriptor_type = vk_to_raw_value(&src.descriptor_type);
-        dst.offset = src.offset;
-        dst.stride = src.stride;
     }
 }
 

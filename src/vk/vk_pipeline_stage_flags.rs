@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineStageFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineStageFlags {
     pub top_of_pipe: bool,
@@ -32,6 +30,40 @@ pub struct VkPipelineStageFlags {
     pub task_shader_nv: bool,
     pub mesh_shader_nv: bool,
     pub fragment_density_process_ext: bool,
+}
+
+pub type RawVkPipelineStageFlags = u32;
+
+impl VkWrappedType<RawVkPipelineStageFlags> for VkPipelineStageFlags {
+    fn vk_to_raw(src: &VkPipelineStageFlags, dst: &mut RawVkPipelineStageFlags) {
+        *dst = 0;
+        if src.top_of_pipe { *dst |= 0x00000001; }
+        if src.draw_indirect { *dst |= 0x00000002; }
+        if src.vertex_input { *dst |= 0x00000004; }
+        if src.vertex_shader { *dst |= 0x00000008; }
+        if src.tessellation_control_shader { *dst |= 0x00000010; }
+        if src.tessellation_evaluation_shader { *dst |= 0x00000020; }
+        if src.geometry_shader { *dst |= 0x00000040; }
+        if src.fragment_shader { *dst |= 0x00000080; }
+        if src.early_fragment_tests { *dst |= 0x00000100; }
+        if src.late_fragment_tests { *dst |= 0x00000200; }
+        if src.color_attachment_output { *dst |= 0x00000400; }
+        if src.compute_shader { *dst |= 0x00000800; }
+        if src.transfer { *dst |= 0x00001000; }
+        if src.bottom_of_pipe { *dst |= 0x00002000; }
+        if src.host { *dst |= 0x00004000; }
+        if src.all_graphics { *dst |= 0x00008000; }
+        if src.all_commands { *dst |= 0x00010000; }
+        if src.transform_feedback_ext { *dst |= 0x01000000; }
+        if src.conditional_rendering_ext { *dst |= 0x00040000; }
+        if src.command_process_nvx { *dst |= 0x00020000; }
+        if src.shading_rate_image_nv { *dst |= 0x00400000; }
+        if src.ray_tracing_shader_nv { *dst |= 0x00200000; }
+        if src.acceleration_structure_build_nv { *dst |= 0x02000000; }
+        if src.task_shader_nv { *dst |= 0x00080000; }
+        if src.mesh_shader_nv { *dst |= 0x00100000; }
+        if src.fragment_density_process_ext { *dst |= 0x00800000; }
+    }
 }
 
 impl VkRawType<VkPipelineStageFlags> for RawVkPipelineStageFlags {
@@ -64,38 +96,6 @@ impl VkRawType<VkPipelineStageFlags> for RawVkPipelineStageFlags {
             mesh_shader_nv: (src & 0x00100000) != 0,
             fragment_density_process_ext: (src & 0x00800000) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineStageFlags> for VkPipelineStageFlags {
-    fn vk_to_raw(src: &VkPipelineStageFlags, dst: &mut RawVkPipelineStageFlags) {
-        *dst = 0;
-        if src.top_of_pipe { *dst |= 0x00000001; }
-        if src.draw_indirect { *dst |= 0x00000002; }
-        if src.vertex_input { *dst |= 0x00000004; }
-        if src.vertex_shader { *dst |= 0x00000008; }
-        if src.tessellation_control_shader { *dst |= 0x00000010; }
-        if src.tessellation_evaluation_shader { *dst |= 0x00000020; }
-        if src.geometry_shader { *dst |= 0x00000040; }
-        if src.fragment_shader { *dst |= 0x00000080; }
-        if src.early_fragment_tests { *dst |= 0x00000100; }
-        if src.late_fragment_tests { *dst |= 0x00000200; }
-        if src.color_attachment_output { *dst |= 0x00000400; }
-        if src.compute_shader { *dst |= 0x00000800; }
-        if src.transfer { *dst |= 0x00001000; }
-        if src.bottom_of_pipe { *dst |= 0x00002000; }
-        if src.host { *dst |= 0x00004000; }
-        if src.all_graphics { *dst |= 0x00008000; }
-        if src.all_commands { *dst |= 0x00010000; }
-        if src.transform_feedback_ext { *dst |= 0x01000000; }
-        if src.conditional_rendering_ext { *dst |= 0x00040000; }
-        if src.command_process_nvx { *dst |= 0x00020000; }
-        if src.shading_rate_image_nv { *dst |= 0x00400000; }
-        if src.ray_tracing_shader_nv { *dst |= 0x00200000; }
-        if src.acceleration_structure_build_nv { *dst |= 0x02000000; }
-        if src.task_shader_nv { *dst |= 0x00080000; }
-        if src.mesh_shader_nv { *dst |= 0x00100000; }
-        if src.fragment_density_process_ext { *dst |= 0x00800000; }
     }
 }
 

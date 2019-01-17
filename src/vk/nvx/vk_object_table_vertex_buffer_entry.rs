@@ -17,19 +17,19 @@ use vk::nvx::vk_object_entry_type::*;
 use vk::nvx::vk_object_entry_usage_flags::*;
 use vk::vk_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkObjectTableVertexBufferEntry<'a> {
+    pub type_: VkObjectEntryType,
+    pub flags: VkObjectEntryUsageFlags,
+    pub buffer: &'a VkBuffer,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableVertexBufferEntry {
     pub type_: RawVkObjectEntryType,
     pub flags: RawVkObjectEntryUsageFlags,
     pub buffer: RawVkBuffer,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkObjectTableVertexBufferEntry<'a> {
-    pub type_: VkObjectEntryType,
-    pub flags: VkObjectEntryUsageFlags,
-    pub buffer: &'a VkBuffer,
 }
 
 impl<'a> VkWrappedType<RawVkObjectTableVertexBufferEntry> for VkObjectTableVertexBufferEntry<'a> {

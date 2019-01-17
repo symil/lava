@@ -15,6 +15,14 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_component_swizzle::*;
 
+#[derive(Debug, Clone)]
+pub struct VkComponentMapping {
+    pub r: VkComponentSwizzle,
+    pub g: VkComponentSwizzle,
+    pub b: VkComponentSwizzle,
+    pub a: VkComponentSwizzle,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkComponentMapping {
@@ -24,12 +32,13 @@ pub struct RawVkComponentMapping {
     pub a: RawVkComponentSwizzle,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkComponentMapping {
-    pub r: VkComponentSwizzle,
-    pub g: VkComponentSwizzle,
-    pub b: VkComponentSwizzle,
-    pub a: VkComponentSwizzle,
+impl VkWrappedType<RawVkComponentMapping> for VkComponentMapping {
+    fn vk_to_raw(src: &VkComponentMapping, dst: &mut RawVkComponentMapping) {
+        dst.r = vk_to_raw_value(&src.r);
+        dst.g = vk_to_raw_value(&src.g);
+        dst.b = vk_to_raw_value(&src.b);
+        dst.a = vk_to_raw_value(&src.a);
+    }
 }
 
 impl VkRawType<VkComponentMapping> for RawVkComponentMapping {
@@ -40,15 +49,6 @@ impl VkRawType<VkComponentMapping> for RawVkComponentMapping {
             b: RawVkComponentSwizzle::vk_to_wrapped(&src.b),
             a: RawVkComponentSwizzle::vk_to_wrapped(&src.a),
         }
-    }
-}
-
-impl VkWrappedType<RawVkComponentMapping> for VkComponentMapping {
-    fn vk_to_raw(src: &VkComponentMapping, dst: &mut RawVkComponentMapping) {
-        dst.r = vk_to_raw_value(&src.r);
-        dst.g = vk_to_raw_value(&src.g);
-        dst.b = vk_to_raw_value(&src.b);
-        dst.a = vk_to_raw_value(&src.a);
     }
 }
 

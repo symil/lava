@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineViewportSwizzleStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineViewportSwizzleStateCreateFlags {
     
+}
+
+pub type RawVkPipelineViewportSwizzleStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineViewportSwizzleStateCreateFlags> for VkPipelineViewportSwizzleStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineViewportSwizzleStateCreateFlags, dst: &mut RawVkPipelineViewportSwizzleStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineViewportSwizzleStateCreateFlags> for RawVkPipelineViewportSwizzleStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineViewportSwizzleStateCreateFlags> for RawVkPipelineViewp
         VkPipelineViewportSwizzleStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineViewportSwizzleStateCreateFlags> for VkPipelineViewportSwizzleStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineViewportSwizzleStateCreateFlags, dst: &mut RawVkPipelineViewportSwizzleStateCreateFlags) {
-        *dst = 0;
     }
 }
 

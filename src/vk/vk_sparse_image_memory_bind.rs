@@ -19,6 +19,16 @@ use vk::vk_extent_3d::*;
 use vk::vk_device_memory::*;
 use vk::vk_sparse_memory_bind_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSparseImageMemoryBind<'a> {
+    pub subresource: VkImageSubresource,
+    pub offset: VkOffset3D,
+    pub extent: VkExtent3D,
+    pub memory: Option<&'a VkDeviceMemory>,
+    pub memory_offset: usize,
+    pub flags: VkSparseMemoryBindFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageMemoryBind {
@@ -28,16 +38,6 @@ pub struct RawVkSparseImageMemoryBind {
     pub memory: RawVkDeviceMemory,
     pub memory_offset: u64,
     pub flags: RawVkSparseMemoryBindFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSparseImageMemoryBind<'a> {
-    pub subresource: VkImageSubresource,
-    pub offset: VkOffset3D,
-    pub extent: VkExtent3D,
-    pub memory: Option<&'a VkDeviceMemory>,
-    pub memory_offset: usize,
-    pub flags: VkSparseMemoryBindFlags,
 }
 
 impl<'a> VkWrappedType<RawVkSparseImageMemoryBind> for VkSparseImageMemoryBind<'a> {

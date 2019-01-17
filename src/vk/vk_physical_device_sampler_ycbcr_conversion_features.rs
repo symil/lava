@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceSamplerYcbcrConversionFeatures {
+    pub sampler_ycbcr_conversion: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSamplerYcbcrConversionFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceSamplerYcbcrConversionFeatures {
     pub sampler_ycbcr_conversion: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceSamplerYcbcrConversionFeatures {
-    pub sampler_ycbcr_conversion: bool,
+impl VkWrappedType<RawVkPhysicalDeviceSamplerYcbcrConversionFeatures> for VkPhysicalDeviceSamplerYcbcrConversionFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceSamplerYcbcrConversionFeatures, dst: &mut RawVkPhysicalDeviceSamplerYcbcrConversionFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSamplerYcbcrConversionFeatures);
+        dst.next = ptr::null();
+        dst.sampler_ycbcr_conversion = vk_to_raw_value(&src.sampler_ycbcr_conversion);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceSamplerYcbcrConversionFeatures> for RawVkPhysicalDeviceSamplerYcbcrConversionFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceSamplerYcbcrConversionFeatures> for RawVkPhysical
         VkPhysicalDeviceSamplerYcbcrConversionFeatures {
             sampler_ycbcr_conversion: u32::vk_to_wrapped(&src.sampler_ycbcr_conversion),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceSamplerYcbcrConversionFeatures> for VkPhysicalDeviceSamplerYcbcrConversionFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceSamplerYcbcrConversionFeatures, dst: &mut RawVkPhysicalDeviceSamplerYcbcrConversionFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSamplerYcbcrConversionFeatures);
-        dst.next = ptr::null();
-        dst.sampler_ycbcr_conversion = vk_to_raw_value(&src.sampler_ycbcr_conversion);
     }
 }
 

@@ -16,14 +16,6 @@ use vk::vk_device::*;
 use vk::vk_image::*;
 use vk::vk_sparse_image_memory_bind::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkSparseImageMemoryBindInfo {
-    pub image: RawVkImage,
-    pub bind_count: u32,
-    pub binds: *mut RawVkSparseImageMemoryBind,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkSparseImageMemoryBindInfo<'a, 'b, 'c>
     where
@@ -31,6 +23,14 @@ pub struct VkSparseImageMemoryBindInfo<'a, 'b, 'c>
 {
     pub image: &'a VkImage,
     pub binds: &'b [VkSparseImageMemoryBind<'c>],
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkSparseImageMemoryBindInfo {
+    pub image: RawVkImage,
+    pub bind_count: u32,
+    pub binds: *mut RawVkSparseImageMemoryBind,
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkSparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfo<'a, 'b, 'c>

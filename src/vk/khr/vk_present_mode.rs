@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPresentMode = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPresentMode {
@@ -15,17 +13,19 @@ pub enum VkPresentMode {
     SharedContinuousRefresh = 1000111001,
 }
 
+pub type RawVkPresentMode = i32;
+
+impl VkWrappedType<RawVkPresentMode> for VkPresentMode {
+    fn vk_to_raw(src: &VkPresentMode, dst: &mut RawVkPresentMode) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkPresentMode> for RawVkPresentMode {
     fn vk_to_wrapped(src: &RawVkPresentMode) -> VkPresentMode {
         unsafe {
             *((src as *const i32) as *const VkPresentMode)
         }
-    }
-}
-
-impl VkWrappedType<RawVkPresentMode> for VkPresentMode {
-    fn vk_to_raw(src: &VkPresentMode, dst: &mut RawVkPresentMode) {
-        *dst = *src as i32
     }
 }
 

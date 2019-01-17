@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::khr::vk_resolve_mode_flags::*;
 use vk::khr::vk_attachment_reference_2::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSubpassDescriptionDepthStencilResolve<'a> {
+    pub depth_resolve_mode: VkResolveModeFlags,
+    pub stencil_resolve_mode: VkResolveModeFlags,
+    pub depth_stencil_resolve_attachment: Option<&'a VkAttachmentReference2>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDescriptionDepthStencilResolve {
@@ -25,13 +32,6 @@ pub struct RawVkSubpassDescriptionDepthStencilResolve {
     pub depth_resolve_mode: RawVkResolveModeFlags,
     pub stencil_resolve_mode: RawVkResolveModeFlags,
     pub depth_stencil_resolve_attachment: *mut RawVkAttachmentReference2,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSubpassDescriptionDepthStencilResolve<'a> {
-    pub depth_resolve_mode: VkResolveModeFlags,
-    pub stencil_resolve_mode: VkResolveModeFlags,
-    pub depth_stencil_resolve_attachment: Option<&'a VkAttachmentReference2>,
 }
 
 impl<'a> VkWrappedType<RawVkSubpassDescriptionDepthStencilResolve> for VkSubpassDescriptionDepthStencilResolve<'a> {

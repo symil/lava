@@ -20,21 +20,6 @@ use vk::vk_descriptor_image_info::*;
 use vk::vk_descriptor_buffer_info::*;
 use vk::vk_buffer_view::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkWriteDescriptorSet {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub dst_set: RawVkDescriptorSet,
-    pub dst_binding: u32,
-    pub dst_array_element: u32,
-    pub descriptor_count: u32,
-    pub descriptor_type: RawVkDescriptorType,
-    pub image_info: *mut RawVkDescriptorImageInfo,
-    pub buffer_info: *mut RawVkDescriptorBufferInfo,
-    pub texel_buffer_view: *mut RawVkBufferView,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     where
@@ -50,6 +35,21 @@ pub struct VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     pub image_info: &'b [VkDescriptorImageInfo<'c, 'd>],
     pub buffer_info: &'e [VkDescriptorBufferInfo<'f>],
     pub texel_buffer_view: &'g [&'h VkBufferView],
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkWriteDescriptorSet {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub dst_set: RawVkDescriptorSet,
+    pub dst_binding: u32,
+    pub dst_array_element: u32,
+    pub descriptor_count: u32,
+    pub descriptor_type: RawVkDescriptorType,
+    pub image_info: *mut RawVkDescriptorImageInfo,
+    pub buffer_info: *mut RawVkDescriptorBufferInfo,
+    pub texel_buffer_view: *mut RawVkBufferView,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkWrappedType<RawVkWriteDescriptorSet> for VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>

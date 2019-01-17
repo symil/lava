@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_device_event_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceEventInfo {
+    pub device_event: VkDeviceEventType,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceEventInfo {
@@ -24,9 +29,12 @@ pub struct RawVkDeviceEventInfo {
     pub device_event: RawVkDeviceEventType,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceEventInfo {
-    pub device_event: VkDeviceEventType,
+impl VkWrappedType<RawVkDeviceEventInfo> for VkDeviceEventInfo {
+    fn vk_to_raw(src: &VkDeviceEventInfo, dst: &mut RawVkDeviceEventInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceEventInfoExt);
+        dst.next = ptr::null();
+        dst.device_event = vk_to_raw_value(&src.device_event);
+    }
 }
 
 impl VkRawType<VkDeviceEventInfo> for RawVkDeviceEventInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkDeviceEventInfo> for RawVkDeviceEventInfo {
         VkDeviceEventInfo {
             device_event: RawVkDeviceEventType::vk_to_wrapped(&src.device_event),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceEventInfo> for VkDeviceEventInfo {
-    fn vk_to_raw(src: &VkDeviceEventInfo, dst: &mut RawVkDeviceEventInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceEventInfoExt);
-        dst.next = ptr::null();
-        dst.device_event = vk_to_raw_value(&src.device_event);
     }
 }
 

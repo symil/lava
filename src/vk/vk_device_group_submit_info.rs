@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGroupSubmitInfo<'a, 'b, 'c> {
+    pub wait_semaphore_device_indices: &'a [usize],
+    pub command_buffer_device_masks: &'b [u32],
+    pub signal_semaphore_device_indices: &'c [usize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupSubmitInfo {
@@ -26,13 +33,6 @@ pub struct RawVkDeviceGroupSubmitInfo {
     pub command_buffer_device_masks: *const u32,
     pub signal_semaphore_count: u32,
     pub signal_semaphore_device_indices: *mut u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDeviceGroupSubmitInfo<'a, 'b, 'c> {
-    pub wait_semaphore_device_indices: &'a [usize],
-    pub command_buffer_device_masks: &'b [u32],
-    pub signal_semaphore_device_indices: &'c [usize],
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkDeviceGroupSubmitInfo> for VkDeviceGroupSubmitInfo<'a, 'b, 'c> {

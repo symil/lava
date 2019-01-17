@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMultiviewPerViewAttributesProperties {
+    pub per_view_position_all_components: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMultiviewPerViewAttributesProperties {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceMultiviewPerViewAttributesProperties {
     pub per_view_position_all_components: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMultiviewPerViewAttributesProperties {
-    pub per_view_position_all_components: bool,
+impl VkWrappedType<RawVkPhysicalDeviceMultiviewPerViewAttributesProperties> for VkPhysicalDeviceMultiviewPerViewAttributesProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceMultiviewPerViewAttributesProperties, dst: &mut RawVkPhysicalDeviceMultiviewPerViewAttributesProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewPerViewAttributesPropertiesNvx);
+        dst.next = ptr::null();
+        dst.per_view_position_all_components = vk_to_raw_value(&src.per_view_position_all_components);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMultiviewPerViewAttributesProperties> for RawVkPhysicalDeviceMultiviewPerViewAttributesProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceMultiviewPerViewAttributesProperties> for RawVkPh
         VkPhysicalDeviceMultiviewPerViewAttributesProperties {
             per_view_position_all_components: u32::vk_to_wrapped(&src.per_view_position_all_components),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMultiviewPerViewAttributesProperties> for VkPhysicalDeviceMultiviewPerViewAttributesProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceMultiviewPerViewAttributesProperties, dst: &mut RawVkPhysicalDeviceMultiviewPerViewAttributesProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewPerViewAttributesPropertiesNvx);
-        dst.next = ptr::null();
-        dst.per_view_position_all_components = vk_to_raw_value(&src.per_view_position_all_components);
     }
 }
 

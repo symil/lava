@@ -14,6 +14,13 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCoarseSampleLocation {
+    pub pixel_x: usize,
+    pub pixel_y: usize,
+    pub sample: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCoarseSampleLocation {
@@ -22,11 +29,12 @@ pub struct RawVkCoarseSampleLocation {
     pub sample: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkCoarseSampleLocation {
-    pub pixel_x: usize,
-    pub pixel_y: usize,
-    pub sample: usize,
+impl VkWrappedType<RawVkCoarseSampleLocation> for VkCoarseSampleLocation {
+    fn vk_to_raw(src: &VkCoarseSampleLocation, dst: &mut RawVkCoarseSampleLocation) {
+        dst.pixel_x = vk_to_raw_value(&src.pixel_x);
+        dst.pixel_y = vk_to_raw_value(&src.pixel_y);
+        dst.sample = vk_to_raw_value(&src.sample);
+    }
 }
 
 impl VkRawType<VkCoarseSampleLocation> for RawVkCoarseSampleLocation {
@@ -36,14 +44,6 @@ impl VkRawType<VkCoarseSampleLocation> for RawVkCoarseSampleLocation {
             pixel_y: u32::vk_to_wrapped(&src.pixel_y),
             sample: u32::vk_to_wrapped(&src.sample),
         }
-    }
-}
-
-impl VkWrappedType<RawVkCoarseSampleLocation> for VkCoarseSampleLocation {
-    fn vk_to_raw(src: &VkCoarseSampleLocation, dst: &mut RawVkCoarseSampleLocation) {
-        dst.pixel_x = vk_to_raw_value(&src.pixel_x);
-        dst.pixel_y = vk_to_raw_value(&src.pixel_y);
-        dst.sample = vk_to_raw_value(&src.sample);
     }
 }
 

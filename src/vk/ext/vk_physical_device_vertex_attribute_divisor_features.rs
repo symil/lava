@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceVertexAttributeDivisorFeatures {
+    pub vertex_attribute_instance_rate_divisor: bool,
+    pub vertex_attribute_instance_rate_zero_divisor: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVertexAttributeDivisorFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceVertexAttributeDivisorFeatures {
     pub vertex_attribute_instance_rate_zero_divisor: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceVertexAttributeDivisorFeatures {
-    pub vertex_attribute_instance_rate_divisor: bool,
-    pub vertex_attribute_instance_rate_zero_divisor: bool,
+impl VkWrappedType<RawVkPhysicalDeviceVertexAttributeDivisorFeatures> for VkPhysicalDeviceVertexAttributeDivisorFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceVertexAttributeDivisorFeatures, dst: &mut RawVkPhysicalDeviceVertexAttributeDivisorFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVertexAttributeDivisorFeaturesExt);
+        dst.next = ptr::null();
+        dst.vertex_attribute_instance_rate_divisor = vk_to_raw_value(&src.vertex_attribute_instance_rate_divisor);
+        dst.vertex_attribute_instance_rate_zero_divisor = vk_to_raw_value(&src.vertex_attribute_instance_rate_zero_divisor);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceVertexAttributeDivisorFeatures> for RawVkPhysicalDeviceVertexAttributeDivisorFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceVertexAttributeDivisorFeatures> for RawVkPhysical
             vertex_attribute_instance_rate_divisor: u32::vk_to_wrapped(&src.vertex_attribute_instance_rate_divisor),
             vertex_attribute_instance_rate_zero_divisor: u32::vk_to_wrapped(&src.vertex_attribute_instance_rate_zero_divisor),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceVertexAttributeDivisorFeatures> for VkPhysicalDeviceVertexAttributeDivisorFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceVertexAttributeDivisorFeatures, dst: &mut RawVkPhysicalDeviceVertexAttributeDivisorFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVertexAttributeDivisorFeaturesExt);
-        dst.next = ptr::null();
-        dst.vertex_attribute_instance_rate_divisor = vk_to_raw_value(&src.vertex_attribute_instance_rate_divisor);
-        dst.vertex_attribute_instance_rate_zero_divisor = vk_to_raw_value(&src.vertex_attribute_instance_rate_zero_divisor);
     }
 }
 

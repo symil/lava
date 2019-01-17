@@ -18,19 +18,6 @@ use vk::vk_physical_device_type::*;
 use vk::vk_physical_device_limits::*;
 use vk::vk_physical_device_sparse_properties::*;
 
-#[repr(C)]
-pub struct RawVkPhysicalDeviceProperties {
-    pub api_version: u32,
-    pub driver_version: u32,
-    pub vendor_id: u32,
-    pub device_id: u32,
-    pub device_type: RawVkPhysicalDeviceType,
-    pub device_name: [c_char; 256],
-    pub pipeline_cache_uuid: [u8; 16],
-    pub limits: RawVkPhysicalDeviceLimits,
-    pub sparse_properties: RawVkPhysicalDeviceSparseProperties,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceProperties {
     pub api_version: VkVersion,
@@ -42,6 +29,19 @@ pub struct VkPhysicalDeviceProperties {
     pub pipeline_cache_uuid: [u8; 16],
     pub limits: VkPhysicalDeviceLimits,
     pub sparse_properties: VkPhysicalDeviceSparseProperties,
+}
+
+#[repr(C)]
+pub struct RawVkPhysicalDeviceProperties {
+    pub api_version: u32,
+    pub driver_version: u32,
+    pub vendor_id: u32,
+    pub device_id: u32,
+    pub device_type: RawVkPhysicalDeviceType,
+    pub device_name: [c_char; 256],
+    pub pipeline_cache_uuid: [u8; 16],
+    pub limits: RawVkPhysicalDeviceLimits,
+    pub sparse_properties: RawVkPhysicalDeviceSparseProperties,
 }
 
 impl VkRawType<VkPhysicalDeviceProperties> for RawVkPhysicalDeviceProperties {

@@ -14,6 +14,15 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPastPresentationTiming {
+    pub present_id: usize,
+    pub desired_present_time: usize,
+    pub actual_present_time: usize,
+    pub earliest_present_time: usize,
+    pub present_margin: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPastPresentationTiming {
@@ -24,13 +33,14 @@ pub struct RawVkPastPresentationTiming {
     pub present_margin: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPastPresentationTiming {
-    pub present_id: usize,
-    pub desired_present_time: usize,
-    pub actual_present_time: usize,
-    pub earliest_present_time: usize,
-    pub present_margin: usize,
+impl VkWrappedType<RawVkPastPresentationTiming> for VkPastPresentationTiming {
+    fn vk_to_raw(src: &VkPastPresentationTiming, dst: &mut RawVkPastPresentationTiming) {
+        dst.present_id = vk_to_raw_value(&src.present_id);
+        dst.desired_present_time = vk_to_raw_value(&src.desired_present_time);
+        dst.actual_present_time = vk_to_raw_value(&src.actual_present_time);
+        dst.earliest_present_time = vk_to_raw_value(&src.earliest_present_time);
+        dst.present_margin = vk_to_raw_value(&src.present_margin);
+    }
 }
 
 impl VkRawType<VkPastPresentationTiming> for RawVkPastPresentationTiming {
@@ -42,16 +52,6 @@ impl VkRawType<VkPastPresentationTiming> for RawVkPastPresentationTiming {
             earliest_present_time: u64::vk_to_wrapped(&src.earliest_present_time),
             present_margin: u64::vk_to_wrapped(&src.present_margin),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPastPresentationTiming> for VkPastPresentationTiming {
-    fn vk_to_raw(src: &VkPastPresentationTiming, dst: &mut RawVkPastPresentationTiming) {
-        dst.present_id = vk_to_raw_value(&src.present_id);
-        dst.desired_present_time = vk_to_raw_value(&src.desired_present_time);
-        dst.actual_present_time = vk_to_raw_value(&src.actual_present_time);
-        dst.earliest_present_time = vk_to_raw_value(&src.earliest_present_time);
-        dst.present_margin = vk_to_raw_value(&src.present_margin);
     }
 }
 

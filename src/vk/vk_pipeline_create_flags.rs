@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineCreateFlags {
     pub disable_optimization: bool,
@@ -12,6 +10,20 @@ pub struct VkPipelineCreateFlags {
     pub view_index_from_device_index: bool,
     pub dispatch_base: bool,
     pub defer_compile_nv: bool,
+}
+
+pub type RawVkPipelineCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {
+    fn vk_to_raw(src: &VkPipelineCreateFlags, dst: &mut RawVkPipelineCreateFlags) {
+        *dst = 0;
+        if src.disable_optimization { *dst |= 0x00000001; }
+        if src.allow_derivatives { *dst |= 0x00000002; }
+        if src.derivative { *dst |= 0x00000004; }
+        if src.view_index_from_device_index { *dst |= 0x00000008; }
+        if src.dispatch_base { *dst |= 0x00000010; }
+        if src.defer_compile_nv { *dst |= 0x00000020; }
+    }
 }
 
 impl VkRawType<VkPipelineCreateFlags> for RawVkPipelineCreateFlags {
@@ -24,18 +36,6 @@ impl VkRawType<VkPipelineCreateFlags> for RawVkPipelineCreateFlags {
             dispatch_base: (src & 0x00000010) != 0,
             defer_compile_nv: (src & 0x00000020) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {
-    fn vk_to_raw(src: &VkPipelineCreateFlags, dst: &mut RawVkPipelineCreateFlags) {
-        *dst = 0;
-        if src.disable_optimization { *dst |= 0x00000001; }
-        if src.allow_derivatives { *dst |= 0x00000002; }
-        if src.derivative { *dst |= 0x00000004; }
-        if src.view_index_from_device_index { *dst |= 0x00000008; }
-        if src.dispatch_base { *dst |= 0x00000010; }
-        if src.defer_compile_nv { *dst |= 0x00000020; }
     }
 }
 

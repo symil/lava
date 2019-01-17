@@ -18,6 +18,16 @@ use vk::vk_pipeline_layout_create_flags::*;
 use vk::vk_descriptor_set_layout::*;
 use vk::vk_push_constant_range::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineLayoutCreateInfo<'a, 'b, 'c>
+    where
+        'b: 'a,
+{
+    pub flags: VkPipelineLayoutCreateFlags,
+    pub set_layouts: &'a [&'b VkDescriptorSetLayout],
+    pub push_constant_ranges: &'c [VkPushConstantRange],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineLayoutCreateInfo {
@@ -28,16 +38,6 @@ pub struct RawVkPipelineLayoutCreateInfo {
     pub set_layouts: *mut RawVkDescriptorSetLayout,
     pub push_constant_range_count: u32,
     pub push_constant_ranges: *mut RawVkPushConstantRange,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineLayoutCreateInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-{
-    pub flags: VkPipelineLayoutCreateFlags,
-    pub set_layouts: &'a [&'b VkDescriptorSetLayout],
-    pub push_constant_ranges: &'c [VkPushConstantRange],
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkPipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfo<'a, 'b, 'c>

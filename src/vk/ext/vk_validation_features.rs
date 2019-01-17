@@ -17,6 +17,12 @@ use vk::vk_structure_type::*;
 use vk::ext::vk_validation_feature_enable::*;
 use vk::ext::vk_validation_feature_disable::*;
 
+#[derive(Debug, Clone)]
+pub struct VkValidationFeatures<'a, 'b> {
+    pub enabled_validation_features: &'a [VkValidationFeatureEnable],
+    pub disabled_validation_features: &'b [VkValidationFeatureDisable],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkValidationFeatures {
@@ -26,12 +32,6 @@ pub struct RawVkValidationFeatures {
     pub enabled_validation_features: *mut RawVkValidationFeatureEnable,
     pub disabled_validation_feature_count: u32,
     pub disabled_validation_features: *mut RawVkValidationFeatureDisable,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkValidationFeatures<'a, 'b> {
-    pub enabled_validation_features: &'a [VkValidationFeatureEnable],
-    pub disabled_validation_features: &'b [VkValidationFeatureDisable],
 }
 
 impl<'a, 'b> VkWrappedType<RawVkValidationFeatures> for VkValidationFeatures<'a, 'b> {

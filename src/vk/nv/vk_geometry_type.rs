@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkGeometryType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkGeometryType {
@@ -11,17 +9,19 @@ pub enum VkGeometryType {
     Aabbs = 1,
 }
 
+pub type RawVkGeometryType = i32;
+
+impl VkWrappedType<RawVkGeometryType> for VkGeometryType {
+    fn vk_to_raw(src: &VkGeometryType, dst: &mut RawVkGeometryType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkGeometryType> for RawVkGeometryType {
     fn vk_to_wrapped(src: &RawVkGeometryType) -> VkGeometryType {
         unsafe {
             *((src as *const i32) as *const VkGeometryType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkGeometryType> for VkGeometryType {
-    fn vk_to_raw(src: &VkGeometryType, dst: &mut RawVkGeometryType) {
-        *dst = *src as i32
     }
 }
 

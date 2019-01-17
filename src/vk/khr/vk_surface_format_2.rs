@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_surface_format::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSurfaceFormat2 {
+    pub surface_format: VkSurfaceFormat,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceFormat2 {
@@ -24,9 +29,12 @@ pub struct RawVkSurfaceFormat2 {
     pub surface_format: RawVkSurfaceFormat,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSurfaceFormat2 {
-    pub surface_format: VkSurfaceFormat,
+impl VkWrappedType<RawVkSurfaceFormat2> for VkSurfaceFormat2 {
+    fn vk_to_raw(src: &VkSurfaceFormat2, dst: &mut RawVkSurfaceFormat2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceFormat2Khr);
+        dst.next = ptr::null();
+        dst.surface_format = vk_to_raw_value(&src.surface_format);
+    }
 }
 
 impl VkRawType<VkSurfaceFormat2> for RawVkSurfaceFormat2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkSurfaceFormat2> for RawVkSurfaceFormat2 {
         VkSurfaceFormat2 {
             surface_format: RawVkSurfaceFormat::vk_to_wrapped(&src.surface_format),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSurfaceFormat2> for VkSurfaceFormat2 {
-    fn vk_to_raw(src: &VkSurfaceFormat2, dst: &mut RawVkSurfaceFormat2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceFormat2Khr);
-        dst.next = ptr::null();
-        dst.surface_format = vk_to_raw_value(&src.surface_format);
     }
 }
 

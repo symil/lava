@@ -17,6 +17,15 @@ use vk::vk_image_subresource_layers::*;
 use vk::vk_offset_3d::*;
 use vk::vk_extent_3d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageCopy {
+    pub src_subresource: VkImageSubresourceLayers,
+    pub src_offset: VkOffset3D,
+    pub dst_subresource: VkImageSubresourceLayers,
+    pub dst_offset: VkOffset3D,
+    pub extent: VkExtent3D,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageCopy {
@@ -27,13 +36,14 @@ pub struct RawVkImageCopy {
     pub extent: RawVkExtent3D,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageCopy {
-    pub src_subresource: VkImageSubresourceLayers,
-    pub src_offset: VkOffset3D,
-    pub dst_subresource: VkImageSubresourceLayers,
-    pub dst_offset: VkOffset3D,
-    pub extent: VkExtent3D,
+impl VkWrappedType<RawVkImageCopy> for VkImageCopy {
+    fn vk_to_raw(src: &VkImageCopy, dst: &mut RawVkImageCopy) {
+        dst.src_subresource = vk_to_raw_value(&src.src_subresource);
+        dst.src_offset = vk_to_raw_value(&src.src_offset);
+        dst.dst_subresource = vk_to_raw_value(&src.dst_subresource);
+        dst.dst_offset = vk_to_raw_value(&src.dst_offset);
+        dst.extent = vk_to_raw_value(&src.extent);
+    }
 }
 
 impl VkRawType<VkImageCopy> for RawVkImageCopy {
@@ -45,16 +55,6 @@ impl VkRawType<VkImageCopy> for RawVkImageCopy {
             dst_offset: RawVkOffset3D::vk_to_wrapped(&src.dst_offset),
             extent: RawVkExtent3D::vk_to_wrapped(&src.extent),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageCopy> for VkImageCopy {
-    fn vk_to_raw(src: &VkImageCopy, dst: &mut RawVkImageCopy) {
-        dst.src_subresource = vk_to_raw_value(&src.src_subresource);
-        dst.src_offset = vk_to_raw_value(&src.src_offset);
-        dst.dst_subresource = vk_to_raw_value(&src.dst_subresource);
-        dst.dst_offset = vk_to_raw_value(&src.dst_offset);
-        dst.extent = vk_to_raw_value(&src.extent);
     }
 }
 

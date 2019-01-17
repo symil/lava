@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_extent_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMultisampleProperties {
+    pub max_sample_location_grid_size: VkExtent2D,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMultisampleProperties {
@@ -24,9 +29,12 @@ pub struct RawVkMultisampleProperties {
     pub max_sample_location_grid_size: RawVkExtent2D,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMultisampleProperties {
-    pub max_sample_location_grid_size: VkExtent2D,
+impl VkWrappedType<RawVkMultisampleProperties> for VkMultisampleProperties {
+    fn vk_to_raw(src: &VkMultisampleProperties, dst: &mut RawVkMultisampleProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::MultisamplePropertiesExt);
+        dst.next = ptr::null();
+        dst.max_sample_location_grid_size = vk_to_raw_value(&src.max_sample_location_grid_size);
+    }
 }
 
 impl VkRawType<VkMultisampleProperties> for RawVkMultisampleProperties {
@@ -34,14 +42,6 @@ impl VkRawType<VkMultisampleProperties> for RawVkMultisampleProperties {
         VkMultisampleProperties {
             max_sample_location_grid_size: RawVkExtent2D::vk_to_wrapped(&src.max_sample_location_grid_size),
         }
-    }
-}
-
-impl VkWrappedType<RawVkMultisampleProperties> for VkMultisampleProperties {
-    fn vk_to_raw(src: &VkMultisampleProperties, dst: &mut RawVkMultisampleProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::MultisamplePropertiesExt);
-        dst.next = ptr::null();
-        dst.max_sample_location_grid_size = vk_to_raw_value(&src.max_sample_location_grid_size);
     }
 }
 

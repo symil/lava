@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMemoryPriorityFeatures {
+    pub memory_priority: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryPriorityFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceMemoryPriorityFeatures {
     pub memory_priority: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMemoryPriorityFeatures {
-    pub memory_priority: bool,
+impl VkWrappedType<RawVkPhysicalDeviceMemoryPriorityFeatures> for VkPhysicalDeviceMemoryPriorityFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceMemoryPriorityFeatures, dst: &mut RawVkPhysicalDeviceMemoryPriorityFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryPriorityFeaturesExt);
+        dst.next = ptr::null();
+        dst.memory_priority = vk_to_raw_value(&src.memory_priority);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMemoryPriorityFeatures> for RawVkPhysicalDeviceMemoryPriorityFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceMemoryPriorityFeatures> for RawVkPhysicalDeviceMe
         VkPhysicalDeviceMemoryPriorityFeatures {
             memory_priority: u32::vk_to_wrapped(&src.memory_priority),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMemoryPriorityFeatures> for VkPhysicalDeviceMemoryPriorityFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceMemoryPriorityFeatures, dst: &mut RawVkPhysicalDeviceMemoryPriorityFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryPriorityFeaturesExt);
-        dst.next = ptr::null();
-        dst.memory_priority = vk_to_raw_value(&src.memory_priority);
     }
 }
 

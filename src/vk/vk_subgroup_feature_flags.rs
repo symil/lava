@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSubgroupFeatureFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkSubgroupFeatureFlags {
     pub basic: bool,
@@ -15,6 +13,23 @@ pub struct VkSubgroupFeatureFlags {
     pub clustered: bool,
     pub quad: bool,
     pub partitioned_nv: bool,
+}
+
+pub type RawVkSubgroupFeatureFlags = u32;
+
+impl VkWrappedType<RawVkSubgroupFeatureFlags> for VkSubgroupFeatureFlags {
+    fn vk_to_raw(src: &VkSubgroupFeatureFlags, dst: &mut RawVkSubgroupFeatureFlags) {
+        *dst = 0;
+        if src.basic { *dst |= 0x00000001; }
+        if src.vote { *dst |= 0x00000002; }
+        if src.arithmetic { *dst |= 0x00000004; }
+        if src.ballot { *dst |= 0x00000008; }
+        if src.shuffle { *dst |= 0x00000010; }
+        if src.shuffle_relative { *dst |= 0x00000020; }
+        if src.clustered { *dst |= 0x00000040; }
+        if src.quad { *dst |= 0x00000080; }
+        if src.partitioned_nv { *dst |= 0x00000100; }
+    }
 }
 
 impl VkRawType<VkSubgroupFeatureFlags> for RawVkSubgroupFeatureFlags {
@@ -30,21 +45,6 @@ impl VkRawType<VkSubgroupFeatureFlags> for RawVkSubgroupFeatureFlags {
             quad: (src & 0x00000080) != 0,
             partitioned_nv: (src & 0x00000100) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSubgroupFeatureFlags> for VkSubgroupFeatureFlags {
-    fn vk_to_raw(src: &VkSubgroupFeatureFlags, dst: &mut RawVkSubgroupFeatureFlags) {
-        *dst = 0;
-        if src.basic { *dst |= 0x00000001; }
-        if src.vote { *dst |= 0x00000002; }
-        if src.arithmetic { *dst |= 0x00000004; }
-        if src.ballot { *dst |= 0x00000008; }
-        if src.shuffle { *dst |= 0x00000010; }
-        if src.shuffle_relative { *dst |= 0x00000020; }
-        if src.clustered { *dst |= 0x00000040; }
-        if src.quad { *dst |= 0x00000080; }
-        if src.partitioned_nv { *dst |= 0x00000100; }
     }
 }
 

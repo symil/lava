@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_semaphore_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExportSemaphoreCreateInfo {
+    pub handle_types: VkExternalSemaphoreHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExportSemaphoreCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkExportSemaphoreCreateInfo {
     pub handle_types: RawVkExternalSemaphoreHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExportSemaphoreCreateInfo {
-    pub handle_types: VkExternalSemaphoreHandleTypeFlags,
+impl VkWrappedType<RawVkExportSemaphoreCreateInfo> for VkExportSemaphoreCreateInfo {
+    fn vk_to_raw(src: &VkExportSemaphoreCreateInfo, dst: &mut RawVkExportSemaphoreCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ExportSemaphoreCreateInfo);
+        dst.next = ptr::null();
+        dst.handle_types = vk_to_raw_value(&src.handle_types);
+    }
 }
 
 impl VkRawType<VkExportSemaphoreCreateInfo> for RawVkExportSemaphoreCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkExportSemaphoreCreateInfo> for RawVkExportSemaphoreCreateInfo {
         VkExportSemaphoreCreateInfo {
             handle_types: RawVkExternalSemaphoreHandleTypeFlags::vk_to_wrapped(&src.handle_types),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExportSemaphoreCreateInfo> for VkExportSemaphoreCreateInfo {
-    fn vk_to_raw(src: &VkExportSemaphoreCreateInfo, dst: &mut RawVkExportSemaphoreCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ExportSemaphoreCreateInfo);
-        dst.next = ptr::null();
-        dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }
 

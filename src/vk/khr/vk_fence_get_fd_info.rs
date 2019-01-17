@@ -17,6 +17,12 @@ use vk::vk_structure_type::*;
 use vk::vk_fence::*;
 use vk::vk_external_fence_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkFenceGetFdInfo<'a> {
+    pub fence: &'a VkFence,
+    pub handle_type: VkExternalFenceHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFenceGetFdInfo {
@@ -24,12 +30,6 @@ pub struct RawVkFenceGetFdInfo {
     pub next: *const c_void,
     pub fence: RawVkFence,
     pub handle_type: RawVkExternalFenceHandleTypeFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkFenceGetFdInfo<'a> {
-    pub fence: &'a VkFence,
-    pub handle_type: VkExternalFenceHandleTypeFlags,
 }
 
 impl<'a> VkWrappedType<RawVkFenceGetFdInfo> for VkFenceGetFdInfo<'a> {

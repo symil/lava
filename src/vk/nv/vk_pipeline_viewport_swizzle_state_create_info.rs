@@ -17,6 +17,12 @@ use vk::vk_structure_type::*;
 use vk::nv::vk_pipeline_viewport_swizzle_state_create_flags::*;
 use vk::nv::vk_viewport_swizzle::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineViewportSwizzleStateCreateInfo<'a> {
+    pub flags: VkPipelineViewportSwizzleStateCreateFlags,
+    pub viewport_swizzles: &'a [VkViewportSwizzle],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportSwizzleStateCreateInfo {
@@ -25,12 +31,6 @@ pub struct RawVkPipelineViewportSwizzleStateCreateInfo {
     pub flags: RawVkPipelineViewportSwizzleStateCreateFlags,
     pub viewport_count: u32,
     pub viewport_swizzles: *mut RawVkViewportSwizzle,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineViewportSwizzleStateCreateInfo<'a> {
-    pub flags: VkPipelineViewportSwizzleStateCreateFlags,
-    pub viewport_swizzles: &'a [VkViewportSwizzle],
 }
 
 impl<'a> VkWrappedType<RawVkPipelineViewportSwizzleStateCreateInfo> for VkPipelineViewportSwizzleStateCreateInfo<'a> {

@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceShaderImageFootprintFeatures {
+    pub image_footprint: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShaderImageFootprintFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceShaderImageFootprintFeatures {
     pub image_footprint: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceShaderImageFootprintFeatures {
-    pub image_footprint: bool,
+impl VkWrappedType<RawVkPhysicalDeviceShaderImageFootprintFeatures> for VkPhysicalDeviceShaderImageFootprintFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceShaderImageFootprintFeatures, dst: &mut RawVkPhysicalDeviceShaderImageFootprintFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderImageFootprintFeaturesNv);
+        dst.next = ptr::null();
+        dst.image_footprint = vk_to_raw_value(&src.image_footprint);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceShaderImageFootprintFeatures> for RawVkPhysicalDeviceShaderImageFootprintFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceShaderImageFootprintFeatures> for RawVkPhysicalDe
         VkPhysicalDeviceShaderImageFootprintFeatures {
             image_footprint: u32::vk_to_wrapped(&src.image_footprint),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceShaderImageFootprintFeatures> for VkPhysicalDeviceShaderImageFootprintFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceShaderImageFootprintFeatures, dst: &mut RawVkPhysicalDeviceShaderImageFootprintFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderImageFootprintFeaturesNv);
-        dst.next = ptr::null();
-        dst.image_footprint = vk_to_raw_value(&src.image_footprint);
     }
 }
 

@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceConditionalRenderingFeatures {
+    pub conditional_rendering: bool,
+    pub inherited_conditional_rendering: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceConditionalRenderingFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceConditionalRenderingFeatures {
     pub inherited_conditional_rendering: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceConditionalRenderingFeatures {
-    pub conditional_rendering: bool,
-    pub inherited_conditional_rendering: bool,
+impl VkWrappedType<RawVkPhysicalDeviceConditionalRenderingFeatures> for VkPhysicalDeviceConditionalRenderingFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceConditionalRenderingFeatures, dst: &mut RawVkPhysicalDeviceConditionalRenderingFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceConditionalRenderingFeaturesExt);
+        dst.next = ptr::null();
+        dst.conditional_rendering = vk_to_raw_value(&src.conditional_rendering);
+        dst.inherited_conditional_rendering = vk_to_raw_value(&src.inherited_conditional_rendering);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceConditionalRenderingFeatures> for RawVkPhysicalDeviceConditionalRenderingFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceConditionalRenderingFeatures> for RawVkPhysicalDe
             conditional_rendering: u32::vk_to_wrapped(&src.conditional_rendering),
             inherited_conditional_rendering: u32::vk_to_wrapped(&src.inherited_conditional_rendering),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceConditionalRenderingFeatures> for VkPhysicalDeviceConditionalRenderingFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceConditionalRenderingFeatures, dst: &mut RawVkPhysicalDeviceConditionalRenderingFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceConditionalRenderingFeaturesExt);
-        dst.next = ptr::null();
-        dst.conditional_rendering = vk_to_raw_value(&src.conditional_rendering);
-        dst.inherited_conditional_rendering = vk_to_raw_value(&src.inherited_conditional_rendering);
     }
 }
 

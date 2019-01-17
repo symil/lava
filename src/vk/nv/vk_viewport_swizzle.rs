@@ -15,6 +15,14 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::nv::vk_viewport_coordinate_swizzle::*;
 
+#[derive(Debug, Clone)]
+pub struct VkViewportSwizzle {
+    pub x: VkViewportCoordinateSwizzle,
+    pub y: VkViewportCoordinateSwizzle,
+    pub z: VkViewportCoordinateSwizzle,
+    pub w: VkViewportCoordinateSwizzle,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkViewportSwizzle {
@@ -24,12 +32,13 @@ pub struct RawVkViewportSwizzle {
     pub w: RawVkViewportCoordinateSwizzle,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkViewportSwizzle {
-    pub x: VkViewportCoordinateSwizzle,
-    pub y: VkViewportCoordinateSwizzle,
-    pub z: VkViewportCoordinateSwizzle,
-    pub w: VkViewportCoordinateSwizzle,
+impl VkWrappedType<RawVkViewportSwizzle> for VkViewportSwizzle {
+    fn vk_to_raw(src: &VkViewportSwizzle, dst: &mut RawVkViewportSwizzle) {
+        dst.x = vk_to_raw_value(&src.x);
+        dst.y = vk_to_raw_value(&src.y);
+        dst.z = vk_to_raw_value(&src.z);
+        dst.w = vk_to_raw_value(&src.w);
+    }
 }
 
 impl VkRawType<VkViewportSwizzle> for RawVkViewportSwizzle {
@@ -40,15 +49,6 @@ impl VkRawType<VkViewportSwizzle> for RawVkViewportSwizzle {
             z: RawVkViewportCoordinateSwizzle::vk_to_wrapped(&src.z),
             w: RawVkViewportCoordinateSwizzle::vk_to_wrapped(&src.w),
         }
-    }
-}
-
-impl VkWrappedType<RawVkViewportSwizzle> for VkViewportSwizzle {
-    fn vk_to_raw(src: &VkViewportSwizzle, dst: &mut RawVkViewportSwizzle) {
-        dst.x = vk_to_raw_value(&src.x);
-        dst.y = vk_to_raw_value(&src.y);
-        dst.z = vk_to_raw_value(&src.z);
-        dst.w = vk_to_raw_value(&src.w);
     }
 }
 

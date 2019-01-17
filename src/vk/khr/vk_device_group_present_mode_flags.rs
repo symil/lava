@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDeviceGroupPresentModeFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDeviceGroupPresentModeFlags {
     pub local: bool,
     pub remote: bool,
     pub sum: bool,
     pub local_multi_device: bool,
+}
+
+pub type RawVkDeviceGroupPresentModeFlags = u32;
+
+impl VkWrappedType<RawVkDeviceGroupPresentModeFlags> for VkDeviceGroupPresentModeFlags {
+    fn vk_to_raw(src: &VkDeviceGroupPresentModeFlags, dst: &mut RawVkDeviceGroupPresentModeFlags) {
+        *dst = 0;
+        if src.local { *dst |= 0x00000001; }
+        if src.remote { *dst |= 0x00000002; }
+        if src.sum { *dst |= 0x00000004; }
+        if src.local_multi_device { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkDeviceGroupPresentModeFlags> for RawVkDeviceGroupPresentModeFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkDeviceGroupPresentModeFlags> for RawVkDeviceGroupPresentModeFla
             sum: (src & 0x00000004) != 0,
             local_multi_device: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceGroupPresentModeFlags> for VkDeviceGroupPresentModeFlags {
-    fn vk_to_raw(src: &VkDeviceGroupPresentModeFlags, dst: &mut RawVkDeviceGroupPresentModeFlags) {
-        *dst = 0;
-        if src.local { *dst |= 0x00000001; }
-        if src.remote { *dst |= 0x00000002; }
-        if src.sum { *dst |= 0x00000004; }
-        if src.local_multi_device { *dst |= 0x00000008; }
     }
 }
 

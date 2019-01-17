@@ -18,6 +18,13 @@ use vk::ext::vk_pipeline_discard_rectangle_state_create_flags::*;
 use vk::ext::vk_discard_rectangle_mode::*;
 use vk::vk_rect_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineDiscardRectangleStateCreateInfo<'a> {
+    pub flags: VkPipelineDiscardRectangleStateCreateFlags,
+    pub discard_rectangle_mode: VkDiscardRectangleMode,
+    pub discard_rectangles: Option<&'a [VkRect2D]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineDiscardRectangleStateCreateInfo {
@@ -27,13 +34,6 @@ pub struct RawVkPipelineDiscardRectangleStateCreateInfo {
     pub discard_rectangle_mode: RawVkDiscardRectangleMode,
     pub discard_rectangle_count: u32,
     pub discard_rectangles: *mut RawVkRect2D,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineDiscardRectangleStateCreateInfo<'a> {
-    pub flags: VkPipelineDiscardRectangleStateCreateFlags,
-    pub discard_rectangle_mode: VkDiscardRectangleMode,
-    pub discard_rectangles: Option<&'a [VkRect2D]>,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineDiscardRectangleStateCreateInfo> for VkPipelineDiscardRectangleStateCreateInfo<'a> {

@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBufferDeviceAddressCreateInfo {
+    pub device_address: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferDeviceAddressCreateInfo {
@@ -23,9 +28,12 @@ pub struct RawVkBufferDeviceAddressCreateInfo {
     pub device_address: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkBufferDeviceAddressCreateInfo {
-    pub device_address: usize,
+impl VkWrappedType<RawVkBufferDeviceAddressCreateInfo> for VkBufferDeviceAddressCreateInfo {
+    fn vk_to_raw(src: &VkBufferDeviceAddressCreateInfo, dst: &mut RawVkBufferDeviceAddressCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::BufferDeviceAddressCreateInfoExt);
+        dst.next = ptr::null();
+        dst.device_address = vk_to_raw_value(&src.device_address);
+    }
 }
 
 impl VkRawType<VkBufferDeviceAddressCreateInfo> for RawVkBufferDeviceAddressCreateInfo {
@@ -33,14 +41,6 @@ impl VkRawType<VkBufferDeviceAddressCreateInfo> for RawVkBufferDeviceAddressCrea
         VkBufferDeviceAddressCreateInfo {
             device_address: u64::vk_to_wrapped(&src.device_address),
         }
-    }
-}
-
-impl VkWrappedType<RawVkBufferDeviceAddressCreateInfo> for VkBufferDeviceAddressCreateInfo {
-    fn vk_to_raw(src: &VkBufferDeviceAddressCreateInfo, dst: &mut RawVkBufferDeviceAddressCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::BufferDeviceAddressCreateInfoExt);
-        dst.next = ptr::null();
-        dst.device_address = vk_to_raw_value(&src.device_address);
     }
 }
 

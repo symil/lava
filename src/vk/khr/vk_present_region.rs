@@ -15,16 +15,16 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::khr::vk_rect_layer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPresentRegion<'a> {
+    pub rectangles: Option<&'a [VkRectLayer]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentRegion {
     pub rectangle_count: u32,
     pub rectangles: *mut RawVkRectLayer,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPresentRegion<'a> {
-    pub rectangles: Option<&'a [VkRectLayer]>,
 }
 
 impl<'a> VkWrappedType<RawVkPresentRegion> for VkPresentRegion<'a> {

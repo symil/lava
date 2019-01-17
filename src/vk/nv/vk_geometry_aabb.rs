@@ -16,6 +16,14 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_buffer::*;
 
+#[derive(Debug, Clone)]
+pub struct VkGeometryAABB<'a> {
+    pub aabb_data: Option<&'a VkBuffer>,
+    pub num_aabbs: usize,
+    pub stride: usize,
+    pub offset: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometryAABB {
@@ -25,14 +33,6 @@ pub struct RawVkGeometryAABB {
     pub num_aabbs: u32,
     pub stride: u32,
     pub offset: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkGeometryAABB<'a> {
-    pub aabb_data: Option<&'a VkBuffer>,
-    pub num_aabbs: usize,
-    pub stride: usize,
-    pub offset: usize,
 }
 
 impl<'a> VkWrappedType<RawVkGeometryAABB> for VkGeometryAABB<'a> {

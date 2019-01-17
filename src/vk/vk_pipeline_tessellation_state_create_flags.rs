@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineTessellationStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineTessellationStateCreateFlags {
     
+}
+
+pub type RawVkPipelineTessellationStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineTessellationStateCreateFlags> for VkPipelineTessellationStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineTessellationStateCreateFlags, dst: &mut RawVkPipelineTessellationStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineTessellationStateCreateFlags> for RawVkPipelineTessellationStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineTessellationStateCreateFlags> for RawVkPipelineTessella
         VkPipelineTessellationStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineTessellationStateCreateFlags> for VkPipelineTessellationStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineTessellationStateCreateFlags, dst: &mut RawVkPipelineTessellationStateCreateFlags) {
-        *dst = 0;
     }
 }
 

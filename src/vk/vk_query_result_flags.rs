@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkQueryResultFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryResultFlags {
     pub _64: bool,
     pub wait: bool,
     pub with_availability: bool,
     pub partial: bool,
+}
+
+pub type RawVkQueryResultFlags = u32;
+
+impl VkWrappedType<RawVkQueryResultFlags> for VkQueryResultFlags {
+    fn vk_to_raw(src: &VkQueryResultFlags, dst: &mut RawVkQueryResultFlags) {
+        *dst = 0;
+        if src._64 { *dst |= 0x00000001; }
+        if src.wait { *dst |= 0x00000002; }
+        if src.with_availability { *dst |= 0x00000004; }
+        if src.partial { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkQueryResultFlags> for RawVkQueryResultFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkQueryResultFlags> for RawVkQueryResultFlags {
             with_availability: (src & 0x00000004) != 0,
             partial: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueryResultFlags> for VkQueryResultFlags {
-    fn vk_to_raw(src: &VkQueryResultFlags, dst: &mut RawVkQueryResultFlags) {
-        *dst = 0;
-        if src._64 { *dst |= 0x00000001; }
-        if src.wait { *dst |= 0x00000002; }
-        if src.with_availability { *dst |= 0x00000004; }
-        if src.partial { *dst |= 0x00000008; }
     }
 }
 

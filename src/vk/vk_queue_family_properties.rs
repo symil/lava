@@ -16,6 +16,14 @@ use vk::vk_device::*;
 use vk::vk_queue_flags::*;
 use vk::vk_extent_3d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkQueueFamilyProperties {
+    pub queue_flags: VkQueueFlags,
+    pub queue_count: usize,
+    pub timestamp_valid_bits: u32,
+    pub min_image_transfer_granularity: VkExtent3D,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueueFamilyProperties {
@@ -25,12 +33,13 @@ pub struct RawVkQueueFamilyProperties {
     pub min_image_transfer_granularity: RawVkExtent3D,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkQueueFamilyProperties {
-    pub queue_flags: VkQueueFlags,
-    pub queue_count: usize,
-    pub timestamp_valid_bits: u32,
-    pub min_image_transfer_granularity: VkExtent3D,
+impl VkWrappedType<RawVkQueueFamilyProperties> for VkQueueFamilyProperties {
+    fn vk_to_raw(src: &VkQueueFamilyProperties, dst: &mut RawVkQueueFamilyProperties) {
+        dst.queue_flags = vk_to_raw_value(&src.queue_flags);
+        dst.queue_count = vk_to_raw_value(&src.queue_count);
+        dst.timestamp_valid_bits = src.timestamp_valid_bits;
+        dst.min_image_transfer_granularity = vk_to_raw_value(&src.min_image_transfer_granularity);
+    }
 }
 
 impl VkRawType<VkQueueFamilyProperties> for RawVkQueueFamilyProperties {
@@ -41,15 +50,6 @@ impl VkRawType<VkQueueFamilyProperties> for RawVkQueueFamilyProperties {
             timestamp_valid_bits: src.timestamp_valid_bits,
             min_image_transfer_granularity: RawVkExtent3D::vk_to_wrapped(&src.min_image_transfer_granularity),
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueueFamilyProperties> for VkQueueFamilyProperties {
-    fn vk_to_raw(src: &VkQueueFamilyProperties, dst: &mut RawVkQueueFamilyProperties) {
-        dst.queue_flags = vk_to_raw_value(&src.queue_flags);
-        dst.queue_count = vk_to_raw_value(&src.queue_count);
-        dst.timestamp_valid_bits = src.timestamp_valid_bits;
-        dst.min_image_transfer_granularity = vk_to_raw_value(&src.min_image_transfer_granularity);
     }
 }
 

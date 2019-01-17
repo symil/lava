@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceFragmentDensityMapFeatures {
+    pub fragment_density_map: bool,
+    pub fragment_density_map_dynamic: bool,
+    pub fragment_density_map_non_subsampled_images: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFragmentDensityMapFeatures {
@@ -25,11 +32,14 @@ pub struct RawVkPhysicalDeviceFragmentDensityMapFeatures {
     pub fragment_density_map_non_subsampled_images: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceFragmentDensityMapFeatures {
-    pub fragment_density_map: bool,
-    pub fragment_density_map_dynamic: bool,
-    pub fragment_density_map_non_subsampled_images: bool,
+impl VkWrappedType<RawVkPhysicalDeviceFragmentDensityMapFeatures> for VkPhysicalDeviceFragmentDensityMapFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceFragmentDensityMapFeatures, dst: &mut RawVkPhysicalDeviceFragmentDensityMapFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentDensityMapFeaturesExt);
+        dst.next = ptr::null();
+        dst.fragment_density_map = vk_to_raw_value(&src.fragment_density_map);
+        dst.fragment_density_map_dynamic = vk_to_raw_value(&src.fragment_density_map_dynamic);
+        dst.fragment_density_map_non_subsampled_images = vk_to_raw_value(&src.fragment_density_map_non_subsampled_images);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceFragmentDensityMapFeatures> for RawVkPhysicalDeviceFragmentDensityMapFeatures {
@@ -39,16 +49,6 @@ impl VkRawType<VkPhysicalDeviceFragmentDensityMapFeatures> for RawVkPhysicalDevi
             fragment_density_map_dynamic: u32::vk_to_wrapped(&src.fragment_density_map_dynamic),
             fragment_density_map_non_subsampled_images: u32::vk_to_wrapped(&src.fragment_density_map_non_subsampled_images),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceFragmentDensityMapFeatures> for VkPhysicalDeviceFragmentDensityMapFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceFragmentDensityMapFeatures, dst: &mut RawVkPhysicalDeviceFragmentDensityMapFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentDensityMapFeaturesExt);
-        dst.next = ptr::null();
-        dst.fragment_density_map = vk_to_raw_value(&src.fragment_density_map);
-        dst.fragment_density_map_dynamic = vk_to_raw_value(&src.fragment_density_map_dynamic);
-        dst.fragment_density_map_non_subsampled_images = vk_to_raw_value(&src.fragment_density_map_non_subsampled_images);
     }
 }
 

@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkImageViewCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageViewCreateFlags {
     pub fragment_density_map_dynamic_ext: bool,
+}
+
+pub type RawVkImageViewCreateFlags = u32;
+
+impl VkWrappedType<RawVkImageViewCreateFlags> for VkImageViewCreateFlags {
+    fn vk_to_raw(src: &VkImageViewCreateFlags, dst: &mut RawVkImageViewCreateFlags) {
+        *dst = 0;
+        if src.fragment_density_map_dynamic_ext { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkImageViewCreateFlags> for RawVkImageViewCreateFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkImageViewCreateFlags> for RawVkImageViewCreateFlags {
         VkImageViewCreateFlags {
             fragment_density_map_dynamic_ext: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageViewCreateFlags> for VkImageViewCreateFlags {
-    fn vk_to_raw(src: &VkImageViewCreateFlags, dst: &mut RawVkImageViewCreateFlags) {
-        *dst = 0;
-        if src.fragment_density_map_dynamic_ext { *dst |= 0x00000001; }
     }
 }
 

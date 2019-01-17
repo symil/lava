@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCommandBufferInheritanceConditionalRenderingInfo {
+    pub conditional_rendering_enable: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferInheritanceConditionalRenderingInfo {
@@ -23,9 +28,12 @@ pub struct RawVkCommandBufferInheritanceConditionalRenderingInfo {
     pub conditional_rendering_enable: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkCommandBufferInheritanceConditionalRenderingInfo {
-    pub conditional_rendering_enable: bool,
+impl VkWrappedType<RawVkCommandBufferInheritanceConditionalRenderingInfo> for VkCommandBufferInheritanceConditionalRenderingInfo {
+    fn vk_to_raw(src: &VkCommandBufferInheritanceConditionalRenderingInfo, dst: &mut RawVkCommandBufferInheritanceConditionalRenderingInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferInheritanceConditionalRenderingInfoExt);
+        dst.next = ptr::null();
+        dst.conditional_rendering_enable = vk_to_raw_value(&src.conditional_rendering_enable);
+    }
 }
 
 impl VkRawType<VkCommandBufferInheritanceConditionalRenderingInfo> for RawVkCommandBufferInheritanceConditionalRenderingInfo {
@@ -33,14 +41,6 @@ impl VkRawType<VkCommandBufferInheritanceConditionalRenderingInfo> for RawVkComm
         VkCommandBufferInheritanceConditionalRenderingInfo {
             conditional_rendering_enable: u32::vk_to_wrapped(&src.conditional_rendering_enable),
         }
-    }
-}
-
-impl VkWrappedType<RawVkCommandBufferInheritanceConditionalRenderingInfo> for VkCommandBufferInheritanceConditionalRenderingInfo {
-    fn vk_to_raw(src: &VkCommandBufferInheritanceConditionalRenderingInfo, dst: &mut RawVkCommandBufferInheritanceConditionalRenderingInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferInheritanceConditionalRenderingInfoExt);
-        dst.next = ptr::null();
-        dst.conditional_rendering_enable = vk_to_raw_value(&src.conditional_rendering_enable);
     }
 }
 

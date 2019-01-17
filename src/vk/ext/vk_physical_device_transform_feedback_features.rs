@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceTransformFeedbackFeatures {
+    pub transform_feedback: bool,
+    pub geometry_streams: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceTransformFeedbackFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceTransformFeedbackFeatures {
     pub geometry_streams: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceTransformFeedbackFeatures {
-    pub transform_feedback: bool,
-    pub geometry_streams: bool,
+impl VkWrappedType<RawVkPhysicalDeviceTransformFeedbackFeatures> for VkPhysicalDeviceTransformFeedbackFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceTransformFeedbackFeatures, dst: &mut RawVkPhysicalDeviceTransformFeedbackFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceTransformFeedbackFeaturesExt);
+        dst.next = ptr::null();
+        dst.transform_feedback = vk_to_raw_value(&src.transform_feedback);
+        dst.geometry_streams = vk_to_raw_value(&src.geometry_streams);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceTransformFeedbackFeatures> for RawVkPhysicalDeviceTransformFeedbackFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceTransformFeedbackFeatures> for RawVkPhysicalDevic
             transform_feedback: u32::vk_to_wrapped(&src.transform_feedback),
             geometry_streams: u32::vk_to_wrapped(&src.geometry_streams),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceTransformFeedbackFeatures> for VkPhysicalDeviceTransformFeedbackFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceTransformFeedbackFeatures, dst: &mut RawVkPhysicalDeviceTransformFeedbackFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceTransformFeedbackFeaturesExt);
-        dst.next = ptr::null();
-        dst.transform_feedback = vk_to_raw_value(&src.transform_feedback);
-        dst.geometry_streams = vk_to_raw_value(&src.geometry_streams);
     }
 }
 

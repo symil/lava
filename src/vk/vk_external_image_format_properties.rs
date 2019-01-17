@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_memory_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExternalImageFormatProperties {
+    pub external_memory_properties: VkExternalMemoryProperties,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalImageFormatProperties {
@@ -24,9 +29,12 @@ pub struct RawVkExternalImageFormatProperties {
     pub external_memory_properties: RawVkExternalMemoryProperties,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExternalImageFormatProperties {
-    pub external_memory_properties: VkExternalMemoryProperties,
+impl VkWrappedType<RawVkExternalImageFormatProperties> for VkExternalImageFormatProperties {
+    fn vk_to_raw(src: &VkExternalImageFormatProperties, dst: &mut RawVkExternalImageFormatProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalImageFormatProperties);
+        dst.next = ptr::null();
+        dst.external_memory_properties = vk_to_raw_value(&src.external_memory_properties);
+    }
 }
 
 impl VkRawType<VkExternalImageFormatProperties> for RawVkExternalImageFormatProperties {
@@ -34,14 +42,6 @@ impl VkRawType<VkExternalImageFormatProperties> for RawVkExternalImageFormatProp
         VkExternalImageFormatProperties {
             external_memory_properties: RawVkExternalMemoryProperties::vk_to_wrapped(&src.external_memory_properties),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalImageFormatProperties> for VkExternalImageFormatProperties {
-    fn vk_to_raw(src: &VkExternalImageFormatProperties, dst: &mut RawVkExternalImageFormatProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalImageFormatProperties);
-        dst.next = ptr::null();
-        dst.external_memory_properties = vk_to_raw_value(&src.external_memory_properties);
     }
 }
 

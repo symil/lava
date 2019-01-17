@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::amd::vk_memory_overallocation_behavior::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceMemoryOverallocationCreateInfo {
+    pub overallocation_behavior: VkMemoryOverallocationBehavior,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceMemoryOverallocationCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkDeviceMemoryOverallocationCreateInfo {
     pub overallocation_behavior: RawVkMemoryOverallocationBehavior,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceMemoryOverallocationCreateInfo {
-    pub overallocation_behavior: VkMemoryOverallocationBehavior,
+impl VkWrappedType<RawVkDeviceMemoryOverallocationCreateInfo> for VkDeviceMemoryOverallocationCreateInfo {
+    fn vk_to_raw(src: &VkDeviceMemoryOverallocationCreateInfo, dst: &mut RawVkDeviceMemoryOverallocationCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceMemoryOverallocationCreateInfoAmd);
+        dst.next = ptr::null();
+        dst.overallocation_behavior = vk_to_raw_value(&src.overallocation_behavior);
+    }
 }
 
 impl VkRawType<VkDeviceMemoryOverallocationCreateInfo> for RawVkDeviceMemoryOverallocationCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkDeviceMemoryOverallocationCreateInfo> for RawVkDeviceMemoryOver
         VkDeviceMemoryOverallocationCreateInfo {
             overallocation_behavior: RawVkMemoryOverallocationBehavior::vk_to_wrapped(&src.overallocation_behavior),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceMemoryOverallocationCreateInfo> for VkDeviceMemoryOverallocationCreateInfo {
-    fn vk_to_raw(src: &VkDeviceMemoryOverallocationCreateInfo, dst: &mut RawVkDeviceMemoryOverallocationCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceMemoryOverallocationCreateInfoAmd);
-        dst.next = ptr::null();
-        dst.overallocation_behavior = vk_to_raw_value(&src.overallocation_behavior);
     }
 }
 

@@ -18,6 +18,14 @@ use vk::nvx::vk_object_entry_usage_flags::*;
 use vk::vk_pipeline_layout::*;
 use vk::vk_shader_stage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkObjectTablePushConstantEntry<'a> {
+    pub type_: VkObjectEntryType,
+    pub flags: VkObjectEntryUsageFlags,
+    pub pipeline_layout: &'a VkPipelineLayout,
+    pub stage_flags: VkShaderStageFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTablePushConstantEntry {
@@ -25,14 +33,6 @@ pub struct RawVkObjectTablePushConstantEntry {
     pub flags: RawVkObjectEntryUsageFlags,
     pub pipeline_layout: RawVkPipelineLayout,
     pub stage_flags: RawVkShaderStageFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkObjectTablePushConstantEntry<'a> {
-    pub type_: VkObjectEntryType,
-    pub flags: VkObjectEntryUsageFlags,
-    pub pipeline_layout: &'a VkPipelineLayout,
-    pub stage_flags: VkShaderStageFlags,
 }
 
 impl<'a> VkWrappedType<RawVkObjectTablePushConstantEntry> for VkObjectTablePushConstantEntry<'a> {

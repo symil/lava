@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_pipeline_stage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCheckpointData {
+    pub stage: VkPipelineStageFlags,
+    pub checkpoint_marker: *const c_void,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCheckpointData {
@@ -25,10 +31,13 @@ pub struct RawVkCheckpointData {
     pub checkpoint_marker: *const c_void,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkCheckpointData {
-    pub stage: VkPipelineStageFlags,
-    pub checkpoint_marker: *const c_void,
+impl VkWrappedType<RawVkCheckpointData> for VkCheckpointData {
+    fn vk_to_raw(src: &VkCheckpointData, dst: &mut RawVkCheckpointData) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::CheckpointDataNv);
+        dst.next = ptr::null();
+        dst.stage = vk_to_raw_value(&src.stage);
+        dst.checkpoint_marker = src.checkpoint_marker;
+    }
 }
 
 impl VkRawType<VkCheckpointData> for RawVkCheckpointData {
@@ -37,15 +46,6 @@ impl VkRawType<VkCheckpointData> for RawVkCheckpointData {
             stage: RawVkPipelineStageFlags::vk_to_wrapped(&src.stage),
             checkpoint_marker: src.checkpoint_marker,
         }
-    }
-}
-
-impl VkWrappedType<RawVkCheckpointData> for VkCheckpointData {
-    fn vk_to_raw(src: &VkCheckpointData, dst: &mut RawVkCheckpointData) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::CheckpointDataNv);
-        dst.next = ptr::null();
-        dst.stage = vk_to_raw_value(&src.stage);
-        dst.checkpoint_marker = src.checkpoint_marker;
     }
 }
 

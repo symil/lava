@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_queue_family_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkQueueFamilyProperties2 {
+    pub queue_family_properties: VkQueueFamilyProperties,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueueFamilyProperties2 {
@@ -24,9 +29,12 @@ pub struct RawVkQueueFamilyProperties2 {
     pub queue_family_properties: RawVkQueueFamilyProperties,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkQueueFamilyProperties2 {
-    pub queue_family_properties: VkQueueFamilyProperties,
+impl VkWrappedType<RawVkQueueFamilyProperties2> for VkQueueFamilyProperties2 {
+    fn vk_to_raw(src: &VkQueueFamilyProperties2, dst: &mut RawVkQueueFamilyProperties2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::QueueFamilyProperties2);
+        dst.next = ptr::null();
+        dst.queue_family_properties = vk_to_raw_value(&src.queue_family_properties);
+    }
 }
 
 impl VkRawType<VkQueueFamilyProperties2> for RawVkQueueFamilyProperties2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkQueueFamilyProperties2> for RawVkQueueFamilyProperties2 {
         VkQueueFamilyProperties2 {
             queue_family_properties: RawVkQueueFamilyProperties::vk_to_wrapped(&src.queue_family_properties),
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueueFamilyProperties2> for VkQueueFamilyProperties2 {
-    fn vk_to_raw(src: &VkQueueFamilyProperties2, dst: &mut RawVkQueueFamilyProperties2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::QueueFamilyProperties2);
-        dst.next = ptr::null();
-        dst.queue_family_properties = vk_to_raw_value(&src.queue_family_properties);
     }
 }
 

@@ -21,6 +21,18 @@ use vk::vk_component_mapping::*;
 use vk::vk_chroma_location::*;
 use vk::vk_filter::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSamplerYcbcrConversionCreateInfo {
+    pub format: VkFormat,
+    pub ycbcr_model: VkSamplerYcbcrModelConversion,
+    pub ycbcr_range: VkSamplerYcbcrRange,
+    pub components: VkComponentMapping,
+    pub x_chroma_offset: VkChromaLocation,
+    pub y_chroma_offset: VkChromaLocation,
+    pub chroma_filter: VkFilter,
+    pub force_explicit_reconstruction: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionCreateInfo {
@@ -36,16 +48,19 @@ pub struct RawVkSamplerYcbcrConversionCreateInfo {
     pub force_explicit_reconstruction: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSamplerYcbcrConversionCreateInfo {
-    pub format: VkFormat,
-    pub ycbcr_model: VkSamplerYcbcrModelConversion,
-    pub ycbcr_range: VkSamplerYcbcrRange,
-    pub components: VkComponentMapping,
-    pub x_chroma_offset: VkChromaLocation,
-    pub y_chroma_offset: VkChromaLocation,
-    pub chroma_filter: VkFilter,
-    pub force_explicit_reconstruction: bool,
+impl VkWrappedType<RawVkSamplerYcbcrConversionCreateInfo> for VkSamplerYcbcrConversionCreateInfo {
+    fn vk_to_raw(src: &VkSamplerYcbcrConversionCreateInfo, dst: &mut RawVkSamplerYcbcrConversionCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::SamplerYcbcrConversionCreateInfo);
+        dst.next = ptr::null();
+        dst.format = vk_to_raw_value(&src.format);
+        dst.ycbcr_model = vk_to_raw_value(&src.ycbcr_model);
+        dst.ycbcr_range = vk_to_raw_value(&src.ycbcr_range);
+        dst.components = vk_to_raw_value(&src.components);
+        dst.x_chroma_offset = vk_to_raw_value(&src.x_chroma_offset);
+        dst.y_chroma_offset = vk_to_raw_value(&src.y_chroma_offset);
+        dst.chroma_filter = vk_to_raw_value(&src.chroma_filter);
+        dst.force_explicit_reconstruction = vk_to_raw_value(&src.force_explicit_reconstruction);
+    }
 }
 
 impl VkRawType<VkSamplerYcbcrConversionCreateInfo> for RawVkSamplerYcbcrConversionCreateInfo {
@@ -60,21 +75,6 @@ impl VkRawType<VkSamplerYcbcrConversionCreateInfo> for RawVkSamplerYcbcrConversi
             chroma_filter: RawVkFilter::vk_to_wrapped(&src.chroma_filter),
             force_explicit_reconstruction: u32::vk_to_wrapped(&src.force_explicit_reconstruction),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSamplerYcbcrConversionCreateInfo> for VkSamplerYcbcrConversionCreateInfo {
-    fn vk_to_raw(src: &VkSamplerYcbcrConversionCreateInfo, dst: &mut RawVkSamplerYcbcrConversionCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::SamplerYcbcrConversionCreateInfo);
-        dst.next = ptr::null();
-        dst.format = vk_to_raw_value(&src.format);
-        dst.ycbcr_model = vk_to_raw_value(&src.ycbcr_model);
-        dst.ycbcr_range = vk_to_raw_value(&src.ycbcr_range);
-        dst.components = vk_to_raw_value(&src.components);
-        dst.x_chroma_offset = vk_to_raw_value(&src.x_chroma_offset);
-        dst.y_chroma_offset = vk_to_raw_value(&src.y_chroma_offset);
-        dst.chroma_filter = vk_to_raw_value(&src.chroma_filter);
-        dst.force_explicit_reconstruction = vk_to_raw_value(&src.force_explicit_reconstruction);
     }
 }
 

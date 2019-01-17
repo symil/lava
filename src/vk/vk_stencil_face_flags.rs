@@ -2,13 +2,22 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkStencilFaceFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkStencilFaceFlags {
     pub front: bool,
     pub back: bool,
     pub _and_back: bool,
+}
+
+pub type RawVkStencilFaceFlags = u32;
+
+impl VkWrappedType<RawVkStencilFaceFlags> for VkStencilFaceFlags {
+    fn vk_to_raw(src: &VkStencilFaceFlags, dst: &mut RawVkStencilFaceFlags) {
+        *dst = 0;
+        if src.front { *dst |= 0x00000001; }
+        if src.back { *dst |= 0x00000002; }
+        if src._and_back { *dst |= 0x00000003; }
+    }
 }
 
 impl VkRawType<VkStencilFaceFlags> for RawVkStencilFaceFlags {
@@ -18,15 +27,6 @@ impl VkRawType<VkStencilFaceFlags> for RawVkStencilFaceFlags {
             back: (src & 0x00000002) != 0,
             _and_back: (src & 0x00000003) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkStencilFaceFlags> for VkStencilFaceFlags {
-    fn vk_to_raw(src: &VkStencilFaceFlags, dst: &mut RawVkStencilFaceFlags) {
-        *dst = 0;
-        if src.front { *dst |= 0x00000001; }
-        if src.back { *dst |= 0x00000002; }
-        if src._and_back { *dst |= 0x00000003; }
     }
 }
 

@@ -17,6 +17,14 @@ use vk::vk_image_format_properties::*;
 use vk::nv::vk_external_memory_feature_flags::*;
 use vk::nv::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExternalImageFormatProperties {
+    pub image_format_properties: VkImageFormatProperties,
+    pub external_memory_features: VkExternalMemoryFeatureFlags,
+    pub export_from_imported_handle_types: VkExternalMemoryHandleTypeFlags,
+    pub compatible_handle_types: VkExternalMemoryHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalImageFormatProperties {
@@ -26,12 +34,13 @@ pub struct RawVkExternalImageFormatProperties {
     pub compatible_handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExternalImageFormatProperties {
-    pub image_format_properties: VkImageFormatProperties,
-    pub external_memory_features: VkExternalMemoryFeatureFlags,
-    pub export_from_imported_handle_types: VkExternalMemoryHandleTypeFlags,
-    pub compatible_handle_types: VkExternalMemoryHandleTypeFlags,
+impl VkWrappedType<RawVkExternalImageFormatProperties> for VkExternalImageFormatProperties {
+    fn vk_to_raw(src: &VkExternalImageFormatProperties, dst: &mut RawVkExternalImageFormatProperties) {
+        dst.image_format_properties = vk_to_raw_value(&src.image_format_properties);
+        dst.external_memory_features = vk_to_raw_value(&src.external_memory_features);
+        dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
+        dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
+    }
 }
 
 impl VkRawType<VkExternalImageFormatProperties> for RawVkExternalImageFormatProperties {
@@ -42,15 +51,6 @@ impl VkRawType<VkExternalImageFormatProperties> for RawVkExternalImageFormatProp
             export_from_imported_handle_types: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.export_from_imported_handle_types),
             compatible_handle_types: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.compatible_handle_types),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalImageFormatProperties> for VkExternalImageFormatProperties {
-    fn vk_to_raw(src: &VkExternalImageFormatProperties, dst: &mut RawVkExternalImageFormatProperties) {
-        dst.image_format_properties = vk_to_raw_value(&src.image_format_properties);
-        dst.external_memory_features = vk_to_raw_value(&src.external_memory_features);
-        dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
-        dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
     }
 }
 

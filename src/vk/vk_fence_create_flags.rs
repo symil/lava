@@ -2,11 +2,18 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkFenceCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkFenceCreateFlags {
     pub signaled: bool,
+}
+
+pub type RawVkFenceCreateFlags = u32;
+
+impl VkWrappedType<RawVkFenceCreateFlags> for VkFenceCreateFlags {
+    fn vk_to_raw(src: &VkFenceCreateFlags, dst: &mut RawVkFenceCreateFlags) {
+        *dst = 0;
+        if src.signaled { *dst |= 0x00000001; }
+    }
 }
 
 impl VkRawType<VkFenceCreateFlags> for RawVkFenceCreateFlags {
@@ -14,13 +21,6 @@ impl VkRawType<VkFenceCreateFlags> for RawVkFenceCreateFlags {
         VkFenceCreateFlags {
             signaled: (src & 0x00000001) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkFenceCreateFlags> for VkFenceCreateFlags {
-    fn vk_to_raw(src: &VkFenceCreateFlags, dst: &mut RawVkFenceCreateFlags) {
-        *dst = 0;
-        if src.signaled { *dst |= 0x00000001; }
     }
 }
 

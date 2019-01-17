@@ -14,6 +14,13 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSpecializationMapEntry {
+    pub constant_id: usize,
+    pub offset: usize,
+    pub size: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSpecializationMapEntry {
@@ -22,11 +29,12 @@ pub struct RawVkSpecializationMapEntry {
     pub size: usize,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSpecializationMapEntry {
-    pub constant_id: usize,
-    pub offset: usize,
-    pub size: usize,
+impl VkWrappedType<RawVkSpecializationMapEntry> for VkSpecializationMapEntry {
+    fn vk_to_raw(src: &VkSpecializationMapEntry, dst: &mut RawVkSpecializationMapEntry) {
+        dst.constant_id = vk_to_raw_value(&src.constant_id);
+        dst.offset = vk_to_raw_value(&src.offset);
+        dst.size = src.size;
+    }
 }
 
 impl VkRawType<VkSpecializationMapEntry> for RawVkSpecializationMapEntry {
@@ -36,14 +44,6 @@ impl VkRawType<VkSpecializationMapEntry> for RawVkSpecializationMapEntry {
             offset: u32::vk_to_wrapped(&src.offset),
             size: src.size,
         }
-    }
-}
-
-impl VkWrappedType<RawVkSpecializationMapEntry> for VkSpecializationMapEntry {
-    fn vk_to_raw(src: &VkSpecializationMapEntry, dst: &mut RawVkSpecializationMapEntry) {
-        dst.constant_id = vk_to_raw_value(&src.constant_id);
-        dst.offset = vk_to_raw_value(&src.offset);
-        dst.size = src.size;
     }
 }
 

@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_event_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkEventCreateInfo {
+    pub flags: VkEventCreateFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkEventCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkEventCreateInfo {
     pub flags: RawVkEventCreateFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkEventCreateInfo {
-    pub flags: VkEventCreateFlags,
+impl VkWrappedType<RawVkEventCreateInfo> for VkEventCreateInfo {
+    fn vk_to_raw(src: &VkEventCreateInfo, dst: &mut RawVkEventCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::EventCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+    }
 }
 
 impl VkRawType<VkEventCreateInfo> for RawVkEventCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkEventCreateInfo> for RawVkEventCreateInfo {
         VkEventCreateInfo {
             flags: RawVkEventCreateFlags::vk_to_wrapped(&src.flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkEventCreateInfo> for VkEventCreateInfo {
-    fn vk_to_raw(src: &VkEventCreateInfo, dst: &mut RawVkEventCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::EventCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 

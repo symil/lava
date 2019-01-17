@@ -18,6 +18,20 @@ use vk::khr::vk_surface_transform_flags::*;
 use vk::khr::vk_composite_alpha_flags::*;
 use vk::vk_image_usage_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSurfaceCapabilities {
+    pub min_image_count: usize,
+    pub max_image_count: usize,
+    pub current_extent: VkExtent2D,
+    pub min_image_extent: VkExtent2D,
+    pub max_image_extent: VkExtent2D,
+    pub max_image_array_layers: usize,
+    pub supported_transforms: VkSurfaceTransformFlags,
+    pub current_transform: VkSurfaceTransformFlags,
+    pub supported_composite_alpha: VkCompositeAlphaFlags,
+    pub supported_usage_flags: VkImageUsageFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities {
@@ -33,18 +47,19 @@ pub struct RawVkSurfaceCapabilities {
     pub supported_usage_flags: RawVkImageUsageFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkSurfaceCapabilities {
-    pub min_image_count: usize,
-    pub max_image_count: usize,
-    pub current_extent: VkExtent2D,
-    pub min_image_extent: VkExtent2D,
-    pub max_image_extent: VkExtent2D,
-    pub max_image_array_layers: usize,
-    pub supported_transforms: VkSurfaceTransformFlags,
-    pub current_transform: VkSurfaceTransformFlags,
-    pub supported_composite_alpha: VkCompositeAlphaFlags,
-    pub supported_usage_flags: VkImageUsageFlags,
+impl VkWrappedType<RawVkSurfaceCapabilities> for VkSurfaceCapabilities {
+    fn vk_to_raw(src: &VkSurfaceCapabilities, dst: &mut RawVkSurfaceCapabilities) {
+        dst.min_image_count = vk_to_raw_value(&src.min_image_count);
+        dst.max_image_count = vk_to_raw_value(&src.max_image_count);
+        dst.current_extent = vk_to_raw_value(&src.current_extent);
+        dst.min_image_extent = vk_to_raw_value(&src.min_image_extent);
+        dst.max_image_extent = vk_to_raw_value(&src.max_image_extent);
+        dst.max_image_array_layers = vk_to_raw_value(&src.max_image_array_layers);
+        dst.supported_transforms = vk_to_raw_value(&src.supported_transforms);
+        dst.current_transform = vk_to_raw_value(&src.current_transform);
+        dst.supported_composite_alpha = vk_to_raw_value(&src.supported_composite_alpha);
+        dst.supported_usage_flags = vk_to_raw_value(&src.supported_usage_flags);
+    }
 }
 
 impl VkRawType<VkSurfaceCapabilities> for RawVkSurfaceCapabilities {
@@ -61,21 +76,6 @@ impl VkRawType<VkSurfaceCapabilities> for RawVkSurfaceCapabilities {
             supported_composite_alpha: RawVkCompositeAlphaFlags::vk_to_wrapped(&src.supported_composite_alpha),
             supported_usage_flags: RawVkImageUsageFlags::vk_to_wrapped(&src.supported_usage_flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkSurfaceCapabilities> for VkSurfaceCapabilities {
-    fn vk_to_raw(src: &VkSurfaceCapabilities, dst: &mut RawVkSurfaceCapabilities) {
-        dst.min_image_count = vk_to_raw_value(&src.min_image_count);
-        dst.max_image_count = vk_to_raw_value(&src.max_image_count);
-        dst.current_extent = vk_to_raw_value(&src.current_extent);
-        dst.min_image_extent = vk_to_raw_value(&src.min_image_extent);
-        dst.max_image_extent = vk_to_raw_value(&src.max_image_extent);
-        dst.max_image_array_layers = vk_to_raw_value(&src.max_image_array_layers);
-        dst.supported_transforms = vk_to_raw_value(&src.supported_transforms);
-        dst.current_transform = vk_to_raw_value(&src.current_transform);
-        dst.supported_composite_alpha = vk_to_raw_value(&src.supported_composite_alpha);
-        dst.supported_usage_flags = vk_to_raw_value(&src.supported_usage_flags);
     }
 }
 

@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_format::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageViewASTCDecodeMode {
+    pub decode_mode: VkFormat,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageViewASTCDecodeMode {
@@ -24,9 +29,12 @@ pub struct RawVkImageViewASTCDecodeMode {
     pub decode_mode: RawVkFormat,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageViewASTCDecodeMode {
-    pub decode_mode: VkFormat,
+impl VkWrappedType<RawVkImageViewASTCDecodeMode> for VkImageViewASTCDecodeMode {
+    fn vk_to_raw(src: &VkImageViewASTCDecodeMode, dst: &mut RawVkImageViewASTCDecodeMode) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ImageViewAstcDecodeModeExt);
+        dst.next = ptr::null();
+        dst.decode_mode = vk_to_raw_value(&src.decode_mode);
+    }
 }
 
 impl VkRawType<VkImageViewASTCDecodeMode> for RawVkImageViewASTCDecodeMode {
@@ -34,14 +42,6 @@ impl VkRawType<VkImageViewASTCDecodeMode> for RawVkImageViewASTCDecodeMode {
         VkImageViewASTCDecodeMode {
             decode_mode: RawVkFormat::vk_to_wrapped(&src.decode_mode),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageViewASTCDecodeMode> for VkImageViewASTCDecodeMode {
-    fn vk_to_raw(src: &VkImageViewASTCDecodeMode, dst: &mut RawVkImageViewASTCDecodeMode) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ImageViewAstcDecodeModeExt);
-        dst.next = ptr::null();
-        dst.decode_mode = vk_to_raw_value(&src.decode_mode);
     }
 }
 

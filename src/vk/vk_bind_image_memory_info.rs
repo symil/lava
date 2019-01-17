@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_image::*;
 use vk::vk_device_memory::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBindImageMemoryInfo<'a, 'b> {
+    pub image: &'a VkImage,
+    pub memory: &'b VkDeviceMemory,
+    pub memory_offset: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemoryInfo {
@@ -25,13 +32,6 @@ pub struct RawVkBindImageMemoryInfo {
     pub image: RawVkImage,
     pub memory: RawVkDeviceMemory,
     pub memory_offset: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBindImageMemoryInfo<'a, 'b> {
-    pub image: &'a VkImage,
-    pub memory: &'b VkDeviceMemory,
-    pub memory_offset: usize,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkBindImageMemoryInfo> for VkBindImageMemoryInfo<'a, 'b> {

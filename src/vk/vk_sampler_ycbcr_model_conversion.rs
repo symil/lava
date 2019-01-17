@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSamplerYcbcrModelConversion = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSamplerYcbcrModelConversion {
@@ -14,17 +12,19 @@ pub enum VkSamplerYcbcrModelConversion {
     Ycbcr2020 = 4,
 }
 
+pub type RawVkSamplerYcbcrModelConversion = i32;
+
+impl VkWrappedType<RawVkSamplerYcbcrModelConversion> for VkSamplerYcbcrModelConversion {
+    fn vk_to_raw(src: &VkSamplerYcbcrModelConversion, dst: &mut RawVkSamplerYcbcrModelConversion) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkSamplerYcbcrModelConversion> for RawVkSamplerYcbcrModelConversion {
     fn vk_to_wrapped(src: &RawVkSamplerYcbcrModelConversion) -> VkSamplerYcbcrModelConversion {
         unsafe {
             *((src as *const i32) as *const VkSamplerYcbcrModelConversion)
         }
-    }
-}
-
-impl VkWrappedType<RawVkSamplerYcbcrModelConversion> for VkSamplerYcbcrModelConversion {
-    fn vk_to_raw(src: &VkSamplerYcbcrModelConversion, dst: &mut RawVkSamplerYcbcrModelConversion) {
-        *dst = *src as i32
     }
 }
 

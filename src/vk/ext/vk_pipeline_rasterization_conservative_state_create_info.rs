@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::ext::vk_pipeline_rasterization_conservative_state_create_flags::*;
 use vk::ext::vk_conservative_rasterization_mode::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineRasterizationConservativeStateCreateInfo {
+    pub flags: VkPipelineRasterizationConservativeStateCreateFlags,
+    pub conservative_rasterization_mode: VkConservativeRasterizationMode,
+    pub extra_primitive_overestimation_size: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationConservativeStateCreateInfo {
@@ -27,11 +34,14 @@ pub struct RawVkPipelineRasterizationConservativeStateCreateInfo {
     pub extra_primitive_overestimation_size: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineRasterizationConservativeStateCreateInfo {
-    pub flags: VkPipelineRasterizationConservativeStateCreateFlags,
-    pub conservative_rasterization_mode: VkConservativeRasterizationMode,
-    pub extra_primitive_overestimation_size: f32,
+impl VkWrappedType<RawVkPipelineRasterizationConservativeStateCreateInfo> for VkPipelineRasterizationConservativeStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineRasterizationConservativeStateCreateInfo, dst: &mut RawVkPipelineRasterizationConservativeStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationConservativeStateCreateInfoExt);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.conservative_rasterization_mode = vk_to_raw_value(&src.conservative_rasterization_mode);
+        dst.extra_primitive_overestimation_size = src.extra_primitive_overestimation_size;
+    }
 }
 
 impl VkRawType<VkPipelineRasterizationConservativeStateCreateInfo> for RawVkPipelineRasterizationConservativeStateCreateInfo {
@@ -41,16 +51,6 @@ impl VkRawType<VkPipelineRasterizationConservativeStateCreateInfo> for RawVkPipe
             conservative_rasterization_mode: RawVkConservativeRasterizationMode::vk_to_wrapped(&src.conservative_rasterization_mode),
             extra_primitive_overestimation_size: src.extra_primitive_overestimation_size,
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineRasterizationConservativeStateCreateInfo> for VkPipelineRasterizationConservativeStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineRasterizationConservativeStateCreateInfo, dst: &mut RawVkPipelineRasterizationConservativeStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationConservativeStateCreateInfoExt);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.conservative_rasterization_mode = vk_to_raw_value(&src.conservative_rasterization_mode);
-        dst.extra_primitive_overestimation_size = src.extra_primitive_overestimation_size;
     }
 }
 

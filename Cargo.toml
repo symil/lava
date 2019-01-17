@@ -2,9 +2,9 @@
 name = "lava"
 version = "0.2.0"
 build = "build.rs"
-authors = ["Ytawo <milan.sylvain@gmail.com>"]
+authors = ["Anovs <milan.sylvain@gmail.com>"]
 description = "Vulkan wrapper"
 license = "MIT"
-repository = "https://github.com/Ytawo/lava"
+repository = "https://github.com/Anovs/lava"
 
 [dependencies]

@@ -16,14 +16,6 @@ use vk::vk_device::*;
 use vk::vk_buffer::*;
 use vk::vk_sparse_memory_bind::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkSparseBufferMemoryBindInfo {
-    pub buffer: RawVkBuffer,
-    pub bind_count: u32,
-    pub binds: *mut RawVkSparseMemoryBind,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkSparseBufferMemoryBindInfo<'a, 'b, 'c>
     where
@@ -31,6 +23,14 @@ pub struct VkSparseBufferMemoryBindInfo<'a, 'b, 'c>
 {
     pub buffer: &'a VkBuffer,
     pub binds: &'b [VkSparseMemoryBind<'c>],
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkSparseBufferMemoryBindInfo {
+    pub buffer: RawVkBuffer,
+    pub bind_count: u32,
+    pub binds: *mut RawVkSparseMemoryBind,
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkSparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfo<'a, 'b, 'c>

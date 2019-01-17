@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_buffer::*;
 use vk::vk_device_memory::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBindBufferMemoryInfo<'a, 'b> {
+    pub buffer: &'a VkBuffer,
+    pub memory: &'b VkDeviceMemory,
+    pub memory_offset: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindBufferMemoryInfo {
@@ -25,13 +32,6 @@ pub struct RawVkBindBufferMemoryInfo {
     pub buffer: RawVkBuffer,
     pub memory: RawVkDeviceMemory,
     pub memory_offset: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBindBufferMemoryInfo<'a, 'b> {
-    pub buffer: &'a VkBuffer,
-    pub memory: &'b VkDeviceMemory,
-    pub memory_offset: usize,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkBindBufferMemoryInfo> for VkBindBufferMemoryInfo<'a, 'b> {

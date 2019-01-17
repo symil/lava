@@ -16,16 +16,16 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_physical_device_properties::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceProperties2 {
+    pub properties: VkPhysicalDeviceProperties,
+}
+
 #[repr(C)]
 pub struct RawVkPhysicalDeviceProperties2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub properties: RawVkPhysicalDeviceProperties,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceProperties2 {
-    pub properties: VkPhysicalDeviceProperties,
 }
 
 impl VkRawType<VkPhysicalDeviceProperties2> for RawVkPhysicalDeviceProperties2 {

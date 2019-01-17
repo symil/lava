@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMultiviewFeatures {
+    pub multiview: bool,
+    pub multiview_geometry_shader: bool,
+    pub multiview_tessellation_shader: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMultiviewFeatures {
@@ -25,11 +32,14 @@ pub struct RawVkPhysicalDeviceMultiviewFeatures {
     pub multiview_tessellation_shader: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMultiviewFeatures {
-    pub multiview: bool,
-    pub multiview_geometry_shader: bool,
-    pub multiview_tessellation_shader: bool,
+impl VkWrappedType<RawVkPhysicalDeviceMultiviewFeatures> for VkPhysicalDeviceMultiviewFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceMultiviewFeatures, dst: &mut RawVkPhysicalDeviceMultiviewFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewFeatures);
+        dst.next = ptr::null();
+        dst.multiview = vk_to_raw_value(&src.multiview);
+        dst.multiview_geometry_shader = vk_to_raw_value(&src.multiview_geometry_shader);
+        dst.multiview_tessellation_shader = vk_to_raw_value(&src.multiview_tessellation_shader);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMultiviewFeatures> for RawVkPhysicalDeviceMultiviewFeatures {
@@ -39,16 +49,6 @@ impl VkRawType<VkPhysicalDeviceMultiviewFeatures> for RawVkPhysicalDeviceMultivi
             multiview_geometry_shader: u32::vk_to_wrapped(&src.multiview_geometry_shader),
             multiview_tessellation_shader: u32::vk_to_wrapped(&src.multiview_tessellation_shader),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMultiviewFeatures> for VkPhysicalDeviceMultiviewFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceMultiviewFeatures, dst: &mut RawVkPhysicalDeviceMultiviewFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewFeatures);
-        dst.next = ptr::null();
-        dst.multiview = vk_to_raw_value(&src.multiview);
-        dst.multiview_geometry_shader = vk_to_raw_value(&src.multiview_geometry_shader);
-        dst.multiview_tessellation_shader = vk_to_raw_value(&src.multiview_tessellation_shader);
     }
 }
 

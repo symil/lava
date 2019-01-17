@@ -18,6 +18,14 @@ use vk::vk_query_pool_create_flags::*;
 use vk::vk_query_type::*;
 use vk::vk_query_pipeline_statistic_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkQueryPoolCreateInfo {
+    pub flags: VkQueryPoolCreateFlags,
+    pub query_type: VkQueryType,
+    pub query_count: usize,
+    pub pipeline_statistics: VkQueryPipelineStatisticFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueryPoolCreateInfo {
@@ -29,12 +37,15 @@ pub struct RawVkQueryPoolCreateInfo {
     pub pipeline_statistics: RawVkQueryPipelineStatisticFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkQueryPoolCreateInfo {
-    pub flags: VkQueryPoolCreateFlags,
-    pub query_type: VkQueryType,
-    pub query_count: usize,
-    pub pipeline_statistics: VkQueryPipelineStatisticFlags,
+impl VkWrappedType<RawVkQueryPoolCreateInfo> for VkQueryPoolCreateInfo {
+    fn vk_to_raw(src: &VkQueryPoolCreateInfo, dst: &mut RawVkQueryPoolCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::QueryPoolCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.query_type = vk_to_raw_value(&src.query_type);
+        dst.query_count = vk_to_raw_value(&src.query_count);
+        dst.pipeline_statistics = vk_to_raw_value(&src.pipeline_statistics);
+    }
 }
 
 impl VkRawType<VkQueryPoolCreateInfo> for RawVkQueryPoolCreateInfo {
@@ -45,17 +56,6 @@ impl VkRawType<VkQueryPoolCreateInfo> for RawVkQueryPoolCreateInfo {
             query_count: u32::vk_to_wrapped(&src.query_count),
             pipeline_statistics: RawVkQueryPipelineStatisticFlags::vk_to_wrapped(&src.pipeline_statistics),
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueryPoolCreateInfo> for VkQueryPoolCreateInfo {
-    fn vk_to_raw(src: &VkQueryPoolCreateInfo, dst: &mut RawVkQueryPoolCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::QueryPoolCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.query_type = vk_to_raw_value(&src.query_type);
-        dst.query_count = vk_to_raw_value(&src.query_count);
-        dst.pipeline_statistics = vk_to_raw_value(&src.pipeline_statistics);
     }
 }
 

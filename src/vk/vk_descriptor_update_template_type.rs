@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDescriptorUpdateTemplateType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDescriptorUpdateTemplateType {
@@ -11,17 +9,19 @@ pub enum VkDescriptorUpdateTemplateType {
     PushDescriptorsKhr = 1,
 }
 
+pub type RawVkDescriptorUpdateTemplateType = i32;
+
+impl VkWrappedType<RawVkDescriptorUpdateTemplateType> for VkDescriptorUpdateTemplateType {
+    fn vk_to_raw(src: &VkDescriptorUpdateTemplateType, dst: &mut RawVkDescriptorUpdateTemplateType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkDescriptorUpdateTemplateType> for RawVkDescriptorUpdateTemplateType {
     fn vk_to_wrapped(src: &RawVkDescriptorUpdateTemplateType) -> VkDescriptorUpdateTemplateType {
         unsafe {
             *((src as *const i32) as *const VkDescriptorUpdateTemplateType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorUpdateTemplateType> for VkDescriptorUpdateTemplateType {
-    fn vk_to_raw(src: &VkDescriptorUpdateTemplateType, dst: &mut RawVkDescriptorUpdateTemplateType) {
-        *dst = *src as i32
     }
 }
 

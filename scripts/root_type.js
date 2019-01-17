@@ -13,7 +13,7 @@ function generateRootTypeDefinition(functions) {
 
     return [
         genUses(functions),
-        genType(functions),
+        // genType(functions),
         genMethods(functions),
         genExterns(functions)
     ];
@@ -37,10 +37,12 @@ function genType(functions) {
 }
 
 function genMethods(functions) {
-    return [
-        `impl Vk`,
-        functions.map(func => functionToMethod(null, func)).reduce((acc, block) => acc.concat(block), [])
-    ];
+    // return [
+        // `impl Vk`,
+        // functions.map(func => functionToMethod(null, func)).reduce((acc, block) => acc.concat(block), [])
+    // ];
+
+    return functions.map(func => functionToMethod(null, func)).reduce((acc, block) => acc.concat(block), []);
 }
 
 function genExterns(functions) {

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineBindPoint = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPipelineBindPoint {
@@ -12,17 +10,19 @@ pub enum VkPipelineBindPoint {
     RayTracingNv = 1000165000,
 }
 
+pub type RawVkPipelineBindPoint = i32;
+
+impl VkWrappedType<RawVkPipelineBindPoint> for VkPipelineBindPoint {
+    fn vk_to_raw(src: &VkPipelineBindPoint, dst: &mut RawVkPipelineBindPoint) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkPipelineBindPoint> for RawVkPipelineBindPoint {
     fn vk_to_wrapped(src: &RawVkPipelineBindPoint) -> VkPipelineBindPoint {
         unsafe {
             *((src as *const i32) as *const VkPipelineBindPoint)
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineBindPoint> for VkPipelineBindPoint {
-    fn vk_to_raw(src: &VkPipelineBindPoint, dst: &mut RawVkPipelineBindPoint) {
-        *dst = *src as i32
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkShaderInfoType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkShaderInfoType {
@@ -12,17 +10,19 @@ pub enum VkShaderInfoType {
     Disassembly = 2,
 }
 
+pub type RawVkShaderInfoType = i32;
+
+impl VkWrappedType<RawVkShaderInfoType> for VkShaderInfoType {
+    fn vk_to_raw(src: &VkShaderInfoType, dst: &mut RawVkShaderInfoType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkShaderInfoType> for RawVkShaderInfoType {
     fn vk_to_wrapped(src: &RawVkShaderInfoType) -> VkShaderInfoType {
         unsafe {
             *((src as *const i32) as *const VkShaderInfoType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkShaderInfoType> for VkShaderInfoType {
-    fn vk_to_raw(src: &VkShaderInfoType, dst: &mut RawVkShaderInfoType) {
-        *dst = *src as i32
     }
 }
 

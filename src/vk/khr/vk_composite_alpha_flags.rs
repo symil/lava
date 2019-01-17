@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCompositeAlphaFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkCompositeAlphaFlags {
     pub opaque: bool,
     pub pre_multiplied: bool,
     pub post_multiplied: bool,
     pub inherit: bool,
+}
+
+pub type RawVkCompositeAlphaFlags = u32;
+
+impl VkWrappedType<RawVkCompositeAlphaFlags> for VkCompositeAlphaFlags {
+    fn vk_to_raw(src: &VkCompositeAlphaFlags, dst: &mut RawVkCompositeAlphaFlags) {
+        *dst = 0;
+        if src.opaque { *dst |= 0x00000001; }
+        if src.pre_multiplied { *dst |= 0x00000002; }
+        if src.post_multiplied { *dst |= 0x00000004; }
+        if src.inherit { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkCompositeAlphaFlags> for RawVkCompositeAlphaFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkCompositeAlphaFlags> for RawVkCompositeAlphaFlags {
             post_multiplied: (src & 0x00000004) != 0,
             inherit: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkCompositeAlphaFlags> for VkCompositeAlphaFlags {
-    fn vk_to_raw(src: &VkCompositeAlphaFlags, dst: &mut RawVkCompositeAlphaFlags) {
-        *dst = 0;
-        if src.opaque { *dst |= 0x00000001; }
-        if src.pre_multiplied { *dst |= 0x00000002; }
-        if src.post_multiplied { *dst |= 0x00000004; }
-        if src.inherit { *dst |= 0x00000008; }
     }
 }
 

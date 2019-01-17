@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkExternalFenceHandleTypeFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalFenceHandleTypeFlags {
     pub opaque_fd: bool,
     pub opaque_win_32: bool,
     pub opaque_win_32_kmt: bool,
     pub sync_fd: bool,
+}
+
+pub type RawVkExternalFenceHandleTypeFlags = u32;
+
+impl VkWrappedType<RawVkExternalFenceHandleTypeFlags> for VkExternalFenceHandleTypeFlags {
+    fn vk_to_raw(src: &VkExternalFenceHandleTypeFlags, dst: &mut RawVkExternalFenceHandleTypeFlags) {
+        *dst = 0;
+        if src.opaque_fd { *dst |= 0x00000001; }
+        if src.opaque_win_32 { *dst |= 0x00000002; }
+        if src.opaque_win_32_kmt { *dst |= 0x00000004; }
+        if src.sync_fd { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkExternalFenceHandleTypeFlags> for RawVkExternalFenceHandleTypeFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkExternalFenceHandleTypeFlags> for RawVkExternalFenceHandleTypeF
             opaque_win_32_kmt: (src & 0x00000004) != 0,
             sync_fd: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalFenceHandleTypeFlags> for VkExternalFenceHandleTypeFlags {
-    fn vk_to_raw(src: &VkExternalFenceHandleTypeFlags, dst: &mut RawVkExternalFenceHandleTypeFlags) {
-        *dst = 0;
-        if src.opaque_fd { *dst |= 0x00000001; }
-        if src.opaque_win_32 { *dst |= 0x00000002; }
-        if src.opaque_win_32_kmt { *dst |= 0x00000004; }
-        if src.sync_fd { *dst |= 0x00000008; }
     }
 }
 

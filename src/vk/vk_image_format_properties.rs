@@ -16,6 +16,15 @@ use vk::vk_device::*;
 use vk::vk_extent_3d::*;
 use vk::vk_sample_count_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageFormatProperties {
+    pub max_extent: VkExtent3D,
+    pub max_mip_levels: usize,
+    pub max_array_layers: usize,
+    pub sample_counts: VkSampleCountFlags,
+    pub max_resource_size: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageFormatProperties {
@@ -26,13 +35,14 @@ pub struct RawVkImageFormatProperties {
     pub max_resource_size: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImageFormatProperties {
-    pub max_extent: VkExtent3D,
-    pub max_mip_levels: usize,
-    pub max_array_layers: usize,
-    pub sample_counts: VkSampleCountFlags,
-    pub max_resource_size: usize,
+impl VkWrappedType<RawVkImageFormatProperties> for VkImageFormatProperties {
+    fn vk_to_raw(src: &VkImageFormatProperties, dst: &mut RawVkImageFormatProperties) {
+        dst.max_extent = vk_to_raw_value(&src.max_extent);
+        dst.max_mip_levels = vk_to_raw_value(&src.max_mip_levels);
+        dst.max_array_layers = vk_to_raw_value(&src.max_array_layers);
+        dst.sample_counts = vk_to_raw_value(&src.sample_counts);
+        dst.max_resource_size = vk_to_raw_value(&src.max_resource_size);
+    }
 }
 
 impl VkRawType<VkImageFormatProperties> for RawVkImageFormatProperties {
@@ -44,16 +54,6 @@ impl VkRawType<VkImageFormatProperties> for RawVkImageFormatProperties {
             sample_counts: RawVkSampleCountFlags::vk_to_wrapped(&src.sample_counts),
             max_resource_size: u64::vk_to_wrapped(&src.max_resource_size),
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageFormatProperties> for VkImageFormatProperties {
-    fn vk_to_raw(src: &VkImageFormatProperties, dst: &mut RawVkImageFormatProperties) {
-        dst.max_extent = vk_to_raw_value(&src.max_extent);
-        dst.max_mip_levels = vk_to_raw_value(&src.max_mip_levels);
-        dst.max_array_layers = vk_to_raw_value(&src.max_array_layers);
-        dst.sample_counts = vk_to_raw_value(&src.sample_counts);
-        dst.max_resource_size = vk_to_raw_value(&src.max_resource_size);
     }
 }
 

@@ -14,6 +14,15 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceSparseProperties {
+    pub residency_standard_2_dblock_shape: bool,
+    pub residency_standard_2_dmultisample_block_shape: bool,
+    pub residency_standard_3_dblock_shape: bool,
+    pub residency_aligned_mip_size: bool,
+    pub residency_non_resident_strict: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSparseProperties {
@@ -24,13 +33,14 @@ pub struct RawVkPhysicalDeviceSparseProperties {
     pub residency_non_resident_strict: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceSparseProperties {
-    pub residency_standard_2_dblock_shape: bool,
-    pub residency_standard_2_dmultisample_block_shape: bool,
-    pub residency_standard_3_dblock_shape: bool,
-    pub residency_aligned_mip_size: bool,
-    pub residency_non_resident_strict: bool,
+impl VkWrappedType<RawVkPhysicalDeviceSparseProperties> for VkPhysicalDeviceSparseProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceSparseProperties, dst: &mut RawVkPhysicalDeviceSparseProperties) {
+        dst.residency_standard_2_dblock_shape = vk_to_raw_value(&src.residency_standard_2_dblock_shape);
+        dst.residency_standard_2_dmultisample_block_shape = vk_to_raw_value(&src.residency_standard_2_dmultisample_block_shape);
+        dst.residency_standard_3_dblock_shape = vk_to_raw_value(&src.residency_standard_3_dblock_shape);
+        dst.residency_aligned_mip_size = vk_to_raw_value(&src.residency_aligned_mip_size);
+        dst.residency_non_resident_strict = vk_to_raw_value(&src.residency_non_resident_strict);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceSparseProperties> for RawVkPhysicalDeviceSparseProperties {
@@ -42,16 +52,6 @@ impl VkRawType<VkPhysicalDeviceSparseProperties> for RawVkPhysicalDeviceSparsePr
             residency_aligned_mip_size: u32::vk_to_wrapped(&src.residency_aligned_mip_size),
             residency_non_resident_strict: u32::vk_to_wrapped(&src.residency_non_resident_strict),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceSparseProperties> for VkPhysicalDeviceSparseProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceSparseProperties, dst: &mut RawVkPhysicalDeviceSparseProperties) {
-        dst.residency_standard_2_dblock_shape = vk_to_raw_value(&src.residency_standard_2_dblock_shape);
-        dst.residency_standard_2_dmultisample_block_shape = vk_to_raw_value(&src.residency_standard_2_dmultisample_block_shape);
-        dst.residency_standard_3_dblock_shape = vk_to_raw_value(&src.residency_standard_3_dblock_shape);
-        dst.residency_aligned_mip_size = vk_to_raw_value(&src.residency_aligned_mip_size);
-        dst.residency_non_resident_strict = vk_to_raw_value(&src.residency_non_resident_strict);
     }
 }
 

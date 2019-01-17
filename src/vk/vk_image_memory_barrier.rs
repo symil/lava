@@ -19,6 +19,18 @@ use vk::vk_image_layout::*;
 use vk::vk_image::*;
 use vk::vk_image_subresource_range::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageMemoryBarrier<'a> {
+    pub src_access_mask: VkAccessFlags,
+    pub dst_access_mask: VkAccessFlags,
+    pub old_layout: VkImageLayout,
+    pub new_layout: VkImageLayout,
+    pub src_queue_family_index: usize,
+    pub dst_queue_family_index: usize,
+    pub image: &'a VkImage,
+    pub subresource_range: VkImageSubresourceRange,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageMemoryBarrier {
@@ -32,18 +44,6 @@ pub struct RawVkImageMemoryBarrier {
     pub dst_queue_family_index: u32,
     pub image: RawVkImage,
     pub subresource_range: RawVkImageSubresourceRange,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImageMemoryBarrier<'a> {
-    pub src_access_mask: VkAccessFlags,
-    pub dst_access_mask: VkAccessFlags,
-    pub old_layout: VkImageLayout,
-    pub new_layout: VkImageLayout,
-    pub src_queue_family_index: usize,
-    pub dst_queue_family_index: usize,
-    pub image: &'a VkImage,
-    pub subresource_range: VkImageSubresourceRange,
 }
 
 impl<'a> VkWrappedType<RawVkImageMemoryBarrier> for VkImageMemoryBarrier<'a> {

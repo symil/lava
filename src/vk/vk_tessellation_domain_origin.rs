@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkTessellationDomainOrigin = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkTessellationDomainOrigin {
@@ -11,17 +9,19 @@ pub enum VkTessellationDomainOrigin {
     LowerLeft = 1,
 }
 
+pub type RawVkTessellationDomainOrigin = i32;
+
+impl VkWrappedType<RawVkTessellationDomainOrigin> for VkTessellationDomainOrigin {
+    fn vk_to_raw(src: &VkTessellationDomainOrigin, dst: &mut RawVkTessellationDomainOrigin) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkTessellationDomainOrigin> for RawVkTessellationDomainOrigin {
     fn vk_to_wrapped(src: &RawVkTessellationDomainOrigin) -> VkTessellationDomainOrigin {
         unsafe {
             *((src as *const i32) as *const VkTessellationDomainOrigin)
         }
-    }
-}
-
-impl VkWrappedType<RawVkTessellationDomainOrigin> for VkTessellationDomainOrigin {
-    fn vk_to_raw(src: &VkTessellationDomainOrigin, dst: &mut RawVkTessellationDomainOrigin) {
-        *dst = *src as i32
     }
 }
 

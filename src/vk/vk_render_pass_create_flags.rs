@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkRenderPassCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkRenderPassCreateFlags {
     
+}
+
+pub type RawVkRenderPassCreateFlags = u32;
+
+impl VkWrappedType<RawVkRenderPassCreateFlags> for VkRenderPassCreateFlags {
+    fn vk_to_raw(src: &VkRenderPassCreateFlags, dst: &mut RawVkRenderPassCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkRenderPassCreateFlags> for RawVkRenderPassCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkRenderPassCreateFlags> for RawVkRenderPassCreateFlags {
         VkRenderPassCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkRenderPassCreateFlags> for VkRenderPassCreateFlags {
-    fn vk_to_raw(src: &VkRenderPassCreateFlags, dst: &mut RawVkRenderPassCreateFlags) {
-        *dst = 0;
     }
 }
 

@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDescriptorPoolResetFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorPoolResetFlags {
     
+}
+
+pub type RawVkDescriptorPoolResetFlags = u32;
+
+impl VkWrappedType<RawVkDescriptorPoolResetFlags> for VkDescriptorPoolResetFlags {
+    fn vk_to_raw(src: &VkDescriptorPoolResetFlags, dst: &mut RawVkDescriptorPoolResetFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkDescriptorPoolResetFlags> for RawVkDescriptorPoolResetFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkDescriptorPoolResetFlags> for RawVkDescriptorPoolResetFlags {
         VkDescriptorPoolResetFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorPoolResetFlags> for VkDescriptorPoolResetFlags {
-    fn vk_to_raw(src: &VkDescriptorPoolResetFlags, dst: &mut RawVkDescriptorPoolResetFlags) {
-        *dst = 0;
     }
 }
 

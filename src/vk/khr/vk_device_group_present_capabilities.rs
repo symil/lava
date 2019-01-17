@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::khr::vk_device_group_present_mode_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGroupPresentCapabilities {
+    pub present_mask: [u32; 32],
+    pub modes: VkDeviceGroupPresentModeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupPresentCapabilities {
@@ -25,10 +31,13 @@ pub struct RawVkDeviceGroupPresentCapabilities {
     pub modes: RawVkDeviceGroupPresentModeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceGroupPresentCapabilities {
-    pub present_mask: [u32; 32],
-    pub modes: VkDeviceGroupPresentModeFlags,
+impl VkWrappedType<RawVkDeviceGroupPresentCapabilities> for VkDeviceGroupPresentCapabilities {
+    fn vk_to_raw(src: &VkDeviceGroupPresentCapabilities, dst: &mut RawVkDeviceGroupPresentCapabilities) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupPresentCapabilitiesKhr);
+        dst.next = ptr::null();
+        dst.present_mask = unsafe { let mut dst_array : [u32; 32] = mem::uninitialized(); to_array(&src.present_mask, &mut dst_array); dst_array };
+        dst.modes = vk_to_raw_value(&src.modes);
+    }
 }
 
 impl VkRawType<VkDeviceGroupPresentCapabilities> for RawVkDeviceGroupPresentCapabilities {
@@ -37,15 +46,6 @@ impl VkRawType<VkDeviceGroupPresentCapabilities> for RawVkDeviceGroupPresentCapa
             present_mask: unsafe { let mut dst_array : [u32; 32] = mem::uninitialized(); to_array(&src.present_mask, &mut dst_array); dst_array },
             modes: RawVkDeviceGroupPresentModeFlags::vk_to_wrapped(&src.modes),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceGroupPresentCapabilities> for VkDeviceGroupPresentCapabilities {
-    fn vk_to_raw(src: &VkDeviceGroupPresentCapabilities, dst: &mut RawVkDeviceGroupPresentCapabilities) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupPresentCapabilitiesKhr);
-        dst.next = ptr::null();
-        dst.present_mask = unsafe { let mut dst_array : [u32; 32] = mem::uninitialized(); to_array(&src.present_mask, &mut dst_array); dst_array };
-        dst.modes = vk_to_raw_value(&src.modes);
     }
 }
 

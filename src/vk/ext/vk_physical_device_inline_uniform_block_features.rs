@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceInlineUniformBlockFeatures {
+    pub inline_uniform_block: bool,
+    pub descriptor_binding_inline_uniform_block_update_after_bind: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceInlineUniformBlockFeatures {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceInlineUniformBlockFeatures {
     pub descriptor_binding_inline_uniform_block_update_after_bind: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceInlineUniformBlockFeatures {
-    pub inline_uniform_block: bool,
-    pub descriptor_binding_inline_uniform_block_update_after_bind: bool,
+impl VkWrappedType<RawVkPhysicalDeviceInlineUniformBlockFeatures> for VkPhysicalDeviceInlineUniformBlockFeatures {
+    fn vk_to_raw(src: &VkPhysicalDeviceInlineUniformBlockFeatures, dst: &mut RawVkPhysicalDeviceInlineUniformBlockFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceInlineUniformBlockFeaturesExt);
+        dst.next = ptr::null();
+        dst.inline_uniform_block = vk_to_raw_value(&src.inline_uniform_block);
+        dst.descriptor_binding_inline_uniform_block_update_after_bind = vk_to_raw_value(&src.descriptor_binding_inline_uniform_block_update_after_bind);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceInlineUniformBlockFeatures> for RawVkPhysicalDeviceInlineUniformBlockFeatures {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceInlineUniformBlockFeatures> for RawVkPhysicalDevi
             inline_uniform_block: u32::vk_to_wrapped(&src.inline_uniform_block),
             descriptor_binding_inline_uniform_block_update_after_bind: u32::vk_to_wrapped(&src.descriptor_binding_inline_uniform_block_update_after_bind),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceInlineUniformBlockFeatures> for VkPhysicalDeviceInlineUniformBlockFeatures {
-    fn vk_to_raw(src: &VkPhysicalDeviceInlineUniformBlockFeatures, dst: &mut RawVkPhysicalDeviceInlineUniformBlockFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceInlineUniformBlockFeaturesExt);
-        dst.next = ptr::null();
-        dst.inline_uniform_block = vk_to_raw_value(&src.inline_uniform_block);
-        dst.descriptor_binding_inline_uniform_block_update_after_bind = vk_to_raw_value(&src.descriptor_binding_inline_uniform_block_update_after_bind);
     }
 }
 

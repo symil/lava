@@ -17,6 +17,17 @@ use vk::vk_subpass_description_flags::*;
 use vk::vk_pipeline_bind_point::*;
 use vk::vk_attachment_reference::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSubpassDescription<'a, 'b, 'c, 'd, 'e> {
+    pub flags: VkSubpassDescriptionFlags,
+    pub pipeline_bind_point: VkPipelineBindPoint,
+    pub input_attachments: &'a [VkAttachmentReference],
+    pub color_attachments: &'b [VkAttachmentReference],
+    pub resolve_attachments: Option<&'c [VkAttachmentReference]>,
+    pub depth_stencil_attachment: Option<&'d VkAttachmentReference>,
+    pub preserve_attachments: &'e [usize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDescription {
@@ -30,17 +41,6 @@ pub struct RawVkSubpassDescription {
     pub depth_stencil_attachment: *mut RawVkAttachmentReference,
     pub preserve_attachment_count: u32,
     pub preserve_attachments: *mut u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSubpassDescription<'a, 'b, 'c, 'd, 'e> {
-    pub flags: VkSubpassDescriptionFlags,
-    pub pipeline_bind_point: VkPipelineBindPoint,
-    pub input_attachments: &'a [VkAttachmentReference],
-    pub color_attachments: &'b [VkAttachmentReference],
-    pub resolve_attachments: Option<&'c [VkAttachmentReference]>,
-    pub depth_stencil_attachment: Option<&'d VkAttachmentReference>,
-    pub preserve_attachments: &'e [usize],
 }
 
 impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkSubpassDescription> for VkSubpassDescription<'a, 'b, 'c, 'd, 'e> {

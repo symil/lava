@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_device_queue_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceQueueInfo2 {
+    pub flags: VkDeviceQueueCreateFlags,
+    pub queue_family_index: usize,
+    pub queue_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceQueueInfo2 {
@@ -26,11 +33,14 @@ pub struct RawVkDeviceQueueInfo2 {
     pub queue_index: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceQueueInfo2 {
-    pub flags: VkDeviceQueueCreateFlags,
-    pub queue_family_index: usize,
-    pub queue_index: usize,
+impl VkWrappedType<RawVkDeviceQueueInfo2> for VkDeviceQueueInfo2 {
+    fn vk_to_raw(src: &VkDeviceQueueInfo2, dst: &mut RawVkDeviceQueueInfo2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceQueueInfo2);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.queue_family_index = vk_to_raw_value(&src.queue_family_index);
+        dst.queue_index = vk_to_raw_value(&src.queue_index);
+    }
 }
 
 impl VkRawType<VkDeviceQueueInfo2> for RawVkDeviceQueueInfo2 {
@@ -40,16 +50,6 @@ impl VkRawType<VkDeviceQueueInfo2> for RawVkDeviceQueueInfo2 {
             queue_family_index: u32::vk_to_wrapped(&src.queue_family_index),
             queue_index: u32::vk_to_wrapped(&src.queue_index),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceQueueInfo2> for VkDeviceQueueInfo2 {
-    fn vk_to_raw(src: &VkDeviceQueueInfo2, dst: &mut RawVkDeviceQueueInfo2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceQueueInfo2);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.queue_family_index = vk_to_raw_value(&src.queue_family_index);
-        dst.queue_index = vk_to_raw_value(&src.queue_index);
     }
 }
 

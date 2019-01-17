@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDisplayPlaneAlphaFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDisplayPlaneAlphaFlags {
     pub opaque: bool,
     pub global: bool,
     pub per_pixel: bool,
     pub per_pixel_premultiplied: bool,
+}
+
+pub type RawVkDisplayPlaneAlphaFlags = u32;
+
+impl VkWrappedType<RawVkDisplayPlaneAlphaFlags> for VkDisplayPlaneAlphaFlags {
+    fn vk_to_raw(src: &VkDisplayPlaneAlphaFlags, dst: &mut RawVkDisplayPlaneAlphaFlags) {
+        *dst = 0;
+        if src.opaque { *dst |= 0x00000001; }
+        if src.global { *dst |= 0x00000002; }
+        if src.per_pixel { *dst |= 0x00000004; }
+        if src.per_pixel_premultiplied { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkDisplayPlaneAlphaFlags> for RawVkDisplayPlaneAlphaFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkDisplayPlaneAlphaFlags> for RawVkDisplayPlaneAlphaFlags {
             per_pixel: (src & 0x00000004) != 0,
             per_pixel_premultiplied: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayPlaneAlphaFlags> for VkDisplayPlaneAlphaFlags {
-    fn vk_to_raw(src: &VkDisplayPlaneAlphaFlags, dst: &mut RawVkDisplayPlaneAlphaFlags) {
-        *dst = 0;
-        if src.opaque { *dst |= 0x00000001; }
-        if src.global { *dst |= 0x00000002; }
-        if src.per_pixel { *dst |= 0x00000004; }
-        if src.per_pixel_premultiplied { *dst |= 0x00000008; }
     }
 }
 

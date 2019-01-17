@@ -18,6 +18,13 @@ use vk::vk_pipeline_viewport_state_create_flags::*;
 use vk::vk_viewport::*;
 use vk::vk_rect_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineViewportStateCreateInfo<'a, 'b> {
+    pub flags: VkPipelineViewportStateCreateFlags,
+    pub viewports: Option<&'a [VkViewport]>,
+    pub scissors: Option<&'b [VkRect2D]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportStateCreateInfo {
@@ -28,13 +35,6 @@ pub struct RawVkPipelineViewportStateCreateInfo {
     pub viewports: *mut RawVkViewport,
     pub scissor_count: u32,
     pub scissors: *mut RawVkRect2D,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineViewportStateCreateInfo<'a, 'b> {
-    pub flags: VkPipelineViewportStateCreateFlags,
-    pub viewports: Option<&'a [VkViewport]>,
-    pub scissors: Option<&'b [VkRect2D]>,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkPipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfo<'a, 'b> {

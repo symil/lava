@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkBlendOverlap = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkBlendOverlap {
@@ -12,17 +10,19 @@ pub enum VkBlendOverlap {
     Conjoint = 2,
 }
 
+pub type RawVkBlendOverlap = i32;
+
+impl VkWrappedType<RawVkBlendOverlap> for VkBlendOverlap {
+    fn vk_to_raw(src: &VkBlendOverlap, dst: &mut RawVkBlendOverlap) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkBlendOverlap> for RawVkBlendOverlap {
     fn vk_to_wrapped(src: &RawVkBlendOverlap) -> VkBlendOverlap {
         unsafe {
             *((src as *const i32) as *const VkBlendOverlap)
         }
-    }
-}
-
-impl VkWrappedType<RawVkBlendOverlap> for VkBlendOverlap {
-    fn vk_to_raw(src: &VkBlendOverlap, dst: &mut RawVkBlendOverlap) {
-        *dst = *src as i32
     }
 }
 

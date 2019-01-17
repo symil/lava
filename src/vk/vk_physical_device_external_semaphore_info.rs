@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_semaphore_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceExternalSemaphoreInfo {
+    pub handle_type: VkExternalSemaphoreHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalSemaphoreInfo {
@@ -24,9 +29,12 @@ pub struct RawVkPhysicalDeviceExternalSemaphoreInfo {
     pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceExternalSemaphoreInfo {
-    pub handle_type: VkExternalSemaphoreHandleTypeFlags,
+impl VkWrappedType<RawVkPhysicalDeviceExternalSemaphoreInfo> for VkPhysicalDeviceExternalSemaphoreInfo {
+    fn vk_to_raw(src: &VkPhysicalDeviceExternalSemaphoreInfo, dst: &mut RawVkPhysicalDeviceExternalSemaphoreInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalSemaphoreInfo);
+        dst.next = ptr::null();
+        dst.handle_type = vk_to_raw_value(&src.handle_type);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceExternalSemaphoreInfo> for RawVkPhysicalDeviceExternalSemaphoreInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkPhysicalDeviceExternalSemaphoreInfo> for RawVkPhysicalDeviceExt
         VkPhysicalDeviceExternalSemaphoreInfo {
             handle_type: RawVkExternalSemaphoreHandleTypeFlags::vk_to_wrapped(&src.handle_type),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceExternalSemaphoreInfo> for VkPhysicalDeviceExternalSemaphoreInfo {
-    fn vk_to_raw(src: &VkPhysicalDeviceExternalSemaphoreInfo, dst: &mut RawVkPhysicalDeviceExternalSemaphoreInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalSemaphoreInfo);
-        dst.next = ptr::null();
-        dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }
 

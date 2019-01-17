@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPipelineDiscardRectangleStateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineDiscardRectangleStateCreateFlags {
     
+}
+
+pub type RawVkPipelineDiscardRectangleStateCreateFlags = u32;
+
+impl VkWrappedType<RawVkPipelineDiscardRectangleStateCreateFlags> for VkPipelineDiscardRectangleStateCreateFlags {
+    fn vk_to_raw(src: &VkPipelineDiscardRectangleStateCreateFlags, dst: &mut RawVkPipelineDiscardRectangleStateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkPipelineDiscardRectangleStateCreateFlags> for RawVkPipelineDiscardRectangleStateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkPipelineDiscardRectangleStateCreateFlags> for RawVkPipelineDisc
         VkPipelineDiscardRectangleStateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineDiscardRectangleStateCreateFlags> for VkPipelineDiscardRectangleStateCreateFlags {
-    fn vk_to_raw(src: &VkPipelineDiscardRectangleStateCreateFlags, dst: &mut RawVkPipelineDiscardRectangleStateCreateFlags) {
-        *dst = 0;
     }
 }
 

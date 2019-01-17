@@ -14,6 +14,13 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBufferCopy {
+    pub src_offset: usize,
+    pub dst_offset: usize,
+    pub size: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferCopy {
@@ -22,11 +29,12 @@ pub struct RawVkBufferCopy {
     pub size: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkBufferCopy {
-    pub src_offset: usize,
-    pub dst_offset: usize,
-    pub size: usize,
+impl VkWrappedType<RawVkBufferCopy> for VkBufferCopy {
+    fn vk_to_raw(src: &VkBufferCopy, dst: &mut RawVkBufferCopy) {
+        dst.src_offset = vk_to_raw_value(&src.src_offset);
+        dst.dst_offset = vk_to_raw_value(&src.dst_offset);
+        dst.size = vk_to_raw_value(&src.size);
+    }
 }
 
 impl VkRawType<VkBufferCopy> for RawVkBufferCopy {
@@ -36,14 +44,6 @@ impl VkRawType<VkBufferCopy> for RawVkBufferCopy {
             dst_offset: u64::vk_to_wrapped(&src.dst_offset),
             size: u64::vk_to_wrapped(&src.size),
         }
-    }
-}
-
-impl VkWrappedType<RawVkBufferCopy> for VkBufferCopy {
-    fn vk_to_raw(src: &VkBufferCopy, dst: &mut RawVkBufferCopy) {
-        dst.src_offset = vk_to_raw_value(&src.src_offset);
-        dst.dst_offset = vk_to_raw_value(&src.dst_offset);
-        dst.size = vk_to_raw_value(&src.size);
     }
 }
 

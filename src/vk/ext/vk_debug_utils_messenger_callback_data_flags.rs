@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDebugUtilsMessengerCallbackDataFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessengerCallbackDataFlags {
     
+}
+
+pub type RawVkDebugUtilsMessengerCallbackDataFlags = u32;
+
+impl VkWrappedType<RawVkDebugUtilsMessengerCallbackDataFlags> for VkDebugUtilsMessengerCallbackDataFlags {
+    fn vk_to_raw(src: &VkDebugUtilsMessengerCallbackDataFlags, dst: &mut RawVkDebugUtilsMessengerCallbackDataFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkDebugUtilsMessengerCallbackDataFlags> for RawVkDebugUtilsMessengerCallbackDataFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkDebugUtilsMessengerCallbackDataFlags> for RawVkDebugUtilsMessen
         VkDebugUtilsMessengerCallbackDataFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkDebugUtilsMessengerCallbackDataFlags> for VkDebugUtilsMessengerCallbackDataFlags {
-    fn vk_to_raw(src: &VkDebugUtilsMessengerCallbackDataFlags, dst: &mut RawVkDebugUtilsMessengerCallbackDataFlags) {
-        *dst = 0;
     }
 }
 

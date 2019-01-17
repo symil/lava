@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_pipeline_cache_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineCacheCreateInfo<'a> {
+    pub flags: VkPipelineCacheCreateFlags,
+    pub initial_data_size: usize,
+    pub initial_data: &'a c_void,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineCacheCreateInfo {
@@ -24,13 +31,6 @@ pub struct RawVkPipelineCacheCreateInfo {
     pub flags: RawVkPipelineCacheCreateFlags,
     pub initial_data_size: usize,
     pub initial_data: *const c_void,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineCacheCreateInfo<'a> {
-    pub flags: VkPipelineCacheCreateFlags,
-    pub initial_data_size: usize,
-    pub initial_data: &'a c_void,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineCacheCreateInfo> for VkPipelineCacheCreateInfo<'a> {

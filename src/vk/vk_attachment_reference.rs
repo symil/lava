@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_image_layout::*;
 
+#[derive(Debug, Clone)]
+pub struct VkAttachmentReference {
+    pub attachment: usize,
+    pub layout: VkImageLayout,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAttachmentReference {
@@ -22,10 +28,11 @@ pub struct RawVkAttachmentReference {
     pub layout: RawVkImageLayout,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkAttachmentReference {
-    pub attachment: usize,
-    pub layout: VkImageLayout,
+impl VkWrappedType<RawVkAttachmentReference> for VkAttachmentReference {
+    fn vk_to_raw(src: &VkAttachmentReference, dst: &mut RawVkAttachmentReference) {
+        dst.attachment = vk_to_raw_value(&src.attachment);
+        dst.layout = vk_to_raw_value(&src.layout);
+    }
 }
 
 impl VkRawType<VkAttachmentReference> for RawVkAttachmentReference {
@@ -34,13 +41,6 @@ impl VkRawType<VkAttachmentReference> for RawVkAttachmentReference {
             attachment: u32::vk_to_wrapped(&src.attachment),
             layout: RawVkImageLayout::vk_to_wrapped(&src.layout),
         }
-    }
-}
-
-impl VkWrappedType<RawVkAttachmentReference> for VkAttachmentReference {
-    fn vk_to_raw(src: &VkAttachmentReference, dst: &mut RawVkAttachmentReference) {
-        dst.attachment = vk_to_raw_value(&src.attachment);
-        dst.layout = vk_to_raw_value(&src.layout);
     }
 }
 

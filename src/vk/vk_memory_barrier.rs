@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_access_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryBarrier {
+    pub src_access_mask: VkAccessFlags,
+    pub dst_access_mask: VkAccessFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryBarrier {
@@ -25,10 +31,13 @@ pub struct RawVkMemoryBarrier {
     pub dst_access_mask: RawVkAccessFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryBarrier {
-    pub src_access_mask: VkAccessFlags,
-    pub dst_access_mask: VkAccessFlags,
+impl VkWrappedType<RawVkMemoryBarrier> for VkMemoryBarrier {
+    fn vk_to_raw(src: &VkMemoryBarrier, dst: &mut RawVkMemoryBarrier) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryBarrier);
+        dst.next = ptr::null();
+        dst.src_access_mask = vk_to_raw_value(&src.src_access_mask);
+        dst.dst_access_mask = vk_to_raw_value(&src.dst_access_mask);
+    }
 }
 
 impl VkRawType<VkMemoryBarrier> for RawVkMemoryBarrier {
@@ -37,15 +46,6 @@ impl VkRawType<VkMemoryBarrier> for RawVkMemoryBarrier {
             src_access_mask: RawVkAccessFlags::vk_to_wrapped(&src.src_access_mask),
             dst_access_mask: RawVkAccessFlags::vk_to_wrapped(&src.dst_access_mask),
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryBarrier> for VkMemoryBarrier {
-    fn vk_to_raw(src: &VkMemoryBarrier, dst: &mut RawVkMemoryBarrier) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryBarrier);
-        dst.next = ptr::null();
-        dst.src_access_mask = vk_to_raw_value(&src.src_access_mask);
-        dst.dst_access_mask = vk_to_raw_value(&src.dst_access_mask);
     }
 }
 

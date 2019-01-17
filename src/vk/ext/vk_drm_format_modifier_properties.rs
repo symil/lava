@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_format_feature_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDrmFormatModifierProperties {
+    pub drm_format_modifier: usize,
+    pub drm_format_modifier_plane_count: usize,
+    pub drm_format_modifier_tiling_features: VkFormatFeatureFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrmFormatModifierProperties {
@@ -23,11 +30,12 @@ pub struct RawVkDrmFormatModifierProperties {
     pub drm_format_modifier_tiling_features: RawVkFormatFeatureFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDrmFormatModifierProperties {
-    pub drm_format_modifier: usize,
-    pub drm_format_modifier_plane_count: usize,
-    pub drm_format_modifier_tiling_features: VkFormatFeatureFlags,
+impl VkWrappedType<RawVkDrmFormatModifierProperties> for VkDrmFormatModifierProperties {
+    fn vk_to_raw(src: &VkDrmFormatModifierProperties, dst: &mut RawVkDrmFormatModifierProperties) {
+        dst.drm_format_modifier = vk_to_raw_value(&src.drm_format_modifier);
+        dst.drm_format_modifier_plane_count = vk_to_raw_value(&src.drm_format_modifier_plane_count);
+        dst.drm_format_modifier_tiling_features = vk_to_raw_value(&src.drm_format_modifier_tiling_features);
+    }
 }
 
 impl VkRawType<VkDrmFormatModifierProperties> for RawVkDrmFormatModifierProperties {
@@ -37,14 +45,6 @@ impl VkRawType<VkDrmFormatModifierProperties> for RawVkDrmFormatModifierProperti
             drm_format_modifier_plane_count: u32::vk_to_wrapped(&src.drm_format_modifier_plane_count),
             drm_format_modifier_tiling_features: RawVkFormatFeatureFlags::vk_to_wrapped(&src.drm_format_modifier_tiling_features),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDrmFormatModifierProperties> for VkDrmFormatModifierProperties {
-    fn vk_to_raw(src: &VkDrmFormatModifierProperties, dst: &mut RawVkDrmFormatModifierProperties) {
-        dst.drm_format_modifier = vk_to_raw_value(&src.drm_format_modifier);
-        dst.drm_format_modifier_plane_count = vk_to_raw_value(&src.drm_format_modifier_plane_count);
-        dst.drm_format_modifier_tiling_features = vk_to_raw_value(&src.drm_format_modifier_tiling_features);
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkTimeDomain = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkTimeDomain {
@@ -13,17 +11,19 @@ pub enum VkTimeDomain {
     QueryPerformanceCounter = 3,
 }
 
+pub type RawVkTimeDomain = i32;
+
+impl VkWrappedType<RawVkTimeDomain> for VkTimeDomain {
+    fn vk_to_raw(src: &VkTimeDomain, dst: &mut RawVkTimeDomain) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkTimeDomain> for RawVkTimeDomain {
     fn vk_to_wrapped(src: &RawVkTimeDomain) -> VkTimeDomain {
         unsafe {
             *((src as *const i32) as *const VkTimeDomain)
         }
-    }
-}
-
-impl VkWrappedType<RawVkTimeDomain> for VkTimeDomain {
-    fn vk_to_raw(src: &VkTimeDomain, dst: &mut RawVkTimeDomain) {
-        *dst = *src as i32
     }
 }
 

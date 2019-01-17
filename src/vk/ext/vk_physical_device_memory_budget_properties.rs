@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMemoryBudgetProperties {
+    pub heap_budget: [usize; 16],
+    pub heap_usage: [usize; 16],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryBudgetProperties {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceMemoryBudgetProperties {
     pub heap_usage: [u64; 16],
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMemoryBudgetProperties {
-    pub heap_budget: [usize; 16],
-    pub heap_usage: [usize; 16],
+impl VkWrappedType<RawVkPhysicalDeviceMemoryBudgetProperties> for VkPhysicalDeviceMemoryBudgetProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceMemoryBudgetProperties, dst: &mut RawVkPhysicalDeviceMemoryBudgetProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryBudgetPropertiesExt);
+        dst.next = ptr::null();
+        dst.heap_budget = unsafe { let mut dst_array : [u64; 16] = mem::uninitialized(); vk_to_raw_array(&src.heap_budget, &mut dst_array); dst_array };
+        dst.heap_usage = unsafe { let mut dst_array : [u64; 16] = mem::uninitialized(); vk_to_raw_array(&src.heap_usage, &mut dst_array); dst_array };
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMemoryBudgetProperties> for RawVkPhysicalDeviceMemoryBudgetProperties {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceMemoryBudgetProperties> for RawVkPhysicalDeviceMe
             heap_budget: unsafe { let mut dst_array : [usize; 16] = mem::uninitialized(); vk_to_wrapped_array(&src.heap_budget, &mut dst_array); dst_array },
             heap_usage: unsafe { let mut dst_array : [usize; 16] = mem::uninitialized(); vk_to_wrapped_array(&src.heap_usage, &mut dst_array); dst_array },
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMemoryBudgetProperties> for VkPhysicalDeviceMemoryBudgetProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceMemoryBudgetProperties, dst: &mut RawVkPhysicalDeviceMemoryBudgetProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryBudgetPropertiesExt);
-        dst.next = ptr::null();
-        dst.heap_budget = unsafe { let mut dst_array : [u64; 16] = mem::uninitialized(); vk_to_raw_array(&src.heap_budget, &mut dst_array); dst_array };
-        dst.heap_usage = unsafe { let mut dst_array : [u64; 16] = mem::uninitialized(); vk_to_raw_array(&src.heap_usage, &mut dst_array); dst_array };
     }
 }
 

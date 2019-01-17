@@ -15,6 +15,14 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDevice16BitStorageFeatures {
+    pub storage_buffer_16_bit_access: bool,
+    pub uniform_and_storage_buffer_16_bit_access: bool,
+    pub storage_push_constant_16: bool,
+    pub storage_input_output_16: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevice16BitStorageFeatures {
@@ -26,12 +34,15 @@ pub struct RawVkPhysicalDevice16BitStorageFeatures {
     pub storage_input_output_16: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDevice16BitStorageFeatures {
-    pub storage_buffer_16_bit_access: bool,
-    pub uniform_and_storage_buffer_16_bit_access: bool,
-    pub storage_push_constant_16: bool,
-    pub storage_input_output_16: bool,
+impl VkWrappedType<RawVkPhysicalDevice16BitStorageFeatures> for VkPhysicalDevice16BitStorageFeatures {
+    fn vk_to_raw(src: &VkPhysicalDevice16BitStorageFeatures, dst: &mut RawVkPhysicalDevice16BitStorageFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevice16bitStorageFeatures);
+        dst.next = ptr::null();
+        dst.storage_buffer_16_bit_access = vk_to_raw_value(&src.storage_buffer_16_bit_access);
+        dst.uniform_and_storage_buffer_16_bit_access = vk_to_raw_value(&src.uniform_and_storage_buffer_16_bit_access);
+        dst.storage_push_constant_16 = vk_to_raw_value(&src.storage_push_constant_16);
+        dst.storage_input_output_16 = vk_to_raw_value(&src.storage_input_output_16);
+    }
 }
 
 impl VkRawType<VkPhysicalDevice16BitStorageFeatures> for RawVkPhysicalDevice16BitStorageFeatures {
@@ -42,17 +53,6 @@ impl VkRawType<VkPhysicalDevice16BitStorageFeatures> for RawVkPhysicalDevice16Bi
             storage_push_constant_16: u32::vk_to_wrapped(&src.storage_push_constant_16),
             storage_input_output_16: u32::vk_to_wrapped(&src.storage_input_output_16),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDevice16BitStorageFeatures> for VkPhysicalDevice16BitStorageFeatures {
-    fn vk_to_raw(src: &VkPhysicalDevice16BitStorageFeatures, dst: &mut RawVkPhysicalDevice16BitStorageFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevice16bitStorageFeatures);
-        dst.next = ptr::null();
-        dst.storage_buffer_16_bit_access = vk_to_raw_value(&src.storage_buffer_16_bit_access);
-        dst.uniform_and_storage_buffer_16_bit_access = vk_to_raw_value(&src.uniform_and_storage_buffer_16_bit_access);
-        dst.storage_push_constant_16 = vk_to_raw_value(&src.storage_push_constant_16);
-        dst.storage_input_output_16 = vk_to_raw_value(&src.storage_input_output_16);
     }
 }
 

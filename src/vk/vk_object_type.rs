@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkObjectType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkObjectType {
@@ -47,17 +45,19 @@ pub enum VkObjectType {
     AccelerationStructureNv = 1000165000,
 }
 
+pub type RawVkObjectType = i32;
+
+impl VkWrappedType<RawVkObjectType> for VkObjectType {
+    fn vk_to_raw(src: &VkObjectType, dst: &mut RawVkObjectType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkObjectType> for RawVkObjectType {
     fn vk_to_wrapped(src: &RawVkObjectType) -> VkObjectType {
         unsafe {
             *((src as *const i32) as *const VkObjectType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkObjectType> for VkObjectType {
-    fn vk_to_raw(src: &VkObjectType, dst: &mut RawVkObjectType) {
-        *dst = *src as i32
     }
 }
 

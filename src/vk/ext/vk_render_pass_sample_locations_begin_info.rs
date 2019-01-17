@@ -17,6 +17,16 @@ use vk::vk_structure_type::*;
 use vk::ext::vk_attachment_sample_locations::*;
 use vk::ext::vk_subpass_sample_locations::*;
 
+#[derive(Debug, Clone)]
+pub struct VkRenderPassSampleLocationsBeginInfo<'a, 'b, 'c, 'd>
+    where
+        'b: 'a,
+        'd: 'c,
+{
+    pub attachment_initial_sample_locations: &'a [VkAttachmentSampleLocations<'b>],
+    pub post_subpass_sample_locations: &'c [VkSubpassSampleLocations<'d>],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassSampleLocationsBeginInfo {
@@ -26,16 +36,6 @@ pub struct RawVkRenderPassSampleLocationsBeginInfo {
     pub attachment_initial_sample_locations: *mut RawVkAttachmentSampleLocations,
     pub post_subpass_sample_locations_count: u32,
     pub post_subpass_sample_locations: *mut RawVkSubpassSampleLocations,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkRenderPassSampleLocationsBeginInfo<'a, 'b, 'c, 'd>
-    where
-        'b: 'a,
-        'd: 'c,
-{
-    pub attachment_initial_sample_locations: &'a [VkAttachmentSampleLocations<'b>],
-    pub post_subpass_sample_locations: &'c [VkSubpassSampleLocations<'d>],
 }
 
 impl<'a, 'b, 'c, 'd> VkWrappedType<RawVkRenderPassSampleLocationsBeginInfo> for VkRenderPassSampleLocationsBeginInfo<'a, 'b, 'c, 'd>

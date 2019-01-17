@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkStructureType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkStructureType {
@@ -322,17 +320,19 @@ pub enum VkStructureType {
     ValidationFeaturesExt = 1000247000,
 }
 
+pub type RawVkStructureType = i32;
+
+impl VkWrappedType<RawVkStructureType> for VkStructureType {
+    fn vk_to_raw(src: &VkStructureType, dst: &mut RawVkStructureType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkStructureType> for RawVkStructureType {
     fn vk_to_wrapped(src: &RawVkStructureType) -> VkStructureType {
         unsafe {
             *((src as *const i32) as *const VkStructureType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkStructureType> for VkStructureType {
-    fn vk_to_raw(src: &VkStructureType, dst: &mut RawVkStructureType) {
-        *dst = *src as i32
     }
 }
 

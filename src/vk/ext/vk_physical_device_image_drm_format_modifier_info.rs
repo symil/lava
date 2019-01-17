@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_sharing_mode::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceImageDrmFormatModifierInfo<'a> {
+    pub drm_format_modifier: usize,
+    pub sharing_mode: VkSharingMode,
+    pub queue_family_indices: &'a [usize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceImageDrmFormatModifierInfo {
@@ -25,13 +32,6 @@ pub struct RawVkPhysicalDeviceImageDrmFormatModifierInfo {
     pub sharing_mode: RawVkSharingMode,
     pub queue_family_index_count: u32,
     pub queue_family_indices: *mut u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceImageDrmFormatModifierInfo<'a> {
-    pub drm_format_modifier: usize,
-    pub sharing_mode: VkSharingMode,
-    pub queue_family_indices: &'a [usize],
 }
 
 impl<'a> VkWrappedType<RawVkPhysicalDeviceImageDrmFormatModifierInfo> for VkPhysicalDeviceImageDrmFormatModifierInfo<'a> {

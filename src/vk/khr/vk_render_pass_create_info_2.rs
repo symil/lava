@@ -19,22 +19,6 @@ use vk::khr::vk_attachment_description_2::*;
 use vk::khr::vk_subpass_description_2::*;
 use vk::khr::vk_subpass_dependency_2::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkRenderPassCreateInfo2 {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub flags: RawVkRenderPassCreateFlags,
-    pub attachment_count: u32,
-    pub attachments: *mut RawVkAttachmentDescription2,
-    pub subpass_count: u32,
-    pub subpasses: *mut RawVkSubpassDescription2,
-    pub dependency_count: u32,
-    pub dependencies: *mut RawVkSubpassDependency2,
-    pub correlated_view_mask_count: u32,
-    pub correlated_view_masks: *const u32,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkRenderPassCreateInfo2<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>
     where
@@ -49,6 +33,22 @@ pub struct VkRenderPassCreateInfo2<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>
     pub subpasses: &'b [VkSubpassDescription2<'c, 'd, 'e, 'f, 'g>],
     pub dependencies: &'h [VkSubpassDependency2],
     pub correlated_view_masks: &'i [u32],
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkRenderPassCreateInfo2 {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkRenderPassCreateFlags,
+    pub attachment_count: u32,
+    pub attachments: *mut RawVkAttachmentDescription2,
+    pub subpass_count: u32,
+    pub subpasses: *mut RawVkSubpassDescription2,
+    pub dependency_count: u32,
+    pub dependencies: *mut RawVkSubpassDependency2,
+    pub correlated_view_mask_count: u32,
+    pub correlated_view_masks: *const u32,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i> VkWrappedType<RawVkRenderPassCreateInfo2> for VkRenderPassCreateInfo2<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>

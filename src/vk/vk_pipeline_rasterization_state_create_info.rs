@@ -19,6 +19,21 @@ use vk::vk_polygon_mode::*;
 use vk::vk_cull_mode_flags::*;
 use vk::vk_front_face::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineRasterizationStateCreateInfo {
+    pub flags: VkPipelineRasterizationStateCreateFlags,
+    pub depth_clamp_enable: bool,
+    pub rasterizer_discard_enable: bool,
+    pub polygon_mode: VkPolygonMode,
+    pub cull_mode: VkCullModeFlags,
+    pub front_face: VkFrontFace,
+    pub depth_bias_enable: bool,
+    pub depth_bias_constant_factor: f32,
+    pub depth_bias_clamp: f32,
+    pub depth_bias_slope_factor: f32,
+    pub line_width: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationStateCreateInfo {
@@ -37,19 +52,22 @@ pub struct RawVkPipelineRasterizationStateCreateInfo {
     pub line_width: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineRasterizationStateCreateInfo {
-    pub flags: VkPipelineRasterizationStateCreateFlags,
-    pub depth_clamp_enable: bool,
-    pub rasterizer_discard_enable: bool,
-    pub polygon_mode: VkPolygonMode,
-    pub cull_mode: VkCullModeFlags,
-    pub front_face: VkFrontFace,
-    pub depth_bias_enable: bool,
-    pub depth_bias_constant_factor: f32,
-    pub depth_bias_clamp: f32,
-    pub depth_bias_slope_factor: f32,
-    pub line_width: f32,
+impl VkWrappedType<RawVkPipelineRasterizationStateCreateInfo> for VkPipelineRasterizationStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineRasterizationStateCreateInfo, dst: &mut RawVkPipelineRasterizationStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.depth_clamp_enable = vk_to_raw_value(&src.depth_clamp_enable);
+        dst.rasterizer_discard_enable = vk_to_raw_value(&src.rasterizer_discard_enable);
+        dst.polygon_mode = vk_to_raw_value(&src.polygon_mode);
+        dst.cull_mode = vk_to_raw_value(&src.cull_mode);
+        dst.front_face = vk_to_raw_value(&src.front_face);
+        dst.depth_bias_enable = vk_to_raw_value(&src.depth_bias_enable);
+        dst.depth_bias_constant_factor = src.depth_bias_constant_factor;
+        dst.depth_bias_clamp = src.depth_bias_clamp;
+        dst.depth_bias_slope_factor = src.depth_bias_slope_factor;
+        dst.line_width = src.line_width;
+    }
 }
 
 impl VkRawType<VkPipelineRasterizationStateCreateInfo> for RawVkPipelineRasterizationStateCreateInfo {
@@ -67,24 +85,6 @@ impl VkRawType<VkPipelineRasterizationStateCreateInfo> for RawVkPipelineRasteriz
             depth_bias_slope_factor: src.depth_bias_slope_factor,
             line_width: src.line_width,
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineRasterizationStateCreateInfo> for VkPipelineRasterizationStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineRasterizationStateCreateInfo, dst: &mut RawVkPipelineRasterizationStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.depth_clamp_enable = vk_to_raw_value(&src.depth_clamp_enable);
-        dst.rasterizer_discard_enable = vk_to_raw_value(&src.rasterizer_discard_enable);
-        dst.polygon_mode = vk_to_raw_value(&src.polygon_mode);
-        dst.cull_mode = vk_to_raw_value(&src.cull_mode);
-        dst.front_face = vk_to_raw_value(&src.front_face);
-        dst.depth_bias_enable = vk_to_raw_value(&src.depth_bias_enable);
-        dst.depth_bias_constant_factor = src.depth_bias_constant_factor;
-        dst.depth_bias_clamp = src.depth_bias_clamp;
-        dst.depth_bias_slope_factor = src.depth_bias_slope_factor;
-        dst.line_width = src.line_width;
     }
 }
 

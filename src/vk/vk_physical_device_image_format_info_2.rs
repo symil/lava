@@ -20,6 +20,15 @@ use vk::vk_image_tiling::*;
 use vk::vk_image_usage_flags::*;
 use vk::vk_image_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceImageFormatInfo2 {
+    pub format: VkFormat,
+    pub type_: VkImageType,
+    pub tiling: VkImageTiling,
+    pub usage: VkImageUsageFlags,
+    pub flags: VkImageCreateFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceImageFormatInfo2 {
@@ -32,13 +41,16 @@ pub struct RawVkPhysicalDeviceImageFormatInfo2 {
     pub flags: RawVkImageCreateFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceImageFormatInfo2 {
-    pub format: VkFormat,
-    pub type_: VkImageType,
-    pub tiling: VkImageTiling,
-    pub usage: VkImageUsageFlags,
-    pub flags: VkImageCreateFlags,
+impl VkWrappedType<RawVkPhysicalDeviceImageFormatInfo2> for VkPhysicalDeviceImageFormatInfo2 {
+    fn vk_to_raw(src: &VkPhysicalDeviceImageFormatInfo2, dst: &mut RawVkPhysicalDeviceImageFormatInfo2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceImageFormatInfo2);
+        dst.next = ptr::null();
+        dst.format = vk_to_raw_value(&src.format);
+        dst.type_ = vk_to_raw_value(&src.type_);
+        dst.tiling = vk_to_raw_value(&src.tiling);
+        dst.usage = vk_to_raw_value(&src.usage);
+        dst.flags = vk_to_raw_value(&src.flags);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceImageFormatInfo2> for RawVkPhysicalDeviceImageFormatInfo2 {
@@ -50,18 +62,6 @@ impl VkRawType<VkPhysicalDeviceImageFormatInfo2> for RawVkPhysicalDeviceImageFor
             usage: RawVkImageUsageFlags::vk_to_wrapped(&src.usage),
             flags: RawVkImageCreateFlags::vk_to_wrapped(&src.flags),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceImageFormatInfo2> for VkPhysicalDeviceImageFormatInfo2 {
-    fn vk_to_raw(src: &VkPhysicalDeviceImageFormatInfo2, dst: &mut RawVkPhysicalDeviceImageFormatInfo2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceImageFormatInfo2);
-        dst.next = ptr::null();
-        dst.format = vk_to_raw_value(&src.format);
-        dst.type_ = vk_to_raw_value(&src.type_);
-        dst.tiling = vk_to_raw_value(&src.tiling);
-        dst.usage = vk_to_raw_value(&src.usage);
-        dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 

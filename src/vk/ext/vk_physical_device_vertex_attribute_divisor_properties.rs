@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceVertexAttributeDivisorProperties {
+    pub max_vertex_attrib_divisor: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVertexAttributeDivisorProperties {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceVertexAttributeDivisorProperties {
     pub max_vertex_attrib_divisor: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceVertexAttributeDivisorProperties {
-    pub max_vertex_attrib_divisor: usize,
+impl VkWrappedType<RawVkPhysicalDeviceVertexAttributeDivisorProperties> for VkPhysicalDeviceVertexAttributeDivisorProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceVertexAttributeDivisorProperties, dst: &mut RawVkPhysicalDeviceVertexAttributeDivisorProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVertexAttributeDivisorPropertiesExt);
+        dst.next = ptr::null();
+        dst.max_vertex_attrib_divisor = vk_to_raw_value(&src.max_vertex_attrib_divisor);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceVertexAttributeDivisorProperties> for RawVkPhysicalDeviceVertexAttributeDivisorProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceVertexAttributeDivisorProperties> for RawVkPhysic
         VkPhysicalDeviceVertexAttributeDivisorProperties {
             max_vertex_attrib_divisor: u32::vk_to_wrapped(&src.max_vertex_attrib_divisor),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceVertexAttributeDivisorProperties> for VkPhysicalDeviceVertexAttributeDivisorProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceVertexAttributeDivisorProperties, dst: &mut RawVkPhysicalDeviceVertexAttributeDivisorProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVertexAttributeDivisorPropertiesExt);
-        dst.next = ptr::null();
-        dst.max_vertex_attrib_divisor = vk_to_raw_value(&src.max_vertex_attrib_divisor);
     }
 }
 

@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDebugUtilsMessengerCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessengerCreateFlags {
     
+}
+
+pub type RawVkDebugUtilsMessengerCreateFlags = u32;
+
+impl VkWrappedType<RawVkDebugUtilsMessengerCreateFlags> for VkDebugUtilsMessengerCreateFlags {
+    fn vk_to_raw(src: &VkDebugUtilsMessengerCreateFlags, dst: &mut RawVkDebugUtilsMessengerCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkDebugUtilsMessengerCreateFlags> for RawVkDebugUtilsMessengerCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkDebugUtilsMessengerCreateFlags> for RawVkDebugUtilsMessengerCre
         VkDebugUtilsMessengerCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkDebugUtilsMessengerCreateFlags> for VkDebugUtilsMessengerCreateFlags {
-    fn vk_to_raw(src: &VkDebugUtilsMessengerCreateFlags, dst: &mut RawVkDebugUtilsMessengerCreateFlags) {
-        *dst = 0;
     }
 }
 

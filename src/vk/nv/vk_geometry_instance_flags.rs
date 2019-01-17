@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkGeometryInstanceFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkGeometryInstanceFlags {
     pub triangle_cull_disable: bool,
     pub triangle_front_counterclockwise: bool,
     pub force_opaque: bool,
     pub force_no_opaque: bool,
+}
+
+pub type RawVkGeometryInstanceFlags = u32;
+
+impl VkWrappedType<RawVkGeometryInstanceFlags> for VkGeometryInstanceFlags {
+    fn vk_to_raw(src: &VkGeometryInstanceFlags, dst: &mut RawVkGeometryInstanceFlags) {
+        *dst = 0;
+        if src.triangle_cull_disable { *dst |= 0x00000001; }
+        if src.triangle_front_counterclockwise { *dst |= 0x00000002; }
+        if src.force_opaque { *dst |= 0x00000004; }
+        if src.force_no_opaque { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkGeometryInstanceFlags> for RawVkGeometryInstanceFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkGeometryInstanceFlags> for RawVkGeometryInstanceFlags {
             force_opaque: (src & 0x00000004) != 0,
             force_no_opaque: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkGeometryInstanceFlags> for VkGeometryInstanceFlags {
-    fn vk_to_raw(src: &VkGeometryInstanceFlags, dst: &mut RawVkGeometryInstanceFlags) {
-        *dst = 0;
-        if src.triangle_cull_disable { *dst |= 0x00000001; }
-        if src.triangle_front_counterclockwise { *dst |= 0x00000002; }
-        if src.force_opaque { *dst |= 0x00000004; }
-        if src.force_no_opaque { *dst |= 0x00000008; }
     }
 }
 

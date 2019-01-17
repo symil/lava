@@ -2,14 +2,24 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkColorComponentFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkColorComponentFlags {
     pub r: bool,
     pub g: bool,
     pub b: bool,
     pub a: bool,
+}
+
+pub type RawVkColorComponentFlags = u32;
+
+impl VkWrappedType<RawVkColorComponentFlags> for VkColorComponentFlags {
+    fn vk_to_raw(src: &VkColorComponentFlags, dst: &mut RawVkColorComponentFlags) {
+        *dst = 0;
+        if src.r { *dst |= 0x00000001; }
+        if src.g { *dst |= 0x00000002; }
+        if src.b { *dst |= 0x00000004; }
+        if src.a { *dst |= 0x00000008; }
+    }
 }
 
 impl VkRawType<VkColorComponentFlags> for RawVkColorComponentFlags {
@@ -20,16 +30,6 @@ impl VkRawType<VkColorComponentFlags> for RawVkColorComponentFlags {
             b: (src & 0x00000004) != 0,
             a: (src & 0x00000008) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkColorComponentFlags> for VkColorComponentFlags {
-    fn vk_to_raw(src: &VkColorComponentFlags, dst: &mut RawVkColorComponentFlags) {
-        *dst = 0;
-        if src.r { *dst |= 0x00000001; }
-        if src.g { *dst |= 0x00000002; }
-        if src.b { *dst |= 0x00000004; }
-        if src.a { *dst |= 0x00000008; }
     }
 }
 

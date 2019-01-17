@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCoverageModulationMode = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkCoverageModulationMode {
@@ -13,17 +11,19 @@ pub enum VkCoverageModulationMode {
     Rgba = 3,
 }
 
+pub type RawVkCoverageModulationMode = i32;
+
+impl VkWrappedType<RawVkCoverageModulationMode> for VkCoverageModulationMode {
+    fn vk_to_raw(src: &VkCoverageModulationMode, dst: &mut RawVkCoverageModulationMode) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkCoverageModulationMode> for RawVkCoverageModulationMode {
     fn vk_to_wrapped(src: &RawVkCoverageModulationMode) -> VkCoverageModulationMode {
         unsafe {
             *((src as *const i32) as *const VkCoverageModulationMode)
         }
-    }
-}
-
-impl VkWrappedType<RawVkCoverageModulationMode> for VkCoverageModulationMode {
-    fn vk_to_raw(src: &VkCoverageModulationMode, dst: &mut RawVkCoverageModulationMode) {
-        *dst = *src as i32
     }
 }
 

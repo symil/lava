@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_vertex_input_binding_divisor_description::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineVertexInputDivisorStateCreateInfo<'a> {
+    pub vertex_binding_divisors: &'a [VkVertexInputBindingDivisorDescription],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineVertexInputDivisorStateCreateInfo {
@@ -23,11 +28,6 @@ pub struct RawVkPipelineVertexInputDivisorStateCreateInfo {
     pub next: *const c_void,
     pub vertex_binding_divisor_count: u32,
     pub vertex_binding_divisors: *mut RawVkVertexInputBindingDivisorDescription,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineVertexInputDivisorStateCreateInfo<'a> {
-    pub vertex_binding_divisors: &'a [VkVertexInputBindingDivisorDescription],
 }
 
 impl<'a> VkWrappedType<RawVkPipelineVertexInputDivisorStateCreateInfo> for VkPipelineVertexInputDivisorStateCreateInfo<'a> {

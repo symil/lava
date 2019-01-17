@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceMaintenance3Properties {
+    pub max_per_set_descriptors: usize,
+    pub max_memory_allocation_size: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMaintenance3Properties {
@@ -24,10 +30,13 @@ pub struct RawVkPhysicalDeviceMaintenance3Properties {
     pub max_memory_allocation_size: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceMaintenance3Properties {
-    pub max_per_set_descriptors: usize,
-    pub max_memory_allocation_size: usize,
+impl VkWrappedType<RawVkPhysicalDeviceMaintenance3Properties> for VkPhysicalDeviceMaintenance3Properties {
+    fn vk_to_raw(src: &VkPhysicalDeviceMaintenance3Properties, dst: &mut RawVkPhysicalDeviceMaintenance3Properties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMaintenance3Properties);
+        dst.next = ptr::null();
+        dst.max_per_set_descriptors = vk_to_raw_value(&src.max_per_set_descriptors);
+        dst.max_memory_allocation_size = vk_to_raw_value(&src.max_memory_allocation_size);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceMaintenance3Properties> for RawVkPhysicalDeviceMaintenance3Properties {
@@ -36,15 +45,6 @@ impl VkRawType<VkPhysicalDeviceMaintenance3Properties> for RawVkPhysicalDeviceMa
             max_per_set_descriptors: u32::vk_to_wrapped(&src.max_per_set_descriptors),
             max_memory_allocation_size: u64::vk_to_wrapped(&src.max_memory_allocation_size),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceMaintenance3Properties> for VkPhysicalDeviceMaintenance3Properties {
-    fn vk_to_raw(src: &VkPhysicalDeviceMaintenance3Properties, dst: &mut RawVkPhysicalDeviceMaintenance3Properties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMaintenance3Properties);
-        dst.next = ptr::null();
-        dst.max_per_set_descriptors = vk_to_raw_value(&src.max_per_set_descriptors);
-        dst.max_memory_allocation_size = vk_to_raw_value(&src.max_memory_allocation_size);
     }
 }
 

@@ -19,18 +19,6 @@ use vk::vk_shader_stage_flags::*;
 use vk::vk_shader_module::*;
 use vk::vk_specialization_info::*;
 
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct RawVkPipelineShaderStageCreateInfo {
-    pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub flags: RawVkPipelineShaderStageCreateFlags,
-    pub stage: RawVkShaderStageFlags,
-    pub module: RawVkShaderModule,
-    pub name: *mut c_char,
-    pub specialization_info: *mut RawVkSpecializationInfo,
-}
-
 #[derive(Debug, Clone)]
 pub struct VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>
     where
@@ -42,6 +30,18 @@ pub struct VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>
     pub module: &'a VkShaderModule,
     pub name: &'b str,
     pub specialization_info: Option<&'c VkSpecializationInfo<'d, 'e>>,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct RawVkPipelineShaderStageCreateInfo {
+    pub s_type: RawVkStructureType,
+    pub next: *const c_void,
+    pub flags: RawVkPipelineShaderStageCreateFlags,
+    pub stage: RawVkShaderStageFlags,
+    pub module: RawVkShaderModule,
+    pub name: *mut c_char,
+    pub specialization_info: *mut RawVkSpecializationInfo,
 }
 
 impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkPipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>

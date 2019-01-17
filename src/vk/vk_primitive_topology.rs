@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkPrimitiveTopology = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPrimitiveTopology {
@@ -20,17 +18,19 @@ pub enum VkPrimitiveTopology {
     PatchList = 10,
 }
 
+pub type RawVkPrimitiveTopology = i32;
+
+impl VkWrappedType<RawVkPrimitiveTopology> for VkPrimitiveTopology {
+    fn vk_to_raw(src: &VkPrimitiveTopology, dst: &mut RawVkPrimitiveTopology) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkPrimitiveTopology> for RawVkPrimitiveTopology {
     fn vk_to_wrapped(src: &RawVkPrimitiveTopology) -> VkPrimitiveTopology {
         unsafe {
             *((src as *const i32) as *const VkPrimitiveTopology)
         }
-    }
-}
-
-impl VkWrappedType<RawVkPrimitiveTopology> for VkPrimitiveTopology {
-    fn vk_to_raw(src: &VkPrimitiveTopology, dst: &mut RawVkPrimitiveTopology) {
-        *dst = *src as i32
     }
 }
 

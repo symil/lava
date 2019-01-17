@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkValidationCacheCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkValidationCacheCreateFlags {
     
+}
+
+pub type RawVkValidationCacheCreateFlags = u32;
+
+impl VkWrappedType<RawVkValidationCacheCreateFlags> for VkValidationCacheCreateFlags {
+    fn vk_to_raw(src: &VkValidationCacheCreateFlags, dst: &mut RawVkValidationCacheCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkValidationCacheCreateFlags> for RawVkValidationCacheCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkValidationCacheCreateFlags> for RawVkValidationCacheCreateFlags
         VkValidationCacheCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkValidationCacheCreateFlags> for VkValidationCacheCreateFlags {
-    fn vk_to_raw(src: &VkValidationCacheCreateFlags, dst: &mut RawVkValidationCacheCreateFlags) {
-        *dst = 0;
     }
 }
 

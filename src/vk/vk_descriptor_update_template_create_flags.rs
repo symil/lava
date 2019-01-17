@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDescriptorUpdateTemplateCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorUpdateTemplateCreateFlags {
     
+}
+
+pub type RawVkDescriptorUpdateTemplateCreateFlags = u32;
+
+impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateFlags> for VkDescriptorUpdateTemplateCreateFlags {
+    fn vk_to_raw(src: &VkDescriptorUpdateTemplateCreateFlags, dst: &mut RawVkDescriptorUpdateTemplateCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkDescriptorUpdateTemplateCreateFlags> for RawVkDescriptorUpdateTemplateCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkDescriptorUpdateTemplateCreateFlags> for RawVkDescriptorUpdateT
         VkDescriptorUpdateTemplateCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateFlags> for VkDescriptorUpdateTemplateCreateFlags {
-    fn vk_to_raw(src: &VkDescriptorUpdateTemplateCreateFlags, dst: &mut RawVkDescriptorUpdateTemplateCreateFlags) {
-        *dst = 0;
     }
 }
 

@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGroupCommandBufferBeginInfo {
+    pub device_mask: u32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupCommandBufferBeginInfo {
@@ -23,9 +28,12 @@ pub struct RawVkDeviceGroupCommandBufferBeginInfo {
     pub device_mask: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceGroupCommandBufferBeginInfo {
-    pub device_mask: u32,
+impl VkWrappedType<RawVkDeviceGroupCommandBufferBeginInfo> for VkDeviceGroupCommandBufferBeginInfo {
+    fn vk_to_raw(src: &VkDeviceGroupCommandBufferBeginInfo, dst: &mut RawVkDeviceGroupCommandBufferBeginInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupCommandBufferBeginInfo);
+        dst.next = ptr::null();
+        dst.device_mask = src.device_mask;
+    }
 }
 
 impl VkRawType<VkDeviceGroupCommandBufferBeginInfo> for RawVkDeviceGroupCommandBufferBeginInfo {
@@ -33,14 +41,6 @@ impl VkRawType<VkDeviceGroupCommandBufferBeginInfo> for RawVkDeviceGroupCommandB
         VkDeviceGroupCommandBufferBeginInfo {
             device_mask: src.device_mask,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceGroupCommandBufferBeginInfo> for VkDeviceGroupCommandBufferBeginInfo {
-    fn vk_to_raw(src: &VkDeviceGroupCommandBufferBeginInfo, dst: &mut RawVkDeviceGroupCommandBufferBeginInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupCommandBufferBeginInfo);
-        dst.next = ptr::null();
-        dst.device_mask = src.device_mask;
     }
 }
 

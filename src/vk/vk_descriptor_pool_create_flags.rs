@@ -2,12 +2,20 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDescriptorPoolCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorPoolCreateFlags {
     pub free_descriptor_set: bool,
     pub update_after_bind_ext: bool,
+}
+
+pub type RawVkDescriptorPoolCreateFlags = u32;
+
+impl VkWrappedType<RawVkDescriptorPoolCreateFlags> for VkDescriptorPoolCreateFlags {
+    fn vk_to_raw(src: &VkDescriptorPoolCreateFlags, dst: &mut RawVkDescriptorPoolCreateFlags) {
+        *dst = 0;
+        if src.free_descriptor_set { *dst |= 0x00000001; }
+        if src.update_after_bind_ext { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkDescriptorPoolCreateFlags> for RawVkDescriptorPoolCreateFlags {
@@ -16,14 +24,6 @@ impl VkRawType<VkDescriptorPoolCreateFlags> for RawVkDescriptorPoolCreateFlags {
             free_descriptor_set: (src & 0x00000001) != 0,
             update_after_bind_ext: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorPoolCreateFlags> for VkDescriptorPoolCreateFlags {
-    fn vk_to_raw(src: &VkDescriptorPoolCreateFlags, dst: &mut RawVkDescriptorPoolCreateFlags) {
-        *dst = 0;
-        if src.free_descriptor_set { *dst |= 0x00000001; }
-        if src.update_after_bind_ext { *dst |= 0x00000002; }
     }
 }
 

@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_fence_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExportFenceCreateInfo {
+    pub handle_types: VkExternalFenceHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExportFenceCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkExportFenceCreateInfo {
     pub handle_types: RawVkExternalFenceHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExportFenceCreateInfo {
-    pub handle_types: VkExternalFenceHandleTypeFlags,
+impl VkWrappedType<RawVkExportFenceCreateInfo> for VkExportFenceCreateInfo {
+    fn vk_to_raw(src: &VkExportFenceCreateInfo, dst: &mut RawVkExportFenceCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ExportFenceCreateInfo);
+        dst.next = ptr::null();
+        dst.handle_types = vk_to_raw_value(&src.handle_types);
+    }
 }
 
 impl VkRawType<VkExportFenceCreateInfo> for RawVkExportFenceCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkExportFenceCreateInfo> for RawVkExportFenceCreateInfo {
         VkExportFenceCreateInfo {
             handle_types: RawVkExternalFenceHandleTypeFlags::vk_to_wrapped(&src.handle_types),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExportFenceCreateInfo> for VkExportFenceCreateInfo {
-    fn vk_to_raw(src: &VkExportFenceCreateInfo, dst: &mut RawVkExportFenceCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ExportFenceCreateInfo);
-        dst.next = ptr::null();
-        dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkImageLayout = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkImageLayout {
@@ -24,17 +22,19 @@ pub enum VkImageLayout {
     FragmentDensityMapOptimalExt = 1000218000,
 }
 
+pub type RawVkImageLayout = i32;
+
+impl VkWrappedType<RawVkImageLayout> for VkImageLayout {
+    fn vk_to_raw(src: &VkImageLayout, dst: &mut RawVkImageLayout) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkImageLayout> for RawVkImageLayout {
     fn vk_to_wrapped(src: &RawVkImageLayout) -> VkImageLayout {
         unsafe {
             *((src as *const i32) as *const VkImageLayout)
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageLayout> for VkImageLayout {
-    fn vk_to_raw(src: &VkImageLayout, dst: &mut RawVkImageLayout) {
-        *dst = *src as i32
     }
 }
 

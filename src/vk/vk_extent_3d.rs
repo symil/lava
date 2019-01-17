@@ -14,6 +14,13 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExtent3D {
+    pub width: u32,
+    pub height: u32,
+    pub depth: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExtent3D {
@@ -22,11 +29,12 @@ pub struct RawVkExtent3D {
     pub depth: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExtent3D {
-    pub width: u32,
-    pub height: u32,
-    pub depth: usize,
+impl VkWrappedType<RawVkExtent3D> for VkExtent3D {
+    fn vk_to_raw(src: &VkExtent3D, dst: &mut RawVkExtent3D) {
+        dst.width = src.width;
+        dst.height = src.height;
+        dst.depth = vk_to_raw_value(&src.depth);
+    }
 }
 
 impl VkRawType<VkExtent3D> for RawVkExtent3D {
@@ -36,14 +44,6 @@ impl VkRawType<VkExtent3D> for RawVkExtent3D {
             height: src.height,
             depth: u32::vk_to_wrapped(&src.depth),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExtent3D> for VkExtent3D {
-    fn vk_to_raw(src: &VkExtent3D, dst: &mut RawVkExtent3D) {
-        dst.width = src.width;
-        dst.height = src.height;
-        dst.depth = vk_to_raw_value(&src.depth);
     }
 }
 

@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkLogicOp = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkLogicOp {
@@ -25,17 +23,19 @@ pub enum VkLogicOp {
     Set = 15,
 }
 
+pub type RawVkLogicOp = i32;
+
+impl VkWrappedType<RawVkLogicOp> for VkLogicOp {
+    fn vk_to_raw(src: &VkLogicOp, dst: &mut RawVkLogicOp) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkLogicOp> for RawVkLogicOp {
     fn vk_to_wrapped(src: &RawVkLogicOp) -> VkLogicOp {
         unsafe {
             *((src as *const i32) as *const VkLogicOp)
         }
-    }
-}
-
-impl VkWrappedType<RawVkLogicOp> for VkLogicOp {
-    fn vk_to_raw(src: &VkLogicOp, dst: &mut RawVkLogicOp) {
-        *dst = *src as i32
     }
 }
 

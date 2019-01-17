@@ -18,6 +18,18 @@ use vk::vk_semaphore::*;
 use vk::khr::vk_swapchain::*;
 use vk::vk_result::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>
+    where
+        'b: 'a,
+        'd: 'c,
+{
+    pub wait_semaphores: &'a [&'b VkSemaphore],
+    pub swapchains: &'c [&'d VkSwapchain],
+    pub image_indices: &'e [usize],
+    pub results: Option<&'f [VkResult]>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentInfo {
@@ -29,18 +41,6 @@ pub struct RawVkPresentInfo {
     pub swapchains: *mut RawVkSwapchain,
     pub image_indices: *mut u32,
     pub results: *mut RawVkResult,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>
-    where
-        'b: 'a,
-        'd: 'c,
-{
-    pub wait_semaphores: &'a [&'b VkSemaphore],
-    pub swapchains: &'c [&'d VkSwapchain],
-    pub image_indices: &'e [usize],
-    pub results: Option<&'f [VkResult]>,
 }
 
 impl<'a, 'b, 'c, 'd, 'e, 'f> VkWrappedType<RawVkPresentInfo> for VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>

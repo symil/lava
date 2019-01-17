@@ -15,6 +15,15 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceInlineUniformBlockProperties {
+    pub max_inline_uniform_block_size: usize,
+    pub max_per_stage_descriptor_inline_uniform_blocks: usize,
+    pub max_per_stage_descriptor_update_after_bind_inline_uniform_blocks: usize,
+    pub max_descriptor_set_inline_uniform_blocks: usize,
+    pub max_descriptor_set_update_after_bind_inline_uniform_blocks: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceInlineUniformBlockProperties {
@@ -27,13 +36,16 @@ pub struct RawVkPhysicalDeviceInlineUniformBlockProperties {
     pub max_descriptor_set_update_after_bind_inline_uniform_blocks: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceInlineUniformBlockProperties {
-    pub max_inline_uniform_block_size: usize,
-    pub max_per_stage_descriptor_inline_uniform_blocks: usize,
-    pub max_per_stage_descriptor_update_after_bind_inline_uniform_blocks: usize,
-    pub max_descriptor_set_inline_uniform_blocks: usize,
-    pub max_descriptor_set_update_after_bind_inline_uniform_blocks: usize,
+impl VkWrappedType<RawVkPhysicalDeviceInlineUniformBlockProperties> for VkPhysicalDeviceInlineUniformBlockProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceInlineUniformBlockProperties, dst: &mut RawVkPhysicalDeviceInlineUniformBlockProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceInlineUniformBlockPropertiesExt);
+        dst.next = ptr::null();
+        dst.max_inline_uniform_block_size = vk_to_raw_value(&src.max_inline_uniform_block_size);
+        dst.max_per_stage_descriptor_inline_uniform_blocks = vk_to_raw_value(&src.max_per_stage_descriptor_inline_uniform_blocks);
+        dst.max_per_stage_descriptor_update_after_bind_inline_uniform_blocks = vk_to_raw_value(&src.max_per_stage_descriptor_update_after_bind_inline_uniform_blocks);
+        dst.max_descriptor_set_inline_uniform_blocks = vk_to_raw_value(&src.max_descriptor_set_inline_uniform_blocks);
+        dst.max_descriptor_set_update_after_bind_inline_uniform_blocks = vk_to_raw_value(&src.max_descriptor_set_update_after_bind_inline_uniform_blocks);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceInlineUniformBlockProperties> for RawVkPhysicalDeviceInlineUniformBlockProperties {
@@ -45,18 +57,6 @@ impl VkRawType<VkPhysicalDeviceInlineUniformBlockProperties> for RawVkPhysicalDe
             max_descriptor_set_inline_uniform_blocks: u32::vk_to_wrapped(&src.max_descriptor_set_inline_uniform_blocks),
             max_descriptor_set_update_after_bind_inline_uniform_blocks: u32::vk_to_wrapped(&src.max_descriptor_set_update_after_bind_inline_uniform_blocks),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceInlineUniformBlockProperties> for VkPhysicalDeviceInlineUniformBlockProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceInlineUniformBlockProperties, dst: &mut RawVkPhysicalDeviceInlineUniformBlockProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceInlineUniformBlockPropertiesExt);
-        dst.next = ptr::null();
-        dst.max_inline_uniform_block_size = vk_to_raw_value(&src.max_inline_uniform_block_size);
-        dst.max_per_stage_descriptor_inline_uniform_blocks = vk_to_raw_value(&src.max_per_stage_descriptor_inline_uniform_blocks);
-        dst.max_per_stage_descriptor_update_after_bind_inline_uniform_blocks = vk_to_raw_value(&src.max_per_stage_descriptor_update_after_bind_inline_uniform_blocks);
-        dst.max_descriptor_set_inline_uniform_blocks = vk_to_raw_value(&src.max_descriptor_set_inline_uniform_blocks);
-        dst.max_descriptor_set_update_after_bind_inline_uniform_blocks = vk_to_raw_value(&src.max_descriptor_set_update_after_bind_inline_uniform_blocks);
     }
 }
 

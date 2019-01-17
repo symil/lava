@@ -16,6 +16,15 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::nv::vk_ray_tracing_shader_group_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkRayTracingShaderGroupCreateInfo {
+    pub type_: VkRayTracingShaderGroupType,
+    pub general_shader: usize,
+    pub closest_hit_shader: usize,
+    pub any_hit_shader: usize,
+    pub intersection_shader: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRayTracingShaderGroupCreateInfo {
@@ -28,13 +37,16 @@ pub struct RawVkRayTracingShaderGroupCreateInfo {
     pub intersection_shader: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkRayTracingShaderGroupCreateInfo {
-    pub type_: VkRayTracingShaderGroupType,
-    pub general_shader: usize,
-    pub closest_hit_shader: usize,
-    pub any_hit_shader: usize,
-    pub intersection_shader: usize,
+impl VkWrappedType<RawVkRayTracingShaderGroupCreateInfo> for VkRayTracingShaderGroupCreateInfo {
+    fn vk_to_raw(src: &VkRayTracingShaderGroupCreateInfo, dst: &mut RawVkRayTracingShaderGroupCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::RayTracingShaderGroupCreateInfoNv);
+        dst.next = ptr::null();
+        dst.type_ = vk_to_raw_value(&src.type_);
+        dst.general_shader = vk_to_raw_value(&src.general_shader);
+        dst.closest_hit_shader = vk_to_raw_value(&src.closest_hit_shader);
+        dst.any_hit_shader = vk_to_raw_value(&src.any_hit_shader);
+        dst.intersection_shader = vk_to_raw_value(&src.intersection_shader);
+    }
 }
 
 impl VkRawType<VkRayTracingShaderGroupCreateInfo> for RawVkRayTracingShaderGroupCreateInfo {
@@ -46,18 +58,6 @@ impl VkRawType<VkRayTracingShaderGroupCreateInfo> for RawVkRayTracingShaderGroup
             any_hit_shader: u32::vk_to_wrapped(&src.any_hit_shader),
             intersection_shader: u32::vk_to_wrapped(&src.intersection_shader),
         }
-    }
-}
-
-impl VkWrappedType<RawVkRayTracingShaderGroupCreateInfo> for VkRayTracingShaderGroupCreateInfo {
-    fn vk_to_raw(src: &VkRayTracingShaderGroupCreateInfo, dst: &mut RawVkRayTracingShaderGroupCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::RayTracingShaderGroupCreateInfoNv);
-        dst.next = ptr::null();
-        dst.type_ = vk_to_raw_value(&src.type_);
-        dst.general_shader = vk_to_raw_value(&src.general_shader);
-        dst.closest_hit_shader = vk_to_raw_value(&src.closest_hit_shader);
-        dst.any_hit_shader = vk_to_raw_value(&src.any_hit_shader);
-        dst.intersection_shader = vk_to_raw_value(&src.intersection_shader);
     }
 }
 

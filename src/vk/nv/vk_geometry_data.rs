@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::nv::vk_geometry_triangles::*;
 use vk::nv::vk_geometry_aabb::*;
 
+#[derive(Debug, Clone)]
+pub struct VkGeometryData<'a, 'b, 'c, 'd> {
+    pub triangles: VkGeometryTriangles<'a, 'b, 'c>,
+    pub aabbs: VkGeometryAABB<'d>,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometryData {
     pub triangles: RawVkGeometryTriangles,
     pub aabbs: RawVkGeometryAABB,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkGeometryData<'a, 'b, 'c, 'd> {
-    pub triangles: VkGeometryTriangles<'a, 'b, 'c>,
-    pub aabbs: VkGeometryAABB<'d>,
 }
 
 impl<'a, 'b, 'c, 'd> VkWrappedType<RawVkGeometryData> for VkGeometryData<'a, 'b, 'c, 'd> {

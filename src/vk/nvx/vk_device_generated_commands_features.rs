@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGeneratedCommandsFeatures {
+    pub compute_binding_point_support: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGeneratedCommandsFeatures {
@@ -23,9 +28,12 @@ pub struct RawVkDeviceGeneratedCommandsFeatures {
     pub compute_binding_point_support: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDeviceGeneratedCommandsFeatures {
-    pub compute_binding_point_support: bool,
+impl VkWrappedType<RawVkDeviceGeneratedCommandsFeatures> for VkDeviceGeneratedCommandsFeatures {
+    fn vk_to_raw(src: &VkDeviceGeneratedCommandsFeatures, dst: &mut RawVkDeviceGeneratedCommandsFeatures) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGeneratedCommandsFeaturesNvx);
+        dst.next = ptr::null();
+        dst.compute_binding_point_support = vk_to_raw_value(&src.compute_binding_point_support);
+    }
 }
 
 impl VkRawType<VkDeviceGeneratedCommandsFeatures> for RawVkDeviceGeneratedCommandsFeatures {
@@ -33,14 +41,6 @@ impl VkRawType<VkDeviceGeneratedCommandsFeatures> for RawVkDeviceGeneratedComman
         VkDeviceGeneratedCommandsFeatures {
             compute_binding_point_support: u32::vk_to_wrapped(&src.compute_binding_point_support),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDeviceGeneratedCommandsFeatures> for VkDeviceGeneratedCommandsFeatures {
-    fn vk_to_raw(src: &VkDeviceGeneratedCommandsFeatures, dst: &mut RawVkDeviceGeneratedCommandsFeatures) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGeneratedCommandsFeaturesNvx);
-        dst.next = ptr::null();
-        dst.compute_binding_point_support = vk_to_raw_value(&src.compute_binding_point_support);
     }
 }
 

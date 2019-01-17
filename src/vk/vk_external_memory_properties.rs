@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_external_memory_feature_flags::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExternalMemoryProperties {
+    pub external_memory_features: VkExternalMemoryFeatureFlags,
+    pub export_from_imported_handle_types: VkExternalMemoryHandleTypeFlags,
+    pub compatible_handle_types: VkExternalMemoryHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalMemoryProperties {
@@ -24,11 +31,12 @@ pub struct RawVkExternalMemoryProperties {
     pub compatible_handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExternalMemoryProperties {
-    pub external_memory_features: VkExternalMemoryFeatureFlags,
-    pub export_from_imported_handle_types: VkExternalMemoryHandleTypeFlags,
-    pub compatible_handle_types: VkExternalMemoryHandleTypeFlags,
+impl VkWrappedType<RawVkExternalMemoryProperties> for VkExternalMemoryProperties {
+    fn vk_to_raw(src: &VkExternalMemoryProperties, dst: &mut RawVkExternalMemoryProperties) {
+        dst.external_memory_features = vk_to_raw_value(&src.external_memory_features);
+        dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
+        dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
+    }
 }
 
 impl VkRawType<VkExternalMemoryProperties> for RawVkExternalMemoryProperties {
@@ -38,14 +46,6 @@ impl VkRawType<VkExternalMemoryProperties> for RawVkExternalMemoryProperties {
             export_from_imported_handle_types: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.export_from_imported_handle_types),
             compatible_handle_types: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.compatible_handle_types),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalMemoryProperties> for VkExternalMemoryProperties {
-    fn vk_to_raw(src: &VkExternalMemoryProperties, dst: &mut RawVkExternalMemoryProperties) {
-        dst.external_memory_features = vk_to_raw_value(&src.external_memory_features);
-        dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
-        dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
     }
 }
 

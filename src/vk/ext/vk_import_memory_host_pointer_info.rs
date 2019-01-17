@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_external_memory_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImportMemoryHostPointerInfo {
+    pub handle_type: VkExternalMemoryHandleTypeFlags,
+    pub host_pointer: *const c_void,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportMemoryHostPointerInfo {
@@ -25,10 +31,13 @@ pub struct RawVkImportMemoryHostPointerInfo {
     pub host_pointer: *const c_void,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkImportMemoryHostPointerInfo {
-    pub handle_type: VkExternalMemoryHandleTypeFlags,
-    pub host_pointer: *const c_void,
+impl VkWrappedType<RawVkImportMemoryHostPointerInfo> for VkImportMemoryHostPointerInfo {
+    fn vk_to_raw(src: &VkImportMemoryHostPointerInfo, dst: &mut RawVkImportMemoryHostPointerInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ImportMemoryHostPointerInfoExt);
+        dst.next = ptr::null();
+        dst.handle_type = vk_to_raw_value(&src.handle_type);
+        dst.host_pointer = src.host_pointer;
+    }
 }
 
 impl VkRawType<VkImportMemoryHostPointerInfo> for RawVkImportMemoryHostPointerInfo {
@@ -37,15 +46,6 @@ impl VkRawType<VkImportMemoryHostPointerInfo> for RawVkImportMemoryHostPointerIn
             handle_type: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.handle_type),
             host_pointer: src.host_pointer,
         }
-    }
-}
-
-impl VkWrappedType<RawVkImportMemoryHostPointerInfo> for VkImportMemoryHostPointerInfo {
-    fn vk_to_raw(src: &VkImportMemoryHostPointerInfo, dst: &mut RawVkImportMemoryHostPointerInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ImportMemoryHostPointerInfoExt);
-        dst.next = ptr::null();
-        dst.handle_type = vk_to_raw_value(&src.handle_type);
-        dst.host_pointer = src.host_pointer;
     }
 }
 

@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkWriteDescriptorSetInlineUniformBlock<'a> {
+    pub data_size: usize,
+    pub data: &'a c_void,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSetInlineUniformBlock {
@@ -22,12 +28,6 @@ pub struct RawVkWriteDescriptorSetInlineUniformBlock {
     pub next: *const c_void,
     pub data_size: u32,
     pub data: *const c_void,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkWriteDescriptorSetInlineUniformBlock<'a> {
-    pub data_size: usize,
-    pub data: &'a c_void,
 }
 
 impl<'a> VkWrappedType<RawVkWriteDescriptorSetInlineUniformBlock> for VkWriteDescriptorSetInlineUniformBlock<'a> {

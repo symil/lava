@@ -2,12 +2,20 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkObjectEntryUsageFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkObjectEntryUsageFlags {
     pub graphics: bool,
     pub compute: bool,
+}
+
+pub type RawVkObjectEntryUsageFlags = u32;
+
+impl VkWrappedType<RawVkObjectEntryUsageFlags> for VkObjectEntryUsageFlags {
+    fn vk_to_raw(src: &VkObjectEntryUsageFlags, dst: &mut RawVkObjectEntryUsageFlags) {
+        *dst = 0;
+        if src.graphics { *dst |= 0x00000001; }
+        if src.compute { *dst |= 0x00000002; }
+    }
 }
 
 impl VkRawType<VkObjectEntryUsageFlags> for RawVkObjectEntryUsageFlags {
@@ -16,14 +24,6 @@ impl VkRawType<VkObjectEntryUsageFlags> for RawVkObjectEntryUsageFlags {
             graphics: (src & 0x00000001) != 0,
             compute: (src & 0x00000002) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkObjectEntryUsageFlags> for VkObjectEntryUsageFlags {
-    fn vk_to_raw(src: &VkObjectEntryUsageFlags, dst: &mut RawVkObjectEntryUsageFlags) {
-        *dst = 0;
-        if src.graphics { *dst |= 0x00000001; }
-        if src.compute { *dst |= 0x00000002; }
     }
 }
 

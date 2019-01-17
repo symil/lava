@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkFilter = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkFilter {
@@ -12,17 +10,19 @@ pub enum VkFilter {
     CubicImg = 1000015000,
 }
 
+pub type RawVkFilter = i32;
+
+impl VkWrappedType<RawVkFilter> for VkFilter {
+    fn vk_to_raw(src: &VkFilter, dst: &mut RawVkFilter) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkFilter> for RawVkFilter {
     fn vk_to_wrapped(src: &RawVkFilter) -> VkFilter {
         unsafe {
             *((src as *const i32) as *const VkFilter)
         }
-    }
-}
-
-impl VkWrappedType<RawVkFilter> for VkFilter {
-    fn vk_to_raw(src: &VkFilter, dst: &mut RawVkFilter) {
-        *dst = *src as i32
     }
 }
 

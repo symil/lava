@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPhysicalDeviceExternalMemoryHostProperties {
+    pub min_imported_host_pointer_alignment: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalMemoryHostProperties {
@@ -23,9 +28,12 @@ pub struct RawVkPhysicalDeviceExternalMemoryHostProperties {
     pub min_imported_host_pointer_alignment: u64,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceExternalMemoryHostProperties {
-    pub min_imported_host_pointer_alignment: usize,
+impl VkWrappedType<RawVkPhysicalDeviceExternalMemoryHostProperties> for VkPhysicalDeviceExternalMemoryHostProperties {
+    fn vk_to_raw(src: &VkPhysicalDeviceExternalMemoryHostProperties, dst: &mut RawVkPhysicalDeviceExternalMemoryHostProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalMemoryHostPropertiesExt);
+        dst.next = ptr::null();
+        dst.min_imported_host_pointer_alignment = vk_to_raw_value(&src.min_imported_host_pointer_alignment);
+    }
 }
 
 impl VkRawType<VkPhysicalDeviceExternalMemoryHostProperties> for RawVkPhysicalDeviceExternalMemoryHostProperties {
@@ -33,14 +41,6 @@ impl VkRawType<VkPhysicalDeviceExternalMemoryHostProperties> for RawVkPhysicalDe
         VkPhysicalDeviceExternalMemoryHostProperties {
             min_imported_host_pointer_alignment: u64::vk_to_wrapped(&src.min_imported_host_pointer_alignment),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPhysicalDeviceExternalMemoryHostProperties> for VkPhysicalDeviceExternalMemoryHostProperties {
-    fn vk_to_raw(src: &VkPhysicalDeviceExternalMemoryHostProperties, dst: &mut RawVkPhysicalDeviceExternalMemoryHostProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalMemoryHostPropertiesExt);
-        dst.next = ptr::null();
-        dst.min_imported_host_pointer_alignment = vk_to_raw_value(&src.min_imported_host_pointer_alignment);
     }
 }
 

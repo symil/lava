@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkQueryType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkQueryType {
@@ -14,17 +12,19 @@ pub enum VkQueryType {
     AccelerationStructureCompactedSizeNv = 1000165000,
 }
 
+pub type RawVkQueryType = i32;
+
+impl VkWrappedType<RawVkQueryType> for VkQueryType {
+    fn vk_to_raw(src: &VkQueryType, dst: &mut RawVkQueryType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkQueryType> for RawVkQueryType {
     fn vk_to_wrapped(src: &RawVkQueryType) -> VkQueryType {
         unsafe {
             *((src as *const i32) as *const VkQueryType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkQueryType> for VkQueryType {
-    fn vk_to_raw(src: &VkQueryType, dst: &mut RawVkQueryType) {
-        *dst = *src as i32
     }
 }
 

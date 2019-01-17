@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDescriptorSetLayoutSupport {
+    pub supported: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetLayoutSupport {
@@ -23,9 +28,12 @@ pub struct RawVkDescriptorSetLayoutSupport {
     pub supported: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDescriptorSetLayoutSupport {
-    pub supported: bool,
+impl VkWrappedType<RawVkDescriptorSetLayoutSupport> for VkDescriptorSetLayoutSupport {
+    fn vk_to_raw(src: &VkDescriptorSetLayoutSupport, dst: &mut RawVkDescriptorSetLayoutSupport) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetLayoutSupport);
+        dst.next = ptr::null();
+        dst.supported = vk_to_raw_value(&src.supported);
+    }
 }
 
 impl VkRawType<VkDescriptorSetLayoutSupport> for RawVkDescriptorSetLayoutSupport {
@@ -33,14 +41,6 @@ impl VkRawType<VkDescriptorSetLayoutSupport> for RawVkDescriptorSetLayoutSupport
         VkDescriptorSetLayoutSupport {
             supported: u32::vk_to_wrapped(&src.supported),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorSetLayoutSupport> for VkDescriptorSetLayoutSupport {
-    fn vk_to_raw(src: &VkDescriptorSetLayoutSupport, dst: &mut RawVkDescriptorSetLayoutSupport) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetLayoutSupport);
-        dst.next = ptr::null();
-        dst.supported = vk_to_raw_value(&src.supported);
     }
 }
 

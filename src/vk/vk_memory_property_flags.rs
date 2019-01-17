@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkMemoryPropertyFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryPropertyFlags {
     pub device_local: bool,
@@ -12,6 +10,20 @@ pub struct VkMemoryPropertyFlags {
     pub host_cached: bool,
     pub lazily_allocated: bool,
     pub protected: bool,
+}
+
+pub type RawVkMemoryPropertyFlags = u32;
+
+impl VkWrappedType<RawVkMemoryPropertyFlags> for VkMemoryPropertyFlags {
+    fn vk_to_raw(src: &VkMemoryPropertyFlags, dst: &mut RawVkMemoryPropertyFlags) {
+        *dst = 0;
+        if src.device_local { *dst |= 0x00000001; }
+        if src.host_visible { *dst |= 0x00000002; }
+        if src.host_coherent { *dst |= 0x00000004; }
+        if src.host_cached { *dst |= 0x00000008; }
+        if src.lazily_allocated { *dst |= 0x00000010; }
+        if src.protected { *dst |= 0x00000020; }
+    }
 }
 
 impl VkRawType<VkMemoryPropertyFlags> for RawVkMemoryPropertyFlags {
@@ -24,18 +36,6 @@ impl VkRawType<VkMemoryPropertyFlags> for RawVkMemoryPropertyFlags {
             lazily_allocated: (src & 0x00000010) != 0,
             protected: (src & 0x00000020) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryPropertyFlags> for VkMemoryPropertyFlags {
-    fn vk_to_raw(src: &VkMemoryPropertyFlags, dst: &mut RawVkMemoryPropertyFlags) {
-        *dst = 0;
-        if src.device_local { *dst |= 0x00000001; }
-        if src.host_visible { *dst |= 0x00000002; }
-        if src.host_coherent { *dst |= 0x00000004; }
-        if src.host_cached { *dst |= 0x00000008; }
-        if src.lazily_allocated { *dst |= 0x00000010; }
-        if src.protected { *dst |= 0x00000020; }
     }
 }
 

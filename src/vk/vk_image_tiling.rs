@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkImageTiling = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkImageTiling {
@@ -12,17 +10,19 @@ pub enum VkImageTiling {
     DrmFormatModifierExt = 1000158000,
 }
 
+pub type RawVkImageTiling = i32;
+
+impl VkWrappedType<RawVkImageTiling> for VkImageTiling {
+    fn vk_to_raw(src: &VkImageTiling, dst: &mut RawVkImageTiling) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkImageTiling> for RawVkImageTiling {
     fn vk_to_wrapped(src: &RawVkImageTiling) -> VkImageTiling {
         unsafe {
             *((src as *const i32) as *const VkImageTiling)
         }
-    }
-}
-
-impl VkWrappedType<RawVkImageTiling> for VkImageTiling {
-    fn vk_to_raw(src: &VkImageTiling, dst: &mut RawVkImageTiling) {
-        *dst = *src as i32
     }
 }
 

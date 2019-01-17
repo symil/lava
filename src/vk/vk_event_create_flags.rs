@@ -2,11 +2,17 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkEventCreateFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkEventCreateFlags {
     
+}
+
+pub type RawVkEventCreateFlags = u32;
+
+impl VkWrappedType<RawVkEventCreateFlags> for VkEventCreateFlags {
+    fn vk_to_raw(src: &VkEventCreateFlags, dst: &mut RawVkEventCreateFlags) {
+        *dst = 0;
+    }
 }
 
 impl VkRawType<VkEventCreateFlags> for RawVkEventCreateFlags {
@@ -14,12 +20,6 @@ impl VkRawType<VkEventCreateFlags> for RawVkEventCreateFlags {
         VkEventCreateFlags {
             
         }
-    }
-}
-
-impl VkWrappedType<RawVkEventCreateFlags> for VkEventCreateFlags {
-    fn vk_to_raw(src: &VkEventCreateFlags, dst: &mut RawVkEventCreateFlags) {
-        *dst = 0;
     }
 }
 

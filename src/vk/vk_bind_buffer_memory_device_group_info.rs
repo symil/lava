@@ -15,6 +15,11 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkBindBufferMemoryDeviceGroupInfo<'a> {
+    pub device_indices: &'a [usize],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindBufferMemoryDeviceGroupInfo {
@@ -22,11 +27,6 @@ pub struct RawVkBindBufferMemoryDeviceGroupInfo {
     pub next: *const c_void,
     pub device_index_count: u32,
     pub device_indices: *mut u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkBindBufferMemoryDeviceGroupInfo<'a> {
-    pub device_indices: &'a [usize],
 }
 
 impl<'a> VkWrappedType<RawVkBindBufferMemoryDeviceGroupInfo> for VkBindBufferMemoryDeviceGroupInfo<'a> {

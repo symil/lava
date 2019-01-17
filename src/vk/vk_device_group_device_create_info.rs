@@ -16,6 +16,14 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_physical_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDeviceGroupDeviceCreateInfo<'a, 'b>
+    where
+        'b: 'a,
+{
+    pub physical_devices: &'a [&'b VkPhysicalDevice],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupDeviceCreateInfo {
@@ -23,14 +31,6 @@ pub struct RawVkDeviceGroupDeviceCreateInfo {
     pub next: *const c_void,
     pub physical_device_count: u32,
     pub physical_devices: *mut RawVkPhysicalDevice,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDeviceGroupDeviceCreateInfo<'a, 'b>
-    where
-        'b: 'a,
-{
-    pub physical_devices: &'a [&'b VkPhysicalDevice],
 }
 
 impl<'a, 'b> VkWrappedType<RawVkDeviceGroupDeviceCreateInfo> for VkDeviceGroupDeviceCreateInfo<'a, 'b>

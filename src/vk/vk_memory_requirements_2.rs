@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_memory_requirements::*;
 
+#[derive(Debug, Clone)]
+pub struct VkMemoryRequirements2 {
+    pub memory_requirements: VkMemoryRequirements,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryRequirements2 {
@@ -24,9 +29,12 @@ pub struct RawVkMemoryRequirements2 {
     pub memory_requirements: RawVkMemoryRequirements,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkMemoryRequirements2 {
-    pub memory_requirements: VkMemoryRequirements,
+impl VkWrappedType<RawVkMemoryRequirements2> for VkMemoryRequirements2 {
+    fn vk_to_raw(src: &VkMemoryRequirements2, dst: &mut RawVkMemoryRequirements2) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryRequirements2);
+        dst.next = ptr::null();
+        dst.memory_requirements = vk_to_raw_value(&src.memory_requirements);
+    }
 }
 
 impl VkRawType<VkMemoryRequirements2> for RawVkMemoryRequirements2 {
@@ -34,14 +42,6 @@ impl VkRawType<VkMemoryRequirements2> for RawVkMemoryRequirements2 {
         VkMemoryRequirements2 {
             memory_requirements: RawVkMemoryRequirements::vk_to_wrapped(&src.memory_requirements),
         }
-    }
-}
-
-impl VkWrappedType<RawVkMemoryRequirements2> for VkMemoryRequirements2 {
-    fn vk_to_raw(src: &VkMemoryRequirements2, dst: &mut RawVkMemoryRequirements2) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::MemoryRequirements2);
-        dst.next = ptr::null();
-        dst.memory_requirements = vk_to_raw_value(&src.memory_requirements);
     }
 }
 

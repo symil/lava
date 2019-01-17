@@ -17,6 +17,12 @@ use vk::vk_structure_type::*;
 use vk::vk_pipeline_dynamic_state_create_flags::*;
 use vk::vk_dynamic_state::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineDynamicStateCreateInfo<'a> {
+    pub flags: VkPipelineDynamicStateCreateFlags,
+    pub dynamic_states: &'a [VkDynamicState],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineDynamicStateCreateInfo {
@@ -25,12 +31,6 @@ pub struct RawVkPipelineDynamicStateCreateInfo {
     pub flags: RawVkPipelineDynamicStateCreateFlags,
     pub dynamic_state_count: u32,
     pub dynamic_states: *mut RawVkDynamicState,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkPipelineDynamicStateCreateInfo<'a> {
-    pub flags: VkPipelineDynamicStateCreateFlags,
-    pub dynamic_states: &'a [VkDynamicState],
 }
 
 impl<'a> VkWrappedType<RawVkPipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfo<'a> {

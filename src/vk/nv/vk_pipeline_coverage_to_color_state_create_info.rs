@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::nv::vk_pipeline_coverage_to_color_state_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineCoverageToColorStateCreateInfo {
+    pub flags: VkPipelineCoverageToColorStateCreateFlags,
+    pub coverage_to_color_enable: bool,
+    pub coverage_to_color_location: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineCoverageToColorStateCreateInfo {
@@ -26,11 +33,14 @@ pub struct RawVkPipelineCoverageToColorStateCreateInfo {
     pub coverage_to_color_location: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineCoverageToColorStateCreateInfo {
-    pub flags: VkPipelineCoverageToColorStateCreateFlags,
-    pub coverage_to_color_enable: bool,
-    pub coverage_to_color_location: usize,
+impl VkWrappedType<RawVkPipelineCoverageToColorStateCreateInfo> for VkPipelineCoverageToColorStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineCoverageToColorStateCreateInfo, dst: &mut RawVkPipelineCoverageToColorStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineCoverageToColorStateCreateInfoNv);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.coverage_to_color_enable = vk_to_raw_value(&src.coverage_to_color_enable);
+        dst.coverage_to_color_location = vk_to_raw_value(&src.coverage_to_color_location);
+    }
 }
 
 impl VkRawType<VkPipelineCoverageToColorStateCreateInfo> for RawVkPipelineCoverageToColorStateCreateInfo {
@@ -40,16 +50,6 @@ impl VkRawType<VkPipelineCoverageToColorStateCreateInfo> for RawVkPipelineCovera
             coverage_to_color_enable: u32::vk_to_wrapped(&src.coverage_to_color_enable),
             coverage_to_color_location: u32::vk_to_wrapped(&src.coverage_to_color_location),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineCoverageToColorStateCreateInfo> for VkPipelineCoverageToColorStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineCoverageToColorStateCreateInfo, dst: &mut RawVkPipelineCoverageToColorStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineCoverageToColorStateCreateInfoNv);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.coverage_to_color_enable = vk_to_raw_value(&src.coverage_to_color_enable);
-        dst.coverage_to_color_location = vk_to_raw_value(&src.coverage_to_color_location);
     }
 }
 

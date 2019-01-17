@@ -17,6 +17,12 @@ use vk::vk_structure_type::*;
 use vk::vk_semaphore::*;
 use vk::vk_external_semaphore_handle_type_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkSemaphoreGetFdInfo<'a> {
+    pub semaphore: &'a VkSemaphore,
+    pub handle_type: VkExternalSemaphoreHandleTypeFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSemaphoreGetFdInfo {
@@ -24,12 +30,6 @@ pub struct RawVkSemaphoreGetFdInfo {
     pub next: *const c_void,
     pub semaphore: RawVkSemaphore,
     pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkSemaphoreGetFdInfo<'a> {
-    pub semaphore: &'a VkSemaphore,
-    pub handle_type: VkExternalSemaphoreHandleTypeFlags,
 }
 
 impl<'a> VkWrappedType<RawVkSemaphoreGetFdInfo> for VkSemaphoreGetFdInfo<'a> {

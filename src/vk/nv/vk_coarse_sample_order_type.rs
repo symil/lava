@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkCoarseSampleOrderType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkCoarseSampleOrderType {
@@ -13,17 +11,19 @@ pub enum VkCoarseSampleOrderType {
     SampleMajor = 3,
 }
 
+pub type RawVkCoarseSampleOrderType = i32;
+
+impl VkWrappedType<RawVkCoarseSampleOrderType> for VkCoarseSampleOrderType {
+    fn vk_to_raw(src: &VkCoarseSampleOrderType, dst: &mut RawVkCoarseSampleOrderType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkCoarseSampleOrderType> for RawVkCoarseSampleOrderType {
     fn vk_to_wrapped(src: &RawVkCoarseSampleOrderType) -> VkCoarseSampleOrderType {
         unsafe {
             *((src as *const i32) as *const VkCoarseSampleOrderType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkCoarseSampleOrderType> for VkCoarseSampleOrderType {
-    fn vk_to_raw(src: &VkCoarseSampleOrderType, dst: &mut RawVkCoarseSampleOrderType) {
-        *dst = *src as i32
     }
 }
 

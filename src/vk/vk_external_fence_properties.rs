@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_external_fence_handle_type_flags::*;
 use vk::vk_external_fence_feature_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkExternalFenceProperties {
+    pub export_from_imported_handle_types: VkExternalFenceHandleTypeFlags,
+    pub compatible_handle_types: VkExternalFenceHandleTypeFlags,
+    pub external_fence_features: VkExternalFenceFeatureFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalFenceProperties {
@@ -27,11 +34,14 @@ pub struct RawVkExternalFenceProperties {
     pub external_fence_features: RawVkExternalFenceFeatureFlags,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkExternalFenceProperties {
-    pub export_from_imported_handle_types: VkExternalFenceHandleTypeFlags,
-    pub compatible_handle_types: VkExternalFenceHandleTypeFlags,
-    pub external_fence_features: VkExternalFenceFeatureFlags,
+impl VkWrappedType<RawVkExternalFenceProperties> for VkExternalFenceProperties {
+    fn vk_to_raw(src: &VkExternalFenceProperties, dst: &mut RawVkExternalFenceProperties) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalFenceProperties);
+        dst.next = ptr::null();
+        dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
+        dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
+        dst.external_fence_features = vk_to_raw_value(&src.external_fence_features);
+    }
 }
 
 impl VkRawType<VkExternalFenceProperties> for RawVkExternalFenceProperties {
@@ -41,16 +51,6 @@ impl VkRawType<VkExternalFenceProperties> for RawVkExternalFenceProperties {
             compatible_handle_types: RawVkExternalFenceHandleTypeFlags::vk_to_wrapped(&src.compatible_handle_types),
             external_fence_features: RawVkExternalFenceFeatureFlags::vk_to_wrapped(&src.external_fence_features),
         }
-    }
-}
-
-impl VkWrappedType<RawVkExternalFenceProperties> for VkExternalFenceProperties {
-    fn vk_to_raw(src: &VkExternalFenceProperties, dst: &mut RawVkExternalFenceProperties) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::ExternalFenceProperties);
-        dst.next = ptr::null();
-        dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
-        dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
-        dst.external_fence_features = vk_to_raw_value(&src.external_fence_features);
     }
 }
 

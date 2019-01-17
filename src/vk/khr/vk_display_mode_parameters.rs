@@ -15,6 +15,12 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_extent_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayModeParameters {
+    pub visible_region: VkExtent2D,
+    pub refresh_rate: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayModeParameters {
@@ -22,10 +28,11 @@ pub struct RawVkDisplayModeParameters {
     pub refresh_rate: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDisplayModeParameters {
-    pub visible_region: VkExtent2D,
-    pub refresh_rate: usize,
+impl VkWrappedType<RawVkDisplayModeParameters> for VkDisplayModeParameters {
+    fn vk_to_raw(src: &VkDisplayModeParameters, dst: &mut RawVkDisplayModeParameters) {
+        dst.visible_region = vk_to_raw_value(&src.visible_region);
+        dst.refresh_rate = vk_to_raw_value(&src.refresh_rate);
+    }
 }
 
 impl VkRawType<VkDisplayModeParameters> for RawVkDisplayModeParameters {
@@ -34,13 +41,6 @@ impl VkRawType<VkDisplayModeParameters> for RawVkDisplayModeParameters {
             visible_region: RawVkExtent2D::vk_to_wrapped(&src.visible_region),
             refresh_rate: u32::vk_to_wrapped(&src.refresh_rate),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayModeParameters> for VkDisplayModeParameters {
-    fn vk_to_raw(src: &VkDisplayModeParameters, dst: &mut RawVkDisplayModeParameters) {
-        dst.visible_region = vk_to_raw_value(&src.visible_region);
-        dst.refresh_rate = vk_to_raw_value(&src.refresh_rate);
     }
 }
 

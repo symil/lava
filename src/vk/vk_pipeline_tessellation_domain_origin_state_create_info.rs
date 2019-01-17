@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_tessellation_domain_origin::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineTessellationDomainOriginStateCreateInfo {
+    pub domain_origin: VkTessellationDomainOrigin,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineTessellationDomainOriginStateCreateInfo {
@@ -24,9 +29,12 @@ pub struct RawVkPipelineTessellationDomainOriginStateCreateInfo {
     pub domain_origin: RawVkTessellationDomainOrigin,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineTessellationDomainOriginStateCreateInfo {
-    pub domain_origin: VkTessellationDomainOrigin,
+impl VkWrappedType<RawVkPipelineTessellationDomainOriginStateCreateInfo> for VkPipelineTessellationDomainOriginStateCreateInfo {
+    fn vk_to_raw(src: &VkPipelineTessellationDomainOriginStateCreateInfo, dst: &mut RawVkPipelineTessellationDomainOriginStateCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineTessellationDomainOriginStateCreateInfo);
+        dst.next = ptr::null();
+        dst.domain_origin = vk_to_raw_value(&src.domain_origin);
+    }
 }
 
 impl VkRawType<VkPipelineTessellationDomainOriginStateCreateInfo> for RawVkPipelineTessellationDomainOriginStateCreateInfo {
@@ -34,14 +42,6 @@ impl VkRawType<VkPipelineTessellationDomainOriginStateCreateInfo> for RawVkPipel
         VkPipelineTessellationDomainOriginStateCreateInfo {
             domain_origin: RawVkTessellationDomainOrigin::vk_to_wrapped(&src.domain_origin),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineTessellationDomainOriginStateCreateInfo> for VkPipelineTessellationDomainOriginStateCreateInfo {
-    fn vk_to_raw(src: &VkPipelineTessellationDomainOriginStateCreateInfo, dst: &mut RawVkPipelineTessellationDomainOriginStateCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineTessellationDomainOriginStateCreateInfo);
-        dst.next = ptr::null();
-        dst.domain_origin = vk_to_raw_value(&src.domain_origin);
     }
 }
 

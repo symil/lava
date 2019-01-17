@@ -14,6 +14,14 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkConformanceVersion {
+    pub major: u8,
+    pub minor: u8,
+    pub subminor: u8,
+    pub patch: u8,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkConformanceVersion {
@@ -23,12 +31,13 @@ pub struct RawVkConformanceVersion {
     pub patch: u8,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkConformanceVersion {
-    pub major: u8,
-    pub minor: u8,
-    pub subminor: u8,
-    pub patch: u8,
+impl VkWrappedType<RawVkConformanceVersion> for VkConformanceVersion {
+    fn vk_to_raw(src: &VkConformanceVersion, dst: &mut RawVkConformanceVersion) {
+        dst.major = src.major;
+        dst.minor = src.minor;
+        dst.subminor = src.subminor;
+        dst.patch = src.patch;
+    }
 }
 
 impl VkRawType<VkConformanceVersion> for RawVkConformanceVersion {
@@ -39,15 +48,6 @@ impl VkRawType<VkConformanceVersion> for RawVkConformanceVersion {
             subminor: src.subminor,
             patch: src.patch,
         }
-    }
-}
-
-impl VkWrappedType<RawVkConformanceVersion> for VkConformanceVersion {
-    fn vk_to_raw(src: &VkConformanceVersion, dst: &mut RawVkConformanceVersion) {
-        dst.major = src.major;
-        dst.minor = src.minor;
-        dst.subminor = src.subminor;
-        dst.patch = src.patch;
     }
 }
 

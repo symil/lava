@@ -17,6 +17,13 @@ use vk::vk_structure_type::*;
 use vk::vk_buffer::*;
 use vk::ext::vk_conditional_rendering_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkConditionalRenderingBeginInfo<'a> {
+    pub buffer: &'a VkBuffer,
+    pub offset: usize,
+    pub flags: VkConditionalRenderingFlags,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkConditionalRenderingBeginInfo {
@@ -25,13 +32,6 @@ pub struct RawVkConditionalRenderingBeginInfo {
     pub buffer: RawVkBuffer,
     pub offset: u64,
     pub flags: RawVkConditionalRenderingFlags,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkConditionalRenderingBeginInfo<'a> {
-    pub buffer: &'a VkBuffer,
-    pub offset: usize,
-    pub flags: VkConditionalRenderingFlags,
 }
 
 impl<'a> VkWrappedType<RawVkConditionalRenderingBeginInfo> for VkConditionalRenderingBeginInfo<'a> {

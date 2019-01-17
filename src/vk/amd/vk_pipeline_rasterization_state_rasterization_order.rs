@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::amd::vk_rasterization_order::*;
 
+#[derive(Debug, Clone)]
+pub struct VkPipelineRasterizationStateRasterizationOrder {
+    pub rasterization_order: VkRasterizationOrder,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationStateRasterizationOrder {
@@ -24,9 +29,12 @@ pub struct RawVkPipelineRasterizationStateRasterizationOrder {
     pub rasterization_order: RawVkRasterizationOrder,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkPipelineRasterizationStateRasterizationOrder {
-    pub rasterization_order: VkRasterizationOrder,
+impl VkWrappedType<RawVkPipelineRasterizationStateRasterizationOrder> for VkPipelineRasterizationStateRasterizationOrder {
+    fn vk_to_raw(src: &VkPipelineRasterizationStateRasterizationOrder, dst: &mut RawVkPipelineRasterizationStateRasterizationOrder) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateRasterizationOrderAmd);
+        dst.next = ptr::null();
+        dst.rasterization_order = vk_to_raw_value(&src.rasterization_order);
+    }
 }
 
 impl VkRawType<VkPipelineRasterizationStateRasterizationOrder> for RawVkPipelineRasterizationStateRasterizationOrder {
@@ -34,14 +42,6 @@ impl VkRawType<VkPipelineRasterizationStateRasterizationOrder> for RawVkPipeline
         VkPipelineRasterizationStateRasterizationOrder {
             rasterization_order: RawVkRasterizationOrder::vk_to_wrapped(&src.rasterization_order),
         }
-    }
-}
-
-impl VkWrappedType<RawVkPipelineRasterizationStateRasterizationOrder> for VkPipelineRasterizationStateRasterizationOrder {
-    fn vk_to_raw(src: &VkPipelineRasterizationStateRasterizationOrder, dst: &mut RawVkPipelineRasterizationStateRasterizationOrder) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateRasterizationOrderAmd);
-        dst.next = ptr::null();
-        dst.rasterization_order = vk_to_raw_value(&src.rasterization_order);
     }
 }
 

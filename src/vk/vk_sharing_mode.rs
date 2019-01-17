@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkSharingMode = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSharingMode {
@@ -11,17 +9,19 @@ pub enum VkSharingMode {
     Concurrent = 1,
 }
 
+pub type RawVkSharingMode = i32;
+
+impl VkWrappedType<RawVkSharingMode> for VkSharingMode {
+    fn vk_to_raw(src: &VkSharingMode, dst: &mut RawVkSharingMode) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkSharingMode> for RawVkSharingMode {
     fn vk_to_wrapped(src: &RawVkSharingMode) -> VkSharingMode {
         unsafe {
             *((src as *const i32) as *const VkSharingMode)
         }
-    }
-}
-
-impl VkWrappedType<RawVkSharingMode> for VkSharingMode {
-    fn vk_to_raw(src: &VkSharingMode, dst: &mut RawVkSharingMode) {
-        *dst = *src as i32
     }
 }
 

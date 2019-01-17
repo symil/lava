@@ -14,6 +14,16 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkViewport {
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
+    pub min_depth: f32,
+    pub max_depth: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkViewport {
@@ -25,14 +35,15 @@ pub struct RawVkViewport {
     pub max_depth: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkViewport {
-    pub x: f32,
-    pub y: f32,
-    pub width: f32,
-    pub height: f32,
-    pub min_depth: f32,
-    pub max_depth: f32,
+impl VkWrappedType<RawVkViewport> for VkViewport {
+    fn vk_to_raw(src: &VkViewport, dst: &mut RawVkViewport) {
+        dst.x = src.x;
+        dst.y = src.y;
+        dst.width = src.width;
+        dst.height = src.height;
+        dst.min_depth = src.min_depth;
+        dst.max_depth = src.max_depth;
+    }
 }
 
 impl VkRawType<VkViewport> for RawVkViewport {
@@ -45,17 +56,6 @@ impl VkRawType<VkViewport> for RawVkViewport {
             min_depth: src.min_depth,
             max_depth: src.max_depth,
         }
-    }
-}
-
-impl VkWrappedType<RawVkViewport> for VkViewport {
-    fn vk_to_raw(src: &VkViewport, dst: &mut RawVkViewport) {
-        dst.x = src.x;
-        dst.y = src.y;
-        dst.width = src.width;
-        dst.height = src.height;
-        dst.min_depth = src.min_depth;
-        dst.max_depth = src.max_depth;
     }
 }
 

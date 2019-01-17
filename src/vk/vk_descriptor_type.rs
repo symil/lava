@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkDescriptorType = i32;
-
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDescriptorType {
@@ -22,17 +20,19 @@ pub enum VkDescriptorType {
     AccelerationStructureNv = 1000165000,
 }
 
+pub type RawVkDescriptorType = i32;
+
+impl VkWrappedType<RawVkDescriptorType> for VkDescriptorType {
+    fn vk_to_raw(src: &VkDescriptorType, dst: &mut RawVkDescriptorType) {
+        *dst = *src as i32
+    }
+}
+
 impl VkRawType<VkDescriptorType> for RawVkDescriptorType {
     fn vk_to_wrapped(src: &RawVkDescriptorType) -> VkDescriptorType {
         unsafe {
             *((src as *const i32) as *const VkDescriptorType)
         }
-    }
-}
-
-impl VkWrappedType<RawVkDescriptorType> for VkDescriptorType {
-    fn vk_to_raw(src: &VkDescriptorType, dst: &mut RawVkDescriptorType) {
-        *dst = *src as i32
     }
 }
 

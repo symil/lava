@@ -2,8 +2,6 @@
 
 use utils::vk_traits::*;
 
-pub type RawVkBufferUsageFlags = u32;
-
 #[derive(Debug, Clone, Copy)]
 pub struct VkBufferUsageFlags {
     pub transfer_src: bool,
@@ -20,6 +18,28 @@ pub struct VkBufferUsageFlags {
     pub conditional_rendering_ext: bool,
     pub ray_tracing_nv: bool,
     pub shader_device_address_ext: bool,
+}
+
+pub type RawVkBufferUsageFlags = u32;
+
+impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
+    fn vk_to_raw(src: &VkBufferUsageFlags, dst: &mut RawVkBufferUsageFlags) {
+        *dst = 0;
+        if src.transfer_src { *dst |= 0x00000001; }
+        if src.transfer_dst { *dst |= 0x00000002; }
+        if src.uniform_texel_buffer { *dst |= 0x00000004; }
+        if src.storage_texel_buffer { *dst |= 0x00000008; }
+        if src.uniform_buffer { *dst |= 0x00000010; }
+        if src.storage_buffer { *dst |= 0x00000020; }
+        if src.index_buffer { *dst |= 0x00000040; }
+        if src.vertex_buffer { *dst |= 0x00000080; }
+        if src.indirect_buffer { *dst |= 0x00000100; }
+        if src.transform_feedback_buffer_ext { *dst |= 0x00000800; }
+        if src.transform_feedback_counter_buffer_ext { *dst |= 0x00001000; }
+        if src.conditional_rendering_ext { *dst |= 0x00000200; }
+        if src.ray_tracing_nv { *dst |= 0x00000400; }
+        if src.shader_device_address_ext { *dst |= 0x00020000; }
+    }
 }
 
 impl VkRawType<VkBufferUsageFlags> for RawVkBufferUsageFlags {
@@ -40,26 +60,6 @@ impl VkRawType<VkBufferUsageFlags> for RawVkBufferUsageFlags {
             ray_tracing_nv: (src & 0x00000400) != 0,
             shader_device_address_ext: (src & 0x00020000) != 0,
         }
-    }
-}
-
-impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
-    fn vk_to_raw(src: &VkBufferUsageFlags, dst: &mut RawVkBufferUsageFlags) {
-        *dst = 0;
-        if src.transfer_src { *dst |= 0x00000001; }
-        if src.transfer_dst { *dst |= 0x00000002; }
-        if src.uniform_texel_buffer { *dst |= 0x00000004; }
-        if src.storage_texel_buffer { *dst |= 0x00000008; }
-        if src.uniform_buffer { *dst |= 0x00000010; }
-        if src.storage_buffer { *dst |= 0x00000020; }
-        if src.index_buffer { *dst |= 0x00000040; }
-        if src.vertex_buffer { *dst |= 0x00000080; }
-        if src.indirect_buffer { *dst |= 0x00000100; }
-        if src.transform_feedback_buffer_ext { *dst |= 0x00000800; }
-        if src.transform_feedback_counter_buffer_ext { *dst |= 0x00001000; }
-        if src.conditional_rendering_ext { *dst |= 0x00000200; }
-        if src.ray_tracing_nv { *dst |= 0x00000400; }
-        if src.shader_device_address_ext { *dst |= 0x00020000; }
     }
 }
 

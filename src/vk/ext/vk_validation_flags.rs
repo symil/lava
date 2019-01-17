@@ -16,6 +16,11 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::ext::vk_validation_check::*;
 
+#[derive(Debug, Clone)]
+pub struct VkValidationFlags<'a> {
+    pub disabled_validation_checks: &'a [VkValidationCheck],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkValidationFlags {
@@ -23,11 +28,6 @@ pub struct RawVkValidationFlags {
     pub next: *const c_void,
     pub disabled_validation_check_count: u32,
     pub disabled_validation_checks: *mut RawVkValidationCheck,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkValidationFlags<'a> {
-    pub disabled_validation_checks: &'a [VkValidationCheck],
 }
 
 impl<'a> VkWrappedType<RawVkValidationFlags> for VkValidationFlags<'a> {

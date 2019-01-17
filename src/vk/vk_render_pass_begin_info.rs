@@ -19,6 +19,14 @@ use vk::vk_framebuffer::*;
 use vk::vk_rect_2d::*;
 use vk::vk_clear_value::*;
 
+#[derive(Debug, Clone)]
+pub struct VkRenderPassBeginInfo<'a, 'b, 'c> {
+    pub render_pass: &'a VkRenderPass,
+    pub framebuffer: &'b VkFramebuffer,
+    pub render_area: VkRect2D,
+    pub clear_values: &'c [VkClearValue],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassBeginInfo {
@@ -29,14 +37,6 @@ pub struct RawVkRenderPassBeginInfo {
     pub render_area: RawVkRect2D,
     pub clear_value_count: u32,
     pub clear_values: *mut RawVkClearValue,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkRenderPassBeginInfo<'a, 'b, 'c> {
-    pub render_pass: &'a VkRenderPass,
-    pub framebuffer: &'b VkFramebuffer,
-    pub render_area: VkRect2D,
-    pub clear_values: &'c [VkClearValue],
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkRenderPassBeginInfo> for VkRenderPassBeginInfo<'a, 'b, 'c> {

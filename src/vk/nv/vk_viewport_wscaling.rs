@@ -14,6 +14,12 @@ use vk::vk_instance_function_table::*;
 use vk::vk_instance::*;
 use vk::vk_device::*;
 
+#[derive(Debug, Clone)]
+pub struct VkViewportWScaling {
+    pub xcoeff: f32,
+    pub ycoeff: f32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkViewportWScaling {
@@ -21,10 +27,11 @@ pub struct RawVkViewportWScaling {
     pub ycoeff: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkViewportWScaling {
-    pub xcoeff: f32,
-    pub ycoeff: f32,
+impl VkWrappedType<RawVkViewportWScaling> for VkViewportWScaling {
+    fn vk_to_raw(src: &VkViewportWScaling, dst: &mut RawVkViewportWScaling) {
+        dst.xcoeff = src.xcoeff;
+        dst.ycoeff = src.ycoeff;
+    }
 }
 
 impl VkRawType<VkViewportWScaling> for RawVkViewportWScaling {
@@ -33,13 +40,6 @@ impl VkRawType<VkViewportWScaling> for RawVkViewportWScaling {
             xcoeff: src.xcoeff,
             ycoeff: src.ycoeff,
         }
-    }
-}
-
-impl VkWrappedType<RawVkViewportWScaling> for VkViewportWScaling {
-    fn vk_to_raw(src: &VkViewportWScaling, dst: &mut RawVkViewportWScaling) {
-        dst.xcoeff = src.xcoeff;
-        dst.ycoeff = src.ycoeff;
     }
 }
 

@@ -16,6 +16,15 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_version::*;
 
+#[derive(Debug, Clone)]
+pub struct VkApplicationInfo<'a, 'b> {
+    pub application_name: Option<&'a str>,
+    pub application_version: u32,
+    pub engine_name: Option<&'b str>,
+    pub engine_version: u32,
+    pub api_version: VkVersion,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkApplicationInfo {
@@ -26,15 +35,6 @@ pub struct RawVkApplicationInfo {
     pub engine_name: *mut c_char,
     pub engine_version: u32,
     pub api_version: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkApplicationInfo<'a, 'b> {
-    pub application_name: Option<&'a str>,
-    pub application_version: u32,
-    pub engine_name: Option<&'b str>,
-    pub engine_version: u32,
-    pub api_version: VkVersion,
 }
 
 impl<'a, 'b> VkWrappedType<RawVkApplicationInfo> for VkApplicationInfo<'a, 'b> {

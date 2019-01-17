@@ -18,6 +18,19 @@ use vk::vk_framebuffer_create_flags::*;
 use vk::vk_render_pass::*;
 use vk::vk_image_view::*;
 
+#[derive(Debug, Clone)]
+pub struct VkFramebufferCreateInfo<'a, 'b, 'c>
+    where
+        'c: 'b,
+{
+    pub flags: VkFramebufferCreateFlags,
+    pub render_pass: &'a VkRenderPass,
+    pub attachments: &'b [&'c VkImageView],
+    pub width: u32,
+    pub height: u32,
+    pub layers: u32,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFramebufferCreateInfo {
@@ -27,19 +40,6 @@ pub struct RawVkFramebufferCreateInfo {
     pub render_pass: RawVkRenderPass,
     pub attachment_count: u32,
     pub attachments: *mut RawVkImageView,
-    pub width: u32,
-    pub height: u32,
-    pub layers: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkFramebufferCreateInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
-    pub flags: VkFramebufferCreateFlags,
-    pub render_pass: &'a VkRenderPass,
-    pub attachments: &'b [&'c VkImageView],
     pub width: u32,
     pub height: u32,
     pub layers: u32,

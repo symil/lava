@@ -15,6 +15,13 @@ use vk::vk_instance::*;
 use vk::vk_device::*;
 use vk::vk_structure_type::*;
 
+#[derive(Debug, Clone)]
+pub struct VkRenderPassMultiviewCreateInfo<'a, 'b, 'c> {
+    pub view_masks: &'a [u32],
+    pub view_offsets: &'b [isize],
+    pub correlation_masks: &'c [u32],
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassMultiviewCreateInfo {
@@ -26,13 +33,6 @@ pub struct RawVkRenderPassMultiviewCreateInfo {
     pub view_offsets: *mut i32,
     pub correlation_mask_count: u32,
     pub correlation_masks: *const u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkRenderPassMultiviewCreateInfo<'a, 'b, 'c> {
-    pub view_masks: &'a [u32],
-    pub view_offsets: &'b [isize],
-    pub correlation_masks: &'c [u32],
 }
 
 impl<'a, 'b, 'c> VkWrappedType<RawVkRenderPassMultiviewCreateInfo> for VkRenderPassMultiviewCreateInfo<'a, 'b, 'c> {

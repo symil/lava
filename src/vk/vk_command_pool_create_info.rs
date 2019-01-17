@@ -16,6 +16,12 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_command_pool_create_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkCommandPoolCreateInfo {
+    pub flags: VkCommandPoolCreateFlags,
+    pub queue_family_index: usize,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandPoolCreateInfo {
@@ -25,10 +31,13 @@ pub struct RawVkCommandPoolCreateInfo {
     pub queue_family_index: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkCommandPoolCreateInfo {
-    pub flags: VkCommandPoolCreateFlags,
-    pub queue_family_index: usize,
+impl VkWrappedType<RawVkCommandPoolCreateInfo> for VkCommandPoolCreateInfo {
+    fn vk_to_raw(src: &VkCommandPoolCreateInfo, dst: &mut RawVkCommandPoolCreateInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::CommandPoolCreateInfo);
+        dst.next = ptr::null();
+        dst.flags = vk_to_raw_value(&src.flags);
+        dst.queue_family_index = vk_to_raw_value(&src.queue_family_index);
+    }
 }
 
 impl VkRawType<VkCommandPoolCreateInfo> for RawVkCommandPoolCreateInfo {
@@ -37,15 +46,6 @@ impl VkRawType<VkCommandPoolCreateInfo> for RawVkCommandPoolCreateInfo {
             flags: RawVkCommandPoolCreateFlags::vk_to_wrapped(&src.flags),
             queue_family_index: u32::vk_to_wrapped(&src.queue_family_index),
         }
-    }
-}
-
-impl VkWrappedType<RawVkCommandPoolCreateInfo> for VkCommandPoolCreateInfo {
-    fn vk_to_raw(src: &VkCommandPoolCreateInfo, dst: &mut RawVkCommandPoolCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::CommandPoolCreateInfo);
-        dst.next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.queue_family_index = vk_to_raw_value(&src.queue_family_index);
     }
 }
 

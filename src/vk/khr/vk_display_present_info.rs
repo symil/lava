@@ -16,6 +16,13 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_rect_2d::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayPresentInfo {
+    pub src_rect: VkRect2D,
+    pub dst_rect: VkRect2D,
+    pub persistent: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPresentInfo {
@@ -26,11 +33,14 @@ pub struct RawVkDisplayPresentInfo {
     pub persistent: u32,
 }
 
-#[derive(Debug, Clone)]
-pub struct VkDisplayPresentInfo {
-    pub src_rect: VkRect2D,
-    pub dst_rect: VkRect2D,
-    pub persistent: bool,
+impl VkWrappedType<RawVkDisplayPresentInfo> for VkDisplayPresentInfo {
+    fn vk_to_raw(src: &VkDisplayPresentInfo, dst: &mut RawVkDisplayPresentInfo) {
+        dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPresentInfoKhr);
+        dst.next = ptr::null();
+        dst.src_rect = vk_to_raw_value(&src.src_rect);
+        dst.dst_rect = vk_to_raw_value(&src.dst_rect);
+        dst.persistent = vk_to_raw_value(&src.persistent);
+    }
 }
 
 impl VkRawType<VkDisplayPresentInfo> for RawVkDisplayPresentInfo {
@@ -40,16 +50,6 @@ impl VkRawType<VkDisplayPresentInfo> for RawVkDisplayPresentInfo {
             dst_rect: RawVkRect2D::vk_to_wrapped(&src.dst_rect),
             persistent: u32::vk_to_wrapped(&src.persistent),
         }
-    }
-}
-
-impl VkWrappedType<RawVkDisplayPresentInfo> for VkDisplayPresentInfo {
-    fn vk_to_raw(src: &VkDisplayPresentInfo, dst: &mut RawVkDisplayPresentInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPresentInfoKhr);
-        dst.next = ptr::null();
-        dst.src_rect = vk_to_raw_value(&src.src_rect);
-        dst.dst_rect = vk_to_raw_value(&src.dst_rect);
-        dst.persistent = vk_to_raw_value(&src.persistent);
     }
 }
 

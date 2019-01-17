@@ -16,17 +16,17 @@ use vk::vk_device::*;
 use vk::vk_structure_type::*;
 use vk::vk_image::*;
 
+#[derive(Debug, Clone)]
+pub struct VkImageSparseMemoryRequirementsInfo2<'a> {
+    pub image: &'a VkImage,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSparseMemoryRequirementsInfo2 {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub image: RawVkImage,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkImageSparseMemoryRequirementsInfo2<'a> {
-    pub image: &'a VkImage,
 }
 
 impl<'a> VkWrappedType<RawVkImageSparseMemoryRequirementsInfo2> for VkImageSparseMemoryRequirementsInfo2<'a> {

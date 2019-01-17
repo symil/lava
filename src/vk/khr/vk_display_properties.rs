@@ -17,6 +17,17 @@ use vk::khr::vk_display::*;
 use vk::vk_extent_2d::*;
 use vk::khr::vk_surface_transform_flags::*;
 
+#[derive(Debug, Clone)]
+pub struct VkDisplayProperties {
+    pub display: VkDisplay,
+    pub display_name: Option<String>,
+    pub physical_dimensions: VkExtent2D,
+    pub physical_resolution: VkExtent2D,
+    pub supported_transforms: VkSurfaceTransformFlags,
+    pub plane_reorder_possible: bool,
+    pub persistent_content: bool,
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayProperties {
@@ -27,17 +38,6 @@ pub struct RawVkDisplayProperties {
     pub supported_transforms: RawVkSurfaceTransformFlags,
     pub plane_reorder_possible: u32,
     pub persistent_content: u32,
-}
-
-#[derive(Debug, Clone)]
-pub struct VkDisplayProperties {
-    pub display: VkDisplay,
-    pub display_name: Option<String>,
-    pub physical_dimensions: VkExtent2D,
-    pub physical_resolution: VkExtent2D,
-    pub supported_transforms: VkSurfaceTransformFlags,
-    pub plane_reorder_possible: bool,
-    pub persistent_content: bool,
 }
 
 impl VkRawType<VkDisplayProperties> for RawVkDisplayProperties {
