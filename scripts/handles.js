@@ -76,11 +76,22 @@ function genUses() {
     return Array.from(uses.values()).map(str => `use ${str};`);
 }
 
+function getProcessedHandleName(handle) {
+    if (!handle) return '';
+
+    if (handle.name === 'VkDeviceMemory') {
+        return 'VkMemory';
+    }
+
+    return handle.name;
+}
+
 function makeMethodNames(handle, functions) {
     const assigned = new Set();
 
     for (const func of functions) {
-        const singularToReplace = handle ? handle.name.replace('Vk', '') : '';
+        const handleName = getProcessedHandleName(handle);
+        const singularToReplace = handle ? handleName.replace('Vk', '') : '';
         const pluralToReplace = handle ? singularToReplace + 's' : '';
 
         let extension = '';

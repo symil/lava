@@ -69,4 +69,42 @@ impl VkDeviceMemory {
     pub fn handle(&self) -> u64 {
         self._handle
     }
+    
+    pub fn free(&self) {
+        unsafe {
+            ((&*self._fn_table).vkFreeMemory)(self._parent_device, self._handle, ptr::null());
+        }
+    }
+    
+    pub fn map<'a>(&self, offset: usize, size: usize, flags: VkMemoryMapFlags) -> Result<&'a mut [c_void], (VkResult, &'a mut [c_void])> {
+        unsafe {
+            let raw_offset = vk_to_raw_value(&offset);
+            let raw_size = vk_to_raw_value(&size);
+            let raw_flags = vk_to_raw_value(&flags);
+            let mut vk_result = 0;
+            let raw_data = &mut mem::zeroed() as *mut *mut c_void;
+            
+            vk_result = ((&*self._fn_table).vkMapMemory)(self._parent_device, self._handle, raw_offset, raw_size, raw_flags, raw_data);
+            
+            let data = slice::from_raw_parts_mut(*raw_data, size);
+            if vk_result == 0 { Ok(data) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), data)) }
+        }
+    }
+    
+    pub fn unmap(&self) {
+        unsafe {
+            ((&*self._fn_table).vkUnmapMemory)(self._parent_device, self._handle);
+        }
+    }
+    
+    pub fn get_device_commitment(&self) -> usize {
+        unsafe {
+            let raw_committed_memory_in_bytes = &mut mem::zeroed() as *mut u64;
+            
+            ((&*self._fn_table).vkGetDeviceMemoryCommitment)(self._parent_device, self._handle, raw_committed_memory_in_bytes);
+            
+            let committed_memory_in_bytes = new_vk_value(raw_committed_memory_in_bytes);
+            committed_memory_in_bytes
+        }
+    }
 }

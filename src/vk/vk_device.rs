@@ -120,36 +120,6 @@ impl VkDevice {
         }
     }
     
-    pub fn free_memory(&self, memory: Option<&VkDeviceMemory>) {
-        unsafe {
-            let raw_memory = if memory.is_some() { vk_to_raw_value(memory.unwrap()) } else { 0 };
-            ((&*self._fn_table).vkFreeMemory)(self._handle, raw_memory, ptr::null());
-        }
-    }
-    
-    pub fn map_memory<'a>(&self, memory: &VkDeviceMemory, offset: usize, size: usize, flags: VkMemoryMapFlags) -> Result<&'a mut [c_void], (VkResult, &'a mut [c_void])> {
-        unsafe {
-            let raw_memory = vk_to_raw_value(memory);
-            let raw_offset = vk_to_raw_value(&offset);
-            let raw_size = vk_to_raw_value(&size);
-            let raw_flags = vk_to_raw_value(&flags);
-            let mut vk_result = 0;
-            let raw_data = &mut mem::zeroed() as *mut *mut c_void;
-            
-            vk_result = ((&*self._fn_table).vkMapMemory)(self._handle, raw_memory, raw_offset, raw_size, raw_flags, raw_data);
-            
-            let data = slice::from_raw_parts_mut(*raw_data, size);
-            if vk_result == 0 { Ok(data) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), data)) }
-        }
-    }
-    
-    pub fn unmap_memory(&self, memory: &VkDeviceMemory) {
-        unsafe {
-            let raw_memory = vk_to_raw_value(memory);
-            ((&*self._fn_table).vkUnmapMemory)(self._handle, raw_memory);
-        }
-    }
-    
     pub fn flush_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> Result<(), VkResult> {
         unsafe {
             let raw_memory_range_count = memory_ranges.len() as u32;
@@ -167,18 +137,6 @@ impl VkDevice {
             let vk_result = ((&*self._fn_table).vkInvalidateMappedMemoryRanges)(self._handle, raw_memory_range_count, raw_memory_ranges);
             free_vk_ptr_array(raw_memory_range_count as usize, raw_memory_ranges);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    pub fn get_memory_commitment(&self, memory: &VkDeviceMemory) -> usize {
-        unsafe {
-            let raw_memory = vk_to_raw_value(memory);
-            let raw_committed_memory_in_bytes = &mut mem::zeroed() as *mut u64;
-            
-            ((&*self._fn_table).vkGetDeviceMemoryCommitment)(self._handle, raw_memory, raw_committed_memory_in_bytes);
-            
-            let committed_memory_in_bytes = new_vk_value(raw_committed_memory_in_bytes);
-            committed_memory_in_bytes
         }
     }
     

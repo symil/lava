@@ -160,6 +160,10 @@ function generateStructs() {
     return generateVkTypes(structs, generateVkStructDefinition);
 }
 
+function isDestroyFunction(func) {
+    return func.name.includes('Destroy') || func.name === "vkFreeMemory";
+}
+
 function generateHandles() {
     const handles = getAllHandles();
     const functions = getAllFunctions().filter(func => !STATIC_VK_FUNCTIONS.includes(func.name));
@@ -168,7 +172,7 @@ function generateHandles() {
         handle.functions = [];
     }
 
-    const destroyFunctions = functions.filter(func => func.name.includes('Destroy'));
+    const destroyFunctions = functions.filter(isDestroyFunction);
 
     for (let destroyFunction of destroyFunctions) {
         const parentArg = destroyFunction.args.first();
