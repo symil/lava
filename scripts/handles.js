@@ -33,7 +33,8 @@ function generateVkHandleDefinition(def) {
         genPartialEqTrait(def),
         genVkSetupTrait(def),
         genSpecialMethods(def),
-        genMethods(def)
+        genMethods(def),
+        // genDropTrait(def)
     ];
 }
 
@@ -44,6 +45,7 @@ function genUses() {
         `utils::vk_ptr::*`,
         `utils::vk_convert::*`,
         'std::os::raw::c_char',
+        'std::ops::Drop',
         'std::ptr',
         'std::mem',
         'std::cmp',
@@ -104,7 +106,7 @@ function genRawType(def) {
 
 function genWrappedType(def) {
     return [
-        `#[derive(Debug, Copy, Clone)]`,
+        `#[derive(Debug, Clone)]`,
         `pub struct ${def.wrappedTypeName}`, [
             `_handle: ${def.rawTypeName},`,
             `_parent_instance: RawVkInstance,`,
@@ -432,6 +434,22 @@ function functionToMethod(handle, func) {
 
 function prefixWithExtension(ext, name) {
     return ext ? `${ext}::${name}` : name;
+}
+
+function genDropTrait(def) {
+    const destroyFunction = def.functions.find(func => func.name.includes("Destroy"));
+
+    if (destroyFunction) {
+        return [
+            `impl Drop for ${def.wrappedTypeName}`,
+            [
+                `fn drop(&mut self)`, [
+                    `println!("${destroyFunction.name}");`,
+                    `self.destroy()`
+                ]
+            ]
+        ];
+    }
 }
 
 module.exports = {

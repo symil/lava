@@ -5,6 +5,7 @@ use utils::vk_traits::*;
 use utils::vk_ptr::*;
 use utils::vk_convert::*;
 use std::os::raw::c_char;
+use std::ops::Drop;
 use std::ptr;
 use std::mem;
 use std::cmp;
@@ -13,7 +14,7 @@ use vk::*;
 
 pub type RawVkQueue = u64;
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone)]
 pub struct VkQueue {
     _handle: RawVkQueue,
     _parent_instance: RawVkInstance,
