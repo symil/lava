@@ -66,7 +66,7 @@ impl VkSetup for VkPipelineLayout {
 
 impl VkPipelineLayout {
     
-    pub fn handle(&self) -> u64 {
+    pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     

@@ -66,7 +66,7 @@ impl VkSetup for VkDeviceMemory {
 
 impl VkDeviceMemory {
     
-    pub fn handle(&self) -> u64 {
+    pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
@@ -97,7 +97,7 @@ impl VkDeviceMemory {
         }
     }
     
-    pub fn get_device_commitment(&self) -> usize {
+    pub fn get_commitment(&self) -> usize {
         unsafe {
             let raw_committed_memory_in_bytes = &mut mem::zeroed() as *mut u64;
             

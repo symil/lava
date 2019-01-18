@@ -66,7 +66,7 @@ impl VkSetup for VkPipelineCache {
 
 impl VkPipelineCache {
     
-    pub fn handle(&self) -> u64 {
+    pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     

@@ -76,22 +76,11 @@ function genUses() {
     return Array.from(uses.values()).map(str => `use ${str};`);
 }
 
-function getProcessedHandleName(handle) {
-    if (!handle) return '';
-
-    if (handle.name === 'VkDeviceMemory') {
-        return 'VkMemory';
-    }
-
-    return handle.name;
-}
-
 function makeMethodNames(handle, functions) {
     const assigned = new Set();
 
     for (const func of functions) {
-        const handleName = getProcessedHandleName(handle);
-        const singularToReplace = handle ? handleName.replace('Vk', '') : '';
+        const singularToReplace = handle ? handle.name.replace('Vk', '') : '';
         const pluralToReplace = handle ? singularToReplace + 's' : '';
 
         let extension = '';
@@ -101,6 +90,10 @@ function makeMethodNames(handle, functions) {
             .replace(singularToReplace, '')
             .replace(/[A-Z]+$/, ext => { extension = ext.toLowerCase(); return ''; })
             .toSnakeCase();
+
+        if (handle && handle.name === 'VkDeviceMemory') {
+            methodName = methodName.replace('_memory', '');
+        }
 
         if (assigned.has(methodName)) {
             methodName += `_${extension}`;
@@ -213,7 +206,7 @@ function genSpecialMethods(def) {
 
 function genMethods(def) {
     const handleMethod = [
-        `\npub fn handle(&self) -> u64`, [
+        `\npub fn vk_handle(&self) -> u64`, [
             `self._handle`
         ],
     ];

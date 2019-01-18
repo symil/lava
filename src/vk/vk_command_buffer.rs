@@ -66,7 +66,7 @@ impl VkSetup for VkCommandBuffer {
 
 impl VkCommandBuffer {
     
-    pub fn handle(&self) -> u64 {
+    pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
@@ -677,11 +677,11 @@ impl VkCommandBuffer {
         }
     }
     
-    pub fn cmd_begin_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: Option<&[&VkBuffer]>, counter_buffer_offsets: Option<&[usize]>) {
+    pub fn cmd_begin_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: &[&VkBuffer], counter_buffer_offsets: Option<&[usize]>) {
         unsafe {
             let raw_first_counter_buffer = vk_to_raw_value(&first_counter_buffer);
-            let raw_counter_buffer_count = cmp::max(get_array_option_len(counter_buffers), get_array_option_len(counter_buffer_offsets)) as u32;
-            let raw_counter_buffers = new_ptr_vk_array_checked_from_ref(counter_buffers);
+            let raw_counter_buffer_count = cmp::max(counter_buffers.len(), get_array_option_len(counter_buffer_offsets)) as u32;
+            let raw_counter_buffers = new_ptr_vk_array_from_ref(counter_buffers);
             let raw_counter_buffer_offsets = new_ptr_vk_array_checked(counter_buffer_offsets);
             ((&*self._fn_table).vkCmdBeginTransformFeedbackEXT)(self._handle, raw_first_counter_buffer, raw_counter_buffer_count, raw_counter_buffers, raw_counter_buffer_offsets);
             free_ptr(raw_counter_buffers);
@@ -689,11 +689,11 @@ impl VkCommandBuffer {
         }
     }
     
-    pub fn cmd_end_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: Option<&[&VkBuffer]>, counter_buffer_offsets: Option<&[usize]>) {
+    pub fn cmd_end_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: &[&VkBuffer], counter_buffer_offsets: Option<&[usize]>) {
         unsafe {
             let raw_first_counter_buffer = vk_to_raw_value(&first_counter_buffer);
-            let raw_counter_buffer_count = cmp::max(get_array_option_len(counter_buffers), get_array_option_len(counter_buffer_offsets)) as u32;
-            let raw_counter_buffers = new_ptr_vk_array_checked_from_ref(counter_buffers);
+            let raw_counter_buffer_count = cmp::max(counter_buffers.len(), get_array_option_len(counter_buffer_offsets)) as u32;
+            let raw_counter_buffers = new_ptr_vk_array_from_ref(counter_buffers);
             let raw_counter_buffer_offsets = new_ptr_vk_array_checked(counter_buffer_offsets);
             ((&*self._fn_table).vkCmdEndTransformFeedbackEXT)(self._handle, raw_first_counter_buffer, raw_counter_buffer_count, raw_counter_buffers, raw_counter_buffer_offsets);
             free_ptr(raw_counter_buffers);

@@ -66,7 +66,7 @@ impl VkSetup for VkShaderModule {
 
 impl VkShaderModule {
     
-    pub fn handle(&self) -> u64 {
+    pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     

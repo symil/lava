@@ -19,6 +19,7 @@ use vk::vk_structure_type::*;
 pub struct VkPhysicalDeviceVulkanMemoryModelFeatures {
     pub vulkan_memory_model: bool,
     pub vulkan_memory_model_device_scope: bool,
+    pub vulkan_memory_model_availability_visibility_chains: bool,
 }
 
 #[repr(C)]
@@ -28,6 +29,7 @@ pub struct RawVkPhysicalDeviceVulkanMemoryModelFeatures {
     pub next: *const c_void,
     pub vulkan_memory_model: u32,
     pub vulkan_memory_model_device_scope: u32,
+    pub vulkan_memory_model_availability_visibility_chains: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceVulkanMemoryModelFeatures> for VkPhysicalDeviceVulkanMemoryModelFeatures {
@@ -36,6 +38,7 @@ impl VkWrappedType<RawVkPhysicalDeviceVulkanMemoryModelFeatures> for VkPhysicalD
         dst.next = ptr::null();
         dst.vulkan_memory_model = vk_to_raw_value(&src.vulkan_memory_model);
         dst.vulkan_memory_model_device_scope = vk_to_raw_value(&src.vulkan_memory_model_device_scope);
+        dst.vulkan_memory_model_availability_visibility_chains = vk_to_raw_value(&src.vulkan_memory_model_availability_visibility_chains);
     }
 }
 
@@ -44,6 +47,7 @@ impl VkRawType<VkPhysicalDeviceVulkanMemoryModelFeatures> for RawVkPhysicalDevic
         VkPhysicalDeviceVulkanMemoryModelFeatures {
             vulkan_memory_model: u32::vk_to_wrapped(&src.vulkan_memory_model),
             vulkan_memory_model_device_scope: u32::vk_to_wrapped(&src.vulkan_memory_model_device_scope),
+            vulkan_memory_model_availability_visibility_chains: u32::vk_to_wrapped(&src.vulkan_memory_model_availability_visibility_chains),
         }
     }
 }
@@ -53,6 +57,7 @@ impl Default for VkPhysicalDeviceVulkanMemoryModelFeatures {
         VkPhysicalDeviceVulkanMemoryModelFeatures {
             vulkan_memory_model: false,
             vulkan_memory_model_device_scope: false,
+            vulkan_memory_model_availability_visibility_chains: false,
         }
     }
 }

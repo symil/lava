@@ -66,7 +66,7 @@ impl VkSetup for VkSampler {
 
 impl VkSampler {
     
-    pub fn handle(&self) -> u64 {
+    pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
