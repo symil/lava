@@ -1,4 +1,5 @@
 pub const VK_SUBPASS_EXTERNAL : u32 = <u32>::max_value();
+pub const VK_QUEUE_FAMILY_IGNORED : usize = <u32>::max_value() as usize;
 
 pub const VK_LAYER_LUNARG_STANDARD_VALIDATION : &str = "VK_LAYER_LUNARG_standard_validation";
 

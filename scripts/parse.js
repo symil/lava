@@ -284,7 +284,9 @@ function parseStructs() {
         }
 
         for (let field of fields) {
-            field.countFor = fields.filter(otherField => otherField.countField === field.name).map(f => f.name);
+            if (structName !== 'VkDescriptorSetLayoutBinding' || field.name !== 'descriptorCount') {
+                field.countFor = fields.filter(otherField => otherField.countField === field.name).map(f => f.name);
+            }
         }
 
         return { name, extension, fields };
