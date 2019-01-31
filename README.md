@@ -4,10 +4,10 @@ Wrapper to manipulate the Vulkan API in Rust more conveniently than with binding
 
 - removes the need to specify the structure type when sending structures to Vulkan
 - takes care of making double Vulkan calls when necessary (e.g when retrieving a list of Vulkan objects)
-- returns objects retrieved by Vulkan in a `Result` instead of returning them via a pointer
-- allows to manipulate references, slices and options instead of pointers
+- returns objects retrieved by Vulkan in a `Result` instead of writing them to a user-provided pointer
+- allows to manipulate references, slices and options instead of pointers (in particular, allows to provide slice instead of length + pointer)
 - exposes the API in an object-oriented way (e.g `instance.enumerate_physical_devices()` instead of `enumerate_physical_devices(&instance)`)
-- removes the extension suffix from function and data-structure names (use modules instead)
+- removes the extension suffix from function and data-structure names (modules are used instead)
 - exposes bit flags as structures instead of integers
 - provides a default value for all structures, allowing to "auto-complete" structure with optional fields using `..Default::default()`
 - manages the calls to `vkGetInstanceProcAddr` to manipulate functions that are not exposed statically
@@ -49,7 +49,7 @@ fn main() {
             engine_version: 1,
             api_version: VkVersion(1, 0, 0),
         }),
-        enabled_layer_names: &[VK_LAYER_LUNARG_STANDARD_VAlIDATION_NAME],
+        enabled_layer_names: &[VK_LAYER_LUNARG_STANDARD_VALIDATION_NAME],
         enabled_extension_names: &[VK_EXT_DEBUG_REPORT_EXTENSION_NAME]
     }).expect("Failed to create instance");
 
