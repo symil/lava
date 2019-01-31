@@ -59,6 +59,16 @@ impl VkCullModeFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkCullModeFlags {
+    ( $( $x:ident ),* ) => {
+        VkCullModeFlags {
+            $($x: true,)*
+            ..VkCullModeFlags::none()
+        }
+    }
+}
+
 impl VkCullModeFlags {
     
     pub fn to_u32(&self) -> u32 {

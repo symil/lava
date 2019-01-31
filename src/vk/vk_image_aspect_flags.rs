@@ -107,6 +107,16 @@ impl VkImageAspectFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkImageAspectFlags {
+    ( $( $x:ident ),* ) => {
+        VkImageAspectFlags {
+            $($x: true,)*
+            ..VkImageAspectFlags::none()
+        }
+    }
+}
+
 impl VkImageAspectFlags {
     
     pub fn to_u32(&self) -> u32 {

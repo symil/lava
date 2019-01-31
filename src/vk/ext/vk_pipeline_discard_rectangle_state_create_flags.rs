@@ -46,6 +46,16 @@ impl VkPipelineDiscardRectangleStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineDiscardRectangleStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineDiscardRectangleStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineDiscardRectangleStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineDiscardRectangleStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -77,6 +77,16 @@ impl VkMemoryPropertyFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkMemoryPropertyFlags {
+    ( $( $x:ident ),* ) => {
+        VkMemoryPropertyFlags {
+            $($x: true,)*
+            ..VkMemoryPropertyFlags::none()
+        }
+    }
+}
+
 impl VkMemoryPropertyFlags {
     
     pub fn to_u32(&self) -> u32 {

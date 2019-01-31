@@ -191,6 +191,16 @@ impl VkFormatFeatureFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkFormatFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkFormatFeatureFlags {
+            $($x: true,)*
+            ..VkFormatFeatureFlags::none()
+        }
+    }
+}
+
 impl VkFormatFeatureFlags {
     
     pub fn to_u32(&self) -> u32 {

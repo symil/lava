@@ -46,6 +46,16 @@ impl VkDisplayModeCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDisplayModeCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDisplayModeCreateFlags {
+            $($x: true,)*
+            ..VkDisplayModeCreateFlags::none()
+        }
+    }
+}
+
 impl VkDisplayModeCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

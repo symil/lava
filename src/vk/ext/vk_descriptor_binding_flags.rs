@@ -65,6 +65,16 @@ impl VkDescriptorBindingFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDescriptorBindingFlags {
+    ( $( $x:ident ),* ) => {
+        VkDescriptorBindingFlags {
+            $($x: true,)*
+            ..VkDescriptorBindingFlags::none()
+        }
+    }
+}
+
 impl VkDescriptorBindingFlags {
     
     pub fn to_u32(&self) -> u32 {

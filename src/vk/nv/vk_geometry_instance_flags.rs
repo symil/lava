@@ -65,6 +65,16 @@ impl VkGeometryInstanceFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkGeometryInstanceFlags {
+    ( $( $x:ident ),* ) => {
+        VkGeometryInstanceFlags {
+            $($x: true,)*
+            ..VkGeometryInstanceFlags::none()
+        }
+    }
+}
+
 impl VkGeometryInstanceFlags {
     
     pub fn to_u32(&self) -> u32 {

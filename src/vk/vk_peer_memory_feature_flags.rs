@@ -65,6 +65,16 @@ impl VkPeerMemoryFeatureFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPeerMemoryFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkPeerMemoryFeatureFlags {
+            $($x: true,)*
+            ..VkPeerMemoryFeatureFlags::none()
+        }
+    }
+}
+
 impl VkPeerMemoryFeatureFlags {
     
     pub fn to_u32(&self) -> u32 {

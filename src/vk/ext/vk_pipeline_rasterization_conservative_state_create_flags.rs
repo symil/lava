@@ -46,6 +46,16 @@ impl VkPipelineRasterizationConservativeStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineRasterizationConservativeStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineRasterizationConservativeStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineRasterizationConservativeStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineRasterizationConservativeStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

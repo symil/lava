@@ -451,3 +451,13 @@ impl VkPhysicalDeviceFeatures {
         }
     }
 }
+
+#[macro_export]
+macro_rules! VkPhysicalDeviceFeatures {
+    ( $( $x:ident ),* ) => {
+        VkPhysicalDeviceFeatures {
+            $($x: true,)*
+            ..VkPhysicalDeviceFeatures::none()
+        }
+    }
+}

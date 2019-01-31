@@ -59,6 +59,16 @@ impl VkStencilFaceFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkStencilFaceFlags {
+    ( $( $x:ident ),* ) => {
+        VkStencilFaceFlags {
+            $($x: true,)*
+            ..VkStencilFaceFlags::none()
+        }
+    }
+}
+
 impl VkStencilFaceFlags {
     
     pub fn to_u32(&self) -> u32 {

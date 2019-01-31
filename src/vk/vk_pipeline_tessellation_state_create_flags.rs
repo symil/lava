@@ -46,6 +46,16 @@ impl VkPipelineTessellationStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineTessellationStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineTessellationStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineTessellationStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineTessellationStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

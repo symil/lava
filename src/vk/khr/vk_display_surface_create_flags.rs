@@ -46,6 +46,16 @@ impl VkDisplaySurfaceCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDisplaySurfaceCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDisplaySurfaceCreateFlags {
+            $($x: true,)*
+            ..VkDisplaySurfaceCreateFlags::none()
+        }
+    }
+}
+
 impl VkDisplaySurfaceCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

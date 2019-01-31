@@ -46,6 +46,16 @@ impl VkPipelineCoverageModulationStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineCoverageModulationStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineCoverageModulationStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineCoverageModulationStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineCoverageModulationStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

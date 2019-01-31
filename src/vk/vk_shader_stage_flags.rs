@@ -131,6 +131,16 @@ impl VkShaderStageFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkShaderStageFlags {
+    ( $( $x:ident ),* ) => {
+        VkShaderStageFlags {
+            $($x: true,)*
+            ..VkShaderStageFlags::none()
+        }
+    }
+}
+
 impl VkShaderStageFlags {
     
     pub fn to_u32(&self) -> u32 {

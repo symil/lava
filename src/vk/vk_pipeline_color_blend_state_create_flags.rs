@@ -46,6 +46,16 @@ impl VkPipelineColorBlendStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineColorBlendStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineColorBlendStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineColorBlendStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineColorBlendStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

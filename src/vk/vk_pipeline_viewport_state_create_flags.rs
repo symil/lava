@@ -46,6 +46,16 @@ impl VkPipelineViewportStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineViewportStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineViewportStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineViewportStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineViewportStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

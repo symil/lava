@@ -65,6 +65,16 @@ impl VkIndirectCommandsLayoutUsageFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkIndirectCommandsLayoutUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkIndirectCommandsLayoutUsageFlags {
+            $($x: true,)*
+            ..VkIndirectCommandsLayoutUsageFlags::none()
+        }
+    }
+}
+
 impl VkIndirectCommandsLayoutUsageFlags {
     
     pub fn to_u32(&self) -> u32 {

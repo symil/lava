@@ -46,6 +46,16 @@ impl VkPipelineInputAssemblyStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineInputAssemblyStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineInputAssemblyStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineInputAssemblyStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineInputAssemblyStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

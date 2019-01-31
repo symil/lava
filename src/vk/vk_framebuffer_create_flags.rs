@@ -46,6 +46,16 @@ impl VkFramebufferCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkFramebufferCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkFramebufferCreateFlags {
+            $($x: true,)*
+            ..VkFramebufferCreateFlags::none()
+        }
+    }
+}
+
 impl VkFramebufferCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

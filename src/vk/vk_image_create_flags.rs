@@ -131,6 +131,16 @@ impl VkImageCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkImageCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkImageCreateFlags {
+            $($x: true,)*
+            ..VkImageCreateFlags::none()
+        }
+    }
+}
+
 impl VkImageCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

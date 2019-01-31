@@ -53,6 +53,16 @@ impl VkDescriptorPoolCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDescriptorPoolCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDescriptorPoolCreateFlags {
+            $($x: true,)*
+            ..VkDescriptorPoolCreateFlags::none()
+        }
+    }
+}
+
 impl VkDescriptorPoolCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

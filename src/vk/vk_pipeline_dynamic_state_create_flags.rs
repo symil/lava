@@ -46,6 +46,16 @@ impl VkPipelineDynamicStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineDynamicStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineDynamicStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineDynamicStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineDynamicStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

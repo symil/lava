@@ -46,6 +46,16 @@ impl VkPipelineShaderStageCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineShaderStageCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineShaderStageCreateFlags {
+            $($x: true,)*
+            ..VkPipelineShaderStageCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineShaderStageCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

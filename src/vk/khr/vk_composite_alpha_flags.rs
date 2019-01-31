@@ -65,6 +65,16 @@ impl VkCompositeAlphaFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkCompositeAlphaFlags {
+    ( $( $x:ident ),* ) => {
+        VkCompositeAlphaFlags {
+            $($x: true,)*
+            ..VkCompositeAlphaFlags::none()
+        }
+    }
+}
+
 impl VkCompositeAlphaFlags {
     
     pub fn to_u32(&self) -> u32 {

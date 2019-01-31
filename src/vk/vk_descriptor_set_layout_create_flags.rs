@@ -53,6 +53,16 @@ impl VkDescriptorSetLayoutCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDescriptorSetLayoutCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDescriptorSetLayoutCreateFlags {
+            $($x: true,)*
+            ..VkDescriptorSetLayoutCreateFlags::none()
+        }
+    }
+}
+
 impl VkDescriptorSetLayoutCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

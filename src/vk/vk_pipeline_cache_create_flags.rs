@@ -46,6 +46,16 @@ impl VkPipelineCacheCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineCacheCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineCacheCreateFlags {
+            $($x: true,)*
+            ..VkPipelineCacheCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineCacheCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -46,6 +46,16 @@ impl VkPipelineDepthStencilStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineDepthStencilStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineDepthStencilStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineDepthStencilStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineDepthStencilStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

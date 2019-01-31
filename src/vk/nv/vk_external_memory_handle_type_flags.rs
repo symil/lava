@@ -65,6 +65,16 @@ impl VkExternalMemoryHandleTypeFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkExternalMemoryHandleTypeFlagsNv {
+    ( $( $x:ident ),* ) => {
+        VkExternalMemoryHandleTypeFlags {
+            $($x: true,)*
+            ..VkExternalMemoryHandleTypeFlags::none()
+        }
+    }
+}
+
 impl VkExternalMemoryHandleTypeFlags {
     
     pub fn to_u32(&self) -> u32 {

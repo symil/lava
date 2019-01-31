@@ -53,6 +53,16 @@ impl VkSamplerCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSamplerCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkSamplerCreateFlags {
+            $($x: true,)*
+            ..VkSamplerCreateFlags::none()
+        }
+    }
+}
+
 impl VkSamplerCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

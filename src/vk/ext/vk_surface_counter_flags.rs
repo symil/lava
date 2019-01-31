@@ -47,6 +47,16 @@ impl VkSurfaceCounterFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSurfaceCounterFlags {
+    ( $( $x:ident ),* ) => {
+        VkSurfaceCounterFlags {
+            $($x: true,)*
+            ..VkSurfaceCounterFlags::none()
+        }
+    }
+}
+
 impl VkSurfaceCounterFlags {
     
     pub fn to_u32(&self) -> u32 {

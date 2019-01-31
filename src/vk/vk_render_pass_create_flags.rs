@@ -46,6 +46,16 @@ impl VkRenderPassCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkRenderPassCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkRenderPassCreateFlags {
+            $($x: true,)*
+            ..VkRenderPassCreateFlags::none()
+        }
+    }
+}
+
 impl VkRenderPassCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

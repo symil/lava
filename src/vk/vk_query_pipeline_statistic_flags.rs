@@ -107,6 +107,16 @@ impl VkQueryPipelineStatisticFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkQueryPipelineStatisticFlags {
+    ( $( $x:ident ),* ) => {
+        VkQueryPipelineStatisticFlags {
+            $($x: true,)*
+            ..VkQueryPipelineStatisticFlags::none()
+        }
+    }
+}
+
 impl VkQueryPipelineStatisticFlags {
     
     pub fn to_u32(&self) -> u32 {

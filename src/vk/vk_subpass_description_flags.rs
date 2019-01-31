@@ -53,6 +53,16 @@ impl VkSubpassDescriptionFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSubpassDescriptionFlags {
+    ( $( $x:ident ),* ) => {
+        VkSubpassDescriptionFlags {
+            $($x: true,)*
+            ..VkSubpassDescriptionFlags::none()
+        }
+    }
+}
+
 impl VkSubpassDescriptionFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -46,6 +46,16 @@ impl VkDebugUtilsMessengerCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDebugUtilsMessengerCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDebugUtilsMessengerCreateFlags {
+            $($x: true,)*
+            ..VkDebugUtilsMessengerCreateFlags::none()
+        }
+    }
+}
+
 impl VkDebugUtilsMessengerCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

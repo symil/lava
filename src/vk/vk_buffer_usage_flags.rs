@@ -125,6 +125,16 @@ impl VkBufferUsageFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkBufferUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkBufferUsageFlags {
+            $($x: true,)*
+            ..VkBufferUsageFlags::none()
+        }
+    }
+}
+
 impl VkBufferUsageFlags {
     
     pub fn to_u32(&self) -> u32 {

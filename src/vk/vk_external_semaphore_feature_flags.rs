@@ -53,6 +53,16 @@ impl VkExternalSemaphoreFeatureFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkExternalSemaphoreFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkExternalSemaphoreFeatureFlags {
+            $($x: true,)*
+            ..VkExternalSemaphoreFeatureFlags::none()
+        }
+    }
+}
+
 impl VkExternalSemaphoreFeatureFlags {
     
     pub fn to_u32(&self) -> u32 {

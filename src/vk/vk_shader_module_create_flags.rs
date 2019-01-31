@@ -46,6 +46,16 @@ impl VkShaderModuleCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkShaderModuleCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkShaderModuleCreateFlags {
+            $($x: true,)*
+            ..VkShaderModuleCreateFlags::none()
+        }
+    }
+}
+
 impl VkShaderModuleCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

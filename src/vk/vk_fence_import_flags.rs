@@ -47,6 +47,16 @@ impl VkFenceImportFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkFenceImportFlags {
+    ( $( $x:ident ),* ) => {
+        VkFenceImportFlags {
+            $($x: true,)*
+            ..VkFenceImportFlags::none()
+        }
+    }
+}
+
 impl VkFenceImportFlags {
     
     pub fn to_u32(&self) -> u32 {

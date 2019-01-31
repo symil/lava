@@ -95,6 +95,16 @@ impl VkSubgroupFeatureFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSubgroupFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkSubgroupFeatureFlags {
+            $($x: true,)*
+            ..VkSubgroupFeatureFlags::none()
+        }
+    }
+}
+
 impl VkSubgroupFeatureFlags {
     
     pub fn to_u32(&self) -> u32 {

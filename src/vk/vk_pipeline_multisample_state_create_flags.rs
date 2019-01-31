@@ -46,6 +46,16 @@ impl VkPipelineMultisampleStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineMultisampleStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineMultisampleStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineMultisampleStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineMultisampleStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

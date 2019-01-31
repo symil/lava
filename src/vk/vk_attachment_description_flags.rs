@@ -47,6 +47,16 @@ impl VkAttachmentDescriptionFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkAttachmentDescriptionFlags {
+    ( $( $x:ident ),* ) => {
+        VkAttachmentDescriptionFlags {
+            $($x: true,)*
+            ..VkAttachmentDescriptionFlags::none()
+        }
+    }
+}
+
 impl VkAttachmentDescriptionFlags {
     
     pub fn to_u32(&self) -> u32 {

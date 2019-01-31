@@ -46,6 +46,16 @@ impl VkCommandPoolTrimFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkCommandPoolTrimFlags {
+    ( $( $x:ident ),* ) => {
+        VkCommandPoolTrimFlags {
+            $($x: true,)*
+            ..VkCommandPoolTrimFlags::none()
+        }
+    }
+}
+
 impl VkCommandPoolTrimFlags {
     
     pub fn to_u32(&self) -> u32 {

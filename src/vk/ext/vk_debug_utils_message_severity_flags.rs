@@ -65,6 +65,16 @@ impl VkDebugUtilsMessageSeverityFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDebugUtilsMessageSeverityFlags {
+    ( $( $x:ident ),* ) => {
+        VkDebugUtilsMessageSeverityFlags {
+            $($x: true,)*
+            ..VkDebugUtilsMessageSeverityFlags::none()
+        }
+    }
+}
+
 impl VkDebugUtilsMessageSeverityFlags {
     
     pub fn to_u32(&self) -> u32 {

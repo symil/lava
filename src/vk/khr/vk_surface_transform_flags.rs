@@ -95,6 +95,16 @@ impl VkSurfaceTransformFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSurfaceTransformFlags {
+    ( $( $x:ident ),* ) => {
+        VkSurfaceTransformFlags {
+            $($x: true,)*
+            ..VkSurfaceTransformFlags::none()
+        }
+    }
+}
+
 impl VkSurfaceTransformFlags {
     
     pub fn to_u32(&self) -> u32 {

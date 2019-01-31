@@ -47,6 +47,16 @@ impl VkCommandPoolResetFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkCommandPoolResetFlags {
+    ( $( $x:ident ),* ) => {
+        VkCommandPoolResetFlags {
+            $($x: true,)*
+            ..VkCommandPoolResetFlags::none()
+        }
+    }
+}
+
 impl VkCommandPoolResetFlags {
     
     pub fn to_u32(&self) -> u32 {

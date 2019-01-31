@@ -209,6 +209,16 @@ impl VkAccessFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkAccessFlags {
+    ( $( $x:ident ),* ) => {
+        VkAccessFlags {
+            $($x: true,)*
+            ..VkAccessFlags::none()
+        }
+    }
+}
+
 impl VkAccessFlags {
     
     pub fn to_u32(&self) -> u32 {

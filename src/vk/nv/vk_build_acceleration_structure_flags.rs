@@ -71,6 +71,16 @@ impl VkBuildAccelerationStructureFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkBuildAccelerationStructureFlags {
+    ( $( $x:ident ),* ) => {
+        VkBuildAccelerationStructureFlags {
+            $($x: true,)*
+            ..VkBuildAccelerationStructureFlags::none()
+        }
+    }
+}
+
 impl VkBuildAccelerationStructureFlags {
     
     pub fn to_u32(&self) -> u32 {

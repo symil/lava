@@ -47,6 +47,16 @@ impl VkSparseMemoryBindFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSparseMemoryBindFlags {
+    ( $( $x:ident ),* ) => {
+        VkSparseMemoryBindFlags {
+            $($x: true,)*
+            ..VkSparseMemoryBindFlags::none()
+        }
+    }
+}
+
 impl VkSparseMemoryBindFlags {
     
     pub fn to_u32(&self) -> u32 {

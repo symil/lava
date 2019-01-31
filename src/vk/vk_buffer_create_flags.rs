@@ -71,6 +71,16 @@ impl VkBufferCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkBufferCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkBufferCreateFlags {
+            $($x: true,)*
+            ..VkBufferCreateFlags::none()
+        }
+    }
+}
+
 impl VkBufferCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

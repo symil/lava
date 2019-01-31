@@ -53,6 +53,16 @@ impl VkMemoryHeapFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkMemoryHeapFlags {
+    ( $( $x:ident ),* ) => {
+        VkMemoryHeapFlags {
+            $($x: true,)*
+            ..VkMemoryHeapFlags::none()
+        }
+    }
+}
+
 impl VkMemoryHeapFlags {
     
     pub fn to_u32(&self) -> u32 {

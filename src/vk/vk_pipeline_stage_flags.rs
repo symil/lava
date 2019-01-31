@@ -197,6 +197,16 @@ impl VkPipelineStageFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineStageFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineStageFlags {
+            $($x: true,)*
+            ..VkPipelineStageFlags::none()
+        }
+    }
+}
+
 impl VkPipelineStageFlags {
     
     pub fn to_u32(&self) -> u32 {

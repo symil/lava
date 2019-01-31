@@ -59,6 +59,16 @@ impl VkExternalMemoryFeatureFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkExternalMemoryFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkExternalMemoryFeatureFlags {
+            $($x: true,)*
+            ..VkExternalMemoryFeatureFlags::none()
+        }
+    }
+}
+
 impl VkExternalMemoryFeatureFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -46,6 +46,16 @@ impl VkValidationCacheCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkValidationCacheCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkValidationCacheCreateFlags {
+            $($x: true,)*
+            ..VkValidationCacheCreateFlags::none()
+        }
+    }
+}
+
 impl VkValidationCacheCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

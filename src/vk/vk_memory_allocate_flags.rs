@@ -47,6 +47,16 @@ impl VkMemoryAllocateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkMemoryAllocateFlags {
+    ( $( $x:ident ),* ) => {
+        VkMemoryAllocateFlags {
+            $($x: true,)*
+            ..VkMemoryAllocateFlags::none()
+        }
+    }
+}
+
 impl VkMemoryAllocateFlags {
     
     pub fn to_u32(&self) -> u32 {

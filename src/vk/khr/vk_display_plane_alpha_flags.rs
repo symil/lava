@@ -65,6 +65,16 @@ impl VkDisplayPlaneAlphaFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDisplayPlaneAlphaFlags {
+    ( $( $x:ident ),* ) => {
+        VkDisplayPlaneAlphaFlags {
+            $($x: true,)*
+            ..VkDisplayPlaneAlphaFlags::none()
+        }
+    }
+}
+
 impl VkDisplayPlaneAlphaFlags {
     
     pub fn to_u32(&self) -> u32 {

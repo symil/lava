@@ -53,6 +53,16 @@ impl VkExternalFenceFeatureFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkExternalFenceFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkExternalFenceFeatureFlags {
+            $($x: true,)*
+            ..VkExternalFenceFeatureFlags::none()
+        }
+    }
+}
+
 impl VkExternalFenceFeatureFlags {
     
     pub fn to_u32(&self) -> u32 {

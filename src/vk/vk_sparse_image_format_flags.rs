@@ -59,6 +59,16 @@ impl VkSparseImageFormatFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSparseImageFormatFlags {
+    ( $( $x:ident ),* ) => {
+        VkSparseImageFormatFlags {
+            $($x: true,)*
+            ..VkSparseImageFormatFlags::none()
+        }
+    }
+}
+
 impl VkSparseImageFormatFlags {
     
     pub fn to_u32(&self) -> u32 {

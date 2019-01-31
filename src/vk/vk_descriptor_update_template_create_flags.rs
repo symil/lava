@@ -46,6 +46,16 @@ impl VkDescriptorUpdateTemplateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDescriptorUpdateTemplateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDescriptorUpdateTemplateCreateFlags {
+            $($x: true,)*
+            ..VkDescriptorUpdateTemplateCreateFlags::none()
+        }
+    }
+}
+
 impl VkDescriptorUpdateTemplateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

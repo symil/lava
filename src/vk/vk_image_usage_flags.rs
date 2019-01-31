@@ -101,6 +101,16 @@ impl VkImageUsageFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkImageUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkImageUsageFlags {
+            $($x: true,)*
+            ..VkImageUsageFlags::none()
+        }
+    }
+}
+
 impl VkImageUsageFlags {
     
     pub fn to_u32(&self) -> u32 {

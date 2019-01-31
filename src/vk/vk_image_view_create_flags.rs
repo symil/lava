@@ -47,6 +47,16 @@ impl VkImageViewCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkImageViewCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkImageViewCreateFlags {
+            $($x: true,)*
+            ..VkImageViewCreateFlags::none()
+        }
+    }
+}
+
 impl VkImageViewCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -59,6 +59,16 @@ impl VkCommandPoolCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkCommandPoolCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkCommandPoolCreateFlags {
+            $($x: true,)*
+            ..VkCommandPoolCreateFlags::none()
+        }
+    }
+}
+
 impl VkCommandPoolCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

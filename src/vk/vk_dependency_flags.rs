@@ -59,6 +59,16 @@ impl VkDependencyFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDependencyFlags {
+    ( $( $x:ident ),* ) => {
+        VkDependencyFlags {
+            $($x: true,)*
+            ..VkDependencyFlags::none()
+        }
+    }
+}
+
 impl VkDependencyFlags {
     
     pub fn to_u32(&self) -> u32 {

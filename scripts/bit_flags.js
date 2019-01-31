@@ -110,6 +110,13 @@ function genImplAsUint(def) {
 }
 
 function genImplFlags(def) {
+    let macroSuffix = '';
+
+    // Manually solve conflicts for now
+    if (def.wrappedTypeName === 'VkExternalMemoryFeatureFlags' || def.wrappedTypeName === 'VkExternalMemoryHandleTypeFlags') {
+        macroSuffix = def.extension.capitalize();
+    }
+
     return [
         `impl ${def.wrappedTypeName}`, [
             `\npub fn none() -> ${def.wrappedTypeName}`, [
@@ -119,6 +126,16 @@ function genImplFlags(def) {
             `\npub fn all() -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName,
                 def.fields.map(field => `${field.varName}: true,`)
+            ]
+        ],
+        ``,
+        `#[macro_export]`,
+        `macro_rules! ${def.wrappedTypeName}${macroSuffix}`, [
+            `( $( $x:ident ),* ) =>`, [
+                `${def.wrappedTypeName}`, [
+                    `$($x: true,)*`,
+                    `..${def.wrappedTypeName}::none()`
+                ]
             ]
         ]
     ];

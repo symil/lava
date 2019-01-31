@@ -47,6 +47,16 @@ impl VkSemaphoreImportFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSemaphoreImportFlags {
+    ( $( $x:ident ),* ) => {
+        VkSemaphoreImportFlags {
+            $($x: true,)*
+            ..VkSemaphoreImportFlags::none()
+        }
+    }
+}
+
 impl VkSemaphoreImportFlags {
     
     pub fn to_u32(&self) -> u32 {

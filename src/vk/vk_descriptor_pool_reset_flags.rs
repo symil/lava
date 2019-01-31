@@ -46,6 +46,16 @@ impl VkDescriptorPoolResetFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDescriptorPoolResetFlags {
+    ( $( $x:ident ),* ) => {
+        VkDescriptorPoolResetFlags {
+            $($x: true,)*
+            ..VkDescriptorPoolResetFlags::none()
+        }
+    }
+}
+
 impl VkDescriptorPoolResetFlags {
     
     pub fn to_u32(&self) -> u32 {

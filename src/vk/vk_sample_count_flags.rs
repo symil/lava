@@ -83,6 +83,16 @@ impl VkSampleCountFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSampleCountFlags {
+    ( $( $x:ident ),* ) => {
+        VkSampleCountFlags {
+            $($x: true,)*
+            ..VkSampleCountFlags::none()
+        }
+    }
+}
+
 impl VkSampleCountFlags {
     
     pub fn to_u32(&self) -> u32 {

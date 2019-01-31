@@ -46,6 +46,16 @@ impl VkPipelineLayoutCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineLayoutCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineLayoutCreateFlags {
+            $($x: true,)*
+            ..VkPipelineLayoutCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineLayoutCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

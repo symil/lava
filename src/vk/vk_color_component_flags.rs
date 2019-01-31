@@ -65,6 +65,16 @@ impl VkColorComponentFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkColorComponentFlags {
+    ( $( $x:ident ),* ) => {
+        VkColorComponentFlags {
+            $($x: true,)*
+            ..VkColorComponentFlags::none()
+        }
+    }
+}
+
 impl VkColorComponentFlags {
     
     pub fn to_u32(&self) -> u32 {

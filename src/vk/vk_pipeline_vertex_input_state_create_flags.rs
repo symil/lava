@@ -46,6 +46,16 @@ impl VkPipelineVertexInputStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineVertexInputStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineVertexInputStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineVertexInputStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineVertexInputStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

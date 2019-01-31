@@ -46,6 +46,16 @@ impl VkMemoryMapFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkMemoryMapFlags {
+    ( $( $x:ident ),* ) => {
+        VkMemoryMapFlags {
+            $($x: true,)*
+            ..VkMemoryMapFlags::none()
+        }
+    }
+}
+
 impl VkMemoryMapFlags {
     
     pub fn to_u32(&self) -> u32 {

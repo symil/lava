@@ -65,6 +65,16 @@ impl VkDeviceGroupPresentModeFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDeviceGroupPresentModeFlags {
+    ( $( $x:ident ),* ) => {
+        VkDeviceGroupPresentModeFlags {
+            $($x: true,)*
+            ..VkDeviceGroupPresentModeFlags::none()
+        }
+    }
+}
+
 impl VkDeviceGroupPresentModeFlags {
     
     pub fn to_u32(&self) -> u32 {

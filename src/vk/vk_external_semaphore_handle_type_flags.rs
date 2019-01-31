@@ -71,6 +71,16 @@ impl VkExternalSemaphoreHandleTypeFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkExternalSemaphoreHandleTypeFlags {
+    ( $( $x:ident ),* ) => {
+        VkExternalSemaphoreHandleTypeFlags {
+            $($x: true,)*
+            ..VkExternalSemaphoreHandleTypeFlags::none()
+        }
+    }
+}
+
 impl VkExternalSemaphoreHandleTypeFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -46,6 +46,16 @@ impl VkPipelineCoverageToColorStateCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineCoverageToColorStateCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineCoverageToColorStateCreateFlags {
+            $($x: true,)*
+            ..VkPipelineCoverageToColorStateCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineCoverageToColorStateCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

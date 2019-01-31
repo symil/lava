@@ -53,6 +53,16 @@ impl VkObjectEntryUsageFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkObjectEntryUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkObjectEntryUsageFlags {
+            $($x: true,)*
+            ..VkObjectEntryUsageFlags::none()
+        }
+    }
+}
+
 impl VkObjectEntryUsageFlags {
     
     pub fn to_u32(&self) -> u32 {

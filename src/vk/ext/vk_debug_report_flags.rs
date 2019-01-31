@@ -71,6 +71,16 @@ impl VkDebugReportFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDebugReportFlags {
+    ( $( $x:ident ),* ) => {
+        VkDebugReportFlags {
+            $($x: true,)*
+            ..VkDebugReportFlags::none()
+        }
+    }
+}
+
 impl VkDebugReportFlags {
     
     pub fn to_u32(&self) -> u32 {

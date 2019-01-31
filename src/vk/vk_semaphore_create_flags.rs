@@ -46,6 +46,16 @@ impl VkSemaphoreCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSemaphoreCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkSemaphoreCreateFlags {
+            $($x: true,)*
+            ..VkSemaphoreCreateFlags::none()
+        }
+    }
+}
+
 impl VkSemaphoreCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -47,6 +47,16 @@ impl VkQueryControlFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkQueryControlFlags {
+    ( $( $x:ident ),* ) => {
+        VkQueryControlFlags {
+            $($x: true,)*
+            ..VkQueryControlFlags::none()
+        }
+    }
+}
+
 impl VkQueryControlFlags {
     
     pub fn to_u32(&self) -> u32 {

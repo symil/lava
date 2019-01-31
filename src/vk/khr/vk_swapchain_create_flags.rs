@@ -59,6 +59,16 @@ impl VkSwapchainCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkSwapchainCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkSwapchainCreateFlags {
+            $($x: true,)*
+            ..VkSwapchainCreateFlags::none()
+        }
+    }
+}
+
 impl VkSwapchainCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

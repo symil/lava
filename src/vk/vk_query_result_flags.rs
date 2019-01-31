@@ -65,6 +65,16 @@ impl VkQueryResultFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkQueryResultFlags {
+    ( $( $x:ident ),* ) => {
+        VkQueryResultFlags {
+            $($x: true,)*
+            ..VkQueryResultFlags::none()
+        }
+    }
+}
+
 impl VkQueryResultFlags {
     
     pub fn to_u32(&self) -> u32 {

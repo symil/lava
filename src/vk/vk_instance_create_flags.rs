@@ -46,6 +46,16 @@ impl VkInstanceCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkInstanceCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkInstanceCreateFlags {
+            $($x: true,)*
+            ..VkInstanceCreateFlags::none()
+        }
+    }
+}
+
 impl VkInstanceCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

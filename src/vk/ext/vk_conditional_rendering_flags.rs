@@ -47,6 +47,16 @@ impl VkConditionalRenderingFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkConditionalRenderingFlags {
+    ( $( $x:ident ),* ) => {
+        VkConditionalRenderingFlags {
+            $($x: true,)*
+            ..VkConditionalRenderingFlags::none()
+        }
+    }
+}
+
 impl VkConditionalRenderingFlags {
     
     pub fn to_u32(&self) -> u32 {

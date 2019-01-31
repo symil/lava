@@ -46,6 +46,16 @@ impl VkQueryPoolCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkQueryPoolCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkQueryPoolCreateFlags {
+            $($x: true,)*
+            ..VkQueryPoolCreateFlags::none()
+        }
+    }
+}
+
 impl VkQueryPoolCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

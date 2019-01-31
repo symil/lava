@@ -46,6 +46,16 @@ impl VkEventCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkEventCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkEventCreateFlags {
+            $($x: true,)*
+            ..VkEventCreateFlags::none()
+        }
+    }
+}
+
 impl VkEventCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -46,6 +46,16 @@ impl VkDebugUtilsMessengerCallbackDataFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDebugUtilsMessengerCallbackDataFlags {
+    ( $( $x:ident ),* ) => {
+        VkDebugUtilsMessengerCallbackDataFlags {
+            $($x: true,)*
+            ..VkDebugUtilsMessengerCallbackDataFlags::none()
+        }
+    }
+}
+
 impl VkDebugUtilsMessengerCallbackDataFlags {
     
     pub fn to_u32(&self) -> u32 {

@@ -65,6 +65,16 @@ impl VkExternalFenceHandleTypeFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkExternalFenceHandleTypeFlags {
+    ( $( $x:ident ),* ) => {
+        VkExternalFenceHandleTypeFlags {
+            $($x: true,)*
+            ..VkExternalFenceHandleTypeFlags::none()
+        }
+    }
+}
+
 impl VkExternalFenceHandleTypeFlags {
     
     pub fn to_u32(&self) -> u32 {

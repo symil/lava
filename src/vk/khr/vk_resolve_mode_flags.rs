@@ -65,6 +65,16 @@ impl VkResolveModeFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkResolveModeFlags {
+    ( $( $x:ident ),* ) => {
+        VkResolveModeFlags {
+            $($x: true,)*
+            ..VkResolveModeFlags::none()
+        }
+    }
+}
+
 impl VkResolveModeFlags {
     
     pub fn to_u32(&self) -> u32 {

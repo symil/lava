@@ -46,6 +46,18 @@ String.prototype.toSnakeCase = function() {
     return toSnakeCase(this);
 }
 
+String.prototype.capitalize = function() {
+    return capitalize(this);
+};
+
+function capitalize(str) {
+    if (!str.length) {
+        return '';
+    }
+
+    return str.charAt(0).toUpperCase() + str.substring(1);
+}
+
 function isStructOrHandle(field) {
     return !!(getHandle(field) || getStruct(field));
 }

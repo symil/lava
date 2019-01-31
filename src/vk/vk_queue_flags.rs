@@ -71,6 +71,16 @@ impl VkQueueFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkQueueFlags {
+    ( $( $x:ident ),* ) => {
+        VkQueueFlags {
+            $($x: true,)*
+            ..VkQueueFlags::none()
+        }
+    }
+}
+
 impl VkQueueFlags {
     
     pub fn to_u32(&self) -> u32 {

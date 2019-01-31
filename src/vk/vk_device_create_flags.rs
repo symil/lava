@@ -46,6 +46,16 @@ impl VkDeviceCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDeviceCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDeviceCreateFlags {
+            $($x: true,)*
+            ..VkDeviceCreateFlags::none()
+        }
+    }
+}
+
 impl VkDeviceCreateFlags {
     
     pub fn to_u32(&self) -> u32 {

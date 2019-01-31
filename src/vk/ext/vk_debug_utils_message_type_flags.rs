@@ -59,6 +59,16 @@ impl VkDebugUtilsMessageTypeFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkDebugUtilsMessageTypeFlags {
+    ( $( $x:ident ),* ) => {
+        VkDebugUtilsMessageTypeFlags {
+            $($x: true,)*
+            ..VkDebugUtilsMessageTypeFlags::none()
+        }
+    }
+}
+
 impl VkDebugUtilsMessageTypeFlags {
     
     pub fn to_u32(&self) -> u32 {

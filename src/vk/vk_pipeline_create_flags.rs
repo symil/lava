@@ -77,6 +77,16 @@ impl VkPipelineCreateFlags {
     }
 }
 
+#[macro_export]
+macro_rules! VkPipelineCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineCreateFlags {
+            $($x: true,)*
+            ..VkPipelineCreateFlags::none()
+        }
+    }
+}
+
 impl VkPipelineCreateFlags {
     
     pub fn to_u32(&self) -> u32 {
