@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceMeshShaderPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMeshShaderPropertiesNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceMeshShaderProperties {
     pub max_draw_mesh_tasks_count: usize,
@@ -30,6 +31,7 @@ pub struct VkPhysicalDeviceMeshShaderProperties {
     pub mesh_output_per_primitive_granularity: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMeshShaderProperties {

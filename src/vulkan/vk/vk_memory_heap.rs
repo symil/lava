@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkMemoryHeapFlags,RawVkMemoryHeapFlags};
 
+/// Wrapper for [VkMemoryHeap](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHeap.html)
 #[derive(Debug, Clone)]
 pub struct VkMemoryHeap {
     pub size: usize,
     pub flags: VkMemoryHeapFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryHeap {

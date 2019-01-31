@@ -16,6 +16,7 @@ use vulkan::vk::{VkPipelineColorBlendStateCreateFlags,RawVkPipelineColorBlendSta
 use vulkan::vk::{VkLogicOp,RawVkLogicOp};
 use vulkan::vk::{VkPipelineColorBlendAttachmentState,RawVkPipelineColorBlendAttachmentState};
 
+/// Wrapper for [VkPipelineColorBlendStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineColorBlendStateCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineColorBlendStateCreateInfo<'a> {
     pub flags: VkPipelineColorBlendStateCreateFlags,
@@ -25,6 +26,7 @@ pub struct VkPipelineColorBlendStateCreateInfo<'a> {
     pub blend_constants: [f32; 4],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendStateCreateInfo {

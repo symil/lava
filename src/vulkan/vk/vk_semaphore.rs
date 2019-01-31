@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkSemaphore = u64;
 
+/// Wrapper for [VkSemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphore.html)
 #[derive(Debug, Clone)]
 pub struct VkSemaphore {
     _handle: RawVkSemaphore,
@@ -67,10 +69,12 @@ impl VkSetup for VkSemaphore {
 
 impl VkSemaphore {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroySemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySemaphore.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroySemaphore)(self._parent_device, self._handle, ptr::null());

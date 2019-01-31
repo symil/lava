@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPolygonMode](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPolygonMode.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPolygonMode {
@@ -11,6 +12,7 @@ pub enum VkPolygonMode {
     FillRectangleNv = 1000153000,
 }
 
+#[doc(hidden)]
 pub type RawVkPolygonMode = i32;
 
 impl VkWrappedType<RawVkPolygonMode> for VkPolygonMode {

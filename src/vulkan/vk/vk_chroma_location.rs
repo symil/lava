@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkChromaLocation](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkChromaLocation.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkChromaLocation {
@@ -9,6 +10,7 @@ pub enum VkChromaLocation {
     Midpoint = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkChromaLocation = i32;
 
 impl VkWrappedType<RawVkChromaLocation> for VkChromaLocation {

@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineViewportSwizzleStateCreateFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportSwizzleStateCreateFlagBitsNV.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineViewportSwizzleStateCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineViewportSwizzleStateCreateFlags = u32;
 
 impl VkWrappedType<RawVkPipelineViewportSwizzleStateCreateFlags> for VkPipelineViewportSwizzleStateCreateFlags {

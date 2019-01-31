@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkMemoryOverallocationBehaviorAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryOverallocationBehaviorAMD.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkMemoryOverallocationBehavior {
@@ -10,6 +11,7 @@ pub enum VkMemoryOverallocationBehavior {
     Disallowed = 2,
 }
 
+#[doc(hidden)]
 pub type RawVkMemoryOverallocationBehavior = i32;
 
 impl VkWrappedType<RawVkMemoryOverallocationBehavior> for VkMemoryOverallocationBehavior {

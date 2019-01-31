@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceMemoryPriorityFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMemoryPriorityFeaturesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceMemoryPriorityFeatures {
     pub memory_priority: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryPriorityFeatures {

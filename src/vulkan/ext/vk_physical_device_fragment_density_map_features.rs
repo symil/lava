@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceFragmentDensityMapFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentDensityMapFeaturesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFragmentDensityMapFeatures {
     pub fragment_density_map: bool,
@@ -20,6 +21,7 @@ pub struct VkPhysicalDeviceFragmentDensityMapFeatures {
     pub fragment_density_map_non_subsampled_images: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFragmentDensityMapFeatures {

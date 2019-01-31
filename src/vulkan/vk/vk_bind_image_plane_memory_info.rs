@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImageAspectFlags,RawVkImageAspectFlags};
 
+/// Wrapper for [VkBindImagePlaneMemoryInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindImagePlaneMemoryInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkBindImagePlaneMemoryInfo {
     pub plane_aspect: VkImageAspectFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImagePlaneMemoryInfo {

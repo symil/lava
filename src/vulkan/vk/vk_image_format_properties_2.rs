@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImageFormatProperties,RawVkImageFormatProperties};
 
+/// Wrapper for [VkImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatProperties2.html)
 #[derive(Debug, Clone)]
 pub struct VkImageFormatProperties2 {
     pub image_format_properties: VkImageFormatProperties,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageFormatProperties2 {

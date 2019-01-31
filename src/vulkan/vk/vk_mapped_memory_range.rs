@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 
+/// Wrapper for [VkMappedMemoryRange](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMappedMemoryRange.html)
 #[derive(Debug, Clone)]
 pub struct VkMappedMemoryRange<'a> {
     pub memory: &'a VkDeviceMemory,
@@ -21,6 +22,7 @@ pub struct VkMappedMemoryRange<'a> {
     pub size: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMappedMemoryRange {

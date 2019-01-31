@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDriverIdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDriverIdKHR.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDriverId {
@@ -17,6 +18,7 @@ pub enum VkDriverId {
     GooglePastel = 10,
 }
 
+#[doc(hidden)]
 pub type RawVkDriverId = i32;
 
 impl VkWrappedType<RawVkDriverId> for VkDriverId {

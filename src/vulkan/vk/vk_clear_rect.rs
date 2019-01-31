@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkRect2D,RawVkRect2D};
 
+/// Wrapper for [VkClearRect](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkClearRect.html)
 #[derive(Debug, Clone)]
 pub struct VkClearRect {
     pub rect: VkRect2D,
@@ -20,6 +21,7 @@ pub struct VkClearRect {
     pub layer_count: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkClearRect {

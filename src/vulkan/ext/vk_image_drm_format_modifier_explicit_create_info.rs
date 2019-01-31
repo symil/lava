@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSubresourceLayout,RawVkSubresourceLayout};
 
+/// Wrapper for [VkImageDrmFormatModifierExplicitCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageDrmFormatModifierExplicitCreateInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkImageDrmFormatModifierExplicitCreateInfo<'a> {
     pub drm_format_modifier: usize,
     pub plane_layouts: &'a [VkSubresourceLayout],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageDrmFormatModifierExplicitCreateInfo {

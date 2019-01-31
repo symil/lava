@@ -2,7 +2,8 @@ const {
     toPascalCase,
     getRawVkTypeName,
     getWrappedVkTypeName,
-    findEnumPrefix
+    findEnumPrefix,
+    documentType
 } = require('./utils');
 
 function generateVkEnumDefinition(cDef) {
@@ -37,11 +38,15 @@ function genUses() {
 }
 
 function genRawType(def) {
-    return `pub type ${def.rawTypeName} = i32;`;
+    return [
+        `#[doc(hidden)]`,
+        `pub type ${def.rawTypeName} = i32;`
+    ];
 }
 
 function genWrappedType(def) {
     return [
+        documentType(def),
         `#[repr(i32)]`,
         `#[derive(Debug, PartialEq, Copy, Clone)]`,
         `pub enum ${def.wrappedTypeName}`,

@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkCoarseSampleOrderType,RawVkCoarseSampleOrderType};
 use vulkan::nv::{VkCoarseSampleOrderCustom,RawVkCoarseSampleOrderCustom};
 
+/// Wrapper for [VkPipelineViewportCoarseSampleOrderStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportCoarseSampleOrderStateCreateInfoNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineViewportCoarseSampleOrderStateCreateInfo<'a, 'b>
     where
@@ -24,6 +25,7 @@ pub struct VkPipelineViewportCoarseSampleOrderStateCreateInfo<'a, 'b>
     pub custom_sample_orders: &'a [VkCoarseSampleOrderCustom<'b>],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportCoarseSampleOrderStateCreateInfo {

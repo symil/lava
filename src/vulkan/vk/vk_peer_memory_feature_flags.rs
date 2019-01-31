@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPeerMemoryFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPeerMemoryFeatureFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPeerMemoryFeatureFlags {
     pub copy_src: bool,
@@ -10,6 +11,7 @@ pub struct VkPeerMemoryFeatureFlags {
     pub generic_dst: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkPeerMemoryFeatureFlags = u32;
 
 impl VkWrappedType<RawVkPeerMemoryFeatureFlags> for VkPeerMemoryFeatureFlags {

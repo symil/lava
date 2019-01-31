@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkRenderPassMultiviewCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassMultiviewCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkRenderPassMultiviewCreateInfo<'a, 'b, 'c> {
     pub view_masks: &'a [u32],
@@ -20,6 +21,7 @@ pub struct VkRenderPassMultiviewCreateInfo<'a, 'b, 'c> {
     pub correlation_masks: &'c [u32],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassMultiviewCreateInfo {

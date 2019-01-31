@@ -15,6 +15,7 @@ use vulkan::vk::{VkSampler,RawVkSampler};
 use vulkan::vk::{VkImageView,RawVkImageView};
 use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 
+/// Wrapper for [VkDescriptorImageInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorImageInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorImageInfo<'a, 'b> {
     pub sampler: &'a VkSampler,
@@ -22,6 +23,7 @@ pub struct VkDescriptorImageInfo<'a, 'b> {
     pub image_layout: VkImageLayout,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorImageInfo {

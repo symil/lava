@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkQueryControlFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryControlFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryControlFlags {
     pub precise: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkQueryControlFlags = u32;
 
 impl VkWrappedType<RawVkQueryControlFlags> for VkQueryControlFlags {

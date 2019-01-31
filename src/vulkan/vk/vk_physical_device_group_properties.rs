@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPhysicalDevice,RawVkPhysicalDevice};
 
+/// Wrapper for [VkPhysicalDeviceGroupProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceGroupProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceGroupProperties {
     pub physical_devices: Vec<VkPhysicalDevice>,
     pub subset_allocation: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceGroupProperties {

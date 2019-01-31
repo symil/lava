@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkFilter](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFilter.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkFilter {
@@ -10,6 +11,7 @@ pub enum VkFilter {
     CubicImg = 1000015000,
 }
 
+#[doc(hidden)]
 pub type RawVkFilter = i32;
 
 impl VkWrappedType<RawVkFilter> for VkFilter {

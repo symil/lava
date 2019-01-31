@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkDispatchIndirectCommand](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDispatchIndirectCommand.html)
 #[derive(Debug, Clone)]
 pub struct VkDispatchIndirectCommand {
     pub x: u32,
@@ -19,6 +20,7 @@ pub struct VkDispatchIndirectCommand {
     pub z: u32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDispatchIndirectCommand {

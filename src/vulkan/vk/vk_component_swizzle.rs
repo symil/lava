@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkComponentSwizzle](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkComponentSwizzle.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkComponentSwizzle {
@@ -14,6 +15,7 @@ pub enum VkComponentSwizzle {
     A = 6,
 }
 
+#[doc(hidden)]
 pub type RawVkComponentSwizzle = i32;
 
 impl VkWrappedType<RawVkComponentSwizzle> for VkComponentSwizzle {

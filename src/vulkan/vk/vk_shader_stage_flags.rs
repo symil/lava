@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkShaderStageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderStageFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkShaderStageFlags {
     pub vertex: bool,
@@ -21,6 +22,7 @@ pub struct VkShaderStageFlags {
     pub mesh_nv: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkShaderStageFlags = u32;
 
 impl VkWrappedType<RawVkShaderStageFlags> for VkShaderStageFlags {

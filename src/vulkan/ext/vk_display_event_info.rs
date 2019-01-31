@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkDisplayEventType,RawVkDisplayEventType};
 
+/// Wrapper for [VkDisplayEventInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayEventInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDisplayEventInfo {
     pub display_event: VkDisplayEventType,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayEventInfo {

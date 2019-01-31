@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkQueue = u64;
 
+/// Wrapper for [VkQueue](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueue.html)
 #[derive(Debug, Clone)]
 pub struct VkQueue {
     _handle: RawVkQueue,
@@ -67,10 +69,12 @@ impl VkSetup for VkQueue {
 
 impl VkQueue {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkQueueSubmit](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueSubmit.html)
     pub fn submit(&self, submits: &[VkSubmitInfo], fence: Option<&VkFence>) -> Result<(), VkResult> {
         unsafe {
             let raw_submit_count = submits.len() as u32;
@@ -82,6 +86,7 @@ impl VkQueue {
         }
     }
     
+    /// Wrapper for [vkQueueWaitIdle](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueWaitIdle.html)
     pub fn wait_idle(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkQueueWaitIdle)(self._handle);
@@ -89,6 +94,7 @@ impl VkQueue {
         }
     }
     
+    /// Wrapper for [vkQueueBindSparse](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueBindSparse.html)
     pub fn bind_sparse(&self, bind_info: &[VkBindSparseInfo], fence: Option<&VkFence>) -> Result<(), VkResult> {
         unsafe {
             let raw_bind_info_count = bind_info.len() as u32;
@@ -100,6 +106,7 @@ impl VkQueue {
         }
     }
     
+    /// Wrapper for [vkQueuePresentKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueuePresentKHR.html)
     pub fn present(&self, present_info: &khr::VkPresentInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_present_info = new_ptr_vk_value(present_info);
@@ -109,6 +116,7 @@ impl VkQueue {
         }
     }
     
+    /// Wrapper for [vkQueueBeginDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueBeginDebugUtilsLabelEXT.html)
     pub fn begin_debug_utils_label(&self, label_info: &ext::VkDebugUtilsLabel) {
         unsafe {
             let raw_label_info = new_ptr_vk_value(label_info);
@@ -117,12 +125,14 @@ impl VkQueue {
         }
     }
     
+    /// Wrapper for [vkQueueEndDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueEndDebugUtilsLabelEXT.html)
     pub fn end_debug_utils_label(&self) {
         unsafe {
             ((&*self._fn_table).vkQueueEndDebugUtilsLabelEXT)(self._handle);
         }
     }
     
+    /// Wrapper for [vkQueueInsertDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueInsertDebugUtilsLabelEXT.html)
     pub fn insert_debug_utils_label(&self, label_info: &ext::VkDebugUtilsLabel) {
         unsafe {
             let raw_label_info = new_ptr_vk_value(label_info);
@@ -131,6 +141,7 @@ impl VkQueue {
         }
     }
     
+    /// Wrapper for [vkGetQueueCheckpointDataNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetQueueCheckpointDataNV.html)
     pub fn get_checkpoint_data(&self) -> Vec<nv::VkCheckpointData> {
         unsafe {
             let mut raw_checkpoint_data : *mut nv::RawVkCheckpointData = ptr::null_mut();

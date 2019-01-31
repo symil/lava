@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceVariablePointerFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVariablePointerFeatures.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceVariablePointerFeatures {
     pub variable_pointers_storage_buffer: bool,
     pub variable_pointers: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVariablePointerFeatures {

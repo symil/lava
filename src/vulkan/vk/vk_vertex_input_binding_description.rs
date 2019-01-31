@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkVertexInputRate,RawVkVertexInputRate};
 
+/// Wrapper for [VkVertexInputBindingDescription](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputBindingDescription.html)
 #[derive(Debug, Clone)]
 pub struct VkVertexInputBindingDescription {
     pub binding: usize,
@@ -20,6 +21,7 @@ pub struct VkVertexInputBindingDescription {
     pub input_rate: VkVertexInputRate,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkVertexInputBindingDescription {

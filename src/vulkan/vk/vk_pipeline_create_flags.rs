@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineCreateFlags {
     pub disable_optimization: bool,
@@ -12,6 +13,7 @@ pub struct VkPipelineCreateFlags {
     pub defer_compile_nv: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineCreateFlags = u32;
 
 impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {

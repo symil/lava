@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkDescriptorPoolInlineUniformBlockCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPoolInlineUniformBlockCreateInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorPoolInlineUniformBlockCreateInfo {
     pub max_inline_uniform_block_bindings: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorPoolInlineUniformBlockCreateInfo {

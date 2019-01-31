@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkAttachmentStoreOp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentStoreOp.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkAttachmentStoreOp {
@@ -9,6 +10,7 @@ pub enum VkAttachmentStoreOp {
     DontCare = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkAttachmentStoreOp = i32;
 
 impl VkWrappedType<RawVkAttachmentStoreOp> for VkAttachmentStoreOp {

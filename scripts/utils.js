@@ -585,6 +585,11 @@ function stringToFunction(statement, varName, countVarName, arrayVarName, varNam
     };
 }
 
+function documentType(def) {
+    const typeName = (def.typeName || def.name).replace(/Flags$/, 'FlagBits') + (def.extension || '').toUpperCase();
+    return `/// Wrapper for [${typeName}](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/${typeName}.html)`;
+}
+
 module.exports = {
     toSnakeCase,
     toPascalCase,
@@ -603,5 +608,6 @@ module.exports = {
     isStructOrHandle,
     isStruct,
     isOutputHandleStruct,
-    getCountVarNameValue
+    getCountVarNameValue,
+    documentType
 };

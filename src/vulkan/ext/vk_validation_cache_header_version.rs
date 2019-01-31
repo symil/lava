@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkValidationCacheHeaderVersionEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationCacheHeaderVersionEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkValidationCacheHeaderVersion {
     One = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkValidationCacheHeaderVersion = i32;
 
 impl VkWrappedType<RawVkValidationCacheHeaderVersion> for VkValidationCacheHeaderVersion {

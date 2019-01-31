@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDevice16BitStorageFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice16BitStorageFeatures.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDevice16BitStorageFeatures {
     pub storage_buffer_16_bit_access: bool,
@@ -21,6 +22,7 @@ pub struct VkPhysicalDevice16BitStorageFeatures {
     pub storage_input_output_16: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevice16BitStorageFeatures {

@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkQueryPoolCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPoolCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryPoolCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkQueryPoolCreateFlags = u32;
 
 impl VkWrappedType<RawVkQueryPoolCreateFlags> for VkQueryPoolCreateFlags {

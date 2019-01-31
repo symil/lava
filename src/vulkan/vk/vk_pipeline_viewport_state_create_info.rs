@@ -16,6 +16,7 @@ use vulkan::vk::{VkPipelineViewportStateCreateFlags,RawVkPipelineViewportStateCr
 use vulkan::vk::{VkViewport,RawVkViewport};
 use vulkan::vk::{VkRect2D,RawVkRect2D};
 
+/// Wrapper for [VkPipelineViewportStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportStateCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineViewportStateCreateInfo<'a, 'b> {
     pub flags: VkPipelineViewportStateCreateFlags,
@@ -23,6 +24,7 @@ pub struct VkPipelineViewportStateCreateInfo<'a, 'b> {
     pub scissors: Option<&'b [VkRect2D]>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportStateCreateInfo {

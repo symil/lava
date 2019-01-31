@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceFloat16Int8FeaturesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFloat16Int8FeaturesKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFloat16Int8Features {
     pub shader_float_16: bool,
     pub shader_int_8: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFloat16Int8Features {

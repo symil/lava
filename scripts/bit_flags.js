@@ -13,7 +13,8 @@ const {
     isPlural,
     cToRustVarName,
     argToString,
-    getFieldInformation
+    getFieldInformation,
+    documentType
 } = require('./utils');
 
 function generateVkBitFlagsDefinition(cDef) {
@@ -50,11 +51,15 @@ function genUses() {
 }
 
 function genRawType(def) {
-    return `pub type ${def.rawTypeName} = u32;`;
+    return [
+        `#[doc(hidden)]`,
+        `pub type ${def.rawTypeName} = u32;`
+    ];
 }
 
 function genWrappedType(def) {
     return [
+        documentType(def),
         `#[derive(Debug, Clone, Copy)]`,
         `pub struct ${def.wrappedTypeName}`,
         def.fields.map(field => `pub ${field.varName}: bool,`)

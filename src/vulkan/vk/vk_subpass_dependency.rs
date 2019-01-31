@@ -15,6 +15,7 @@ use vulkan::vk::{VkPipelineStageFlags,RawVkPipelineStageFlags};
 use vulkan::vk::{VkAccessFlags,RawVkAccessFlags};
 use vulkan::vk::{VkDependencyFlags,RawVkDependencyFlags};
 
+/// Wrapper for [VkSubpassDependency](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDependency.html)
 #[derive(Debug, Clone)]
 pub struct VkSubpassDependency {
     pub src_subpass: usize,
@@ -26,6 +27,7 @@ pub struct VkSubpassDependency {
     pub dependency_flags: VkDependencyFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDependency {

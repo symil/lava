@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkOffset2D,RawVkOffset2D};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
+/// Wrapper for [VkRectLayerKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRectLayerKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkRectLayer {
     pub offset: VkOffset2D,
@@ -21,6 +22,7 @@ pub struct VkRectLayer {
     pub layer: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRectLayer {

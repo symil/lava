@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::nv::{VkShadingRatePaletteEntry,RawVkShadingRatePaletteEntry};
 use vulkan::nv::{VkCoarseSampleLocation,RawVkCoarseSampleLocation};
 
+/// Wrapper for [VkCoarseSampleOrderCustomNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCoarseSampleOrderCustomNV.html)
 #[derive(Debug, Clone)]
 pub struct VkCoarseSampleOrderCustom<'a> {
     pub shading_rate: VkShadingRatePaletteEntry,
@@ -21,6 +22,7 @@ pub struct VkCoarseSampleOrderCustom<'a> {
     pub sample_locations: &'a [VkCoarseSampleLocation],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCoarseSampleOrderCustom {

@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceMaintenance3Properties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMaintenance3Properties.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceMaintenance3Properties {
     pub max_per_set_descriptors: usize,
     pub max_memory_allocation_size: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMaintenance3Properties {

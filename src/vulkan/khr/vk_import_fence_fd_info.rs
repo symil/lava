@@ -16,6 +16,7 @@ use vulkan::vk::{VkFence,RawVkFence};
 use vulkan::vk::{VkFenceImportFlags,RawVkFenceImportFlags};
 use vulkan::vk::{VkExternalFenceHandleTypeFlags,RawVkExternalFenceHandleTypeFlags};
 
+/// Wrapper for [VkImportFenceFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImportFenceFdInfoKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkImportFenceFdInfo<'a> {
     pub fence: &'a VkFence,
@@ -24,6 +25,7 @@ pub struct VkImportFenceFdInfo<'a> {
     pub fd: i32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportFenceFdInfo {

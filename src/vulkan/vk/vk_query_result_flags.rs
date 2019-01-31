@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkQueryResultFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryResultFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryResultFlags {
     pub _64: bool,
@@ -10,6 +11,7 @@ pub struct VkQueryResultFlags {
     pub partial: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkQueryResultFlags = u32;
 
 impl VkWrappedType<RawVkQueryResultFlags> for VkQueryResultFlags {

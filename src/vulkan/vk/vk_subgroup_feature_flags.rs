@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSubgroupFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubgroupFeatureFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSubgroupFeatureFlags {
     pub basic: bool,
@@ -15,6 +16,7 @@ pub struct VkSubgroupFeatureFlags {
     pub partitioned_nv: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSubgroupFeatureFlags = u32;
 
 impl VkWrappedType<RawVkSubgroupFeatureFlags> for VkSubgroupFeatureFlags {

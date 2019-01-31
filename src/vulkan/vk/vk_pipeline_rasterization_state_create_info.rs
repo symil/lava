@@ -17,6 +17,7 @@ use vulkan::vk::{VkPolygonMode,RawVkPolygonMode};
 use vulkan::vk::{VkCullModeFlags,RawVkCullModeFlags};
 use vulkan::vk::{VkFrontFace,RawVkFrontFace};
 
+/// Wrapper for [VkPipelineRasterizationStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationStateCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineRasterizationStateCreateInfo {
     pub flags: VkPipelineRasterizationStateCreateFlags,
@@ -32,6 +33,7 @@ pub struct VkPipelineRasterizationStateCreateInfo {
     pub line_width: f32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationStateCreateInfo {

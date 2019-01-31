@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkOffset2D](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkOffset2D.html)
 #[derive(Debug, Clone)]
 pub struct VkOffset2D {
     pub x: i32,
     pub y: i32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkOffset2D {

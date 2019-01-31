@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkSamplerYcbcrConversion = u64;
 
+/// Wrapper for [VkSamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrConversion.html)
 #[derive(Debug, Clone)]
 pub struct VkSamplerYcbcrConversion {
     _handle: RawVkSamplerYcbcrConversion,
@@ -67,10 +69,12 @@ impl VkSetup for VkSamplerYcbcrConversion {
 
 impl VkSamplerYcbcrConversion {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroySamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySamplerYcbcrConversion.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroySamplerYcbcrConversion)(self._parent_device, self._handle, ptr::null());

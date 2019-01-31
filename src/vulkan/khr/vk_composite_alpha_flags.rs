@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkCompositeAlphaFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCompositeAlphaFlagBitsKHR.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkCompositeAlphaFlags {
     pub opaque: bool,
@@ -10,6 +11,7 @@ pub struct VkCompositeAlphaFlags {
     pub inherit: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkCompositeAlphaFlags = u32;
 
 impl VkWrappedType<RawVkCompositeAlphaFlags> for VkCompositeAlphaFlags {

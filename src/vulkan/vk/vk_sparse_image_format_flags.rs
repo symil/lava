@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSparseImageFormatFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageFormatFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSparseImageFormatFlags {
     pub single_miptail: bool,
@@ -9,6 +10,7 @@ pub struct VkSparseImageFormatFlags {
     pub nonstandard_block_size: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSparseImageFormatFlags = u32;
 
 impl VkWrappedType<RawVkSparseImageFormatFlags> for VkSparseImageFormatFlags {

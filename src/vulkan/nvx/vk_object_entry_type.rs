@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkObjectEntryTypeNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectEntryTypeNVX.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkObjectEntryType {
@@ -12,6 +13,7 @@ pub enum VkObjectEntryType {
     PushConstant = 4,
 }
 
+#[doc(hidden)]
 pub type RawVkObjectEntryType = i32;
 
 impl VkWrappedType<RawVkObjectEntryType> for VkObjectEntryType {

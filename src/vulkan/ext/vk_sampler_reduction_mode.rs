@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSamplerReductionModeEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerReductionModeEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSamplerReductionMode {
@@ -10,6 +11,7 @@ pub enum VkSamplerReductionMode {
     Max = 2,
 }
 
+#[doc(hidden)]
 pub type RawVkSamplerReductionMode = i32;
 
 impl VkWrappedType<RawVkSamplerReductionMode> for VkSamplerReductionMode {

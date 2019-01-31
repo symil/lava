@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkFormatFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatFeatureFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkFormatFeatureFlags {
     pub sampled_image: bool,
@@ -31,6 +32,7 @@ pub struct VkFormatFeatureFlags {
     pub fragment_density_map_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkFormatFeatureFlags = u32;
 
 impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {

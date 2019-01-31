@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkConformanceVersionKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConformanceVersionKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkConformanceVersion {
     pub major: u8,
@@ -20,6 +21,7 @@ pub struct VkConformanceVersion {
     pub patch: u8,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkConformanceVersion {

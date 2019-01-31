@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkSurface = u64;
 
+/// Wrapper for [VkSurfaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkSurface {
     _handle: RawVkSurface,
@@ -67,10 +69,12 @@ impl VkSetup for VkSurface {
 
 impl VkSurface {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroySurfaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySurfaceKHR.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroySurfaceKHR)(self._parent_instance, self._handle, ptr::null());

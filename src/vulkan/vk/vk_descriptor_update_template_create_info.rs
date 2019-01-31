@@ -19,6 +19,7 @@ use vulkan::vk::{VkDescriptorSetLayout,RawVkDescriptorSetLayout};
 use vulkan::vk::{VkPipelineBindPoint,RawVkPipelineBindPoint};
 use vulkan::vk::{VkPipelineLayout,RawVkPipelineLayout};
 
+/// Wrapper for [VkDescriptorUpdateTemplateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorUpdateTemplateCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {
     pub flags: VkDescriptorUpdateTemplateCreateFlags,
@@ -30,6 +31,7 @@ pub struct VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {
     pub set: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorUpdateTemplateCreateInfo {

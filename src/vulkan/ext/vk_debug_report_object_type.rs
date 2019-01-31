@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDebugReportObjectTypeEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportObjectTypeEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDebugReportObjectType {
@@ -44,6 +45,7 @@ pub enum VkDebugReportObjectType {
     AccelerationStructureNv = 1000165000,
 }
 
+#[doc(hidden)]
 pub type RawVkDebugReportObjectType = i32;
 
 impl VkWrappedType<RawVkDebugReportObjectType> for VkDebugReportObjectType {

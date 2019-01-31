@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkMemoryHeapFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHeapFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryHeapFlags {
     pub device_local: bool,
     pub multi_instance: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkMemoryHeapFlags = u32;
 
 impl VkWrappedType<RawVkMemoryHeapFlags> for VkMemoryHeapFlags {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkQueueFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueueFlags {
     pub graphics: bool,
@@ -11,6 +12,7 @@ pub struct VkQueueFlags {
     pub protected: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkQueueFlags = u32;
 
 impl VkWrappedType<RawVkQueueFlags> for VkQueueFlags {

@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkEventCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkEventCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkEventCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkEventCreateFlags = u32;
 
 impl VkWrappedType<RawVkEventCreateFlags> for VkEventCreateFlags {

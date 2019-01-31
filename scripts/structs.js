@@ -1,4 +1,4 @@
-const { getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle, isOutputHandleStruct } = require('./utils');
+const { getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle, isOutputHandleStruct, documentType } = require('./utils');
 const { getStruct } = require('./parse');
 const { genImplFlags } = require('./bit_flags');
 
@@ -72,6 +72,7 @@ function genRawStructDeclaration(cDef) {
     }
 
     return [
+        `#[doc(hidden)]`,
         `#[repr(C)]`,
         derivedTraits.length ? `#[derive(${derivedTraits.join(', ')})]` : null,
         `pub struct ${cDef.rawTypeName}`,
@@ -84,6 +85,7 @@ function getWrappedStructDeclaration(def) {
     const derivedTraits = ['Debug', 'Clone'];
     
     return [
+        documentType(def),
         `#[derive(${derivedTraits.join(', ')})]`,
         `pub struct ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`,
             fields.map(field => `pub ${field.varName}: ${field.wrappedType},`)

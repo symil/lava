@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkDedicatedAllocationImageCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDedicatedAllocationImageCreateInfoNV.html)
 #[derive(Debug, Clone)]
 pub struct VkDedicatedAllocationImageCreateInfo {
     pub dedicated_allocation: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDedicatedAllocationImageCreateInfo {

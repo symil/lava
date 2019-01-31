@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSampleCountFlags,RawVkSampleCountFlags};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
+/// Wrapper for [VkPhysicalDeviceSampleLocationsPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSampleLocationsPropertiesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSampleLocationsProperties {
     pub sample_location_sample_counts: VkSampleCountFlags,
@@ -24,6 +25,7 @@ pub struct VkPhysicalDeviceSampleLocationsProperties {
     pub variable_sample_locations: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSampleLocationsProperties {

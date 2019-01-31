@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkSurfaceCapabilities,RawVkSurfaceCapabilities};
 
+/// Wrapper for [VkSurfaceCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceCapabilities2KHR.html)
 #[derive(Debug, Clone)]
 pub struct VkSurfaceCapabilities2 {
     pub surface_capabilities: VkSurfaceCapabilities,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities2 {

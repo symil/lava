@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineRasterizationConservativeStateCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationConservativeStateCreateFlagBitsEXT.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineRasterizationConservativeStateCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineRasterizationConservativeStateCreateFlags = u32;
 
 impl VkWrappedType<RawVkPipelineRasterizationConservativeStateCreateFlags> for VkPipelineRasterizationConservativeStateCreateFlags {

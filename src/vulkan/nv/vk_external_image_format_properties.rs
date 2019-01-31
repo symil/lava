@@ -15,6 +15,7 @@ use vulkan::vk::{VkImageFormatProperties,RawVkImageFormatProperties};
 use vulkan::nv::{VkExternalMemoryFeatureFlags,RawVkExternalMemoryFeatureFlags};
 use vulkan::nv::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFlags};
 
+/// Wrapper for [VkExternalImageFormatPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalImageFormatPropertiesNV.html)
 #[derive(Debug, Clone)]
 pub struct VkExternalImageFormatProperties {
     pub image_format_properties: VkImageFormatProperties,
@@ -23,6 +24,7 @@ pub struct VkExternalImageFormatProperties {
     pub compatible_handle_types: VkExternalMemoryHandleTypeFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalImageFormatProperties {

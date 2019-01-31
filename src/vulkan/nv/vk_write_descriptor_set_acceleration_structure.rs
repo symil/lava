@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkAccelerationStructure,RawVkAccelerationStructure};
 
+/// Wrapper for [VkWriteDescriptorSetAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkWriteDescriptorSetAccelerationStructureNV.html)
 #[derive(Debug, Clone)]
 pub struct VkWriteDescriptorSetAccelerationStructure<'a, 'b>
     where
@@ -22,6 +23,7 @@ pub struct VkWriteDescriptorSetAccelerationStructure<'a, 'b>
     pub acceleration_structures: &'a [&'b VkAccelerationStructure],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSetAccelerationStructure {

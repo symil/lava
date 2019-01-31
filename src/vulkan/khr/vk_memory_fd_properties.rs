@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkMemoryFdPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryFdPropertiesKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkMemoryFdProperties {
     pub memory_type_bits: u32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryFdProperties {

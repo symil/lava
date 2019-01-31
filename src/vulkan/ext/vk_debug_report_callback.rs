@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkDebugReportCallback = u64;
 
+/// Wrapper for [VkDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportCallbackEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDebugReportCallback {
     _handle: RawVkDebugReportCallback,
@@ -67,10 +69,12 @@ impl VkSetup for VkDebugReportCallback {
 
 impl VkDebugReportCallback {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroyDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDebugReportCallbackEXT.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyDebugReportCallbackEXT)(self._parent_instance, self._handle, ptr::null());

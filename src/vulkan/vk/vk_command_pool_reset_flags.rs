@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkCommandPoolResetFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPoolResetFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandPoolResetFlags {
     pub release_resources: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkCommandPoolResetFlags = u32;
 
 impl VkWrappedType<RawVkCommandPoolResetFlags> for VkCommandPoolResetFlags {

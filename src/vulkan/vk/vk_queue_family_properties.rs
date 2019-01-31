@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkQueueFlags,RawVkQueueFlags};
 use vulkan::vk::{VkExtent3D,RawVkExtent3D};
 
+/// Wrapper for [VkQueueFamilyProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFamilyProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkQueueFamilyProperties {
     pub queue_flags: VkQueueFlags,
@@ -22,6 +23,7 @@ pub struct VkQueueFamilyProperties {
     pub min_image_transfer_granularity: VkExtent3D,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueueFamilyProperties {

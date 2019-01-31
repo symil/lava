@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkDrawMeshTasksIndirectCommandNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrawMeshTasksIndirectCommandNV.html)
 #[derive(Debug, Clone)]
 pub struct VkDrawMeshTasksIndirectCommand {
     pub task_count: usize,
     pub first_task: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrawMeshTasksIndirectCommand {

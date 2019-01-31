@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkDebugUtilsMessenger = u64;
 
+/// Wrapper for [VkDebugUtilsMessengerEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDebugUtilsMessenger {
     _handle: RawVkDebugUtilsMessenger,
@@ -67,10 +69,12 @@ impl VkSetup for VkDebugUtilsMessenger {
 
 impl VkDebugUtilsMessenger {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroyDebugUtilsMessengerEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDebugUtilsMessengerEXT.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyDebugUtilsMessengerEXT)(self._parent_instance, self._handle, ptr::null());

@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSharingMode,RawVkSharingMode};
 
+/// Wrapper for [VkPhysicalDeviceImageDrmFormatModifierInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceImageDrmFormatModifierInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceImageDrmFormatModifierInfo<'a> {
     pub drm_format_modifier: usize,
@@ -21,6 +22,7 @@ pub struct VkPhysicalDeviceImageDrmFormatModifierInfo<'a> {
     pub queue_family_indices: &'a [usize],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceImageDrmFormatModifierInfo {

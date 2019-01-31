@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceInlineUniformBlockPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceInlineUniformBlockPropertiesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceInlineUniformBlockProperties {
     pub max_inline_uniform_block_size: usize,
@@ -22,6 +23,7 @@ pub struct VkPhysicalDeviceInlineUniformBlockProperties {
     pub max_descriptor_set_update_after_bind_inline_uniform_blocks: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceInlineUniformBlockProperties {

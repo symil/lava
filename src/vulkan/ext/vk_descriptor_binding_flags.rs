@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDescriptorBindingFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBindingFlagBitsEXT.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorBindingFlags {
     pub update_after_bind: bool,
@@ -10,6 +11,7 @@ pub struct VkDescriptorBindingFlags {
     pub variable_descriptor_count: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkDescriptorBindingFlags = u32;
 
 impl VkWrappedType<RawVkDescriptorBindingFlags> for VkDescriptorBindingFlags {

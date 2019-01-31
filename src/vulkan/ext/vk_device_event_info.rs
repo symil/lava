@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkDeviceEventType,RawVkDeviceEventType};
 
+/// Wrapper for [VkDeviceEventInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceEventInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDeviceEventInfo {
     pub device_event: VkDeviceEventType,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceEventInfo {

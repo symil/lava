@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkClearDepthStencilValue](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkClearDepthStencilValue.html)
 #[derive(Debug, Clone)]
 pub struct VkClearDepthStencilValue {
     pub depth: f32,
     pub stencil: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkClearDepthStencilValue {

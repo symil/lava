@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkOffset3D](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkOffset3D.html)
 #[derive(Debug, Clone)]
 pub struct VkOffset3D {
     pub x: i32,
@@ -19,6 +20,7 @@ pub struct VkOffset3D {
     pub z: i32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkOffset3D {

@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkFence = u64;
 
+/// Wrapper for [VkFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFence.html)
 #[derive(Debug, Clone)]
 pub struct VkFence {
     _handle: RawVkFence,
@@ -67,16 +69,19 @@ impl VkSetup for VkFence {
 
 impl VkFence {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroyFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyFence.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyFence)(self._parent_device, self._handle, ptr::null());
         }
     }
     
+    /// Wrapper for [vkGetFenceStatus](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetFenceStatus.html)
     pub fn get_status(&self) -> VkResult {
         unsafe {
             let vk_result = ((&*self._fn_table).vkGetFenceStatus)(self._parent_device, self._handle);

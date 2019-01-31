@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkShaderModule = u64;
 
+/// Wrapper for [VkShaderModule](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModule.html)
 #[derive(Debug, Clone)]
 pub struct VkShaderModule {
     _handle: RawVkShaderModule,
@@ -67,10 +69,12 @@ impl VkSetup for VkShaderModule {
 
 impl VkShaderModule {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroyShaderModule](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyShaderModule.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyShaderModule)(self._parent_device, self._handle, ptr::null());

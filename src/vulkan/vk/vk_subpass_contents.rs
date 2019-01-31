@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSubpassContents](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassContents.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSubpassContents {
@@ -9,6 +10,7 @@ pub enum VkSubpassContents {
     SecondaryCommandBuffers = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkSubpassContents = i32;
 
 impl VkWrappedType<RawVkSubpassContents> for VkSubpassContents {

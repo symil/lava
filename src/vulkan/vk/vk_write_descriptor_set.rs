@@ -18,6 +18,7 @@ use vulkan::vk::{VkDescriptorImageInfo,RawVkDescriptorImageInfo};
 use vulkan::vk::{VkDescriptorBufferInfo,RawVkDescriptorBufferInfo};
 use vulkan::vk::{VkBufferView,RawVkBufferView};
 
+/// Wrapper for [VkWriteDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkWriteDescriptorSet.html)
 #[derive(Debug, Clone)]
 pub struct VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     where
@@ -35,6 +36,7 @@ pub struct VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     pub texel_buffer_view: &'g [&'h VkBufferView],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSet {

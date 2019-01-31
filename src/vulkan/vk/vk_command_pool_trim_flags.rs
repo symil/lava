@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkCommandPoolTrimFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPoolTrimFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandPoolTrimFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkCommandPoolTrimFlags = u32;
 
 impl VkWrappedType<RawVkCommandPoolTrimFlags> for VkCommandPoolTrimFlags {

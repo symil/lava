@@ -16,6 +16,7 @@ use vulkan::vk::{VkPipelineLayoutCreateFlags,RawVkPipelineLayoutCreateFlags};
 use vulkan::vk::{VkDescriptorSetLayout,RawVkDescriptorSetLayout};
 use vulkan::vk::{VkPushConstantRange,RawVkPushConstantRange};
 
+/// Wrapper for [VkPipelineLayoutCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineLayoutCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineLayoutCreateInfo<'a, 'b, 'c>
     where
@@ -26,6 +27,7 @@ pub struct VkPipelineLayoutCreateInfo<'a, 'b, 'c>
     pub push_constant_ranges: &'c [VkPushConstantRange],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineLayoutCreateInfo {

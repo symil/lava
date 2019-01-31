@@ -32,6 +32,7 @@ function genUses() {
 
 function genDefinition(functions) {
     return [
+        `#[doc(hidden)]`,
         `pub struct VkInstanceFunctionTable`,
         functions.map(func => `pub ${func.name}: ${functionToDeclaration(func)},`)
     ];

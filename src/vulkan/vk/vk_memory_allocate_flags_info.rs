@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkMemoryAllocateFlags,RawVkMemoryAllocateFlags};
 
+/// Wrapper for [VkMemoryAllocateFlagsInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryAllocateFlagsInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkMemoryAllocateFlagsInfo {
     pub flags: VkMemoryAllocateFlags,
     pub device_mask: u32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryAllocateFlagsInfo {

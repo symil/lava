@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImage,RawVkImage};
 
+/// Wrapper for [VkImageSparseMemoryRequirementsInfo2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSparseMemoryRequirementsInfo2.html)
 #[derive(Debug, Clone)]
 pub struct VkImageSparseMemoryRequirementsInfo2<'a> {
     pub image: &'a VkImage,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSparseMemoryRequirementsInfo2 {

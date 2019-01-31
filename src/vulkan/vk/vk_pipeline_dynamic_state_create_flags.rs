@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineDynamicStateCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDynamicStateCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineDynamicStateCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineDynamicStateCreateFlags = u32;
 
 impl VkWrappedType<RawVkPipelineDynamicStateCreateFlags> for VkPipelineDynamicStateCreateFlags {

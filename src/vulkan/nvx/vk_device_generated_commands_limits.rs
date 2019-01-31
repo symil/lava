@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkDeviceGeneratedCommandsLimitsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGeneratedCommandsLimitsNVX.html)
 #[derive(Debug, Clone)]
 pub struct VkDeviceGeneratedCommandsLimits {
     pub max_indirect_commands_layout_token_count: usize,
@@ -22,6 +23,7 @@ pub struct VkDeviceGeneratedCommandsLimits {
     pub min_commands_token_buffer_offset_alignment: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGeneratedCommandsLimits {

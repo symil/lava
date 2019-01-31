@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::amd::{VkMemoryOverallocationBehavior,RawVkMemoryOverallocationBehavior};
 
+/// Wrapper for [VkDeviceMemoryOverallocationCreateInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceMemoryOverallocationCreateInfoAMD.html)
 #[derive(Debug, Clone)]
 pub struct VkDeviceMemoryOverallocationCreateInfo {
     pub overallocation_behavior: VkMemoryOverallocationBehavior,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceMemoryOverallocationCreateInfo {

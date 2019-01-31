@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExternalFenceHandleTypeFlags,RawVkExternalFenceHandleTypeFlags};
 use vulkan::vk::{VkExternalFenceFeatureFlags,RawVkExternalFenceFeatureFlags};
 
+/// Wrapper for [VkExternalFenceProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalFenceProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkExternalFenceProperties {
     pub export_from_imported_handle_types: VkExternalFenceHandleTypeFlags,
@@ -22,6 +23,7 @@ pub struct VkExternalFenceProperties {
     pub external_fence_features: VkExternalFenceFeatureFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalFenceProperties {

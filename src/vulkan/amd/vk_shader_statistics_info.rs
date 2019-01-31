@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 use vulkan::amd::{VkShaderResourceUsage,RawVkShaderResourceUsage};
 
+/// Wrapper for [VkShaderStatisticsInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderStatisticsInfoAMD.html)
 #[derive(Debug, Clone)]
 pub struct VkShaderStatisticsInfo {
     pub shader_stage_mask: VkShaderStageFlags,
@@ -25,6 +26,7 @@ pub struct VkShaderStatisticsInfo {
     pub compute_work_group_size: [usize; 3],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShaderStatisticsInfo {

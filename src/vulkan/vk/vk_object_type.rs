@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkObjectType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectType.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkObjectType {
@@ -45,6 +46,7 @@ pub enum VkObjectType {
     AccelerationStructureNv = 1000165000,
 }
 
+#[doc(hidden)]
 pub type RawVkObjectType = i32;
 
 impl VkWrappedType<RawVkObjectType> for VkObjectType {

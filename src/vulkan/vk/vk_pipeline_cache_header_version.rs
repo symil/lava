@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineCacheHeaderVersion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCacheHeaderVersion.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPipelineCacheHeaderVersion {
     One = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineCacheHeaderVersion = i32;
 
 impl VkWrappedType<RawVkPipelineCacheHeaderVersion> for VkPipelineCacheHeaderVersion {

@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineDepthStencilStateCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDepthStencilStateCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineDepthStencilStateCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineDepthStencilStateCreateFlags = u32;
 
 impl VkWrappedType<RawVkPipelineDepthStencilStateCreateFlags> for VkPipelineDepthStencilStateCreateFlags {

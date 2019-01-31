@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSparseMemoryBindFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseMemoryBindFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSparseMemoryBindFlags {
     pub metadata: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSparseMemoryBindFlags = u32;
 
 impl VkWrappedType<RawVkSparseMemoryBindFlags> for VkSparseMemoryBindFlags {

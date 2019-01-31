@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSystemAllocationScope](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSystemAllocationScope.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSystemAllocationScope {
@@ -12,6 +13,7 @@ pub enum VkSystemAllocationScope {
     Instance = 4,
 }
 
+#[doc(hidden)]
 pub type RawVkSystemAllocationScope = i32;
 
 impl VkWrappedType<RawVkSystemAllocationScope> for VkSystemAllocationScope {

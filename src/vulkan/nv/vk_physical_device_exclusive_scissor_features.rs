@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceExclusiveScissorFeaturesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceExclusiveScissorFeaturesNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceExclusiveScissorFeatures {
     pub exclusive_scissor: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExclusiveScissorFeatures {

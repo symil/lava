@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDiscardRectangleModeEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDiscardRectangleModeEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDiscardRectangleMode {
@@ -9,6 +10,7 @@ pub enum VkDiscardRectangleMode {
     Exclusive = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkDiscardRectangleMode = i32;
 
 impl VkWrappedType<RawVkDiscardRectangleMode> for VkDiscardRectangleMode {

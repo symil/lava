@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSampleCountFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSampleCountFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSampleCountFlags {
     pub _1: bool,
@@ -13,6 +14,7 @@ pub struct VkSampleCountFlags {
     pub _64: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSampleCountFlags = u32;
 
 impl VkWrappedType<RawVkSampleCountFlags> for VkSampleCountFlags {

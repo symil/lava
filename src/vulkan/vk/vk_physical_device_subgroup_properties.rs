@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 use vulkan::vk::{VkSubgroupFeatureFlags,RawVkSubgroupFeatureFlags};
 
+/// Wrapper for [VkPhysicalDeviceSubgroupProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSubgroupProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSubgroupProperties {
     pub subgroup_size: usize,
@@ -23,6 +24,7 @@ pub struct VkPhysicalDeviceSubgroupProperties {
     pub quad_operations_in_all_stages: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSubgroupProperties {

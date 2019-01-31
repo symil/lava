@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDebugUtilsMessageSeverityFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessageSeverityFlagBitsEXT.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessageSeverityFlags {
     pub verbose: bool,
@@ -10,6 +11,7 @@ pub struct VkDebugUtilsMessageSeverityFlags {
     pub error: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkDebugUtilsMessageSeverityFlags = u32;
 
 impl VkWrappedType<RawVkDebugUtilsMessageSeverityFlags> for VkDebugUtilsMessageSeverityFlags {

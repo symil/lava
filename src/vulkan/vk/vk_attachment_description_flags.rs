@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkAttachmentDescriptionFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentDescriptionFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkAttachmentDescriptionFlags {
     pub may_alias: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkAttachmentDescriptionFlags = u32;
 
 impl VkWrappedType<RawVkAttachmentDescriptionFlags> for VkAttachmentDescriptionFlags {

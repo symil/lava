@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSamplerYcbcrConversion,RawVkSamplerYcbcrConversion};
 
+/// Wrapper for [VkSamplerYcbcrConversionInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrConversionInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkSamplerYcbcrConversionInfo<'a> {
     pub conversion: &'a VkSamplerYcbcrConversion,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionInfo {

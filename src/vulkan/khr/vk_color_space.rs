@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkColorSpaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkColorSpaceKHR.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkColorSpace {
@@ -22,6 +23,7 @@ pub enum VkColorSpace {
     ExtendedSrgbNonlinearExt = 1000104014,
 }
 
+#[doc(hidden)]
 pub type RawVkColorSpace = i32;
 
 impl VkWrappedType<RawVkColorSpace> for VkColorSpace {

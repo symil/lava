@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkQueryPipelineStatisticFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPipelineStatisticFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryPipelineStatisticFlags {
     pub input_assembly_vertices: bool,
@@ -17,6 +18,7 @@ pub struct VkQueryPipelineStatisticFlags {
     pub compute_shader_invocations: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkQueryPipelineStatisticFlags = u32;
 
 impl VkWrappedType<RawVkQueryPipelineStatisticFlags> for VkQueryPipelineStatisticFlags {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkImageType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageType.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkImageType {
@@ -10,6 +11,7 @@ pub enum VkImageType {
     _3d = 2,
 }
 
+#[doc(hidden)]
 pub type RawVkImageType = i32;
 
 impl VkWrappedType<RawVkImageType> for VkImageType {

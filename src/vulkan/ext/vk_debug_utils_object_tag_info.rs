@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkObjectType,RawVkObjectType};
 
+/// Wrapper for [VkDebugUtilsObjectTagInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsObjectTagInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDebugUtilsObjectTagInfo<'a> {
     pub object_type: VkObjectType,
@@ -23,6 +24,7 @@ pub struct VkDebugUtilsObjectTagInfo<'a> {
     pub tag: &'a c_void,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsObjectTagInfo {

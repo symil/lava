@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkShadingRatePaletteEntryNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShadingRatePaletteEntryNV.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkShadingRatePaletteEntry {
@@ -19,6 +20,7 @@ pub enum VkShadingRatePaletteEntry {
     _1InvocationPer4X4Pixels = 11,
 }
 
+#[doc(hidden)]
 pub type RawVkShadingRatePaletteEntry = i32;
 
 impl VkWrappedType<RawVkShadingRatePaletteEntry> for VkShadingRatePaletteEntry {

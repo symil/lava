@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceConservativeRasterizationPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceConservativeRasterizationPropertiesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceConservativeRasterizationProperties {
     pub primitive_overestimation_size: f32,
@@ -26,6 +27,7 @@ pub struct VkPhysicalDeviceConservativeRasterizationProperties {
     pub conservative_rasterization_post_depth_coverage: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceConservativeRasterizationProperties {

@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkDisplayMode,RawVkDisplayMode};
 
+/// Wrapper for [VkDisplayPlaneInfo2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneInfo2KHR.html)
 #[derive(Debug, Clone)]
 pub struct VkDisplayPlaneInfo2<'a> {
     pub mode: &'a VkDisplayMode,
     pub plane_index: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneInfo2 {

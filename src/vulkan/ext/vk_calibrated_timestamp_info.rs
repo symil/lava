@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkTimeDomain,RawVkTimeDomain};
 
+/// Wrapper for [VkCalibratedTimestampInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCalibratedTimestampInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkCalibratedTimestampInfo {
     pub time_domain: VkTimeDomain,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCalibratedTimestampInfo {

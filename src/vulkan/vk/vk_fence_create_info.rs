@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkFenceCreateFlags,RawVkFenceCreateFlags};
 
+/// Wrapper for [VkFenceCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFenceCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkFenceCreateInfo {
     pub flags: VkFenceCreateFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFenceCreateInfo {

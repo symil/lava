@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkSparseImageFormatProperties,RawVkSparseImageFormatProperties};
 
+/// Wrapper for [VkSparseImageMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryRequirements.html)
 #[derive(Debug, Clone)]
 pub struct VkSparseImageMemoryRequirements {
     pub format_properties: VkSparseImageFormatProperties,
@@ -22,6 +23,7 @@ pub struct VkSparseImageMemoryRequirements {
     pub image_mip_tail_stride: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageMemoryRequirements {

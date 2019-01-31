@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSemaphoreCreateFlags,RawVkSemaphoreCreateFlags};
 
+/// Wrapper for [VkSemaphoreCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkSemaphoreCreateInfo {
     pub flags: VkSemaphoreCreateFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSemaphoreCreateInfo {

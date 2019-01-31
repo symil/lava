@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkCommandPool,RawVkCommandPool};
 use vulkan::vk::{VkCommandBufferLevel,RawVkCommandBufferLevel};
 
+/// Wrapper for [VkCommandBufferAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferAllocateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkCommandBufferAllocateInfo<'a> {
     pub command_pool: &'a VkCommandPool,
@@ -22,6 +23,7 @@ pub struct VkCommandBufferAllocateInfo<'a> {
     pub command_buffer_count: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferAllocateInfo {

@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImageUsageFlags,RawVkImageUsageFlags};
 
+/// Wrapper for [VkSharedPresentSurfaceCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSharedPresentSurfaceCapabilitiesKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkSharedPresentSurfaceCapabilities {
     pub shared_present_supported_usage_flags: VkImageUsageFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSharedPresentSurfaceCapabilities {

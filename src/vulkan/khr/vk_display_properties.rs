@@ -15,6 +15,7 @@ use vulkan::khr::{VkDisplay,RawVkDisplay};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 use vulkan::khr::{VkSurfaceTransformFlags,RawVkSurfaceTransformFlags};
 
+/// Wrapper for [VkDisplayPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPropertiesKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkDisplayProperties {
     pub display: VkDisplay,
@@ -26,6 +27,7 @@ pub struct VkDisplayProperties {
     pub persistent_content: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayProperties {

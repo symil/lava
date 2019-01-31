@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDeviceQueueCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceQueueCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDeviceQueueCreateFlags {
     pub protected: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkDeviceQueueCreateFlags = u32;
 
 impl VkWrappedType<RawVkDeviceQueueCreateFlags> for VkDeviceQueueCreateFlags {

@@ -10,6 +10,7 @@ use utils::vk_ptr::*;
 use vulkan::vk::*;
 use vulkan::ext::*;
 
+#[doc(hidden)]
 #[repr(C)]
 pub struct RawVkDebugUtilsMessengerCreateInfo {
     s_type: i32,
@@ -21,6 +22,7 @@ pub struct RawVkDebugUtilsMessengerCreateInfo {
     user_data: *mut c_void
 }
 
+/// Wrapper for [VkDebugUtilsMessengerCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCreateInfo.html)
 pub struct VkDebugUtilsMessengerCreateInfo {
     pub flags: VkDebugUtilsMessengerCreateFlags,
     pub message_severity: VkDebugUtilsMessageSeverityFlags,

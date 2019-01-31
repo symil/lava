@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkImageViewCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageViewCreateFlags {
     pub fragment_density_map_dynamic_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkImageViewCreateFlags = u32;
 
 impl VkWrappedType<RawVkImageViewCreateFlags> for VkImageViewCreateFlags {

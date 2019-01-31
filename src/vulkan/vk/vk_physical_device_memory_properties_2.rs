@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPhysicalDeviceMemoryProperties,RawVkPhysicalDeviceMemoryProperties};
 
+/// Wrapper for [VkPhysicalDeviceMemoryProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMemoryProperties2.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceMemoryProperties2 {
     pub memory_properties: VkPhysicalDeviceMemoryProperties,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryProperties2 {

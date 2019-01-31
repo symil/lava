@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkImageLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageLayout.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkImageLayout {
@@ -22,6 +23,7 @@ pub enum VkImageLayout {
     FragmentDensityMapOptimalExt = 1000218000,
 }
 
+#[doc(hidden)]
 pub type RawVkImageLayout = i32;
 
 impl VkWrappedType<RawVkImageLayout> for VkImageLayout {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkTimeDomainEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkTimeDomainEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkTimeDomain {
@@ -11,6 +12,7 @@ pub enum VkTimeDomain {
     QueryPerformanceCounter = 3,
 }
 
+#[doc(hidden)]
 pub type RawVkTimeDomain = i32;
 
 impl VkWrappedType<RawVkTimeDomain> for VkTimeDomain {

@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkSamplerYcbcrConversionImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrConversionImageFormatProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkSamplerYcbcrConversionImageFormatProperties {
     pub combined_image_sampler_descriptor_count: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionImageFormatProperties {

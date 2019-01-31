@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkBuildAccelerationStructureFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuildAccelerationStructureFlagBitsNV.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkBuildAccelerationStructureFlags {
     pub allow_update: bool,
@@ -11,6 +12,7 @@ pub struct VkBuildAccelerationStructureFlags {
     pub low_memory: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkBuildAccelerationStructureFlags = u32;
 
 impl VkWrappedType<RawVkBuildAccelerationStructureFlags> for VkBuildAccelerationStructureFlags {

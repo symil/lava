@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkImageSubresourceLayers,RawVkImageSubresourceLayers};
 use vulkan::vk::{VkOffset3D,RawVkOffset3D};
 
+/// Wrapper for [VkImageBlit](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageBlit.html)
 #[derive(Debug, Clone)]
 pub struct VkImageBlit {
     pub src_subresource: VkImageSubresourceLayers,
@@ -22,6 +23,7 @@ pub struct VkImageBlit {
     pub dst_offsets: [VkOffset3D; 2],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageBlit {

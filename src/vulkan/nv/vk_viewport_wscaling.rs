@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkViewportWScalingNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkViewportWScalingNV.html)
 #[derive(Debug, Clone)]
 pub struct VkViewportWScaling {
     pub xcoeff: f32,
     pub ycoeff: f32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkViewportWScaling {

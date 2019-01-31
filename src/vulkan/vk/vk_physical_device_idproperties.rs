@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceIDProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceIDProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceIDProperties {
     pub device_uuid: [u8; 16],
@@ -22,6 +23,7 @@ pub struct VkPhysicalDeviceIDProperties {
     pub device_luidvalid: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceIDProperties {

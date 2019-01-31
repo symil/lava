@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkRenderPassCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkRenderPassCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkRenderPassCreateFlags = u32;
 
 impl VkWrappedType<RawVkRenderPassCreateFlags> for VkRenderPassCreateFlags {

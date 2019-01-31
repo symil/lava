@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkResolveModeFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResolveModeFlagBitsKHR.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkResolveModeFlags {
     pub sample_zero: bool,
@@ -10,6 +11,7 @@ pub struct VkResolveModeFlags {
     pub max: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkResolveModeFlags = u32;
 
 impl VkWrappedType<RawVkResolveModeFlags> for VkResolveModeFlags {

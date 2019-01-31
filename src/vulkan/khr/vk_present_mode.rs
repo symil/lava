@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPresentModeKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentModeKHR.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPresentMode {
@@ -13,6 +14,7 @@ pub enum VkPresentMode {
     SharedContinuousRefresh = 1000111001,
 }
 
+#[doc(hidden)]
 pub type RawVkPresentMode = i32;
 
 impl VkWrappedType<RawVkPresentMode> for VkPresentMode {

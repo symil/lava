@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkShaderModuleCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModuleCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkShaderModuleCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkShaderModuleCreateFlags = u32;
 
 impl VkWrappedType<RawVkShaderModuleCreateFlags> for VkShaderModuleCreateFlags {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkGeometryInstanceFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryInstanceFlagBitsNV.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkGeometryInstanceFlags {
     pub triangle_cull_disable: bool,
@@ -10,6 +11,7 @@ pub struct VkGeometryInstanceFlags {
     pub force_no_opaque: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkGeometryInstanceFlags = u32;
 
 impl VkWrappedType<RawVkGeometryInstanceFlags> for VkGeometryInstanceFlags {

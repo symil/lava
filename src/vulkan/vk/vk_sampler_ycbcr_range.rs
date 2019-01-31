@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSamplerYcbcrRange](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrRange.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSamplerYcbcrRange {
@@ -9,6 +10,7 @@ pub enum VkSamplerYcbcrRange {
     ItuNarrow = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkSamplerYcbcrRange = i32;
 
 impl VkWrappedType<RawVkSamplerYcbcrRange> for VkSamplerYcbcrRange {

@@ -18,6 +18,7 @@ use vulkan::khr::{VkSurfaceTransformFlags,RawVkSurfaceTransformFlags};
 use vulkan::khr::{VkDisplayPlaneAlphaFlags,RawVkDisplayPlaneAlphaFlags};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
+/// Wrapper for [VkDisplaySurfaceCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplaySurfaceCreateInfoKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkDisplaySurfaceCreateInfo<'a> {
     pub flags: VkDisplaySurfaceCreateFlags,
@@ -30,6 +31,7 @@ pub struct VkDisplaySurfaceCreateInfo<'a> {
     pub image_extent: VkExtent2D,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplaySurfaceCreateInfo {

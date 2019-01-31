@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDescriptorPoolCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPoolCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorPoolCreateFlags {
     pub free_descriptor_set: bool,
     pub update_after_bind_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkDescriptorPoolCreateFlags = u32;
 
 impl VkWrappedType<RawVkDescriptorPoolCreateFlags> for VkDescriptorPoolCreateFlags {

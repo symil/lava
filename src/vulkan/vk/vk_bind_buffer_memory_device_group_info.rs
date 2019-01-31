@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkBindBufferMemoryDeviceGroupInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindBufferMemoryDeviceGroupInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkBindBufferMemoryDeviceGroupInfo<'a> {
     pub device_indices: &'a [usize],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindBufferMemoryDeviceGroupInfo {

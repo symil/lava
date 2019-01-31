@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 
+/// Wrapper for [VkBindImageMemorySwapchainInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindImageMemorySwapchainInfoKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkBindImageMemorySwapchainInfo<'a> {
     pub swapchain: &'a VkSwapchain,
     pub image_index: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemorySwapchainInfo {

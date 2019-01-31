@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtensionProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkExtensionProperties {
     pub extension_name: String,
     pub spec_version: u32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 pub struct RawVkExtensionProperties {
     pub extension_name: [c_char; 256],

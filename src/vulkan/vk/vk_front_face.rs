@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkFrontFace](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFrontFace.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkFrontFace {
@@ -9,6 +10,7 @@ pub enum VkFrontFace {
     Clockwise = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkFrontFace = i32;
 
 impl VkWrappedType<RawVkFrontFace> for VkFrontFace {

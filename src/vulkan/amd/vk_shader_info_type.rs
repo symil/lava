@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkShaderInfoTypeAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderInfoTypeAMD.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkShaderInfoType {
@@ -10,6 +11,7 @@ pub enum VkShaderInfoType {
     Disassembly = 2,
 }
 
+#[doc(hidden)]
 pub type RawVkShaderInfoType = i32;
 
 impl VkWrappedType<RawVkShaderInfoType> for VkShaderInfoType {

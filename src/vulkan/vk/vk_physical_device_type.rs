@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPhysicalDeviceType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceType.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPhysicalDeviceType {
@@ -12,6 +13,7 @@ pub enum VkPhysicalDeviceType {
     Cpu = 4,
 }
 
+#[doc(hidden)]
 pub type RawVkPhysicalDeviceType = i32;
 
 impl VkWrappedType<RawVkPhysicalDeviceType> for VkPhysicalDeviceType {

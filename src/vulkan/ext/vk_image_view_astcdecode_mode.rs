@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkFormat,RawVkFormat};
 
+/// Wrapper for [VkImageViewASTCDecodeModeEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewASTCDecodeModeEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkImageViewASTCDecodeMode {
     pub decode_mode: VkFormat,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageViewASTCDecodeMode {

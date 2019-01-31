@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceSamplerYcbcrConversionFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSamplerYcbcrConversionFeatures.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSamplerYcbcrConversionFeatures {
     pub sampler_ycbcr_conversion: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSamplerYcbcrConversionFeatures {

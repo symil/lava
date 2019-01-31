@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkFormatFeatureFlags,RawVkFormatFeatureFlags};
 
+/// Wrapper for [VkFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkFormatProperties {
     pub linear_tiling_features: VkFormatFeatureFlags,
@@ -20,6 +21,7 @@ pub struct VkFormatProperties {
     pub buffer_features: VkFormatFeatureFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFormatProperties {

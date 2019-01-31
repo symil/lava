@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkExternalFenceHandleTypeFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalFenceHandleTypeFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalFenceHandleTypeFlags {
     pub opaque_fd: bool,
@@ -10,6 +11,7 @@ pub struct VkExternalFenceHandleTypeFlags {
     pub sync_fd: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkExternalFenceHandleTypeFlags = u32;
 
 impl VkWrappedType<RawVkExternalFenceHandleTypeFlags> for VkExternalFenceHandleTypeFlags {

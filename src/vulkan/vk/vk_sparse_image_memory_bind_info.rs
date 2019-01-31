@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkImage,RawVkImage};
 use vulkan::vk::{VkSparseImageMemoryBind,RawVkSparseImageMemoryBind};
 
+/// Wrapper for [VkSparseImageMemoryBindInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryBindInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkSparseImageMemoryBindInfo<'a, 'b, 'c>
     where
@@ -23,6 +24,7 @@ pub struct VkSparseImageMemoryBindInfo<'a, 'b, 'c>
     pub binds: &'b [VkSparseImageMemoryBind<'c>],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageMemoryBindInfo {

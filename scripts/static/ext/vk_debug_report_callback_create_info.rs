@@ -8,9 +8,15 @@ use utils::vk_ptr::*;
 use vulkan::vk::*;
 use vulkan::ext::*;
 
+#[doc(hidden)]
 pub type RawVkDebugCallback = unsafe extern fn(flags: u32, obj_type: i32, obj: u64, location: usize, code: i32, layer_prefix: *const c_char, msg: *const c_char, user_data: *mut c_void) -> u32;
+
+/// Function called by the debug report callback when needed.
+/// 
+/// The signature will be expanded in the future. 
 pub type VkDebugCallback = fn(msg: String);
 
+#[doc(hidden)]
 #[repr(C)]
 pub struct RawVkDebugReportCallbackCreateInfo {
     s_type: i32,
@@ -20,6 +26,7 @@ pub struct RawVkDebugReportCallbackCreateInfo {
     user_data: *mut c_void
 }
 
+/// Wrapper for [VkDebugReportCallbackCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportCallbackCreateInfo.html)
 pub struct VkDebugReportCallbackCreateInfo {
     pub flags: VkDebugReportFlags,
     pub callback: VkDebugCallback

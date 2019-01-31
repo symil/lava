@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkCullModeFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCullModeFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkCullModeFlags {
     pub front: bool,
@@ -9,6 +10,7 @@ pub struct VkCullModeFlags {
     pub front_and_back: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkCullModeFlags = u32;
 
 impl VkWrappedType<RawVkCullModeFlags> for VkCullModeFlags {

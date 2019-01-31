@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDebugUtilsMessengerCallbackDataFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCallbackDataFlagBitsEXT.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessengerCallbackDataFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkDebugUtilsMessengerCallbackDataFlags = u32;
 
 impl VkWrappedType<RawVkDebugUtilsMessengerCallbackDataFlags> for VkDebugUtilsMessengerCallbackDataFlags {

@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkPresentRegion,RawVkPresentRegion};
 
+/// Wrapper for [VkPresentRegionsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentRegionsKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkPresentRegions<'a, 'b>
     where
@@ -22,6 +23,7 @@ pub struct VkPresentRegions<'a, 'b>
     pub regions: Option<&'a [VkPresentRegion<'b>]>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentRegions {

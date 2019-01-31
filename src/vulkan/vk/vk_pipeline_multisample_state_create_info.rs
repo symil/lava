@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPipelineMultisampleStateCreateFlags,RawVkPipelineMultisampleStateCreateFlags};
 use vulkan::vk::{VkSampleCountFlags,RawVkSampleCountFlags};
 
+/// Wrapper for [VkPipelineMultisampleStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineMultisampleStateCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineMultisampleStateCreateInfo<'a> {
     pub flags: VkPipelineMultisampleStateCreateFlags,
@@ -26,6 +27,7 @@ pub struct VkPipelineMultisampleStateCreateInfo<'a> {
     pub alpha_to_one_enable: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineMultisampleStateCreateInfo {

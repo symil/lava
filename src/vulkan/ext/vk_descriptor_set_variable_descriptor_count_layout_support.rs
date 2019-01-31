@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkDescriptorSetVariableDescriptorCountLayoutSupportEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetVariableDescriptorCountLayoutSupportEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetVariableDescriptorCountLayoutSupport {
     pub max_variable_descriptor_count: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetVariableDescriptorCountLayoutSupport {

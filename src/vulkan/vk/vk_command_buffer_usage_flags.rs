@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkCommandBufferUsageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferUsageFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandBufferUsageFlags {
     pub one_time_submit: bool,
@@ -9,6 +10,7 @@ pub struct VkCommandBufferUsageFlags {
     pub simultaneous_use: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkCommandBufferUsageFlags = u32;
 
 impl VkWrappedType<RawVkCommandBufferUsageFlags> for VkCommandBufferUsageFlags {

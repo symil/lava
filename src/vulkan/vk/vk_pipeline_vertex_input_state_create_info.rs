@@ -16,6 +16,7 @@ use vulkan::vk::{VkPipelineVertexInputStateCreateFlags,RawVkPipelineVertexInputS
 use vulkan::vk::{VkVertexInputBindingDescription,RawVkVertexInputBindingDescription};
 use vulkan::vk::{VkVertexInputAttributeDescription,RawVkVertexInputAttributeDescription};
 
+/// Wrapper for [VkPipelineVertexInputStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineVertexInputStateCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineVertexInputStateCreateInfo<'a, 'b> {
     pub flags: VkPipelineVertexInputStateCreateFlags,
@@ -23,6 +24,7 @@ pub struct VkPipelineVertexInputStateCreateInfo<'a, 'b> {
     pub vertex_attribute_descriptions: &'b [VkVertexInputAttributeDescription],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineVertexInputStateCreateInfo {

@@ -16,6 +16,7 @@ use vulkan::vk::{VkBufferCreateFlags,RawVkBufferCreateFlags};
 use vulkan::vk::{VkBufferUsageFlags,RawVkBufferUsageFlags};
 use vulkan::vk::{VkSharingMode,RawVkSharingMode};
 
+/// Wrapper for [VkBufferCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkBufferCreateInfo<'a> {
     pub flags: VkBufferCreateFlags,
@@ -25,6 +26,7 @@ pub struct VkBufferCreateInfo<'a> {
     pub queue_family_indices: &'a [usize],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferCreateInfo {

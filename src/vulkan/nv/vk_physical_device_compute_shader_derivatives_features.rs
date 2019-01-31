@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceComputeShaderDerivativesFeaturesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceComputeShaderDerivativesFeaturesNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceComputeShaderDerivativesFeatures {
     pub compute_derivative_group_quads: bool,
     pub compute_derivative_group_linear: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceComputeShaderDerivativesFeatures {

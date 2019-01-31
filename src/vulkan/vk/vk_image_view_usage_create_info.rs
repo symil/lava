@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImageUsageFlags,RawVkImageUsageFlags};
 
+/// Wrapper for [VkImageViewUsageCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewUsageCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkImageViewUsageCreateInfo {
     pub usage: VkImageUsageFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageViewUsageCreateInfo {

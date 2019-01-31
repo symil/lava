@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkPipelineRasterizationStateStreamCreateFlags,RawVkPipelineRasterizationStateStreamCreateFlags};
 
+/// Wrapper for [VkPipelineRasterizationStateStreamCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationStateStreamCreateInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineRasterizationStateStreamCreateInfo {
     pub flags: VkPipelineRasterizationStateStreamCreateFlags,
     pub rasterization_stream: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationStateStreamCreateInfo {

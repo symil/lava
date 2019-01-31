@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkBufferViewCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferViewCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkBufferViewCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkBufferViewCreateFlags = u32;
 
 impl VkWrappedType<RawVkBufferViewCreateFlags> for VkBufferViewCreateFlags {

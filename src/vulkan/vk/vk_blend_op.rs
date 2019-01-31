@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkBlendOp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBlendOp.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkBlendOp {
@@ -58,6 +59,7 @@ pub enum VkBlendOp {
     BlueExt = 1000148045,
 }
 
+#[doc(hidden)]
 pub type RawVkBlendOp = i32;
 
 impl VkWrappedType<RawVkBlendOp> for VkBlendOp {

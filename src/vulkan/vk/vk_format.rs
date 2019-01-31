@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormat.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkFormat {
@@ -206,6 +207,7 @@ pub enum VkFormat {
     Pvrtc24bppSrgbBlockImg = 1000054007,
 }
 
+#[doc(hidden)]
 pub type RawVkFormat = i32;
 
 impl VkWrappedType<RawVkFormat> for VkFormat {

@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
+/// Wrapper for [VkPhysicalDeviceFragmentDensityMapPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentDensityMapPropertiesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFragmentDensityMapProperties {
     pub min_fragment_density_texel_size: VkExtent2D,
@@ -21,6 +22,7 @@ pub struct VkPhysicalDeviceFragmentDensityMapProperties {
     pub fragment_density_invocations: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFragmentDensityMapProperties {

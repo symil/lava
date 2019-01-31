@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkImageAspectFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageAspectFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageAspectFlags {
     pub color: bool,
@@ -17,6 +18,7 @@ pub struct VkImageAspectFlags {
     pub memory_plane_3_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkImageAspectFlags = u32;
 
 impl VkWrappedType<RawVkImageAspectFlags> for VkImageAspectFlags {

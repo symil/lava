@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
+/// Wrapper for [VkGeometryAABBNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryAABBNV.html)
 #[derive(Debug, Clone)]
 pub struct VkGeometryAABB<'a> {
     pub aabb_data: Option<&'a VkBuffer>,
@@ -22,6 +23,7 @@ pub struct VkGeometryAABB<'a> {
     pub offset: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometryAABB {

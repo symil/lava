@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDescriptorPoolCreateFlags,RawVkDescriptorPoolCreateFlags};
 use vulkan::vk::{VkDescriptorPoolSize,RawVkDescriptorPoolSize};
 
+/// Wrapper for [VkDescriptorPoolCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPoolCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorPoolCreateInfo<'a> {
     pub flags: VkDescriptorPoolCreateFlags,
@@ -22,6 +23,7 @@ pub struct VkDescriptorPoolCreateInfo<'a> {
     pub pool_sizes: &'a [VkDescriptorPoolSize],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorPoolCreateInfo {

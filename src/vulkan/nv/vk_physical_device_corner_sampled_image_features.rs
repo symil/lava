@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceCornerSampledImageFeaturesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceCornerSampledImageFeaturesNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceCornerSampledImageFeatures {
     pub corner_sampled_image: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceCornerSampledImageFeatures {

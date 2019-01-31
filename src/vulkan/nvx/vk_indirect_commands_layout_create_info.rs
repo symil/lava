@@ -16,6 +16,7 @@ use vulkan::vk::{VkPipelineBindPoint,RawVkPipelineBindPoint};
 use vulkan::nvx::{VkIndirectCommandsLayoutUsageFlags,RawVkIndirectCommandsLayoutUsageFlags};
 use vulkan::nvx::{VkIndirectCommandsLayoutToken,RawVkIndirectCommandsLayoutToken};
 
+/// Wrapper for [VkIndirectCommandsLayoutCreateInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutCreateInfoNVX.html)
 #[derive(Debug, Clone)]
 pub struct VkIndirectCommandsLayoutCreateInfo<'a> {
     pub pipeline_bind_point: VkPipelineBindPoint,
@@ -23,6 +24,7 @@ pub struct VkIndirectCommandsLayoutCreateInfo<'a> {
     pub tokens: &'a [VkIndirectCommandsLayoutToken],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkIndirectCommandsLayoutCreateInfo {

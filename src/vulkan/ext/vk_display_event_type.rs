@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDisplayEventTypeEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayEventTypeEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDisplayEventType {
     FirstPixelOut = 0,
 }
 
+#[doc(hidden)]
 pub type RawVkDisplayEventType = i32;
 
 impl VkWrappedType<RawVkDisplayEventType> for VkDisplayEventType {

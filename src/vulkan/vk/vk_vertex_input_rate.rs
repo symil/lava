@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkVertexInputRate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputRate.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkVertexInputRate {
@@ -9,6 +10,7 @@ pub enum VkVertexInputRate {
     Instance = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkVertexInputRate = i32;
 
 impl VkWrappedType<RawVkVertexInputRate> for VkVertexInputRate {

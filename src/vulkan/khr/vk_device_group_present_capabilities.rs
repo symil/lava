@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkDeviceGroupPresentModeFlags,RawVkDeviceGroupPresentModeFlags};
 
+/// Wrapper for [VkDeviceGroupPresentCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupPresentCapabilitiesKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkDeviceGroupPresentCapabilities {
     pub present_mask: [u32; 32],
     pub modes: VkDeviceGroupPresentModeFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupPresentCapabilities {

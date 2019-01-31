@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 
+/// Wrapper for [VkPushConstantRange](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPushConstantRange.html)
 #[derive(Debug, Clone)]
 pub struct VkPushConstantRange {
     pub stage_flags: VkShaderStageFlags,
@@ -20,6 +21,7 @@ pub struct VkPushConstantRange {
     pub size: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPushConstantRange {

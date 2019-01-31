@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkVendorId](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVendorId.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkVendorId {
@@ -10,6 +11,7 @@ pub enum VkVendorId {
     Kazan = 0x10003,
 }
 
+#[doc(hidden)]
 pub type RawVkVendorId = i32;
 
 impl VkWrappedType<RawVkVendorId> for VkVendorId {

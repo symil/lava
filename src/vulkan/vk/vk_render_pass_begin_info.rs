@@ -17,6 +17,7 @@ use vulkan::vk::{VkFramebuffer,RawVkFramebuffer};
 use vulkan::vk::{VkRect2D,RawVkRect2D};
 use vulkan::vk::{VkClearValue,RawVkClearValue};
 
+/// Wrapper for [VkRenderPassBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassBeginInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkRenderPassBeginInfo<'a, 'b, 'c> {
     pub render_pass: &'a VkRenderPass,
@@ -25,6 +26,7 @@ pub struct VkRenderPassBeginInfo<'a, 'b, 'c> {
     pub clear_values: &'c [VkClearValue],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassBeginInfo {

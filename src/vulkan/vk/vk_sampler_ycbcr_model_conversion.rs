@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSamplerYcbcrModelConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrModelConversion.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSamplerYcbcrModelConversion {
@@ -12,6 +13,7 @@ pub enum VkSamplerYcbcrModelConversion {
     Ycbcr2020 = 4,
 }
 
+#[doc(hidden)]
 pub type RawVkSamplerYcbcrModelConversion = i32;
 
 impl VkWrappedType<RawVkSamplerYcbcrModelConversion> for VkSamplerYcbcrModelConversion {

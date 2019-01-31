@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPipelineStageFlags,RawVkPipelineStageFlags};
 
+/// Wrapper for [VkQueueFamilyCheckpointPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFamilyCheckpointPropertiesNV.html)
 #[derive(Debug, Clone)]
 pub struct VkQueueFamilyCheckpointProperties {
     pub checkpoint_execution_stage_mask: VkPipelineStageFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueueFamilyCheckpointProperties {

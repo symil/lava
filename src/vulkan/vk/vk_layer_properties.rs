@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkLayerProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkLayerProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkLayerProperties {
     pub layer_name: String,
@@ -20,6 +21,7 @@ pub struct VkLayerProperties {
     pub description: String,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 pub struct RawVkLayerProperties {
     pub layer_name: [c_char; 256],

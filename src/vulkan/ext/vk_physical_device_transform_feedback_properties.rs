@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceTransformFeedbackPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceTransformFeedbackPropertiesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceTransformFeedbackProperties {
     pub max_transform_feedback_streams: usize,
@@ -27,6 +28,7 @@ pub struct VkPhysicalDeviceTransformFeedbackProperties {
     pub transform_feedback_draw: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceTransformFeedbackProperties {

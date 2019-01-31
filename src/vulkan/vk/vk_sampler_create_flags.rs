@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSamplerCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSamplerCreateFlags {
     pub subsampled_ext: bool,
     pub subsampled_coarse_reconstruction_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSamplerCreateFlags = u32;
 
 impl VkWrappedType<RawVkSamplerCreateFlags> for VkSamplerCreateFlags {

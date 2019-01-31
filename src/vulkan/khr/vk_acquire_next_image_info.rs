@@ -16,6 +16,7 @@ use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 use vulkan::vk::{VkSemaphore,RawVkSemaphore};
 use vulkan::vk::{VkFence,RawVkFence};
 
+/// Wrapper for [VkAcquireNextImageInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAcquireNextImageInfoKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkAcquireNextImageInfo<'a, 'b, 'c> {
     pub swapchain: &'a VkSwapchain,
@@ -25,6 +26,7 @@ pub struct VkAcquireNextImageInfo<'a, 'b, 'c> {
     pub device_mask: u32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAcquireNextImageInfo {

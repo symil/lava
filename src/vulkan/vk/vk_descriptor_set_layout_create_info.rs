@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDescriptorSetLayoutCreateFlags,RawVkDescriptorSetLayoutCreateFlags};
 use vulkan::vk::{VkDescriptorSetLayoutBinding,RawVkDescriptorSetLayoutBinding};
 
+/// Wrapper for [VkDescriptorSetLayoutCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
     where
@@ -25,6 +26,7 @@ pub struct VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
     pub bindings: &'a [VkDescriptorSetLayoutBinding<'b, 'c>],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetLayoutCreateInfo {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkExternalMemoryHandleTypeFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryHandleTypeFlagBitsNV.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalMemoryHandleTypeFlags {
     pub opaque_win_32: bool,
@@ -10,6 +11,7 @@ pub struct VkExternalMemoryHandleTypeFlags {
     pub d_3d_11_image_kmt: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkExternalMemoryHandleTypeFlags = u32;
 
 impl VkWrappedType<RawVkExternalMemoryHandleTypeFlags> for VkExternalMemoryHandleTypeFlags {

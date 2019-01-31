@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDynamicState](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDynamicState.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDynamicState {
@@ -22,6 +23,7 @@ pub enum VkDynamicState {
     ExclusiveScissorNv = 1000205001,
 }
 
+#[doc(hidden)]
 pub type RawVkDynamicState = i32;
 
 impl VkWrappedType<RawVkDynamicState> for VkDynamicState {

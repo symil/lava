@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPrimitiveTopology](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPrimitiveTopology.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPrimitiveTopology {
@@ -18,6 +19,7 @@ pub enum VkPrimitiveTopology {
     PatchList = 10,
 }
 
+#[doc(hidden)]
 pub type RawVkPrimitiveTopology = i32;
 
 impl VkWrappedType<RawVkPrimitiveTopology> for VkPrimitiveTopology {

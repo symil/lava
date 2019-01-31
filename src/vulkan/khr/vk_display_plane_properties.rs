@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::khr::{VkDisplay,RawVkDisplay};
 
+/// Wrapper for [VkDisplayPlanePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlanePropertiesKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkDisplayPlaneProperties {
     pub current_display: VkDisplay,
     pub current_stack_index: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneProperties {

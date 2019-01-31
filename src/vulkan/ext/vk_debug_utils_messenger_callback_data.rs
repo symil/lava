@@ -16,6 +16,7 @@ use vulkan::ext::{VkDebugUtilsMessengerCallbackDataFlags,RawVkDebugUtilsMessenge
 use vulkan::ext::{VkDebugUtilsLabel,RawVkDebugUtilsLabel};
 use vulkan::ext::{VkDebugUtilsObjectNameInfo,RawVkDebugUtilsObjectNameInfo};
 
+/// Wrapper for [VkDebugUtilsMessengerCallbackDataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCallbackDataEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     where
@@ -32,6 +33,7 @@ pub struct VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     pub objects: &'g [VkDebugUtilsObjectNameInfo<'h>],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsMessengerCallbackData {

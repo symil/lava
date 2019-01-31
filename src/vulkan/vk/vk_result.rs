@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkResult](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResult.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkResult {
@@ -38,6 +39,7 @@ pub enum VkResult {
     ErrorInvalidDeviceAddressExt = -1000244000,
 }
 
+#[doc(hidden)]
 pub type RawVkResult = i32;
 
 impl VkWrappedType<RawVkResult> for VkResult {

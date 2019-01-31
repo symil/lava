@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkMemoryDedicatedRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryDedicatedRequirements.html)
 #[derive(Debug, Clone)]
 pub struct VkMemoryDedicatedRequirements {
     pub prefers_dedicated_allocation: bool,
     pub requires_dedicated_allocation: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryDedicatedRequirements {

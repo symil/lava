@@ -18,6 +18,7 @@ use vulkan::khr::{VkCompositeAlphaFlags,RawVkCompositeAlphaFlags};
 use vulkan::vk::{VkImageUsageFlags,RawVkImageUsageFlags};
 use vulkan::ext::{VkSurfaceCounterFlags,RawVkSurfaceCounterFlags};
 
+/// Wrapper for [VkSurfaceCapabilities2EXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceCapabilities2EXT.html)
 #[derive(Debug, Clone)]
 pub struct VkSurfaceCapabilities2 {
     pub min_image_count: usize,
@@ -33,6 +34,7 @@ pub struct VkSurfaceCapabilities2 {
     pub supported_surface_counters: VkSurfaceCounterFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities2 {

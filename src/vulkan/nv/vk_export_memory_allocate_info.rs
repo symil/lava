@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFlags};
 
+/// Wrapper for [VkExportMemoryAllocateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExportMemoryAllocateInfoNV.html)
 #[derive(Debug, Clone)]
 pub struct VkExportMemoryAllocateInfo {
     pub handle_types: VkExternalMemoryHandleTypeFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExportMemoryAllocateInfo {

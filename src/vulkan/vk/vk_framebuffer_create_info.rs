@@ -16,6 +16,7 @@ use vulkan::vk::{VkFramebufferCreateFlags,RawVkFramebufferCreateFlags};
 use vulkan::vk::{VkRenderPass,RawVkRenderPass};
 use vulkan::vk::{VkImageView,RawVkImageView};
 
+/// Wrapper for [VkFramebufferCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkFramebufferCreateInfo<'a, 'b, 'c>
     where
@@ -29,6 +30,7 @@ pub struct VkFramebufferCreateInfo<'a, 'b, 'c>
     pub layers: u32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFramebufferCreateInfo {

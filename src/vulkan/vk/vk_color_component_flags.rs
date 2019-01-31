@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkColorComponentFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkColorComponentFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkColorComponentFlags {
     pub r: bool,
@@ -10,6 +11,7 @@ pub struct VkColorComponentFlags {
     pub a: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkColorComponentFlags = u32;
 
 impl VkWrappedType<RawVkColorComponentFlags> for VkColorComponentFlags {

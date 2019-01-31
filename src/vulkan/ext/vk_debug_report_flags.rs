@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDebugReportFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportFlagBitsEXT.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugReportFlags {
     pub information: bool,
@@ -11,6 +12,7 @@ pub struct VkDebugReportFlags {
     pub debug: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkDebugReportFlags = u32;
 
 impl VkWrappedType<RawVkDebugReportFlags> for VkDebugReportFlags {

@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceDescriptorIndexingFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDescriptorIndexingFeaturesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceDescriptorIndexingFeatures {
     pub shader_input_attachment_array_dynamic_indexing: bool,
@@ -37,6 +38,7 @@ pub struct VkPhysicalDeviceDescriptorIndexingFeatures {
     pub runtime_descriptor_array: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDescriptorIndexingFeatures {

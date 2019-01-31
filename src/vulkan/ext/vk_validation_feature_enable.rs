@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkValidationFeatureEnableEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationFeatureEnableEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkValidationFeatureEnable {
@@ -9,6 +10,7 @@ pub enum VkValidationFeatureEnable {
     GpuAssistedReserveBindingSlot = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkValidationFeatureEnable = i32;
 
 impl VkWrappedType<RawVkValidationFeatureEnable> for VkValidationFeatureEnable {

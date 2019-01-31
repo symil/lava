@@ -17,6 +17,7 @@ use vulkan::vk::{VkSparseBufferMemoryBindInfo,RawVkSparseBufferMemoryBindInfo};
 use vulkan::vk::{VkSparseImageOpaqueMemoryBindInfo,RawVkSparseImageOpaqueMemoryBindInfo};
 use vulkan::vk::{VkSparseImageMemoryBindInfo,RawVkSparseImageMemoryBindInfo};
 
+/// Wrapper for [VkBindSparseInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindSparseInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>
     where
@@ -39,6 +40,7 @@ pub struct VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 
     pub signal_semaphores: &'o [&'p VkSemaphore],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindSparseInfo {

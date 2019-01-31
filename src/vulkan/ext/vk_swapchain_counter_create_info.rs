@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkSurfaceCounterFlags,RawVkSurfaceCounterFlags};
 
+/// Wrapper for [VkSwapchainCounterCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainCounterCreateInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkSwapchainCounterCreateInfo {
     pub surface_counters: VkSurfaceCounterFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSwapchainCounterCreateInfo {

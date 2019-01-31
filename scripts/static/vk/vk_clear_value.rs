@@ -4,6 +4,7 @@ use utils::vk_traits::*;
 use utils::vk_convert::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union RawVkClearValue {
@@ -11,6 +12,7 @@ pub union RawVkClearValue {
     pub depth_stencil: RawVkClearDepthStencilValue
 }
 
+/// Wrapper for [VkClearValue](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkClearValue.html)
 #[derive(Debug, Clone)]
 pub enum VkClearValue {
     Color(VkClearColorValue),

@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDebugUtilsMessengerCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCreateFlagBitsEXT.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessengerCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkDebugUtilsMessengerCreateFlags = u32;
 
 impl VkWrappedType<RawVkDebugUtilsMessengerCreateFlags> for VkDebugUtilsMessengerCreateFlags {

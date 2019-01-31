@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkSampleCountFlags,RawVkSampleCountFlags};
 
+/// Wrapper for [VkPhysicalDeviceLimits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceLimits.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceLimits {
     pub max_image_dimension_1d: usize,
@@ -123,6 +124,7 @@ pub struct VkPhysicalDeviceLimits {
     pub non_coherent_atom_size: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceLimits {

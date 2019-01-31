@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkDescriptorSetLayout = u64;
 
+/// Wrapper for [VkDescriptorSetLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayout.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetLayout {
     _handle: RawVkDescriptorSetLayout,
@@ -67,10 +69,12 @@ impl VkSetup for VkDescriptorSetLayout {
 
 impl VkDescriptorSetLayout {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroyDescriptorSetLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDescriptorSetLayout.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyDescriptorSetLayout)(self._parent_device, self._handle, ptr::null());

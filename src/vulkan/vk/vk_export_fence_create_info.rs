@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExternalFenceHandleTypeFlags,RawVkExternalFenceHandleTypeFlags};
 
+/// Wrapper for [VkExportFenceCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExportFenceCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkExportFenceCreateInfo {
     pub handle_types: VkExternalFenceHandleTypeFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExportFenceCreateInfo {

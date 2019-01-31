@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkResolveModeFlags,RawVkResolveModeFlags};
 
+/// Wrapper for [VkPhysicalDeviceDepthStencilResolvePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDepthStencilResolvePropertiesKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceDepthStencilResolveProperties {
     pub supported_depth_resolve_modes: VkResolveModeFlags,
@@ -22,6 +23,7 @@ pub struct VkPhysicalDeviceDepthStencilResolveProperties {
     pub independent_resolve: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDepthStencilResolveProperties {

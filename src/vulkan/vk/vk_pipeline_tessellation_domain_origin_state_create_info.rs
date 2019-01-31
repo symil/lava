@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkTessellationDomainOrigin,RawVkTessellationDomainOrigin};
 
+/// Wrapper for [VkPipelineTessellationDomainOriginStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineTessellationDomainOriginStateCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineTessellationDomainOriginStateCreateInfo {
     pub domain_origin: VkTessellationDomainOrigin,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineTessellationDomainOriginStateCreateInfo {

@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkVertexInputBindingDivisorDescription,RawVkVertexInputBindingDivisorDescription};
 
+/// Wrapper for [VkPipelineVertexInputDivisorStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineVertexInputDivisorStateCreateInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineVertexInputDivisorStateCreateInfo<'a> {
     pub vertex_binding_divisors: &'a [VkVertexInputBindingDivisorDescription],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineVertexInputDivisorStateCreateInfo {

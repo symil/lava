@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkImageCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageCreateFlags {
     pub sparse_binding: bool,
@@ -21,6 +22,7 @@ pub struct VkImageCreateFlags {
     pub subsampled_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkImageCreateFlags = u32;
 
 impl VkWrappedType<RawVkImageCreateFlags> for VkImageCreateFlags {

@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkBufferCopy](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferCopy.html)
 #[derive(Debug, Clone)]
 pub struct VkBufferCopy {
     pub src_offset: usize,
@@ -19,6 +20,7 @@ pub struct VkBufferCopy {
     pub size: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferCopy {

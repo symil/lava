@@ -5,7 +5,8 @@ const {
     getFieldsInformation,
     isStructOrHandle,
     isStruct,
-    getCountVarNameValue
+    getCountVarNameValue,
+    documentType
 } = require('./utils');
 
 const VK_SUCCESS = 0;
@@ -110,11 +111,15 @@ function makeMethodNames(handle, functions) {
 }
 
 function genRawType(def) {
-    return `pub type ${def.rawTypeName} = u64;`;
+    return [
+        `#[doc(hidden)]`,
+        `pub type ${def.rawTypeName} = u64;`
+    ];
 }
 
 function genWrappedType(def) {
     return [
+        documentType(def),
         `#[derive(Debug, Clone)]`,
         `pub struct ${def.wrappedTypeName}`, [
             `_handle: ${def.rawTypeName},`,
@@ -210,8 +215,9 @@ function genSpecialMethods(def) {
 }
 
 function genMethods(def) {
+    const doc = '/// Returns the internal Vulkan handle for the object.'
     const handleMethod = [
-        `\npub fn vk_handle(&self) -> u64`, [
+        `\n${doc}\npub fn vk_handle(&self) -> u64`, [
             `self._handle`
         ],
     ];
@@ -436,7 +442,7 @@ function functionToMethod(handle, func) {
     }
 
     return [
-        `\npub fn ${methodName}${generics}(${argList})${returnInfo}`,
+        `\n${documentType(func)}\npub fn ${methodName}${generics}(${argList})${returnInfo}`,
         [`unsafe`, allStatements]
     ];
 }

@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceRepresentativeFragmentTestFeaturesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRepresentativeFragmentTestFeaturesNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceRepresentativeFragmentTestFeatures {
     pub representative_fragment_test: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceRepresentativeFragmentTestFeatures {

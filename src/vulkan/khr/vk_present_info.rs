@@ -16,6 +16,7 @@ use vulkan::vk::{VkSemaphore,RawVkSemaphore};
 use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 use vulkan::vk::{VkResult,RawVkResult};
 
+/// Wrapper for [VkPresentInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentInfoKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>
     where
@@ -28,6 +29,7 @@ pub struct VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>
     pub results: Option<&'f [VkResult]>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentInfo {

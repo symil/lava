@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImage,RawVkImage};
 use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 
+/// Wrapper for [VkBindImageMemoryInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindImageMemoryInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkBindImageMemoryInfo<'a, 'b> {
     pub image: &'a VkImage,
@@ -22,6 +23,7 @@ pub struct VkBindImageMemoryInfo<'a, 'b> {
     pub memory_offset: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemoryInfo {

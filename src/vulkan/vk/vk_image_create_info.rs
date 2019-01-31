@@ -22,6 +22,7 @@ use vulkan::vk::{VkImageUsageFlags,RawVkImageUsageFlags};
 use vulkan::vk::{VkSharingMode,RawVkSharingMode};
 use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 
+/// Wrapper for [VkImageCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkImageCreateInfo<'a> {
     pub flags: VkImageCreateFlags,
@@ -38,6 +39,7 @@ pub struct VkImageCreateInfo<'a> {
     pub initial_layout: VkImageLayout,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageCreateInfo {

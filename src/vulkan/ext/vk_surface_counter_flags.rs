@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSurfaceCounterFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceCounterFlagBitsEXT.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSurfaceCounterFlags {
     pub vblank: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSurfaceCounterFlags = u32;
 
 impl VkWrappedType<RawVkSurfaceCounterFlags> for VkSurfaceCounterFlags {

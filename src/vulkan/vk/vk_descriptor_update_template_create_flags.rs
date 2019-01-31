@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDescriptorUpdateTemplateCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorUpdateTemplateCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorUpdateTemplateCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkDescriptorUpdateTemplateCreateFlags = u32;
 
 impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateFlags> for VkDescriptorUpdateTemplateCreateFlags {

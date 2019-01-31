@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSubpassContents,RawVkSubpassContents};
 
+/// Wrapper for [VkSubpassBeginInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassBeginInfoKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkSubpassBeginInfo {
     pub contents: VkSubpassContents,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassBeginInfo {

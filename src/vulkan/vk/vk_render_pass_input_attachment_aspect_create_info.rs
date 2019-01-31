@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkInputAttachmentAspectReference,RawVkInputAttachmentAspectReference};
 
+/// Wrapper for [VkRenderPassInputAttachmentAspectCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassInputAttachmentAspectCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkRenderPassInputAttachmentAspectCreateInfo<'a> {
     pub aspect_references: &'a [VkInputAttachmentAspectReference],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassInputAttachmentAspectCreateInfo {

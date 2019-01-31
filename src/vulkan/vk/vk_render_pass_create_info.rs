@@ -17,6 +17,7 @@ use vulkan::vk::{VkAttachmentDescription,RawVkAttachmentDescription};
 use vulkan::vk::{VkSubpassDescription,RawVkSubpassDescription};
 use vulkan::vk::{VkSubpassDependency,RawVkSubpassDependency};
 
+/// Wrapper for [VkRenderPassCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkRenderPassCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     where
@@ -32,6 +33,7 @@ pub struct VkRenderPassCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
     pub dependencies: &'h [VkSubpassDependency],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassCreateInfo {

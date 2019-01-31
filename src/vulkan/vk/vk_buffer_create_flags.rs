@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkBufferCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkBufferCreateFlags {
     pub sparse_binding: bool,
@@ -11,6 +12,7 @@ pub struct VkBufferCreateFlags {
     pub device_address_capture_replay_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkBufferCreateFlags = u32;
 
 impl VkWrappedType<RawVkBufferCreateFlags> for VkBufferCreateFlags {

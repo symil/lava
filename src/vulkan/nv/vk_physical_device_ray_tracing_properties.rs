@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceRayTracingPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRayTracingPropertiesNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceRayTracingProperties {
     pub shader_group_handle_size: usize,
@@ -25,6 +26,7 @@ pub struct VkPhysicalDeviceRayTracingProperties {
     pub max_descriptor_set_acceleration_structures: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceRayTracingProperties {

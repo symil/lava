@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceScalarBlockLayoutFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceScalarBlockLayoutFeaturesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceScalarBlockLayoutFeatures {
     pub scalar_block_layout: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceScalarBlockLayoutFeatures {

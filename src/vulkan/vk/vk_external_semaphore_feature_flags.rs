@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkExternalSemaphoreFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalSemaphoreFeatureFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalSemaphoreFeatureFlags {
     pub exportable: bool,
     pub importable: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkExternalSemaphoreFeatureFlags = u32;
 
 impl VkWrappedType<RawVkExternalSemaphoreFeatureFlags> for VkExternalSemaphoreFeatureFlags {

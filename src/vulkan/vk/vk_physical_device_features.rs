@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkPhysicalDeviceFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFeatures.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFeatures {
     pub robust_buffer_access: bool,
@@ -71,6 +72,7 @@ pub struct VkPhysicalDeviceFeatures {
     pub inherited_queries: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFeatures {

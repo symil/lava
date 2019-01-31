@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkMemoryMapFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryMapFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryMapFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkMemoryMapFlags = u32;
 
 impl VkWrappedType<RawVkMemoryMapFlags> for VkMemoryMapFlags {

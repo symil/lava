@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
+/// Wrapper for [VkBufferDeviceAddressInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferDeviceAddressInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkBufferDeviceAddressInfo<'a> {
     pub buffer: &'a VkBuffer,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferDeviceAddressInfo {

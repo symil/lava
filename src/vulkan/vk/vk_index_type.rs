@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkIndexType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndexType.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkIndexType {
@@ -10,6 +11,7 @@ pub enum VkIndexType {
     NoneNv = 1000165000,
 }
 
+#[doc(hidden)]
 pub type RawVkIndexType = i32;
 
 impl VkWrappedType<RawVkIndexType> for VkIndexType {

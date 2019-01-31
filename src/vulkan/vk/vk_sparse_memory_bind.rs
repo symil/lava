@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 use vulkan::vk::{VkSparseMemoryBindFlags,RawVkSparseMemoryBindFlags};
 
+/// Wrapper for [VkSparseMemoryBind](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseMemoryBind.html)
 #[derive(Debug, Clone)]
 pub struct VkSparseMemoryBind<'a> {
     pub resource_offset: usize,
@@ -23,6 +24,7 @@ pub struct VkSparseMemoryBind<'a> {
     pub flags: VkSparseMemoryBindFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseMemoryBind {

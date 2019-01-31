@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkSpecializationMapEntry](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSpecializationMapEntry.html)
 #[derive(Debug, Clone)]
 pub struct VkSpecializationMapEntry {
     pub constant_id: usize,
@@ -19,6 +20,7 @@ pub struct VkSpecializationMapEntry {
     pub size: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSpecializationMapEntry {

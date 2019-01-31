@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkExternalFenceFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalFenceFeatureFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalFenceFeatureFlags {
     pub exportable: bool,
     pub importable: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkExternalFenceFeatureFlags = u32;
 
 impl VkWrappedType<RawVkExternalFenceFeatureFlags> for VkExternalFenceFeatureFlags {

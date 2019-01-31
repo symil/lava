@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkLogicOp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkLogicOp.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkLogicOp {
@@ -23,6 +24,7 @@ pub enum VkLogicOp {
     Set = 15,
 }
 
+#[doc(hidden)]
 pub type RawVkLogicOp = i32;
 
 impl VkWrappedType<RawVkLogicOp> for VkLogicOp {

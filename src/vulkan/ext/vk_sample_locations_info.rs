@@ -16,6 +16,7 @@ use vulkan::vk::{VkSampleCountFlags,RawVkSampleCountFlags};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 use vulkan::ext::{VkSampleLocation,RawVkSampleLocation};
 
+/// Wrapper for [VkSampleLocationsInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSampleLocationsInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkSampleLocationsInfo<'a> {
     pub sample_locations_per_pixel: VkSampleCountFlags,
@@ -23,6 +24,7 @@ pub struct VkSampleLocationsInfo<'a> {
     pub sample_locations: &'a [VkSampleLocation],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSampleLocationsInfo {

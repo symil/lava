@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkAccessFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccessFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkAccessFlags {
     pub indirect_command_read: bool,
@@ -34,6 +35,7 @@ pub struct VkAccessFlags {
     pub fragment_density_map_read_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkAccessFlags = u32;
 
 impl VkWrappedType<RawVkAccessFlags> for VkAccessFlags {

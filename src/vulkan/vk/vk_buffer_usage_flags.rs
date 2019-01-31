@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkBufferUsageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferUsageFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkBufferUsageFlags {
     pub transfer_src: bool,
@@ -20,6 +21,7 @@ pub struct VkBufferUsageFlags {
     pub shader_device_address_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkBufferUsageFlags = u32;
 
 impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {

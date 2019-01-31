@@ -13,6 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkDescriptorType,RawVkDescriptorType};
 
+/// Wrapper for [VkDescriptorUpdateTemplateEntry](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorUpdateTemplateEntry.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorUpdateTemplateEntry {
     pub dst_binding: usize,
@@ -23,6 +24,7 @@ pub struct VkDescriptorUpdateTemplateEntry {
     pub stride: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorUpdateTemplateEntry {

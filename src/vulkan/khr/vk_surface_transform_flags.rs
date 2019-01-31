@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSurfaceTransformFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceTransformFlagBitsKHR.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSurfaceTransformFlags {
     pub identity: bool,
@@ -15,6 +16,7 @@ pub struct VkSurfaceTransformFlags {
     pub inherit: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSurfaceTransformFlags = u32;
 
 impl VkWrappedType<RawVkSurfaceTransformFlags> for VkSurfaceTransformFlags {

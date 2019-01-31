@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkBlendFactor](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBlendFactor.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkBlendFactor {
@@ -26,6 +27,7 @@ pub enum VkBlendFactor {
     OneMinusSrc1Alpha = 18,
 }
 
+#[doc(hidden)]
 pub type RawVkBlendFactor = i32;
 
 impl VkWrappedType<RawVkBlendFactor> for VkBlendFactor {

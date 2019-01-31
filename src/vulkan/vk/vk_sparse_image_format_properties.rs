@@ -15,6 +15,7 @@ use vulkan::vk::{VkImageAspectFlags,RawVkImageAspectFlags};
 use vulkan::vk::{VkExtent3D,RawVkExtent3D};
 use vulkan::vk::{VkSparseImageFormatFlags,RawVkSparseImageFormatFlags};
 
+/// Wrapper for [VkSparseImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageFormatProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkSparseImageFormatProperties {
     pub aspect_mask: VkImageAspectFlags,
@@ -22,6 +23,7 @@ pub struct VkSparseImageFormatProperties {
     pub flags: VkSparseImageFormatFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageFormatProperties {

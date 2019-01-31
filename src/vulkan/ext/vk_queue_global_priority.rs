@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkQueueGlobalPriorityEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueGlobalPriorityEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkQueueGlobalPriority {
@@ -11,6 +12,7 @@ pub enum VkQueueGlobalPriority {
     Realtime = 1024,
 }
 
+#[doc(hidden)]
 pub type RawVkQueueGlobalPriority = i32;
 
 impl VkWrappedType<RawVkQueueGlobalPriority> for VkQueueGlobalPriority {

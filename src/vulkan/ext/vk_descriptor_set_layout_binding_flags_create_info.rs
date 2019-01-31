@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkDescriptorBindingFlags,RawVkDescriptorBindingFlags};
 
+/// Wrapper for [VkDescriptorSetLayoutBindingFlagsCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBindingFlagsCreateInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {
     pub binding_flags: Option<&'a [VkDescriptorBindingFlags]>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetLayoutBindingFlagsCreateInfo {

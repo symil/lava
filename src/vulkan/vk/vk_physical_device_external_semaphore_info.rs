@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExternalSemaphoreHandleTypeFlags,RawVkExternalSemaphoreHandleTypeFlags};
 
+/// Wrapper for [VkPhysicalDeviceExternalSemaphoreInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceExternalSemaphoreInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceExternalSemaphoreInfo {
     pub handle_type: VkExternalSemaphoreHandleTypeFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalSemaphoreInfo {

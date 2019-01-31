@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkStencilFaceFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilFaceFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkStencilFaceFlags {
     pub front: bool,
@@ -9,6 +10,7 @@ pub struct VkStencilFaceFlags {
     pub _and_back: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkStencilFaceFlags = u32;
 
 impl VkWrappedType<RawVkStencilFaceFlags> for VkStencilFaceFlags {

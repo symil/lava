@@ -15,6 +15,7 @@ use vulkan::vk::{VkDescriptorType,RawVkDescriptorType};
 use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 use vulkan::vk::{VkSampler,RawVkSampler};
 
+/// Wrapper for [VkDescriptorSetLayoutBinding](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBinding.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetLayoutBinding<'a, 'b>
     where
@@ -27,6 +28,7 @@ pub struct VkDescriptorSetLayoutBinding<'a, 'b>
     pub immutable_samplers: Option<&'a [&'b VkSampler]>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetLayoutBinding {

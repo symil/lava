@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExternalMemoryProperties,RawVkExternalMemoryProperties};
 
+/// Wrapper for [VkExternalImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalImageFormatProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkExternalImageFormatProperties {
     pub external_memory_properties: VkExternalMemoryProperties,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalImageFormatProperties {

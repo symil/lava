@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkStencilOp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilOp.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkStencilOp {
@@ -15,6 +16,7 @@ pub enum VkStencilOp {
     DecrementAndWrap = 7,
 }
 
+#[doc(hidden)]
 pub type RawVkStencilOp = i32;
 
 impl VkWrappedType<RawVkStencilOp> for VkStencilOp {

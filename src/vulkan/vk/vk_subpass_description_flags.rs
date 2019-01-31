@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSubpassDescriptionFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSubpassDescriptionFlags {
     pub per_view_attributes_nvx: bool,
     pub per_view_position_x_only_nvx: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSubpassDescriptionFlags = u32;
 
 impl VkWrappedType<RawVkSubpassDescriptionFlags> for VkSubpassDescriptionFlags {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDescriptorType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorType.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDescriptorType {
@@ -20,6 +21,7 @@ pub enum VkDescriptorType {
     AccelerationStructureNv = 1000165000,
 }
 
+#[doc(hidden)]
 pub type RawVkDescriptorType = i32;
 
 impl VkWrappedType<RawVkDescriptorType> for VkDescriptorType {

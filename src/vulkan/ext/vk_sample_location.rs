@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkSampleLocationEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSampleLocationEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkSampleLocation {
     pub x: f32,
     pub y: f32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSampleLocation {

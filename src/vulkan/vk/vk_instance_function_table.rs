@@ -9,6 +9,7 @@ use utils::vk_convert::get_vk_instance_function_pointer;
 use vulkan::vk::*;
 use vulkan::{ext,khr,amd,nv,nvx,google};
 
+#[doc(hidden)]
 pub struct VkInstanceFunctionTable {
     pub vkDestroyInstance: unsafe extern fn(RawVkInstance, *const c_void),
     pub vkEnumeratePhysicalDevices: unsafe extern fn(RawVkInstance, *mut u32, *mut RawVkPhysicalDevice) -> RawVkResult,

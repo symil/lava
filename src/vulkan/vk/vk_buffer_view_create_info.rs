@@ -16,6 +16,7 @@ use vulkan::vk::{VkBufferViewCreateFlags,RawVkBufferViewCreateFlags};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 use vulkan::vk::{VkFormat,RawVkFormat};
 
+/// Wrapper for [VkBufferViewCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferViewCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkBufferViewCreateInfo<'a> {
     pub flags: VkBufferViewCreateFlags,
@@ -25,6 +26,7 @@ pub struct VkBufferViewCreateInfo<'a> {
     pub range: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferViewCreateInfo {

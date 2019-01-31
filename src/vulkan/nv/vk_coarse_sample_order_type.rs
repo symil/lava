@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkCoarseSampleOrderTypeNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCoarseSampleOrderTypeNV.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkCoarseSampleOrderType {
@@ -11,6 +12,7 @@ pub enum VkCoarseSampleOrderType {
     SampleMajor = 3,
 }
 
+#[doc(hidden)]
 pub type RawVkCoarseSampleOrderType = i32;
 
 impl VkWrappedType<RawVkCoarseSampleOrderType> for VkCoarseSampleOrderType {

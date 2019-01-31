@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPointClippingBehavior,RawVkPointClippingBehavior};
 
+/// Wrapper for [VkPhysicalDevicePointClippingProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevicePointClippingProperties.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDevicePointClippingProperties {
     pub point_clipping_behavior: VkPointClippingBehavior,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevicePointClippingProperties {

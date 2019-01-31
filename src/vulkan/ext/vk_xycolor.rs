@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkXYColorEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkXYColorEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkXYColor {
     pub x: f32,
     pub y: f32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkXYColor {

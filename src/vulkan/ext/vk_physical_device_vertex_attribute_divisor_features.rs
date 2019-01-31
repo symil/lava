@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceVertexAttributeDivisorFeatures {
     pub vertex_attribute_instance_rate_divisor: bool,
     pub vertex_attribute_instance_rate_zero_divisor: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVertexAttributeDivisorFeatures {

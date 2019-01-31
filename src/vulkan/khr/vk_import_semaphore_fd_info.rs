@@ -16,6 +16,7 @@ use vulkan::vk::{VkSemaphore,RawVkSemaphore};
 use vulkan::vk::{VkSemaphoreImportFlags,RawVkSemaphoreImportFlags};
 use vulkan::vk::{VkExternalSemaphoreHandleTypeFlags,RawVkExternalSemaphoreHandleTypeFlags};
 
+/// Wrapper for [VkImportSemaphoreFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImportSemaphoreFdInfoKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkImportSemaphoreFdInfo<'a> {
     pub semaphore: &'a VkSemaphore,
@@ -24,6 +25,7 @@ pub struct VkImportSemaphoreFdInfo<'a> {
     pub fd: i32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportSemaphoreFdInfo {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkTessellationDomainOrigin](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkTessellationDomainOrigin.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkTessellationDomainOrigin {
@@ -9,6 +10,7 @@ pub enum VkTessellationDomainOrigin {
     LowerLeft = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkTessellationDomainOrigin = i32;
 
 impl VkWrappedType<RawVkTessellationDomainOrigin> for VkTessellationDomainOrigin {

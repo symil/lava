@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkVertexInputBindingDivisorDescriptionEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputBindingDivisorDescriptionEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkVertexInputBindingDivisorDescription {
     pub binding: usize,
     pub divisor: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkVertexInputBindingDivisorDescription {

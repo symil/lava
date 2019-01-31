@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineCoverageToColorStateCreateFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCoverageToColorStateCreateFlagBitsNV.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineCoverageToColorStateCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineCoverageToColorStateCreateFlags = u32;
 
 impl VkWrappedType<RawVkPipelineCoverageToColorStateCreateFlags> for VkPipelineCoverageToColorStateCreateFlags {

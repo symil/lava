@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDescriptorPool,RawVkDescriptorPool};
 use vulkan::vk::{VkDescriptorSetLayout,RawVkDescriptorSetLayout};
 
+/// Wrapper for [VkDescriptorSetAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetAllocateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetAllocateInfo<'a, 'b, 'c>
     where
@@ -24,6 +25,7 @@ pub struct VkDescriptorSetAllocateInfo<'a, 'b, 'c>
     pub set_layouts: &'b [&'c VkDescriptorSetLayout],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetAllocateInfo {

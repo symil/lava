@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDeviceGroupPresentModeFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupPresentModeFlagBitsKHR.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDeviceGroupPresentModeFlags {
     pub local: bool,
@@ -10,6 +11,7 @@ pub struct VkDeviceGroupPresentModeFlags {
     pub local_multi_device: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkDeviceGroupPresentModeFlags = u32;
 
 impl VkWrappedType<RawVkDeviceGroupPresentModeFlags> for VkDeviceGroupPresentModeFlags {

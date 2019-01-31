@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkCommandBufferLevel](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferLevel.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkCommandBufferLevel {
@@ -9,6 +10,7 @@ pub enum VkCommandBufferLevel {
     Secondary = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkCommandBufferLevel = i32;
 
 impl VkWrappedType<RawVkCommandBufferLevel> for VkCommandBufferLevel {

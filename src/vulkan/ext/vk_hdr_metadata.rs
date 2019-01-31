@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkXYColor,RawVkXYColor};
 
+/// Wrapper for [VkHdrMetadataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkHdrMetadataEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkHdrMetadata {
     pub display_primary_red: VkXYColor,
@@ -26,6 +27,7 @@ pub struct VkHdrMetadata {
     pub max_frame_average_light_level: f32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkHdrMetadata {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkAttachmentLoadOp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentLoadOp.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkAttachmentLoadOp {
@@ -10,6 +11,7 @@ pub enum VkAttachmentLoadOp {
     DontCare = 2,
 }
 
+#[doc(hidden)]
 pub type RawVkAttachmentLoadOp = i32;
 
 impl VkWrappedType<RawVkAttachmentLoadOp> for VkAttachmentLoadOp {

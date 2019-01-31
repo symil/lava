@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkQueryType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryType.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkQueryType {
@@ -12,6 +13,7 @@ pub enum VkQueryType {
     AccelerationStructureCompactedSizeNv = 1000165000,
 }
 
+#[doc(hidden)]
 pub type RawVkQueryType = i32;
 
 impl VkWrappedType<RawVkQueryType> for VkQueryType {

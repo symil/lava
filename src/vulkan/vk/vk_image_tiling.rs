@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkImageTiling](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageTiling.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkImageTiling {
@@ -10,6 +11,7 @@ pub enum VkImageTiling {
     DrmFormatModifierExt = 1000158000,
 }
 
+#[doc(hidden)]
 pub type RawVkImageTiling = i32;
 
 impl VkWrappedType<RawVkImageTiling> for VkImageTiling {

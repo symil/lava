@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkDebugMarkerMarkerInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugMarkerMarkerInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDebugMarkerMarkerInfo<'a> {
     pub marker_name: &'a str,
     pub color: [f32; 4],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugMarkerMarkerInfo {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkConservativeRasterizationModeEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConservativeRasterizationModeEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkConservativeRasterizationMode {
@@ -10,6 +11,7 @@ pub enum VkConservativeRasterizationMode {
     Underestimate = 2,
 }
 
+#[doc(hidden)]
 pub type RawVkConservativeRasterizationMode = i32;
 
 impl VkWrappedType<RawVkConservativeRasterizationMode> for VkConservativeRasterizationMode {

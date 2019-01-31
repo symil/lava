@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkAccelerationStructure = u64;
 
+/// Wrapper for [VkAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureNV.html)
 #[derive(Debug, Clone)]
 pub struct VkAccelerationStructure {
     _handle: RawVkAccelerationStructure,
@@ -67,16 +69,19 @@ impl VkSetup for VkAccelerationStructure {
 
 impl VkAccelerationStructure {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroyAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyAccelerationStructureNV.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyAccelerationStructureNV)(self._parent_device, self._handle, ptr::null());
         }
     }
     
+    /// Wrapper for [vkGetAccelerationStructureHandleNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetAccelerationStructureHandleNV.html)
     pub fn get_handle(&self, data: &mut [c_void]) -> Result<(), VkResult> {
         unsafe {
             let raw_data_size = data.len();

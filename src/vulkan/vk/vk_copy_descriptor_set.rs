@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDescriptorSet,RawVkDescriptorSet};
 
+/// Wrapper for [VkCopyDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyDescriptorSet.html)
 #[derive(Debug, Clone)]
 pub struct VkCopyDescriptorSet<'a, 'b> {
     pub src_set: &'a VkDescriptorSet,
@@ -25,6 +26,7 @@ pub struct VkCopyDescriptorSet<'a, 'b> {
     pub descriptor_count: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCopyDescriptorSet {

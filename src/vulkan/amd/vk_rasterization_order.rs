@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkRasterizationOrderAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRasterizationOrderAMD.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkRasterizationOrder {
@@ -9,6 +10,7 @@ pub enum VkRasterizationOrder {
     Relaxed = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkRasterizationOrder = i32;
 
 impl VkWrappedType<RawVkRasterizationOrder> for VkRasterizationOrder {

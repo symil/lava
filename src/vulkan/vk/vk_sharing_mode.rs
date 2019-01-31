@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSharingMode](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSharingMode.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSharingMode {
@@ -9,6 +10,7 @@ pub enum VkSharingMode {
     Concurrent = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkSharingMode = i32;
 
 impl VkWrappedType<RawVkSharingMode> for VkSharingMode {

@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::nv::{VkShadingRatePaletteEntry,RawVkShadingRatePaletteEntry};
 
+/// Wrapper for [VkShadingRatePaletteNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShadingRatePaletteNV.html)
 #[derive(Debug, Clone)]
 pub struct VkShadingRatePalette<'a> {
     pub shading_rate_palette_entries: &'a [VkShadingRatePaletteEntry],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShadingRatePalette {

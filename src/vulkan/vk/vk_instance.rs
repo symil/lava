@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkInstance = u64;
 
+/// Wrapper for [VkInstance](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInstance.html)
 #[derive(Debug, Clone)]
 pub struct VkInstance {
     _handle: RawVkInstance,
@@ -83,10 +85,12 @@ impl VkInstance {
 
 impl VkInstance {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroyInstance](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyInstance.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyInstance)(self._handle, ptr::null());
@@ -94,6 +98,7 @@ impl VkInstance {
         }
     }
     
+    /// Wrapper for [vkEnumeratePhysicalDevices](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumeratePhysicalDevices.html)
     pub fn enumerate_physical_devices(&self) -> Result<Vec<VkPhysicalDevice>, (VkResult, Vec<VkPhysicalDevice>)> {
         unsafe {
             let mut vk_result = 0;
@@ -113,6 +118,7 @@ impl VkInstance {
         }
     }
     
+    /// Wrapper for [vkEnumeratePhysicalDeviceGroups](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumeratePhysicalDeviceGroups.html)
     pub fn enumerate_physical_device_groups(&self) -> Result<Vec<VkPhysicalDeviceGroupProperties>, (VkResult, Vec<VkPhysicalDeviceGroupProperties>)> {
         unsafe {
             let mut vk_result = 0;
@@ -132,6 +138,7 @@ impl VkInstance {
         }
     }
     
+    /// Wrapper for [vkCreateDisplayPlaneSurfaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDisplayPlaneSurfaceKHR.html)
     pub fn create_display_plane_surface(&self, create_info: &khr::VkDisplaySurfaceCreateInfo) -> Result<khr::VkSurface, (VkResult, khr::VkSurface)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -152,6 +159,7 @@ impl VkInstance {
         }
     }
     
+    /// Wrapper for [vkCreateDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDebugReportCallbackEXT.html)
     pub fn create_debug_report_callback(&self, create_info: &ext::VkDebugReportCallbackCreateInfo) -> Result<ext::VkDebugReportCallback, (VkResult, ext::VkDebugReportCallback)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -172,6 +180,7 @@ impl VkInstance {
         }
     }
     
+    /// Wrapper for [vkDebugReportMessageEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDebugReportMessageEXT.html)
     pub fn debug_report_message(&self, flags: ext::VkDebugReportFlags, object_type: ext::VkDebugReportObjectType, object: usize, location: usize, message_code: isize, layer_prefix: &str, message: &str) {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
@@ -187,6 +196,7 @@ impl VkInstance {
         }
     }
     
+    /// Wrapper for [vkCreateDebugUtilsMessengerEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDebugUtilsMessengerEXT.html)
     pub fn create_debug_utils_messenger(&self, create_info: &ext::VkDebugUtilsMessengerCreateInfo) -> Result<ext::VkDebugUtilsMessenger, (VkResult, ext::VkDebugUtilsMessenger)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -207,6 +217,7 @@ impl VkInstance {
         }
     }
     
+    /// Wrapper for [vkSubmitDebugUtilsMessageEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSubmitDebugUtilsMessageEXT.html)
     pub fn submit_debug_utils_message(&self, message_severity: ext::VkDebugUtilsMessageSeverityFlags, message_types: ext::VkDebugUtilsMessageTypeFlags, callback_data: &ext::VkDebugUtilsMessengerCallbackData) {
         unsafe {
             let raw_message_severity = vk_to_raw_value(&message_severity);

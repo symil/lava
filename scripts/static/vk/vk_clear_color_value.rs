@@ -2,6 +2,7 @@ use std::fmt::*;
 use std::mem;
 use utils::vk_traits::*;
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union RawVkClearColorValue {
@@ -10,6 +11,7 @@ pub union RawVkClearColorValue {
     uint32: [u32; 4]
 }
 
+/// Wrapper for [VkClearColorValue](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkClearColorValue.html)
 #[derive(Debug, Clone)]
 pub enum VkClearColorValue {
     F([f32; 4]),

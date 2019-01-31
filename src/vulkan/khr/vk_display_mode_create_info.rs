@@ -15,12 +15,14 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkDisplayModeCreateFlags,RawVkDisplayModeCreateFlags};
 use vulkan::khr::{VkDisplayModeParameters,RawVkDisplayModeParameters};
 
+/// Wrapper for [VkDisplayModeCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayModeCreateInfoKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkDisplayModeCreateInfo {
     pub flags: VkDisplayModeCreateFlags,
     pub parameters: VkDisplayModeParameters,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayModeCreateInfo {

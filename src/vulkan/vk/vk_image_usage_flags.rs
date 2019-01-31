@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkImageUsageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageUsageFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageUsageFlags {
     pub transfer_src: bool,
@@ -16,6 +17,7 @@ pub struct VkImageUsageFlags {
     pub fragment_density_map_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkImageUsageFlags = u32;
 
 impl VkWrappedType<RawVkImageUsageFlags> for VkImageUsageFlags {

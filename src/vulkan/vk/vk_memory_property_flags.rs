@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkMemoryPropertyFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryPropertyFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryPropertyFlags {
     pub device_local: bool,
@@ -12,6 +13,7 @@ pub struct VkMemoryPropertyFlags {
     pub protected: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkMemoryPropertyFlags = u32;
 
 impl VkWrappedType<RawVkMemoryPropertyFlags> for VkMemoryPropertyFlags {

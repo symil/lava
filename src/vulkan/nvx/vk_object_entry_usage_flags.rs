@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkObjectEntryUsageFlagBitsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectEntryUsageFlagBitsNVX.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkObjectEntryUsageFlags {
     pub graphics: bool,
     pub compute: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkObjectEntryUsageFlags = u32;
 
 impl VkWrappedType<RawVkObjectEntryUsageFlags> for VkObjectEntryUsageFlags {

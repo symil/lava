@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkDisplay = u64;
 
+/// Wrapper for [VkDisplayKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayKHR.html)
 #[derive(Debug, Clone)]
 pub struct VkDisplay {
     _handle: RawVkDisplay,
@@ -67,6 +69,7 @@ impl VkSetup for VkDisplay {
 
 impl VkDisplay {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }

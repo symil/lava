@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineTessellationStateCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineTessellationStateCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineTessellationStateCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineTessellationStateCreateFlags = u32;
 
 impl VkWrappedType<RawVkPipelineTessellationStateCreateFlags> for VkPipelineTessellationStateCreateFlags {

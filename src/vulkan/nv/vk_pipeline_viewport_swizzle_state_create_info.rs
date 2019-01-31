@@ -15,12 +15,14 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkPipelineViewportSwizzleStateCreateFlags,RawVkPipelineViewportSwizzleStateCreateFlags};
 use vulkan::nv::{VkViewportSwizzle,RawVkViewportSwizzle};
 
+/// Wrapper for [VkPipelineViewportSwizzleStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportSwizzleStateCreateInfoNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineViewportSwizzleStateCreateInfo<'a> {
     pub flags: VkPipelineViewportSwizzleStateCreateFlags,
     pub viewport_swizzles: &'a [VkViewportSwizzle],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportSwizzleStateCreateInfo {

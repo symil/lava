@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkExtent3D](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtent3D.html)
 #[derive(Debug, Clone)]
 pub struct VkExtent3D {
     pub width: u32,
@@ -19,6 +20,7 @@ pub struct VkExtent3D {
     pub depth: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExtent3D {

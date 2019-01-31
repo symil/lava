@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDependencyFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDependencyFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDependencyFlags {
     pub by_region: bool,
@@ -9,6 +10,7 @@ pub struct VkDependencyFlags {
     pub view_local: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkDependencyFlags = u32;
 
 impl VkWrappedType<RawVkDependencyFlags> for VkDependencyFlags {

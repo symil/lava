@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkMemoryAllocateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryAllocateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryAllocateFlags {
     pub device_mask: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkMemoryAllocateFlags = u32;
 
 impl VkWrappedType<RawVkMemoryAllocateFlags> for VkMemoryAllocateFlags {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkExternalMemoryFeatureFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryFeatureFlagBitsNV.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalMemoryFeatureFlags {
     pub dedicated_only: bool,
@@ -9,6 +10,7 @@ pub struct VkExternalMemoryFeatureFlags {
     pub importable: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkExternalMemoryFeatureFlags = u32;
 
 impl VkWrappedType<RawVkExternalMemoryFeatureFlags> for VkExternalMemoryFeatureFlags {

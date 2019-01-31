@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkViewportWScaling,RawVkViewportWScaling};
 
+/// Wrapper for [VkPipelineViewportWScalingStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportWScalingStateCreateInfoNV.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineViewportWScalingStateCreateInfo<'a> {
     pub viewport_wscaling_enable: bool,
     pub viewport_wscalings: Option<&'a [VkViewportWScaling]>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportWScalingStateCreateInfo {

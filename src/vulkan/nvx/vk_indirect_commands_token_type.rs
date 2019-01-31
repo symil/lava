@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkIndirectCommandsTokenTypeNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsTokenTypeNVX.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkIndirectCommandsTokenType {
@@ -15,6 +16,7 @@ pub enum VkIndirectCommandsTokenType {
     Dispatch = 7,
 }
 
+#[doc(hidden)]
 pub type RawVkIndirectCommandsTokenType = i32;
 
 impl VkWrappedType<RawVkIndirectCommandsTokenType> for VkIndirectCommandsTokenType {

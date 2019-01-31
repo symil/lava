@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkCommandPoolCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPoolCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandPoolCreateFlags {
     pub transient: bool,
@@ -9,6 +10,7 @@ pub struct VkCommandPoolCreateFlags {
     pub protected: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkCommandPoolCreateFlags = u32;
 
 impl VkWrappedType<RawVkCommandPoolCreateFlags> for VkCommandPoolCreateFlags {

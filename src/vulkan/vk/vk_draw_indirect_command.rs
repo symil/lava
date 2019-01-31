@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkDrawIndirectCommand](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrawIndirectCommand.html)
 #[derive(Debug, Clone)]
 pub struct VkDrawIndirectCommand {
     pub vertex_count: usize,
@@ -20,6 +21,7 @@ pub struct VkDrawIndirectCommand {
     pub first_instance: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrawIndirectCommand {

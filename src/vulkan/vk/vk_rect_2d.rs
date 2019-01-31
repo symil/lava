@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkOffset2D,RawVkOffset2D};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
+/// Wrapper for [VkRect2D](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRect2D.html)
 #[derive(Debug, Clone)]
 pub struct VkRect2D {
     pub offset: VkOffset2D,
     pub extent: VkExtent2D,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRect2D {

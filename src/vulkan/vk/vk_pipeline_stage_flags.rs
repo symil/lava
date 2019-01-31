@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineStageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineStageFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineStageFlags {
     pub top_of_pipe: bool,
@@ -32,6 +33,7 @@ pub struct VkPipelineStageFlags {
     pub fragment_density_process_ext: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineStageFlags = u32;
 
 impl VkWrappedType<RawVkPipelineStageFlags> for VkPipelineStageFlags {

@@ -17,6 +17,7 @@ use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 use vulkan::vk::{VkImage,RawVkImage};
 use vulkan::vk::{VkImageSubresourceRange,RawVkImageSubresourceRange};
 
+/// Wrapper for [VkImageMemoryBarrier](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageMemoryBarrier.html)
 #[derive(Debug, Clone)]
 pub struct VkImageMemoryBarrier<'a> {
     pub src_access_mask: VkAccessFlags,
@@ -29,6 +30,7 @@ pub struct VkImageMemoryBarrier<'a> {
     pub subresource_range: VkImageSubresourceRange,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageMemoryBarrier {

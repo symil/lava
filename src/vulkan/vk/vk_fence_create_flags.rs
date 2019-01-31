@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkFenceCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFenceCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkFenceCreateFlags {
     pub signaled: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkFenceCreateFlags = u32;
 
 impl VkWrappedType<RawVkFenceCreateFlags> for VkFenceCreateFlags {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkValidationFeatureDisableEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationFeatureDisableEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkValidationFeatureDisable {
@@ -14,6 +15,7 @@ pub enum VkValidationFeatureDisable {
     UniqueHandles = 6,
 }
 
+#[doc(hidden)]
 pub type RawVkValidationFeatureDisable = i32;
 
 impl VkWrappedType<RawVkValidationFeatureDisable> for VkValidationFeatureDisable {

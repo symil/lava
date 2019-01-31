@@ -12,12 +12,14 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkExtent2D](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtent2D.html)
 #[derive(Debug, Clone)]
 pub struct VkExtent2D {
     pub width: u32,
     pub height: u32,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExtent2D {

@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkShaderResourceUsageAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderResourceUsageAMD.html)
 #[derive(Debug, Clone)]
 pub struct VkShaderResourceUsage {
     pub num_used_vgprs: usize,
@@ -21,6 +22,7 @@ pub struct VkShaderResourceUsage {
     pub scratch_mem_usage_in_bytes: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShaderResourceUsage {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDisplayPlaneAlphaFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneAlphaFlagBitsKHR.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDisplayPlaneAlphaFlags {
     pub opaque: bool,
@@ -10,6 +11,7 @@ pub struct VkDisplayPlaneAlphaFlags {
     pub per_pixel_premultiplied: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkDisplayPlaneAlphaFlags = u32;
 
 impl VkWrappedType<RawVkDisplayPlaneAlphaFlags> for VkDisplayPlaneAlphaFlags {

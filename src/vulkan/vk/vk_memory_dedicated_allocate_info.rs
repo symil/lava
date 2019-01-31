@@ -15,12 +15,14 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImage,RawVkImage};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
+/// Wrapper for [VkMemoryDedicatedAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryDedicatedAllocateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkMemoryDedicatedAllocateInfo<'a, 'b> {
     pub image: Option<&'a VkImage>,
     pub buffer: Option<&'b VkBuffer>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryDedicatedAllocateInfo {

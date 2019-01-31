@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPipelineLayoutCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineLayoutCreateFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineLayoutCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkPipelineLayoutCreateFlags = u32;
 
 impl VkWrappedType<RawVkPipelineLayoutCreateFlags> for VkPipelineLayoutCreateFlags {

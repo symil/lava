@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkSampleLocationsInfo,RawVkSampleLocationsInfo};
 
+/// Wrapper for [VkPipelineSampleLocationsStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineSampleLocationsStateCreateInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineSampleLocationsStateCreateInfo<'a> {
     pub sample_locations_enable: bool,
     pub sample_locations_info: VkSampleLocationsInfo<'a>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineSampleLocationsStateCreateInfo {

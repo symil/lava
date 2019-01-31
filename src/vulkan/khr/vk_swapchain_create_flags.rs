@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSwapchainCreateFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainCreateFlagBitsKHR.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSwapchainCreateFlags {
     pub split_instance_bind_regions: bool,
@@ -9,6 +10,7 @@ pub struct VkSwapchainCreateFlags {
     pub mutable_format: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSwapchainCreateFlags = u32;
 
 impl VkWrappedType<RawVkSwapchainCreateFlags> for VkSwapchainCreateFlags {

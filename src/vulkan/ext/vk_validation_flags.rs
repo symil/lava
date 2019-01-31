@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkValidationCheck,RawVkValidationCheck};
 
+/// Wrapper for [VkValidationFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationFlagBitsEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkValidationFlags<'a> {
     pub disabled_validation_checks: &'a [VkValidationCheck],
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkValidationFlags {

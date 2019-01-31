@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkDeviceGeneratedCommandsFeaturesNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGeneratedCommandsFeaturesNVX.html)
 #[derive(Debug, Clone)]
 pub struct VkDeviceGeneratedCommandsFeatures {
     pub compute_binding_point_support: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGeneratedCommandsFeatures {

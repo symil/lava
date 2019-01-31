@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkRayTracingShaderGroupType,RawVkRayTracingShaderGroupType};
 
+/// Wrapper for [VkRayTracingShaderGroupCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingShaderGroupCreateInfoNV.html)
 #[derive(Debug, Clone)]
 pub struct VkRayTracingShaderGroupCreateInfo {
     pub type_: VkRayTracingShaderGroupType,
@@ -23,6 +24,7 @@ pub struct VkRayTracingShaderGroupCreateInfo {
     pub intersection_shader: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRayTracingShaderGroupCreateInfo {

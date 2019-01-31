@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkSemaphoreImportFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreImportFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkSemaphoreImportFlags {
     pub temporary: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkSemaphoreImportFlags = u32;
 
 impl VkWrappedType<RawVkSemaphoreImportFlags> for VkSemaphoreImportFlags {

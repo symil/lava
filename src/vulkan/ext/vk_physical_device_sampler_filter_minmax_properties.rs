@@ -13,12 +13,14 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSamplerFilterMinmaxProperties {
     pub filter_minmax_single_component_formats: bool,
     pub filter_minmax_image_component_mapping: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSamplerFilterMinmaxProperties {

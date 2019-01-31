@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkMemoryRequirements,RawVkMemoryRequirements};
 
+/// Wrapper for [VkMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryRequirements2.html)
 #[derive(Debug, Clone)]
 pub struct VkMemoryRequirements2 {
     pub memory_requirements: VkMemoryRequirements,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryRequirements2 {

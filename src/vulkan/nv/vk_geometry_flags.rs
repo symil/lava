@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkGeometryFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryFlagBitsNV.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkGeometryFlags {
     pub opaque: bool,
     pub no_duplicate_any_hit_invocation: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkGeometryFlags = u32;
 
 impl VkWrappedType<RawVkGeometryFlags> for VkGeometryFlags {

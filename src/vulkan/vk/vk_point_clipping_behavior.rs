@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkPointClippingBehavior](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPointClippingBehavior.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPointClippingBehavior {
@@ -9,6 +10,7 @@ pub enum VkPointClippingBehavior {
     UserClipPlanesOnly = 1,
 }
 
+#[doc(hidden)]
 pub type RawVkPointClippingBehavior = i32;
 
 impl VkWrappedType<RawVkPointClippingBehavior> for VkPointClippingBehavior {

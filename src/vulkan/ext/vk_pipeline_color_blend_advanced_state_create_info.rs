@@ -14,6 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkBlendOverlap,RawVkBlendOverlap};
 
+/// Wrapper for [VkPipelineColorBlendAdvancedStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineColorBlendAdvancedStateCreateInfoEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineColorBlendAdvancedStateCreateInfo {
     pub src_premultiplied: bool,
@@ -21,6 +22,7 @@ pub struct VkPipelineColorBlendAdvancedStateCreateInfo {
     pub blend_overlap: VkBlendOverlap,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendAdvancedStateCreateInfo {

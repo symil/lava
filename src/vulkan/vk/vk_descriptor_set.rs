@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkDescriptorSet = u64;
 
+/// Wrapper for [VkDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSet.html)
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSet {
     _handle: RawVkDescriptorSet,
@@ -67,6 +69,7 @@ impl VkSetup for VkDescriptorSet {
 
 impl VkDescriptorSet {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }

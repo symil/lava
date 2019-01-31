@@ -16,6 +16,7 @@ use vulkan::nvx::{VkObjectEntryUsageFlags,RawVkObjectEntryUsageFlags};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 use vulkan::vk::{VkIndexType,RawVkIndexType};
 
+/// Wrapper for [VkObjectTableIndexBufferEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableIndexBufferEntryNVX.html)
 #[derive(Debug, Clone)]
 pub struct VkObjectTableIndexBufferEntry<'a> {
     pub type_: VkObjectEntryType,
@@ -24,6 +25,7 @@ pub struct VkObjectTableIndexBufferEntry<'a> {
     pub index_type: VkIndexType,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableIndexBufferEntry {

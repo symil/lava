@@ -2,12 +2,14 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDeviceEventTypeEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceEventTypeEXT.html)
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkDeviceEventType {
     DisplayHotplug = 0,
 }
 
+#[doc(hidden)]
 pub type RawVkDeviceEventType = i32;
 
 impl VkWrappedType<RawVkDeviceEventType> for VkDeviceEventType {

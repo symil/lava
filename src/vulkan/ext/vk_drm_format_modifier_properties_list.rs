@@ -14,11 +14,13 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkDrmFormatModifierProperties,RawVkDrmFormatModifierProperties};
 
+/// Wrapper for [VkDrmFormatModifierPropertiesListEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrmFormatModifierPropertiesListEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkDrmFormatModifierPropertiesList<'a> {
     pub drm_format_modifier_properties: Option<&'a [VkDrmFormatModifierProperties]>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrmFormatModifierPropertiesList {

@@ -6,7 +6,7 @@ const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 
 const { getAllEnums, getAllBitFlags, getAllStructs, getAllHandles, getAllFunctions, getAllExtensionNames, getAllTypedefs } = require('./parse');
-const { blockToString, toSnakeCase, getWrappedVkTypeName, getRawVkTypeName } = require('./utils');
+const { blockToString, toSnakeCase, getWrappedVkTypeName, getRawVkTypeName, documentType } = require('./utils');
 const { generateVkStructDefinition } = require('./structs');
 const { generateVkEnumDefinition } = require('./enums');
 const { generateVkBitFlagsDefinition } = require('./bit_flags');
@@ -125,7 +125,10 @@ function generateExtensionNames() {
     return {
         name: 'ExtensionNames',
         extension: 'constants',
-        definition: getAllExtensionNames().map(({name, value}) => `pub const ${name} : &str = ${value};`)
+        definition: getAllExtensionNames().map(({name, value}) => {
+            const doc = `/// \`${value}\``;
+            return `${doc}\npub const ${name} : &str = ${value};`
+        })
     };
 }
 
@@ -141,7 +144,7 @@ function generateTypedefs() {
             extension: newType.extension,
             definition: [
                 `pub type ${getWrappedVkTypeName(newType.name)}${lifetimes} = super::super::${baseTypeExt}::${prefix}${getWrappedVkTypeName(baseType.name)}${lifetimes};`,
-                `pub type ${getRawVkTypeName(newType.name)} = super::super::${baseTypeExt}::${prefix}${getRawVkTypeName(baseType.name)};`
+                `#[doc(hidden)]\npub type ${getRawVkTypeName(newType.name)} = super::super::${baseTypeExt}::${prefix}${getRawVkTypeName(baseType.name)};`
             ]
         };
     });

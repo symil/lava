@@ -12,6 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
+/// Wrapper for [VkPastPresentationTimingGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPastPresentationTimingGOOGLE.html)
 #[derive(Debug, Clone)]
 pub struct VkPastPresentationTiming {
     pub present_id: usize,
@@ -21,6 +22,7 @@ pub struct VkPastPresentationTiming {
     pub present_margin: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPastPresentationTiming {

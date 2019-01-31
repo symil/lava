@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkExternalSemaphoreHandleTypeFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalSemaphoreHandleTypeFlagBits.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalSemaphoreHandleTypeFlags {
     pub opaque_fd: bool,
@@ -11,6 +12,7 @@ pub struct VkExternalSemaphoreHandleTypeFlags {
     pub sync_fd: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkExternalSemaphoreHandleTypeFlags = u32;
 
 impl VkWrappedType<RawVkExternalSemaphoreHandleTypeFlags> for VkExternalSemaphoreHandleTypeFlags {

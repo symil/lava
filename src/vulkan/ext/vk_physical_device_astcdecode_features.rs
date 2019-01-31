@@ -13,11 +13,13 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
+/// Wrapper for [VkPhysicalDeviceASTCDecodeFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceASTCDecodeFeaturesEXT.html)
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceASTCDecodeFeatures {
     pub decode_mode_shared_exponent: bool,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceASTCDecodeFeatures {

@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkDeviceMemory = u64;
 
+/// Wrapper for [VkDeviceMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceMemory.html)
 #[derive(Debug, Clone)]
 pub struct VkDeviceMemory {
     _handle: RawVkDeviceMemory,
@@ -67,16 +69,19 @@ impl VkSetup for VkDeviceMemory {
 
 impl VkDeviceMemory {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkFreeMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeMemory.html)
     pub fn free(&self) {
         unsafe {
             ((&*self._fn_table).vkFreeMemory)(self._parent_device, self._handle, ptr::null());
         }
     }
     
+    /// Wrapper for [vkMapMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMapMemory.html)
     pub fn map<'a>(&self, offset: usize, size: usize, flags: VkMemoryMapFlags) -> Result<&'a mut [c_void], (VkResult, &'a mut [c_void])> {
         unsafe {
             let raw_offset = vk_to_raw_value(&offset);
@@ -92,12 +97,14 @@ impl VkDeviceMemory {
         }
     }
     
+    /// Wrapper for [vkUnmapMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUnmapMemory.html)
     pub fn unmap(&self) {
         unsafe {
             ((&*self._fn_table).vkUnmapMemory)(self._parent_device, self._handle);
         }
     }
     
+    /// Wrapper for [vkGetDeviceMemoryCommitment](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceMemoryCommitment.html)
     pub fn get_commitment(&self) -> usize {
         unsafe {
             let raw_committed_memory_in_bytes = &mut mem::zeroed() as *mut u64;

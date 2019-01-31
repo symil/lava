@@ -2,11 +2,13 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkDisplaySurfaceCreateFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplaySurfaceCreateFlagBitsKHR.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkDisplaySurfaceCreateFlags {
     
 }
 
+#[doc(hidden)]
 pub type RawVkDisplaySurfaceCreateFlags = u32;
 
 impl VkWrappedType<RawVkDisplaySurfaceCreateFlags> for VkDisplaySurfaceCreateFlags {

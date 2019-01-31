@@ -13,8 +13,10 @@ use std::slice;
 use vulkan::*;
 use vulkan::vk::*;
 
+#[doc(hidden)]
 pub type RawVkIndirectCommandsLayout = u64;
 
+/// Wrapper for [VkIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutNVX.html)
 #[derive(Debug, Clone)]
 pub struct VkIndirectCommandsLayout {
     _handle: RawVkIndirectCommandsLayout,
@@ -67,10 +69,12 @@ impl VkSetup for VkIndirectCommandsLayout {
 
 impl VkIndirectCommandsLayout {
     
+    /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
     
+    /// Wrapper for [vkDestroyIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyIndirectCommandsLayoutNVX.html)
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyIndirectCommandsLayoutNVX)(self._parent_device, self._handle, ptr::null());

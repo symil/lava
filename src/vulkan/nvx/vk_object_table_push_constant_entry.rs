@@ -16,6 +16,7 @@ use vulkan::nvx::{VkObjectEntryUsageFlags,RawVkObjectEntryUsageFlags};
 use vulkan::vk::{VkPipelineLayout,RawVkPipelineLayout};
 use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 
+/// Wrapper for [VkObjectTablePushConstantEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTablePushConstantEntryNVX.html)
 #[derive(Debug, Clone)]
 pub struct VkObjectTablePushConstantEntry<'a> {
     pub type_: VkObjectEntryType,
@@ -24,6 +25,7 @@ pub struct VkObjectTablePushConstantEntry<'a> {
     pub stage_flags: VkShaderStageFlags,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTablePushConstantEntry {

@@ -2,6 +2,7 @@
 
 use utils::vk_traits::*;
 
+/// Wrapper for [VkIndirectCommandsLayoutUsageFlagBitsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutUsageFlagBitsNVX.html)
 #[derive(Debug, Clone, Copy)]
 pub struct VkIndirectCommandsLayoutUsageFlags {
     pub unordered_sequences: bool,
@@ -10,6 +11,7 @@ pub struct VkIndirectCommandsLayoutUsageFlags {
     pub indexed_sequences: bool,
 }
 
+#[doc(hidden)]
 pub type RawVkIndirectCommandsLayoutUsageFlags = u32;
 
 impl VkWrappedType<RawVkIndirectCommandsLayoutUsageFlags> for VkIndirectCommandsLayoutUsageFlags {

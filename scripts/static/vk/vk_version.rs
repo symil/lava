@@ -1,5 +1,6 @@
 use utils::vk_traits::*;
 
+/// Wrapper to specify a version number, that will be encoded according to the [Vulkan specification](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#fundamentals-versionnum). 
 #[derive(Debug, Copy, Clone)]
 pub struct VkVersion(pub u32, pub u32, pub u32);
 

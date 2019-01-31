@@ -14,12 +14,14 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPipelineTessellationStateCreateFlags,RawVkPipelineTessellationStateCreateFlags};
 
+/// Wrapper for [VkPipelineTessellationStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineTessellationStateCreateInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkPipelineTessellationStateCreateInfo {
     pub flags: VkPipelineTessellationStateCreateFlags,
     pub patch_control_points: usize,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineTessellationStateCreateInfo {

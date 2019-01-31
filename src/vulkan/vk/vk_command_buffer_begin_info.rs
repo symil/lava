@@ -15,6 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkCommandBufferUsageFlags,RawVkCommandBufferUsageFlags};
 use vulkan::vk::{VkCommandBufferInheritanceInfo,RawVkCommandBufferInheritanceInfo};
 
+/// Wrapper for [VkCommandBufferBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferBeginInfo.html)
 #[derive(Debug, Clone)]
 pub struct VkCommandBufferBeginInfo<'a, 'b, 'c>
     where
@@ -25,6 +26,7 @@ pub struct VkCommandBufferBeginInfo<'a, 'b, 'c>
     pub inheritance_info: Option<&'a VkCommandBufferInheritanceInfo<'b, 'c>>,
 }
 
+#[doc(hidden)]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferBeginInfo {
