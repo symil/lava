@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const rimraf = require('rimraf');
 
-const { getAllEnums, getAllBitFlags, getAllStructs, getAllHandles, getAllFunctions, isHandle } = require('./parse');
+const { getAllEnums, getAllBitFlags, getAllStructs, getAllHandles, getAllFunctions, getAllExtensionNames } = require('./parse');
 const { blockToString, toSnakeCase } = require('./utils');
 const { generateVkStructDefinition } = require('./structs');
 const { generateVkEnumDefinition } = require('./enums');
@@ -35,6 +35,7 @@ function generateFiles() {
     const vkTypes = [
         generateRootType(),
         generateFunctionTable(),
+        generateExtensionNames(),
         ...generateEnums(),
         ...generateBitFlags(),
         ...generateStructs(),
@@ -115,6 +116,14 @@ function writeModFile(dirPath) {
     fs.writeFileSync(filePath, GENERATED_HEADER + content);
 
     directories.forEach(dirName => writeModFile(path.join(dirPath, dirName)));
+}
+
+function generateExtensionNames() {
+    return {
+        name: 'ExtensionNames',
+        extension: '',
+        definition: getAllExtensionNames().map(({name, value}) => `pub const ${name} : &str = ${value};`)
+    };
 }
 
 function generateVkTypes(cTypes, generateFunction) {

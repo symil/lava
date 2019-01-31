@@ -19,8 +19,8 @@ use vk::vk_dependency_flags::*;
 
 #[derive(Debug, Clone)]
 pub struct VkSubpassDependency {
-    pub src_subpass: u32,
-    pub dst_subpass: u32,
+    pub src_subpass: usize,
+    pub dst_subpass: usize,
     pub src_stage_mask: VkPipelineStageFlags,
     pub dst_stage_mask: VkPipelineStageFlags,
     pub src_access_mask: VkAccessFlags,
@@ -42,8 +42,8 @@ pub struct RawVkSubpassDependency {
 
 impl VkWrappedType<RawVkSubpassDependency> for VkSubpassDependency {
     fn vk_to_raw(src: &VkSubpassDependency, dst: &mut RawVkSubpassDependency) {
-        dst.src_subpass = src.src_subpass;
-        dst.dst_subpass = src.dst_subpass;
+        dst.src_subpass = vk_to_raw_value(&src.src_subpass);
+        dst.dst_subpass = vk_to_raw_value(&src.dst_subpass);
         dst.src_stage_mask = vk_to_raw_value(&src.src_stage_mask);
         dst.dst_stage_mask = vk_to_raw_value(&src.dst_stage_mask);
         dst.src_access_mask = vk_to_raw_value(&src.src_access_mask);
@@ -55,8 +55,8 @@ impl VkWrappedType<RawVkSubpassDependency> for VkSubpassDependency {
 impl VkRawType<VkSubpassDependency> for RawVkSubpassDependency {
     fn vk_to_wrapped(src: &RawVkSubpassDependency) -> VkSubpassDependency {
         VkSubpassDependency {
-            src_subpass: src.src_subpass,
-            dst_subpass: src.dst_subpass,
+            src_subpass: u32::vk_to_wrapped(&src.src_subpass),
+            dst_subpass: u32::vk_to_wrapped(&src.dst_subpass),
             src_stage_mask: RawVkPipelineStageFlags::vk_to_wrapped(&src.src_stage_mask),
             dst_stage_mask: RawVkPipelineStageFlags::vk_to_wrapped(&src.dst_stage_mask),
             src_access_mask: RawVkAccessFlags::vk_to_wrapped(&src.src_access_mask),

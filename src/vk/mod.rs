@@ -8,6 +8,7 @@ pub mod nv;
 pub mod nvx;
 
 pub mod constants;
+pub mod extension_names;
 pub mod vk;
 pub mod vk_access_flags;
 pub mod vk_application_info;
@@ -332,6 +333,7 @@ pub mod vk_viewport;
 pub mod vk_write_descriptor_set;
 
 pub use self::constants::*;
+pub use self::extension_names::*;
 pub use self::vk_access_flags::*;
 pub use self::vk_application_info::*;
 pub use self::vk_attachment_description::*;

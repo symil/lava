@@ -16,6 +16,7 @@ let BIT_FLAGS = null;
 let STRUCTS = null;
 let HANDLES = null;
 let FUNCTIONS = null;
+let EXTENSION_NAMES = null;
 let BOOTSTRAP_DONE = false;
 
 function bootstrap() {
@@ -28,6 +29,7 @@ function bootstrap() {
         STRUCTS = parseStructs();
         HANDLES = parseHandles();
         FUNCTIONS = parseFunctions();
+        EXTENSION_NAMES = parseExtensionNames();
         BOOTSTRAP_DONE = true;
     }
 }
@@ -59,6 +61,7 @@ function getAllBitFlags() { return getAll(BIT_FLAGS); }
 function getAllStructs() { return getAll(STRUCTS); }
 function getAllHandles() { return getAll(HANDLES); }
 function getAllFunctions() { bootstrap(); return FUNCTIONS.slice().filter(isAllowedFunction); }
+function getAllExtensionNames() { bootstrap(); return EXTENSION_NAMES.slice(); }
 
 function getEnumByName(name) { return getByName(ENUMS, name); }
 function getBitFlagsByName(name) { return getByName(BIT_FLAGS, name); }
@@ -119,6 +122,19 @@ function parseField(str) {
     const countFor = [];
 
     return { name, extension, fullType, typeName, isPointer, isDoublePointer, isConst, arraySize, countFor };
+}
+
+function parseExtensionNames() {
+    const regexp = /#define \w+\s+"\w+"/g;
+    const match = VULKAN_H.match(regexp);
+
+    const extensionNames = match.map(str => {
+        const [_, name, value] = str.split(/\s+/)
+
+        return { name, value };
+    });
+
+    return extensionNames;
 }
 
 function parseEnums() {
@@ -384,6 +400,7 @@ module.exports = {
     getAllStructs,
     getAllHandles,
     getAllFunctions,
+    getAllExtensionNames,
     getEnumByName,
     getBitFlagsByName,
     getStructByName,
