@@ -13,9 +13,7 @@ Wrapper to manipulate the Vulkan API in Rust more conveniently than with binding
 - manages the calls to `vkGetInstanceProcAddr` to manipulate functions that are not exposed statically
 - provides a generic `create_surface` method to create surfaces
 
-Lava works by letting the developer manipulate "wrapped" data structures, which are then internally converted to "raw" data-structures
-expected by Vulkan (and the other way around when retrieving objects from Vulkan).
-It means that there is a tiny overhead in each API call.
+Lava is entirely generated from the C header files of Vulkan.
 
 ### Restrictions
 
@@ -86,6 +84,14 @@ let surface = instance.create_surface(
 
 ## Additional usage information
 
+### Module partitionning
+
+Data-structures are separated in multiple modules, according to their extension (KHR, EXT, etc). Data-structures that have no extension are in the `lava::vk` module.
+
+Constants (e.g validation layer names) are located in the `lava::constants` module.
+
+Lava re-exports all the members of `lava::vk`, `lava::constants`, `lava::ext` and `lava::khr` (`use lava::*` makes all data-structures contained in these modules available without needing to prefix them). This choice was made because Vulkan is a very verbose API, so prefixing everything with a module becomes very tedious very quickly. To avoid conflicts with external data-structures, data-structures are prefixed with `Vk` instead.
+
 ### Bit flags
 
 Bit flags are represented as structures instead of integers. Moreover all bit flags structures have static `none()` and `all()` functions. The typical way of creating a bit flags structure is as following:
@@ -125,10 +131,6 @@ If you wish to generate the wrapper for a specific version, you can do (requires
 Where `<version>` is a branch or tag name of the Vulkan-Docs repository (for example "v1.1.80").
 The script will download the corresponding files in the `download/` folder and generate the
 new source files in `src/vulkan/`.
-
-## Warning
-
-This is very much a work in progress.
 
 ## License
 
