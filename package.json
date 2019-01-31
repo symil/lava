@@ -4,6 +4,7 @@
   "description": "",
   "main": "generate.js",
   "dependencies": {
+    "mkdirp": "^0.5.1",
     "pixl-xml": "^1.0.13",
     "rimraf": "^2.6.2"
   },

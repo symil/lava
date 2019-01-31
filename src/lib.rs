@@ -4,12 +4,10 @@
 #![allow(unused_assignments)]
 
 mod utils;
-mod vk;
+mod vulkan;
 
-pub use vk::*;
-
-pub mod all {
-    pub use vk::*;
-    pub use vk::ext::*;
-    pub use vk::khr::*;
-}
+pub use vulkan::*;
+pub use vulkan::constants::*;
+pub use vulkan::vk::*;
+pub use vulkan::ext::*;
+pub use vulkan::khr::*;

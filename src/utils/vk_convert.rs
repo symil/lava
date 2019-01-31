@@ -6,8 +6,7 @@ use std::os::raw::c_char;
 use utils::c_bindings::*;
 use utils::vk_traits::*;
 use utils::vk_ptr::*;
-use vk::vk_instance::*;
-use vk::vk_result::*;
+use vulkan::vk::*;
 
 pub fn vk_to_raw_value<W : VkWrappedType<R>, R>(value: &W) -> R {
     unsafe {

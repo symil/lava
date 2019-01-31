@@ -33,7 +33,7 @@ async function main() {
         await downloadSourceFiles(tag);
     }
 
-    if (argv.includes('--remove')) {
+    if (argv.includes('--delete') || argv.includes('-d')) {
         console.log('Removing current source files...');
         removeFiles();
     }

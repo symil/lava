@@ -50,7 +50,8 @@ function genUses() {
         'std::mem',
         'std::cmp',
         'std::slice',
-        `vk::*`
+        `vulkan::*`,
+        `vulkan::vk::*`,
     ]);
 
     // if (def.name !== 'VkInstance') {
@@ -93,6 +94,10 @@ function makeMethodNames(handle, functions) {
 
         if (handle && handle.name === 'VkDeviceMemory') {
             methodName = methodName.replace('_memory', '');
+        }
+
+        if (!handle) {
+            methodName = `vk_${methodName}`;
         }
 
         if (assigned.has(methodName)) {

@@ -56,9 +56,7 @@ function genUses(def) {
         'utils::vk_null::*',
         'utils::vk_ptr::*',
         'utils::vk_traits::*',
-        `vk::vk_instance_function_table::*`,
-        `vk::vk_instance::*`,
-        `vk::vk_device::*`
+        `vulkan::vk::*`
     ]);
 
     addUsesToSet(uses, def, def.fields);

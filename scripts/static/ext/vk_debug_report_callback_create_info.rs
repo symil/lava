@@ -5,8 +5,8 @@ use utils::c_bindings::*;
 use utils::vk_traits::*;
 use utils::vk_convert::*;
 use utils::vk_ptr::*;
-use vk::vk_structure_type::*;
-use vk::ext::vk_debug_report_flags::*;
+use vulkan::vk::*;
+use vulkan::ext::*;
 
 pub type RawVkDebugCallback = unsafe extern fn(flags: u32, obj_type: i32, obj: u64, location: usize, code: i32, layer_prefix: *const c_char, msg: *const c_char, user_data: *mut c_void) -> u32;
 pub type VkDebugCallback = fn(msg: String);

@@ -533,12 +533,18 @@ function addUsesToSet(set, rootType, fields) {
         const typeName = field.wrappedTypeName;
 
         if (typeName.startsWith('Vk') && typeName !== rootType.wrappedTypeName) {
-            let use = `vk::`;
-            if (field.extension) { use += `${field.extension}::`; }
-            use += toSnakeCase(typeName);
-            use += `::*`;
+            // let use = `vk::`;
+            // if (field.extension) { use += `${field.extension}::`; }
+            // use += toSnakeCase(typeName);
+            // use += `::*`;
 
-            set.add(use);
+            let types = [field.wrappedTypeName];
+
+            if (field.rawTypeName.startsWith('Raw')) {
+                types.push(field.rawTypeName);
+            }
+
+            set.add(`vulkan::${field.extension || 'vk'}::{${types.join(',')}}`);
         }
     }
 }

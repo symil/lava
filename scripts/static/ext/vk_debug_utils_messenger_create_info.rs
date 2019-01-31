@@ -5,10 +5,8 @@ use utils::c_bindings::*;
 use utils::vk_traits::*;
 use utils::vk_convert::*;
 use utils::vk_ptr::*;
-use vk::vk_structure_type::*;
-use vk::ext::vk_debug_utils_messenger_create_flags::*;
-use vk::ext::vk_debug_utils_message_severity_flags::*;
-use vk::ext::vk_debug_utils_message_type_flags::*;
+use vulkan::vk::*;
+use vulkan::ext::*;
 
 #[repr(C)]
 pub struct RawVkDebugUtilsMessengerCreateInfo {

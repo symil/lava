@@ -1,6 +1,6 @@
-use vk::RawVkInstance;
-use vk::RawVkDevice;
-use vk::VkInstanceFunctionTable;
+use vulkan::vk::RawVkInstance;
+use vulkan::vk::RawVkDevice;
+use vulkan::vk::VkInstanceFunctionTable;
 
 pub trait VkWrappedType<R> {
     fn vk_to_raw(value: &Self, dst: &mut R);
