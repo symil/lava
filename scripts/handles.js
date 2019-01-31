@@ -230,7 +230,7 @@ function functionToMethod(handle, func) {
 
     const lastArg = func.args.last();
     const beforeLastArg = func.args.beforeLast();
-    const createSomething = lastArg.isPointer && !lastArg.isConst;
+    const createSomething = lastArg.isPointer && !lastArg.isConst && (lastArg.name !== 'pData' || beforeLastArg.name !== 'dataSize');
     const beforeLastArgIsCountPtr = createSomething && beforeLastArg && !!beforeLastArg.countFor.length && beforeLastArg.isPointer;
     const createList = createSomething && lastArg.countField;
     const returnVkResult = func.type === 'VkResult';

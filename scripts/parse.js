@@ -17,6 +17,7 @@ let STRUCTS = null;
 let HANDLES = null;
 let FUNCTIONS = null;
 let EXTENSION_NAMES = null;
+let TYPEDEFS = null;
 let BOOTSTRAP_DONE = false;
 
 function bootstrap() {
@@ -30,6 +31,7 @@ function bootstrap() {
         HANDLES = parseHandles();
         FUNCTIONS = parseFunctions();
         EXTENSION_NAMES = parseExtensionNames();
+        TYPEDEFS = parseTypedefs();
         BOOTSTRAP_DONE = true;
     }
 }
@@ -50,6 +52,8 @@ function get(obj, type) {
 }
 
 function isAllowedFunction(func) {
+    return true;
+
     const allowedExtensions = ['EXT', 'KHR'];
     const hasExtension = /[A-Z]{2}$/.test(func.name);
 
@@ -62,6 +66,7 @@ function getAllStructs() { return getAll(STRUCTS); }
 function getAllHandles() { return getAll(HANDLES); }
 function getAllFunctions() { bootstrap(); return FUNCTIONS.slice().filter(isAllowedFunction); }
 function getAllExtensionNames() { bootstrap(); return EXTENSION_NAMES.slice(); }
+function getAllTypedefs() { bootstrap(); return TYPEDEFS.slice(); }
 
 function getEnumByName(name) { return getByName(ENUMS, name); }
 function getBitFlagsByName(name) { return getByName(BIT_FLAGS, name); }
@@ -135,6 +140,24 @@ function parseExtensionNames() {
     });
 
     return extensionNames;
+}
+
+function parseTypedefs() {
+    const regexp = /typedef\s+\w+\s+\w+;/g;
+    const match = VULKAN_H.match(regexp);
+
+    return match.map(str => {
+        const [_, baseType, newType] = str.substring(0, str.indexOf(';')).split(/\s+/);
+
+        if (baseType.startsWith('uint') || baseType === 'VkFlags' || baseType.endsWith('FlagBits')) {
+            return null;
+        }
+
+        return {
+            baseType: parseName(baseType),
+            newType: parseName(newType)
+        };
+    }).filter(x => x);
 }
 
 function parseEnums() {
@@ -401,6 +424,7 @@ module.exports = {
     getAllHandles,
     getAllFunctions,
     getAllExtensionNames,
+    getAllTypedefs,
     getEnumByName,
     getBitFlagsByName,
     getStructByName,

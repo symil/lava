@@ -18,6 +18,8 @@ function generateVkStructDefinition(cDef) {
     def.lifetimesRestrictions = lifetimeTree.getRestrictions();
     def.staticLifetimes = lifetimeTree.getStatics();
 
+    cDef.lifetimes = def.lifetimes; // Necessary for typedefs
+
     // if (def.typeName === 'VkDisplayProperties') {
     //     def.fields.forEach(field => {
     //         console.log(`--> ${field.varName}`)
