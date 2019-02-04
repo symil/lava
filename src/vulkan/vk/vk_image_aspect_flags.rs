@@ -135,4 +135,20 @@ impl VkImageAspectFlags {
         + if self.memory_plane_2_ext { 0x00000200 } else { 0 }
         + if self.memory_plane_3_ext { 0x00000400 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkImageAspectFlags {
+        VkImageAspectFlags {
+            color: value & 0x00000001 > 0,
+            depth: value & 0x00000002 > 0,
+            stencil: value & 0x00000004 > 0,
+            metadata: value & 0x00000008 > 0,
+            plane_0: value & 0x00000010 > 0,
+            plane_1: value & 0x00000020 > 0,
+            plane_2: value & 0x00000040 > 0,
+            memory_plane_0_ext: value & 0x00000080 > 0,
+            memory_plane_1_ext: value & 0x00000100 > 0,
+            memory_plane_2_ext: value & 0x00000200 > 0,
+            memory_plane_3_ext: value & 0x00000400 > 0,
+        }
+    }
 }

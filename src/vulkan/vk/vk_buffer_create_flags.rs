@@ -93,4 +93,14 @@ impl VkBufferCreateFlags {
         + if self.protected { 0x00000008 } else { 0 }
         + if self.device_address_capture_replay_ext { 0x00000010 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkBufferCreateFlags {
+        VkBufferCreateFlags {
+            sparse_binding: value & 0x00000001 > 0,
+            sparse_residency: value & 0x00000002 > 0,
+            sparse_aliased: value & 0x00000004 > 0,
+            protected: value & 0x00000008 > 0,
+            device_address_capture_replay_ext: value & 0x00000010 > 0,
+        }
+    }
 }

@@ -135,4 +135,20 @@ impl VkExternalMemoryHandleTypeFlags {
         + if self.host_allocation_ext { 0x00000080 } else { 0 }
         + if self.host_mapped_foreign_memory_ext { 0x00000100 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkExternalMemoryHandleTypeFlags {
+        VkExternalMemoryHandleTypeFlags {
+            opaque_fd: value & 0x00000001 > 0,
+            opaque_win_32: value & 0x00000002 > 0,
+            opaque_win_32_kmt: value & 0x00000004 > 0,
+            d_3d_11_texture: value & 0x00000008 > 0,
+            d_3d_11_texture_kmt: value & 0x00000010 > 0,
+            d_3d_12_heap: value & 0x00000020 > 0,
+            d_3d_12_resource: value & 0x00000040 > 0,
+            dma_buf_ext: value & 0x00000200 > 0,
+            android_hardware_buffer_android: value & 0x00000400 > 0,
+            host_allocation_ext: value & 0x00000080 > 0,
+            host_mapped_foreign_memory_ext: value & 0x00000100 > 0,
+        }
+    }
 }

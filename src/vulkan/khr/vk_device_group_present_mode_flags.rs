@@ -86,4 +86,13 @@ impl VkDeviceGroupPresentModeFlags {
         + if self.sum { 0x00000004 } else { 0 }
         + if self.local_multi_device { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDeviceGroupPresentModeFlags {
+        VkDeviceGroupPresentModeFlags {
+            local: value & 0x00000001 > 0,
+            remote: value & 0x00000002 > 0,
+            sum: value & 0x00000004 > 0,
+            local_multi_device: value & 0x00000008 > 0,
+        }
+    }
 }

@@ -65,4 +65,10 @@ impl VkDeviceQueueCreateFlags {
         0
         + if self.protected { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDeviceQueueCreateFlags {
+        VkDeviceQueueCreateFlags {
+            protected: value & 0x00000001 > 0,
+        }
+    }
 }

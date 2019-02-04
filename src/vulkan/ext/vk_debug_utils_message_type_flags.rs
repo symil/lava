@@ -79,4 +79,12 @@ impl VkDebugUtilsMessageTypeFlags {
         + if self.validation { 0x00000002 } else { 0 }
         + if self.performance { 0x00000004 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDebugUtilsMessageTypeFlags {
+        VkDebugUtilsMessageTypeFlags {
+            general: value & 0x00000001 > 0,
+            validation: value & 0x00000002 > 0,
+            performance: value & 0x00000004 > 0,
+        }
+    }
 }

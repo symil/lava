@@ -93,4 +93,14 @@ impl VkDebugReportFlags {
         + if self.error { 0x00000008 } else { 0 }
         + if self.debug { 0x00000010 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDebugReportFlags {
+        VkDebugReportFlags {
+            information: value & 0x00000001 > 0,
+            warning: value & 0x00000002 > 0,
+            performance_warning: value & 0x00000004 > 0,
+            error: value & 0x00000008 > 0,
+            debug: value & 0x00000010 > 0,
+        }
+    }
 }

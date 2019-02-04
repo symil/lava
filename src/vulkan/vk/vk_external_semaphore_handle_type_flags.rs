@@ -93,4 +93,14 @@ impl VkExternalSemaphoreHandleTypeFlags {
         + if self.d_3d_12_fence { 0x00000008 } else { 0 }
         + if self.sync_fd { 0x00000010 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkExternalSemaphoreHandleTypeFlags {
+        VkExternalSemaphoreHandleTypeFlags {
+            opaque_fd: value & 0x00000001 > 0,
+            opaque_win_32: value & 0x00000002 > 0,
+            opaque_win_32_kmt: value & 0x00000004 > 0,
+            d_3d_12_fence: value & 0x00000008 > 0,
+            sync_fd: value & 0x00000010 > 0,
+        }
+    }
 }

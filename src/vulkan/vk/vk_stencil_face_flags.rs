@@ -79,4 +79,12 @@ impl VkStencilFaceFlags {
         + if self.back { 0x00000002 } else { 0 }
         + if self._and_back { 0x00000003 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkStencilFaceFlags {
+        VkStencilFaceFlags {
+            front: value & 0x00000001 > 0,
+            back: value & 0x00000002 > 0,
+            _and_back: value & 0x00000003 > 0,
+        }
+    }
 }

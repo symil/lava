@@ -65,4 +65,10 @@ impl VkSurfaceCounterFlags {
         0
         + if self.vblank { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSurfaceCounterFlags {
+        VkSurfaceCounterFlags {
+            vblank: value & 0x00000001 > 0,
+        }
+    }
 }

@@ -72,4 +72,11 @@ impl VkGeometryFlags {
         + if self.opaque { 0x00000001 } else { 0 }
         + if self.no_duplicate_any_hit_invocation { 0x00000002 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkGeometryFlags {
+        VkGeometryFlags {
+            opaque: value & 0x00000001 > 0,
+            no_duplicate_any_hit_invocation: value & 0x00000002 > 0,
+        }
+    }
 }

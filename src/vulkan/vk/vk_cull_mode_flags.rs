@@ -79,4 +79,12 @@ impl VkCullModeFlags {
         + if self.back { 0x00000002 } else { 0 }
         + if self.front_and_back { 0x00000003 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkCullModeFlags {
+        VkCullModeFlags {
+            front: value & 0x00000001 > 0,
+            back: value & 0x00000002 > 0,
+            front_and_back: value & 0x00000003 > 0,
+        }
+    }
 }

@@ -156,4 +156,23 @@ impl VkBufferUsageFlags {
         + if self.ray_tracing_nv { 0x00000400 } else { 0 }
         + if self.shader_device_address_ext { 0x00020000 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkBufferUsageFlags {
+        VkBufferUsageFlags {
+            transfer_src: value & 0x00000001 > 0,
+            transfer_dst: value & 0x00000002 > 0,
+            uniform_texel_buffer: value & 0x00000004 > 0,
+            storage_texel_buffer: value & 0x00000008 > 0,
+            uniform_buffer: value & 0x00000010 > 0,
+            storage_buffer: value & 0x00000020 > 0,
+            index_buffer: value & 0x00000040 > 0,
+            vertex_buffer: value & 0x00000080 > 0,
+            indirect_buffer: value & 0x00000100 > 0,
+            transform_feedback_buffer_ext: value & 0x00000800 > 0,
+            transform_feedback_counter_buffer_ext: value & 0x00001000 > 0,
+            conditional_rendering_ext: value & 0x00000200 > 0,
+            ray_tracing_nv: value & 0x00000400 > 0,
+            shader_device_address_ext: value & 0x00020000 > 0,
+        }
+    }
 }

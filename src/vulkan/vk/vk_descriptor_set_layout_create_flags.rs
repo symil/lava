@@ -72,4 +72,11 @@ impl VkDescriptorSetLayoutCreateFlags {
         + if self.push_descriptor_khr { 0x00000001 } else { 0 }
         + if self.update_after_bind_pool_ext { 0x00000002 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDescriptorSetLayoutCreateFlags {
+        VkDescriptorSetLayoutCreateFlags {
+            push_descriptor_khr: value & 0x00000001 > 0,
+            update_after_bind_pool_ext: value & 0x00000002 > 0,
+        }
+    }
 }

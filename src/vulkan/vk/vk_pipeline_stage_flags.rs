@@ -240,4 +240,35 @@ impl VkPipelineStageFlags {
         + if self.mesh_shader_nv { 0x00100000 } else { 0 }
         + if self.fragment_density_process_ext { 0x00800000 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkPipelineStageFlags {
+        VkPipelineStageFlags {
+            top_of_pipe: value & 0x00000001 > 0,
+            draw_indirect: value & 0x00000002 > 0,
+            vertex_input: value & 0x00000004 > 0,
+            vertex_shader: value & 0x00000008 > 0,
+            tessellation_control_shader: value & 0x00000010 > 0,
+            tessellation_evaluation_shader: value & 0x00000020 > 0,
+            geometry_shader: value & 0x00000040 > 0,
+            fragment_shader: value & 0x00000080 > 0,
+            early_fragment_tests: value & 0x00000100 > 0,
+            late_fragment_tests: value & 0x00000200 > 0,
+            color_attachment_output: value & 0x00000400 > 0,
+            compute_shader: value & 0x00000800 > 0,
+            transfer: value & 0x00001000 > 0,
+            bottom_of_pipe: value & 0x00002000 > 0,
+            host: value & 0x00004000 > 0,
+            all_graphics: value & 0x00008000 > 0,
+            all_commands: value & 0x00010000 > 0,
+            transform_feedback_ext: value & 0x01000000 > 0,
+            conditional_rendering_ext: value & 0x00040000 > 0,
+            command_process_nvx: value & 0x00020000 > 0,
+            shading_rate_image_nv: value & 0x00400000 > 0,
+            ray_tracing_shader_nv: value & 0x00200000 > 0,
+            acceleration_structure_build_nv: value & 0x02000000 > 0,
+            task_shader_nv: value & 0x00080000 > 0,
+            mesh_shader_nv: value & 0x00100000 > 0,
+            fragment_density_process_ext: value & 0x00800000 > 0,
+        }
+    }
 }

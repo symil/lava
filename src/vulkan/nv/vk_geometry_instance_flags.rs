@@ -86,4 +86,13 @@ impl VkGeometryInstanceFlags {
         + if self.force_opaque { 0x00000004 } else { 0 }
         + if self.force_no_opaque { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkGeometryInstanceFlags {
+        VkGeometryInstanceFlags {
+            triangle_cull_disable: value & 0x00000001 > 0,
+            triangle_front_counterclockwise: value & 0x00000002 > 0,
+            force_opaque: value & 0x00000004 > 0,
+            force_no_opaque: value & 0x00000008 > 0,
+        }
+    }
 }

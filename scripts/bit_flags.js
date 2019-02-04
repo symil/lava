@@ -109,6 +109,10 @@ function genImplAsUint(def) {
         `impl ${def.wrappedTypeName}`, [
             `\npub fn to_u32(&self) -> u32`, [
                 `0${def.fields.map(field => `\n+ if self.${field.varName} { ${field.value} } else { 0 }`).join('')}`
+            ],
+            `\npub fn from_u32(value: u32) -> ${def.wrappedTypeName}`, [
+                def.wrappedTypeName,
+                def.fields.map(field => `${field.varName}: value & ${field.value} > 0,`)
             ]
         ]
     ];

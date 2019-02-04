@@ -121,4 +121,18 @@ impl VkSurfaceTransformFlags {
         + if self.horizontal_mirror_rotate_270 { 0x00000080 } else { 0 }
         + if self.inherit { 0x00000100 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSurfaceTransformFlags {
+        VkSurfaceTransformFlags {
+            identity: value & 0x00000001 > 0,
+            rotate_90: value & 0x00000002 > 0,
+            rotate_180: value & 0x00000004 > 0,
+            rotate_270: value & 0x00000008 > 0,
+            horizontal_mirror: value & 0x00000010 > 0,
+            horizontal_mirror_rotate_90: value & 0x00000020 > 0,
+            horizontal_mirror_rotate_180: value & 0x00000040 > 0,
+            horizontal_mirror_rotate_270: value & 0x00000080 > 0,
+            inherit: value & 0x00000100 > 0,
+        }
+    }
 }

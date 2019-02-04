@@ -65,4 +65,10 @@ impl VkFenceCreateFlags {
         0
         + if self.signaled { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkFenceCreateFlags {
+        VkFenceCreateFlags {
+            signaled: value & 0x00000001 > 0,
+        }
+    }
 }

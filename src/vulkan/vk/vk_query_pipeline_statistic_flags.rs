@@ -135,4 +135,20 @@ impl VkQueryPipelineStatisticFlags {
         + if self.tessellation_evaluation_shader_invocations { 0x00000200 } else { 0 }
         + if self.compute_shader_invocations { 0x00000400 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkQueryPipelineStatisticFlags {
+        VkQueryPipelineStatisticFlags {
+            input_assembly_vertices: value & 0x00000001 > 0,
+            input_assembly_primitives: value & 0x00000002 > 0,
+            vertex_shader_invocations: value & 0x00000004 > 0,
+            geometry_shader_invocations: value & 0x00000008 > 0,
+            geometry_shader_primitives: value & 0x00000010 > 0,
+            clipping_invocations: value & 0x00000020 > 0,
+            clipping_primitives: value & 0x00000040 > 0,
+            fragment_shader_invocations: value & 0x00000080 > 0,
+            tessellation_control_shader_patches: value & 0x00000100 > 0,
+            tessellation_evaluation_shader_invocations: value & 0x00000200 > 0,
+            compute_shader_invocations: value & 0x00000400 > 0,
+        }
+    }
 }

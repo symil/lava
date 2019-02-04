@@ -163,4 +163,24 @@ impl VkShaderStageFlags {
         + if self.task_nv { 0x00000040 } else { 0 }
         + if self.mesh_nv { 0x00000080 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkShaderStageFlags {
+        VkShaderStageFlags {
+            vertex: value & 0x00000001 > 0,
+            tessellation_control: value & 0x00000002 > 0,
+            tessellation_evaluation: value & 0x00000004 > 0,
+            geometry: value & 0x00000008 > 0,
+            fragment: value & 0x00000010 > 0,
+            compute: value & 0x00000020 > 0,
+            all_graphics: value & 0x0000001F > 0,
+            raygen_nv: value & 0x00000100 > 0,
+            any_hit_nv: value & 0x00000200 > 0,
+            closest_hit_nv: value & 0x00000400 > 0,
+            miss_nv: value & 0x00000800 > 0,
+            intersection_nv: value & 0x00001000 > 0,
+            callable_nv: value & 0x00002000 > 0,
+            task_nv: value & 0x00000040 > 0,
+            mesh_nv: value & 0x00000080 > 0,
+        }
+    }
 }

@@ -79,4 +79,12 @@ impl VkSwapchainCreateFlags {
         + if self.protected { 0x00000002 } else { 0 }
         + if self.mutable_format { 0x00000004 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSwapchainCreateFlags {
+        VkSwapchainCreateFlags {
+            split_instance_bind_regions: value & 0x00000001 > 0,
+            protected: value & 0x00000002 > 0,
+            mutable_format: value & 0x00000004 > 0,
+        }
+    }
 }

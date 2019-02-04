@@ -65,4 +65,10 @@ impl VkSemaphoreImportFlags {
         0
         + if self.temporary { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSemaphoreImportFlags {
+        VkSemaphoreImportFlags {
+            temporary: value & 0x00000001 > 0,
+        }
+    }
 }

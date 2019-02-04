@@ -72,4 +72,11 @@ impl VkObjectEntryUsageFlags {
         + if self.graphics { 0x00000001 } else { 0 }
         + if self.compute { 0x00000002 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkObjectEntryUsageFlags {
+        VkObjectEntryUsageFlags {
+            graphics: value & 0x00000001 > 0,
+            compute: value & 0x00000002 > 0,
+        }
+    }
 }

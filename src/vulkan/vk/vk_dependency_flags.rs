@@ -79,4 +79,12 @@ impl VkDependencyFlags {
         + if self.device_group { 0x00000004 } else { 0 }
         + if self.view_local { 0x00000002 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDependencyFlags {
+        VkDependencyFlags {
+            by_region: value & 0x00000001 > 0,
+            device_group: value & 0x00000004 > 0,
+            view_local: value & 0x00000002 > 0,
+        }
+    }
 }

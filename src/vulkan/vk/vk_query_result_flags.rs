@@ -86,4 +86,13 @@ impl VkQueryResultFlags {
         + if self.with_availability { 0x00000004 } else { 0 }
         + if self.partial { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkQueryResultFlags {
+        VkQueryResultFlags {
+            _64: value & 0x00000001 > 0,
+            wait: value & 0x00000002 > 0,
+            with_availability: value & 0x00000004 > 0,
+            partial: value & 0x00000008 > 0,
+        }
+    }
 }

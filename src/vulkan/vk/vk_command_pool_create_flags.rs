@@ -79,4 +79,12 @@ impl VkCommandPoolCreateFlags {
         + if self.reset_command_buffer { 0x00000002 } else { 0 }
         + if self.protected { 0x00000004 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkCommandPoolCreateFlags {
+        VkCommandPoolCreateFlags {
+            transient: value & 0x00000001 > 0,
+            reset_command_buffer: value & 0x00000002 > 0,
+            protected: value & 0x00000004 > 0,
+        }
+    }
 }

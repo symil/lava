@@ -65,4 +65,10 @@ impl VkSparseMemoryBindFlags {
         0
         + if self.metadata { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSparseMemoryBindFlags {
+        VkSparseMemoryBindFlags {
+            metadata: value & 0x00000001 > 0,
+        }
+    }
 }

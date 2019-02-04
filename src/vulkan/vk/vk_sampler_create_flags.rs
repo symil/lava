@@ -72,4 +72,11 @@ impl VkSamplerCreateFlags {
         + if self.subsampled_ext { 0x00000001 } else { 0 }
         + if self.subsampled_coarse_reconstruction_ext { 0x00000002 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSamplerCreateFlags {
+        VkSamplerCreateFlags {
+            subsampled_ext: value & 0x00000001 > 0,
+            subsampled_coarse_reconstruction_ext: value & 0x00000002 > 0,
+        }
+    }
 }

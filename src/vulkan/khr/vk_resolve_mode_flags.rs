@@ -86,4 +86,13 @@ impl VkResolveModeFlags {
         + if self.min { 0x00000004 } else { 0 }
         + if self.max { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkResolveModeFlags {
+        VkResolveModeFlags {
+            sample_zero: value & 0x00000001 > 0,
+            average: value & 0x00000002 > 0,
+            min: value & 0x00000004 > 0,
+            max: value & 0x00000008 > 0,
+        }
+    }
 }

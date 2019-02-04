@@ -86,4 +86,13 @@ impl VkPeerMemoryFeatureFlags {
         + if self.generic_src { 0x00000004 } else { 0 }
         + if self.generic_dst { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkPeerMemoryFeatureFlags {
+        VkPeerMemoryFeatureFlags {
+            copy_src: value & 0x00000001 > 0,
+            copy_dst: value & 0x00000002 > 0,
+            generic_src: value & 0x00000004 > 0,
+            generic_dst: value & 0x00000008 > 0,
+        }
+    }
 }

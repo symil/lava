@@ -65,4 +65,10 @@ impl VkFenceImportFlags {
         0
         + if self.temporary { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkFenceImportFlags {
+        VkFenceImportFlags {
+            temporary: value & 0x00000001 > 0,
+        }
+    }
 }

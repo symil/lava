@@ -65,4 +65,10 @@ impl VkMemoryAllocateFlags {
         0
         + if self.device_mask { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkMemoryAllocateFlags {
+        VkMemoryAllocateFlags {
+            device_mask: value & 0x00000001 > 0,
+        }
+    }
 }

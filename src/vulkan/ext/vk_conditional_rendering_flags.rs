@@ -65,4 +65,10 @@ impl VkConditionalRenderingFlags {
         0
         + if self.inverted { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkConditionalRenderingFlags {
+        VkConditionalRenderingFlags {
+            inverted: value & 0x00000001 > 0,
+        }
+    }
 }

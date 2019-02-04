@@ -86,4 +86,13 @@ impl VkDescriptorBindingFlags {
         + if self.partially_bound { 0x00000004 } else { 0 }
         + if self.variable_descriptor_count { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDescriptorBindingFlags {
+        VkDescriptorBindingFlags {
+            update_after_bind: value & 0x00000001 > 0,
+            update_unused_while_pending: value & 0x00000002 > 0,
+            partially_bound: value & 0x00000004 > 0,
+            variable_descriptor_count: value & 0x00000008 > 0,
+        }
+    }
 }

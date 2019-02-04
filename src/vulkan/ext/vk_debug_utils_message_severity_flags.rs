@@ -86,4 +86,13 @@ impl VkDebugUtilsMessageSeverityFlags {
         + if self.warning { 0x00000100 } else { 0 }
         + if self.error { 0x00001000 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDebugUtilsMessageSeverityFlags {
+        VkDebugUtilsMessageSeverityFlags {
+            verbose: value & 0x00000001 > 0,
+            info: value & 0x00000010 > 0,
+            warning: value & 0x00000100 > 0,
+            error: value & 0x00001000 > 0,
+        }
+    }
 }

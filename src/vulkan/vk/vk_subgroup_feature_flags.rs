@@ -121,4 +121,18 @@ impl VkSubgroupFeatureFlags {
         + if self.quad { 0x00000080 } else { 0 }
         + if self.partitioned_nv { 0x00000100 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSubgroupFeatureFlags {
+        VkSubgroupFeatureFlags {
+            basic: value & 0x00000001 > 0,
+            vote: value & 0x00000002 > 0,
+            arithmetic: value & 0x00000004 > 0,
+            ballot: value & 0x00000008 > 0,
+            shuffle: value & 0x00000010 > 0,
+            shuffle_relative: value & 0x00000020 > 0,
+            clustered: value & 0x00000040 > 0,
+            quad: value & 0x00000080 > 0,
+            partitioned_nv: value & 0x00000100 > 0,
+        }
+    }
 }

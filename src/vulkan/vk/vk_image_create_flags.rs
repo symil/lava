@@ -163,4 +163,24 @@ impl VkImageCreateFlags {
         + if self.sample_locations_compatible_depth_ext { 0x00001000 } else { 0 }
         + if self.subsampled_ext { 0x00004000 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkImageCreateFlags {
+        VkImageCreateFlags {
+            sparse_binding: value & 0x00000001 > 0,
+            sparse_residency: value & 0x00000002 > 0,
+            sparse_aliased: value & 0x00000004 > 0,
+            mutable_format: value & 0x00000008 > 0,
+            cube_compatible: value & 0x00000010 > 0,
+            alias: value & 0x00000400 > 0,
+            split_instance_bind_regions: value & 0x00000040 > 0,
+            _2d_array_compatible: value & 0x00000020 > 0,
+            block_texel_view_compatible: value & 0x00000080 > 0,
+            extended_usage: value & 0x00000100 > 0,
+            protected: value & 0x00000800 > 0,
+            disjoint: value & 0x00000200 > 0,
+            corner_sampled_nv: value & 0x00002000 > 0,
+            sample_locations_compatible_depth_ext: value & 0x00001000 > 0,
+            subsampled_ext: value & 0x00004000 > 0,
+        }
+    }
 }

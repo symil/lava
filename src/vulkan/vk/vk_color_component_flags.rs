@@ -86,4 +86,13 @@ impl VkColorComponentFlags {
         + if self.b { 0x00000004 } else { 0 }
         + if self.a { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkColorComponentFlags {
+        VkColorComponentFlags {
+            r: value & 0x00000001 > 0,
+            g: value & 0x00000002 > 0,
+            b: value & 0x00000004 > 0,
+            a: value & 0x00000008 > 0,
+        }
+    }
 }

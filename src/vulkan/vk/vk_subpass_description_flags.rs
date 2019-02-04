@@ -72,4 +72,11 @@ impl VkSubpassDescriptionFlags {
         + if self.per_view_attributes_nvx { 0x00000001 } else { 0 }
         + if self.per_view_position_x_only_nvx { 0x00000002 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSubpassDescriptionFlags {
+        VkSubpassDescriptionFlags {
+            per_view_attributes_nvx: value & 0x00000001 > 0,
+            per_view_position_x_only_nvx: value & 0x00000002 > 0,
+        }
+    }
 }

@@ -86,4 +86,13 @@ impl VkIndirectCommandsLayoutUsageFlags {
         + if self.empty_executions { 0x00000004 } else { 0 }
         + if self.indexed_sequences { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkIndirectCommandsLayoutUsageFlags {
+        VkIndirectCommandsLayoutUsageFlags {
+            unordered_sequences: value & 0x00000001 > 0,
+            sparse_sequences: value & 0x00000002 > 0,
+            empty_executions: value & 0x00000004 > 0,
+            indexed_sequences: value & 0x00000008 > 0,
+        }
+    }
 }

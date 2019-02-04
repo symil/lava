@@ -63,4 +63,10 @@ impl VkPipelineDepthStencilStateCreateFlags {
     pub fn to_u32(&self) -> u32 {
         0
     }
+    
+    pub fn from_u32(value: u32) -> VkPipelineDepthStencilStateCreateFlags {
+        VkPipelineDepthStencilStateCreateFlags {
+            
+        }
+    }
 }

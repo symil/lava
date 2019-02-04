@@ -254,4 +254,37 @@ impl VkAccessFlags {
         + if self.acceleration_structure_write_nv { 0x00400000 } else { 0 }
         + if self.fragment_density_map_read_ext { 0x01000000 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkAccessFlags {
+        VkAccessFlags {
+            indirect_command_read: value & 0x00000001 > 0,
+            index_read: value & 0x00000002 > 0,
+            vertex_attribute_read: value & 0x00000004 > 0,
+            uniform_read: value & 0x00000008 > 0,
+            input_attachment_read: value & 0x00000010 > 0,
+            shader_read: value & 0x00000020 > 0,
+            shader_write: value & 0x00000040 > 0,
+            color_attachment_read: value & 0x00000080 > 0,
+            color_attachment_write: value & 0x00000100 > 0,
+            depth_stencil_attachment_read: value & 0x00000200 > 0,
+            depth_stencil_attachment_write: value & 0x00000400 > 0,
+            transfer_read: value & 0x00000800 > 0,
+            transfer_write: value & 0x00001000 > 0,
+            host_read: value & 0x00002000 > 0,
+            host_write: value & 0x00004000 > 0,
+            memory_read: value & 0x00008000 > 0,
+            memory_write: value & 0x00010000 > 0,
+            transform_feedback_write_ext: value & 0x02000000 > 0,
+            transform_feedback_counter_read_ext: value & 0x04000000 > 0,
+            transform_feedback_counter_write_ext: value & 0x08000000 > 0,
+            conditional_rendering_read_ext: value & 0x00100000 > 0,
+            command_process_read_nvx: value & 0x00020000 > 0,
+            command_process_write_nvx: value & 0x00040000 > 0,
+            color_attachment_read_noncoherent_ext: value & 0x00080000 > 0,
+            shading_rate_image_read_nv: value & 0x00800000 > 0,
+            acceleration_structure_read_nv: value & 0x00200000 > 0,
+            acceleration_structure_write_nv: value & 0x00400000 > 0,
+            fragment_density_map_read_ext: value & 0x01000000 > 0,
+        }
+    }
 }

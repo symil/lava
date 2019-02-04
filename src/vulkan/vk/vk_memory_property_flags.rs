@@ -100,4 +100,15 @@ impl VkMemoryPropertyFlags {
         + if self.lazily_allocated { 0x00000010 } else { 0 }
         + if self.protected { 0x00000020 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkMemoryPropertyFlags {
+        VkMemoryPropertyFlags {
+            device_local: value & 0x00000001 > 0,
+            host_visible: value & 0x00000002 > 0,
+            host_coherent: value & 0x00000004 > 0,
+            host_cached: value & 0x00000008 > 0,
+            lazily_allocated: value & 0x00000010 > 0,
+            protected: value & 0x00000020 > 0,
+        }
+    }
 }

@@ -93,4 +93,14 @@ impl VkBuildAccelerationStructureFlags {
         + if self.prefer_fast_build { 0x00000008 } else { 0 }
         + if self.low_memory { 0x00000010 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkBuildAccelerationStructureFlags {
+        VkBuildAccelerationStructureFlags {
+            allow_update: value & 0x00000001 > 0,
+            allow_compaction: value & 0x00000002 > 0,
+            prefer_fast_trace: value & 0x00000004 > 0,
+            prefer_fast_build: value & 0x00000008 > 0,
+            low_memory: value & 0x00000010 > 0,
+        }
+    }
 }

@@ -100,4 +100,15 @@ impl VkPipelineCreateFlags {
         + if self.dispatch_base { 0x00000010 } else { 0 }
         + if self.defer_compile_nv { 0x00000020 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkPipelineCreateFlags {
+        VkPipelineCreateFlags {
+            disable_optimization: value & 0x00000001 > 0,
+            allow_derivatives: value & 0x00000002 > 0,
+            derivative: value & 0x00000004 > 0,
+            view_index_from_device_index: value & 0x00000008 > 0,
+            dispatch_base: value & 0x00000010 > 0,
+            defer_compile_nv: value & 0x00000020 > 0,
+        }
+    }
 }

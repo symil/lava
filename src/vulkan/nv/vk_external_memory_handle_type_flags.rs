@@ -86,4 +86,13 @@ impl VkExternalMemoryHandleTypeFlags {
         + if self.d_3d_11_image { 0x00000004 } else { 0 }
         + if self.d_3d_11_image_kmt { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkExternalMemoryHandleTypeFlags {
+        VkExternalMemoryHandleTypeFlags {
+            opaque_win_32: value & 0x00000001 > 0,
+            opaque_win_32_kmt: value & 0x00000002 > 0,
+            d_3d_11_image: value & 0x00000004 > 0,
+            d_3d_11_image_kmt: value & 0x00000008 > 0,
+        }
+    }
 }

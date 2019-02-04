@@ -65,4 +65,10 @@ impl VkAttachmentDescriptionFlags {
         0
         + if self.may_alias { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkAttachmentDescriptionFlags {
+        VkAttachmentDescriptionFlags {
+            may_alias: value & 0x00000001 > 0,
+        }
+    }
 }

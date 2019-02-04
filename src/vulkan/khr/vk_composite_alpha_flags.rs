@@ -86,4 +86,13 @@ impl VkCompositeAlphaFlags {
         + if self.post_multiplied { 0x00000004 } else { 0 }
         + if self.inherit { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkCompositeAlphaFlags {
+        VkCompositeAlphaFlags {
+            opaque: value & 0x00000001 > 0,
+            pre_multiplied: value & 0x00000002 > 0,
+            post_multiplied: value & 0x00000004 > 0,
+            inherit: value & 0x00000008 > 0,
+        }
+    }
 }

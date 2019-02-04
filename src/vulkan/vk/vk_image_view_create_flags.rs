@@ -65,4 +65,10 @@ impl VkImageViewCreateFlags {
         0
         + if self.fragment_density_map_dynamic_ext { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkImageViewCreateFlags {
+        VkImageViewCreateFlags {
+            fragment_density_map_dynamic_ext: value & 0x00000001 > 0,
+        }
+    }
 }

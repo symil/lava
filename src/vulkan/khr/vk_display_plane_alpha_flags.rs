@@ -86,4 +86,13 @@ impl VkDisplayPlaneAlphaFlags {
         + if self.per_pixel { 0x00000004 } else { 0 }
         + if self.per_pixel_premultiplied { 0x00000008 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkDisplayPlaneAlphaFlags {
+        VkDisplayPlaneAlphaFlags {
+            opaque: value & 0x00000001 > 0,
+            global: value & 0x00000002 > 0,
+            per_pixel: value & 0x00000004 > 0,
+            per_pixel_premultiplied: value & 0x00000008 > 0,
+        }
+    }
 }

@@ -72,4 +72,11 @@ impl VkExternalFenceFeatureFlags {
         + if self.exportable { 0x00000001 } else { 0 }
         + if self.importable { 0x00000002 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkExternalFenceFeatureFlags {
+        VkExternalFenceFeatureFlags {
+            exportable: value & 0x00000001 > 0,
+            importable: value & 0x00000002 > 0,
+        }
+    }
 }

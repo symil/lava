@@ -93,4 +93,14 @@ impl VkQueueFlags {
         + if self.sparse_binding { 0x00000008 } else { 0 }
         + if self.protected { 0x00000010 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkQueueFlags {
+        VkQueueFlags {
+            graphics: value & 0x00000001 > 0,
+            compute: value & 0x00000002 > 0,
+            transfer: value & 0x00000004 > 0,
+            sparse_binding: value & 0x00000008 > 0,
+            protected: value & 0x00000010 > 0,
+        }
+    }
 }

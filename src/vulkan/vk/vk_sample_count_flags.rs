@@ -107,4 +107,16 @@ impl VkSampleCountFlags {
         + if self._32 { 0x00000020 } else { 0 }
         + if self._64 { 0x00000040 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkSampleCountFlags {
+        VkSampleCountFlags {
+            _1: value & 0x00000001 > 0,
+            _2: value & 0x00000002 > 0,
+            _4: value & 0x00000004 > 0,
+            _8: value & 0x00000008 > 0,
+            _16: value & 0x00000010 > 0,
+            _32: value & 0x00000020 > 0,
+            _64: value & 0x00000040 > 0,
+        }
+    }
 }

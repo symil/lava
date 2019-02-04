@@ -128,4 +128,19 @@ impl VkImageUsageFlags {
         + if self.shading_rate_image_nv { 0x00000100 } else { 0 }
         + if self.fragment_density_map_ext { 0x00000200 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkImageUsageFlags {
+        VkImageUsageFlags {
+            transfer_src: value & 0x00000001 > 0,
+            transfer_dst: value & 0x00000002 > 0,
+            sampled: value & 0x00000004 > 0,
+            storage: value & 0x00000008 > 0,
+            color_attachment: value & 0x00000010 > 0,
+            depth_stencil_attachment: value & 0x00000020 > 0,
+            transient_attachment: value & 0x00000040 > 0,
+            input_attachment: value & 0x00000080 > 0,
+            shading_rate_image_nv: value & 0x00000100 > 0,
+            fragment_density_map_ext: value & 0x00000200 > 0,
+        }
+    }
 }

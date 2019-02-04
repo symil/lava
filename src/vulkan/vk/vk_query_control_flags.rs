@@ -65,4 +65,10 @@ impl VkQueryControlFlags {
         0
         + if self.precise { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkQueryControlFlags {
+        VkQueryControlFlags {
+            precise: value & 0x00000001 > 0,
+        }
+    }
 }

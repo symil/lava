@@ -65,4 +65,10 @@ impl VkCommandBufferResetFlags {
         0
         + if self.release_resources { 0x00000001 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkCommandBufferResetFlags {
+        VkCommandBufferResetFlags {
+            release_resources: value & 0x00000001 > 0,
+        }
+    }
 }

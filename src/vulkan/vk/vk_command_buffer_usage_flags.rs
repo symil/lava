@@ -79,4 +79,12 @@ impl VkCommandBufferUsageFlags {
         + if self.render_pass_continue { 0x00000002 } else { 0 }
         + if self.simultaneous_use { 0x00000004 } else { 0 }
     }
+    
+    pub fn from_u32(value: u32) -> VkCommandBufferUsageFlags {
+        VkCommandBufferUsageFlags {
+            one_time_submit: value & 0x00000001 > 0,
+            render_pass_continue: value & 0x00000002 > 0,
+            simultaneous_use: value & 0x00000004 > 0,
+        }
+    }
 }
