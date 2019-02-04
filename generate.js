@@ -4,30 +4,27 @@ const downloadSourceFiles = require('./scripts/download');
 const { generateFiles, removeFiles } = require('./scripts/generate');
 
 const HELP = `
-Download the necessary files from the Vulkan documentation repository in the \`download\` folder,
-and generate a Rust wrapper for the Vulkan API.
+Download the necessary files from the Vulkan documentation repository in the \`download\` folder, and then generate the library.
 
-Available options:
-
---tag <tag>   : Download the files for the specified branch or tag of the \`Vulkan-Docs\` repository (e.g "v1.1.80").
-                Defaults to "master".
---no-download : Do not download the files from the Vulkan repository, assume they are already there.
---no-generate : Do not generate the Rust wrapper.
---remove      : Remove \`src/vk/\` before generating the files
-`;
+--tag <tag>, -t <tag>   Download the files for the specified branch or tag of the \`Vulkan-Docs\` repository (e.g "v1.1.80").
+                        Defaults to "master".
+--no-download, -nd      Do not download the files from the Vulkan repository, assume they are already there.
+--no-generate, -ng      Do not generate the library.
+--delete, -d            Remove \`src/vulkan/\` before generating the files.
+`.replace(/^--.*  /gm, str => '\033[1m' + str + '\033[0m');
 
 main();
 
 async function main() {
     const argv = process.argv.slice(2);
 
-    if (argv.includes('--help')) {
+    if (argv.includes('--help') || argv.includes('-h')) {
         console.log(HELP);
         process.exit();
     }
 
-    if (!argv.includes('--no-download') && !argv.includes('-n')) {
-        const tagOptionIndex = argv.indexOf('--tag');
+    if (!argv.includes('--no-download') && !argv.includes('-nd')) {
+        const tagOptionIndex = Math.max(argv.indexOf('--tag'), argv.indexOf('-t'));
         const tag = tagOptionIndex !== -1 ? argv[tagOptionIndex + 1] : 'master';
 
         await downloadSourceFiles(tag);
@@ -38,7 +35,7 @@ async function main() {
         removeFiles();
     }
 
-    if (!argv.includes('--no-generate')) {
+    if (!argv.includes('--no-generate') && !argv.includes('-ng')) {
         console.log('Generating source files...');
         generateFiles();
     }
