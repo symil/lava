@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::khr::{VkRectLayer,RawVkRectLayer};
 
-/// Wrapper for [VkPresentRegionKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentRegionKHR.html)
+/// Wrapper for [VkPresentRegionKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentRegionKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPresentRegion<'a> {
     pub rectangles: Option<&'a [VkRectLayer]>,

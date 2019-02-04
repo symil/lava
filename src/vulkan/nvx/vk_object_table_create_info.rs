@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nvx::{VkObjectEntryType,RawVkObjectEntryType};
 use vulkan::nvx::{VkObjectEntryUsageFlags,RawVkObjectEntryUsageFlags};
 
-/// Wrapper for [VkObjectTableCreateInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableCreateInfoNVX.html)
+/// Wrapper for [VkObjectTableCreateInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableCreateInfoNVX.html).
 #[derive(Debug, Clone)]
 pub struct VkObjectTableCreateInfo<'a, 'b, 'c> {
     pub object_entry_types: &'a [VkObjectEntryType],

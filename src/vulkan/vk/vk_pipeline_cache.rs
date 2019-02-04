@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkPipelineCache = u64;
 
-/// Wrapper for [VkPipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCache.html)
+/// Wrapper for [VkPipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCache.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineCache {
     _handle: RawVkPipelineCache,
@@ -74,14 +74,14 @@ impl VkPipelineCache {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyPipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyPipelineCache.html)
+    /// Wrapper for [vkDestroyPipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyPipelineCache.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyPipelineCache)(self._parent_device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetPipelineCacheData](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPipelineCacheData.html)
+    /// Wrapper for [vkGetPipelineCacheData](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPipelineCacheData.html).
     pub fn get_data(&self) -> Result<Vec<c_void>, (VkResult, Vec<c_void>)> {
         unsafe {
             let mut vk_result = 0;
@@ -97,7 +97,7 @@ impl VkPipelineCache {
         }
     }
     
-    /// Wrapper for [vkMergePipelineCaches](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMergePipelineCaches.html)
+    /// Wrapper for [vkMergePipelineCaches](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMergePipelineCaches.html).
     pub fn merge(&self, src_caches: &[&VkPipelineCache]) -> Result<(), VkResult> {
         unsafe {
             let raw_src_cache_count = src_caches.len() as u32;

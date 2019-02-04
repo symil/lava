@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkStencilFaceFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilFaceFlagBits.html)
+/// Wrapper for [VkStencilFaceFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilFaceFlagBits.html).
 ///
 /// Use the macro `VkStencilFaceFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

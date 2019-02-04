@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkDeviceGroupSubmitInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupSubmitInfo.html)
+/// Wrapper for [VkDeviceGroupSubmitInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupSubmitInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkDeviceGroupSubmitInfo<'a, 'b, 'c> {
     pub wait_semaphore_device_indices: &'a [usize],

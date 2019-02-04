@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::nv::{VkViewportCoordinateSwizzle,RawVkViewportCoordinateSwizzle};
 
-/// Wrapper for [VkViewportSwizzleNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkViewportSwizzleNV.html)
+/// Wrapper for [VkViewportSwizzleNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkViewportSwizzleNV.html).
 #[derive(Debug, Clone)]
 pub struct VkViewportSwizzle {
     pub x: VkViewportCoordinateSwizzle,

@@ -10,7 +10,7 @@ use std::mem;
 use vulkan::vk::*;
 
 
-/// Wrapper for [vkCreateInstance](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateInstance.html)
+/// Wrapper for [vkCreateInstance](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateInstance.html).
 pub fn vk_create_instance(create_info: &VkInstanceCreateInfo) -> Result<VkInstance, (VkResult, VkInstance)> {
     unsafe {
         let raw_create_info = new_ptr_vk_value(create_info);
@@ -31,7 +31,7 @@ pub fn vk_create_instance(create_info: &VkInstanceCreateInfo) -> Result<VkInstan
     }
 }
 
-/// Wrapper for [vkEnumerateInstanceExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateInstanceExtensionProperties.html)
+/// Wrapper for [vkEnumerateInstanceExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateInstanceExtensionProperties.html).
 pub fn vk_enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
     unsafe {
         let raw_layer_name = new_ptr_string_checked(layer_name);
@@ -50,7 +50,7 @@ pub fn vk_enumerate_instance_extension_properties(layer_name: Option<&str>) -> R
     }
 }
 
-/// Wrapper for [vkEnumerateInstanceLayerProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateInstanceLayerProperties.html)
+/// Wrapper for [vkEnumerateInstanceLayerProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateInstanceLayerProperties.html).
 pub fn vk_enumerate_instance_layer_properties() -> Result<Vec<VkLayerProperties>, (VkResult, Vec<VkLayerProperties>)> {
     unsafe {
         let mut vk_result = 0;
@@ -67,7 +67,7 @@ pub fn vk_enumerate_instance_layer_properties() -> Result<Vec<VkLayerProperties>
     }
 }
 
-/// Wrapper for [vkEnumerateInstanceVersion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateInstanceVersion.html)
+/// Wrapper for [vkEnumerateInstanceVersion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateInstanceVersion.html).
 pub fn vk_enumerate_instance_version() -> Result<VkVersion, (VkResult, VkVersion)> {
     unsafe {
         let mut vk_result = 0;

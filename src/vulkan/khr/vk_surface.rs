@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkSurface = u64;
 
-/// Wrapper for [VkSurfaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceKHR.html)
+/// Wrapper for [VkSurfaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkSurface {
     _handle: RawVkSurface,
@@ -74,7 +74,7 @@ impl VkSurface {
         self._handle
     }
     
-    /// Wrapper for [vkDestroySurfaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySurfaceKHR.html)
+    /// Wrapper for [vkDestroySurfaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySurfaceKHR.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroySurfaceKHR)(self._parent_instance, self._handle, ptr::null());

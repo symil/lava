@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkShaderModuleCreateFlags,RawVkShaderModuleCreateFlags};
 
-/// Wrapper for [VkShaderModuleCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModuleCreateInfo.html)
+/// Wrapper for [VkShaderModuleCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModuleCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkShaderModuleCreateInfo<'a> {
     pub flags: VkShaderModuleCreateFlags,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkRect2D,RawVkRect2D};
 
-/// Wrapper for [VkDeviceGroupRenderPassBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupRenderPassBeginInfo.html)
+/// Wrapper for [VkDeviceGroupRenderPassBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupRenderPassBeginInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkDeviceGroupRenderPassBeginInfo<'a> {
     pub device_mask: u32,

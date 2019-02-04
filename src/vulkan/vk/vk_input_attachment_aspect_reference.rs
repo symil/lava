@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkImageAspectFlags,RawVkImageAspectFlags};
 
-/// Wrapper for [VkInputAttachmentAspectReference](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInputAttachmentAspectReference.html)
+/// Wrapper for [VkInputAttachmentAspectReference](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInputAttachmentAspectReference.html).
 #[derive(Debug, Clone)]
 pub struct VkInputAttachmentAspectReference {
     pub subpass: usize,

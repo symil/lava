@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDeviceQueueCreateFlags,RawVkDeviceQueueCreateFlags};
 
-/// Wrapper for [VkDeviceQueueInfo2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceQueueInfo2.html)
+/// Wrapper for [VkDeviceQueueInfo2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceQueueInfo2.html).
 #[derive(Debug, Clone)]
 pub struct VkDeviceQueueInfo2 {
     pub flags: VkDeviceQueueCreateFlags,

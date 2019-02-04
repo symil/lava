@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::google::{VkPresentTime,RawVkPresentTime};
 
-/// Wrapper for [VkPresentTimesInfoGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentTimesInfoGOOGLE.html)
+/// Wrapper for [VkPresentTimesInfoGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentTimesInfoGOOGLE.html).
 #[derive(Debug, Clone)]
 pub struct VkPresentTimesInfo<'a> {
     pub times: Option<&'a [VkPresentTime]>,

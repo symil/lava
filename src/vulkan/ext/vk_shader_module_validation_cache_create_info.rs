@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkValidationCache,RawVkValidationCache};
 
-/// Wrapper for [VkShaderModuleValidationCacheCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModuleValidationCacheCreateInfoEXT.html)
+/// Wrapper for [VkShaderModuleValidationCacheCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModuleValidationCacheCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkShaderModuleValidationCacheCreateInfo<'a> {
     pub validation_cache: &'a VkValidationCache,

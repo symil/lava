@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkMemoryHostPointerPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHostPointerPropertiesEXT.html)
+/// Wrapper for [VkMemoryHostPointerPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHostPointerPropertiesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkMemoryHostPointerProperties {
     pub memory_type_bits: u32,

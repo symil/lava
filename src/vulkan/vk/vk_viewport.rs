@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkViewport](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkViewport.html)
+/// Wrapper for [VkViewport](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkViewport.html).
 #[derive(Debug, Clone)]
 pub struct VkViewport {
     pub x: f32,

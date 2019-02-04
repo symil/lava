@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkPipelineCoverageToColorStateCreateFlags,RawVkPipelineCoverageToColorStateCreateFlags};
 
-/// Wrapper for [VkPipelineCoverageToColorStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCoverageToColorStateCreateInfoNV.html)
+/// Wrapper for [VkPipelineCoverageToColorStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCoverageToColorStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineCoverageToColorStateCreateInfo {
     pub flags: VkPipelineCoverageToColorStateCreateFlags,

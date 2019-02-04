@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkDescriptorSetVariableDescriptorCountAllocateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetVariableDescriptorCountAllocateInfoEXT.html)
+/// Wrapper for [VkDescriptorSetVariableDescriptorCountAllocateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetVariableDescriptorCountAllocateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {
     pub descriptor_counts: &'a [usize],

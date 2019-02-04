@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkBaseInStructure](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBaseInStructure.html)
+/// Wrapper for [VkBaseInStructure](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBaseInStructure.html).
 #[derive(Debug, Clone)]
 pub struct VkBaseInStructure {
     pub s_type: VkStructureType,

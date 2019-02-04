@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkBufferView = u64;
 
-/// Wrapper for [VkBufferView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferView.html)
+/// Wrapper for [VkBufferView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferView.html).
 #[derive(Debug, Clone)]
 pub struct VkBufferView {
     _handle: RawVkBufferView,
@@ -74,7 +74,7 @@ impl VkBufferView {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyBufferView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyBufferView.html)
+    /// Wrapper for [vkDestroyBufferView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyBufferView.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyBufferView)(self._parent_device, self._handle, ptr::null());

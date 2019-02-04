@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 use vulkan::vk::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFlags};
 
-/// Wrapper for [VkMemoryGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryGetFdInfoKHR.html)
+/// Wrapper for [VkMemoryGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryGetFdInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkMemoryGetFdInfo<'a> {
     pub memory: &'a VkDeviceMemory,

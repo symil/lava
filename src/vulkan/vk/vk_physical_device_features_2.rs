@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPhysicalDeviceFeatures,RawVkPhysicalDeviceFeatures};
 
-/// Wrapper for [VkPhysicalDeviceFeatures2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFeatures2.html)
+/// Wrapper for [VkPhysicalDeviceFeatures2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFeatures2.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFeatures2 {
     pub features: VkPhysicalDeviceFeatures,

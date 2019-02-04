@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkAccelerationStructureInfo,RawVkAccelerationStructureInfo};
 
-/// Wrapper for [VkAccelerationStructureCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureCreateInfoNV.html)
+/// Wrapper for [VkAccelerationStructureCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureCreateInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkAccelerationStructureCreateInfo<'a, 'b, 'c, 'd, 'e>
     where

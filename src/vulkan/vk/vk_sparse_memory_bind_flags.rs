@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkSparseMemoryBindFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseMemoryBindFlagBits.html)
+/// Wrapper for [VkSparseMemoryBindFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseMemoryBindFlagBits.html).
 ///
 /// Use the macro `VkSparseMemoryBindFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

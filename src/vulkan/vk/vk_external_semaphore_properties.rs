@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExternalSemaphoreHandleTypeFlags,RawVkExternalSemaphoreHandleTypeFlags};
 use vulkan::vk::{VkExternalSemaphoreFeatureFlags,RawVkExternalSemaphoreFeatureFlags};
 
-/// Wrapper for [VkExternalSemaphoreProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalSemaphoreProperties.html)
+/// Wrapper for [VkExternalSemaphoreProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalSemaphoreProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkExternalSemaphoreProperties {
     pub export_from_imported_handle_types: VkExternalSemaphoreHandleTypeFlags,

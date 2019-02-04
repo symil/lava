@@ -18,7 +18,7 @@ use vulkan::vk::{VkSampleCountFlags,RawVkSampleCountFlags};
 use vulkan::vk::{VkImageUsageFlags,RawVkImageUsageFlags};
 use vulkan::vk::{VkImageTiling,RawVkImageTiling};
 
-/// Wrapper for [VkPhysicalDeviceSparseImageFormatInfo2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSparseImageFormatInfo2.html)
+/// Wrapper for [VkPhysicalDeviceSparseImageFormatInfo2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSparseImageFormatInfo2.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSparseImageFormatInfo2 {
     pub format: VkFormat,

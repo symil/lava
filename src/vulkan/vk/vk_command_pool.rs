@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkCommandPool = u64;
 
-/// Wrapper for [VkCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPool.html)
+/// Wrapper for [VkCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPool.html).
 #[derive(Debug, Clone)]
 pub struct VkCommandPool {
     _handle: RawVkCommandPool,
@@ -74,14 +74,14 @@ impl VkCommandPool {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyCommandPool.html)
+    /// Wrapper for [vkDestroyCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyCommandPool.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyCommandPool)(self._parent_device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkResetCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetCommandPool.html)
+    /// Wrapper for [vkResetCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetCommandPool.html).
     pub fn reset(&self, flags: VkCommandPoolResetFlags) -> Result<(), VkResult> {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
@@ -90,7 +90,7 @@ impl VkCommandPool {
         }
     }
     
-    /// Wrapper for [vkFreeCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeCommandBuffers.html)
+    /// Wrapper for [vkFreeCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeCommandBuffers.html).
     pub fn free_command_buffers(&self, command_buffers: &[&VkCommandBuffer]) {
         unsafe {
             let raw_command_buffer_count = command_buffers.len() as u32;
@@ -100,7 +100,7 @@ impl VkCommandPool {
         }
     }
     
-    /// Wrapper for [vkTrimCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkTrimCommandPool.html)
+    /// Wrapper for [vkTrimCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkTrimCommandPool.html).
     pub fn trim(&self, flags: VkCommandPoolTrimFlags) {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);

@@ -15,7 +15,7 @@ use vulkan::vk::{VkSubpassDescriptionFlags,RawVkSubpassDescriptionFlags};
 use vulkan::vk::{VkPipelineBindPoint,RawVkPipelineBindPoint};
 use vulkan::vk::{VkAttachmentReference,RawVkAttachmentReference};
 
-/// Wrapper for [VkSubpassDescription](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescription.html)
+/// Wrapper for [VkSubpassDescription](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescription.html).
 #[derive(Debug, Clone)]
 pub struct VkSubpassDescription<'a, 'b, 'c, 'd, 'e> {
     pub flags: VkSubpassDescriptionFlags,

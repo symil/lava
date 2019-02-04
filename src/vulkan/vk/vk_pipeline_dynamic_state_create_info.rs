@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPipelineDynamicStateCreateFlags,RawVkPipelineDynamicStateCreateFlags};
 use vulkan::vk::{VkDynamicState,RawVkDynamicState};
 
-/// Wrapper for [VkPipelineDynamicStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDynamicStateCreateInfo.html)
+/// Wrapper for [VkPipelineDynamicStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDynamicStateCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineDynamicStateCreateInfo<'a> {
     pub flags: VkPipelineDynamicStateCreateFlags,

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkDebugReportFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportFlagBitsEXT.html)
+/// Wrapper for [VkDebugReportFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportFlagBitsEXT.html).
 ///
 /// Use the macro `VkDebugReportFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

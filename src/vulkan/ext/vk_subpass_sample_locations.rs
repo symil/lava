@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::ext::{VkSampleLocationsInfo,RawVkSampleLocationsInfo};
 
-/// Wrapper for [VkSubpassSampleLocationsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassSampleLocationsEXT.html)
+/// Wrapper for [VkSubpassSampleLocationsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassSampleLocationsEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkSubpassSampleLocations<'a> {
     pub subpass_index: usize,

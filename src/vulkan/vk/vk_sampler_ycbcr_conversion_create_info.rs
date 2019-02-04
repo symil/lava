@@ -19,7 +19,7 @@ use vulkan::vk::{VkComponentMapping,RawVkComponentMapping};
 use vulkan::vk::{VkChromaLocation,RawVkChromaLocation};
 use vulkan::vk::{VkFilter,RawVkFilter};
 
-/// Wrapper for [VkSamplerYcbcrConversionCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrConversionCreateInfo.html)
+/// Wrapper for [VkSamplerYcbcrConversionCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrConversionCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkSamplerYcbcrConversionCreateInfo {
     pub format: VkFormat,

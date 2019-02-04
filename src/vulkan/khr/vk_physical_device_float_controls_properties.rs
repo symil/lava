@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceFloatControlsPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFloatControlsPropertiesKHR.html)
+/// Wrapper for [VkPhysicalDeviceFloatControlsPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFloatControlsPropertiesKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFloatControlsProperties {
     pub separate_denorm_settings: bool,

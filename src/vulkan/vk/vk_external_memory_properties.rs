@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkExternalMemoryFeatureFlags,RawVkExternalMemoryFeatureFlags};
 use vulkan::vk::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFlags};
 
-/// Wrapper for [VkExternalMemoryProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryProperties.html)
+/// Wrapper for [VkExternalMemoryProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkExternalMemoryProperties {
     pub external_memory_features: VkExternalMemoryFeatureFlags,

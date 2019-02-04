@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkDeviceGroupPresentModeFlags,RawVkDeviceGroupPresentModeFlags};
 
-/// Wrapper for [VkDeviceGroupPresentInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupPresentInfoKHR.html)
+/// Wrapper for [VkDeviceGroupPresentInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupPresentInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkDeviceGroupPresentInfo<'a> {
     pub device_masks: &'a [u32],

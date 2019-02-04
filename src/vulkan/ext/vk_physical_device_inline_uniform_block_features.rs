@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceInlineUniformBlockFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceInlineUniformBlockFeaturesEXT.html)
+/// Wrapper for [VkPhysicalDeviceInlineUniformBlockFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceInlineUniformBlockFeaturesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceInlineUniformBlockFeatures {
     pub inline_uniform_block: bool,

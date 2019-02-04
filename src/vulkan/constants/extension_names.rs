@@ -333,6 +333,9 @@ pub const VK_NV_RAY_TRACING_EXTENSION_NAME : &str = "VK_NV_ray_tracing";
 /// `"VK_NV_representative_fragment_test"`
 pub const VK_NV_REPRESENTATIVE_FRAGMENT_TEST_EXTENSION_NAME : &str = "VK_NV_representative_fragment_test";
 
+/// `"VK_EXT_filter_cubic"`
+pub const VK_EXT_FILTER_CUBIC_EXTENSION_NAME : &str = "VK_EXT_filter_cubic";
+
 /// `"VK_EXT_global_priority"`
 pub const VK_EXT_GLOBAL_PRIORITY_EXTENSION_NAME : &str = "VK_EXT_global_priority";
 
@@ -395,6 +398,9 @@ pub const VK_EXT_MEMORY_BUDGET_EXTENSION_NAME : &str = "VK_EXT_memory_budget";
 
 /// `"VK_EXT_memory_priority"`
 pub const VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME : &str = "VK_EXT_memory_priority";
+
+/// `"VK_NV_dedicated_allocation_image_aliasing"`
+pub const VK_NV_DEDICATED_ALLOCATION_IMAGE_ALIASING_EXTENSION_NAME : &str = "VK_NV_dedicated_allocation_image_aliasing";
 
 /// `"VK_EXT_buffer_device_address"`
 pub const VK_EXT_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME : &str = "VK_EXT_buffer_device_address";

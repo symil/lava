@@ -17,7 +17,7 @@ use vulkan::vk::{VkExtent3D,RawVkExtent3D};
 use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 use vulkan::vk::{VkSparseMemoryBindFlags,RawVkSparseMemoryBindFlags};
 
-/// Wrapper for [VkSparseImageMemoryBind](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryBind.html)
+/// Wrapper for [VkSparseImageMemoryBind](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryBind.html).
 #[derive(Debug, Clone)]
 pub struct VkSparseImageMemoryBind<'a> {
     pub subresource: VkImageSubresource,

@@ -15,7 +15,7 @@ use vulkan::vk::{VkImageSubresourceLayers,RawVkImageSubresourceLayers};
 use vulkan::vk::{VkOffset3D,RawVkOffset3D};
 use vulkan::vk::{VkExtent3D,RawVkExtent3D};
 
-/// Wrapper for [VkImageResolve](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageResolve.html)
+/// Wrapper for [VkImageResolve](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageResolve.html).
 #[derive(Debug, Clone)]
 pub struct VkImageResolve {
     pub src_subresource: VkImageSubresourceLayers,

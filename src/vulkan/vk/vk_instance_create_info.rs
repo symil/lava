@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkInstanceCreateFlags,RawVkInstanceCreateFlags};
 use vulkan::vk::{VkApplicationInfo,RawVkApplicationInfo};
 
-/// Wrapper for [VkInstanceCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInstanceCreateInfo.html)
+/// Wrapper for [VkInstanceCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInstanceCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkInstanceCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
     where

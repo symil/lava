@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nvx::{VkObjectTable,RawVkObjectTable};
 use vulkan::nvx::{VkIndirectCommandsLayout,RawVkIndirectCommandsLayout};
 
-/// Wrapper for [VkCmdReserveSpaceForCommandsInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCmdReserveSpaceForCommandsInfoNVX.html)
+/// Wrapper for [VkCmdReserveSpaceForCommandsInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCmdReserveSpaceForCommandsInfoNVX.html).
 #[derive(Debug, Clone)]
 pub struct VkCmdReserveSpaceForCommandsInfo<'a, 'b> {
     pub object_table: &'a VkObjectTable,

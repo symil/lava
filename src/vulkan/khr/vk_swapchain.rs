@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkSwapchain = u64;
 
-/// Wrapper for [VkSwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainKHR.html)
+/// Wrapper for [VkSwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkSwapchain {
     _handle: RawVkSwapchain,
@@ -74,14 +74,14 @@ impl VkSwapchain {
         self._handle
     }
     
-    /// Wrapper for [vkDestroySwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySwapchainKHR.html)
+    /// Wrapper for [vkDestroySwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySwapchainKHR.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroySwapchainKHR)(self._parent_device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetSwapchainImagesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSwapchainImagesKHR.html)
+    /// Wrapper for [vkGetSwapchainImagesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSwapchainImagesKHR.html).
     pub fn get_images(&self) -> Result<Vec<VkImage>, (VkResult, Vec<VkImage>)> {
         unsafe {
             let mut vk_result = 0;
@@ -101,7 +101,7 @@ impl VkSwapchain {
         }
     }
     
-    /// Wrapper for [vkAcquireNextImageKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireNextImageKHR.html)
+    /// Wrapper for [vkAcquireNextImageKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireNextImageKHR.html).
     pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<&VkSemaphore>, fence: Option<&VkFence>) -> Result<usize, (VkResult, usize)> {
         unsafe {
             let raw_timeout = timeout;
@@ -117,7 +117,7 @@ impl VkSwapchain {
         }
     }
     
-    /// Wrapper for [vkGetSwapchainStatusKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSwapchainStatusKHR.html)
+    /// Wrapper for [vkGetSwapchainStatusKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSwapchainStatusKHR.html).
     pub fn get_status(&self) -> VkResult {
         unsafe {
             let vk_result = ((&*self._fn_table).vkGetSwapchainStatusKHR)(self._parent_device, self._handle);
@@ -125,7 +125,7 @@ impl VkSwapchain {
         }
     }
     
-    /// Wrapper for [vkGetSwapchainCounterEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSwapchainCounterEXT.html)
+    /// Wrapper for [vkGetSwapchainCounterEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSwapchainCounterEXT.html).
     pub fn get_counter(&self, counter: ext::VkSurfaceCounterFlags) -> Result<usize, (VkResult, usize)> {
         unsafe {
             let raw_counter = vk_to_raw_value(&counter);
@@ -139,7 +139,7 @@ impl VkSwapchain {
         }
     }
     
-    /// Wrapper for [vkGetRefreshCycleDurationGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRefreshCycleDurationGOOGLE.html)
+    /// Wrapper for [vkGetRefreshCycleDurationGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRefreshCycleDurationGOOGLE.html).
     pub fn get_refresh_cycle_duration(&self) -> Result<google::VkRefreshCycleDuration, (VkResult, google::VkRefreshCycleDuration)> {
         unsafe {
             let mut vk_result = 0;
@@ -159,7 +159,7 @@ impl VkSwapchain {
         }
     }
     
-    /// Wrapper for [vkGetPastPresentationTimingGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPastPresentationTimingGOOGLE.html)
+    /// Wrapper for [vkGetPastPresentationTimingGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPastPresentationTimingGOOGLE.html).
     pub fn get_past_presentation_timing(&self) -> Result<Vec<google::VkPastPresentationTiming>, (VkResult, Vec<google::VkPastPresentationTiming>)> {
         unsafe {
             let mut vk_result = 0;

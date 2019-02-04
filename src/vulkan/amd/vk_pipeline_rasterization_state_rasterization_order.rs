@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::amd::{VkRasterizationOrder,RawVkRasterizationOrder};
 
-/// Wrapper for [VkPipelineRasterizationStateRasterizationOrderAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationStateRasterizationOrderAMD.html)
+/// Wrapper for [VkPipelineRasterizationStateRasterizationOrderAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationStateRasterizationOrderAMD.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineRasterizationStateRasterizationOrder {
     pub rasterization_order: VkRasterizationOrder,

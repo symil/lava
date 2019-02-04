@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkRect2D,RawVkRect2D};
 
-/// Wrapper for [VkPipelineViewportExclusiveScissorStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportExclusiveScissorStateCreateInfoNV.html)
+/// Wrapper for [VkPipelineViewportExclusiveScissorStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportExclusiveScissorStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineViewportExclusiveScissorStateCreateInfo<'a> {
     pub exclusive_scissors: Option<&'a [VkRect2D]>,

@@ -16,7 +16,7 @@ use vulkan::vk::{VkDeviceCreateFlags,RawVkDeviceCreateFlags};
 use vulkan::vk::{VkDeviceQueueCreateInfo,RawVkDeviceQueueCreateInfo};
 use vulkan::vk::{VkPhysicalDeviceFeatures,RawVkPhysicalDeviceFeatures};
 
-/// Wrapper for [VkDeviceCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceCreateInfo.html)
+/// Wrapper for [VkDeviceCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkDeviceCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
     where

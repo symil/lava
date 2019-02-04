@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
-/// Wrapper for [VkDescriptorBufferInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBufferInfo.html)
+/// Wrapper for [VkDescriptorBufferInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBufferInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkDescriptorBufferInfo<'a> {
     pub buffer: &'a VkBuffer,

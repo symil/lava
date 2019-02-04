@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkResolveModeFlags,RawVkResolveModeFlags};
 use vulkan::khr::{VkAttachmentReference2,RawVkAttachmentReference2};
 
-/// Wrapper for [VkSubpassDescriptionDepthStencilResolveKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionDepthStencilResolveKHR.html)
+/// Wrapper for [VkSubpassDescriptionDepthStencilResolveKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionDepthStencilResolveKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkSubpassDescriptionDepthStencilResolve<'a> {
     pub depth_resolve_mode: VkResolveModeFlags,

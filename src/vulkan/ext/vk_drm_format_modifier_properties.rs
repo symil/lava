@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkFormatFeatureFlags,RawVkFormatFeatureFlags};
 
-/// Wrapper for [VkDrmFormatModifierPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrmFormatModifierPropertiesEXT.html)
+/// Wrapper for [VkDrmFormatModifierPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrmFormatModifierPropertiesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkDrmFormatModifierProperties {
     pub drm_format_modifier: usize,

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkGeometryInstanceFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryInstanceFlagBitsNV.html)
+/// Wrapper for [VkGeometryInstanceFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryInstanceFlagBitsNV.html).
 ///
 /// Use the macro `VkGeometryInstanceFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkPeerMemoryFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPeerMemoryFeatureFlagBits.html)
+/// Wrapper for [VkPeerMemoryFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPeerMemoryFeatureFlagBits.html).
 ///
 /// Use the macro `VkPeerMemoryFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

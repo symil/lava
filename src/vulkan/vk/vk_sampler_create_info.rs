@@ -19,7 +19,7 @@ use vulkan::vk::{VkSamplerAddressMode,RawVkSamplerAddressMode};
 use vulkan::vk::{VkCompareOp,RawVkCompareOp};
 use vulkan::vk::{VkBorderColor,RawVkBorderColor};
 
-/// Wrapper for [VkSamplerCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerCreateInfo.html)
+/// Wrapper for [VkSamplerCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkSamplerCreateInfo {
     pub flags: VkSamplerCreateFlags,

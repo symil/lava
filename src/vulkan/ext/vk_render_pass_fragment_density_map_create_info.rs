@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkAttachmentReference,RawVkAttachmentReference};
 
-/// Wrapper for [VkRenderPassFragmentDensityMapCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassFragmentDensityMapCreateInfoEXT.html)
+/// Wrapper for [VkRenderPassFragmentDensityMapCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassFragmentDensityMapCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkRenderPassFragmentDensityMapCreateInfo {
     pub fragment_density_map_attachment: VkAttachmentReference,

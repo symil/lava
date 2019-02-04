@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkSubresourceLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubresourceLayout.html)
+/// Wrapper for [VkSubresourceLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubresourceLayout.html).
 #[derive(Debug, Clone)]
 pub struct VkSubresourceLayout {
     pub offset: usize,

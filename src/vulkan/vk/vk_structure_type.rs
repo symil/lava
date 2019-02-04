@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkStructureType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStructureType.html)
+/// Wrapper for [VkStructureType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStructureType.html).
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkStructureType {
@@ -279,6 +279,8 @@ pub enum VkStructureType {
     AccelerationStructureInfoNv = 1000165012,
     PhysicalDeviceRepresentativeFragmentTestFeaturesNv = 1000166000,
     PipelineRepresentativeFragmentTestStateCreateInfoNv = 1000166001,
+    PhysicalDeviceImageViewImageFormatInfoExt = 1000170000,
+    FilterCubicImageViewImageFormatPropertiesExt = 1000170001,
     DeviceQueueGlobalPriorityCreateInfoExt = 1000174000,
     PhysicalDevice8bitStorageFeaturesKhr = 1000177000,
     ImportMemoryHostPointerInfoExt = 1000178000,
@@ -314,6 +316,7 @@ pub enum VkStructureType {
     PhysicalDeviceMemoryBudgetPropertiesExt = 1000237000,
     PhysicalDeviceMemoryPriorityFeaturesExt = 1000238000,
     MemoryPriorityAllocateInfoExt = 1000238001,
+    PhysicalDeviceDedicatedAllocationImageAliasingFeaturesNv = 1000240000,
     PhysicalDeviceBufferAddressFeaturesExt = 1000244000,
     BufferDeviceAddressInfoExt = 1000244001,
     BufferDeviceAddressCreateInfoExt = 1000244002,

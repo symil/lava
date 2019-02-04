@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkRenderPass = u64;
 
-/// Wrapper for [VkRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPass.html)
+/// Wrapper for [VkRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPass.html).
 #[derive(Debug, Clone)]
 pub struct VkRenderPass {
     _handle: RawVkRenderPass,
@@ -74,14 +74,14 @@ impl VkRenderPass {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyRenderPass.html)
+    /// Wrapper for [vkDestroyRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyRenderPass.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyRenderPass)(self._parent_device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetRenderAreaGranularity](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRenderAreaGranularity.html)
+    /// Wrapper for [vkGetRenderAreaGranularity](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRenderAreaGranularity.html).
     pub fn get_render_area_granularity(&self) -> VkExtent2D {
         unsafe {
             let raw_granularity = &mut mem::zeroed() as *mut RawVkExtent2D;

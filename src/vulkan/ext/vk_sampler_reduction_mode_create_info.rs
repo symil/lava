@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkSamplerReductionMode,RawVkSamplerReductionMode};
 
-/// Wrapper for [VkSamplerReductionModeCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerReductionModeCreateInfoEXT.html)
+/// Wrapper for [VkSamplerReductionModeCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerReductionModeCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkSamplerReductionModeCreateInfo {
     pub reduction_mode: VkSamplerReductionMode,

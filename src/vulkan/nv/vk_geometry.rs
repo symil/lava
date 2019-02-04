@@ -16,7 +16,7 @@ use vulkan::nv::{VkGeometryType,RawVkGeometryType};
 use vulkan::nv::{VkGeometryData,RawVkGeometryData};
 use vulkan::nv::{VkGeometryFlags,RawVkGeometryFlags};
 
-/// Wrapper for [VkGeometryNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryNV.html)
+/// Wrapper for [VkGeometryNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryNV.html).
 #[derive(Debug, Clone)]
 pub struct VkGeometry<'a, 'b, 'c, 'd> {
     pub geometry_type: VkGeometryType,

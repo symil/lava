@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkQueryControlFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryControlFlagBits.html)
+/// Wrapper for [VkQueryControlFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryControlFlagBits.html).
 ///
 /// Use the macro `VkQueryControlFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

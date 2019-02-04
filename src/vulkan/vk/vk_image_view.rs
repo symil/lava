@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkImageView = u64;
 
-/// Wrapper for [VkImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageView.html)
+/// Wrapper for [VkImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageView.html).
 #[derive(Debug, Clone)]
 pub struct VkImageView {
     _handle: RawVkImageView,
@@ -74,7 +74,7 @@ impl VkImageView {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyImageView.html)
+    /// Wrapper for [vkDestroyImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyImageView.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyImageView)(self._parent_device, self._handle, ptr::null());

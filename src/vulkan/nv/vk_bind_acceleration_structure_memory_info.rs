@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkAccelerationStructure,RawVkAccelerationStructure};
 use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 
-/// Wrapper for [VkBindAccelerationStructureMemoryInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindAccelerationStructureMemoryInfoNV.html)
+/// Wrapper for [VkBindAccelerationStructureMemoryInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindAccelerationStructureMemoryInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkBindAccelerationStructureMemoryInfo<'a, 'b, 'c> {
     pub acceleration_structure: &'a VkAccelerationStructure,

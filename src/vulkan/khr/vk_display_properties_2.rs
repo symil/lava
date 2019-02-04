@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkDisplayProperties,RawVkDisplayProperties};
 
-/// Wrapper for [VkDisplayProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayProperties2KHR.html)
+/// Wrapper for [VkDisplayProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayProperties2KHR.html).
 #[derive(Debug, Clone)]
 pub struct VkDisplayProperties2 {
     pub display_properties: VkDisplayProperties,

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkImageUsageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageUsageFlagBits.html)
+/// Wrapper for [VkImageUsageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageUsageFlagBits.html).
 ///
 /// Use the macro `VkImageUsageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

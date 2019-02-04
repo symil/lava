@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkDevice = u64;
 
-/// Wrapper for [VkDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDevice.html)
+/// Wrapper for [VkDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDevice.html).
 #[derive(Debug, Clone)]
 pub struct VkDevice {
     _handle: RawVkDevice,
@@ -74,14 +74,14 @@ impl VkDevice {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDevice.html)
+    /// Wrapper for [vkDestroyDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDevice.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyDevice)(self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetDeviceQueue](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceQueue.html)
+    /// Wrapper for [vkGetDeviceQueue](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceQueue.html).
     pub fn get_queue(&self, queue_family_index: usize, queue_index: usize) -> VkQueue {
         unsafe {
             let raw_queue_family_index = vk_to_raw_value(&queue_family_index);
@@ -99,7 +99,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkDeviceWaitIdle](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDeviceWaitIdle.html)
+    /// Wrapper for [vkDeviceWaitIdle](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDeviceWaitIdle.html).
     pub fn wait_idle(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkDeviceWaitIdle)(self._handle);
@@ -107,7 +107,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkAllocateMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateMemory.html)
+    /// Wrapper for [vkAllocateMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateMemory.html).
     pub fn allocate_memory(&self, allocate_info: &VkMemoryAllocateInfo) -> Result<VkDeviceMemory, (VkResult, VkDeviceMemory)> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(allocate_info);
@@ -128,7 +128,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkFlushMappedMemoryRanges](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFlushMappedMemoryRanges.html)
+    /// Wrapper for [vkFlushMappedMemoryRanges](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFlushMappedMemoryRanges.html).
     pub fn flush_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> Result<(), VkResult> {
         unsafe {
             let raw_memory_range_count = memory_ranges.len() as u32;
@@ -139,7 +139,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkInvalidateMappedMemoryRanges](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkInvalidateMappedMemoryRanges.html)
+    /// Wrapper for [vkInvalidateMappedMemoryRanges](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkInvalidateMappedMemoryRanges.html).
     pub fn invalidate_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> Result<(), VkResult> {
         unsafe {
             let raw_memory_range_count = memory_ranges.len() as u32;
@@ -150,7 +150,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateFence.html)
+    /// Wrapper for [vkCreateFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateFence.html).
     pub fn create_fence(&self, create_info: &VkFenceCreateInfo) -> Result<VkFence, (VkResult, VkFence)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -171,7 +171,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkResetFences](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetFences.html)
+    /// Wrapper for [vkResetFences](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetFences.html).
     pub fn reset_fences(&self, fences: &[&VkFence]) -> Result<(), VkResult> {
         unsafe {
             let raw_fence_count = fences.len() as u32;
@@ -182,7 +182,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkWaitForFences](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWaitForFences.html)
+    /// Wrapper for [vkWaitForFences](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWaitForFences.html).
     pub fn wait_for_fences(&self, fences: &[&VkFence], wait_all: bool, timeout: u64) -> Result<(), VkResult> {
         unsafe {
             let raw_fence_count = fences.len() as u32;
@@ -195,7 +195,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateSemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSemaphore.html)
+    /// Wrapper for [vkCreateSemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSemaphore.html).
     pub fn create_semaphore(&self, create_info: &VkSemaphoreCreateInfo) -> Result<VkSemaphore, (VkResult, VkSemaphore)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -216,7 +216,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateEvent.html)
+    /// Wrapper for [vkCreateEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateEvent.html).
     pub fn create_event(&self, create_info: &VkEventCreateInfo) -> Result<VkEvent, (VkResult, VkEvent)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -237,7 +237,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateQueryPool.html)
+    /// Wrapper for [vkCreateQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateQueryPool.html).
     pub fn create_query_pool(&self, create_info: &VkQueryPoolCreateInfo) -> Result<VkQueryPool, (VkResult, VkQueryPool)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -258,7 +258,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateBuffer.html)
+    /// Wrapper for [vkCreateBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateBuffer.html).
     pub fn create_buffer(&self, create_info: &VkBufferCreateInfo) -> Result<VkBuffer, (VkResult, VkBuffer)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -279,7 +279,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateBufferView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateBufferView.html)
+    /// Wrapper for [vkCreateBufferView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateBufferView.html).
     pub fn create_buffer_view(&self, create_info: &VkBufferViewCreateInfo) -> Result<VkBufferView, (VkResult, VkBufferView)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -300,7 +300,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateImage.html)
+    /// Wrapper for [vkCreateImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateImage.html).
     pub fn create_image(&self, create_info: &VkImageCreateInfo) -> Result<VkImage, (VkResult, VkImage)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -321,7 +321,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateImageView.html)
+    /// Wrapper for [vkCreateImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateImageView.html).
     pub fn create_image_view(&self, create_info: &VkImageViewCreateInfo) -> Result<VkImageView, (VkResult, VkImageView)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -342,7 +342,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateShaderModule](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateShaderModule.html)
+    /// Wrapper for [vkCreateShaderModule](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateShaderModule.html).
     pub fn create_shader_module(&self, create_info: &VkShaderModuleCreateInfo) -> Result<VkShaderModule, (VkResult, VkShaderModule)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -363,7 +363,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreatePipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreatePipelineCache.html)
+    /// Wrapper for [vkCreatePipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreatePipelineCache.html).
     pub fn create_pipeline_cache(&self, create_info: &VkPipelineCacheCreateInfo) -> Result<VkPipelineCache, (VkResult, VkPipelineCache)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -384,7 +384,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateGraphicsPipelines](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateGraphicsPipelines.html)
+    /// Wrapper for [vkCreateGraphicsPipelines](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateGraphicsPipelines.html).
     pub fn create_graphics_pipelines(&self, pipeline_cache: Option<&VkPipelineCache>, create_infos: &[VkGraphicsPipelineCreateInfo]) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
         unsafe {
             let raw_pipeline_cache = if pipeline_cache.is_some() { vk_to_raw_value(pipeline_cache.unwrap()) } else { 0 };
@@ -405,7 +405,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateComputePipelines](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html)
+    /// Wrapper for [vkCreateComputePipelines](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html).
     pub fn create_compute_pipelines(&self, pipeline_cache: Option<&VkPipelineCache>, create_infos: &[VkComputePipelineCreateInfo]) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
         unsafe {
             let raw_pipeline_cache = if pipeline_cache.is_some() { vk_to_raw_value(pipeline_cache.unwrap()) } else { 0 };
@@ -426,7 +426,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreatePipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreatePipelineLayout.html)
+    /// Wrapper for [vkCreatePipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreatePipelineLayout.html).
     pub fn create_pipeline_layout(&self, create_info: &VkPipelineLayoutCreateInfo) -> Result<VkPipelineLayout, (VkResult, VkPipelineLayout)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -447,7 +447,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateSampler](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSampler.html)
+    /// Wrapper for [vkCreateSampler](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSampler.html).
     pub fn create_sampler(&self, create_info: &VkSamplerCreateInfo) -> Result<VkSampler, (VkResult, VkSampler)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -468,7 +468,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateDescriptorSetLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorSetLayout.html)
+    /// Wrapper for [vkCreateDescriptorSetLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorSetLayout.html).
     pub fn create_descriptor_set_layout(&self, create_info: &VkDescriptorSetLayoutCreateInfo) -> Result<VkDescriptorSetLayout, (VkResult, VkDescriptorSetLayout)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -489,7 +489,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorPool.html)
+    /// Wrapper for [vkCreateDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorPool.html).
     pub fn create_descriptor_pool(&self, create_info: &VkDescriptorPoolCreateInfo) -> Result<VkDescriptorPool, (VkResult, VkDescriptorPool)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -510,7 +510,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkAllocateDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateDescriptorSets.html)
+    /// Wrapper for [vkAllocateDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateDescriptorSets.html).
     pub fn allocate_descriptor_sets(&self, allocate_info: &VkDescriptorSetAllocateInfo) -> Result<Vec<VkDescriptorSet>, (VkResult, Vec<VkDescriptorSet>)> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(allocate_info);
@@ -529,7 +529,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkUpdateDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUpdateDescriptorSets.html)
+    /// Wrapper for [vkUpdateDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUpdateDescriptorSets.html).
     pub fn update_descriptor_sets(&self, descriptor_writes: &[VkWriteDescriptorSet], descriptor_copies: &[VkCopyDescriptorSet]) {
         unsafe {
             let raw_descriptor_write_count = descriptor_writes.len() as u32;
@@ -542,7 +542,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateFramebuffer.html)
+    /// Wrapper for [vkCreateFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateFramebuffer.html).
     pub fn create_framebuffer(&self, create_info: &VkFramebufferCreateInfo) -> Result<VkFramebuffer, (VkResult, VkFramebuffer)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -563,7 +563,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass.html)
+    /// Wrapper for [vkCreateRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass.html).
     pub fn create_render_pass(&self, create_info: &VkRenderPassCreateInfo) -> Result<VkRenderPass, (VkResult, VkRenderPass)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -584,7 +584,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateCommandPool.html)
+    /// Wrapper for [vkCreateCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateCommandPool.html).
     pub fn create_command_pool(&self, create_info: &VkCommandPoolCreateInfo) -> Result<VkCommandPool, (VkResult, VkCommandPool)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -605,7 +605,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkAllocateCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateCommandBuffers.html)
+    /// Wrapper for [vkAllocateCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateCommandBuffers.html).
     pub fn allocate_command_buffers(&self, allocate_info: &VkCommandBufferAllocateInfo) -> Result<Vec<VkCommandBuffer>, (VkResult, Vec<VkCommandBuffer>)> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(allocate_info);
@@ -624,7 +624,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkBindBufferMemory2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindBufferMemory2.html)
+    /// Wrapper for [vkBindBufferMemory2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindBufferMemory2.html).
     pub fn bind_buffer_memory_2(&self, bind_infos: &[VkBindBufferMemoryInfo]) -> Result<(), VkResult> {
         unsafe {
             let raw_bind_info_count = bind_infos.len() as u32;
@@ -635,7 +635,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkBindImageMemory2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindImageMemory2.html)
+    /// Wrapper for [vkBindImageMemory2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindImageMemory2.html).
     pub fn bind_image_memory_2(&self, bind_infos: &[VkBindImageMemoryInfo]) -> Result<(), VkResult> {
         unsafe {
             let raw_bind_info_count = bind_infos.len() as u32;
@@ -646,7 +646,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetDeviceGroupPeerMemoryFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupPeerMemoryFeatures.html)
+    /// Wrapper for [vkGetDeviceGroupPeerMemoryFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupPeerMemoryFeatures.html).
     pub fn get_group_peer_memory_features(&self, heap_index: usize, local_device_index: usize, remote_device_index: usize) -> VkPeerMemoryFeatureFlags {
         unsafe {
             let raw_heap_index = vk_to_raw_value(&heap_index);
@@ -661,7 +661,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetImageMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageMemoryRequirements2.html)
+    /// Wrapper for [vkGetImageMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageMemoryRequirements2.html).
     pub fn get_image_memory_requirements_2(&self, info: &VkImageMemoryRequirementsInfo2) -> VkMemoryRequirements2 {
         unsafe {
             let raw_info = new_ptr_vk_value(info);
@@ -680,7 +680,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetBufferMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferMemoryRequirements2.html)
+    /// Wrapper for [vkGetBufferMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferMemoryRequirements2.html).
     pub fn get_buffer_memory_requirements_2(&self, info: &VkBufferMemoryRequirementsInfo2) -> VkMemoryRequirements2 {
         unsafe {
             let raw_info = new_ptr_vk_value(info);
@@ -699,7 +699,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetImageSparseMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageSparseMemoryRequirements2.html)
+    /// Wrapper for [vkGetImageSparseMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageSparseMemoryRequirements2.html).
     pub fn get_image_sparse_memory_requirements_2(&self, info: &VkImageSparseMemoryRequirementsInfo2) -> Vec<VkSparseImageMemoryRequirements2> {
         unsafe {
             let raw_info = new_ptr_vk_value(info);
@@ -718,7 +718,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetDeviceQueue2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceQueue2.html)
+    /// Wrapper for [vkGetDeviceQueue2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceQueue2.html).
     pub fn get_queue_2(&self, queue_info: &VkDeviceQueueInfo2) -> VkQueue {
         unsafe {
             let raw_queue_info = new_ptr_vk_value(queue_info);
@@ -736,7 +736,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateSamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSamplerYcbcrConversion.html)
+    /// Wrapper for [vkCreateSamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSamplerYcbcrConversion.html).
     pub fn create_sampler_ycbcr_conversion(&self, create_info: &VkSamplerYcbcrConversionCreateInfo) -> Result<VkSamplerYcbcrConversion, (VkResult, VkSamplerYcbcrConversion)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -757,7 +757,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateDescriptorUpdateTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorUpdateTemplate.html)
+    /// Wrapper for [vkCreateDescriptorUpdateTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorUpdateTemplate.html).
     pub fn create_descriptor_update_template(&self, create_info: &VkDescriptorUpdateTemplateCreateInfo) -> Result<VkDescriptorUpdateTemplate, (VkResult, VkDescriptorUpdateTemplate)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -778,7 +778,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkUpdateDescriptorSetWithTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUpdateDescriptorSetWithTemplate.html)
+    /// Wrapper for [vkUpdateDescriptorSetWithTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUpdateDescriptorSetWithTemplate.html).
     pub fn update_descriptor_set_with_template(&self, descriptor_set: &VkDescriptorSet, descriptor_update_template: &VkDescriptorUpdateTemplate, data: &c_void) {
         unsafe {
             let raw_descriptor_set = vk_to_raw_value(descriptor_set);
@@ -788,7 +788,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetDescriptorSetLayoutSupport](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDescriptorSetLayoutSupport.html)
+    /// Wrapper for [vkGetDescriptorSetLayoutSupport](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDescriptorSetLayoutSupport.html).
     pub fn get_descriptor_set_layout_support(&self, create_info: &VkDescriptorSetLayoutCreateInfo) -> VkDescriptorSetLayoutSupport {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -807,7 +807,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateSwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSwapchainKHR.html)
+    /// Wrapper for [vkCreateSwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSwapchainKHR.html).
     pub fn create_swapchain(&self, create_info: &khr::VkSwapchainCreateInfo) -> Result<khr::VkSwapchain, (VkResult, khr::VkSwapchain)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -828,7 +828,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetDeviceGroupPresentCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupPresentCapabilitiesKHR.html)
+    /// Wrapper for [vkGetDeviceGroupPresentCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupPresentCapabilitiesKHR.html).
     pub fn get_group_present_capabilities(&self) -> Result<khr::VkDeviceGroupPresentCapabilities, (VkResult, khr::VkDeviceGroupPresentCapabilities)> {
         unsafe {
             let mut vk_result = 0;
@@ -848,7 +848,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetDeviceGroupSurfacePresentModesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupSurfacePresentModesKHR.html)
+    /// Wrapper for [vkGetDeviceGroupSurfacePresentModesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupSurfacePresentModesKHR.html).
     pub fn get_group_surface_present_modes(&self, surface: &khr::VkSurface) -> Result<khr::VkDeviceGroupPresentModeFlags, (VkResult, khr::VkDeviceGroupPresentModeFlags)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
@@ -862,7 +862,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkAcquireNextImage2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireNextImage2KHR.html)
+    /// Wrapper for [vkAcquireNextImage2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireNextImage2KHR.html).
     pub fn acquire_next_image_2(&self, acquire_info: &khr::VkAcquireNextImageInfo) -> Result<usize, (VkResult, usize)> {
         unsafe {
             let raw_acquire_info = new_ptr_vk_value(acquire_info);
@@ -877,7 +877,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateSharedSwapchainsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSharedSwapchainsKHR.html)
+    /// Wrapper for [vkCreateSharedSwapchainsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSharedSwapchainsKHR.html).
     pub fn create_shared_swapchains(&self, create_infos: &[khr::VkSwapchainCreateInfo]) -> Result<Vec<khr::VkSwapchain>, (VkResult, Vec<khr::VkSwapchain>)> {
         unsafe {
             let raw_swapchain_count = create_infos.len() as u32;
@@ -897,7 +897,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetMemoryFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryFdKHR.html)
+    /// Wrapper for [vkGetMemoryFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryFdKHR.html).
     pub fn get_memory_fd(&self, get_fd_info: &khr::VkMemoryGetFdInfo) -> Result<i32, (VkResult, i32)> {
         unsafe {
             let raw_get_fd_info = new_ptr_vk_value(get_fd_info);
@@ -912,7 +912,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetMemoryFdPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryFdPropertiesKHR.html)
+    /// Wrapper for [vkGetMemoryFdPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryFdPropertiesKHR.html).
     pub fn get_memory_fd_properties(&self, handle_type: VkExternalMemoryHandleTypeFlags, fd: i32) -> Result<khr::VkMemoryFdProperties, (VkResult, khr::VkMemoryFdProperties)> {
         unsafe {
             let raw_handle_type = vk_to_raw_value(&handle_type);
@@ -934,7 +934,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkImportSemaphoreFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkImportSemaphoreFdKHR.html)
+    /// Wrapper for [vkImportSemaphoreFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkImportSemaphoreFdKHR.html).
     pub fn import_semaphore_fd(&self, import_semaphore_fd_info: &khr::VkImportSemaphoreFdInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_import_semaphore_fd_info = new_ptr_vk_value(import_semaphore_fd_info);
@@ -944,7 +944,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetSemaphoreFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSemaphoreFdKHR.html)
+    /// Wrapper for [vkGetSemaphoreFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSemaphoreFdKHR.html).
     pub fn get_semaphore_fd(&self, get_fd_info: &khr::VkSemaphoreGetFdInfo) -> Result<i32, (VkResult, i32)> {
         unsafe {
             let raw_get_fd_info = new_ptr_vk_value(get_fd_info);
@@ -959,7 +959,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateRenderPass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass2KHR.html)
+    /// Wrapper for [vkCreateRenderPass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass2KHR.html).
     pub fn create_render_pass_2(&self, create_info: &khr::VkRenderPassCreateInfo2) -> Result<VkRenderPass, (VkResult, VkRenderPass)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -980,7 +980,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkImportFenceFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkImportFenceFdKHR.html)
+    /// Wrapper for [vkImportFenceFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkImportFenceFdKHR.html).
     pub fn import_fence_fd(&self, import_fence_fd_info: &khr::VkImportFenceFdInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_import_fence_fd_info = new_ptr_vk_value(import_fence_fd_info);
@@ -990,7 +990,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetFenceFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetFenceFdKHR.html)
+    /// Wrapper for [vkGetFenceFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetFenceFdKHR.html).
     pub fn get_fence_fd(&self, get_fd_info: &khr::VkFenceGetFdInfo) -> Result<i32, (VkResult, i32)> {
         unsafe {
             let raw_get_fd_info = new_ptr_vk_value(get_fd_info);
@@ -1005,7 +1005,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkDebugMarkerSetObjectTagEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDebugMarkerSetObjectTagEXT.html)
+    /// Wrapper for [vkDebugMarkerSetObjectTagEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDebugMarkerSetObjectTagEXT.html).
     pub fn debug_marker_set_object_tag(&self, tag_info: &ext::VkDebugMarkerObjectTagInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_tag_info = new_ptr_vk_value(tag_info);
@@ -1015,7 +1015,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkDebugMarkerSetObjectNameEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDebugMarkerSetObjectNameEXT.html)
+    /// Wrapper for [vkDebugMarkerSetObjectNameEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDebugMarkerSetObjectNameEXT.html).
     pub fn debug_marker_set_object_name(&self, name_info: &ext::VkDebugMarkerObjectNameInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_name_info = new_ptr_vk_value(name_info);
@@ -1025,7 +1025,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateIndirectCommandsLayoutNVX.html)
+    /// Wrapper for [vkCreateIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateIndirectCommandsLayoutNVX.html).
     pub fn create_indirect_commands_layout(&self, create_info: &nvx::VkIndirectCommandsLayoutCreateInfo) -> Result<nvx::VkIndirectCommandsLayout, (VkResult, nvx::VkIndirectCommandsLayout)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -1046,7 +1046,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateObjectTableNVX.html)
+    /// Wrapper for [vkCreateObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateObjectTableNVX.html).
     pub fn create_object_table(&self, create_info: &nvx::VkObjectTableCreateInfo) -> Result<nvx::VkObjectTable, (VkResult, nvx::VkObjectTable)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -1067,7 +1067,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkDisplayPowerControlEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDisplayPowerControlEXT.html)
+    /// Wrapper for [vkDisplayPowerControlEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDisplayPowerControlEXT.html).
     pub fn display_power_control(&self, display: &khr::VkDisplay, display_power_info: &ext::VkDisplayPowerInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
@@ -1078,7 +1078,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkRegisterDeviceEventEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterDeviceEventEXT.html)
+    /// Wrapper for [vkRegisterDeviceEventEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterDeviceEventEXT.html).
     pub fn register_event(&self, device_event_info: &ext::VkDeviceEventInfo) -> Result<VkFence, (VkResult, VkFence)> {
         unsafe {
             let raw_device_event_info = new_ptr_vk_value(device_event_info);
@@ -1099,7 +1099,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkRegisterDisplayEventEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterDisplayEventEXT.html)
+    /// Wrapper for [vkRegisterDisplayEventEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterDisplayEventEXT.html).
     pub fn register_display_event(&self, display: &khr::VkDisplay, display_event_info: &ext::VkDisplayEventInfo) -> Result<VkFence, (VkResult, VkFence)> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
@@ -1121,7 +1121,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkSetHdrMetadataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetHdrMetadataEXT.html)
+    /// Wrapper for [vkSetHdrMetadataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetHdrMetadataEXT.html).
     pub fn set_hdr_metadata(&self, swapchains: &[&khr::VkSwapchain], metadata: &[ext::VkHdrMetadata]) {
         unsafe {
             let raw_swapchain_count = cmp::max(swapchains.len(), metadata.len()) as u32;
@@ -1133,7 +1133,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkSetDebugUtilsObjectNameEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetDebugUtilsObjectNameEXT.html)
+    /// Wrapper for [vkSetDebugUtilsObjectNameEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetDebugUtilsObjectNameEXT.html).
     pub fn set_debug_utils_object_name(&self, name_info: &ext::VkDebugUtilsObjectNameInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_name_info = new_ptr_vk_value(name_info);
@@ -1143,7 +1143,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkSetDebugUtilsObjectTagEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetDebugUtilsObjectTagEXT.html)
+    /// Wrapper for [vkSetDebugUtilsObjectTagEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetDebugUtilsObjectTagEXT.html).
     pub fn set_debug_utils_object_tag(&self, tag_info: &ext::VkDebugUtilsObjectTagInfo) -> Result<(), VkResult> {
         unsafe {
             let raw_tag_info = new_ptr_vk_value(tag_info);
@@ -1153,7 +1153,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateValidationCacheEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateValidationCacheEXT.html)
+    /// Wrapper for [vkCreateValidationCacheEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateValidationCacheEXT.html).
     pub fn create_validation_cache(&self, create_info: &ext::VkValidationCacheCreateInfo) -> Result<ext::VkValidationCache, (VkResult, ext::VkValidationCache)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -1174,7 +1174,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateAccelerationStructureNV.html)
+    /// Wrapper for [vkCreateAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateAccelerationStructureNV.html).
     pub fn create_acceleration_structure(&self, create_info: &nv::VkAccelerationStructureCreateInfo) -> Result<nv::VkAccelerationStructure, (VkResult, nv::VkAccelerationStructure)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -1195,7 +1195,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetAccelerationStructureMemoryRequirementsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetAccelerationStructureMemoryRequirementsNV.html)
+    /// Wrapper for [vkGetAccelerationStructureMemoryRequirementsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetAccelerationStructureMemoryRequirementsNV.html).
     pub fn get_acceleration_structure_memory_requirements(&self, info: &nv::VkAccelerationStructureMemoryRequirementsInfo) -> khr::VkMemoryRequirements2 {
         unsafe {
             let raw_info = new_ptr_vk_value(info);
@@ -1209,7 +1209,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkBindAccelerationStructureMemoryNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindAccelerationStructureMemoryNV.html)
+    /// Wrapper for [vkBindAccelerationStructureMemoryNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindAccelerationStructureMemoryNV.html).
     pub fn bind_acceleration_structure_memory(&self, bind_infos: &[nv::VkBindAccelerationStructureMemoryInfo]) -> Result<(), VkResult> {
         unsafe {
             let raw_bind_info_count = bind_infos.len() as u32;
@@ -1220,7 +1220,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateRayTracingPipelinesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRayTracingPipelinesNV.html)
+    /// Wrapper for [vkCreateRayTracingPipelinesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRayTracingPipelinesNV.html).
     pub fn create_ray_tracing_pipelines(&self, pipeline_cache: Option<&VkPipelineCache>, create_infos: &[nv::VkRayTracingPipelineCreateInfo]) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
         unsafe {
             let raw_pipeline_cache = if pipeline_cache.is_some() { vk_to_raw_value(pipeline_cache.unwrap()) } else { 0 };
@@ -1241,7 +1241,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetMemoryHostPointerPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryHostPointerPropertiesEXT.html)
+    /// Wrapper for [vkGetMemoryHostPointerPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryHostPointerPropertiesEXT.html).
     pub fn get_memory_host_pointer_properties(&self, handle_type: VkExternalMemoryHandleTypeFlags, host_pointer: &c_void) -> Result<ext::VkMemoryHostPointerProperties, (VkResult, ext::VkMemoryHostPointerProperties)> {
         unsafe {
             let raw_handle_type = vk_to_raw_value(&handle_type);
@@ -1263,7 +1263,7 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetCalibratedTimestampsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetCalibratedTimestampsEXT.html)
+    /// Wrapper for [vkGetCalibratedTimestampsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetCalibratedTimestampsEXT.html).
     pub fn get_calibrated_timestamps(&self, timestamp_infos: &[ext::VkCalibratedTimestampInfo], timestamps: &[usize]) -> Result<usize, (VkResult, usize)> {
         unsafe {
             let raw_timestamp_count = timestamp_infos.len() as u32;

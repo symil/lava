@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkFormatFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatFeatureFlagBits.html)
+/// Wrapper for [VkFormatFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatFeatureFlagBits.html).
 ///
 /// Use the macro `VkFormatFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
@@ -39,7 +39,7 @@ pub struct VkFormatFeatureFlags {
     pub sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable: bool,
     pub disjoint: bool,
     pub cosited_chroma_samples: bool,
-    pub sampled_image_filter_cubic_img: bool,
+    pub sampled_image_filter_cubic_ext: bool,
     pub sampled_image_filter_minmax_ext: bool,
     pub fragment_density_map_ext: bool,
 }
@@ -72,7 +72,7 @@ impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {
         if src.sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable { *dst |= 0x00200000; }
         if src.disjoint { *dst |= 0x00400000; }
         if src.cosited_chroma_samples { *dst |= 0x00800000; }
-        if src.sampled_image_filter_cubic_img { *dst |= 0x00002000; }
+        if src.sampled_image_filter_cubic_ext { *dst |= 0x00002000; }
         if src.sampled_image_filter_minmax_ext { *dst |= 0x00010000; }
         if src.fragment_density_map_ext { *dst |= 0x01000000; }
     }
@@ -103,7 +103,7 @@ impl VkRawType<VkFormatFeatureFlags> for RawVkFormatFeatureFlags {
             sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable: (src & 0x00200000) != 0,
             disjoint: (src & 0x00400000) != 0,
             cosited_chroma_samples: (src & 0x00800000) != 0,
-            sampled_image_filter_cubic_img: (src & 0x00002000) != 0,
+            sampled_image_filter_cubic_ext: (src & 0x00002000) != 0,
             sampled_image_filter_minmax_ext: (src & 0x00010000) != 0,
             fragment_density_map_ext: (src & 0x01000000) != 0,
         }
@@ -135,7 +135,7 @@ impl Default for VkFormatFeatureFlags {
             sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable: false,
             disjoint: false,
             cosited_chroma_samples: false,
-            sampled_image_filter_cubic_img: false,
+            sampled_image_filter_cubic_ext: false,
             sampled_image_filter_minmax_ext: false,
             fragment_density_map_ext: false,
         }
@@ -169,7 +169,7 @@ impl VkFormatFeatureFlags {
             sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable: false,
             disjoint: false,
             cosited_chroma_samples: false,
-            sampled_image_filter_cubic_img: false,
+            sampled_image_filter_cubic_ext: false,
             sampled_image_filter_minmax_ext: false,
             fragment_density_map_ext: false,
         }
@@ -200,7 +200,7 @@ impl VkFormatFeatureFlags {
             sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable: true,
             disjoint: true,
             cosited_chroma_samples: true,
-            sampled_image_filter_cubic_img: true,
+            sampled_image_filter_cubic_ext: true,
             sampled_image_filter_minmax_ext: true,
             fragment_density_map_ext: true,
         }
@@ -231,7 +231,7 @@ impl VkFormatFeatureFlags {
         + if self.sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable { 0x00200000 } else { 0 }
         + if self.disjoint { 0x00400000 } else { 0 }
         + if self.cosited_chroma_samples { 0x00800000 } else { 0 }
-        + if self.sampled_image_filter_cubic_img { 0x00002000 } else { 0 }
+        + if self.sampled_image_filter_cubic_ext { 0x00002000 } else { 0 }
         + if self.sampled_image_filter_minmax_ext { 0x00010000 } else { 0 }
         + if self.fragment_density_map_ext { 0x01000000 } else { 0 }
     }
@@ -261,7 +261,7 @@ impl VkFormatFeatureFlags {
             sampled_image_ycbcr_conversion_chroma_reconstruction_explicit_forceable: value & 0x00200000 > 0,
             disjoint: value & 0x00400000 > 0,
             cosited_chroma_samples: value & 0x00800000 > 0,
-            sampled_image_filter_cubic_img: value & 0x00002000 > 0,
+            sampled_image_filter_cubic_ext: value & 0x00002000 > 0,
             sampled_image_filter_minmax_ext: value & 0x00010000 > 0,
             fragment_density_map_ext: value & 0x01000000 > 0,
         }

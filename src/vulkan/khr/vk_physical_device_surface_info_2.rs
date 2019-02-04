@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkSurface,RawVkSurface};
 
-/// Wrapper for [VkPhysicalDeviceSurfaceInfo2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSurfaceInfo2KHR.html)
+/// Wrapper for [VkPhysicalDeviceSurfaceInfo2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSurfaceInfo2KHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSurfaceInfo2<'a> {
     pub surface: &'a VkSurface,

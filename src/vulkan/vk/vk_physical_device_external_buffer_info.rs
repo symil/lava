@@ -16,7 +16,7 @@ use vulkan::vk::{VkBufferCreateFlags,RawVkBufferCreateFlags};
 use vulkan::vk::{VkBufferUsageFlags,RawVkBufferUsageFlags};
 use vulkan::vk::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFlags};
 
-/// Wrapper for [VkPhysicalDeviceExternalBufferInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceExternalBufferInfo.html)
+/// Wrapper for [VkPhysicalDeviceExternalBufferInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceExternalBufferInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceExternalBufferInfo {
     pub flags: VkBufferCreateFlags,

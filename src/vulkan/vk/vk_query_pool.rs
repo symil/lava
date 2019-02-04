@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkQueryPool = u64;
 
-/// Wrapper for [VkQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPool.html)
+/// Wrapper for [VkQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPool.html).
 #[derive(Debug, Clone)]
 pub struct VkQueryPool {
     _handle: RawVkQueryPool,
@@ -74,14 +74,14 @@ impl VkQueryPool {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyQueryPool.html)
+    /// Wrapper for [vkDestroyQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyQueryPool.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyQueryPool)(self._parent_device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetQueryPoolResults](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetQueryPoolResults.html)
+    /// Wrapper for [vkGetQueryPoolResults](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetQueryPoolResults.html).
     pub fn get_results(&self, first_query: usize, query_count: usize, data: &mut [c_void], stride: usize, flags: VkQueryResultFlags) -> Result<(), VkResult> {
         unsafe {
             let raw_first_query = vk_to_raw_value(&first_query);

@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDevice8BitStorageFeaturesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice8BitStorageFeaturesKHR.html)
+/// Wrapper for [VkPhysicalDevice8BitStorageFeaturesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice8BitStorageFeaturesKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDevice8BitStorageFeatures {
     pub storage_buffer_8_bit_access: bool,

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkBlendOp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBlendOp.html)
+/// Wrapper for [VkBlendOp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBlendOp.html).
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkBlendOp {

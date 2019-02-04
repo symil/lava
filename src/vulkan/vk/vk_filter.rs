@@ -2,13 +2,13 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkFilter](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFilter.html)
+/// Wrapper for [VkFilter](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFilter.html).
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkFilter {
     Nearest = 0,
     Linear = 1,
-    CubicImg = 1000015000,
+    CubicExt = 1000015000,
 }
 
 #[doc(hidden)]

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkRenderPassCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateFlagBits.html)
+/// Wrapper for [VkRenderPassCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateFlagBits.html).
 ///
 /// Use the macro `VkRenderPassCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

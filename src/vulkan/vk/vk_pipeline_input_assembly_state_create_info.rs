@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPipelineInputAssemblyStateCreateFlags,RawVkPipelineInputAssemblyStateCreateFlags};
 use vulkan::vk::{VkPrimitiveTopology,RawVkPrimitiveTopology};
 
-/// Wrapper for [VkPipelineInputAssemblyStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineInputAssemblyStateCreateInfo.html)
+/// Wrapper for [VkPipelineInputAssemblyStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineInputAssemblyStateCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineInputAssemblyStateCreateInfo {
     pub flags: VkPipelineInputAssemblyStateCreateFlags,

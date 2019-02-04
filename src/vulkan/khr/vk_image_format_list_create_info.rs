@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkFormat,RawVkFormat};
 
-/// Wrapper for [VkImageFormatListCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatListCreateInfoKHR.html)
+/// Wrapper for [VkImageFormatListCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatListCreateInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkImageFormatListCreateInfo<'a> {
     pub view_formats: &'a [VkFormat],

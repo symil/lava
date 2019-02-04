@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkPipelineRasterizationConservativeStateCreateFlags,RawVkPipelineRasterizationConservativeStateCreateFlags};
 use vulkan::ext::{VkConservativeRasterizationMode,RawVkConservativeRasterizationMode};
 
-/// Wrapper for [VkPipelineRasterizationConservativeStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationConservativeStateCreateInfoEXT.html)
+/// Wrapper for [VkPipelineRasterizationConservativeStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationConservativeStateCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineRasterizationConservativeStateCreateInfo {
     pub flags: VkPipelineRasterizationConservativeStateCreateFlags,

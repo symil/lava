@@ -16,7 +16,7 @@ use vulkan::vk::{VkSemaphore,RawVkSemaphore};
 use vulkan::vk::{VkPipelineStageFlags,RawVkPipelineStageFlags};
 use vulkan::vk::{VkCommandBuffer,RawVkCommandBuffer};
 
-/// Wrapper for [VkSubmitInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubmitInfo.html)
+/// Wrapper for [VkSubmitInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubmitInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkSubmitInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
     where

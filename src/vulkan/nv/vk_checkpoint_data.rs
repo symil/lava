@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPipelineStageFlags,RawVkPipelineStageFlags};
 
-/// Wrapper for [VkCheckpointDataNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCheckpointDataNV.html)
+/// Wrapper for [VkCheckpointDataNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCheckpointDataNV.html).
 #[derive(Debug, Clone)]
 pub struct VkCheckpointData {
     pub stage: VkPipelineStageFlags,

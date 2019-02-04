@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkDescriptorSet = u64;
 
-/// Wrapper for [VkDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSet.html)
+/// Wrapper for [VkDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSet.html).
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSet {
     _handle: RawVkDescriptorSet,

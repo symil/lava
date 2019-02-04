@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkEvent = u64;
 
-/// Wrapper for [VkEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkEvent.html)
+/// Wrapper for [VkEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkEvent.html).
 #[derive(Debug, Clone)]
 pub struct VkEvent {
     _handle: RawVkEvent,
@@ -74,14 +74,14 @@ impl VkEvent {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyEvent.html)
+    /// Wrapper for [vkDestroyEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyEvent.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyEvent)(self._parent_device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetEventStatus](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetEventStatus.html)
+    /// Wrapper for [vkGetEventStatus](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetEventStatus.html).
     pub fn get_status(&self) -> VkResult {
         unsafe {
             let vk_result = ((&*self._fn_table).vkGetEventStatus)(self._parent_device, self._handle);
@@ -89,7 +89,7 @@ impl VkEvent {
         }
     }
     
-    /// Wrapper for [vkSetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetEvent.html)
+    /// Wrapper for [vkSetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetEvent.html).
     pub fn set(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkSetEvent)(self._parent_device, self._handle);
@@ -97,7 +97,7 @@ impl VkEvent {
         }
     }
     
-    /// Wrapper for [vkResetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetEvent.html)
+    /// Wrapper for [vkResetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetEvent.html).
     pub fn reset(&self) -> Result<(), VkResult> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkResetEvent)(self._parent_device, self._handle);

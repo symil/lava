@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 
-/// Wrapper for [VkImageSwapchainCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSwapchainCreateInfoKHR.html)
+/// Wrapper for [VkImageSwapchainCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSwapchainCreateInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkImageSwapchainCreateInfo<'a> {
     pub swapchain: Option<&'a VkSwapchain>,

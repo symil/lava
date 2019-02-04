@@ -15,7 +15,7 @@ use vulkan::nvx::{VkObjectEntryType,RawVkObjectEntryType};
 use vulkan::nvx::{VkObjectEntryUsageFlags,RawVkObjectEntryUsageFlags};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
-/// Wrapper for [VkObjectTableVertexBufferEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableVertexBufferEntryNVX.html)
+/// Wrapper for [VkObjectTableVertexBufferEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableVertexBufferEntryNVX.html).
 #[derive(Debug, Clone)]
 pub struct VkObjectTableVertexBufferEntry<'a> {
     pub type_: VkObjectEntryType,

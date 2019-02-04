@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
-/// Wrapper for [VkMultisamplePropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMultisamplePropertiesEXT.html)
+/// Wrapper for [VkMultisamplePropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMultisamplePropertiesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkMultisampleProperties {
     pub max_sample_location_grid_size: VkExtent2D,

@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkFence = u64;
 
-/// Wrapper for [VkFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFence.html)
+/// Wrapper for [VkFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFence.html).
 #[derive(Debug, Clone)]
 pub struct VkFence {
     _handle: RawVkFence,
@@ -74,14 +74,14 @@ impl VkFence {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyFence.html)
+    /// Wrapper for [vkDestroyFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyFence.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyFence)(self._parent_device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetFenceStatus](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetFenceStatus.html)
+    /// Wrapper for [vkGetFenceStatus](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetFenceStatus.html).
     pub fn get_status(&self) -> VkResult {
         unsafe {
             let vk_result = ((&*self._fn_table).vkGetFenceStatus)(self._parent_device, self._handle);

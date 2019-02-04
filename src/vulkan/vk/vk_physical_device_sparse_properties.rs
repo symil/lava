@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkPhysicalDeviceSparseProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSparseProperties.html)
+/// Wrapper for [VkPhysicalDeviceSparseProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSparseProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSparseProperties {
     pub residency_standard_2_dblock_shape: bool,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::nvx::{VkIndirectCommandsTokenType,RawVkIndirectCommandsTokenType};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
-/// Wrapper for [VkIndirectCommandsTokenNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsTokenNVX.html)
+/// Wrapper for [VkIndirectCommandsTokenNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsTokenNVX.html).
 #[derive(Debug, Clone)]
 pub struct VkIndirectCommandsToken<'a> {
     pub token_type: VkIndirectCommandsTokenType,

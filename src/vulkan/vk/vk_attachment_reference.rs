@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 
-/// Wrapper for [VkAttachmentReference](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentReference.html)
+/// Wrapper for [VkAttachmentReference](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentReference.html).
 #[derive(Debug, Clone)]
 pub struct VkAttachmentReference {
     pub attachment: usize,

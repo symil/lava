@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStencilOp,RawVkStencilOp};
 use vulkan::vk::{VkCompareOp,RawVkCompareOp};
 
-/// Wrapper for [VkStencilOpState](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilOpState.html)
+/// Wrapper for [VkStencilOpState](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilOpState.html).
 #[derive(Debug, Clone)]
 pub struct VkStencilOpState {
     pub fail_op: VkStencilOp,

@@ -15,7 +15,7 @@ use vulkan::khr::{VkDisplayPlaneAlphaFlags,RawVkDisplayPlaneAlphaFlags};
 use vulkan::vk::{VkOffset2D,RawVkOffset2D};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
-/// Wrapper for [VkDisplayPlaneCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneCapabilitiesKHR.html)
+/// Wrapper for [VkDisplayPlaneCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneCapabilitiesKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkDisplayPlaneCapabilities {
     pub supported_alpha: VkDisplayPlaneAlphaFlags,

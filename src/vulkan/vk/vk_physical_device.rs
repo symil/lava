@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkPhysicalDevice = u64;
 
-/// Wrapper for [VkPhysicalDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice.html)
+/// Wrapper for [VkPhysicalDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDevice {
     _handle: RawVkPhysicalDevice,
@@ -74,7 +74,7 @@ impl VkPhysicalDevice {
         self._handle
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFeatures.html)
+    /// Wrapper for [vkGetPhysicalDeviceFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFeatures.html).
     pub fn get_features(&self) -> VkPhysicalDeviceFeatures {
         unsafe {
             let raw_features = &mut mem::zeroed() as *mut RawVkPhysicalDeviceFeatures;
@@ -91,7 +91,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFormatProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFormatProperties.html).
     pub fn get_format_properties(&self, format: VkFormat) -> VkFormatProperties {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
@@ -109,7 +109,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceImageFormatProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceImageFormatProperties.html).
     pub fn get_image_format_properties(&self, format: VkFormat, type_: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags) -> Result<VkImageFormatProperties, (VkResult, VkImageFormatProperties)> {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
@@ -134,7 +134,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceProperties.html).
     pub fn get_properties(&self) -> VkPhysicalDeviceProperties {
         unsafe {
             let raw_properties = &mut mem::zeroed() as *mut RawVkPhysicalDeviceProperties;
@@ -151,7 +151,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceQueueFamilyProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceQueueFamilyProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceQueueFamilyProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceQueueFamilyProperties.html).
     pub fn get_queue_family_properties(&self) -> Vec<VkQueueFamilyProperties> {
         unsafe {
             let mut raw_queue_family_properties : *mut RawVkQueueFamilyProperties = ptr::null_mut();
@@ -168,7 +168,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceMemoryProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceMemoryProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceMemoryProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceMemoryProperties.html).
     pub fn get_memory_properties(&self) -> VkPhysicalDeviceMemoryProperties {
         unsafe {
             let raw_memory_properties = &mut mem::zeroed() as *mut RawVkPhysicalDeviceMemoryProperties;
@@ -185,7 +185,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkCreateDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDevice.html)
+    /// Wrapper for [vkCreateDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDevice.html).
     pub fn create_device(&self, create_info: &VkDeviceCreateInfo) -> Result<VkDevice, (VkResult, VkDevice)> {
         unsafe {
             let raw_create_info = new_ptr_vk_value(create_info);
@@ -206,7 +206,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkEnumerateDeviceExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateDeviceExtensionProperties.html)
+    /// Wrapper for [vkEnumerateDeviceExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateDeviceExtensionProperties.html).
     pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
         unsafe {
             let raw_layer_name = new_ptr_string_checked(layer_name);
@@ -228,7 +228,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkEnumerateDeviceLayerProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateDeviceLayerProperties.html)
+    /// Wrapper for [vkEnumerateDeviceLayerProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateDeviceLayerProperties.html).
     pub fn enumerate_device_layer_properties(&self) -> Result<Vec<VkLayerProperties>, (VkResult, Vec<VkLayerProperties>)> {
         unsafe {
             let mut vk_result = 0;
@@ -248,7 +248,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSparseImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSparseImageFormatProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceSparseImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSparseImageFormatProperties.html).
     pub fn get_sparse_image_format_properties(&self, format: VkFormat, type_: VkImageType, samples: VkSampleCountFlags, usage: VkImageUsageFlags, tiling: VkImageTiling) -> Vec<VkSparseImageFormatProperties> {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
@@ -270,7 +270,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceFeatures2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFeatures2.html)
+    /// Wrapper for [vkGetPhysicalDeviceFeatures2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFeatures2.html).
     pub fn get_features_2(&self) -> VkPhysicalDeviceFeatures2 {
         unsafe {
             let raw_features = &mut mem::zeroed() as *mut RawVkPhysicalDeviceFeatures2;
@@ -287,7 +287,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceProperties2.html)
+    /// Wrapper for [vkGetPhysicalDeviceProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceProperties2.html).
     pub fn get_properties_2(&self) -> VkPhysicalDeviceProperties2 {
         unsafe {
             let raw_properties = &mut mem::zeroed() as *mut RawVkPhysicalDeviceProperties2;
@@ -304,7 +304,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFormatProperties2.html)
+    /// Wrapper for [vkGetPhysicalDeviceFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFormatProperties2.html).
     pub fn get_format_properties_2(&self, format: VkFormat) -> VkFormatProperties2 {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
@@ -322,7 +322,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceImageFormatProperties2.html)
+    /// Wrapper for [vkGetPhysicalDeviceImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceImageFormatProperties2.html).
     pub fn get_image_format_properties_2(&self, image_format_info: &VkPhysicalDeviceImageFormatInfo2) -> Result<VkImageFormatProperties2, (VkResult, VkImageFormatProperties2)> {
         unsafe {
             let raw_image_format_info = new_ptr_vk_value(image_format_info);
@@ -344,7 +344,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceQueueFamilyProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceQueueFamilyProperties2.html)
+    /// Wrapper for [vkGetPhysicalDeviceQueueFamilyProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceQueueFamilyProperties2.html).
     pub fn get_queue_family_properties_2(&self) -> Vec<VkQueueFamilyProperties2> {
         unsafe {
             let mut raw_queue_family_properties : *mut RawVkQueueFamilyProperties2 = ptr::null_mut();
@@ -361,7 +361,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceMemoryProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceMemoryProperties2.html)
+    /// Wrapper for [vkGetPhysicalDeviceMemoryProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceMemoryProperties2.html).
     pub fn get_memory_properties_2(&self) -> VkPhysicalDeviceMemoryProperties2 {
         unsafe {
             let raw_memory_properties = &mut mem::zeroed() as *mut RawVkPhysicalDeviceMemoryProperties2;
@@ -378,7 +378,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSparseImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSparseImageFormatProperties2.html)
+    /// Wrapper for [vkGetPhysicalDeviceSparseImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSparseImageFormatProperties2.html).
     pub fn get_sparse_image_format_properties_2(&self, format_info: &VkPhysicalDeviceSparseImageFormatInfo2) -> Vec<VkSparseImageFormatProperties2> {
         unsafe {
             let raw_format_info = new_ptr_vk_value(format_info);
@@ -397,7 +397,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceExternalBufferProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalBufferProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceExternalBufferProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalBufferProperties.html).
     pub fn get_external_buffer_properties(&self, external_buffer_info: &VkPhysicalDeviceExternalBufferInfo) -> VkExternalBufferProperties {
         unsafe {
             let raw_external_buffer_info = new_ptr_vk_value(external_buffer_info);
@@ -416,7 +416,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceExternalFenceProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalFenceProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceExternalFenceProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalFenceProperties.html).
     pub fn get_external_fence_properties(&self, external_fence_info: &VkPhysicalDeviceExternalFenceInfo) -> VkExternalFenceProperties {
         unsafe {
             let raw_external_fence_info = new_ptr_vk_value(external_fence_info);
@@ -435,7 +435,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceExternalSemaphoreProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalSemaphoreProperties.html)
+    /// Wrapper for [vkGetPhysicalDeviceExternalSemaphoreProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalSemaphoreProperties.html).
     pub fn get_external_semaphore_properties(&self, external_semaphore_info: &VkPhysicalDeviceExternalSemaphoreInfo) -> VkExternalSemaphoreProperties {
         unsafe {
             let raw_external_semaphore_info = new_ptr_vk_value(external_semaphore_info);
@@ -454,7 +454,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSurfaceSupportKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceSupportKHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceSurfaceSupportKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceSupportKHR.html).
     pub fn get_surface_support(&self, queue_family_index: usize, surface: &khr::VkSurface) -> Result<bool, (VkResult, bool)> {
         unsafe {
             let raw_queue_family_index = vk_to_raw_value(&queue_family_index);
@@ -469,7 +469,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilitiesKHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilitiesKHR.html).
     pub fn get_surface_capabilities(&self, surface: &khr::VkSurface) -> Result<khr::VkSurfaceCapabilities, (VkResult, khr::VkSurfaceCapabilities)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
@@ -490,7 +490,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSurfaceFormatsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceFormatsKHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceSurfaceFormatsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceFormatsKHR.html).
     pub fn get_surface_formats(&self, surface: &khr::VkSurface) -> Result<Vec<khr::VkSurfaceFormat>, (VkResult, Vec<khr::VkSurfaceFormat>)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
@@ -511,7 +511,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSurfacePresentModesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfacePresentModesKHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceSurfacePresentModesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfacePresentModesKHR.html).
     pub fn get_surface_present_modes(&self, surface: &khr::VkSurface) -> Result<Vec<khr::VkPresentMode>, (VkResult, Vec<khr::VkPresentMode>)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
@@ -529,7 +529,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDevicePresentRectanglesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDevicePresentRectanglesKHR.html)
+    /// Wrapper for [vkGetPhysicalDevicePresentRectanglesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDevicePresentRectanglesKHR.html).
     pub fn get_present_rectangles(&self, surface: &khr::VkSurface) -> Result<Vec<VkRect2D>, (VkResult, Vec<VkRect2D>)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
@@ -550,7 +550,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceDisplayPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceDisplayPropertiesKHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceDisplayPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceDisplayPropertiesKHR.html).
     pub fn get_display_properties(&self) -> Result<Vec<khr::VkDisplayProperties>, (VkResult, Vec<khr::VkDisplayProperties>)> {
         unsafe {
             let mut vk_result = 0;
@@ -570,7 +570,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceDisplayPlanePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceDisplayPlanePropertiesKHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceDisplayPlanePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceDisplayPlanePropertiesKHR.html).
     pub fn get_display_plane_properties(&self) -> Result<Vec<khr::VkDisplayPlaneProperties>, (VkResult, Vec<khr::VkDisplayPlaneProperties>)> {
         unsafe {
             let mut vk_result = 0;
@@ -590,7 +590,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetDisplayPlaneSupportedDisplaysKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayPlaneSupportedDisplaysKHR.html)
+    /// Wrapper for [vkGetDisplayPlaneSupportedDisplaysKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayPlaneSupportedDisplaysKHR.html).
     pub fn get_display_plane_supported_displays(&self, plane_index: usize) -> Result<Vec<khr::VkDisplay>, (VkResult, Vec<khr::VkDisplay>)> {
         unsafe {
             let raw_plane_index = vk_to_raw_value(&plane_index);
@@ -611,7 +611,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetDisplayModePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayModePropertiesKHR.html)
+    /// Wrapper for [vkGetDisplayModePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayModePropertiesKHR.html).
     pub fn get_display_mode_properties(&self, display: &khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties>, (VkResult, Vec<khr::VkDisplayModeProperties>)> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
@@ -632,7 +632,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkCreateDisplayModeKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDisplayModeKHR.html)
+    /// Wrapper for [vkCreateDisplayModeKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDisplayModeKHR.html).
     pub fn create_display_mode(&self, display: &khr::VkDisplay, create_info: &khr::VkDisplayModeCreateInfo) -> Result<khr::VkDisplayMode, (VkResult, khr::VkDisplayMode)> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
@@ -654,7 +654,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetDisplayPlaneCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayPlaneCapabilitiesKHR.html)
+    /// Wrapper for [vkGetDisplayPlaneCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayPlaneCapabilitiesKHR.html).
     pub fn get_display_plane_capabilities(&self, mode: &khr::VkDisplayMode, plane_index: usize) -> Result<khr::VkDisplayPlaneCapabilities, (VkResult, khr::VkDisplayPlaneCapabilities)> {
         unsafe {
             let raw_mode = vk_to_raw_value(mode);
@@ -676,7 +676,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilities2KHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilities2KHR.html).
     pub fn get_surface_capabilities_2(&self, surface_info: &khr::VkPhysicalDeviceSurfaceInfo2) -> Result<khr::VkSurfaceCapabilities2, (VkResult, khr::VkSurfaceCapabilities2)> {
         unsafe {
             let raw_surface_info = new_ptr_vk_value(surface_info);
@@ -698,7 +698,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSurfaceFormats2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceFormats2KHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceSurfaceFormats2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceFormats2KHR.html).
     pub fn get_surface_formats_2(&self, surface_info: &khr::VkPhysicalDeviceSurfaceInfo2) -> Result<Vec<khr::VkSurfaceFormat2>, (VkResult, Vec<khr::VkSurfaceFormat2>)> {
         unsafe {
             let raw_surface_info = new_ptr_vk_value(surface_info);
@@ -720,7 +720,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceDisplayProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceDisplayProperties2KHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceDisplayProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceDisplayProperties2KHR.html).
     pub fn get_display_properties_2(&self) -> Result<Vec<khr::VkDisplayProperties2>, (VkResult, Vec<khr::VkDisplayProperties2>)> {
         unsafe {
             let mut vk_result = 0;
@@ -740,7 +740,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceDisplayPlaneProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceDisplayPlaneProperties2KHR.html)
+    /// Wrapper for [vkGetPhysicalDeviceDisplayPlaneProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceDisplayPlaneProperties2KHR.html).
     pub fn get_display_plane_properties_2(&self) -> Result<Vec<khr::VkDisplayPlaneProperties2>, (VkResult, Vec<khr::VkDisplayPlaneProperties2>)> {
         unsafe {
             let mut vk_result = 0;
@@ -760,7 +760,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetDisplayModeProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayModeProperties2KHR.html)
+    /// Wrapper for [vkGetDisplayModeProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayModeProperties2KHR.html).
     pub fn get_display_mode_properties_2(&self, display: &khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties2>, (VkResult, Vec<khr::VkDisplayModeProperties2>)> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
@@ -781,7 +781,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetDisplayPlaneCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayPlaneCapabilities2KHR.html)
+    /// Wrapper for [vkGetDisplayPlaneCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayPlaneCapabilities2KHR.html).
     pub fn get_display_plane_capabilities_2(&self, display_plane_info: &khr::VkDisplayPlaneInfo2) -> Result<khr::VkDisplayPlaneCapabilities2, (VkResult, khr::VkDisplayPlaneCapabilities2)> {
         unsafe {
             let raw_display_plane_info = new_ptr_vk_value(display_plane_info);
@@ -803,7 +803,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceExternalImageFormatPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalImageFormatPropertiesNV.html)
+    /// Wrapper for [vkGetPhysicalDeviceExternalImageFormatPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalImageFormatPropertiesNV.html).
     pub fn get_external_image_format_properties(&self, format: VkFormat, type_: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags, external_handle_type: nv::VkExternalMemoryHandleTypeFlags) -> Result<nv::VkExternalImageFormatProperties, (VkResult, nv::VkExternalImageFormatProperties)> {
         unsafe {
             let raw_format = vk_to_raw_value(&format);
@@ -829,7 +829,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX.html)
+    /// Wrapper for [vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX.html).
     pub fn get_generated_commands_properties(&self, features: &nvx::VkDeviceGeneratedCommandsFeatures) -> nvx::VkDeviceGeneratedCommandsLimits {
         unsafe {
             let raw_features = new_ptr_vk_value(features);
@@ -848,7 +848,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkReleaseDisplayEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkReleaseDisplayEXT.html)
+    /// Wrapper for [vkReleaseDisplayEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkReleaseDisplayEXT.html).
     pub fn release_display(&self, display: &khr::VkDisplay) -> Result<(), VkResult> {
         unsafe {
             let raw_display = vk_to_raw_value(display);
@@ -857,7 +857,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilities2EXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilities2EXT.html)
+    /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilities2EXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilities2EXT.html).
     pub fn get_surface_capabilities_2_ext(&self, surface: &khr::VkSurface) -> Result<ext::VkSurfaceCapabilities2, (VkResult, ext::VkSurfaceCapabilities2)> {
         unsafe {
             let raw_surface = vk_to_raw_value(surface);
@@ -878,7 +878,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceMultisamplePropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceMultisamplePropertiesEXT.html)
+    /// Wrapper for [vkGetPhysicalDeviceMultisamplePropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceMultisamplePropertiesEXT.html).
     pub fn get_multisample_properties(&self, samples: VkSampleCountFlags) -> ext::VkMultisampleProperties {
         unsafe {
             let raw_samples = vk_to_raw_value(&samples);
@@ -896,7 +896,7 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceCalibrateableTimeDomainsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceCalibrateableTimeDomainsEXT.html)
+    /// Wrapper for [vkGetPhysicalDeviceCalibrateableTimeDomainsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceCalibrateableTimeDomainsEXT.html).
     pub fn get_calibrateable_time_domains(&self) -> Result<Vec<ext::VkTimeDomain>, (VkResult, Vec<ext::VkTimeDomain>)> {
         unsafe {
             let mut vk_result = 0;

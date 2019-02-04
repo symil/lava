@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExternalFenceHandleTypeFlags,RawVkExternalFenceHandleTypeFlags};
 
-/// Wrapper for [VkPhysicalDeviceExternalFenceInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceExternalFenceInfo.html)
+/// Wrapper for [VkPhysicalDeviceExternalFenceInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceExternalFenceInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceExternalFenceInfo {
     pub handle_type: VkExternalFenceHandleTypeFlags,

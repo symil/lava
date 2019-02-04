@@ -107,7 +107,7 @@ function listToObj(array) {
 }
 
 function parseField(str) {
-    const match = str.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?;?\s*$/);
+    const match = str.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?\s*;?\s*$/);
 
     if (!match) {
         return null;

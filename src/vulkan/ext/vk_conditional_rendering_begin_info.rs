@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 use vulkan::ext::{VkConditionalRenderingFlags,RawVkConditionalRenderingFlags};
 
-/// Wrapper for [VkConditionalRenderingBeginInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConditionalRenderingBeginInfoEXT.html)
+/// Wrapper for [VkConditionalRenderingBeginInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConditionalRenderingBeginInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkConditionalRenderingBeginInfo<'a> {
     pub buffer: &'a VkBuffer,

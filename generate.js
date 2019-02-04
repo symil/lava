@@ -8,9 +8,9 @@ Download the necessary files from the Vulkan documentation repository in the \`d
 
 --tag <tag>, -t <tag>   Download the files for the specified branch or tag of the \`Vulkan-Docs\` repository (e.g "v1.1.80").
                         Defaults to "master".
---no-download, -nd      Do not download the files from the Vulkan repository, assume they are already there.
+--no-download, -nd      Do not download the files from the Vulkan repository (assume they are already there).
 --no-generate, -ng      Do not generate the library.
---delete, -d            Remove \`src/vulkan/\` before generating the files.
+--delete, -d            Remove the library files before re-generating them.
 `.replace(/^--.*  /gm, str => '\033[1m' + str + '\033[0m');
 
 main();

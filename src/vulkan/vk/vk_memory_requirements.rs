@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryRequirements.html)
+/// Wrapper for [VkMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryRequirements.html).
 #[derive(Debug, Clone)]
 pub struct VkMemoryRequirements {
     pub size: usize,

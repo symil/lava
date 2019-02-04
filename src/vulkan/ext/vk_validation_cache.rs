@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkValidationCache = u64;
 
-/// Wrapper for [VkValidationCacheEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationCacheEXT.html)
+/// Wrapper for [VkValidationCacheEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationCacheEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkValidationCache {
     _handle: RawVkValidationCache,
@@ -74,14 +74,14 @@ impl VkValidationCache {
         self._handle
     }
     
-    /// Wrapper for [vkDestroyValidationCacheEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyValidationCacheEXT.html)
+    /// Wrapper for [vkDestroyValidationCacheEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyValidationCacheEXT.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyValidationCacheEXT)(self._parent_device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkMergeValidationCachesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMergeValidationCachesEXT.html)
+    /// Wrapper for [vkMergeValidationCachesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMergeValidationCachesEXT.html).
     pub fn merge(&self, src_caches: &[&ext::VkValidationCache]) -> Result<(), VkResult> {
         unsafe {
             let raw_src_cache_count = src_caches.len() as u32;
@@ -92,7 +92,7 @@ impl VkValidationCache {
         }
     }
     
-    /// Wrapper for [vkGetValidationCacheDataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetValidationCacheDataEXT.html)
+    /// Wrapper for [vkGetValidationCacheDataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetValidationCacheDataEXT.html).
     pub fn get_data(&self) -> Result<Vec<c_void>, (VkResult, Vec<c_void>)> {
         unsafe {
             let mut vk_result = 0;

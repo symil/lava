@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkMemoryPropertyFlags,RawVkMemoryPropertyFlags};
 
-/// Wrapper for [VkMemoryType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryType.html)
+/// Wrapper for [VkMemoryType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryType.html).
 #[derive(Debug, Clone)]
 pub struct VkMemoryType {
     pub property_flags: VkMemoryPropertyFlags,

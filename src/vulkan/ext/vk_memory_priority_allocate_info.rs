@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkMemoryPriorityAllocateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryPriorityAllocateInfoEXT.html)
+/// Wrapper for [VkMemoryPriorityAllocateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryPriorityAllocateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkMemoryPriorityAllocateInfo {
     pub priority: f32,

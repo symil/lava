@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkSpecializationMapEntry,RawVkSpecializationMapEntry};
 
-/// Wrapper for [VkSpecializationInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSpecializationInfo.html)
+/// Wrapper for [VkSpecializationInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSpecializationInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkSpecializationInfo<'a, 'b> {
     pub map_entries: &'a [VkSpecializationMapEntry],

@@ -17,7 +17,7 @@ use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 use vulkan::vk::{VkShaderModule,RawVkShaderModule};
 use vulkan::vk::{VkSpecializationInfo,RawVkSpecializationInfo};
 
-/// Wrapper for [VkPipelineShaderStageCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineShaderStageCreateInfo.html)
+/// Wrapper for [VkPipelineShaderStageCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineShaderStageCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>
     where

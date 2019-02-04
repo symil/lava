@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceVulkanMemoryModelFeaturesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkanMemoryModelFeaturesKHR.html)
+/// Wrapper for [VkPhysicalDeviceVulkanMemoryModelFeaturesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkanMemoryModelFeaturesKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceVulkanMemoryModelFeatures {
     pub vulkan_memory_model: bool,

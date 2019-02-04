@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkValidationFeatureEnable,RawVkValidationFeatureEnable};
 use vulkan::ext::{VkValidationFeatureDisable,RawVkValidationFeatureDisable};
 
-/// Wrapper for [VkValidationFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationFeaturesEXT.html)
+/// Wrapper for [VkValidationFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationFeaturesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkValidationFeatures<'a, 'b> {
     pub enabled_validation_features: &'a [VkValidationFeatureEnable],

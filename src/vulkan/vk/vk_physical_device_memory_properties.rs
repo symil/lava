@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkMemoryType,RawVkMemoryType};
 use vulkan::vk::{VkMemoryHeap,RawVkMemoryHeap};
 
-/// Wrapper for [VkPhysicalDeviceMemoryProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMemoryProperties.html)
+/// Wrapper for [VkPhysicalDeviceMemoryProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMemoryProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceMemoryProperties {
     pub memory_types: Vec<VkMemoryType>,

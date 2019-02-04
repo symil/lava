@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPipelineCacheCreateFlags,RawVkPipelineCacheCreateFlags};
 
-/// Wrapper for [VkPipelineCacheCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCacheCreateInfo.html)
+/// Wrapper for [VkPipelineCacheCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCacheCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineCacheCreateInfo<'a> {
     pub flags: VkPipelineCacheCreateFlags,

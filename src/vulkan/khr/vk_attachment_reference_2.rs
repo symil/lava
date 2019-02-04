@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 use vulkan::vk::{VkImageAspectFlags,RawVkImageAspectFlags};
 
-/// Wrapper for [VkAttachmentReference2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentReference2KHR.html)
+/// Wrapper for [VkAttachmentReference2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentReference2KHR.html).
 #[derive(Debug, Clone)]
 pub struct VkAttachmentReference2 {
     pub attachment: usize,
