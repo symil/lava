@@ -3,6 +3,17 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkExternalSemaphoreFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalSemaphoreFeatureFlagBits.html)
+///
+/// Use the macro `VkExternalSemaphoreFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkExternalSemaphoreFeatureFlags!(exportable, importable)
+/// ```
+/// ```
+/// VkExternalSemaphoreFeatureFlags {
+///     exportable: true,
+///     importable: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalSemaphoreFeatureFlags {
     pub exportable: bool,
@@ -40,43 +51,45 @@ impl Default for VkExternalSemaphoreFeatureFlags {
 
 impl VkExternalSemaphoreFeatureFlags {
     
-    pub fn none() -> VkExternalSemaphoreFeatureFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkExternalSemaphoreFeatureFlags {
             exportable: false,
             importable: false,
         }
     }
     
-    pub fn all() -> VkExternalSemaphoreFeatureFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkExternalSemaphoreFeatureFlags {
             exportable: true,
             importable: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkExternalSemaphoreFeatureFlags {
-    ( $( $x:ident ),* ) => {
-        VkExternalSemaphoreFeatureFlags {
-            $($x: true,)*
-            ..VkExternalSemaphoreFeatureFlags::none()
-        }
-    }
-}
-
-impl VkExternalSemaphoreFeatureFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.exportable { 0x00000001 } else { 0 }
         + if self.importable { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkExternalSemaphoreFeatureFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkExternalSemaphoreFeatureFlags {
             exportable: value & 0x00000001 > 0,
             importable: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkExternalSemaphoreFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkExternalSemaphoreFeatureFlags {
+            $($x: true,)*
+            ..VkExternalSemaphoreFeatureFlags::none()
         }
     }
 }

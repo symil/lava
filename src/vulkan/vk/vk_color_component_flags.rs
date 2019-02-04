@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkColorComponentFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkColorComponentFlagBits.html)
+///
+/// Use the macro `VkColorComponentFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkColorComponentFlags!(r, g)
+/// ```
+/// ```
+/// VkColorComponentFlags {
+///     r: true,
+///     g: true,
+///     ..VkColorComponentFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkColorComponentFlags {
     pub r: bool,
@@ -48,7 +60,8 @@ impl Default for VkColorComponentFlags {
 
 impl VkColorComponentFlags {
     
-    pub fn none() -> VkColorComponentFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkColorComponentFlags {
             r: false,
             g: false,
@@ -57,7 +70,8 @@ impl VkColorComponentFlags {
         }
     }
     
-    pub fn all() -> VkColorComponentFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkColorComponentFlags {
             r: true,
             g: true,
@@ -65,20 +79,8 @@ impl VkColorComponentFlags {
             a: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkColorComponentFlags {
-    ( $( $x:ident ),* ) => {
-        VkColorComponentFlags {
-            $($x: true,)*
-            ..VkColorComponentFlags::none()
-        }
-    }
-}
-
-impl VkColorComponentFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.r { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkColorComponentFlags {
         + if self.a { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkColorComponentFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkColorComponentFlags {
             r: value & 0x00000001 > 0,
             g: value & 0x00000002 > 0,
             b: value & 0x00000004 > 0,
             a: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkColorComponentFlags {
+    ( $( $x:ident ),* ) => {
+        VkColorComponentFlags {
+            $($x: true,)*
+            ..VkColorComponentFlags::none()
         }
     }
 }

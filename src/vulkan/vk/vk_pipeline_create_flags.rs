@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkPipelineCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCreateFlagBits.html)
+///
+/// Use the macro `VkPipelineCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkPipelineCreateFlags!(disable_optimization, allow_derivatives)
+/// ```
+/// ```
+/// VkPipelineCreateFlags {
+///     disable_optimization: true,
+///     allow_derivatives: true,
+///     ..VkPipelineCreateFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineCreateFlags {
     pub disable_optimization: bool,
@@ -56,7 +68,8 @@ impl Default for VkPipelineCreateFlags {
 
 impl VkPipelineCreateFlags {
     
-    pub fn none() -> VkPipelineCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkPipelineCreateFlags {
             disable_optimization: false,
             allow_derivatives: false,
@@ -67,7 +80,8 @@ impl VkPipelineCreateFlags {
         }
     }
     
-    pub fn all() -> VkPipelineCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkPipelineCreateFlags {
             disable_optimization: true,
             allow_derivatives: true,
@@ -77,20 +91,8 @@ impl VkPipelineCreateFlags {
             defer_compile_nv: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkPipelineCreateFlags {
-    ( $( $x:ident ),* ) => {
-        VkPipelineCreateFlags {
-            $($x: true,)*
-            ..VkPipelineCreateFlags::none()
-        }
-    }
-}
-
-impl VkPipelineCreateFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.disable_optimization { 0x00000001 } else { 0 }
@@ -101,7 +103,8 @@ impl VkPipelineCreateFlags {
         + if self.defer_compile_nv { 0x00000020 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkPipelineCreateFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkPipelineCreateFlags {
             disable_optimization: value & 0x00000001 > 0,
             allow_derivatives: value & 0x00000002 > 0,
@@ -109,6 +112,17 @@ impl VkPipelineCreateFlags {
             view_index_from_device_index: value & 0x00000008 > 0,
             dispatch_base: value & 0x00000010 > 0,
             defer_compile_nv: value & 0x00000020 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkPipelineCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineCreateFlags {
+            $($x: true,)*
+            ..VkPipelineCreateFlags::none()
         }
     }
 }

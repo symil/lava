@@ -3,6 +3,17 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkGeometryFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryFlagBitsNV.html)
+///
+/// Use the macro `VkGeometryFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkGeometryFlags!(opaque, no_duplicate_any_hit_invocation)
+/// ```
+/// ```
+/// VkGeometryFlags {
+///     opaque: true,
+///     no_duplicate_any_hit_invocation: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkGeometryFlags {
     pub opaque: bool,
@@ -40,43 +51,45 @@ impl Default for VkGeometryFlags {
 
 impl VkGeometryFlags {
     
-    pub fn none() -> VkGeometryFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkGeometryFlags {
             opaque: false,
             no_duplicate_any_hit_invocation: false,
         }
     }
     
-    pub fn all() -> VkGeometryFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkGeometryFlags {
             opaque: true,
             no_duplicate_any_hit_invocation: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkGeometryFlags {
-    ( $( $x:ident ),* ) => {
-        VkGeometryFlags {
-            $($x: true,)*
-            ..VkGeometryFlags::none()
-        }
-    }
-}
-
-impl VkGeometryFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.opaque { 0x00000001 } else { 0 }
         + if self.no_duplicate_any_hit_invocation { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkGeometryFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkGeometryFlags {
             opaque: value & 0x00000001 > 0,
             no_duplicate_any_hit_invocation: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkGeometryFlags {
+    ( $( $x:ident ),* ) => {
+        VkGeometryFlags {
+            $($x: true,)*
+            ..VkGeometryFlags::none()
         }
     }
 }

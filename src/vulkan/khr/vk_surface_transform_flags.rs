@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkSurfaceTransformFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceTransformFlagBitsKHR.html)
+///
+/// Use the macro `VkSurfaceTransformFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkSurfaceTransformFlags!(identity, rotate_90)
+/// ```
+/// ```
+/// VkSurfaceTransformFlags {
+///     identity: true,
+///     rotate_90: true,
+///     ..VkSurfaceTransformFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkSurfaceTransformFlags {
     pub identity: bool,
@@ -68,7 +80,8 @@ impl Default for VkSurfaceTransformFlags {
 
 impl VkSurfaceTransformFlags {
     
-    pub fn none() -> VkSurfaceTransformFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkSurfaceTransformFlags {
             identity: false,
             rotate_90: false,
@@ -82,7 +95,8 @@ impl VkSurfaceTransformFlags {
         }
     }
     
-    pub fn all() -> VkSurfaceTransformFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkSurfaceTransformFlags {
             identity: true,
             rotate_90: true,
@@ -95,20 +109,8 @@ impl VkSurfaceTransformFlags {
             inherit: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkSurfaceTransformFlags {
-    ( $( $x:ident ),* ) => {
-        VkSurfaceTransformFlags {
-            $($x: true,)*
-            ..VkSurfaceTransformFlags::none()
-        }
-    }
-}
-
-impl VkSurfaceTransformFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.identity { 0x00000001 } else { 0 }
@@ -122,7 +124,8 @@ impl VkSurfaceTransformFlags {
         + if self.inherit { 0x00000100 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkSurfaceTransformFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkSurfaceTransformFlags {
             identity: value & 0x00000001 > 0,
             rotate_90: value & 0x00000002 > 0,
@@ -133,6 +136,17 @@ impl VkSurfaceTransformFlags {
             horizontal_mirror_rotate_180: value & 0x00000040 > 0,
             horizontal_mirror_rotate_270: value & 0x00000080 > 0,
             inherit: value & 0x00000100 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkSurfaceTransformFlags {
+    ( $( $x:ident ),* ) => {
+        VkSurfaceTransformFlags {
+            $($x: true,)*
+            ..VkSurfaceTransformFlags::none()
         }
     }
 }

@@ -3,6 +3,16 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkSemaphoreImportFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreImportFlagBits.html)
+///
+/// Use the macro `VkSemaphoreImportFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkSemaphoreImportFlags!(temporary)
+/// ```
+/// ```
+/// VkSemaphoreImportFlags {
+///     temporary: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkSemaphoreImportFlags {
     pub temporary: bool,
@@ -36,39 +46,41 @@ impl Default for VkSemaphoreImportFlags {
 
 impl VkSemaphoreImportFlags {
     
-    pub fn none() -> VkSemaphoreImportFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkSemaphoreImportFlags {
             temporary: false,
         }
     }
     
-    pub fn all() -> VkSemaphoreImportFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkSemaphoreImportFlags {
             temporary: true,
         }
     }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.temporary { 0x00000001 } else { 0 }
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
+        VkSemaphoreImportFlags {
+            temporary: value & 0x00000001 > 0,
+        }
+    }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkSemaphoreImportFlags {
     ( $( $x:ident ),* ) => {
         VkSemaphoreImportFlags {
             $($x: true,)*
             ..VkSemaphoreImportFlags::none()
-        }
-    }
-}
-
-impl VkSemaphoreImportFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-        + if self.temporary { 0x00000001 } else { 0 }
-    }
-    
-    pub fn from_u32(value: u32) -> VkSemaphoreImportFlags {
-        VkSemaphoreImportFlags {
-            temporary: value & 0x00000001 > 0,
         }
     }
 }

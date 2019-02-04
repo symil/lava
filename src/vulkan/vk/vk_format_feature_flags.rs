@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkFormatFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatFeatureFlagBits.html)
+///
+/// Use the macro `VkFormatFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkFormatFeatureFlags!(sampled_image, storage_image)
+/// ```
+/// ```
+/// VkFormatFeatureFlags {
+///     sampled_image: true,
+///     storage_image: true,
+///     ..VkFormatFeatureFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkFormatFeatureFlags {
     pub sampled_image: bool,
@@ -132,7 +144,8 @@ impl Default for VkFormatFeatureFlags {
 
 impl VkFormatFeatureFlags {
     
-    pub fn none() -> VkFormatFeatureFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkFormatFeatureFlags {
             sampled_image: false,
             storage_image: false,
@@ -162,7 +175,8 @@ impl VkFormatFeatureFlags {
         }
     }
     
-    pub fn all() -> VkFormatFeatureFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkFormatFeatureFlags {
             sampled_image: true,
             storage_image: true,
@@ -191,20 +205,8 @@ impl VkFormatFeatureFlags {
             fragment_density_map_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkFormatFeatureFlags {
-    ( $( $x:ident ),* ) => {
-        VkFormatFeatureFlags {
-            $($x: true,)*
-            ..VkFormatFeatureFlags::none()
-        }
-    }
-}
-
-impl VkFormatFeatureFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.sampled_image { 0x00000001 } else { 0 }
@@ -234,7 +236,8 @@ impl VkFormatFeatureFlags {
         + if self.fragment_density_map_ext { 0x01000000 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkFormatFeatureFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkFormatFeatureFlags {
             sampled_image: value & 0x00000001 > 0,
             storage_image: value & 0x00000002 > 0,
@@ -261,6 +264,17 @@ impl VkFormatFeatureFlags {
             sampled_image_filter_cubic_img: value & 0x00002000 > 0,
             sampled_image_filter_minmax_ext: value & 0x00010000 > 0,
             fragment_density_map_ext: value & 0x01000000 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkFormatFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkFormatFeatureFlags {
+            $($x: true,)*
+            ..VkFormatFeatureFlags::none()
         }
     }
 }

@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDebugReportFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportFlagBitsEXT.html)
+///
+/// Use the macro `VkDebugReportFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDebugReportFlags!(information, warning)
+/// ```
+/// ```
+/// VkDebugReportFlags {
+///     information: true,
+///     warning: true,
+///     ..VkDebugReportFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugReportFlags {
     pub information: bool,
@@ -52,7 +64,8 @@ impl Default for VkDebugReportFlags {
 
 impl VkDebugReportFlags {
     
-    pub fn none() -> VkDebugReportFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDebugReportFlags {
             information: false,
             warning: false,
@@ -62,7 +75,8 @@ impl VkDebugReportFlags {
         }
     }
     
-    pub fn all() -> VkDebugReportFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDebugReportFlags {
             information: true,
             warning: true,
@@ -71,20 +85,8 @@ impl VkDebugReportFlags {
             debug: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkDebugReportFlags {
-    ( $( $x:ident ),* ) => {
-        VkDebugReportFlags {
-            $($x: true,)*
-            ..VkDebugReportFlags::none()
-        }
-    }
-}
-
-impl VkDebugReportFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.information { 0x00000001 } else { 0 }
@@ -94,13 +96,25 @@ impl VkDebugReportFlags {
         + if self.debug { 0x00000010 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkDebugReportFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDebugReportFlags {
             information: value & 0x00000001 > 0,
             warning: value & 0x00000002 > 0,
             performance_warning: value & 0x00000004 > 0,
             error: value & 0x00000008 > 0,
             debug: value & 0x00000010 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkDebugReportFlags {
+    ( $( $x:ident ),* ) => {
+        VkDebugReportFlags {
+            $($x: true,)*
+            ..VkDebugReportFlags::none()
         }
     }
 }

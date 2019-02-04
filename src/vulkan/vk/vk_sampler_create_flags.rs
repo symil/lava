@@ -3,6 +3,17 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkSamplerCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerCreateFlagBits.html)
+///
+/// Use the macro `VkSamplerCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkSamplerCreateFlags!(subsampled_ext, subsampled_coarse_reconstruction_ext)
+/// ```
+/// ```
+/// VkSamplerCreateFlags {
+///     subsampled_ext: true,
+///     subsampled_coarse_reconstruction_ext: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkSamplerCreateFlags {
     pub subsampled_ext: bool,
@@ -40,43 +51,45 @@ impl Default for VkSamplerCreateFlags {
 
 impl VkSamplerCreateFlags {
     
-    pub fn none() -> VkSamplerCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkSamplerCreateFlags {
             subsampled_ext: false,
             subsampled_coarse_reconstruction_ext: false,
         }
     }
     
-    pub fn all() -> VkSamplerCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkSamplerCreateFlags {
             subsampled_ext: true,
             subsampled_coarse_reconstruction_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkSamplerCreateFlags {
-    ( $( $x:ident ),* ) => {
-        VkSamplerCreateFlags {
-            $($x: true,)*
-            ..VkSamplerCreateFlags::none()
-        }
-    }
-}
-
-impl VkSamplerCreateFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.subsampled_ext { 0x00000001 } else { 0 }
         + if self.subsampled_coarse_reconstruction_ext { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkSamplerCreateFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkSamplerCreateFlags {
             subsampled_ext: value & 0x00000001 > 0,
             subsampled_coarse_reconstruction_ext: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkSamplerCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkSamplerCreateFlags {
+            $($x: true,)*
+            ..VkSamplerCreateFlags::none()
         }
     }
 }

@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkQueueFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFlagBits.html)
+///
+/// Use the macro `VkQueueFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkQueueFlags!(graphics, compute)
+/// ```
+/// ```
+/// VkQueueFlags {
+///     graphics: true,
+///     compute: true,
+///     ..VkQueueFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueueFlags {
     pub graphics: bool,
@@ -52,7 +64,8 @@ impl Default for VkQueueFlags {
 
 impl VkQueueFlags {
     
-    pub fn none() -> VkQueueFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkQueueFlags {
             graphics: false,
             compute: false,
@@ -62,7 +75,8 @@ impl VkQueueFlags {
         }
     }
     
-    pub fn all() -> VkQueueFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkQueueFlags {
             graphics: true,
             compute: true,
@@ -71,20 +85,8 @@ impl VkQueueFlags {
             protected: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkQueueFlags {
-    ( $( $x:ident ),* ) => {
-        VkQueueFlags {
-            $($x: true,)*
-            ..VkQueueFlags::none()
-        }
-    }
-}
-
-impl VkQueueFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.graphics { 0x00000001 } else { 0 }
@@ -94,13 +96,25 @@ impl VkQueueFlags {
         + if self.protected { 0x00000010 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkQueueFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkQueueFlags {
             graphics: value & 0x00000001 > 0,
             compute: value & 0x00000002 > 0,
             transfer: value & 0x00000004 > 0,
             sparse_binding: value & 0x00000008 > 0,
             protected: value & 0x00000010 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkQueueFlags {
+    ( $( $x:ident ),* ) => {
+        VkQueueFlags {
+            $($x: true,)*
+            ..VkQueueFlags::none()
         }
     }
 }

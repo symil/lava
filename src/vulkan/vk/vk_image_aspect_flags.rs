@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkImageAspectFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageAspectFlagBits.html)
+///
+/// Use the macro `VkImageAspectFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkImageAspectFlags!(color, depth)
+/// ```
+/// ```
+/// VkImageAspectFlags {
+///     color: true,
+///     depth: true,
+///     ..VkImageAspectFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageAspectFlags {
     pub color: bool,
@@ -76,7 +88,8 @@ impl Default for VkImageAspectFlags {
 
 impl VkImageAspectFlags {
     
-    pub fn none() -> VkImageAspectFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkImageAspectFlags {
             color: false,
             depth: false,
@@ -92,7 +105,8 @@ impl VkImageAspectFlags {
         }
     }
     
-    pub fn all() -> VkImageAspectFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkImageAspectFlags {
             color: true,
             depth: true,
@@ -107,20 +121,8 @@ impl VkImageAspectFlags {
             memory_plane_3_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkImageAspectFlags {
-    ( $( $x:ident ),* ) => {
-        VkImageAspectFlags {
-            $($x: true,)*
-            ..VkImageAspectFlags::none()
-        }
-    }
-}
-
-impl VkImageAspectFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.color { 0x00000001 } else { 0 }
@@ -136,7 +138,8 @@ impl VkImageAspectFlags {
         + if self.memory_plane_3_ext { 0x00000400 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkImageAspectFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkImageAspectFlags {
             color: value & 0x00000001 > 0,
             depth: value & 0x00000002 > 0,
@@ -149,6 +152,17 @@ impl VkImageAspectFlags {
             memory_plane_1_ext: value & 0x00000100 > 0,
             memory_plane_2_ext: value & 0x00000200 > 0,
             memory_plane_3_ext: value & 0x00000400 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkImageAspectFlags {
+    ( $( $x:ident ),* ) => {
+        VkImageAspectFlags {
+            $($x: true,)*
+            ..VkImageAspectFlags::none()
         }
     }
 }

@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkQueryResultFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryResultFlagBits.html)
+///
+/// Use the macro `VkQueryResultFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkQueryResultFlags!(_64, wait)
+/// ```
+/// ```
+/// VkQueryResultFlags {
+///     _64: true,
+///     wait: true,
+///     ..VkQueryResultFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryResultFlags {
     pub _64: bool,
@@ -48,7 +60,8 @@ impl Default for VkQueryResultFlags {
 
 impl VkQueryResultFlags {
     
-    pub fn none() -> VkQueryResultFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkQueryResultFlags {
             _64: false,
             wait: false,
@@ -57,7 +70,8 @@ impl VkQueryResultFlags {
         }
     }
     
-    pub fn all() -> VkQueryResultFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkQueryResultFlags {
             _64: true,
             wait: true,
@@ -65,20 +79,8 @@ impl VkQueryResultFlags {
             partial: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkQueryResultFlags {
-    ( $( $x:ident ),* ) => {
-        VkQueryResultFlags {
-            $($x: true,)*
-            ..VkQueryResultFlags::none()
-        }
-    }
-}
-
-impl VkQueryResultFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self._64 { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkQueryResultFlags {
         + if self.partial { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkQueryResultFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkQueryResultFlags {
             _64: value & 0x00000001 > 0,
             wait: value & 0x00000002 > 0,
             with_availability: value & 0x00000004 > 0,
             partial: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkQueryResultFlags {
+    ( $( $x:ident ),* ) => {
+        VkQueryResultFlags {
+            $($x: true,)*
+            ..VkQueryResultFlags::none()
         }
     }
 }

@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkBufferUsageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferUsageFlagBits.html)
+///
+/// Use the macro `VkBufferUsageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkBufferUsageFlags!(transfer_src, transfer_dst)
+/// ```
+/// ```
+/// VkBufferUsageFlags {
+///     transfer_src: true,
+///     transfer_dst: true,
+///     ..VkBufferUsageFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkBufferUsageFlags {
     pub transfer_src: bool,
@@ -88,7 +100,8 @@ impl Default for VkBufferUsageFlags {
 
 impl VkBufferUsageFlags {
     
-    pub fn none() -> VkBufferUsageFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkBufferUsageFlags {
             transfer_src: false,
             transfer_dst: false,
@@ -107,7 +120,8 @@ impl VkBufferUsageFlags {
         }
     }
     
-    pub fn all() -> VkBufferUsageFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkBufferUsageFlags {
             transfer_src: true,
             transfer_dst: true,
@@ -125,20 +139,8 @@ impl VkBufferUsageFlags {
             shader_device_address_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkBufferUsageFlags {
-    ( $( $x:ident ),* ) => {
-        VkBufferUsageFlags {
-            $($x: true,)*
-            ..VkBufferUsageFlags::none()
-        }
-    }
-}
-
-impl VkBufferUsageFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.transfer_src { 0x00000001 } else { 0 }
@@ -157,7 +159,8 @@ impl VkBufferUsageFlags {
         + if self.shader_device_address_ext { 0x00020000 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkBufferUsageFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkBufferUsageFlags {
             transfer_src: value & 0x00000001 > 0,
             transfer_dst: value & 0x00000002 > 0,
@@ -173,6 +176,17 @@ impl VkBufferUsageFlags {
             conditional_rendering_ext: value & 0x00000200 > 0,
             ray_tracing_nv: value & 0x00000400 > 0,
             shader_device_address_ext: value & 0x00020000 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkBufferUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkBufferUsageFlags {
+            $($x: true,)*
+            ..VkBufferUsageFlags::none()
         }
     }
 }

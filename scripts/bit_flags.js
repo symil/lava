@@ -39,8 +39,7 @@ function generateVkBitFlagsDefinition(cDef) {
         genImplVkWrappedType(cDef),
         genImplVkRawType(cDef),
         genImplDefault(cDef),
-        genImplFlags(cDef),
-        genImplAsUint(cDef)
+        genImplFlags(cDef)
     ];
 }
 
@@ -57,9 +56,26 @@ function genRawType(def) {
     ];
 }
 
+function genFlagBitsDoc(def) {
+    const fields = def.fields.slice(0, 2).map(f => f.varName);
+
+    return [
+        `Use the macro \`${def.wrappedTypeName}!\` as an alternative method to create a structure. For example, these two snippets return the same value:`,
+        '```',
+        `${def.wrappedTypeName}!(${fields.join(', ')})`,
+        '```',
+        '```',
+        `${def.wrappedTypeName} {`,
+        ...fields.map(f => `    ${f}: true,`),
+        def.fields.length <= 2 ? '' : `    ..${def.wrappedTypeName}::none()`,
+        `}`,
+        '```'
+    ].filter(x => x).map(x => `/// ${x}`).join('\n');
+}
+
 function genWrappedType(def) {
     return [
-        documentType(def),
+        documentType(def, genFlagBitsDoc(def)),
         `#[derive(Debug, Clone, Copy)]`,
         `pub struct ${def.wrappedTypeName}`,
         def.fields.map(field => `pub ${field.varName}: bool,`)
@@ -104,21 +120,12 @@ function formatBitFlagsFieldName(name) {
         .replace(/^(\d)/, '_$1');
 }
 
-function genImplAsUint(def) {
-    return [
-        `impl ${def.wrappedTypeName}`, [
-            `\npub fn to_u32(&self) -> u32`, [
-                `0${def.fields.map(field => `\n+ if self.${field.varName} { ${field.value} } else { 0 }`).join('')}`
-            ],
-            `\npub fn from_u32(value: u32) -> ${def.wrappedTypeName}`, [
-                def.wrappedTypeName,
-                def.fields.map(field => `${field.varName}: value & ${field.value} > 0,`)
-            ]
-        ]
-    ];
-}
+const NONE_DOC = '/// Return a structure with all flags to `false`.\n'
+const ALL_DOC = '/// Return a structure with all flags to `true`.\n'
+const TO_U32_DOC = '/// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).\n';
+const FROM_U32_DOC = '/// Create a structure corresponding to the specified numerical bit flags.\n';
 
-function genImplFlags(def) {
+function genImplFlags(def, isU32 = true) {
     let macroSuffix = '';
 
     // Manually solve conflicts for now
@@ -126,18 +133,34 @@ function genImplFlags(def) {
         macroSuffix = def.extension.capitalize();
     }
 
-    return [
-        `impl ${def.wrappedTypeName}`, [
-            `\npub fn none() -> ${def.wrappedTypeName}`, [
-                def.wrappedTypeName,
-                def.fields.map(field => `${field.varName}: false,`)
-            ],
-            `\npub fn all() -> ${def.wrappedTypeName}`, [
-                def.wrappedTypeName,
-                def.fields.map(field => `${field.varName}: true,`)
-            ]
+    const impl = [
+        `\n${NONE_DOC}pub fn none() -> Self`, [
+            def.wrappedTypeName,
+            def.fields.map(field => `${field.varName}: false,`)
         ],
+        `\n${ALL_DOC}pub fn all() -> Self`, [
+            def.wrappedTypeName,
+            def.fields.map(field => `${field.varName}: true,`)
+        ]
+    ];
+
+    if (isU32) {
+        impl.push(
+            `\n${TO_U32_DOC}pub fn to_u32(&self) -> u32`, [
+                `0${def.fields.map(field => `\n+ if self.${field.varName} { ${field.value} } else { 0 }`).join('')}`
+            ],
+            `\n${FROM_U32_DOC}pub fn from_u32(value: u32) -> Self`, [
+                def.wrappedTypeName,
+                def.fields.map(field => `${field.varName}: value & ${field.value} > 0,`)
+            ]
+        );
+    }
+
+    return [
+        `impl ${def.wrappedTypeName}`,
+        impl,
         ``,
+        `#[doc(hidden)]`,
         `#[macro_export]`,
         `macro_rules! ${def.wrappedTypeName}${macroSuffix}`, [
             `( $( $x:ident ),* ) =>`, [
@@ -152,5 +175,6 @@ function genImplFlags(def) {
 
 module.exports = {
     generateVkBitFlagsDefinition,
-    genImplFlags
+    genImplFlags,
+    genFlagBitsDoc
 };

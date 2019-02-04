@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkBuildAccelerationStructureFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuildAccelerationStructureFlagBitsNV.html)
+///
+/// Use the macro `VkBuildAccelerationStructureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkBuildAccelerationStructureFlags!(allow_update, allow_compaction)
+/// ```
+/// ```
+/// VkBuildAccelerationStructureFlags {
+///     allow_update: true,
+///     allow_compaction: true,
+///     ..VkBuildAccelerationStructureFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkBuildAccelerationStructureFlags {
     pub allow_update: bool,
@@ -52,7 +64,8 @@ impl Default for VkBuildAccelerationStructureFlags {
 
 impl VkBuildAccelerationStructureFlags {
     
-    pub fn none() -> VkBuildAccelerationStructureFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkBuildAccelerationStructureFlags {
             allow_update: false,
             allow_compaction: false,
@@ -62,7 +75,8 @@ impl VkBuildAccelerationStructureFlags {
         }
     }
     
-    pub fn all() -> VkBuildAccelerationStructureFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkBuildAccelerationStructureFlags {
             allow_update: true,
             allow_compaction: true,
@@ -71,20 +85,8 @@ impl VkBuildAccelerationStructureFlags {
             low_memory: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkBuildAccelerationStructureFlags {
-    ( $( $x:ident ),* ) => {
-        VkBuildAccelerationStructureFlags {
-            $($x: true,)*
-            ..VkBuildAccelerationStructureFlags::none()
-        }
-    }
-}
-
-impl VkBuildAccelerationStructureFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.allow_update { 0x00000001 } else { 0 }
@@ -94,13 +96,25 @@ impl VkBuildAccelerationStructureFlags {
         + if self.low_memory { 0x00000010 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkBuildAccelerationStructureFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkBuildAccelerationStructureFlags {
             allow_update: value & 0x00000001 > 0,
             allow_compaction: value & 0x00000002 > 0,
             prefer_fast_trace: value & 0x00000004 > 0,
             prefer_fast_build: value & 0x00000008 > 0,
             low_memory: value & 0x00000010 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkBuildAccelerationStructureFlags {
+    ( $( $x:ident ),* ) => {
+        VkBuildAccelerationStructureFlags {
+            $($x: true,)*
+            ..VkBuildAccelerationStructureFlags::none()
         }
     }
 }

@@ -3,6 +3,16 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkFenceImportFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFenceImportFlagBits.html)
+///
+/// Use the macro `VkFenceImportFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkFenceImportFlags!(temporary)
+/// ```
+/// ```
+/// VkFenceImportFlags {
+///     temporary: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkFenceImportFlags {
     pub temporary: bool,
@@ -36,39 +46,41 @@ impl Default for VkFenceImportFlags {
 
 impl VkFenceImportFlags {
     
-    pub fn none() -> VkFenceImportFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkFenceImportFlags {
             temporary: false,
         }
     }
     
-    pub fn all() -> VkFenceImportFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkFenceImportFlags {
             temporary: true,
         }
     }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.temporary { 0x00000001 } else { 0 }
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
+        VkFenceImportFlags {
+            temporary: value & 0x00000001 > 0,
+        }
+    }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkFenceImportFlags {
     ( $( $x:ident ),* ) => {
         VkFenceImportFlags {
             $($x: true,)*
             ..VkFenceImportFlags::none()
-        }
-    }
-}
-
-impl VkFenceImportFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-        + if self.temporary { 0x00000001 } else { 0 }
-    }
-    
-    pub fn from_u32(value: u32) -> VkFenceImportFlags {
-        VkFenceImportFlags {
-            temporary: value & 0x00000001 > 0,
         }
     }
 }

@@ -3,6 +3,16 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkQueryControlFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryControlFlagBits.html)
+///
+/// Use the macro `VkQueryControlFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkQueryControlFlags!(precise)
+/// ```
+/// ```
+/// VkQueryControlFlags {
+///     precise: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryControlFlags {
     pub precise: bool,
@@ -36,39 +46,41 @@ impl Default for VkQueryControlFlags {
 
 impl VkQueryControlFlags {
     
-    pub fn none() -> VkQueryControlFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkQueryControlFlags {
             precise: false,
         }
     }
     
-    pub fn all() -> VkQueryControlFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkQueryControlFlags {
             precise: true,
         }
     }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.precise { 0x00000001 } else { 0 }
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
+        VkQueryControlFlags {
+            precise: value & 0x00000001 > 0,
+        }
+    }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkQueryControlFlags {
     ( $( $x:ident ),* ) => {
         VkQueryControlFlags {
             $($x: true,)*
             ..VkQueryControlFlags::none()
-        }
-    }
-}
-
-impl VkQueryControlFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-        + if self.precise { 0x00000001 } else { 0 }
-    }
-    
-    pub fn from_u32(value: u32) -> VkQueryControlFlags {
-        VkQueryControlFlags {
-            precise: value & 0x00000001 > 0,
         }
     }
 }

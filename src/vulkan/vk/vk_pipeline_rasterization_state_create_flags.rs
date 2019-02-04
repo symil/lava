@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkPipelineRasterizationStateCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationStateCreateFlagBits.html)
+///
+/// Use the macro `VkPipelineRasterizationStateCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkPipelineRasterizationStateCreateFlags!()
+/// ```
+/// ```
+/// VkPipelineRasterizationStateCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineRasterizationStateCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkPipelineRasterizationStateCreateFlags {
 
 impl VkPipelineRasterizationStateCreateFlags {
     
-    pub fn none() -> VkPipelineRasterizationStateCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkPipelineRasterizationStateCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkPipelineRasterizationStateCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkPipelineRasterizationStateCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkPipelineRasterizationStateCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkPipelineRasterizationStateCreateFlags {
     ( $( $x:ident ),* ) => {
         VkPipelineRasterizationStateCreateFlags {
             $($x: true,)*
             ..VkPipelineRasterizationStateCreateFlags::none()
-        }
-    }
-}
-
-impl VkPipelineRasterizationStateCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkPipelineRasterizationStateCreateFlags {
-        VkPipelineRasterizationStateCreateFlags {
-            
         }
     }
 }

@@ -3,6 +3,17 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkSubpassDescriptionFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionFlagBits.html)
+///
+/// Use the macro `VkSubpassDescriptionFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkSubpassDescriptionFlags!(per_view_attributes_nvx, per_view_position_x_only_nvx)
+/// ```
+/// ```
+/// VkSubpassDescriptionFlags {
+///     per_view_attributes_nvx: true,
+///     per_view_position_x_only_nvx: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkSubpassDescriptionFlags {
     pub per_view_attributes_nvx: bool,
@@ -40,43 +51,45 @@ impl Default for VkSubpassDescriptionFlags {
 
 impl VkSubpassDescriptionFlags {
     
-    pub fn none() -> VkSubpassDescriptionFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkSubpassDescriptionFlags {
             per_view_attributes_nvx: false,
             per_view_position_x_only_nvx: false,
         }
     }
     
-    pub fn all() -> VkSubpassDescriptionFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkSubpassDescriptionFlags {
             per_view_attributes_nvx: true,
             per_view_position_x_only_nvx: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkSubpassDescriptionFlags {
-    ( $( $x:ident ),* ) => {
-        VkSubpassDescriptionFlags {
-            $($x: true,)*
-            ..VkSubpassDescriptionFlags::none()
-        }
-    }
-}
-
-impl VkSubpassDescriptionFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.per_view_attributes_nvx { 0x00000001 } else { 0 }
         + if self.per_view_position_x_only_nvx { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkSubpassDescriptionFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkSubpassDescriptionFlags {
             per_view_attributes_nvx: value & 0x00000001 > 0,
             per_view_position_x_only_nvx: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkSubpassDescriptionFlags {
+    ( $( $x:ident ),* ) => {
+        VkSubpassDescriptionFlags {
+            $($x: true,)*
+            ..VkSubpassDescriptionFlags::none()
         }
     }
 }

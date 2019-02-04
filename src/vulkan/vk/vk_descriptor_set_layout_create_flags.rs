@@ -3,6 +3,17 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDescriptorSetLayoutCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutCreateFlagBits.html)
+///
+/// Use the macro `VkDescriptorSetLayoutCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDescriptorSetLayoutCreateFlags!(push_descriptor_khr, update_after_bind_pool_ext)
+/// ```
+/// ```
+/// VkDescriptorSetLayoutCreateFlags {
+///     push_descriptor_khr: true,
+///     update_after_bind_pool_ext: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorSetLayoutCreateFlags {
     pub push_descriptor_khr: bool,
@@ -40,43 +51,45 @@ impl Default for VkDescriptorSetLayoutCreateFlags {
 
 impl VkDescriptorSetLayoutCreateFlags {
     
-    pub fn none() -> VkDescriptorSetLayoutCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDescriptorSetLayoutCreateFlags {
             push_descriptor_khr: false,
             update_after_bind_pool_ext: false,
         }
     }
     
-    pub fn all() -> VkDescriptorSetLayoutCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDescriptorSetLayoutCreateFlags {
             push_descriptor_khr: true,
             update_after_bind_pool_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkDescriptorSetLayoutCreateFlags {
-    ( $( $x:ident ),* ) => {
-        VkDescriptorSetLayoutCreateFlags {
-            $($x: true,)*
-            ..VkDescriptorSetLayoutCreateFlags::none()
-        }
-    }
-}
-
-impl VkDescriptorSetLayoutCreateFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.push_descriptor_khr { 0x00000001 } else { 0 }
         + if self.update_after_bind_pool_ext { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkDescriptorSetLayoutCreateFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDescriptorSetLayoutCreateFlags {
             push_descriptor_khr: value & 0x00000001 > 0,
             update_after_bind_pool_ext: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkDescriptorSetLayoutCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDescriptorSetLayoutCreateFlags {
+            $($x: true,)*
+            ..VkDescriptorSetLayoutCreateFlags::none()
         }
     }
 }

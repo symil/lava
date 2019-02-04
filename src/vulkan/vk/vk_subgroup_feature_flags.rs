@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkSubgroupFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubgroupFeatureFlagBits.html)
+///
+/// Use the macro `VkSubgroupFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkSubgroupFeatureFlags!(basic, vote)
+/// ```
+/// ```
+/// VkSubgroupFeatureFlags {
+///     basic: true,
+///     vote: true,
+///     ..VkSubgroupFeatureFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkSubgroupFeatureFlags {
     pub basic: bool,
@@ -68,7 +80,8 @@ impl Default for VkSubgroupFeatureFlags {
 
 impl VkSubgroupFeatureFlags {
     
-    pub fn none() -> VkSubgroupFeatureFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkSubgroupFeatureFlags {
             basic: false,
             vote: false,
@@ -82,7 +95,8 @@ impl VkSubgroupFeatureFlags {
         }
     }
     
-    pub fn all() -> VkSubgroupFeatureFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkSubgroupFeatureFlags {
             basic: true,
             vote: true,
@@ -95,20 +109,8 @@ impl VkSubgroupFeatureFlags {
             partitioned_nv: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkSubgroupFeatureFlags {
-    ( $( $x:ident ),* ) => {
-        VkSubgroupFeatureFlags {
-            $($x: true,)*
-            ..VkSubgroupFeatureFlags::none()
-        }
-    }
-}
-
-impl VkSubgroupFeatureFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.basic { 0x00000001 } else { 0 }
@@ -122,7 +124,8 @@ impl VkSubgroupFeatureFlags {
         + if self.partitioned_nv { 0x00000100 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkSubgroupFeatureFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkSubgroupFeatureFlags {
             basic: value & 0x00000001 > 0,
             vote: value & 0x00000002 > 0,
@@ -133,6 +136,17 @@ impl VkSubgroupFeatureFlags {
             clustered: value & 0x00000040 > 0,
             quad: value & 0x00000080 > 0,
             partitioned_nv: value & 0x00000100 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkSubgroupFeatureFlags {
+    ( $( $x:ident ),* ) => {
+        VkSubgroupFeatureFlags {
+            $($x: true,)*
+            ..VkSubgroupFeatureFlags::none()
         }
     }
 }

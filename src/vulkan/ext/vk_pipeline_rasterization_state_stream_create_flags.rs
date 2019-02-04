@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkPipelineRasterizationStateStreamCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationStateStreamCreateFlagBitsEXT.html)
+///
+/// Use the macro `VkPipelineRasterizationStateStreamCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkPipelineRasterizationStateStreamCreateFlags!()
+/// ```
+/// ```
+/// VkPipelineRasterizationStateStreamCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineRasterizationStateStreamCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkPipelineRasterizationStateStreamCreateFlags {
 
 impl VkPipelineRasterizationStateStreamCreateFlags {
     
-    pub fn none() -> VkPipelineRasterizationStateStreamCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkPipelineRasterizationStateStreamCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkPipelineRasterizationStateStreamCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkPipelineRasterizationStateStreamCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkPipelineRasterizationStateStreamCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkPipelineRasterizationStateStreamCreateFlags {
     ( $( $x:ident ),* ) => {
         VkPipelineRasterizationStateStreamCreateFlags {
             $($x: true,)*
             ..VkPipelineRasterizationStateStreamCreateFlags::none()
-        }
-    }
-}
-
-impl VkPipelineRasterizationStateStreamCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkPipelineRasterizationStateStreamCreateFlags {
-        VkPipelineRasterizationStateStreamCreateFlags {
-            
         }
     }
 }

@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkPipelineStageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineStageFlagBits.html)
+///
+/// Use the macro `VkPipelineStageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkPipelineStageFlags!(top_of_pipe, draw_indirect)
+/// ```
+/// ```
+/// VkPipelineStageFlags {
+///     top_of_pipe: true,
+///     draw_indirect: true,
+///     ..VkPipelineStageFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineStageFlags {
     pub top_of_pipe: bool,
@@ -136,7 +148,8 @@ impl Default for VkPipelineStageFlags {
 
 impl VkPipelineStageFlags {
     
-    pub fn none() -> VkPipelineStageFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkPipelineStageFlags {
             top_of_pipe: false,
             draw_indirect: false,
@@ -167,7 +180,8 @@ impl VkPipelineStageFlags {
         }
     }
     
-    pub fn all() -> VkPipelineStageFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkPipelineStageFlags {
             top_of_pipe: true,
             draw_indirect: true,
@@ -197,20 +211,8 @@ impl VkPipelineStageFlags {
             fragment_density_process_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkPipelineStageFlags {
-    ( $( $x:ident ),* ) => {
-        VkPipelineStageFlags {
-            $($x: true,)*
-            ..VkPipelineStageFlags::none()
-        }
-    }
-}
-
-impl VkPipelineStageFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.top_of_pipe { 0x00000001 } else { 0 }
@@ -241,7 +243,8 @@ impl VkPipelineStageFlags {
         + if self.fragment_density_process_ext { 0x00800000 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkPipelineStageFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkPipelineStageFlags {
             top_of_pipe: value & 0x00000001 > 0,
             draw_indirect: value & 0x00000002 > 0,
@@ -269,6 +272,17 @@ impl VkPipelineStageFlags {
             task_shader_nv: value & 0x00080000 > 0,
             mesh_shader_nv: value & 0x00100000 > 0,
             fragment_density_process_ext: value & 0x00800000 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkPipelineStageFlags {
+    ( $( $x:ident ),* ) => {
+        VkPipelineStageFlags {
+            $($x: true,)*
+            ..VkPipelineStageFlags::none()
         }
     }
 }

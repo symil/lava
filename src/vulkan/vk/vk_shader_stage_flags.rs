@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkShaderStageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderStageFlagBits.html)
+///
+/// Use the macro `VkShaderStageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkShaderStageFlags!(vertex, tessellation_control)
+/// ```
+/// ```
+/// VkShaderStageFlags {
+///     vertex: true,
+///     tessellation_control: true,
+///     ..VkShaderStageFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkShaderStageFlags {
     pub vertex: bool,
@@ -92,7 +104,8 @@ impl Default for VkShaderStageFlags {
 
 impl VkShaderStageFlags {
     
-    pub fn none() -> VkShaderStageFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkShaderStageFlags {
             vertex: false,
             tessellation_control: false,
@@ -112,7 +125,8 @@ impl VkShaderStageFlags {
         }
     }
     
-    pub fn all() -> VkShaderStageFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkShaderStageFlags {
             vertex: true,
             tessellation_control: true,
@@ -131,20 +145,8 @@ impl VkShaderStageFlags {
             mesh_nv: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkShaderStageFlags {
-    ( $( $x:ident ),* ) => {
-        VkShaderStageFlags {
-            $($x: true,)*
-            ..VkShaderStageFlags::none()
-        }
-    }
-}
-
-impl VkShaderStageFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.vertex { 0x00000001 } else { 0 }
@@ -164,7 +166,8 @@ impl VkShaderStageFlags {
         + if self.mesh_nv { 0x00000080 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkShaderStageFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkShaderStageFlags {
             vertex: value & 0x00000001 > 0,
             tessellation_control: value & 0x00000002 > 0,
@@ -181,6 +184,17 @@ impl VkShaderStageFlags {
             callable_nv: value & 0x00002000 > 0,
             task_nv: value & 0x00000040 > 0,
             mesh_nv: value & 0x00000080 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkShaderStageFlags {
+    ( $( $x:ident ),* ) => {
+        VkShaderStageFlags {
+            $($x: true,)*
+            ..VkShaderStageFlags::none()
         }
     }
 }

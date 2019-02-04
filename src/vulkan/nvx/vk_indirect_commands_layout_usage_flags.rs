@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkIndirectCommandsLayoutUsageFlagBitsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutUsageFlagBitsNVX.html)
+///
+/// Use the macro `VkIndirectCommandsLayoutUsageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkIndirectCommandsLayoutUsageFlags!(unordered_sequences, sparse_sequences)
+/// ```
+/// ```
+/// VkIndirectCommandsLayoutUsageFlags {
+///     unordered_sequences: true,
+///     sparse_sequences: true,
+///     ..VkIndirectCommandsLayoutUsageFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkIndirectCommandsLayoutUsageFlags {
     pub unordered_sequences: bool,
@@ -48,7 +60,8 @@ impl Default for VkIndirectCommandsLayoutUsageFlags {
 
 impl VkIndirectCommandsLayoutUsageFlags {
     
-    pub fn none() -> VkIndirectCommandsLayoutUsageFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkIndirectCommandsLayoutUsageFlags {
             unordered_sequences: false,
             sparse_sequences: false,
@@ -57,7 +70,8 @@ impl VkIndirectCommandsLayoutUsageFlags {
         }
     }
     
-    pub fn all() -> VkIndirectCommandsLayoutUsageFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkIndirectCommandsLayoutUsageFlags {
             unordered_sequences: true,
             sparse_sequences: true,
@@ -65,20 +79,8 @@ impl VkIndirectCommandsLayoutUsageFlags {
             indexed_sequences: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkIndirectCommandsLayoutUsageFlags {
-    ( $( $x:ident ),* ) => {
-        VkIndirectCommandsLayoutUsageFlags {
-            $($x: true,)*
-            ..VkIndirectCommandsLayoutUsageFlags::none()
-        }
-    }
-}
-
-impl VkIndirectCommandsLayoutUsageFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.unordered_sequences { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkIndirectCommandsLayoutUsageFlags {
         + if self.indexed_sequences { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkIndirectCommandsLayoutUsageFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkIndirectCommandsLayoutUsageFlags {
             unordered_sequences: value & 0x00000001 > 0,
             sparse_sequences: value & 0x00000002 > 0,
             empty_executions: value & 0x00000004 > 0,
             indexed_sequences: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkIndirectCommandsLayoutUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkIndirectCommandsLayoutUsageFlags {
+            $($x: true,)*
+            ..VkIndirectCommandsLayoutUsageFlags::none()
         }
     }
 }

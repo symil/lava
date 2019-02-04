@@ -3,6 +3,17 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkMemoryHeapFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHeapFlagBits.html)
+///
+/// Use the macro `VkMemoryHeapFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkMemoryHeapFlags!(device_local, multi_instance)
+/// ```
+/// ```
+/// VkMemoryHeapFlags {
+///     device_local: true,
+///     multi_instance: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryHeapFlags {
     pub device_local: bool,
@@ -40,43 +51,45 @@ impl Default for VkMemoryHeapFlags {
 
 impl VkMemoryHeapFlags {
     
-    pub fn none() -> VkMemoryHeapFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkMemoryHeapFlags {
             device_local: false,
             multi_instance: false,
         }
     }
     
-    pub fn all() -> VkMemoryHeapFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkMemoryHeapFlags {
             device_local: true,
             multi_instance: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkMemoryHeapFlags {
-    ( $( $x:ident ),* ) => {
-        VkMemoryHeapFlags {
-            $($x: true,)*
-            ..VkMemoryHeapFlags::none()
-        }
-    }
-}
-
-impl VkMemoryHeapFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.device_local { 0x00000001 } else { 0 }
         + if self.multi_instance { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkMemoryHeapFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkMemoryHeapFlags {
             device_local: value & 0x00000001 > 0,
             multi_instance: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkMemoryHeapFlags {
+    ( $( $x:ident ),* ) => {
+        VkMemoryHeapFlags {
+            $($x: true,)*
+            ..VkMemoryHeapFlags::none()
         }
     }
 }

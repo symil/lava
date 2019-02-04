@@ -3,6 +3,17 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkObjectEntryUsageFlagBitsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectEntryUsageFlagBitsNVX.html)
+///
+/// Use the macro `VkObjectEntryUsageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkObjectEntryUsageFlags!(graphics, compute)
+/// ```
+/// ```
+/// VkObjectEntryUsageFlags {
+///     graphics: true,
+///     compute: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkObjectEntryUsageFlags {
     pub graphics: bool,
@@ -40,43 +51,45 @@ impl Default for VkObjectEntryUsageFlags {
 
 impl VkObjectEntryUsageFlags {
     
-    pub fn none() -> VkObjectEntryUsageFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkObjectEntryUsageFlags {
             graphics: false,
             compute: false,
         }
     }
     
-    pub fn all() -> VkObjectEntryUsageFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkObjectEntryUsageFlags {
             graphics: true,
             compute: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkObjectEntryUsageFlags {
-    ( $( $x:ident ),* ) => {
-        VkObjectEntryUsageFlags {
-            $($x: true,)*
-            ..VkObjectEntryUsageFlags::none()
-        }
-    }
-}
-
-impl VkObjectEntryUsageFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.graphics { 0x00000001 } else { 0 }
         + if self.compute { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkObjectEntryUsageFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkObjectEntryUsageFlags {
             graphics: value & 0x00000001 > 0,
             compute: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkObjectEntryUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkObjectEntryUsageFlags {
+            $($x: true,)*
+            ..VkObjectEntryUsageFlags::none()
         }
     }
 }

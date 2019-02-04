@@ -13,6 +13,18 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 
 /// Wrapper for [VkPhysicalDeviceFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFeatures.html)
+///
+/// Use the macro `VkPhysicalDeviceFeatures!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkPhysicalDeviceFeatures!(robust_buffer_access, full_draw_index_uint_32)
+/// ```
+/// ```
+/// VkPhysicalDeviceFeatures {
+///     robust_buffer_access: true,
+///     full_draw_index_uint_32: true,
+///     ..VkPhysicalDeviceFeatures::none()
+/// }
+/// ```
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFeatures {
     pub robust_buffer_access: bool,
@@ -331,7 +343,8 @@ impl VkFree for RawVkPhysicalDeviceFeatures {
 
 impl VkPhysicalDeviceFeatures {
     
-    pub fn none() -> VkPhysicalDeviceFeatures {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkPhysicalDeviceFeatures {
             robust_buffer_access: false,
             full_draw_index_uint_32: false,
@@ -391,7 +404,8 @@ impl VkPhysicalDeviceFeatures {
         }
     }
     
-    pub fn all() -> VkPhysicalDeviceFeatures {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkPhysicalDeviceFeatures {
             robust_buffer_access: true,
             full_draw_index_uint_32: true,
@@ -452,6 +466,7 @@ impl VkPhysicalDeviceFeatures {
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkPhysicalDeviceFeatures {
     ( $( $x:ident ),* ) => {

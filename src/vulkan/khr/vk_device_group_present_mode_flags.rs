@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDeviceGroupPresentModeFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupPresentModeFlagBitsKHR.html)
+///
+/// Use the macro `VkDeviceGroupPresentModeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDeviceGroupPresentModeFlags!(local, remote)
+/// ```
+/// ```
+/// VkDeviceGroupPresentModeFlags {
+///     local: true,
+///     remote: true,
+///     ..VkDeviceGroupPresentModeFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDeviceGroupPresentModeFlags {
     pub local: bool,
@@ -48,7 +60,8 @@ impl Default for VkDeviceGroupPresentModeFlags {
 
 impl VkDeviceGroupPresentModeFlags {
     
-    pub fn none() -> VkDeviceGroupPresentModeFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDeviceGroupPresentModeFlags {
             local: false,
             remote: false,
@@ -57,7 +70,8 @@ impl VkDeviceGroupPresentModeFlags {
         }
     }
     
-    pub fn all() -> VkDeviceGroupPresentModeFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDeviceGroupPresentModeFlags {
             local: true,
             remote: true,
@@ -65,20 +79,8 @@ impl VkDeviceGroupPresentModeFlags {
             local_multi_device: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkDeviceGroupPresentModeFlags {
-    ( $( $x:ident ),* ) => {
-        VkDeviceGroupPresentModeFlags {
-            $($x: true,)*
-            ..VkDeviceGroupPresentModeFlags::none()
-        }
-    }
-}
-
-impl VkDeviceGroupPresentModeFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.local { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkDeviceGroupPresentModeFlags {
         + if self.local_multi_device { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkDeviceGroupPresentModeFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDeviceGroupPresentModeFlags {
             local: value & 0x00000001 > 0,
             remote: value & 0x00000002 > 0,
             sum: value & 0x00000004 > 0,
             local_multi_device: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkDeviceGroupPresentModeFlags {
+    ( $( $x:ident ),* ) => {
+        VkDeviceGroupPresentModeFlags {
+            $($x: true,)*
+            ..VkDeviceGroupPresentModeFlags::none()
         }
     }
 }

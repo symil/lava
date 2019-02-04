@@ -3,6 +3,17 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDescriptorPoolCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPoolCreateFlagBits.html)
+///
+/// Use the macro `VkDescriptorPoolCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDescriptorPoolCreateFlags!(free_descriptor_set, update_after_bind_ext)
+/// ```
+/// ```
+/// VkDescriptorPoolCreateFlags {
+///     free_descriptor_set: true,
+///     update_after_bind_ext: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorPoolCreateFlags {
     pub free_descriptor_set: bool,
@@ -40,43 +51,45 @@ impl Default for VkDescriptorPoolCreateFlags {
 
 impl VkDescriptorPoolCreateFlags {
     
-    pub fn none() -> VkDescriptorPoolCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: false,
             update_after_bind_ext: false,
         }
     }
     
-    pub fn all() -> VkDescriptorPoolCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: true,
             update_after_bind_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkDescriptorPoolCreateFlags {
-    ( $( $x:ident ),* ) => {
-        VkDescriptorPoolCreateFlags {
-            $($x: true,)*
-            ..VkDescriptorPoolCreateFlags::none()
-        }
-    }
-}
-
-impl VkDescriptorPoolCreateFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.free_descriptor_set { 0x00000001 } else { 0 }
         + if self.update_after_bind_ext { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkDescriptorPoolCreateFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: value & 0x00000001 > 0,
             update_after_bind_ext: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkDescriptorPoolCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkDescriptorPoolCreateFlags {
+            $($x: true,)*
+            ..VkDescriptorPoolCreateFlags::none()
         }
     }
 }

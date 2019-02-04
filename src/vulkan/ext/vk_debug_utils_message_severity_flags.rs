@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDebugUtilsMessageSeverityFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessageSeverityFlagBitsEXT.html)
+///
+/// Use the macro `VkDebugUtilsMessageSeverityFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDebugUtilsMessageSeverityFlags!(verbose, info)
+/// ```
+/// ```
+/// VkDebugUtilsMessageSeverityFlags {
+///     verbose: true,
+///     info: true,
+///     ..VkDebugUtilsMessageSeverityFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessageSeverityFlags {
     pub verbose: bool,
@@ -48,7 +60,8 @@ impl Default for VkDebugUtilsMessageSeverityFlags {
 
 impl VkDebugUtilsMessageSeverityFlags {
     
-    pub fn none() -> VkDebugUtilsMessageSeverityFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDebugUtilsMessageSeverityFlags {
             verbose: false,
             info: false,
@@ -57,7 +70,8 @@ impl VkDebugUtilsMessageSeverityFlags {
         }
     }
     
-    pub fn all() -> VkDebugUtilsMessageSeverityFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDebugUtilsMessageSeverityFlags {
             verbose: true,
             info: true,
@@ -65,20 +79,8 @@ impl VkDebugUtilsMessageSeverityFlags {
             error: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkDebugUtilsMessageSeverityFlags {
-    ( $( $x:ident ),* ) => {
-        VkDebugUtilsMessageSeverityFlags {
-            $($x: true,)*
-            ..VkDebugUtilsMessageSeverityFlags::none()
-        }
-    }
-}
-
-impl VkDebugUtilsMessageSeverityFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.verbose { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkDebugUtilsMessageSeverityFlags {
         + if self.error { 0x00001000 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkDebugUtilsMessageSeverityFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDebugUtilsMessageSeverityFlags {
             verbose: value & 0x00000001 > 0,
             info: value & 0x00000010 > 0,
             warning: value & 0x00000100 > 0,
             error: value & 0x00001000 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkDebugUtilsMessageSeverityFlags {
+    ( $( $x:ident ),* ) => {
+        VkDebugUtilsMessageSeverityFlags {
+            $($x: true,)*
+            ..VkDebugUtilsMessageSeverityFlags::none()
         }
     }
 }

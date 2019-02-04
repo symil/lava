@@ -3,6 +3,16 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDeviceQueueCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceQueueCreateFlagBits.html)
+///
+/// Use the macro `VkDeviceQueueCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDeviceQueueCreateFlags!(protected)
+/// ```
+/// ```
+/// VkDeviceQueueCreateFlags {
+///     protected: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDeviceQueueCreateFlags {
     pub protected: bool,
@@ -36,39 +46,41 @@ impl Default for VkDeviceQueueCreateFlags {
 
 impl VkDeviceQueueCreateFlags {
     
-    pub fn none() -> VkDeviceQueueCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDeviceQueueCreateFlags {
             protected: false,
         }
     }
     
-    pub fn all() -> VkDeviceQueueCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDeviceQueueCreateFlags {
             protected: true,
         }
     }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.protected { 0x00000001 } else { 0 }
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
+        VkDeviceQueueCreateFlags {
+            protected: value & 0x00000001 > 0,
+        }
+    }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkDeviceQueueCreateFlags {
     ( $( $x:ident ),* ) => {
         VkDeviceQueueCreateFlags {
             $($x: true,)*
             ..VkDeviceQueueCreateFlags::none()
-        }
-    }
-}
-
-impl VkDeviceQueueCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-        + if self.protected { 0x00000001 } else { 0 }
-    }
-    
-    pub fn from_u32(value: u32) -> VkDeviceQueueCreateFlags {
-        VkDeviceQueueCreateFlags {
-            protected: value & 0x00000001 > 0,
         }
     }
 }

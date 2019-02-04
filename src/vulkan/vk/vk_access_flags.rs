@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkAccessFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccessFlagBits.html)
+///
+/// Use the macro `VkAccessFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkAccessFlags!(indirect_command_read, index_read)
+/// ```
+/// ```
+/// VkAccessFlags {
+///     indirect_command_read: true,
+///     index_read: true,
+///     ..VkAccessFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkAccessFlags {
     pub indirect_command_read: bool,
@@ -144,7 +156,8 @@ impl Default for VkAccessFlags {
 
 impl VkAccessFlags {
     
-    pub fn none() -> VkAccessFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkAccessFlags {
             indirect_command_read: false,
             index_read: false,
@@ -177,7 +190,8 @@ impl VkAccessFlags {
         }
     }
     
-    pub fn all() -> VkAccessFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkAccessFlags {
             indirect_command_read: true,
             index_read: true,
@@ -209,20 +223,8 @@ impl VkAccessFlags {
             fragment_density_map_read_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkAccessFlags {
-    ( $( $x:ident ),* ) => {
-        VkAccessFlags {
-            $($x: true,)*
-            ..VkAccessFlags::none()
-        }
-    }
-}
-
-impl VkAccessFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.indirect_command_read { 0x00000001 } else { 0 }
@@ -255,7 +257,8 @@ impl VkAccessFlags {
         + if self.fragment_density_map_read_ext { 0x01000000 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkAccessFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkAccessFlags {
             indirect_command_read: value & 0x00000001 > 0,
             index_read: value & 0x00000002 > 0,
@@ -285,6 +288,17 @@ impl VkAccessFlags {
             acceleration_structure_read_nv: value & 0x00200000 > 0,
             acceleration_structure_write_nv: value & 0x00400000 > 0,
             fragment_density_map_read_ext: value & 0x01000000 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkAccessFlags {
+    ( $( $x:ident ),* ) => {
+        VkAccessFlags {
+            $($x: true,)*
+            ..VkAccessFlags::none()
         }
     }
 }

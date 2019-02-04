@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkEventCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkEventCreateFlagBits.html)
+///
+/// Use the macro `VkEventCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkEventCreateFlags!()
+/// ```
+/// ```
+/// VkEventCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkEventCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkEventCreateFlags {
 
 impl VkEventCreateFlags {
     
-    pub fn none() -> VkEventCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkEventCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkEventCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkEventCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkEventCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkEventCreateFlags {
     ( $( $x:ident ),* ) => {
         VkEventCreateFlags {
             $($x: true,)*
             ..VkEventCreateFlags::none()
-        }
-    }
-}
-
-impl VkEventCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkEventCreateFlags {
-        VkEventCreateFlags {
-            
         }
     }
 }

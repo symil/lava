@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkStencilFaceFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilFaceFlagBits.html)
+///
+/// Use the macro `VkStencilFaceFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkStencilFaceFlags!(front, back)
+/// ```
+/// ```
+/// VkStencilFaceFlags {
+///     front: true,
+///     back: true,
+///     ..VkStencilFaceFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkStencilFaceFlags {
     pub front: bool,
@@ -44,7 +56,8 @@ impl Default for VkStencilFaceFlags {
 
 impl VkStencilFaceFlags {
     
-    pub fn none() -> VkStencilFaceFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkStencilFaceFlags {
             front: false,
             back: false,
@@ -52,27 +65,16 @@ impl VkStencilFaceFlags {
         }
     }
     
-    pub fn all() -> VkStencilFaceFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkStencilFaceFlags {
             front: true,
             back: true,
             _and_back: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkStencilFaceFlags {
-    ( $( $x:ident ),* ) => {
-        VkStencilFaceFlags {
-            $($x: true,)*
-            ..VkStencilFaceFlags::none()
-        }
-    }
-}
-
-impl VkStencilFaceFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.front { 0x00000001 } else { 0 }
@@ -80,11 +82,23 @@ impl VkStencilFaceFlags {
         + if self._and_back { 0x00000003 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkStencilFaceFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkStencilFaceFlags {
             front: value & 0x00000001 > 0,
             back: value & 0x00000002 > 0,
             _and_back: value & 0x00000003 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkStencilFaceFlags {
+    ( $( $x:ident ),* ) => {
+        VkStencilFaceFlags {
+            $($x: true,)*
+            ..VkStencilFaceFlags::none()
         }
     }
 }

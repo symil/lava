@@ -3,6 +3,16 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkSparseMemoryBindFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseMemoryBindFlagBits.html)
+///
+/// Use the macro `VkSparseMemoryBindFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkSparseMemoryBindFlags!(metadata)
+/// ```
+/// ```
+/// VkSparseMemoryBindFlags {
+///     metadata: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkSparseMemoryBindFlags {
     pub metadata: bool,
@@ -36,39 +46,41 @@ impl Default for VkSparseMemoryBindFlags {
 
 impl VkSparseMemoryBindFlags {
     
-    pub fn none() -> VkSparseMemoryBindFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkSparseMemoryBindFlags {
             metadata: false,
         }
     }
     
-    pub fn all() -> VkSparseMemoryBindFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkSparseMemoryBindFlags {
             metadata: true,
         }
     }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.metadata { 0x00000001 } else { 0 }
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
+        VkSparseMemoryBindFlags {
+            metadata: value & 0x00000001 > 0,
+        }
+    }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkSparseMemoryBindFlags {
     ( $( $x:ident ),* ) => {
         VkSparseMemoryBindFlags {
             $($x: true,)*
             ..VkSparseMemoryBindFlags::none()
-        }
-    }
-}
-
-impl VkSparseMemoryBindFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-        + if self.metadata { 0x00000001 } else { 0 }
-    }
-    
-    pub fn from_u32(value: u32) -> VkSparseMemoryBindFlags {
-        VkSparseMemoryBindFlags {
-            metadata: value & 0x00000001 > 0,
         }
     }
 }

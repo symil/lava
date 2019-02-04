@@ -3,6 +3,16 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkConditionalRenderingFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConditionalRenderingFlagBitsEXT.html)
+///
+/// Use the macro `VkConditionalRenderingFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkConditionalRenderingFlags!(inverted)
+/// ```
+/// ```
+/// VkConditionalRenderingFlags {
+///     inverted: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkConditionalRenderingFlags {
     pub inverted: bool,
@@ -36,39 +46,41 @@ impl Default for VkConditionalRenderingFlags {
 
 impl VkConditionalRenderingFlags {
     
-    pub fn none() -> VkConditionalRenderingFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkConditionalRenderingFlags {
             inverted: false,
         }
     }
     
-    pub fn all() -> VkConditionalRenderingFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkConditionalRenderingFlags {
             inverted: true,
         }
     }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.inverted { 0x00000001 } else { 0 }
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
+        VkConditionalRenderingFlags {
+            inverted: value & 0x00000001 > 0,
+        }
+    }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkConditionalRenderingFlags {
     ( $( $x:ident ),* ) => {
         VkConditionalRenderingFlags {
             $($x: true,)*
             ..VkConditionalRenderingFlags::none()
-        }
-    }
-}
-
-impl VkConditionalRenderingFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-        + if self.inverted { 0x00000001 } else { 0 }
-    }
-    
-    pub fn from_u32(value: u32) -> VkConditionalRenderingFlags {
-        VkConditionalRenderingFlags {
-            inverted: value & 0x00000001 > 0,
         }
     }
 }

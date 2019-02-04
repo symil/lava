@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkBufferCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferCreateFlagBits.html)
+///
+/// Use the macro `VkBufferCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkBufferCreateFlags!(sparse_binding, sparse_residency)
+/// ```
+/// ```
+/// VkBufferCreateFlags {
+///     sparse_binding: true,
+///     sparse_residency: true,
+///     ..VkBufferCreateFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkBufferCreateFlags {
     pub sparse_binding: bool,
@@ -52,7 +64,8 @@ impl Default for VkBufferCreateFlags {
 
 impl VkBufferCreateFlags {
     
-    pub fn none() -> VkBufferCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkBufferCreateFlags {
             sparse_binding: false,
             sparse_residency: false,
@@ -62,7 +75,8 @@ impl VkBufferCreateFlags {
         }
     }
     
-    pub fn all() -> VkBufferCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkBufferCreateFlags {
             sparse_binding: true,
             sparse_residency: true,
@@ -71,20 +85,8 @@ impl VkBufferCreateFlags {
             device_address_capture_replay_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkBufferCreateFlags {
-    ( $( $x:ident ),* ) => {
-        VkBufferCreateFlags {
-            $($x: true,)*
-            ..VkBufferCreateFlags::none()
-        }
-    }
-}
-
-impl VkBufferCreateFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.sparse_binding { 0x00000001 } else { 0 }
@@ -94,13 +96,25 @@ impl VkBufferCreateFlags {
         + if self.device_address_capture_replay_ext { 0x00000010 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkBufferCreateFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkBufferCreateFlags {
             sparse_binding: value & 0x00000001 > 0,
             sparse_residency: value & 0x00000002 > 0,
             sparse_aliased: value & 0x00000004 > 0,
             protected: value & 0x00000008 > 0,
             device_address_capture_replay_ext: value & 0x00000010 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkBufferCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkBufferCreateFlags {
+            $($x: true,)*
+            ..VkBufferCreateFlags::none()
         }
     }
 }

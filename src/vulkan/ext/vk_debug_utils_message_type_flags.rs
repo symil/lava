@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDebugUtilsMessageTypeFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessageTypeFlagBitsEXT.html)
+///
+/// Use the macro `VkDebugUtilsMessageTypeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDebugUtilsMessageTypeFlags!(general, validation)
+/// ```
+/// ```
+/// VkDebugUtilsMessageTypeFlags {
+///     general: true,
+///     validation: true,
+///     ..VkDebugUtilsMessageTypeFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessageTypeFlags {
     pub general: bool,
@@ -44,7 +56,8 @@ impl Default for VkDebugUtilsMessageTypeFlags {
 
 impl VkDebugUtilsMessageTypeFlags {
     
-    pub fn none() -> VkDebugUtilsMessageTypeFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDebugUtilsMessageTypeFlags {
             general: false,
             validation: false,
@@ -52,27 +65,16 @@ impl VkDebugUtilsMessageTypeFlags {
         }
     }
     
-    pub fn all() -> VkDebugUtilsMessageTypeFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDebugUtilsMessageTypeFlags {
             general: true,
             validation: true,
             performance: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkDebugUtilsMessageTypeFlags {
-    ( $( $x:ident ),* ) => {
-        VkDebugUtilsMessageTypeFlags {
-            $($x: true,)*
-            ..VkDebugUtilsMessageTypeFlags::none()
-        }
-    }
-}
-
-impl VkDebugUtilsMessageTypeFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.general { 0x00000001 } else { 0 }
@@ -80,11 +82,23 @@ impl VkDebugUtilsMessageTypeFlags {
         + if self.performance { 0x00000004 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkDebugUtilsMessageTypeFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDebugUtilsMessageTypeFlags {
             general: value & 0x00000001 > 0,
             validation: value & 0x00000002 > 0,
             performance: value & 0x00000004 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkDebugUtilsMessageTypeFlags {
+    ( $( $x:ident ),* ) => {
+        VkDebugUtilsMessageTypeFlags {
+            $($x: true,)*
+            ..VkDebugUtilsMessageTypeFlags::none()
         }
     }
 }

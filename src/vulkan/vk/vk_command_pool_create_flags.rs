@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkCommandPoolCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPoolCreateFlagBits.html)
+///
+/// Use the macro `VkCommandPoolCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkCommandPoolCreateFlags!(transient, reset_command_buffer)
+/// ```
+/// ```
+/// VkCommandPoolCreateFlags {
+///     transient: true,
+///     reset_command_buffer: true,
+///     ..VkCommandPoolCreateFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandPoolCreateFlags {
     pub transient: bool,
@@ -44,7 +56,8 @@ impl Default for VkCommandPoolCreateFlags {
 
 impl VkCommandPoolCreateFlags {
     
-    pub fn none() -> VkCommandPoolCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkCommandPoolCreateFlags {
             transient: false,
             reset_command_buffer: false,
@@ -52,27 +65,16 @@ impl VkCommandPoolCreateFlags {
         }
     }
     
-    pub fn all() -> VkCommandPoolCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkCommandPoolCreateFlags {
             transient: true,
             reset_command_buffer: true,
             protected: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkCommandPoolCreateFlags {
-    ( $( $x:ident ),* ) => {
-        VkCommandPoolCreateFlags {
-            $($x: true,)*
-            ..VkCommandPoolCreateFlags::none()
-        }
-    }
-}
-
-impl VkCommandPoolCreateFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.transient { 0x00000001 } else { 0 }
@@ -80,11 +82,23 @@ impl VkCommandPoolCreateFlags {
         + if self.protected { 0x00000004 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkCommandPoolCreateFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkCommandPoolCreateFlags {
             transient: value & 0x00000001 > 0,
             reset_command_buffer: value & 0x00000002 > 0,
             protected: value & 0x00000004 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkCommandPoolCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkCommandPoolCreateFlags {
+            $($x: true,)*
+            ..VkCommandPoolCreateFlags::none()
         }
     }
 }

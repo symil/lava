@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkResolveModeFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResolveModeFlagBitsKHR.html)
+///
+/// Use the macro `VkResolveModeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkResolveModeFlags!(sample_zero, average)
+/// ```
+/// ```
+/// VkResolveModeFlags {
+///     sample_zero: true,
+///     average: true,
+///     ..VkResolveModeFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkResolveModeFlags {
     pub sample_zero: bool,
@@ -48,7 +60,8 @@ impl Default for VkResolveModeFlags {
 
 impl VkResolveModeFlags {
     
-    pub fn none() -> VkResolveModeFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkResolveModeFlags {
             sample_zero: false,
             average: false,
@@ -57,7 +70,8 @@ impl VkResolveModeFlags {
         }
     }
     
-    pub fn all() -> VkResolveModeFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkResolveModeFlags {
             sample_zero: true,
             average: true,
@@ -65,20 +79,8 @@ impl VkResolveModeFlags {
             max: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkResolveModeFlags {
-    ( $( $x:ident ),* ) => {
-        VkResolveModeFlags {
-            $($x: true,)*
-            ..VkResolveModeFlags::none()
-        }
-    }
-}
-
-impl VkResolveModeFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.sample_zero { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkResolveModeFlags {
         + if self.max { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkResolveModeFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkResolveModeFlags {
             sample_zero: value & 0x00000001 > 0,
             average: value & 0x00000002 > 0,
             min: value & 0x00000004 > 0,
             max: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkResolveModeFlags {
+    ( $( $x:ident ),* ) => {
+        VkResolveModeFlags {
+            $($x: true,)*
+            ..VkResolveModeFlags::none()
         }
     }
 }

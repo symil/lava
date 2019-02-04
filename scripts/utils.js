@@ -585,9 +585,15 @@ function stringToFunction(statement, varName, countVarName, arrayVarName, varNam
     };
 }
 
-function documentType(def) {
+function documentType(def, precision) {
     const typeName = (def.typeName || def.name).replace(/Flags$/, 'FlagBits') + (def.extension || '').toUpperCase();
-    return `/// Wrapper for [${typeName}](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/${typeName}.html)`;
+    let str = `/// Wrapper for [${typeName}](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/${typeName}.html)`;
+
+    if (precision) {
+        str += `\n///\n${precision}`;
+    }
+
+    return str;
 }
 
 module.exports = {

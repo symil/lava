@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkPipelineTessellationStateCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineTessellationStateCreateFlagBits.html)
+///
+/// Use the macro `VkPipelineTessellationStateCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkPipelineTessellationStateCreateFlags!()
+/// ```
+/// ```
+/// VkPipelineTessellationStateCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineTessellationStateCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkPipelineTessellationStateCreateFlags {
 
 impl VkPipelineTessellationStateCreateFlags {
     
-    pub fn none() -> VkPipelineTessellationStateCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkPipelineTessellationStateCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkPipelineTessellationStateCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkPipelineTessellationStateCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkPipelineTessellationStateCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkPipelineTessellationStateCreateFlags {
     ( $( $x:ident ),* ) => {
         VkPipelineTessellationStateCreateFlags {
             $($x: true,)*
             ..VkPipelineTessellationStateCreateFlags::none()
-        }
-    }
-}
-
-impl VkPipelineTessellationStateCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkPipelineTessellationStateCreateFlags {
-        VkPipelineTessellationStateCreateFlags {
-            
         }
     }
 }

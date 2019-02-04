@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkMemoryPropertyFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryPropertyFlagBits.html)
+///
+/// Use the macro `VkMemoryPropertyFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkMemoryPropertyFlags!(device_local, host_visible)
+/// ```
+/// ```
+/// VkMemoryPropertyFlags {
+///     device_local: true,
+///     host_visible: true,
+///     ..VkMemoryPropertyFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkMemoryPropertyFlags {
     pub device_local: bool,
@@ -56,7 +68,8 @@ impl Default for VkMemoryPropertyFlags {
 
 impl VkMemoryPropertyFlags {
     
-    pub fn none() -> VkMemoryPropertyFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkMemoryPropertyFlags {
             device_local: false,
             host_visible: false,
@@ -67,7 +80,8 @@ impl VkMemoryPropertyFlags {
         }
     }
     
-    pub fn all() -> VkMemoryPropertyFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkMemoryPropertyFlags {
             device_local: true,
             host_visible: true,
@@ -77,20 +91,8 @@ impl VkMemoryPropertyFlags {
             protected: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkMemoryPropertyFlags {
-    ( $( $x:ident ),* ) => {
-        VkMemoryPropertyFlags {
-            $($x: true,)*
-            ..VkMemoryPropertyFlags::none()
-        }
-    }
-}
-
-impl VkMemoryPropertyFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.device_local { 0x00000001 } else { 0 }
@@ -101,7 +103,8 @@ impl VkMemoryPropertyFlags {
         + if self.protected { 0x00000020 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkMemoryPropertyFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkMemoryPropertyFlags {
             device_local: value & 0x00000001 > 0,
             host_visible: value & 0x00000002 > 0,
@@ -109,6 +112,17 @@ impl VkMemoryPropertyFlags {
             host_cached: value & 0x00000008 > 0,
             lazily_allocated: value & 0x00000010 > 0,
             protected: value & 0x00000020 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkMemoryPropertyFlags {
+    ( $( $x:ident ),* ) => {
+        VkMemoryPropertyFlags {
+            $($x: true,)*
+            ..VkMemoryPropertyFlags::none()
         }
     }
 }

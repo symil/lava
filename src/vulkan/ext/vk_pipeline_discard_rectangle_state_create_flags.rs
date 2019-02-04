@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkPipelineDiscardRectangleStateCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDiscardRectangleStateCreateFlagBitsEXT.html)
+///
+/// Use the macro `VkPipelineDiscardRectangleStateCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkPipelineDiscardRectangleStateCreateFlags!()
+/// ```
+/// ```
+/// VkPipelineDiscardRectangleStateCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineDiscardRectangleStateCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkPipelineDiscardRectangleStateCreateFlags {
 
 impl VkPipelineDiscardRectangleStateCreateFlags {
     
-    pub fn none() -> VkPipelineDiscardRectangleStateCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkPipelineDiscardRectangleStateCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkPipelineDiscardRectangleStateCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkPipelineDiscardRectangleStateCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkPipelineDiscardRectangleStateCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkPipelineDiscardRectangleStateCreateFlags {
     ( $( $x:ident ),* ) => {
         VkPipelineDiscardRectangleStateCreateFlags {
             $($x: true,)*
             ..VkPipelineDiscardRectangleStateCreateFlags::none()
-        }
-    }
-}
-
-impl VkPipelineDiscardRectangleStateCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkPipelineDiscardRectangleStateCreateFlags {
-        VkPipelineDiscardRectangleStateCreateFlags {
-            
         }
     }
 }

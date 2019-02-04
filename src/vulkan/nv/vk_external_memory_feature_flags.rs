@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkExternalMemoryFeatureFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryFeatureFlagBitsNV.html)
+///
+/// Use the macro `VkExternalMemoryFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkExternalMemoryFeatureFlags!(dedicated_only, exportable)
+/// ```
+/// ```
+/// VkExternalMemoryFeatureFlags {
+///     dedicated_only: true,
+///     exportable: true,
+///     ..VkExternalMemoryFeatureFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalMemoryFeatureFlags {
     pub dedicated_only: bool,
@@ -44,7 +56,8 @@ impl Default for VkExternalMemoryFeatureFlags {
 
 impl VkExternalMemoryFeatureFlags {
     
-    pub fn none() -> VkExternalMemoryFeatureFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkExternalMemoryFeatureFlags {
             dedicated_only: false,
             exportable: false,
@@ -52,27 +65,16 @@ impl VkExternalMemoryFeatureFlags {
         }
     }
     
-    pub fn all() -> VkExternalMemoryFeatureFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkExternalMemoryFeatureFlags {
             dedicated_only: true,
             exportable: true,
             importable: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkExternalMemoryFeatureFlagsNv {
-    ( $( $x:ident ),* ) => {
-        VkExternalMemoryFeatureFlags {
-            $($x: true,)*
-            ..VkExternalMemoryFeatureFlags::none()
-        }
-    }
-}
-
-impl VkExternalMemoryFeatureFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.dedicated_only { 0x00000001 } else { 0 }
@@ -80,11 +82,23 @@ impl VkExternalMemoryFeatureFlags {
         + if self.importable { 0x00000004 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkExternalMemoryFeatureFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkExternalMemoryFeatureFlags {
             dedicated_only: value & 0x00000001 > 0,
             exportable: value & 0x00000002 > 0,
             importable: value & 0x00000004 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkExternalMemoryFeatureFlagsNv {
+    ( $( $x:ident ),* ) => {
+        VkExternalMemoryFeatureFlags {
+            $($x: true,)*
+            ..VkExternalMemoryFeatureFlags::none()
         }
     }
 }

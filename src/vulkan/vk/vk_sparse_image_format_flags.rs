@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkSparseImageFormatFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageFormatFlagBits.html)
+///
+/// Use the macro `VkSparseImageFormatFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkSparseImageFormatFlags!(single_miptail, aligned_mip_size)
+/// ```
+/// ```
+/// VkSparseImageFormatFlags {
+///     single_miptail: true,
+///     aligned_mip_size: true,
+///     ..VkSparseImageFormatFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkSparseImageFormatFlags {
     pub single_miptail: bool,
@@ -44,7 +56,8 @@ impl Default for VkSparseImageFormatFlags {
 
 impl VkSparseImageFormatFlags {
     
-    pub fn none() -> VkSparseImageFormatFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkSparseImageFormatFlags {
             single_miptail: false,
             aligned_mip_size: false,
@@ -52,27 +65,16 @@ impl VkSparseImageFormatFlags {
         }
     }
     
-    pub fn all() -> VkSparseImageFormatFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkSparseImageFormatFlags {
             single_miptail: true,
             aligned_mip_size: true,
             nonstandard_block_size: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkSparseImageFormatFlags {
-    ( $( $x:ident ),* ) => {
-        VkSparseImageFormatFlags {
-            $($x: true,)*
-            ..VkSparseImageFormatFlags::none()
-        }
-    }
-}
-
-impl VkSparseImageFormatFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.single_miptail { 0x00000001 } else { 0 }
@@ -80,11 +82,23 @@ impl VkSparseImageFormatFlags {
         + if self.nonstandard_block_size { 0x00000004 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkSparseImageFormatFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkSparseImageFormatFlags {
             single_miptail: value & 0x00000001 > 0,
             aligned_mip_size: value & 0x00000002 > 0,
             nonstandard_block_size: value & 0x00000004 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkSparseImageFormatFlags {
+    ( $( $x:ident ),* ) => {
+        VkSparseImageFormatFlags {
+            $($x: true,)*
+            ..VkSparseImageFormatFlags::none()
         }
     }
 }

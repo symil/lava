@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkCullModeFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCullModeFlagBits.html)
+///
+/// Use the macro `VkCullModeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkCullModeFlags!(front, back)
+/// ```
+/// ```
+/// VkCullModeFlags {
+///     front: true,
+///     back: true,
+///     ..VkCullModeFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkCullModeFlags {
     pub front: bool,
@@ -44,7 +56,8 @@ impl Default for VkCullModeFlags {
 
 impl VkCullModeFlags {
     
-    pub fn none() -> VkCullModeFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkCullModeFlags {
             front: false,
             back: false,
@@ -52,27 +65,16 @@ impl VkCullModeFlags {
         }
     }
     
-    pub fn all() -> VkCullModeFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkCullModeFlags {
             front: true,
             back: true,
             front_and_back: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkCullModeFlags {
-    ( $( $x:ident ),* ) => {
-        VkCullModeFlags {
-            $($x: true,)*
-            ..VkCullModeFlags::none()
-        }
-    }
-}
-
-impl VkCullModeFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.front { 0x00000001 } else { 0 }
@@ -80,11 +82,23 @@ impl VkCullModeFlags {
         + if self.front_and_back { 0x00000003 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkCullModeFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkCullModeFlags {
             front: value & 0x00000001 > 0,
             back: value & 0x00000002 > 0,
             front_and_back: value & 0x00000003 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkCullModeFlags {
+    ( $( $x:ident ),* ) => {
+        VkCullModeFlags {
+            $($x: true,)*
+            ..VkCullModeFlags::none()
         }
     }
 }

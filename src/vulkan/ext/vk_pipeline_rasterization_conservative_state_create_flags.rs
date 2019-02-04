@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkPipelineRasterizationConservativeStateCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationConservativeStateCreateFlagBitsEXT.html)
+///
+/// Use the macro `VkPipelineRasterizationConservativeStateCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkPipelineRasterizationConservativeStateCreateFlags!()
+/// ```
+/// ```
+/// VkPipelineRasterizationConservativeStateCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineRasterizationConservativeStateCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkPipelineRasterizationConservativeStateCreateFlags {
 
 impl VkPipelineRasterizationConservativeStateCreateFlags {
     
-    pub fn none() -> VkPipelineRasterizationConservativeStateCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkPipelineRasterizationConservativeStateCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkPipelineRasterizationConservativeStateCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkPipelineRasterizationConservativeStateCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkPipelineRasterizationConservativeStateCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkPipelineRasterizationConservativeStateCreateFlags {
     ( $( $x:ident ),* ) => {
         VkPipelineRasterizationConservativeStateCreateFlags {
             $($x: true,)*
             ..VkPipelineRasterizationConservativeStateCreateFlags::none()
-        }
-    }
-}
-
-impl VkPipelineRasterizationConservativeStateCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkPipelineRasterizationConservativeStateCreateFlags {
-        VkPipelineRasterizationConservativeStateCreateFlags {
-            
         }
     }
 }

@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkQueryPoolCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPoolCreateFlagBits.html)
+///
+/// Use the macro `VkQueryPoolCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkQueryPoolCreateFlags!()
+/// ```
+/// ```
+/// VkQueryPoolCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryPoolCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkQueryPoolCreateFlags {
 
 impl VkQueryPoolCreateFlags {
     
-    pub fn none() -> VkQueryPoolCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkQueryPoolCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkQueryPoolCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkQueryPoolCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkQueryPoolCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkQueryPoolCreateFlags {
     ( $( $x:ident ),* ) => {
         VkQueryPoolCreateFlags {
             $($x: true,)*
             ..VkQueryPoolCreateFlags::none()
-        }
-    }
-}
-
-impl VkQueryPoolCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkQueryPoolCreateFlags {
-        VkQueryPoolCreateFlags {
-            
         }
     }
 }

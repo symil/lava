@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkExternalFenceHandleTypeFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalFenceHandleTypeFlagBits.html)
+///
+/// Use the macro `VkExternalFenceHandleTypeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkExternalFenceHandleTypeFlags!(opaque_fd, opaque_win_32)
+/// ```
+/// ```
+/// VkExternalFenceHandleTypeFlags {
+///     opaque_fd: true,
+///     opaque_win_32: true,
+///     ..VkExternalFenceHandleTypeFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalFenceHandleTypeFlags {
     pub opaque_fd: bool,
@@ -48,7 +60,8 @@ impl Default for VkExternalFenceHandleTypeFlags {
 
 impl VkExternalFenceHandleTypeFlags {
     
-    pub fn none() -> VkExternalFenceHandleTypeFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkExternalFenceHandleTypeFlags {
             opaque_fd: false,
             opaque_win_32: false,
@@ -57,7 +70,8 @@ impl VkExternalFenceHandleTypeFlags {
         }
     }
     
-    pub fn all() -> VkExternalFenceHandleTypeFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkExternalFenceHandleTypeFlags {
             opaque_fd: true,
             opaque_win_32: true,
@@ -65,20 +79,8 @@ impl VkExternalFenceHandleTypeFlags {
             sync_fd: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkExternalFenceHandleTypeFlags {
-    ( $( $x:ident ),* ) => {
-        VkExternalFenceHandleTypeFlags {
-            $($x: true,)*
-            ..VkExternalFenceHandleTypeFlags::none()
-        }
-    }
-}
-
-impl VkExternalFenceHandleTypeFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.opaque_fd { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkExternalFenceHandleTypeFlags {
         + if self.sync_fd { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkExternalFenceHandleTypeFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkExternalFenceHandleTypeFlags {
             opaque_fd: value & 0x00000001 > 0,
             opaque_win_32: value & 0x00000002 > 0,
             opaque_win_32_kmt: value & 0x00000004 > 0,
             sync_fd: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkExternalFenceHandleTypeFlags {
+    ( $( $x:ident ),* ) => {
+        VkExternalFenceHandleTypeFlags {
+            $($x: true,)*
+            ..VkExternalFenceHandleTypeFlags::none()
         }
     }
 }

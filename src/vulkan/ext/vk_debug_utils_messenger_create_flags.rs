@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDebugUtilsMessengerCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCreateFlagBitsEXT.html)
+///
+/// Use the macro `VkDebugUtilsMessengerCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDebugUtilsMessengerCreateFlags!()
+/// ```
+/// ```
+/// VkDebugUtilsMessengerCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessengerCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkDebugUtilsMessengerCreateFlags {
 
 impl VkDebugUtilsMessengerCreateFlags {
     
-    pub fn none() -> VkDebugUtilsMessengerCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDebugUtilsMessengerCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkDebugUtilsMessengerCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkDebugUtilsMessengerCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDebugUtilsMessengerCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkDebugUtilsMessengerCreateFlags {
     ( $( $x:ident ),* ) => {
         VkDebugUtilsMessengerCreateFlags {
             $($x: true,)*
             ..VkDebugUtilsMessengerCreateFlags::none()
-        }
-    }
-}
-
-impl VkDebugUtilsMessengerCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkDebugUtilsMessengerCreateFlags {
-        VkDebugUtilsMessengerCreateFlags {
-            
         }
     }
 }

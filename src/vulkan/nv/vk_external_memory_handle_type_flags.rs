@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkExternalMemoryHandleTypeFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryHandleTypeFlagBitsNV.html)
+///
+/// Use the macro `VkExternalMemoryHandleTypeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkExternalMemoryHandleTypeFlags!(opaque_win_32, opaque_win_32_kmt)
+/// ```
+/// ```
+/// VkExternalMemoryHandleTypeFlags {
+///     opaque_win_32: true,
+///     opaque_win_32_kmt: true,
+///     ..VkExternalMemoryHandleTypeFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalMemoryHandleTypeFlags {
     pub opaque_win_32: bool,
@@ -48,7 +60,8 @@ impl Default for VkExternalMemoryHandleTypeFlags {
 
 impl VkExternalMemoryHandleTypeFlags {
     
-    pub fn none() -> VkExternalMemoryHandleTypeFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkExternalMemoryHandleTypeFlags {
             opaque_win_32: false,
             opaque_win_32_kmt: false,
@@ -57,7 +70,8 @@ impl VkExternalMemoryHandleTypeFlags {
         }
     }
     
-    pub fn all() -> VkExternalMemoryHandleTypeFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkExternalMemoryHandleTypeFlags {
             opaque_win_32: true,
             opaque_win_32_kmt: true,
@@ -65,20 +79,8 @@ impl VkExternalMemoryHandleTypeFlags {
             d_3d_11_image_kmt: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkExternalMemoryHandleTypeFlagsNv {
-    ( $( $x:ident ),* ) => {
-        VkExternalMemoryHandleTypeFlags {
-            $($x: true,)*
-            ..VkExternalMemoryHandleTypeFlags::none()
-        }
-    }
-}
-
-impl VkExternalMemoryHandleTypeFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.opaque_win_32 { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkExternalMemoryHandleTypeFlags {
         + if self.d_3d_11_image_kmt { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkExternalMemoryHandleTypeFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkExternalMemoryHandleTypeFlags {
             opaque_win_32: value & 0x00000001 > 0,
             opaque_win_32_kmt: value & 0x00000002 > 0,
             d_3d_11_image: value & 0x00000004 > 0,
             d_3d_11_image_kmt: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkExternalMemoryHandleTypeFlagsNv {
+    ( $( $x:ident ),* ) => {
+        VkExternalMemoryHandleTypeFlags {
+            $($x: true,)*
+            ..VkExternalMemoryHandleTypeFlags::none()
         }
     }
 }

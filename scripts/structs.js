@@ -1,6 +1,6 @@
 const { getRawVkTypeName, getWrappedVkTypeName, getFieldsInformation, addUsesToSet, isStructOrHandle, isOutputHandleStruct, documentType } = require('./utils');
 const { getStruct } = require('./parse');
-const { genImplFlags } = require('./bit_flags');
+const { genImplFlags, genFlagBitsDoc } = require('./bit_flags');
 
 function generateVkStructDefinition(cDef) {
     const def = {
@@ -33,14 +33,14 @@ function generateVkStructDefinition(cDef) {
 
     return [
         genUses(def),
-        getWrappedStructDeclaration(def),
+        getWrappedStructDeclaration(def, isFlags),
         genRawStructDeclaration(def),
         genImplVkWrappedType(def),
         genImplVkRawType(def),
         genImplDefault(def),
         genImplVkSetup(def),
         genImplVkFree(def),
-        isFlags ? genImplFlags(def) : null
+        isFlags ? genImplFlags(def, false) : null
     ];
 }
 
@@ -80,12 +80,12 @@ function genRawStructDeclaration(cDef) {
     ];
 }
 
-function getWrappedStructDeclaration(def) {
+function getWrappedStructDeclaration(def, isFlags) {
     const fields = getWrappedFields(def);
     const derivedTraits = ['Debug', 'Clone'];
     
     return [
-        documentType(def),
+        documentType(def, isFlags ? genFlagBitsDoc(def) : null),
         `#[derive(${derivedTraits.join(', ')})]`,
         `pub struct ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`,
             fields.map(field => `pub ${field.varName}: ${field.wrappedType},`)

@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkSampleCountFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSampleCountFlagBits.html)
+///
+/// Use the macro `VkSampleCountFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkSampleCountFlags!(_1, _2)
+/// ```
+/// ```
+/// VkSampleCountFlags {
+///     _1: true,
+///     _2: true,
+///     ..VkSampleCountFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkSampleCountFlags {
     pub _1: bool,
@@ -60,7 +72,8 @@ impl Default for VkSampleCountFlags {
 
 impl VkSampleCountFlags {
     
-    pub fn none() -> VkSampleCountFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkSampleCountFlags {
             _1: false,
             _2: false,
@@ -72,7 +85,8 @@ impl VkSampleCountFlags {
         }
     }
     
-    pub fn all() -> VkSampleCountFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkSampleCountFlags {
             _1: true,
             _2: true,
@@ -83,20 +97,8 @@ impl VkSampleCountFlags {
             _64: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkSampleCountFlags {
-    ( $( $x:ident ),* ) => {
-        VkSampleCountFlags {
-            $($x: true,)*
-            ..VkSampleCountFlags::none()
-        }
-    }
-}
-
-impl VkSampleCountFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self._1 { 0x00000001 } else { 0 }
@@ -108,7 +110,8 @@ impl VkSampleCountFlags {
         + if self._64 { 0x00000040 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkSampleCountFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkSampleCountFlags {
             _1: value & 0x00000001 > 0,
             _2: value & 0x00000002 > 0,
@@ -117,6 +120,17 @@ impl VkSampleCountFlags {
             _16: value & 0x00000010 > 0,
             _32: value & 0x00000020 > 0,
             _64: value & 0x00000040 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkSampleCountFlags {
+    ( $( $x:ident ),* ) => {
+        VkSampleCountFlags {
+            $($x: true,)*
+            ..VkSampleCountFlags::none()
         }
     }
 }

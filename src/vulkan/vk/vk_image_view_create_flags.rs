@@ -3,6 +3,16 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkImageViewCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewCreateFlagBits.html)
+///
+/// Use the macro `VkImageViewCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkImageViewCreateFlags!(fragment_density_map_dynamic_ext)
+/// ```
+/// ```
+/// VkImageViewCreateFlags {
+///     fragment_density_map_dynamic_ext: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageViewCreateFlags {
     pub fragment_density_map_dynamic_ext: bool,
@@ -36,39 +46,41 @@ impl Default for VkImageViewCreateFlags {
 
 impl VkImageViewCreateFlags {
     
-    pub fn none() -> VkImageViewCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkImageViewCreateFlags {
             fragment_density_map_dynamic_ext: false,
         }
     }
     
-    pub fn all() -> VkImageViewCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkImageViewCreateFlags {
             fragment_density_map_dynamic_ext: true,
         }
     }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.fragment_density_map_dynamic_ext { 0x00000001 } else { 0 }
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
+        VkImageViewCreateFlags {
+            fragment_density_map_dynamic_ext: value & 0x00000001 > 0,
+        }
+    }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkImageViewCreateFlags {
     ( $( $x:ident ),* ) => {
         VkImageViewCreateFlags {
             $($x: true,)*
             ..VkImageViewCreateFlags::none()
-        }
-    }
-}
-
-impl VkImageViewCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-        + if self.fragment_density_map_dynamic_ext { 0x00000001 } else { 0 }
-    }
-    
-    pub fn from_u32(value: u32) -> VkImageViewCreateFlags {
-        VkImageViewCreateFlags {
-            fragment_density_map_dynamic_ext: value & 0x00000001 > 0,
         }
     }
 }

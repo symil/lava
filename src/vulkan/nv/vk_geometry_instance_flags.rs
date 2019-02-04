@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkGeometryInstanceFlagBitsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryInstanceFlagBitsNV.html)
+///
+/// Use the macro `VkGeometryInstanceFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkGeometryInstanceFlags!(triangle_cull_disable, triangle_front_counterclockwise)
+/// ```
+/// ```
+/// VkGeometryInstanceFlags {
+///     triangle_cull_disable: true,
+///     triangle_front_counterclockwise: true,
+///     ..VkGeometryInstanceFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkGeometryInstanceFlags {
     pub triangle_cull_disable: bool,
@@ -48,7 +60,8 @@ impl Default for VkGeometryInstanceFlags {
 
 impl VkGeometryInstanceFlags {
     
-    pub fn none() -> VkGeometryInstanceFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkGeometryInstanceFlags {
             triangle_cull_disable: false,
             triangle_front_counterclockwise: false,
@@ -57,7 +70,8 @@ impl VkGeometryInstanceFlags {
         }
     }
     
-    pub fn all() -> VkGeometryInstanceFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkGeometryInstanceFlags {
             triangle_cull_disable: true,
             triangle_front_counterclockwise: true,
@@ -65,20 +79,8 @@ impl VkGeometryInstanceFlags {
             force_no_opaque: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkGeometryInstanceFlags {
-    ( $( $x:ident ),* ) => {
-        VkGeometryInstanceFlags {
-            $($x: true,)*
-            ..VkGeometryInstanceFlags::none()
-        }
-    }
-}
-
-impl VkGeometryInstanceFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.triangle_cull_disable { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkGeometryInstanceFlags {
         + if self.force_no_opaque { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkGeometryInstanceFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkGeometryInstanceFlags {
             triangle_cull_disable: value & 0x00000001 > 0,
             triangle_front_counterclockwise: value & 0x00000002 > 0,
             force_opaque: value & 0x00000004 > 0,
             force_no_opaque: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkGeometryInstanceFlags {
+    ( $( $x:ident ),* ) => {
+        VkGeometryInstanceFlags {
+            $($x: true,)*
+            ..VkGeometryInstanceFlags::none()
         }
     }
 }

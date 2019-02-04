@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkCompositeAlphaFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCompositeAlphaFlagBitsKHR.html)
+///
+/// Use the macro `VkCompositeAlphaFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkCompositeAlphaFlags!(opaque, pre_multiplied)
+/// ```
+/// ```
+/// VkCompositeAlphaFlags {
+///     opaque: true,
+///     pre_multiplied: true,
+///     ..VkCompositeAlphaFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkCompositeAlphaFlags {
     pub opaque: bool,
@@ -48,7 +60,8 @@ impl Default for VkCompositeAlphaFlags {
 
 impl VkCompositeAlphaFlags {
     
-    pub fn none() -> VkCompositeAlphaFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkCompositeAlphaFlags {
             opaque: false,
             pre_multiplied: false,
@@ -57,7 +70,8 @@ impl VkCompositeAlphaFlags {
         }
     }
     
-    pub fn all() -> VkCompositeAlphaFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkCompositeAlphaFlags {
             opaque: true,
             pre_multiplied: true,
@@ -65,20 +79,8 @@ impl VkCompositeAlphaFlags {
             inherit: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkCompositeAlphaFlags {
-    ( $( $x:ident ),* ) => {
-        VkCompositeAlphaFlags {
-            $($x: true,)*
-            ..VkCompositeAlphaFlags::none()
-        }
-    }
-}
-
-impl VkCompositeAlphaFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.opaque { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkCompositeAlphaFlags {
         + if self.inherit { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkCompositeAlphaFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkCompositeAlphaFlags {
             opaque: value & 0x00000001 > 0,
             pre_multiplied: value & 0x00000002 > 0,
             post_multiplied: value & 0x00000004 > 0,
             inherit: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkCompositeAlphaFlags {
+    ( $( $x:ident ),* ) => {
+        VkCompositeAlphaFlags {
+            $($x: true,)*
+            ..VkCompositeAlphaFlags::none()
         }
     }
 }

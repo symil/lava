@@ -3,6 +3,16 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkCommandPoolResetFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPoolResetFlagBits.html)
+///
+/// Use the macro `VkCommandPoolResetFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkCommandPoolResetFlags!(release_resources)
+/// ```
+/// ```
+/// VkCommandPoolResetFlags {
+///     release_resources: true,
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandPoolResetFlags {
     pub release_resources: bool,
@@ -36,39 +46,41 @@ impl Default for VkCommandPoolResetFlags {
 
 impl VkCommandPoolResetFlags {
     
-    pub fn none() -> VkCommandPoolResetFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkCommandPoolResetFlags {
             release_resources: false,
         }
     }
     
-    pub fn all() -> VkCommandPoolResetFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkCommandPoolResetFlags {
             release_resources: true,
         }
     }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+        + if self.release_resources { 0x00000001 } else { 0 }
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
+        VkCommandPoolResetFlags {
+            release_resources: value & 0x00000001 > 0,
+        }
+    }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkCommandPoolResetFlags {
     ( $( $x:ident ),* ) => {
         VkCommandPoolResetFlags {
             $($x: true,)*
             ..VkCommandPoolResetFlags::none()
-        }
-    }
-}
-
-impl VkCommandPoolResetFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-        + if self.release_resources { 0x00000001 } else { 0 }
-    }
-    
-    pub fn from_u32(value: u32) -> VkCommandPoolResetFlags {
-        VkCommandPoolResetFlags {
-            release_resources: value & 0x00000001 > 0,
         }
     }
 }

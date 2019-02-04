@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkCommandBufferUsageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferUsageFlagBits.html)
+///
+/// Use the macro `VkCommandBufferUsageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkCommandBufferUsageFlags!(one_time_submit, render_pass_continue)
+/// ```
+/// ```
+/// VkCommandBufferUsageFlags {
+///     one_time_submit: true,
+///     render_pass_continue: true,
+///     ..VkCommandBufferUsageFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkCommandBufferUsageFlags {
     pub one_time_submit: bool,
@@ -44,7 +56,8 @@ impl Default for VkCommandBufferUsageFlags {
 
 impl VkCommandBufferUsageFlags {
     
-    pub fn none() -> VkCommandBufferUsageFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkCommandBufferUsageFlags {
             one_time_submit: false,
             render_pass_continue: false,
@@ -52,27 +65,16 @@ impl VkCommandBufferUsageFlags {
         }
     }
     
-    pub fn all() -> VkCommandBufferUsageFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkCommandBufferUsageFlags {
             one_time_submit: true,
             render_pass_continue: true,
             simultaneous_use: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkCommandBufferUsageFlags {
-    ( $( $x:ident ),* ) => {
-        VkCommandBufferUsageFlags {
-            $($x: true,)*
-            ..VkCommandBufferUsageFlags::none()
-        }
-    }
-}
-
-impl VkCommandBufferUsageFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.one_time_submit { 0x00000001 } else { 0 }
@@ -80,11 +82,23 @@ impl VkCommandBufferUsageFlags {
         + if self.simultaneous_use { 0x00000004 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkCommandBufferUsageFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkCommandBufferUsageFlags {
             one_time_submit: value & 0x00000001 > 0,
             render_pass_continue: value & 0x00000002 > 0,
             simultaneous_use: value & 0x00000004 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkCommandBufferUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkCommandBufferUsageFlags {
+            $($x: true,)*
+            ..VkCommandBufferUsageFlags::none()
         }
     }
 }

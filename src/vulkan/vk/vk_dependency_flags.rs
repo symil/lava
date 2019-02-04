@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDependencyFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDependencyFlagBits.html)
+///
+/// Use the macro `VkDependencyFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDependencyFlags!(by_region, device_group)
+/// ```
+/// ```
+/// VkDependencyFlags {
+///     by_region: true,
+///     device_group: true,
+///     ..VkDependencyFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDependencyFlags {
     pub by_region: bool,
@@ -44,7 +56,8 @@ impl Default for VkDependencyFlags {
 
 impl VkDependencyFlags {
     
-    pub fn none() -> VkDependencyFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDependencyFlags {
             by_region: false,
             device_group: false,
@@ -52,27 +65,16 @@ impl VkDependencyFlags {
         }
     }
     
-    pub fn all() -> VkDependencyFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDependencyFlags {
             by_region: true,
             device_group: true,
             view_local: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkDependencyFlags {
-    ( $( $x:ident ),* ) => {
-        VkDependencyFlags {
-            $($x: true,)*
-            ..VkDependencyFlags::none()
-        }
-    }
-}
-
-impl VkDependencyFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.by_region { 0x00000001 } else { 0 }
@@ -80,11 +82,23 @@ impl VkDependencyFlags {
         + if self.view_local { 0x00000002 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkDependencyFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDependencyFlags {
             by_region: value & 0x00000001 > 0,
             device_group: value & 0x00000004 > 0,
             view_local: value & 0x00000002 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkDependencyFlags {
+    ( $( $x:ident ),* ) => {
+        VkDependencyFlags {
+            $($x: true,)*
+            ..VkDependencyFlags::none()
         }
     }
 }

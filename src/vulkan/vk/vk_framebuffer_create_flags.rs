@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkFramebufferCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferCreateFlagBits.html)
+///
+/// Use the macro `VkFramebufferCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkFramebufferCreateFlags!()
+/// ```
+/// ```
+/// VkFramebufferCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkFramebufferCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkFramebufferCreateFlags {
 
 impl VkFramebufferCreateFlags {
     
-    pub fn none() -> VkFramebufferCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkFramebufferCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkFramebufferCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkFramebufferCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkFramebufferCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkFramebufferCreateFlags {
     ( $( $x:ident ),* ) => {
         VkFramebufferCreateFlags {
             $($x: true,)*
             ..VkFramebufferCreateFlags::none()
-        }
-    }
-}
-
-impl VkFramebufferCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkFramebufferCreateFlags {
-        VkFramebufferCreateFlags {
-            
         }
     }
 }

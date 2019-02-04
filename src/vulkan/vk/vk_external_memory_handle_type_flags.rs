@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkExternalMemoryHandleTypeFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryHandleTypeFlagBits.html)
+///
+/// Use the macro `VkExternalMemoryHandleTypeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkExternalMemoryHandleTypeFlags!(opaque_fd, opaque_win_32)
+/// ```
+/// ```
+/// VkExternalMemoryHandleTypeFlags {
+///     opaque_fd: true,
+///     opaque_win_32: true,
+///     ..VkExternalMemoryHandleTypeFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkExternalMemoryHandleTypeFlags {
     pub opaque_fd: bool,
@@ -76,7 +88,8 @@ impl Default for VkExternalMemoryHandleTypeFlags {
 
 impl VkExternalMemoryHandleTypeFlags {
     
-    pub fn none() -> VkExternalMemoryHandleTypeFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkExternalMemoryHandleTypeFlags {
             opaque_fd: false,
             opaque_win_32: false,
@@ -92,7 +105,8 @@ impl VkExternalMemoryHandleTypeFlags {
         }
     }
     
-    pub fn all() -> VkExternalMemoryHandleTypeFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkExternalMemoryHandleTypeFlags {
             opaque_fd: true,
             opaque_win_32: true,
@@ -107,20 +121,8 @@ impl VkExternalMemoryHandleTypeFlags {
             host_mapped_foreign_memory_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkExternalMemoryHandleTypeFlags {
-    ( $( $x:ident ),* ) => {
-        VkExternalMemoryHandleTypeFlags {
-            $($x: true,)*
-            ..VkExternalMemoryHandleTypeFlags::none()
-        }
-    }
-}
-
-impl VkExternalMemoryHandleTypeFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.opaque_fd { 0x00000001 } else { 0 }
@@ -136,7 +138,8 @@ impl VkExternalMemoryHandleTypeFlags {
         + if self.host_mapped_foreign_memory_ext { 0x00000100 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkExternalMemoryHandleTypeFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkExternalMemoryHandleTypeFlags {
             opaque_fd: value & 0x00000001 > 0,
             opaque_win_32: value & 0x00000002 > 0,
@@ -149,6 +152,17 @@ impl VkExternalMemoryHandleTypeFlags {
             android_hardware_buffer_android: value & 0x00000400 > 0,
             host_allocation_ext: value & 0x00000080 > 0,
             host_mapped_foreign_memory_ext: value & 0x00000100 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkExternalMemoryHandleTypeFlags {
+    ( $( $x:ident ),* ) => {
+        VkExternalMemoryHandleTypeFlags {
+            $($x: true,)*
+            ..VkExternalMemoryHandleTypeFlags::none()
         }
     }
 }

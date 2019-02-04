@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkValidationCacheCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationCacheCreateFlagBitsEXT.html)
+///
+/// Use the macro `VkValidationCacheCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkValidationCacheCreateFlags!()
+/// ```
+/// ```
+/// VkValidationCacheCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkValidationCacheCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkValidationCacheCreateFlags {
 
 impl VkValidationCacheCreateFlags {
     
-    pub fn none() -> VkValidationCacheCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkValidationCacheCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkValidationCacheCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkValidationCacheCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkValidationCacheCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkValidationCacheCreateFlags {
     ( $( $x:ident ),* ) => {
         VkValidationCacheCreateFlags {
             $($x: true,)*
             ..VkValidationCacheCreateFlags::none()
-        }
-    }
-}
-
-impl VkValidationCacheCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkValidationCacheCreateFlags {
-        VkValidationCacheCreateFlags {
-            
         }
     }
 }

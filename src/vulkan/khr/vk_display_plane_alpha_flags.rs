@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDisplayPlaneAlphaFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneAlphaFlagBitsKHR.html)
+///
+/// Use the macro `VkDisplayPlaneAlphaFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDisplayPlaneAlphaFlags!(opaque, global)
+/// ```
+/// ```
+/// VkDisplayPlaneAlphaFlags {
+///     opaque: true,
+///     global: true,
+///     ..VkDisplayPlaneAlphaFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDisplayPlaneAlphaFlags {
     pub opaque: bool,
@@ -48,7 +60,8 @@ impl Default for VkDisplayPlaneAlphaFlags {
 
 impl VkDisplayPlaneAlphaFlags {
     
-    pub fn none() -> VkDisplayPlaneAlphaFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDisplayPlaneAlphaFlags {
             opaque: false,
             global: false,
@@ -57,7 +70,8 @@ impl VkDisplayPlaneAlphaFlags {
         }
     }
     
-    pub fn all() -> VkDisplayPlaneAlphaFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkDisplayPlaneAlphaFlags {
             opaque: true,
             global: true,
@@ -65,20 +79,8 @@ impl VkDisplayPlaneAlphaFlags {
             per_pixel_premultiplied: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkDisplayPlaneAlphaFlags {
-    ( $( $x:ident ),* ) => {
-        VkDisplayPlaneAlphaFlags {
-            $($x: true,)*
-            ..VkDisplayPlaneAlphaFlags::none()
-        }
-    }
-}
-
-impl VkDisplayPlaneAlphaFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.opaque { 0x00000001 } else { 0 }
@@ -87,12 +89,24 @@ impl VkDisplayPlaneAlphaFlags {
         + if self.per_pixel_premultiplied { 0x00000008 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkDisplayPlaneAlphaFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDisplayPlaneAlphaFlags {
             opaque: value & 0x00000001 > 0,
             global: value & 0x00000002 > 0,
             per_pixel: value & 0x00000004 > 0,
             per_pixel_premultiplied: value & 0x00000008 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkDisplayPlaneAlphaFlags {
+    ( $( $x:ident ),* ) => {
+        VkDisplayPlaneAlphaFlags {
+            $($x: true,)*
+            ..VkDisplayPlaneAlphaFlags::none()
         }
     }
 }

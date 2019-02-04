@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkImageCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageCreateFlagBits.html)
+///
+/// Use the macro `VkImageCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkImageCreateFlags!(sparse_binding, sparse_residency)
+/// ```
+/// ```
+/// VkImageCreateFlags {
+///     sparse_binding: true,
+///     sparse_residency: true,
+///     ..VkImageCreateFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageCreateFlags {
     pub sparse_binding: bool,
@@ -92,7 +104,8 @@ impl Default for VkImageCreateFlags {
 
 impl VkImageCreateFlags {
     
-    pub fn none() -> VkImageCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkImageCreateFlags {
             sparse_binding: false,
             sparse_residency: false,
@@ -112,7 +125,8 @@ impl VkImageCreateFlags {
         }
     }
     
-    pub fn all() -> VkImageCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkImageCreateFlags {
             sparse_binding: true,
             sparse_residency: true,
@@ -131,20 +145,8 @@ impl VkImageCreateFlags {
             subsampled_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkImageCreateFlags {
-    ( $( $x:ident ),* ) => {
-        VkImageCreateFlags {
-            $($x: true,)*
-            ..VkImageCreateFlags::none()
-        }
-    }
-}
-
-impl VkImageCreateFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.sparse_binding { 0x00000001 } else { 0 }
@@ -164,7 +166,8 @@ impl VkImageCreateFlags {
         + if self.subsampled_ext { 0x00004000 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkImageCreateFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkImageCreateFlags {
             sparse_binding: value & 0x00000001 > 0,
             sparse_residency: value & 0x00000002 > 0,
@@ -181,6 +184,17 @@ impl VkImageCreateFlags {
             corner_sampled_nv: value & 0x00002000 > 0,
             sample_locations_compatible_depth_ext: value & 0x00001000 > 0,
             subsampled_ext: value & 0x00004000 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkImageCreateFlags {
+    ( $( $x:ident ),* ) => {
+        VkImageCreateFlags {
+            $($x: true,)*
+            ..VkImageCreateFlags::none()
         }
     }
 }

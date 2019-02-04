@@ -3,6 +3,15 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkDisplaySurfaceCreateFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplaySurfaceCreateFlagBitsKHR.html)
+///
+/// Use the macro `VkDisplaySurfaceCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkDisplaySurfaceCreateFlags!()
+/// ```
+/// ```
+/// VkDisplaySurfaceCreateFlags {
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkDisplaySurfaceCreateFlags {
     
@@ -35,38 +44,40 @@ impl Default for VkDisplaySurfaceCreateFlags {
 
 impl VkDisplaySurfaceCreateFlags {
     
-    pub fn none() -> VkDisplaySurfaceCreateFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkDisplaySurfaceCreateFlags {
             
         }
     }
     
-    pub fn all() -> VkDisplaySurfaceCreateFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
+        VkDisplaySurfaceCreateFlags {
+            
+        }
+    }
+    
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
+    pub fn to_u32(&self) -> u32 {
+        0
+    }
+    
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkDisplaySurfaceCreateFlags {
             
         }
     }
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! VkDisplaySurfaceCreateFlags {
     ( $( $x:ident ),* ) => {
         VkDisplaySurfaceCreateFlags {
             $($x: true,)*
             ..VkDisplaySurfaceCreateFlags::none()
-        }
-    }
-}
-
-impl VkDisplaySurfaceCreateFlags {
-    
-    pub fn to_u32(&self) -> u32 {
-        0
-    }
-    
-    pub fn from_u32(value: u32) -> VkDisplaySurfaceCreateFlags {
-        VkDisplaySurfaceCreateFlags {
-            
         }
     }
 }

@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkQueryPipelineStatisticFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPipelineStatisticFlagBits.html)
+///
+/// Use the macro `VkQueryPipelineStatisticFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkQueryPipelineStatisticFlags!(input_assembly_vertices, input_assembly_primitives)
+/// ```
+/// ```
+/// VkQueryPipelineStatisticFlags {
+///     input_assembly_vertices: true,
+///     input_assembly_primitives: true,
+///     ..VkQueryPipelineStatisticFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkQueryPipelineStatisticFlags {
     pub input_assembly_vertices: bool,
@@ -76,7 +88,8 @@ impl Default for VkQueryPipelineStatisticFlags {
 
 impl VkQueryPipelineStatisticFlags {
     
-    pub fn none() -> VkQueryPipelineStatisticFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkQueryPipelineStatisticFlags {
             input_assembly_vertices: false,
             input_assembly_primitives: false,
@@ -92,7 +105,8 @@ impl VkQueryPipelineStatisticFlags {
         }
     }
     
-    pub fn all() -> VkQueryPipelineStatisticFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkQueryPipelineStatisticFlags {
             input_assembly_vertices: true,
             input_assembly_primitives: true,
@@ -107,20 +121,8 @@ impl VkQueryPipelineStatisticFlags {
             compute_shader_invocations: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkQueryPipelineStatisticFlags {
-    ( $( $x:ident ),* ) => {
-        VkQueryPipelineStatisticFlags {
-            $($x: true,)*
-            ..VkQueryPipelineStatisticFlags::none()
-        }
-    }
-}
-
-impl VkQueryPipelineStatisticFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.input_assembly_vertices { 0x00000001 } else { 0 }
@@ -136,7 +138,8 @@ impl VkQueryPipelineStatisticFlags {
         + if self.compute_shader_invocations { 0x00000400 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkQueryPipelineStatisticFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkQueryPipelineStatisticFlags {
             input_assembly_vertices: value & 0x00000001 > 0,
             input_assembly_primitives: value & 0x00000002 > 0,
@@ -149,6 +152,17 @@ impl VkQueryPipelineStatisticFlags {
             tessellation_control_shader_patches: value & 0x00000100 > 0,
             tessellation_evaluation_shader_invocations: value & 0x00000200 > 0,
             compute_shader_invocations: value & 0x00000400 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkQueryPipelineStatisticFlags {
+    ( $( $x:ident ),* ) => {
+        VkQueryPipelineStatisticFlags {
+            $($x: true,)*
+            ..VkQueryPipelineStatisticFlags::none()
         }
     }
 }

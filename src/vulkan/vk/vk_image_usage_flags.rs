@@ -3,6 +3,18 @@
 use utils::vk_traits::*;
 
 /// Wrapper for [VkImageUsageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageUsageFlagBits.html)
+///
+/// Use the macro `VkImageUsageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
+/// ```
+/// VkImageUsageFlags!(transfer_src, transfer_dst)
+/// ```
+/// ```
+/// VkImageUsageFlags {
+///     transfer_src: true,
+///     transfer_dst: true,
+///     ..VkImageUsageFlags::none()
+/// }
+/// ```
 #[derive(Debug, Clone, Copy)]
 pub struct VkImageUsageFlags {
     pub transfer_src: bool,
@@ -72,7 +84,8 @@ impl Default for VkImageUsageFlags {
 
 impl VkImageUsageFlags {
     
-    pub fn none() -> VkImageUsageFlags {
+    /// Return a structure with all flags to `false`.
+    pub fn none() -> Self {
         VkImageUsageFlags {
             transfer_src: false,
             transfer_dst: false,
@@ -87,7 +100,8 @@ impl VkImageUsageFlags {
         }
     }
     
-    pub fn all() -> VkImageUsageFlags {
+    /// Return a structure with all flags to `true`.
+    pub fn all() -> Self {
         VkImageUsageFlags {
             transfer_src: true,
             transfer_dst: true,
@@ -101,20 +115,8 @@ impl VkImageUsageFlags {
             fragment_density_map_ext: true,
         }
     }
-}
-
-#[macro_export]
-macro_rules! VkImageUsageFlags {
-    ( $( $x:ident ),* ) => {
-        VkImageUsageFlags {
-            $($x: true,)*
-            ..VkImageUsageFlags::none()
-        }
-    }
-}
-
-impl VkImageUsageFlags {
     
+    /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
         + if self.transfer_src { 0x00000001 } else { 0 }
@@ -129,7 +131,8 @@ impl VkImageUsageFlags {
         + if self.fragment_density_map_ext { 0x00000200 } else { 0 }
     }
     
-    pub fn from_u32(value: u32) -> VkImageUsageFlags {
+    /// Create a structure corresponding to the specified numerical bit flags.
+    pub fn from_u32(value: u32) -> Self {
         VkImageUsageFlags {
             transfer_src: value & 0x00000001 > 0,
             transfer_dst: value & 0x00000002 > 0,
@@ -141,6 +144,17 @@ impl VkImageUsageFlags {
             input_attachment: value & 0x00000080 > 0,
             shading_rate_image_nv: value & 0x00000100 > 0,
             fragment_density_map_ext: value & 0x00000200 > 0,
+        }
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! VkImageUsageFlags {
+    ( $( $x:ident ),* ) => {
+        VkImageUsageFlags {
+            $($x: true,)*
+            ..VkImageUsageFlags::none()
         }
     }
 }
