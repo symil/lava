@@ -34,24 +34,24 @@ pub struct VkSubpassDescription2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDescription2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkSubpassDescriptionFlags,
     pub pipeline_bind_point: RawVkPipelineBindPoint,
     pub view_mask: u32,
     pub input_attachment_count: u32,
-    pub input_attachments: *const RawVkAttachmentReference2,
+    pub input_attachments: *mut RawVkAttachmentReference2,
     pub color_attachment_count: u32,
-    pub color_attachments: *const RawVkAttachmentReference2,
-    pub resolve_attachments: *const RawVkAttachmentReference2,
-    pub depth_stencil_attachment: *const RawVkAttachmentReference2,
+    pub color_attachments: *mut RawVkAttachmentReference2,
+    pub resolve_attachments: *mut RawVkAttachmentReference2,
+    pub depth_stencil_attachment: *mut RawVkAttachmentReference2,
     pub preserve_attachment_count: u32,
-    pub preserve_attachments: *const u32,
+    pub preserve_attachments: *mut u32,
 }
 
 impl VkWrappedType<RawVkSubpassDescription2> for VkSubpassDescription2 {
     fn vk_to_raw(src: &VkSubpassDescription2, dst: &mut RawVkSubpassDescription2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SubpassDescription2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.pipeline_bind_point = vk_to_raw_value(&src.pipeline_bind_point);
         dst.view_mask = src.view_mask;

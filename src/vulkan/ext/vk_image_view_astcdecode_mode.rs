@@ -25,14 +25,14 @@ pub struct VkImageViewASTCDecodeMode {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageViewASTCDecodeMode {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub decode_mode: RawVkFormat,
 }
 
 impl VkWrappedType<RawVkImageViewASTCDecodeMode> for VkImageViewASTCDecodeMode {
     fn vk_to_raw(src: &VkImageViewASTCDecodeMode, dst: &mut RawVkImageViewASTCDecodeMode) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageViewAstcDecodeModeExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.decode_mode = vk_to_raw_value(&src.decode_mode);
     }
 }

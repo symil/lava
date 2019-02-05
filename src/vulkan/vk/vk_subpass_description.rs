@@ -34,13 +34,13 @@ pub struct RawVkSubpassDescription {
     pub flags: RawVkSubpassDescriptionFlags,
     pub pipeline_bind_point: RawVkPipelineBindPoint,
     pub input_attachment_count: u32,
-    pub input_attachments: *const RawVkAttachmentReference,
+    pub input_attachments: *mut RawVkAttachmentReference,
     pub color_attachment_count: u32,
-    pub color_attachments: *const RawVkAttachmentReference,
-    pub resolve_attachments: *const RawVkAttachmentReference,
-    pub depth_stencil_attachment: *const RawVkAttachmentReference,
+    pub color_attachments: *mut RawVkAttachmentReference,
+    pub resolve_attachments: *mut RawVkAttachmentReference,
+    pub depth_stencil_attachment: *mut RawVkAttachmentReference,
     pub preserve_attachment_count: u32,
-    pub preserve_attachments: *const u32,
+    pub preserve_attachments: *mut u32,
 }
 
 impl VkWrappedType<RawVkSubpassDescription> for VkSubpassDescription {

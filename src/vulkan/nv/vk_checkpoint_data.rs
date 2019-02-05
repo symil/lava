@@ -18,7 +18,7 @@ use vulkan::vk::{VkPipelineStageFlags,RawVkPipelineStageFlags};
 #[derive(Debug, Clone)]
 pub struct VkCheckpointData {
     pub stage: VkPipelineStageFlags,
-    pub checkpoint_marker: *const c_void,
+    pub checkpoint_marker: *mut c_void,
 }
 
 #[doc(hidden)]
@@ -26,15 +26,15 @@ pub struct VkCheckpointData {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCheckpointData {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub stage: RawVkPipelineStageFlags,
-    pub checkpoint_marker: *const c_void,
+    pub checkpoint_marker: *mut c_void,
 }
 
 impl VkWrappedType<RawVkCheckpointData> for VkCheckpointData {
     fn vk_to_raw(src: &VkCheckpointData, dst: &mut RawVkCheckpointData) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CheckpointDataNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.stage = vk_to_raw_value(&src.stage);
         dst.checkpoint_marker = src.checkpoint_marker;
     }
@@ -53,7 +53,7 @@ impl Default for VkCheckpointData {
     fn default() -> VkCheckpointData {
         VkCheckpointData {
             stage: Default::default(),
-            checkpoint_marker: ptr::null(),
+            checkpoint_marker: ptr::null_mut(),
         }
     }
 }

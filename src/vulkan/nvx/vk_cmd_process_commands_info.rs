@@ -37,11 +37,11 @@ pub struct VkCmdProcessCommandsInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCmdProcessCommandsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_table: RawVkObjectTable,
     pub indirect_commands_layout: RawVkIndirectCommandsLayout,
     pub indirect_commands_token_count: u32,
-    pub indirect_commands_tokens: *const RawVkIndirectCommandsToken,
+    pub indirect_commands_tokens: *mut RawVkIndirectCommandsToken,
     pub max_sequences_count: u32,
     pub target_command_buffer: RawVkCommandBuffer,
     pub sequences_count_buffer: RawVkBuffer,
@@ -53,7 +53,7 @@ pub struct RawVkCmdProcessCommandsInfo {
 impl VkWrappedType<RawVkCmdProcessCommandsInfo> for VkCmdProcessCommandsInfo {
     fn vk_to_raw(src: &VkCmdProcessCommandsInfo, dst: &mut RawVkCmdProcessCommandsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CmdProcessCommandsInfoNvx);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.object_table = vk_to_raw_value(&src.object_table);
         dst.indirect_commands_layout = vk_to_raw_value(&src.indirect_commands_layout);
         dst.indirect_commands_token_count = src.indirect_commands_tokens.len() as u32;

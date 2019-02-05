@@ -65,4 +65,11 @@ impl VkIndirectCommandsLayout {
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
+    
+    /// Wrapper for [vkDestroyIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyIndirectCommandsLayoutNVX.html).
+    pub fn destroy(&self) {
+        unsafe {
+            ((&*self._fn_table).vkDestroyIndirectCommandsLayoutNVX)((*self._fn_table).device, self._handle, ptr::null());
+        }
+    }
 }

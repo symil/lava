@@ -32,22 +32,22 @@ pub struct VkRenderPassCreateInfo2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassCreateInfo2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkRenderPassCreateFlags,
     pub attachment_count: u32,
-    pub attachments: *const RawVkAttachmentDescription2,
+    pub attachments: *mut RawVkAttachmentDescription2,
     pub subpass_count: u32,
-    pub subpasses: *const RawVkSubpassDescription2,
+    pub subpasses: *mut RawVkSubpassDescription2,
     pub dependency_count: u32,
-    pub dependencies: *const RawVkSubpassDependency2,
+    pub dependencies: *mut RawVkSubpassDependency2,
     pub correlated_view_mask_count: u32,
-    pub correlated_view_masks: *const u32,
+    pub correlated_view_masks: *mut u32,
 }
 
 impl VkWrappedType<RawVkRenderPassCreateInfo2> for VkRenderPassCreateInfo2 {
     fn vk_to_raw(src: &VkRenderPassCreateInfo2, dst: &mut RawVkRenderPassCreateInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassCreateInfo2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.attachment_count = src.attachments.len() as u32;
         dst.attachments = new_ptr_vk_array(&src.attachments);
@@ -56,7 +56,7 @@ impl VkWrappedType<RawVkRenderPassCreateInfo2> for VkRenderPassCreateInfo2 {
         dst.dependency_count = src.dependencies.len() as u32;
         dst.dependencies = new_ptr_vk_array(&src.dependencies);
         dst.correlated_view_mask_count = src.correlated_view_masks.len() as u32;
-        dst.correlated_view_masks = src.correlated_view_masks.as_ptr();
+        dst.correlated_view_masks = get_vec_ptr(&src.correlated_view_masks);
     }
 }
 

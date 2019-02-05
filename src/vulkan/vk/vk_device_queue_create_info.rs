@@ -27,21 +27,21 @@ pub struct VkDeviceQueueCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceQueueCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDeviceQueueCreateFlags,
     pub queue_family_index: u32,
     pub queue_count: u32,
-    pub queue_priorities: *const f32,
+    pub queue_priorities: *mut f32,
 }
 
 impl VkWrappedType<RawVkDeviceQueueCreateInfo> for VkDeviceQueueCreateInfo {
     fn vk_to_raw(src: &VkDeviceQueueCreateInfo, dst: &mut RawVkDeviceQueueCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceQueueCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.queue_family_index = vk_to_raw_value(&src.queue_family_index);
         dst.queue_count = src.queue_priorities.len() as u32;
-        dst.queue_priorities = src.queue_priorities.as_ptr();
+        dst.queue_priorities = get_vec_ptr(&src.queue_priorities);
     }
 }
 

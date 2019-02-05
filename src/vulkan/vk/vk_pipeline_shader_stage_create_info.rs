@@ -32,18 +32,18 @@ pub struct VkPipelineShaderStageCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineShaderStageCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineShaderStageCreateFlags,
     pub stage: RawVkShaderStageFlags,
     pub module: RawVkShaderModule,
-    pub name: *const c_char,
-    pub specialization_info: *const RawVkSpecializationInfo,
+    pub name: *mut c_char,
+    pub specialization_info: *mut RawVkSpecializationInfo,
 }
 
 impl<'a> VkWrappedType<RawVkPipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfo<'a> {
     fn vk_to_raw(src: &VkPipelineShaderStageCreateInfo, dst: &mut RawVkPipelineShaderStageCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineShaderStageCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage = vk_to_raw_value(&src.stage);
         dst.module = vk_to_raw_value(&src.module);

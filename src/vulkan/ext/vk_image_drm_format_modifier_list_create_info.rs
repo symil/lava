@@ -24,15 +24,15 @@ pub struct VkImageDrmFormatModifierListCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageDrmFormatModifierListCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub drm_format_modifier_count: u32,
-    pub drm_format_modifiers: *const u64,
+    pub drm_format_modifiers: *mut u64,
 }
 
 impl VkWrappedType<RawVkImageDrmFormatModifierListCreateInfo> for VkImageDrmFormatModifierListCreateInfo {
     fn vk_to_raw(src: &VkImageDrmFormatModifierListCreateInfo, dst: &mut RawVkImageDrmFormatModifierListCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageDrmFormatModifierListCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.drm_format_modifier_count = src.drm_format_modifiers.len() as u32;
         dst.drm_format_modifiers = new_ptr_vk_array(&src.drm_format_modifiers);
     }

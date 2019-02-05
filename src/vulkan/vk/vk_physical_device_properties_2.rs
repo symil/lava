@@ -24,7 +24,7 @@ pub struct VkPhysicalDeviceProperties2 {
 #[repr(C)]
 pub struct RawVkPhysicalDeviceProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub properties: RawVkPhysicalDeviceProperties,
 }
 

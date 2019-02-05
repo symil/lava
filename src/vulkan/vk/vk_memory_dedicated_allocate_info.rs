@@ -27,7 +27,7 @@ pub struct VkMemoryDedicatedAllocateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryDedicatedAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub image: RawVkImage,
     pub buffer: RawVkBuffer,
 }
@@ -35,7 +35,7 @@ pub struct RawVkMemoryDedicatedAllocateInfo {
 impl VkWrappedType<RawVkMemoryDedicatedAllocateInfo> for VkMemoryDedicatedAllocateInfo {
     fn vk_to_raw(src: &VkMemoryDedicatedAllocateInfo, dst: &mut RawVkMemoryDedicatedAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryDedicatedAllocateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.image = vk_to_raw_value(&src.image);
         dst.buffer = vk_to_raw_value(&src.buffer);
     }

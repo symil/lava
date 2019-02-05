@@ -24,14 +24,14 @@ pub struct VkTextureLODGatherFormatProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkTextureLODGatherFormatProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub supports_texture_gather_lodbias_amd: u32,
 }
 
 impl VkWrappedType<RawVkTextureLODGatherFormatProperties> for VkTextureLODGatherFormatProperties {
     fn vk_to_raw(src: &VkTextureLODGatherFormatProperties, dst: &mut RawVkTextureLODGatherFormatProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::TextureLodGatherFormatPropertiesAmd);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.supports_texture_gather_lodbias_amd = vk_to_raw_value(&src.supports_texture_gather_lodbias_amd);
     }
 }

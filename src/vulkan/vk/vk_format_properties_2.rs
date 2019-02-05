@@ -25,14 +25,14 @@ pub struct VkFormatProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFormatProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub format_properties: RawVkFormatProperties,
 }
 
 impl VkWrappedType<RawVkFormatProperties2> for VkFormatProperties2 {
     fn vk_to_raw(src: &VkFormatProperties2, dst: &mut RawVkFormatProperties2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::FormatProperties2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.format_properties = vk_to_raw_value(&src.format_properties);
     }
 }

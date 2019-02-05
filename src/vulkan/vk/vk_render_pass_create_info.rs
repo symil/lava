@@ -31,20 +31,20 @@ pub struct VkRenderPassCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkRenderPassCreateFlags,
     pub attachment_count: u32,
-    pub attachments: *const RawVkAttachmentDescription,
+    pub attachments: *mut RawVkAttachmentDescription,
     pub subpass_count: u32,
-    pub subpasses: *const RawVkSubpassDescription,
+    pub subpasses: *mut RawVkSubpassDescription,
     pub dependency_count: u32,
-    pub dependencies: *const RawVkSubpassDependency,
+    pub dependencies: *mut RawVkSubpassDependency,
 }
 
 impl VkWrappedType<RawVkRenderPassCreateInfo> for VkRenderPassCreateInfo {
     fn vk_to_raw(src: &VkRenderPassCreateInfo, dst: &mut RawVkRenderPassCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.attachment_count = src.attachments.len() as u32;
         dst.attachments = new_ptr_vk_array(&src.attachments);

@@ -40,7 +40,7 @@ pub struct VkPhysicalDeviceFloatControlsProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFloatControlsProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub separate_denorm_settings: u32,
     pub separate_rounding_mode_settings: u32,
     pub shader_signed_zero_inf_nan_preserve_float_16: u32,
@@ -63,7 +63,7 @@ pub struct RawVkPhysicalDeviceFloatControlsProperties {
 impl VkWrappedType<RawVkPhysicalDeviceFloatControlsProperties> for VkPhysicalDeviceFloatControlsProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceFloatControlsProperties, dst: &mut RawVkPhysicalDeviceFloatControlsProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFloatControlsPropertiesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.separate_denorm_settings = vk_to_raw_value(&src.separate_denorm_settings);
         dst.separate_rounding_mode_settings = vk_to_raw_value(&src.separate_rounding_mode_settings);
         dst.shader_signed_zero_inf_nan_preserve_float_16 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_16);

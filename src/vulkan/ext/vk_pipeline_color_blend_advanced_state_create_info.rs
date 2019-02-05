@@ -27,7 +27,7 @@ pub struct VkPipelineColorBlendAdvancedStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendAdvancedStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub src_premultiplied: u32,
     pub dst_premultiplied: u32,
     pub blend_overlap: RawVkBlendOverlap,
@@ -36,7 +36,7 @@ pub struct RawVkPipelineColorBlendAdvancedStateCreateInfo {
 impl VkWrappedType<RawVkPipelineColorBlendAdvancedStateCreateInfo> for VkPipelineColorBlendAdvancedStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineColorBlendAdvancedStateCreateInfo, dst: &mut RawVkPipelineColorBlendAdvancedStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineColorBlendAdvancedStateCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.src_premultiplied = vk_to_raw_value(&src.src_premultiplied);
         dst.dst_premultiplied = vk_to_raw_value(&src.dst_premultiplied);
         dst.blend_overlap = vk_to_raw_value(&src.blend_overlap);

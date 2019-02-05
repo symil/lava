@@ -25,15 +25,15 @@ pub struct VkPipelineViewportExclusiveScissorStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportExclusiveScissorStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub exclusive_scissor_count: u32,
-    pub exclusive_scissors: *const RawVkRect2D,
+    pub exclusive_scissors: *mut RawVkRect2D,
 }
 
 impl VkWrappedType<RawVkPipelineViewportExclusiveScissorStateCreateInfo> for VkPipelineViewportExclusiveScissorStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportExclusiveScissorStateCreateInfo, dst: &mut RawVkPipelineViewportExclusiveScissorStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportExclusiveScissorStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.exclusive_scissor_count = get_array_option_len(&src.exclusive_scissors) as u32;
         dst.exclusive_scissors = new_ptr_vk_array_checked(&src.exclusive_scissors);
     }

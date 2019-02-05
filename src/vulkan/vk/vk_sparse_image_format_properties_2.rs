@@ -25,14 +25,14 @@ pub struct VkSparseImageFormatProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSparseImageFormatProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub properties: RawVkSparseImageFormatProperties,
 }
 
 impl VkWrappedType<RawVkSparseImageFormatProperties2> for VkSparseImageFormatProperties2 {
     fn vk_to_raw(src: &VkSparseImageFormatProperties2, dst: &mut RawVkSparseImageFormatProperties2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SparseImageFormatProperties2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.properties = vk_to_raw_value(&src.properties);
     }
 }

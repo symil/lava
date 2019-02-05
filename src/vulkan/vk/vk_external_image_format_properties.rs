@@ -25,14 +25,14 @@ pub struct VkExternalImageFormatProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalImageFormatProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub external_memory_properties: RawVkExternalMemoryProperties,
 }
 
 impl VkWrappedType<RawVkExternalImageFormatProperties> for VkExternalImageFormatProperties {
     fn vk_to_raw(src: &VkExternalImageFormatProperties, dst: &mut RawVkExternalImageFormatProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ExternalImageFormatProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.external_memory_properties = vk_to_raw_value(&src.external_memory_properties);
     }
 }

@@ -24,15 +24,15 @@ pub struct VkDescriptorSetVariableDescriptorCountAllocateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetVariableDescriptorCountAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub descriptor_set_count: u32,
-    pub descriptor_counts: *const u32,
+    pub descriptor_counts: *mut u32,
 }
 
 impl VkWrappedType<RawVkDescriptorSetVariableDescriptorCountAllocateInfo> for VkDescriptorSetVariableDescriptorCountAllocateInfo {
     fn vk_to_raw(src: &VkDescriptorSetVariableDescriptorCountAllocateInfo, dst: &mut RawVkDescriptorSetVariableDescriptorCountAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetVariableDescriptorCountAllocateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.descriptor_set_count = src.descriptor_counts.len() as u32;
         dst.descriptor_counts = new_ptr_vk_array(&src.descriptor_counts);
     }

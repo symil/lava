@@ -30,19 +30,19 @@ pub struct VkPresentInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub wait_semaphore_count: u32,
-    pub wait_semaphores: *const RawVkSemaphore,
+    pub wait_semaphores: *mut RawVkSemaphore,
     pub swapchain_count: u32,
-    pub swapchains: *const RawVkSwapchain,
-    pub image_indices: *const u32,
-    pub results: *const RawVkResult,
+    pub swapchains: *mut RawVkSwapchain,
+    pub image_indices: *mut u32,
+    pub results: *mut RawVkResult,
 }
 
 impl VkWrappedType<RawVkPresentInfo> for VkPresentInfo {
     fn vk_to_raw(src: &VkPresentInfo, dst: &mut RawVkPresentInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PresentInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.wait_semaphore_count = src.wait_semaphores.len() as u32;
         dst.wait_semaphores = new_ptr_vk_array(&src.wait_semaphores);
         dst.swapchain_count = cmp::max(src.swapchains.len(), src.image_indices.len()) as u32;

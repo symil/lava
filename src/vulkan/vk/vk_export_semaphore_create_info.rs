@@ -25,14 +25,14 @@ pub struct VkExportSemaphoreCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExportSemaphoreCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_types: RawVkExternalSemaphoreHandleTypeFlags,
 }
 
 impl VkWrappedType<RawVkExportSemaphoreCreateInfo> for VkExportSemaphoreCreateInfo {
     fn vk_to_raw(src: &VkExportSemaphoreCreateInfo, dst: &mut RawVkExportSemaphoreCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ExportSemaphoreCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }

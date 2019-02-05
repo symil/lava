@@ -65,4 +65,21 @@ impl VkAccelerationStructure {
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
+    
+    /// Wrapper for [vkDestroyAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyAccelerationStructureNV.html).
+    pub fn destroy(&self) {
+        unsafe {
+            ((&*self._fn_table).vkDestroyAccelerationStructureNV)((*self._fn_table).device, self._handle, ptr::null());
+        }
+    }
+    
+    /// Wrapper for [vkGetAccelerationStructureHandleNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetAccelerationStructureHandleNV.html).
+    pub fn get_handle(&self, data: &[c_void]) -> Result<(), VkResult> {
+        unsafe {
+            let raw_data_size = data.len();
+            let raw_data = get_vec_ptr(data);
+            let vk_result = ((&*self._fn_table).vkGetAccelerationStructureHandleNV)((*self._fn_table).device, self._handle, raw_data_size, raw_data);
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+        }
+    }
 }

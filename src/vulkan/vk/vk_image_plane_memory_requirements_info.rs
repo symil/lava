@@ -25,14 +25,14 @@ pub struct VkImagePlaneMemoryRequirementsInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImagePlaneMemoryRequirementsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub plane_aspect: RawVkImageAspectFlags,
 }
 
 impl VkWrappedType<RawVkImagePlaneMemoryRequirementsInfo> for VkImagePlaneMemoryRequirementsInfo {
     fn vk_to_raw(src: &VkImagePlaneMemoryRequirementsInfo, dst: &mut RawVkImagePlaneMemoryRequirementsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImagePlaneMemoryRequirementsInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.plane_aspect = vk_to_raw_value(&src.plane_aspect);
     }
 }

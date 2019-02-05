@@ -29,17 +29,17 @@ pub struct VkIndirectCommandsLayoutCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkIndirectCommandsLayoutCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub pipeline_bind_point: RawVkPipelineBindPoint,
     pub flags: RawVkIndirectCommandsLayoutUsageFlags,
     pub token_count: u32,
-    pub tokens: *const RawVkIndirectCommandsLayoutToken,
+    pub tokens: *mut RawVkIndirectCommandsLayoutToken,
 }
 
 impl VkWrappedType<RawVkIndirectCommandsLayoutCreateInfo> for VkIndirectCommandsLayoutCreateInfo {
     fn vk_to_raw(src: &VkIndirectCommandsLayoutCreateInfo, dst: &mut RawVkIndirectCommandsLayoutCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::IndirectCommandsLayoutCreateInfoNvx);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.pipeline_bind_point = vk_to_raw_value(&src.pipeline_bind_point);
         dst.flags = vk_to_raw_value(&src.flags);
         dst.token_count = src.tokens.len() as u32;

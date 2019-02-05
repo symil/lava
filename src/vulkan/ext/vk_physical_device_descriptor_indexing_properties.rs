@@ -46,7 +46,7 @@ pub struct VkPhysicalDeviceDescriptorIndexingProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDescriptorIndexingProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_update_after_bind_descriptors_in_all_pools: u32,
     pub shader_uniform_buffer_array_non_uniform_indexing_native: u32,
     pub shader_sampled_image_array_non_uniform_indexing_native: u32,
@@ -75,7 +75,7 @@ pub struct RawVkPhysicalDeviceDescriptorIndexingProperties {
 impl VkWrappedType<RawVkPhysicalDeviceDescriptorIndexingProperties> for VkPhysicalDeviceDescriptorIndexingProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceDescriptorIndexingProperties, dst: &mut RawVkPhysicalDeviceDescriptorIndexingProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDescriptorIndexingPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_update_after_bind_descriptors_in_all_pools = vk_to_raw_value(&src.max_update_after_bind_descriptors_in_all_pools);
         dst.shader_uniform_buffer_array_non_uniform_indexing_native = vk_to_raw_value(&src.shader_uniform_buffer_array_non_uniform_indexing_native);
         dst.shader_sampled_image_array_non_uniform_indexing_native = vk_to_raw_value(&src.shader_sampled_image_array_non_uniform_indexing_native);

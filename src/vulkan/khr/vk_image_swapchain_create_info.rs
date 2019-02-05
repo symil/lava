@@ -25,14 +25,14 @@ pub struct VkImageSwapchainCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSwapchainCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain: RawVkSwapchain,
 }
 
 impl VkWrappedType<RawVkImageSwapchainCreateInfo> for VkImageSwapchainCreateInfo {
     fn vk_to_raw(src: &VkImageSwapchainCreateInfo, dst: &mut RawVkImageSwapchainCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageSwapchainCreateInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.swapchain = vk_to_raw_value(&src.swapchain);
     }
 }

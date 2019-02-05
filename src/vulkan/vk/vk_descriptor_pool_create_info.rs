@@ -28,17 +28,17 @@ pub struct VkDescriptorPoolCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorPoolCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDescriptorPoolCreateFlags,
     pub max_sets: u32,
     pub pool_size_count: u32,
-    pub pool_sizes: *const RawVkDescriptorPoolSize,
+    pub pool_sizes: *mut RawVkDescriptorPoolSize,
 }
 
 impl VkWrappedType<RawVkDescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfo {
     fn vk_to_raw(src: &VkDescriptorPoolCreateInfo, dst: &mut RawVkDescriptorPoolCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorPoolCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.max_sets = vk_to_raw_value(&src.max_sets);
         dst.pool_size_count = src.pool_sizes.len() as u32;

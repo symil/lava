@@ -45,7 +45,7 @@ pub struct VkSamplerCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkSamplerCreateFlags,
     pub mag_filter: RawVkFilter,
     pub min_filter: RawVkFilter,
@@ -67,7 +67,7 @@ pub struct RawVkSamplerCreateInfo {
 impl VkWrappedType<RawVkSamplerCreateInfo> for VkSamplerCreateInfo {
     fn vk_to_raw(src: &VkSamplerCreateInfo, dst: &mut RawVkSamplerCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SamplerCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.mag_filter = vk_to_raw_value(&src.mag_filter);
         dst.min_filter = vk_to_raw_value(&src.min_filter);

@@ -27,7 +27,7 @@ pub struct VkSemaphoreGetFdInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSemaphoreGetFdInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub semaphore: RawVkSemaphore,
     pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
 }
@@ -35,7 +35,7 @@ pub struct RawVkSemaphoreGetFdInfo {
 impl VkWrappedType<RawVkSemaphoreGetFdInfo> for VkSemaphoreGetFdInfo {
     fn vk_to_raw(src: &VkSemaphoreGetFdInfo, dst: &mut RawVkSemaphoreGetFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SemaphoreGetFdInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.semaphore = vk_to_raw_value(&src.semaphore);
         dst.handle_type = vk_to_raw_value(&src.handle_type);
     }

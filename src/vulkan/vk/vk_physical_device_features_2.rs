@@ -25,14 +25,14 @@ pub struct VkPhysicalDeviceFeatures2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFeatures2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub features: RawVkPhysicalDeviceFeatures,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceFeatures2> for VkPhysicalDeviceFeatures2 {
     fn vk_to_raw(src: &VkPhysicalDeviceFeatures2, dst: &mut RawVkPhysicalDeviceFeatures2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFeatures2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.features = vk_to_raw_value(&src.features);
     }
 }

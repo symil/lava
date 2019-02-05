@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceShaderAtomicInt64Features {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShaderAtomicInt64Features {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shader_buffer_int_64_atomics: u32,
     pub shader_shared_int_64_atomics: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceShaderAtomicInt64Features {
 impl VkWrappedType<RawVkPhysicalDeviceShaderAtomicInt64Features> for VkPhysicalDeviceShaderAtomicInt64Features {
     fn vk_to_raw(src: &VkPhysicalDeviceShaderAtomicInt64Features, dst: &mut RawVkPhysicalDeviceShaderAtomicInt64Features) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderAtomicInt64FeaturesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shader_buffer_int_64_atomics = vk_to_raw_value(&src.shader_buffer_int_64_atomics);
         dst.shader_shared_int_64_atomics = vk_to_raw_value(&src.shader_shared_int_64_atomics);
     }

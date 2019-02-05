@@ -27,7 +27,7 @@ pub struct VkMemoryGetFdInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryGetFdInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub memory: RawVkDeviceMemory,
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
 }
@@ -35,7 +35,7 @@ pub struct RawVkMemoryGetFdInfo {
 impl VkWrappedType<RawVkMemoryGetFdInfo> for VkMemoryGetFdInfo {
     fn vk_to_raw(src: &VkMemoryGetFdInfo, dst: &mut RawVkMemoryGetFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryGetFdInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.memory = vk_to_raw_value(&src.memory);
         dst.handle_type = vk_to_raw_value(&src.handle_type);
     }

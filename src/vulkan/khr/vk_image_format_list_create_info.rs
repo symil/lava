@@ -25,15 +25,15 @@ pub struct VkImageFormatListCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageFormatListCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub view_format_count: u32,
-    pub view_formats: *const RawVkFormat,
+    pub view_formats: *mut RawVkFormat,
 }
 
 impl VkWrappedType<RawVkImageFormatListCreateInfo> for VkImageFormatListCreateInfo {
     fn vk_to_raw(src: &VkImageFormatListCreateInfo, dst: &mut RawVkImageFormatListCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageFormatListCreateInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.view_format_count = src.view_formats.len() as u32;
         dst.view_formats = new_ptr_vk_array(&src.view_formats);
     }

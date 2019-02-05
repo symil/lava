@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceProtectedMemoryProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceProtectedMemoryProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub protected_no_fault: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceProtectedMemoryProperties> for VkPhysicalDeviceProtectedMemoryProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceProtectedMemoryProperties, dst: &mut RawVkPhysicalDeviceProtectedMemoryProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceProtectedMemoryProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.protected_no_fault = vk_to_raw_value(&src.protected_no_fault);
     }
 }

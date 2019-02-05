@@ -24,14 +24,14 @@ pub struct VkDescriptorSetLayoutSupport {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetLayoutSupport {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub supported: u32,
 }
 
 impl VkWrappedType<RawVkDescriptorSetLayoutSupport> for VkDescriptorSetLayoutSupport {
     fn vk_to_raw(src: &VkDescriptorSetLayoutSupport, dst: &mut RawVkDescriptorSetLayoutSupport) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetLayoutSupport);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.supported = vk_to_raw_value(&src.supported);
     }
 }

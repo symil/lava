@@ -201,7 +201,7 @@ function isDestroyFunction(func) {
 
 function generateHandles() {
     const handles = getAllHandles();
-    const functions = getAllFunctions().filter(func => !STATIC_VK_FUNCTIONS.includes(func.name)).slice(0, 50);
+    const functions = getAllFunctions().filter(func => !STATIC_VK_FUNCTIONS.includes(func.name));
 
     for (let handle of handles) {
         handle.functions = [];

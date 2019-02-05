@@ -29,18 +29,18 @@ pub struct VkBindAccelerationStructureMemoryInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindAccelerationStructureMemoryInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub acceleration_structure: RawVkAccelerationStructure,
     pub memory: RawVkDeviceMemory,
     pub memory_offset: u64,
     pub device_index_count: u32,
-    pub device_indices: *const u32,
+    pub device_indices: *mut u32,
 }
 
 impl VkWrappedType<RawVkBindAccelerationStructureMemoryInfo> for VkBindAccelerationStructureMemoryInfo {
     fn vk_to_raw(src: &VkBindAccelerationStructureMemoryInfo, dst: &mut RawVkBindAccelerationStructureMemoryInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindAccelerationStructureMemoryInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.acceleration_structure = vk_to_raw_value(&src.acceleration_structure);
         dst.memory = vk_to_raw_value(&src.memory);
         dst.memory_offset = vk_to_raw_value(&src.memory_offset);

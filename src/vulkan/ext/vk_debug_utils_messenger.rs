@@ -65,4 +65,11 @@ impl VkDebugUtilsMessenger {
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
+    
+    /// Wrapper for [vkDestroyDebugUtilsMessengerEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDebugUtilsMessengerEXT.html).
+    pub fn destroy(&self) {
+        unsafe {
+            ((&*self._fn_table).vkDestroyDebugUtilsMessengerEXT)((*self._fn_table).instance, self._handle, ptr::null());
+        }
+    }
 }

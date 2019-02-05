@@ -31,7 +31,7 @@ pub struct VkBufferViewCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferViewCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkBufferViewCreateFlags,
     pub buffer: RawVkBuffer,
     pub format: RawVkFormat,
@@ -42,7 +42,7 @@ pub struct RawVkBufferViewCreateInfo {
 impl VkWrappedType<RawVkBufferViewCreateInfo> for VkBufferViewCreateInfo {
     fn vk_to_raw(src: &VkBufferViewCreateInfo, dst: &mut RawVkBufferViewCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferViewCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.buffer = vk_to_raw_value(&src.buffer);
         dst.format = vk_to_raw_value(&src.format);

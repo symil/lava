@@ -38,7 +38,7 @@ pub struct VkAttachmentDescription2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAttachmentDescription2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkAttachmentDescriptionFlags,
     pub format: RawVkFormat,
     pub samples: RawVkSampleCountFlags,
@@ -53,7 +53,7 @@ pub struct RawVkAttachmentDescription2 {
 impl VkWrappedType<RawVkAttachmentDescription2> for VkAttachmentDescription2 {
     fn vk_to_raw(src: &VkAttachmentDescription2, dst: &mut RawVkAttachmentDescription2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AttachmentDescription2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.format = vk_to_raw_value(&src.format);
         dst.samples = vk_to_raw_value(&src.samples);

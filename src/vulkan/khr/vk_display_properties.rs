@@ -32,7 +32,7 @@ pub struct VkDisplayProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayProperties {
     pub display: RawVkDisplay,
-    pub display_name: *const c_char,
+    pub display_name: *mut c_char,
     pub physical_dimensions: RawVkExtent2D,
     pub physical_resolution: RawVkExtent2D,
     pub supported_transforms: RawVkSurfaceTransformFlags,

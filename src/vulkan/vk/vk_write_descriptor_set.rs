@@ -35,21 +35,21 @@ pub struct VkWriteDescriptorSet {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSet {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub dst_set: RawVkDescriptorSet,
     pub dst_binding: u32,
     pub dst_array_element: u32,
     pub descriptor_count: u32,
     pub descriptor_type: RawVkDescriptorType,
-    pub image_info: *const RawVkDescriptorImageInfo,
-    pub buffer_info: *const RawVkDescriptorBufferInfo,
-    pub texel_buffer_view: *const RawVkBufferView,
+    pub image_info: *mut RawVkDescriptorImageInfo,
+    pub buffer_info: *mut RawVkDescriptorBufferInfo,
+    pub texel_buffer_view: *mut RawVkBufferView,
 }
 
 impl VkWrappedType<RawVkWriteDescriptorSet> for VkWriteDescriptorSet {
     fn vk_to_raw(src: &VkWriteDescriptorSet, dst: &mut RawVkWriteDescriptorSet) {
         dst.s_type = vk_to_raw_value(&VkStructureType::WriteDescriptorSet);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.dst_set = vk_to_raw_value(&src.dst_set);
         dst.dst_binding = vk_to_raw_value(&src.dst_binding);
         dst.dst_array_element = vk_to_raw_value(&src.dst_array_element);

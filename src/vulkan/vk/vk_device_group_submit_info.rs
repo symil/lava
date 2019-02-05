@@ -26,23 +26,23 @@ pub struct VkDeviceGroupSubmitInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupSubmitInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub wait_semaphore_count: u32,
-    pub wait_semaphore_device_indices: *const u32,
+    pub wait_semaphore_device_indices: *mut u32,
     pub command_buffer_count: u32,
-    pub command_buffer_device_masks: *const u32,
+    pub command_buffer_device_masks: *mut u32,
     pub signal_semaphore_count: u32,
-    pub signal_semaphore_device_indices: *const u32,
+    pub signal_semaphore_device_indices: *mut u32,
 }
 
 impl VkWrappedType<RawVkDeviceGroupSubmitInfo> for VkDeviceGroupSubmitInfo {
     fn vk_to_raw(src: &VkDeviceGroupSubmitInfo, dst: &mut RawVkDeviceGroupSubmitInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupSubmitInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.wait_semaphore_count = src.wait_semaphore_device_indices.len() as u32;
         dst.wait_semaphore_device_indices = new_ptr_vk_array(&src.wait_semaphore_device_indices);
         dst.command_buffer_count = src.command_buffer_device_masks.len() as u32;
-        dst.command_buffer_device_masks = src.command_buffer_device_masks.as_ptr();
+        dst.command_buffer_device_masks = get_vec_ptr(&src.command_buffer_device_masks);
         dst.signal_semaphore_count = src.signal_semaphore_device_indices.len() as u32;
         dst.signal_semaphore_device_indices = new_ptr_vk_array(&src.signal_semaphore_device_indices);
     }

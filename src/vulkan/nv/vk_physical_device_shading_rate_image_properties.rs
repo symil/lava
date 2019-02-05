@@ -27,7 +27,7 @@ pub struct VkPhysicalDeviceShadingRateImageProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShadingRateImageProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shading_rate_texel_size: RawVkExtent2D,
     pub shading_rate_palette_size: u32,
     pub shading_rate_max_coarse_samples: u32,
@@ -36,7 +36,7 @@ pub struct RawVkPhysicalDeviceShadingRateImageProperties {
 impl VkWrappedType<RawVkPhysicalDeviceShadingRateImageProperties> for VkPhysicalDeviceShadingRateImageProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceShadingRateImageProperties, dst: &mut RawVkPhysicalDeviceShadingRateImageProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShadingRateImagePropertiesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shading_rate_texel_size = vk_to_raw_value(&src.shading_rate_texel_size);
         dst.shading_rate_palette_size = vk_to_raw_value(&src.shading_rate_palette_size);
         dst.shading_rate_max_coarse_samples = vk_to_raw_value(&src.shading_rate_max_coarse_samples);

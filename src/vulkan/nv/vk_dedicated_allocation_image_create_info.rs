@@ -24,14 +24,14 @@ pub struct VkDedicatedAllocationImageCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDedicatedAllocationImageCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub dedicated_allocation: u32,
 }
 
 impl VkWrappedType<RawVkDedicatedAllocationImageCreateInfo> for VkDedicatedAllocationImageCreateInfo {
     fn vk_to_raw(src: &VkDedicatedAllocationImageCreateInfo, dst: &mut RawVkDedicatedAllocationImageCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DedicatedAllocationImageCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.dedicated_allocation = vk_to_raw_value(&src.dedicated_allocation);
     }
 }

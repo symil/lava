@@ -26,7 +26,7 @@ pub struct VkMemoryAllocateFlagsInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryAllocateFlagsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkMemoryAllocateFlags,
     pub device_mask: u32,
 }
@@ -34,7 +34,7 @@ pub struct RawVkMemoryAllocateFlagsInfo {
 impl VkWrappedType<RawVkMemoryAllocateFlagsInfo> for VkMemoryAllocateFlagsInfo {
     fn vk_to_raw(src: &VkMemoryAllocateFlagsInfo, dst: &mut RawVkMemoryAllocateFlagsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryAllocateFlagsInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.device_mask = src.device_mask;
     }

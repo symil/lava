@@ -24,14 +24,14 @@ pub struct VkSamplerYcbcrConversionImageFormatProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionImageFormatProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub combined_image_sampler_descriptor_count: u32,
 }
 
 impl VkWrappedType<RawVkSamplerYcbcrConversionImageFormatProperties> for VkSamplerYcbcrConversionImageFormatProperties {
     fn vk_to_raw(src: &VkSamplerYcbcrConversionImageFormatProperties, dst: &mut RawVkSamplerYcbcrConversionImageFormatProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SamplerYcbcrConversionImageFormatProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.combined_image_sampler_descriptor_count = vk_to_raw_value(&src.combined_image_sampler_descriptor_count);
     }
 }

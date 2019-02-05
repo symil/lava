@@ -25,14 +25,14 @@ pub struct VkShaderModuleValidationCacheCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShaderModuleValidationCacheCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub validation_cache: RawVkValidationCache,
 }
 
 impl VkWrappedType<RawVkShaderModuleValidationCacheCreateInfo> for VkShaderModuleValidationCacheCreateInfo {
     fn vk_to_raw(src: &VkShaderModuleValidationCacheCreateInfo, dst: &mut RawVkShaderModuleValidationCacheCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ShaderModuleValidationCacheCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.validation_cache = vk_to_raw_value(&src.validation_cache);
     }
 }

@@ -37,7 +37,7 @@ pub struct VkGeometryTriangles {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometryTriangles {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub vertex_data: RawVkBuffer,
     pub vertex_offset: u64,
     pub vertex_count: u32,
@@ -54,7 +54,7 @@ pub struct RawVkGeometryTriangles {
 impl VkWrappedType<RawVkGeometryTriangles> for VkGeometryTriangles {
     fn vk_to_raw(src: &VkGeometryTriangles, dst: &mut RawVkGeometryTriangles) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GeometryTrianglesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.vertex_data = vk_to_raw_value(&src.vertex_data);
         dst.vertex_offset = vk_to_raw_value(&src.vertex_offset);
         dst.vertex_count = vk_to_raw_value(&src.vertex_count);

@@ -38,7 +38,7 @@ pub struct VkPipelineRasterizationStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineRasterizationStateCreateFlags,
     pub depth_clamp_enable: u32,
     pub rasterizer_discard_enable: u32,
@@ -55,7 +55,7 @@ pub struct RawVkPipelineRasterizationStateCreateInfo {
 impl VkWrappedType<RawVkPipelineRasterizationStateCreateInfo> for VkPipelineRasterizationStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineRasterizationStateCreateInfo, dst: &mut RawVkPipelineRasterizationStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.depth_clamp_enable = vk_to_raw_value(&src.depth_clamp_enable);
         dst.rasterizer_discard_enable = vk_to_raw_value(&src.rasterizer_discard_enable);

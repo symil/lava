@@ -30,7 +30,7 @@ pub struct VkPhysicalDeviceSampleLocationsProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSampleLocationsProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub sample_location_sample_counts: RawVkSampleCountFlags,
     pub max_sample_location_grid_size: RawVkExtent2D,
     pub sample_location_coordinate_range: [f32; 2],
@@ -41,7 +41,7 @@ pub struct RawVkPhysicalDeviceSampleLocationsProperties {
 impl VkWrappedType<RawVkPhysicalDeviceSampleLocationsProperties> for VkPhysicalDeviceSampleLocationsProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceSampleLocationsProperties, dst: &mut RawVkPhysicalDeviceSampleLocationsProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSampleLocationsPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.sample_location_sample_counts = vk_to_raw_value(&src.sample_location_sample_counts);
         dst.max_sample_location_grid_size = vk_to_raw_value(&src.max_sample_location_grid_size);
         dst.sample_location_coordinate_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.sample_location_coordinate_range, &mut dst_array); dst_array };

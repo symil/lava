@@ -29,7 +29,7 @@ pub struct VkRayTracingShaderGroupCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRayTracingShaderGroupCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub type_: RawVkRayTracingShaderGroupType,
     pub general_shader: u32,
     pub closest_hit_shader: u32,
@@ -40,7 +40,7 @@ pub struct RawVkRayTracingShaderGroupCreateInfo {
 impl VkWrappedType<RawVkRayTracingShaderGroupCreateInfo> for VkRayTracingShaderGroupCreateInfo {
     fn vk_to_raw(src: &VkRayTracingShaderGroupCreateInfo, dst: &mut RawVkRayTracingShaderGroupCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RayTracingShaderGroupCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.general_shader = vk_to_raw_value(&src.general_shader);
         dst.closest_hit_shader = vk_to_raw_value(&src.closest_hit_shader);

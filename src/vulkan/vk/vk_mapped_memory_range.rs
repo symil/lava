@@ -27,7 +27,7 @@ pub struct VkMappedMemoryRange {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMappedMemoryRange {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub memory: RawVkDeviceMemory,
     pub offset: u64,
     pub size: u64,
@@ -36,7 +36,7 @@ pub struct RawVkMappedMemoryRange {
 impl VkWrappedType<RawVkMappedMemoryRange> for VkMappedMemoryRange {
     fn vk_to_raw(src: &VkMappedMemoryRange, dst: &mut RawVkMappedMemoryRange) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MappedMemoryRange);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.memory = vk_to_raw_value(&src.memory);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.size = vk_to_raw_value(&src.size);

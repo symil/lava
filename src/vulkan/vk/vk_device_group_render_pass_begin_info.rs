@@ -26,16 +26,16 @@ pub struct VkDeviceGroupRenderPassBeginInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupRenderPassBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub device_mask: u32,
     pub device_render_area_count: u32,
-    pub device_render_areas: *const RawVkRect2D,
+    pub device_render_areas: *mut RawVkRect2D,
 }
 
 impl VkWrappedType<RawVkDeviceGroupRenderPassBeginInfo> for VkDeviceGroupRenderPassBeginInfo {
     fn vk_to_raw(src: &VkDeviceGroupRenderPassBeginInfo, dst: &mut RawVkDeviceGroupRenderPassBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupRenderPassBeginInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.device_mask = src.device_mask;
         dst.device_render_area_count = src.device_render_areas.len() as u32;
         dst.device_render_areas = new_ptr_vk_array(&src.device_render_areas);

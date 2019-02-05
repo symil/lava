@@ -25,15 +25,15 @@ pub struct VkPresentTimesInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentTimesInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain_count: u32,
-    pub times: *const RawVkPresentTime,
+    pub times: *mut RawVkPresentTime,
 }
 
 impl VkWrappedType<RawVkPresentTimesInfo> for VkPresentTimesInfo {
     fn vk_to_raw(src: &VkPresentTimesInfo, dst: &mut RawVkPresentTimesInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PresentTimesInfoGoogle);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.swapchain_count = get_array_option_len(&src.times) as u32;
         dst.times = new_ptr_vk_array_checked(&src.times);
     }

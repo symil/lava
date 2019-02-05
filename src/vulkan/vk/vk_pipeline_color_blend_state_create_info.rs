@@ -31,19 +31,19 @@ pub struct VkPipelineColorBlendStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineColorBlendStateCreateFlags,
     pub logic_op_enable: u32,
     pub logic_op: RawVkLogicOp,
     pub attachment_count: u32,
-    pub attachments: *const RawVkPipelineColorBlendAttachmentState,
+    pub attachments: *mut RawVkPipelineColorBlendAttachmentState,
     pub blend_constants: [f32; 4],
 }
 
 impl VkWrappedType<RawVkPipelineColorBlendStateCreateInfo> for VkPipelineColorBlendStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineColorBlendStateCreateInfo, dst: &mut RawVkPipelineColorBlendStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineColorBlendStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.logic_op_enable = vk_to_raw_value(&src.logic_op_enable);
         dst.logic_op = vk_to_raw_value(&src.logic_op);

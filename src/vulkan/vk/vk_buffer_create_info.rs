@@ -31,19 +31,19 @@ pub struct VkBufferCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkBufferCreateFlags,
     pub size: u64,
     pub usage: RawVkBufferUsageFlags,
     pub sharing_mode: RawVkSharingMode,
     pub queue_family_index_count: u32,
-    pub queue_family_indices: *const u32,
+    pub queue_family_indices: *mut u32,
 }
 
 impl VkWrappedType<RawVkBufferCreateInfo> for VkBufferCreateInfo {
     fn vk_to_raw(src: &VkBufferCreateInfo, dst: &mut RawVkBufferCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.size = vk_to_raw_value(&src.size);
         dst.usage = vk_to_raw_value(&src.usage);

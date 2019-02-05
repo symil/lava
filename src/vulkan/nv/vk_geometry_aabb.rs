@@ -28,7 +28,7 @@ pub struct VkGeometryAABB {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometryAABB {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub aabb_data: RawVkBuffer,
     pub num_aabbs: u32,
     pub stride: u32,
@@ -38,7 +38,7 @@ pub struct RawVkGeometryAABB {
 impl VkWrappedType<RawVkGeometryAABB> for VkGeometryAABB {
     fn vk_to_raw(src: &VkGeometryAABB, dst: &mut RawVkGeometryAABB) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GeometryAabbNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.aabb_data = vk_to_raw_value(&src.aabb_data);
         dst.num_aabbs = vk_to_raw_value(&src.num_aabbs);
         dst.stride = vk_to_raw_value(&src.stride);

@@ -26,18 +26,18 @@ pub struct VkDeviceGroupPresentInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupPresentInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain_count: u32,
-    pub device_masks: *const u32,
+    pub device_masks: *mut u32,
     pub mode: RawVkDeviceGroupPresentModeFlags,
 }
 
 impl VkWrappedType<RawVkDeviceGroupPresentInfo> for VkDeviceGroupPresentInfo {
     fn vk_to_raw(src: &VkDeviceGroupPresentInfo, dst: &mut RawVkDeviceGroupPresentInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupPresentInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.swapchain_count = src.device_masks.len() as u32;
-        dst.device_masks = src.device_masks.as_ptr();
+        dst.device_masks = get_vec_ptr(&src.device_masks);
         dst.mode = vk_to_raw_value(&src.mode);
     }
 }

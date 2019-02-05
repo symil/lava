@@ -26,7 +26,7 @@ pub struct VkBindImageMemorySwapchainInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemorySwapchainInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain: RawVkSwapchain,
     pub image_index: u32,
 }
@@ -34,7 +34,7 @@ pub struct RawVkBindImageMemorySwapchainInfo {
 impl VkWrappedType<RawVkBindImageMemorySwapchainInfo> for VkBindImageMemorySwapchainInfo {
     fn vk_to_raw(src: &VkBindImageMemorySwapchainInfo, dst: &mut RawVkBindImageMemorySwapchainInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindImageMemorySwapchainInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.swapchain = vk_to_raw_value(&src.swapchain);
         dst.image_index = vk_to_raw_value(&src.image_index);
     }

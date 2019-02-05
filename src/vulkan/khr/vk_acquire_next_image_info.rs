@@ -31,7 +31,7 @@ pub struct VkAcquireNextImageInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAcquireNextImageInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain: RawVkSwapchain,
     pub timeout: u64,
     pub semaphore: RawVkSemaphore,
@@ -42,7 +42,7 @@ pub struct RawVkAcquireNextImageInfo {
 impl VkWrappedType<RawVkAcquireNextImageInfo> for VkAcquireNextImageInfo {
     fn vk_to_raw(src: &VkAcquireNextImageInfo, dst: &mut RawVkAcquireNextImageInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AcquireNextImageInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.swapchain = vk_to_raw_value(&src.swapchain);
         dst.timeout = src.timeout;
         dst.semaphore = vk_to_raw_value(&src.semaphore);

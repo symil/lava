@@ -24,13 +24,13 @@ pub struct VkBaseOutStructure {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBaseOutStructure {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
 }
 
 impl VkWrappedType<RawVkBaseOutStructure> for VkBaseOutStructure {
     fn vk_to_raw(src: &VkBaseOutStructure, dst: &mut RawVkBaseOutStructure) {
         dst.s_type = vk_to_raw_value(&src.s_type);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
     }
 }
 

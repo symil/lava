@@ -27,17 +27,17 @@ pub struct VkRenderPassSampleLocationsBeginInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassSampleLocationsBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub attachment_initial_sample_locations_count: u32,
-    pub attachment_initial_sample_locations: *const RawVkAttachmentSampleLocations,
+    pub attachment_initial_sample_locations: *mut RawVkAttachmentSampleLocations,
     pub post_subpass_sample_locations_count: u32,
-    pub post_subpass_sample_locations: *const RawVkSubpassSampleLocations,
+    pub post_subpass_sample_locations: *mut RawVkSubpassSampleLocations,
 }
 
 impl VkWrappedType<RawVkRenderPassSampleLocationsBeginInfo> for VkRenderPassSampleLocationsBeginInfo {
     fn vk_to_raw(src: &VkRenderPassSampleLocationsBeginInfo, dst: &mut RawVkRenderPassSampleLocationsBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassSampleLocationsBeginInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.attachment_initial_sample_locations_count = src.attachment_initial_sample_locations.len() as u32;
         dst.attachment_initial_sample_locations = new_ptr_vk_array(&src.attachment_initial_sample_locations);
         dst.post_subpass_sample_locations_count = src.post_subpass_sample_locations.len() as u32;

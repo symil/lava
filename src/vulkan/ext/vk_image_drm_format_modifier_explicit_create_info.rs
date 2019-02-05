@@ -26,16 +26,16 @@ pub struct VkImageDrmFormatModifierExplicitCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageDrmFormatModifierExplicitCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub drm_format_modifier: u64,
     pub drm_format_modifier_plane_count: u32,
-    pub plane_layouts: *const RawVkSubresourceLayout,
+    pub plane_layouts: *mut RawVkSubresourceLayout,
 }
 
 impl VkWrappedType<RawVkImageDrmFormatModifierExplicitCreateInfo> for VkImageDrmFormatModifierExplicitCreateInfo {
     fn vk_to_raw(src: &VkImageDrmFormatModifierExplicitCreateInfo, dst: &mut RawVkImageDrmFormatModifierExplicitCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageDrmFormatModifierExplicitCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.drm_format_modifier = vk_to_raw_value(&src.drm_format_modifier);
         dst.drm_format_modifier_plane_count = src.plane_layouts.len() as u32;
         dst.plane_layouts = new_ptr_vk_array(&src.plane_layouts);

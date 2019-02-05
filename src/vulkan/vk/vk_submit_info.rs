@@ -30,20 +30,20 @@ pub struct VkSubmitInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubmitInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub wait_semaphore_count: u32,
-    pub wait_semaphores: *const RawVkSemaphore,
-    pub wait_dst_stage_mask: *const RawVkPipelineStageFlags,
+    pub wait_semaphores: *mut RawVkSemaphore,
+    pub wait_dst_stage_mask: *mut RawVkPipelineStageFlags,
     pub command_buffer_count: u32,
-    pub command_buffers: *const RawVkCommandBuffer,
+    pub command_buffers: *mut RawVkCommandBuffer,
     pub signal_semaphore_count: u32,
-    pub signal_semaphores: *const RawVkSemaphore,
+    pub signal_semaphores: *mut RawVkSemaphore,
 }
 
 impl VkWrappedType<RawVkSubmitInfo> for VkSubmitInfo {
     fn vk_to_raw(src: &VkSubmitInfo, dst: &mut RawVkSubmitInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SubmitInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.wait_semaphore_count = cmp::max(src.wait_semaphores.len(), src.wait_dst_stage_mask.len()) as u32;
         dst.wait_semaphores = new_ptr_vk_array(&src.wait_semaphores);
         dst.wait_dst_stage_mask = new_ptr_vk_array(&src.wait_dst_stage_mask);

@@ -32,7 +32,7 @@ pub struct VkComputePipelineCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkComputePipelineCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineCreateFlags,
     pub stage: RawVkPipelineShaderStageCreateInfo,
     pub layout: RawVkPipelineLayout,
@@ -43,7 +43,7 @@ pub struct RawVkComputePipelineCreateInfo {
 impl<'a> VkWrappedType<RawVkComputePipelineCreateInfo> for VkComputePipelineCreateInfo<'a> {
     fn vk_to_raw(src: &VkComputePipelineCreateInfo, dst: &mut RawVkComputePipelineCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ComputePipelineCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage = vk_to_raw_value(&src.stage);
         dst.layout = vk_to_raw_value(&src.layout);

@@ -31,7 +31,7 @@ pub struct VkCopyDescriptorSet {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCopyDescriptorSet {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub src_set: RawVkDescriptorSet,
     pub src_binding: u32,
     pub src_array_element: u32,
@@ -44,7 +44,7 @@ pub struct RawVkCopyDescriptorSet {
 impl VkWrappedType<RawVkCopyDescriptorSet> for VkCopyDescriptorSet {
     fn vk_to_raw(src: &VkCopyDescriptorSet, dst: &mut RawVkCopyDescriptorSet) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CopyDescriptorSet);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.src_set = vk_to_raw_value(&src.src_set);
         dst.src_binding = vk_to_raw_value(&src.src_binding);
         dst.src_array_element = vk_to_raw_value(&src.src_array_element);

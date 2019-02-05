@@ -25,14 +25,14 @@ pub struct VkBufferMemoryRequirementsInfo2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferMemoryRequirementsInfo2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub buffer: RawVkBuffer,
 }
 
 impl VkWrappedType<RawVkBufferMemoryRequirementsInfo2> for VkBufferMemoryRequirementsInfo2 {
     fn vk_to_raw(src: &VkBufferMemoryRequirementsInfo2, dst: &mut RawVkBufferMemoryRequirementsInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferMemoryRequirementsInfo2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.buffer = vk_to_raw_value(&src.buffer);
     }
 }

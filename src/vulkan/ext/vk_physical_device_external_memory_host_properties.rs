@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceExternalMemoryHostProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalMemoryHostProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub min_imported_host_pointer_alignment: u64,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceExternalMemoryHostProperties> for VkPhysicalDeviceExternalMemoryHostProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceExternalMemoryHostProperties, dst: &mut RawVkPhysicalDeviceExternalMemoryHostProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalMemoryHostPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.min_imported_host_pointer_alignment = vk_to_raw_value(&src.min_imported_host_pointer_alignment);
     }
 }

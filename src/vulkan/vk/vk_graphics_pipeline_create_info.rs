@@ -53,19 +53,19 @@ pub struct VkGraphicsPipelineCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGraphicsPipelineCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineCreateFlags,
     pub stage_count: u32,
-    pub stages: *const RawVkPipelineShaderStageCreateInfo,
-    pub vertex_input_state: *const RawVkPipelineVertexInputStateCreateInfo,
-    pub input_assembly_state: *const RawVkPipelineInputAssemblyStateCreateInfo,
-    pub tessellation_state: *const RawVkPipelineTessellationStateCreateInfo,
-    pub viewport_state: *const RawVkPipelineViewportStateCreateInfo,
-    pub rasterization_state: *const RawVkPipelineRasterizationStateCreateInfo,
-    pub multisample_state: *const RawVkPipelineMultisampleStateCreateInfo,
-    pub depth_stencil_state: *const RawVkPipelineDepthStencilStateCreateInfo,
-    pub color_blend_state: *const RawVkPipelineColorBlendStateCreateInfo,
-    pub dynamic_state: *const RawVkPipelineDynamicStateCreateInfo,
+    pub stages: *mut RawVkPipelineShaderStageCreateInfo,
+    pub vertex_input_state: *mut RawVkPipelineVertexInputStateCreateInfo,
+    pub input_assembly_state: *mut RawVkPipelineInputAssemblyStateCreateInfo,
+    pub tessellation_state: *mut RawVkPipelineTessellationStateCreateInfo,
+    pub viewport_state: *mut RawVkPipelineViewportStateCreateInfo,
+    pub rasterization_state: *mut RawVkPipelineRasterizationStateCreateInfo,
+    pub multisample_state: *mut RawVkPipelineMultisampleStateCreateInfo,
+    pub depth_stencil_state: *mut RawVkPipelineDepthStencilStateCreateInfo,
+    pub color_blend_state: *mut RawVkPipelineColorBlendStateCreateInfo,
+    pub dynamic_state: *mut RawVkPipelineDynamicStateCreateInfo,
     pub layout: RawVkPipelineLayout,
     pub render_pass: RawVkRenderPass,
     pub subpass: u32,
@@ -76,7 +76,7 @@ pub struct RawVkGraphicsPipelineCreateInfo {
 impl<'a> VkWrappedType<RawVkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfo<'a> {
     fn vk_to_raw(src: &VkGraphicsPipelineCreateInfo, dst: &mut RawVkGraphicsPipelineCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GraphicsPipelineCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage_count = src.stages.len() as u32;
         dst.stages = new_ptr_vk_array(&src.stages);

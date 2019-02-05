@@ -25,14 +25,14 @@ pub struct VkPipelineRasterizationStateRasterizationOrder {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationStateRasterizationOrder {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub rasterization_order: RawVkRasterizationOrder,
 }
 
 impl VkWrappedType<RawVkPipelineRasterizationStateRasterizationOrder> for VkPipelineRasterizationStateRasterizationOrder {
     fn vk_to_raw(src: &VkPipelineRasterizationStateRasterizationOrder, dst: &mut RawVkPipelineRasterizationStateRasterizationOrder) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateRasterizationOrderAmd);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.rasterization_order = vk_to_raw_value(&src.rasterization_order);
     }
 }

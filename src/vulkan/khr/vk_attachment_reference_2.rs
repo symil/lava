@@ -28,7 +28,7 @@ pub struct VkAttachmentReference2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAttachmentReference2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub attachment: u32,
     pub layout: RawVkImageLayout,
     pub aspect_mask: RawVkImageAspectFlags,
@@ -37,7 +37,7 @@ pub struct RawVkAttachmentReference2 {
 impl VkWrappedType<RawVkAttachmentReference2> for VkAttachmentReference2 {
     fn vk_to_raw(src: &VkAttachmentReference2, dst: &mut RawVkAttachmentReference2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AttachmentReference2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.attachment = vk_to_raw_value(&src.attachment);
         dst.layout = vk_to_raw_value(&src.layout);
         dst.aspect_mask = vk_to_raw_value(&src.aspect_mask);

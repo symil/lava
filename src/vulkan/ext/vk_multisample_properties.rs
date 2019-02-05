@@ -25,14 +25,14 @@ pub struct VkMultisampleProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMultisampleProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_sample_location_grid_size: RawVkExtent2D,
 }
 
 impl VkWrappedType<RawVkMultisampleProperties> for VkMultisampleProperties {
     fn vk_to_raw(src: &VkMultisampleProperties, dst: &mut RawVkMultisampleProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MultisamplePropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_sample_location_grid_size = vk_to_raw_value(&src.max_sample_location_grid_size);
     }
 }

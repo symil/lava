@@ -27,16 +27,16 @@ pub struct VkPipelineDynamicStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineDynamicStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineDynamicStateCreateFlags,
     pub dynamic_state_count: u32,
-    pub dynamic_states: *const RawVkDynamicState,
+    pub dynamic_states: *mut RawVkDynamicState,
 }
 
 impl VkWrappedType<RawVkPipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineDynamicStateCreateInfo, dst: &mut RawVkPipelineDynamicStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineDynamicStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.dynamic_state_count = src.dynamic_states.len() as u32;
         dst.dynamic_states = new_ptr_vk_array(&src.dynamic_states);

@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceTransformFeedbackFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceTransformFeedbackFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub transform_feedback: u32,
     pub geometry_streams: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceTransformFeedbackFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceTransformFeedbackFeatures> for VkPhysicalDeviceTransformFeedbackFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceTransformFeedbackFeatures, dst: &mut RawVkPhysicalDeviceTransformFeedbackFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceTransformFeedbackFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.transform_feedback = vk_to_raw_value(&src.transform_feedback);
         dst.geometry_streams = vk_to_raw_value(&src.geometry_streams);
     }

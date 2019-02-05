@@ -28,7 +28,7 @@ pub struct VkCommandBufferAllocateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub command_pool: RawVkCommandPool,
     pub level: RawVkCommandBufferLevel,
     pub command_buffer_count: u32,
@@ -37,7 +37,7 @@ pub struct RawVkCommandBufferAllocateInfo {
 impl VkWrappedType<RawVkCommandBufferAllocateInfo> for VkCommandBufferAllocateInfo {
     fn vk_to_raw(src: &VkCommandBufferAllocateInfo, dst: &mut RawVkCommandBufferAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferAllocateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.command_pool = vk_to_raw_value(&src.command_pool);
         dst.level = vk_to_raw_value(&src.level);
         dst.command_buffer_count = vk_to_raw_value(&src.command_buffer_count);

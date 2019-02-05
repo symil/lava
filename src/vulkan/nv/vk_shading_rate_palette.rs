@@ -24,7 +24,7 @@ pub struct VkShadingRatePalette {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShadingRatePalette {
     pub shading_rate_palette_entry_count: u32,
-    pub shading_rate_palette_entries: *const RawVkShadingRatePaletteEntry,
+    pub shading_rate_palette_entries: *mut RawVkShadingRatePaletteEntry,
 }
 
 impl VkWrappedType<RawVkShadingRatePalette> for VkShadingRatePalette {

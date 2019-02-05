@@ -33,7 +33,7 @@ pub struct VkCommandBufferInheritanceInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferInheritanceInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub render_pass: RawVkRenderPass,
     pub subpass: u32,
     pub framebuffer: RawVkFramebuffer,
@@ -45,7 +45,7 @@ pub struct RawVkCommandBufferInheritanceInfo {
 impl VkWrappedType<RawVkCommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfo {
     fn vk_to_raw(src: &VkCommandBufferInheritanceInfo, dst: &mut RawVkCommandBufferInheritanceInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferInheritanceInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.render_pass = vk_to_raw_value(&src.render_pass);
         dst.subpass = vk_to_raw_value(&src.subpass);
         dst.framebuffer = vk_to_raw_value(&src.framebuffer);

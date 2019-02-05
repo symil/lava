@@ -32,12 +32,12 @@ pub struct VkPipelineMultisampleStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineMultisampleStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineMultisampleStateCreateFlags,
     pub rasterization_samples: RawVkSampleCountFlags,
     pub sample_shading_enable: u32,
     pub min_sample_shading: f32,
-    pub sample_mask: *const u32,
+    pub sample_mask: *mut u32,
     pub alpha_to_coverage_enable: u32,
     pub alpha_to_one_enable: u32,
 }
@@ -45,12 +45,12 @@ pub struct RawVkPipelineMultisampleStateCreateInfo {
 impl VkWrappedType<RawVkPipelineMultisampleStateCreateInfo> for VkPipelineMultisampleStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineMultisampleStateCreateInfo, dst: &mut RawVkPipelineMultisampleStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineMultisampleStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.rasterization_samples = vk_to_raw_value(&src.rasterization_samples);
         dst.sample_shading_enable = vk_to_raw_value(&src.sample_shading_enable);
         dst.min_sample_shading = src.min_sample_shading;
-        dst.sample_mask = vec_option_to_ptr(&src.sample_mask);
+        dst.sample_mask = get_vec_ptr_checked(&src.sample_mask);
         dst.alpha_to_coverage_enable = vk_to_raw_value(&src.alpha_to_coverage_enable);
         dst.alpha_to_one_enable = vk_to_raw_value(&src.alpha_to_one_enable);
     }

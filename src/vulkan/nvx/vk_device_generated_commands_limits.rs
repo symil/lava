@@ -28,7 +28,7 @@ pub struct VkDeviceGeneratedCommandsLimits {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGeneratedCommandsLimits {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_indirect_commands_layout_token_count: u32,
     pub max_object_entry_counts: u32,
     pub min_sequence_count_buffer_offset_alignment: u32,
@@ -39,7 +39,7 @@ pub struct RawVkDeviceGeneratedCommandsLimits {
 impl VkWrappedType<RawVkDeviceGeneratedCommandsLimits> for VkDeviceGeneratedCommandsLimits {
     fn vk_to_raw(src: &VkDeviceGeneratedCommandsLimits, dst: &mut RawVkDeviceGeneratedCommandsLimits) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGeneratedCommandsLimitsNvx);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_indirect_commands_layout_token_count = vk_to_raw_value(&src.max_indirect_commands_layout_token_count);
         dst.max_object_entry_counts = vk_to_raw_value(&src.max_object_entry_counts);
         dst.min_sequence_count_buffer_offset_alignment = vk_to_raw_value(&src.min_sequence_count_buffer_offset_alignment);

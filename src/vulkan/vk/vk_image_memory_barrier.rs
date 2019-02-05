@@ -35,7 +35,7 @@ pub struct VkImageMemoryBarrier {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageMemoryBarrier {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub src_access_mask: RawVkAccessFlags,
     pub dst_access_mask: RawVkAccessFlags,
     pub old_layout: RawVkImageLayout,
@@ -49,7 +49,7 @@ pub struct RawVkImageMemoryBarrier {
 impl VkWrappedType<RawVkImageMemoryBarrier> for VkImageMemoryBarrier {
     fn vk_to_raw(src: &VkImageMemoryBarrier, dst: &mut RawVkImageMemoryBarrier) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageMemoryBarrier);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.src_access_mask = vk_to_raw_value(&src.src_access_mask);
         dst.dst_access_mask = vk_to_raw_value(&src.dst_access_mask);
         dst.old_layout = vk_to_raw_value(&src.old_layout);

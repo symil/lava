@@ -18,7 +18,7 @@ use vulkan::vk::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFl
 #[derive(Debug, Clone)]
 pub struct VkImportMemoryHostPointerInfo {
     pub handle_type: VkExternalMemoryHandleTypeFlags,
-    pub host_pointer: *const c_void,
+    pub host_pointer: *mut c_void,
 }
 
 #[doc(hidden)]
@@ -26,15 +26,15 @@ pub struct VkImportMemoryHostPointerInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportMemoryHostPointerInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
-    pub host_pointer: *const c_void,
+    pub host_pointer: *mut c_void,
 }
 
 impl VkWrappedType<RawVkImportMemoryHostPointerInfo> for VkImportMemoryHostPointerInfo {
     fn vk_to_raw(src: &VkImportMemoryHostPointerInfo, dst: &mut RawVkImportMemoryHostPointerInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImportMemoryHostPointerInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_type = vk_to_raw_value(&src.handle_type);
         dst.host_pointer = src.host_pointer;
     }
@@ -53,7 +53,7 @@ impl Default for VkImportMemoryHostPointerInfo {
     fn default() -> VkImportMemoryHostPointerInfo {
         VkImportMemoryHostPointerInfo {
             handle_type: Default::default(),
-            host_pointer: ptr::null(),
+            host_pointer: ptr::null_mut(),
         }
     }
 }

@@ -26,7 +26,7 @@ pub struct VkImportMemoryFdInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportMemoryFdInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
     pub fd: i32,
 }
@@ -34,7 +34,7 @@ pub struct RawVkImportMemoryFdInfo {
 impl VkWrappedType<RawVkImportMemoryFdInfo> for VkImportMemoryFdInfo {
     fn vk_to_raw(src: &VkImportMemoryFdInfo, dst: &mut RawVkImportMemoryFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImportMemoryFdInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_type = vk_to_raw_value(&src.handle_type);
         dst.fd = src.fd;
     }

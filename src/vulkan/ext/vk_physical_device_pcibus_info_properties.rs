@@ -27,7 +27,7 @@ pub struct VkPhysicalDevicePCIBusInfoProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevicePCIBusInfoProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub pci_domain: u32,
     pub pci_bus: u32,
     pub pci_device: u32,
@@ -37,7 +37,7 @@ pub struct RawVkPhysicalDevicePCIBusInfoProperties {
 impl VkWrappedType<RawVkPhysicalDevicePCIBusInfoProperties> for VkPhysicalDevicePCIBusInfoProperties {
     fn vk_to_raw(src: &VkPhysicalDevicePCIBusInfoProperties, dst: &mut RawVkPhysicalDevicePCIBusInfoProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePciBusInfoPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.pci_domain = vk_to_raw_value(&src.pci_domain);
         dst.pci_bus = vk_to_raw_value(&src.pci_bus);
         dst.pci_device = vk_to_raw_value(&src.pci_device);

@@ -36,10 +36,10 @@ pub struct VkDescriptorUpdateTemplateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorUpdateTemplateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDescriptorUpdateTemplateCreateFlags,
     pub descriptor_update_entry_count: u32,
-    pub descriptor_update_entries: *const RawVkDescriptorUpdateTemplateEntry,
+    pub descriptor_update_entries: *mut RawVkDescriptorUpdateTemplateEntry,
     pub template_type: RawVkDescriptorUpdateTemplateType,
     pub descriptor_set_layout: RawVkDescriptorSetLayout,
     pub pipeline_bind_point: RawVkPipelineBindPoint,
@@ -50,7 +50,7 @@ pub struct RawVkDescriptorUpdateTemplateCreateInfo {
 impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateInfo> for VkDescriptorUpdateTemplateCreateInfo {
     fn vk_to_raw(src: &VkDescriptorUpdateTemplateCreateInfo, dst: &mut RawVkDescriptorUpdateTemplateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorUpdateTemplateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.descriptor_update_entry_count = src.descriptor_update_entries.len() as u32;
         dst.descriptor_update_entries = new_ptr_vk_array(&src.descriptor_update_entries);

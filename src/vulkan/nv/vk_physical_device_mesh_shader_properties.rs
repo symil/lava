@@ -36,7 +36,7 @@ pub struct VkPhysicalDeviceMeshShaderProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMeshShaderProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_draw_mesh_tasks_count: u32,
     pub max_task_work_group_invocations: u32,
     pub max_task_work_group_size: [u32; 3],
@@ -55,7 +55,7 @@ pub struct RawVkPhysicalDeviceMeshShaderProperties {
 impl VkWrappedType<RawVkPhysicalDeviceMeshShaderProperties> for VkPhysicalDeviceMeshShaderProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceMeshShaderProperties, dst: &mut RawVkPhysicalDeviceMeshShaderProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMeshShaderPropertiesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_draw_mesh_tasks_count = vk_to_raw_value(&src.max_draw_mesh_tasks_count);
         dst.max_task_work_group_invocations = vk_to_raw_value(&src.max_task_work_group_invocations);
         dst.max_task_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_task_work_group_size, &mut dst_array); dst_array };

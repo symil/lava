@@ -65,4 +65,11 @@ impl VkFramebuffer {
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
+    
+    /// Wrapper for [vkDestroyFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyFramebuffer.html).
+    pub fn destroy(&self) {
+        unsafe {
+            ((&*self._fn_table).vkDestroyFramebuffer)((*self._fn_table).device, self._handle, ptr::null());
+        }
+    }
 }

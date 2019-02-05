@@ -32,11 +32,11 @@ pub struct VkFramebufferCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFramebufferCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkFramebufferCreateFlags,
     pub render_pass: RawVkRenderPass,
     pub attachment_count: u32,
-    pub attachments: *const RawVkImageView,
+    pub attachments: *mut RawVkImageView,
     pub width: u32,
     pub height: u32,
     pub layers: u32,
@@ -45,7 +45,7 @@ pub struct RawVkFramebufferCreateInfo {
 impl VkWrappedType<RawVkFramebufferCreateInfo> for VkFramebufferCreateInfo {
     fn vk_to_raw(src: &VkFramebufferCreateInfo, dst: &mut RawVkFramebufferCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::FramebufferCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.render_pass = vk_to_raw_value(&src.render_pass);
         dst.attachment_count = src.attachments.len() as u32;

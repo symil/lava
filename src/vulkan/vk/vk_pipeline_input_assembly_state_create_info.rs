@@ -28,7 +28,7 @@ pub struct VkPipelineInputAssemblyStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineInputAssemblyStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineInputAssemblyStateCreateFlags,
     pub topology: RawVkPrimitiveTopology,
     pub primitive_restart_enable: u32,
@@ -37,7 +37,7 @@ pub struct RawVkPipelineInputAssemblyStateCreateInfo {
 impl VkWrappedType<RawVkPipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssemblyStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineInputAssemblyStateCreateInfo, dst: &mut RawVkPipelineInputAssemblyStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineInputAssemblyStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.topology = vk_to_raw_value(&src.topology);
         dst.primitive_restart_enable = vk_to_raw_value(&src.primitive_restart_enable);

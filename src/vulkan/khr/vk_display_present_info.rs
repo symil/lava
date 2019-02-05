@@ -27,7 +27,7 @@ pub struct VkDisplayPresentInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPresentInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub src_rect: RawVkRect2D,
     pub dst_rect: RawVkRect2D,
     pub persistent: u32,
@@ -36,7 +36,7 @@ pub struct RawVkDisplayPresentInfo {
 impl VkWrappedType<RawVkDisplayPresentInfo> for VkDisplayPresentInfo {
     fn vk_to_raw(src: &VkDisplayPresentInfo, dst: &mut RawVkDisplayPresentInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPresentInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.src_rect = vk_to_raw_value(&src.src_rect);
         dst.dst_rect = vk_to_raw_value(&src.dst_rect);
         dst.persistent = vk_to_raw_value(&src.persistent);

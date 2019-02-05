@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceSamplerFilterMinmaxProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSamplerFilterMinmaxProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub filter_minmax_single_component_formats: u32,
     pub filter_minmax_image_component_mapping: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceSamplerFilterMinmaxProperties {
 impl VkWrappedType<RawVkPhysicalDeviceSamplerFilterMinmaxProperties> for VkPhysicalDeviceSamplerFilterMinmaxProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceSamplerFilterMinmaxProperties, dst: &mut RawVkPhysicalDeviceSamplerFilterMinmaxProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSamplerFilterMinmaxPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.filter_minmax_single_component_formats = vk_to_raw_value(&src.filter_minmax_single_component_formats);
         dst.filter_minmax_image_component_mapping = vk_to_raw_value(&src.filter_minmax_image_component_mapping);
     }

@@ -37,7 +37,7 @@ pub struct VkSamplerYcbcrConversionCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub format: RawVkFormat,
     pub ycbcr_model: RawVkSamplerYcbcrModelConversion,
     pub ycbcr_range: RawVkSamplerYcbcrRange,
@@ -51,7 +51,7 @@ pub struct RawVkSamplerYcbcrConversionCreateInfo {
 impl VkWrappedType<RawVkSamplerYcbcrConversionCreateInfo> for VkSamplerYcbcrConversionCreateInfo {
     fn vk_to_raw(src: &VkSamplerYcbcrConversionCreateInfo, dst: &mut RawVkSamplerYcbcrConversionCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SamplerYcbcrConversionCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.format = vk_to_raw_value(&src.format);
         dst.ycbcr_model = vk_to_raw_value(&src.ycbcr_model);
         dst.ycbcr_range = vk_to_raw_value(&src.ycbcr_range);

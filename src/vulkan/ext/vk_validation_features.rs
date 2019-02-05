@@ -27,17 +27,17 @@ pub struct VkValidationFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkValidationFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub enabled_validation_feature_count: u32,
-    pub enabled_validation_features: *const RawVkValidationFeatureEnable,
+    pub enabled_validation_features: *mut RawVkValidationFeatureEnable,
     pub disabled_validation_feature_count: u32,
-    pub disabled_validation_features: *const RawVkValidationFeatureDisable,
+    pub disabled_validation_features: *mut RawVkValidationFeatureDisable,
 }
 
 impl VkWrappedType<RawVkValidationFeatures> for VkValidationFeatures {
     fn vk_to_raw(src: &VkValidationFeatures, dst: &mut RawVkValidationFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ValidationFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.enabled_validation_feature_count = src.enabled_validation_features.len() as u32;
         dst.enabled_validation_features = new_ptr_vk_array(&src.enabled_validation_features);
         dst.disabled_validation_feature_count = src.disabled_validation_features.len() as u32;

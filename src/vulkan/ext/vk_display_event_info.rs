@@ -25,14 +25,14 @@ pub struct VkDisplayEventInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayEventInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub display_event: RawVkDisplayEventType,
 }
 
 impl VkWrappedType<RawVkDisplayEventInfo> for VkDisplayEventInfo {
     fn vk_to_raw(src: &VkDisplayEventInfo, dst: &mut RawVkDisplayEventInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplayEventInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.display_event = vk_to_raw_value(&src.display_event);
     }
 }

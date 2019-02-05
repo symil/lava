@@ -25,14 +25,14 @@ pub struct VkSamplerYcbcrConversionInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub conversion: RawVkSamplerYcbcrConversion,
 }
 
 impl VkWrappedType<RawVkSamplerYcbcrConversionInfo> for VkSamplerYcbcrConversionInfo {
     fn vk_to_raw(src: &VkSamplerYcbcrConversionInfo, dst: &mut RawVkSamplerYcbcrConversionInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SamplerYcbcrConversionInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.conversion = vk_to_raw_value(&src.conversion);
     }
 }

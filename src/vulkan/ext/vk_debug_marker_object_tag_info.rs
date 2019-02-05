@@ -28,23 +28,23 @@ pub struct VkDebugMarkerObjectTagInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugMarkerObjectTagInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_type: RawVkDebugReportObjectType,
     pub object: u64,
     pub tag_name: u64,
     pub tag_size: usize,
-    pub tag: *const c_void,
+    pub tag: *mut c_void,
 }
 
 impl<'a> VkWrappedType<RawVkDebugMarkerObjectTagInfo> for VkDebugMarkerObjectTagInfo<'a> {
     fn vk_to_raw(src: &VkDebugMarkerObjectTagInfo, dst: &mut RawVkDebugMarkerObjectTagInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugMarkerObjectTagInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.object_type = vk_to_raw_value(&src.object_type);
         dst.object = vk_to_raw_value(&src.object);
         dst.tag_name = vk_to_raw_value(&src.tag_name);
         dst.tag_size = src.tag.len();
-        dst.tag = src.tag.as_ptr();
+        dst.tag = get_vec_ptr(src.tag);
     }
 }
 

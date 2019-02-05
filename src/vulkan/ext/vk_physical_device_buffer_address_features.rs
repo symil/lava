@@ -26,7 +26,7 @@ pub struct VkPhysicalDeviceBufferAddressFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceBufferAddressFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub buffer_device_address: u32,
     pub buffer_device_address_capture_replay: u32,
     pub buffer_device_address_multi_device: u32,
@@ -35,7 +35,7 @@ pub struct RawVkPhysicalDeviceBufferAddressFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceBufferAddressFeatures> for VkPhysicalDeviceBufferAddressFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceBufferAddressFeatures, dst: &mut RawVkPhysicalDeviceBufferAddressFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBufferAddressFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.buffer_device_address = vk_to_raw_value(&src.buffer_device_address);
         dst.buffer_device_address_capture_replay = vk_to_raw_value(&src.buffer_device_address_capture_replay);
         dst.buffer_device_address_multi_device = vk_to_raw_value(&src.buffer_device_address_multi_device);

@@ -65,4 +65,38 @@ impl VkCommandPool {
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
+    
+    /// Wrapper for [vkDestroyCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyCommandPool.html).
+    pub fn destroy(&self) {
+        unsafe {
+            ((&*self._fn_table).vkDestroyCommandPool)((*self._fn_table).device, self._handle, ptr::null());
+        }
+    }
+    
+    /// Wrapper for [vkResetCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetCommandPool.html).
+    pub fn reset(&self, flags: VkCommandPoolResetFlags) -> Result<(), VkResult> {
+        unsafe {
+            let raw_flags = vk_to_raw_value(&flags);
+            let vk_result = ((&*self._fn_table).vkResetCommandPool)((*self._fn_table).device, self._handle, raw_flags);
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+        }
+    }
+    
+    /// Wrapper for [vkFreeCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeCommandBuffers.html).
+    pub fn free_command_buffers(&self, command_buffers: Vec<VkCommandBuffer>) {
+        unsafe {
+            let raw_command_buffer_count = command_buffers.len() as u32;
+            let raw_command_buffers = new_ptr_vk_array(&command_buffers);
+            ((&*self._fn_table).vkFreeCommandBuffers)((*self._fn_table).device, self._handle, raw_command_buffer_count, raw_command_buffers);
+            free_ptr(raw_command_buffers);
+        }
+    }
+    
+    /// Wrapper for [vkTrimCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkTrimCommandPool.html).
+    pub fn trim(&self, flags: VkCommandPoolTrimFlags) {
+        unsafe {
+            let raw_flags = vk_to_raw_value(&flags);
+            ((&*self._fn_table).vkTrimCommandPool)((*self._fn_table).device, self._handle, raw_flags);
+        }
+    }
 }

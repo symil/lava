@@ -27,7 +27,7 @@ pub struct VkSparseImageMemoryBindInfo {
 pub struct RawVkSparseImageMemoryBindInfo {
     pub image: RawVkImage,
     pub bind_count: u32,
-    pub binds: *const RawVkSparseImageMemoryBind,
+    pub binds: *mut RawVkSparseImageMemoryBind,
 }
 
 impl VkWrappedType<RawVkSparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfo {

@@ -25,15 +25,15 @@ pub struct VkWriteDescriptorSetAccelerationStructure {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSetAccelerationStructure {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub acceleration_structure_count: u32,
-    pub acceleration_structures: *const RawVkAccelerationStructure,
+    pub acceleration_structures: *mut RawVkAccelerationStructure,
 }
 
 impl VkWrappedType<RawVkWriteDescriptorSetAccelerationStructure> for VkWriteDescriptorSetAccelerationStructure {
     fn vk_to_raw(src: &VkWriteDescriptorSetAccelerationStructure, dst: &mut RawVkWriteDescriptorSetAccelerationStructure) {
         dst.s_type = vk_to_raw_value(&VkStructureType::WriteDescriptorSetAccelerationStructureNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.acceleration_structure_count = src.acceleration_structures.len() as u32;
         dst.acceleration_structures = new_ptr_vk_array(&src.acceleration_structures);
     }

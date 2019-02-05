@@ -25,15 +25,15 @@ pub struct VkPipelineVertexInputDivisorStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineVertexInputDivisorStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub vertex_binding_divisor_count: u32,
-    pub vertex_binding_divisors: *const RawVkVertexInputBindingDivisorDescription,
+    pub vertex_binding_divisors: *mut RawVkVertexInputBindingDivisorDescription,
 }
 
 impl VkWrappedType<RawVkPipelineVertexInputDivisorStateCreateInfo> for VkPipelineVertexInputDivisorStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineVertexInputDivisorStateCreateInfo, dst: &mut RawVkPipelineVertexInputDivisorStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineVertexInputDivisorStateCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.vertex_binding_divisor_count = src.vertex_binding_divisors.len() as u32;
         dst.vertex_binding_divisors = new_ptr_vk_array(&src.vertex_binding_divisors);
     }

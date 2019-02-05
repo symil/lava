@@ -32,7 +32,7 @@ pub struct VkBufferMemoryBarrier {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferMemoryBarrier {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub src_access_mask: RawVkAccessFlags,
     pub dst_access_mask: RawVkAccessFlags,
     pub src_queue_family_index: u32,
@@ -45,7 +45,7 @@ pub struct RawVkBufferMemoryBarrier {
 impl VkWrappedType<RawVkBufferMemoryBarrier> for VkBufferMemoryBarrier {
     fn vk_to_raw(src: &VkBufferMemoryBarrier, dst: &mut RawVkBufferMemoryBarrier) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferMemoryBarrier);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.src_access_mask = vk_to_raw_value(&src.src_access_mask);
         dst.dst_access_mask = vk_to_raw_value(&src.dst_access_mask);
         dst.src_queue_family_index = vk_to_raw_value(&src.src_queue_family_index);

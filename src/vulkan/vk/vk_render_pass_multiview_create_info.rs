@@ -26,25 +26,25 @@ pub struct VkRenderPassMultiviewCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassMultiviewCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub subpass_count: u32,
-    pub view_masks: *const u32,
+    pub view_masks: *mut u32,
     pub dependency_count: u32,
-    pub view_offsets: *const i32,
+    pub view_offsets: *mut i32,
     pub correlation_mask_count: u32,
-    pub correlation_masks: *const u32,
+    pub correlation_masks: *mut u32,
 }
 
 impl VkWrappedType<RawVkRenderPassMultiviewCreateInfo> for VkRenderPassMultiviewCreateInfo {
     fn vk_to_raw(src: &VkRenderPassMultiviewCreateInfo, dst: &mut RawVkRenderPassMultiviewCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassMultiviewCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.subpass_count = src.view_masks.len() as u32;
-        dst.view_masks = src.view_masks.as_ptr();
+        dst.view_masks = get_vec_ptr(&src.view_masks);
         dst.dependency_count = src.view_offsets.len() as u32;
         dst.view_offsets = new_ptr_vk_array(&src.view_offsets);
         dst.correlation_mask_count = src.correlation_masks.len() as u32;
-        dst.correlation_masks = src.correlation_masks.as_ptr();
+        dst.correlation_masks = get_vec_ptr(&src.correlation_masks);
     }
 }
 

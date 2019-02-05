@@ -4,15 +4,15 @@ use std::os::raw::c_char;
 use utils::c_bindings::*;
 use utils::vk_traits::*;
 
-const SIZE_OF_PTR : usize = mem::size_of::<*const u8>();
+const SIZE_OF_PTR : usize = mem::size_of::<*mut u8>();
 
-pub fn free_ptr<T>(ptr: *const T) {
+pub fn free_ptr<T>(ptr: *mut T) {
     unsafe {
-        free(mem::transmute(ptr));
+        free(ptr as *mut c_void);
     }
 }
 
-pub fn free_vk_ptr<T : VkFree>(ptr: *const T) {
+pub fn free_vk_ptr<T : VkFree>(ptr: *mut T) {
     unsafe {
         if !ptr.is_null() {
             (&*ptr).vk_free();
@@ -22,7 +22,7 @@ pub fn free_vk_ptr<T : VkFree>(ptr: *const T) {
     }
 }
 
-pub fn free_vk_ptr_array<T : VkFree>(size: usize, ptr: *const T) {
+pub fn free_vk_ptr_array<T : VkFree>(size: usize, ptr: *mut T) {
     unsafe {
         if !ptr.is_null() {
             for i in 0..size {
@@ -34,7 +34,7 @@ pub fn free_vk_ptr_array<T : VkFree>(size: usize, ptr: *const T) {
     }
 }
 
-pub fn free_vk_ptr_array_array<T : VkFree>(size: usize, ptr: *const *const T) {
+pub fn free_vk_ptr_array_array<T : VkFree>(size: usize, ptr: *mut *mut T) {
     unsafe {
         if !ptr.is_null() {
             for i in 0..size {
@@ -72,27 +72,27 @@ pub fn new_ptr_array<R : Copy>(array: &[R]) -> *mut R {
     }
 }
 
-pub fn new_ptr_vk_value<R, W : VkWrappedType<R>>(value: &W) -> *const R {
+pub fn new_ptr_vk_value<R, W : VkWrappedType<R>>(value: &W) -> *mut R {
     unsafe {
         let ptr = malloc(mem::size_of::<R>()) as *mut R;
         let dst = ptr.as_mut().unwrap();
         W::vk_to_raw(value, dst);
 
-        ptr as *const R
+        ptr
     }
 }
 
-pub fn new_ptr_vk_value_checked<R, W : VkWrappedType<R>>(value: &Option<W>) -> *const R {
+pub fn new_ptr_vk_value_checked<R, W : VkWrappedType<R>>(value: &Option<W>) -> *mut R {
     match value {
         Some(v) => new_ptr_vk_value(v),
-        None => ptr::null()
+        None => ptr::null_mut()
     }
 }
 
-pub fn new_ptr_vk_array<R, W : VkWrappedType<R>>(array: &[W]) -> *const R {
+pub fn new_ptr_vk_array<R, W : VkWrappedType<R>>(array: &[W]) -> *mut R {
     unsafe {
         if array.len() == 0 {
-            return ptr::null()
+            return ptr::null_mut()
         }
 
         let byte_len = array.len() * mem::size_of::<R>();
@@ -103,18 +103,18 @@ pub fn new_ptr_vk_array<R, W : VkWrappedType<R>>(array: &[W]) -> *const R {
             W::vk_to_raw(&array[i], dst);
         }
 
-        ptr as *const R
+        ptr
     }
 }
 
-pub fn new_ptr_vk_array_checked<R, W : VkWrappedType<R>>(array: &Option<Vec<W>>) -> *const R {
+pub fn new_ptr_vk_array_checked<R, W : VkWrappedType<R>>(array: &Option<Vec<W>>) -> *mut R {
     match array {
         Some(v) => new_ptr_vk_array(v),
-        None => ptr::null()
+        None => ptr::null_mut()
     }
 }
 
-pub fn new_ptr_string(string: &str) -> *const c_char {
+pub fn new_ptr_string(string: &str) -> *mut c_char {
     unsafe {
         let bytes = string.as_bytes();
         let len = bytes.len();
@@ -126,18 +126,18 @@ pub fn new_ptr_string(string: &str) -> *const c_char {
 
         *ptr.add(len) = 0;
 
-        ptr as *const c_char
+        ptr
     }
 }
 
-pub fn new_ptr_string_checked(string: &Option<String>) -> *const c_char {
+pub fn new_ptr_string_checked(string: &Option<String>) -> *mut c_char {
     match string {
         Some(value) => new_ptr_string(&value),
-        None => ptr::null()
+        None => ptr::null_mut()
     }
 }
 
-pub fn new_ptr_string_array(array: &[String]) -> *const *const c_char {
+pub fn new_ptr_string_array(array: &[String]) -> *mut *mut c_char {
     unsafe {
         let nb_strings = array.len();
         let mut total_strings_len : usize = 0;
@@ -165,15 +165,15 @@ pub fn new_ptr_string_array(array: &[String]) -> *const *const c_char {
             write_start_addr = write_start_addr.add(len + 1);
         }
 
-        addr_ptr as *const *const c_char
+        addr_ptr
     }
 }
 
-pub fn new_ptr_vk_array_array<R, W : VkWrappedType<R>>(array: &[W]) -> *const *const R {
+pub fn new_ptr_vk_array_array<R, W : VkWrappedType<R>>(array: &[W]) -> *mut *mut R {
     unsafe {
         let nb_elements = array.len();
         if nb_elements == 0 {
-            return ptr::null()
+            return ptr::null_mut()
         }
 
         let byte_len = nb_elements * (SIZE_OF_PTR + mem::size_of::<R>());
@@ -187,7 +187,7 @@ pub fn new_ptr_vk_array_array<R, W : VkWrappedType<R>>(array: &[W]) -> *const *c
             *ptr_addr.add(i) = elt_ptr;
         }
 
-        ptr_addr as *const *const R
+        ptr_addr
     }
 }
 
@@ -198,9 +198,19 @@ pub fn get_array_option_len<T>(value: &Option<Vec<T>>) -> usize {
     }
 }
 
-pub fn vec_option_to_ptr<T>(value: &Option<Vec<T>>) -> *const T {
+pub fn get_vec_ptr<T>(array: &[T]) -> *mut T {
+    unsafe { mem::transmute(array.as_ptr()) }
+}
+
+pub fn get_vec_ptr_checked<T>(value: &Option<Vec<T>>) -> *mut T {
     match value {
-        Some(array) => array.as_ptr(),
-        None => ptr::null()
+        Some(array) => unsafe { mem::transmute(array.as_ptr()) },
+        None => ptr::null_mut()
+    }
+}
+
+pub fn get_ref_ptr<T>(value: &T) -> *mut T {
+    unsafe {
+        mem::transmute(value as *const T)
     }
 }

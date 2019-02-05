@@ -25,14 +25,14 @@ pub struct VkImageMemoryRequirementsInfo2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageMemoryRequirementsInfo2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub image: RawVkImage,
 }
 
 impl VkWrappedType<RawVkImageMemoryRequirementsInfo2> for VkImageMemoryRequirementsInfo2 {
     fn vk_to_raw(src: &VkImageMemoryRequirementsInfo2, dst: &mut RawVkImageMemoryRequirementsInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageMemoryRequirementsInfo2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.image = vk_to_raw_value(&src.image);
     }
 }

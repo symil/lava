@@ -29,18 +29,18 @@ pub struct VkPipelineVertexInputStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineVertexInputStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineVertexInputStateCreateFlags,
     pub vertex_binding_description_count: u32,
-    pub vertex_binding_descriptions: *const RawVkVertexInputBindingDescription,
+    pub vertex_binding_descriptions: *mut RawVkVertexInputBindingDescription,
     pub vertex_attribute_description_count: u32,
-    pub vertex_attribute_descriptions: *const RawVkVertexInputAttributeDescription,
+    pub vertex_attribute_descriptions: *mut RawVkVertexInputAttributeDescription,
 }
 
 impl VkWrappedType<RawVkPipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineVertexInputStateCreateInfo, dst: &mut RawVkPipelineVertexInputStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineVertexInputStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.vertex_binding_description_count = src.vertex_binding_descriptions.len() as u32;
         dst.vertex_binding_descriptions = new_ptr_vk_array(&src.vertex_binding_descriptions);

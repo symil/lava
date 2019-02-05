@@ -29,7 +29,7 @@ pub struct RawVkCoarseSampleOrderCustom {
     pub shading_rate: RawVkShadingRatePaletteEntry,
     pub sample_count: u32,
     pub sample_location_count: u32,
-    pub sample_locations: *const RawVkCoarseSampleLocation,
+    pub sample_locations: *mut RawVkCoarseSampleLocation,
 }
 
 impl VkWrappedType<RawVkCoarseSampleOrderCustom> for VkCoarseSampleOrderCustom {

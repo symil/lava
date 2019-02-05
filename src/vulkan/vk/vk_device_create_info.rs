@@ -31,21 +31,21 @@ pub struct VkDeviceCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDeviceCreateFlags,
     pub queue_create_info_count: u32,
-    pub queue_create_infos: *const RawVkDeviceQueueCreateInfo,
+    pub queue_create_infos: *mut RawVkDeviceQueueCreateInfo,
     pub enabled_layer_count: u32,
-    pub enabled_layer_names: *const *const c_char,
+    pub enabled_layer_names: *mut *mut c_char,
     pub enabled_extension_count: u32,
-    pub enabled_extension_names: *const *const c_char,
-    pub enabled_features: *const RawVkPhysicalDeviceFeatures,
+    pub enabled_extension_names: *mut *mut c_char,
+    pub enabled_features: *mut RawVkPhysicalDeviceFeatures,
 }
 
 impl VkWrappedType<RawVkDeviceCreateInfo> for VkDeviceCreateInfo {
     fn vk_to_raw(src: &VkDeviceCreateInfo, dst: &mut RawVkDeviceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.queue_create_info_count = src.queue_create_infos.len() as u32;
         dst.queue_create_infos = new_ptr_vk_array(&src.queue_create_infos);

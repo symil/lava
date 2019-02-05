@@ -29,7 +29,7 @@ pub struct VkPhysicalDeviceBlendOperationAdvancedProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceBlendOperationAdvancedProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub advanced_blend_max_color_attachments: u32,
     pub advanced_blend_independent_blend: u32,
     pub advanced_blend_non_premultiplied_src_color: u32,
@@ -41,7 +41,7 @@ pub struct RawVkPhysicalDeviceBlendOperationAdvancedProperties {
 impl VkWrappedType<RawVkPhysicalDeviceBlendOperationAdvancedProperties> for VkPhysicalDeviceBlendOperationAdvancedProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceBlendOperationAdvancedProperties, dst: &mut RawVkPhysicalDeviceBlendOperationAdvancedProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBlendOperationAdvancedPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.advanced_blend_max_color_attachments = vk_to_raw_value(&src.advanced_blend_max_color_attachments);
         dst.advanced_blend_independent_blend = vk_to_raw_value(&src.advanced_blend_independent_blend);
         dst.advanced_blend_non_premultiplied_src_color = vk_to_raw_value(&src.advanced_blend_non_premultiplied_src_color);

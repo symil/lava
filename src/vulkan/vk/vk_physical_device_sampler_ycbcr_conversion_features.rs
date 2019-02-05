@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceSamplerYcbcrConversionFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSamplerYcbcrConversionFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub sampler_ycbcr_conversion: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceSamplerYcbcrConversionFeatures> for VkPhysicalDeviceSamplerYcbcrConversionFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceSamplerYcbcrConversionFeatures, dst: &mut RawVkPhysicalDeviceSamplerYcbcrConversionFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSamplerYcbcrConversionFeatures);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.sampler_ycbcr_conversion = vk_to_raw_value(&src.sampler_ycbcr_conversion);
     }
 }

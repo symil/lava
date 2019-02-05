@@ -25,14 +25,14 @@ pub struct VkSemaphoreCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSemaphoreCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkSemaphoreCreateFlags,
 }
 
 impl VkWrappedType<RawVkSemaphoreCreateInfo> for VkSemaphoreCreateInfo {
     fn vk_to_raw(src: &VkSemaphoreCreateInfo, dst: &mut RawVkSemaphoreCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SemaphoreCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
     }
 }

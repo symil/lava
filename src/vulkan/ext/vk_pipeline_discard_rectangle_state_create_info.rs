@@ -29,17 +29,17 @@ pub struct VkPipelineDiscardRectangleStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineDiscardRectangleStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineDiscardRectangleStateCreateFlags,
     pub discard_rectangle_mode: RawVkDiscardRectangleMode,
     pub discard_rectangle_count: u32,
-    pub discard_rectangles: *const RawVkRect2D,
+    pub discard_rectangles: *mut RawVkRect2D,
 }
 
 impl VkWrappedType<RawVkPipelineDiscardRectangleStateCreateInfo> for VkPipelineDiscardRectangleStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineDiscardRectangleStateCreateInfo, dst: &mut RawVkPipelineDiscardRectangleStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineDiscardRectangleStateCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.discard_rectangle_mode = vk_to_raw_value(&src.discard_rectangle_mode);
         dst.discard_rectangle_count = get_array_option_len(&src.discard_rectangles) as u32;

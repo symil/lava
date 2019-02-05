@@ -29,18 +29,18 @@ pub struct VkPipelineViewportStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineViewportStateCreateFlags,
     pub viewport_count: u32,
-    pub viewports: *const RawVkViewport,
+    pub viewports: *mut RawVkViewport,
     pub scissor_count: u32,
-    pub scissors: *const RawVkRect2D,
+    pub scissors: *mut RawVkRect2D,
 }
 
 impl VkWrappedType<RawVkPipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportStateCreateInfo, dst: &mut RawVkPipelineViewportStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.viewport_count = get_array_option_len(&src.viewports) as u32;
         dst.viewports = new_ptr_vk_array_checked(&src.viewports);

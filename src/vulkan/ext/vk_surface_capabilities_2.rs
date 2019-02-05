@@ -39,7 +39,7 @@ pub struct VkSurfaceCapabilities2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub min_image_count: u32,
     pub max_image_count: u32,
     pub current_extent: RawVkExtent2D,
@@ -56,7 +56,7 @@ pub struct RawVkSurfaceCapabilities2 {
 impl VkWrappedType<RawVkSurfaceCapabilities2> for VkSurfaceCapabilities2 {
     fn vk_to_raw(src: &VkSurfaceCapabilities2, dst: &mut RawVkSurfaceCapabilities2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceCapabilities2Ext);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.min_image_count = vk_to_raw_value(&src.min_image_count);
         dst.max_image_count = vk_to_raw_value(&src.max_image_count);
         dst.current_extent = vk_to_raw_value(&src.current_extent);

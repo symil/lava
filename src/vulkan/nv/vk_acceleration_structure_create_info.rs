@@ -26,7 +26,7 @@ pub struct VkAccelerationStructureCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAccelerationStructureCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub compacted_size: u64,
     pub info: RawVkAccelerationStructureInfo,
 }
@@ -34,7 +34,7 @@ pub struct RawVkAccelerationStructureCreateInfo {
 impl VkWrappedType<RawVkAccelerationStructureCreateInfo> for VkAccelerationStructureCreateInfo {
     fn vk_to_raw(src: &VkAccelerationStructureCreateInfo, dst: &mut RawVkAccelerationStructureCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AccelerationStructureCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.compacted_size = vk_to_raw_value(&src.compacted_size);
         dst.info = vk_to_raw_value(&src.info);
     }

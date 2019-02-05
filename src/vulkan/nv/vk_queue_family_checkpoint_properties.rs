@@ -25,14 +25,14 @@ pub struct VkQueueFamilyCheckpointProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueueFamilyCheckpointProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub checkpoint_execution_stage_mask: RawVkPipelineStageFlags,
 }
 
 impl VkWrappedType<RawVkQueueFamilyCheckpointProperties> for VkQueueFamilyCheckpointProperties {
     fn vk_to_raw(src: &VkQueueFamilyCheckpointProperties, dst: &mut RawVkQueueFamilyCheckpointProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::QueueFamilyCheckpointPropertiesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.checkpoint_execution_stage_mask = vk_to_raw_value(&src.checkpoint_execution_stage_mask);
     }
 }

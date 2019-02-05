@@ -27,16 +27,16 @@ pub struct VkDebugUtilsObjectNameInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsObjectNameInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_type: RawVkObjectType,
     pub object_handle: u64,
-    pub object_name: *const c_char,
+    pub object_name: *mut c_char,
 }
 
 impl VkWrappedType<RawVkDebugUtilsObjectNameInfo> for VkDebugUtilsObjectNameInfo {
     fn vk_to_raw(src: &VkDebugUtilsObjectNameInfo, dst: &mut RawVkDebugUtilsObjectNameInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsObjectNameInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.object_type = vk_to_raw_value(&src.object_type);
         dst.object_handle = vk_to_raw_value(&src.object_handle);
         dst.object_name = new_ptr_string_checked(&src.object_name);

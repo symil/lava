@@ -25,15 +25,15 @@ pub struct VkValidationFlags {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkValidationFlags {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub disabled_validation_check_count: u32,
-    pub disabled_validation_checks: *const RawVkValidationCheck,
+    pub disabled_validation_checks: *mut RawVkValidationCheck,
 }
 
 impl VkWrappedType<RawVkValidationFlags> for VkValidationFlags {
     fn vk_to_raw(src: &VkValidationFlags, dst: &mut RawVkValidationFlags) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ValidationFlagsExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.disabled_validation_check_count = src.disabled_validation_checks.len() as u32;
         dst.disabled_validation_checks = new_ptr_vk_array(&src.disabled_validation_checks);
     }

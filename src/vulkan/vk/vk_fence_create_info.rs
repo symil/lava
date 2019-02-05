@@ -25,14 +25,14 @@ pub struct VkFenceCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFenceCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkFenceCreateFlags,
 }
 
 impl VkWrappedType<RawVkFenceCreateInfo> for VkFenceCreateInfo {
     fn vk_to_raw(src: &VkFenceCreateInfo, dst: &mut RawVkFenceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::FenceCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
     }
 }

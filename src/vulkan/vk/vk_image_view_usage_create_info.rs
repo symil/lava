@@ -25,14 +25,14 @@ pub struct VkImageViewUsageCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageViewUsageCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub usage: RawVkImageUsageFlags,
 }
 
 impl VkWrappedType<RawVkImageViewUsageCreateInfo> for VkImageViewUsageCreateInfo {
     fn vk_to_raw(src: &VkImageViewUsageCreateInfo, dst: &mut RawVkImageViewUsageCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageViewUsageCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.usage = vk_to_raw_value(&src.usage);
     }
 }

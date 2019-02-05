@@ -24,17 +24,17 @@ pub struct VkWriteDescriptorSetInlineUniformBlock<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSetInlineUniformBlock {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub data_size: u32,
-    pub data: *const c_void,
+    pub data: *mut c_void,
 }
 
 impl<'a> VkWrappedType<RawVkWriteDescriptorSetInlineUniformBlock> for VkWriteDescriptorSetInlineUniformBlock<'a> {
     fn vk_to_raw(src: &VkWriteDescriptorSetInlineUniformBlock, dst: &mut RawVkWriteDescriptorSetInlineUniformBlock) {
         dst.s_type = vk_to_raw_value(&VkStructureType::WriteDescriptorSetInlineUniformBlockExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.data_size = src.data.len() as u32;
-        dst.data = src.data.as_ptr();
+        dst.data = get_vec_ptr(src.data);
     }
 }
 

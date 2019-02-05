@@ -25,15 +25,15 @@ pub struct VkRenderPassInputAttachmentAspectCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassInputAttachmentAspectCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub aspect_reference_count: u32,
-    pub aspect_references: *const RawVkInputAttachmentAspectReference,
+    pub aspect_references: *mut RawVkInputAttachmentAspectReference,
 }
 
 impl VkWrappedType<RawVkRenderPassInputAttachmentAspectCreateInfo> for VkRenderPassInputAttachmentAspectCreateInfo {
     fn vk_to_raw(src: &VkRenderPassInputAttachmentAspectCreateInfo, dst: &mut RawVkRenderPassInputAttachmentAspectCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassInputAttachmentAspectCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.aspect_reference_count = src.aspect_references.len() as u32;
         dst.aspect_references = new_ptr_vk_array(&src.aspect_references);
     }

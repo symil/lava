@@ -25,15 +25,15 @@ pub struct VkPresentRegions {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentRegions {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain_count: u32,
-    pub regions: *const RawVkPresentRegion,
+    pub regions: *mut RawVkPresentRegion,
 }
 
 impl VkWrappedType<RawVkPresentRegions> for VkPresentRegions {
     fn vk_to_raw(src: &VkPresentRegions, dst: &mut RawVkPresentRegions) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PresentRegionsKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.swapchain_count = get_array_option_len(&src.regions) as u32;
         dst.regions = new_ptr_vk_array_checked(&src.regions);
     }

@@ -26,7 +26,7 @@ pub struct VkPipelineRasterizationStateStreamCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationStateStreamCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineRasterizationStateStreamCreateFlags,
     pub rasterization_stream: u32,
 }
@@ -34,7 +34,7 @@ pub struct RawVkPipelineRasterizationStateStreamCreateInfo {
 impl VkWrappedType<RawVkPipelineRasterizationStateStreamCreateInfo> for VkPipelineRasterizationStateStreamCreateInfo {
     fn vk_to_raw(src: &VkPipelineRasterizationStateStreamCreateInfo, dst: &mut RawVkPipelineRasterizationStateStreamCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationStateStreamCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.rasterization_stream = vk_to_raw_value(&src.rasterization_stream);
     }

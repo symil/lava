@@ -14,96 +14,96 @@ pub struct VkFunctionTable {
     pub instance: RawVkInstance,
     pub device: RawVkDevice,
     pub vkDestroyInstance: unsafe extern fn(RawVkInstance, *const c_void),
-    pub vkEnumeratePhysicalDevices: unsafe extern fn(RawVkInstance, *const u32, *const RawVkPhysicalDevice) -> RawVkResult,
-    pub vkGetPhysicalDeviceFeatures: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceFeatures),
-    pub vkGetPhysicalDeviceFormatProperties: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, *const RawVkFormatProperties),
-    pub vkGetPhysicalDeviceImageFormatProperties: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, RawVkImageType, RawVkImageTiling, RawVkImageUsageFlags, RawVkImageCreateFlags, *const RawVkImageFormatProperties) -> RawVkResult,
-    pub vkGetPhysicalDeviceProperties: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceProperties),
-    pub vkGetPhysicalDeviceQueueFamilyProperties: unsafe extern fn(RawVkPhysicalDevice, *const u32, *const RawVkQueueFamilyProperties),
-    pub vkGetPhysicalDeviceMemoryProperties: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceMemoryProperties),
-    pub vkCreateDevice: unsafe extern fn(RawVkPhysicalDevice, *const RawVkDeviceCreateInfo, *const c_void, *const RawVkDevice) -> RawVkResult,
+    pub vkEnumeratePhysicalDevices: unsafe extern fn(RawVkInstance, *mut u32, *mut RawVkPhysicalDevice) -> RawVkResult,
+    pub vkGetPhysicalDeviceFeatures: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceFeatures),
+    pub vkGetPhysicalDeviceFormatProperties: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, *mut RawVkFormatProperties),
+    pub vkGetPhysicalDeviceImageFormatProperties: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, RawVkImageType, RawVkImageTiling, RawVkImageUsageFlags, RawVkImageCreateFlags, *mut RawVkImageFormatProperties) -> RawVkResult,
+    pub vkGetPhysicalDeviceProperties: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceProperties),
+    pub vkGetPhysicalDeviceQueueFamilyProperties: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut RawVkQueueFamilyProperties),
+    pub vkGetPhysicalDeviceMemoryProperties: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceMemoryProperties),
+    pub vkCreateDevice: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkDeviceCreateInfo, *const c_void, *mut RawVkDevice) -> RawVkResult,
     pub vkDestroyDevice: unsafe extern fn(RawVkDevice, *const c_void),
-    pub vkEnumerateDeviceExtensionProperties: unsafe extern fn(RawVkPhysicalDevice, *const c_char, *const u32, *const RawVkExtensionProperties) -> RawVkResult,
-    pub vkEnumerateDeviceLayerProperties: unsafe extern fn(RawVkPhysicalDevice, *const u32, *const RawVkLayerProperties) -> RawVkResult,
-    pub vkGetDeviceQueue: unsafe extern fn(RawVkDevice, u32, u32, *const RawVkQueue),
-    pub vkQueueSubmit: unsafe extern fn(RawVkQueue, u32, *const RawVkSubmitInfo, RawVkFence) -> RawVkResult,
+    pub vkEnumerateDeviceExtensionProperties: unsafe extern fn(RawVkPhysicalDevice, *mut c_char, *mut u32, *mut RawVkExtensionProperties) -> RawVkResult,
+    pub vkEnumerateDeviceLayerProperties: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut RawVkLayerProperties) -> RawVkResult,
+    pub vkGetDeviceQueue: unsafe extern fn(RawVkDevice, u32, u32, *mut RawVkQueue),
+    pub vkQueueSubmit: unsafe extern fn(RawVkQueue, u32, *mut RawVkSubmitInfo, RawVkFence) -> RawVkResult,
     pub vkQueueWaitIdle: unsafe extern fn(RawVkQueue) -> RawVkResult,
     pub vkDeviceWaitIdle: unsafe extern fn(RawVkDevice) -> RawVkResult,
-    pub vkAllocateMemory: unsafe extern fn(RawVkDevice, *const RawVkMemoryAllocateInfo, *const c_void, *const RawVkDeviceMemory) -> RawVkResult,
+    pub vkAllocateMemory: unsafe extern fn(RawVkDevice, *mut RawVkMemoryAllocateInfo, *const c_void, *mut RawVkDeviceMemory) -> RawVkResult,
     pub vkFreeMemory: unsafe extern fn(RawVkDevice, RawVkDeviceMemory, *const c_void),
-    pub vkMapMemory: unsafe extern fn(RawVkDevice, RawVkDeviceMemory, u64, u64, RawVkMemoryMapFlags, *const *const c_void) -> RawVkResult,
+    pub vkMapMemory: unsafe extern fn(RawVkDevice, RawVkDeviceMemory, u64, u64, RawVkMemoryMapFlags, *mut *mut c_void) -> RawVkResult,
     pub vkUnmapMemory: unsafe extern fn(RawVkDevice, RawVkDeviceMemory),
-    pub vkFlushMappedMemoryRanges: unsafe extern fn(RawVkDevice, u32, *const RawVkMappedMemoryRange) -> RawVkResult,
-    pub vkInvalidateMappedMemoryRanges: unsafe extern fn(RawVkDevice, u32, *const RawVkMappedMemoryRange) -> RawVkResult,
-    pub vkGetDeviceMemoryCommitment: unsafe extern fn(RawVkDevice, RawVkDeviceMemory, *const u64),
+    pub vkFlushMappedMemoryRanges: unsafe extern fn(RawVkDevice, u32, *mut RawVkMappedMemoryRange) -> RawVkResult,
+    pub vkInvalidateMappedMemoryRanges: unsafe extern fn(RawVkDevice, u32, *mut RawVkMappedMemoryRange) -> RawVkResult,
+    pub vkGetDeviceMemoryCommitment: unsafe extern fn(RawVkDevice, RawVkDeviceMemory, *mut u64),
     pub vkBindBufferMemory: unsafe extern fn(RawVkDevice, RawVkBuffer, RawVkDeviceMemory, u64) -> RawVkResult,
     pub vkBindImageMemory: unsafe extern fn(RawVkDevice, RawVkImage, RawVkDeviceMemory, u64) -> RawVkResult,
-    pub vkGetBufferMemoryRequirements: unsafe extern fn(RawVkDevice, RawVkBuffer, *const RawVkMemoryRequirements),
-    pub vkGetImageMemoryRequirements: unsafe extern fn(RawVkDevice, RawVkImage, *const RawVkMemoryRequirements),
-    pub vkGetImageSparseMemoryRequirements: unsafe extern fn(RawVkDevice, RawVkImage, *const u32, *const RawVkSparseImageMemoryRequirements),
-    pub vkGetPhysicalDeviceSparseImageFormatProperties: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, RawVkImageType, RawVkSampleCountFlags, RawVkImageUsageFlags, RawVkImageTiling, *const u32, *const RawVkSparseImageFormatProperties),
-    pub vkQueueBindSparse: unsafe extern fn(RawVkQueue, u32, *const RawVkBindSparseInfo, RawVkFence) -> RawVkResult,
-    pub vkCreateFence: unsafe extern fn(RawVkDevice, *const RawVkFenceCreateInfo, *const c_void, *const RawVkFence) -> RawVkResult,
+    pub vkGetBufferMemoryRequirements: unsafe extern fn(RawVkDevice, RawVkBuffer, *mut RawVkMemoryRequirements),
+    pub vkGetImageMemoryRequirements: unsafe extern fn(RawVkDevice, RawVkImage, *mut RawVkMemoryRequirements),
+    pub vkGetImageSparseMemoryRequirements: unsafe extern fn(RawVkDevice, RawVkImage, *mut u32, *mut RawVkSparseImageMemoryRequirements),
+    pub vkGetPhysicalDeviceSparseImageFormatProperties: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, RawVkImageType, RawVkSampleCountFlags, RawVkImageUsageFlags, RawVkImageTiling, *mut u32, *mut RawVkSparseImageFormatProperties),
+    pub vkQueueBindSparse: unsafe extern fn(RawVkQueue, u32, *mut RawVkBindSparseInfo, RawVkFence) -> RawVkResult,
+    pub vkCreateFence: unsafe extern fn(RawVkDevice, *mut RawVkFenceCreateInfo, *const c_void, *mut RawVkFence) -> RawVkResult,
     pub vkDestroyFence: unsafe extern fn(RawVkDevice, RawVkFence, *const c_void),
-    pub vkResetFences: unsafe extern fn(RawVkDevice, u32, *const RawVkFence) -> RawVkResult,
+    pub vkResetFences: unsafe extern fn(RawVkDevice, u32, *mut RawVkFence) -> RawVkResult,
     pub vkGetFenceStatus: unsafe extern fn(RawVkDevice, RawVkFence) -> RawVkResult,
-    pub vkWaitForFences: unsafe extern fn(RawVkDevice, u32, *const RawVkFence, u32, u64) -> RawVkResult,
-    pub vkCreateSemaphore: unsafe extern fn(RawVkDevice, *const RawVkSemaphoreCreateInfo, *const c_void, *const RawVkSemaphore) -> RawVkResult,
+    pub vkWaitForFences: unsafe extern fn(RawVkDevice, u32, *mut RawVkFence, u32, u64) -> RawVkResult,
+    pub vkCreateSemaphore: unsafe extern fn(RawVkDevice, *mut RawVkSemaphoreCreateInfo, *const c_void, *mut RawVkSemaphore) -> RawVkResult,
     pub vkDestroySemaphore: unsafe extern fn(RawVkDevice, RawVkSemaphore, *const c_void),
-    pub vkCreateEvent: unsafe extern fn(RawVkDevice, *const RawVkEventCreateInfo, *const c_void, *const RawVkEvent) -> RawVkResult,
+    pub vkCreateEvent: unsafe extern fn(RawVkDevice, *mut RawVkEventCreateInfo, *const c_void, *mut RawVkEvent) -> RawVkResult,
     pub vkDestroyEvent: unsafe extern fn(RawVkDevice, RawVkEvent, *const c_void),
     pub vkGetEventStatus: unsafe extern fn(RawVkDevice, RawVkEvent) -> RawVkResult,
     pub vkSetEvent: unsafe extern fn(RawVkDevice, RawVkEvent) -> RawVkResult,
     pub vkResetEvent: unsafe extern fn(RawVkDevice, RawVkEvent) -> RawVkResult,
-    pub vkCreateQueryPool: unsafe extern fn(RawVkDevice, *const RawVkQueryPoolCreateInfo, *const c_void, *const RawVkQueryPool) -> RawVkResult,
+    pub vkCreateQueryPool: unsafe extern fn(RawVkDevice, *mut RawVkQueryPoolCreateInfo, *const c_void, *mut RawVkQueryPool) -> RawVkResult,
     pub vkDestroyQueryPool: unsafe extern fn(RawVkDevice, RawVkQueryPool, *const c_void),
-    pub vkGetQueryPoolResults: unsafe extern fn(RawVkDevice, RawVkQueryPool, u32, u32, usize, *const c_void, u64, RawVkQueryResultFlags) -> RawVkResult,
-    pub vkCreateBuffer: unsafe extern fn(RawVkDevice, *const RawVkBufferCreateInfo, *const c_void, *const RawVkBuffer) -> RawVkResult,
+    pub vkGetQueryPoolResults: unsafe extern fn(RawVkDevice, RawVkQueryPool, u32, u32, usize, *mut c_void, u64, RawVkQueryResultFlags) -> RawVkResult,
+    pub vkCreateBuffer: unsafe extern fn(RawVkDevice, *mut RawVkBufferCreateInfo, *const c_void, *mut RawVkBuffer) -> RawVkResult,
     pub vkDestroyBuffer: unsafe extern fn(RawVkDevice, RawVkBuffer, *const c_void),
-    pub vkCreateBufferView: unsafe extern fn(RawVkDevice, *const RawVkBufferViewCreateInfo, *const c_void, *const RawVkBufferView) -> RawVkResult,
+    pub vkCreateBufferView: unsafe extern fn(RawVkDevice, *mut RawVkBufferViewCreateInfo, *const c_void, *mut RawVkBufferView) -> RawVkResult,
     pub vkDestroyBufferView: unsafe extern fn(RawVkDevice, RawVkBufferView, *const c_void),
-    pub vkCreateImage: unsafe extern fn(RawVkDevice, *const RawVkImageCreateInfo, *const c_void, *const RawVkImage) -> RawVkResult,
+    pub vkCreateImage: unsafe extern fn(RawVkDevice, *mut RawVkImageCreateInfo, *const c_void, *mut RawVkImage) -> RawVkResult,
     pub vkDestroyImage: unsafe extern fn(RawVkDevice, RawVkImage, *const c_void),
-    pub vkGetImageSubresourceLayout: unsafe extern fn(RawVkDevice, RawVkImage, *const RawVkImageSubresource, *const RawVkSubresourceLayout),
-    pub vkCreateImageView: unsafe extern fn(RawVkDevice, *const RawVkImageViewCreateInfo, *const c_void, *const RawVkImageView) -> RawVkResult,
+    pub vkGetImageSubresourceLayout: unsafe extern fn(RawVkDevice, RawVkImage, *mut RawVkImageSubresource, *mut RawVkSubresourceLayout),
+    pub vkCreateImageView: unsafe extern fn(RawVkDevice, *mut RawVkImageViewCreateInfo, *const c_void, *mut RawVkImageView) -> RawVkResult,
     pub vkDestroyImageView: unsafe extern fn(RawVkDevice, RawVkImageView, *const c_void),
-    pub vkCreateShaderModule: unsafe extern fn(RawVkDevice, *const RawVkShaderModuleCreateInfo, *const c_void, *const RawVkShaderModule) -> RawVkResult,
+    pub vkCreateShaderModule: unsafe extern fn(RawVkDevice, *mut RawVkShaderModuleCreateInfo, *const c_void, *mut RawVkShaderModule) -> RawVkResult,
     pub vkDestroyShaderModule: unsafe extern fn(RawVkDevice, RawVkShaderModule, *const c_void),
-    pub vkCreatePipelineCache: unsafe extern fn(RawVkDevice, *const RawVkPipelineCacheCreateInfo, *const c_void, *const RawVkPipelineCache) -> RawVkResult,
+    pub vkCreatePipelineCache: unsafe extern fn(RawVkDevice, *mut RawVkPipelineCacheCreateInfo, *const c_void, *mut RawVkPipelineCache) -> RawVkResult,
     pub vkDestroyPipelineCache: unsafe extern fn(RawVkDevice, RawVkPipelineCache, *const c_void),
-    pub vkGetPipelineCacheData: unsafe extern fn(RawVkDevice, RawVkPipelineCache, *const usize, *const c_void) -> RawVkResult,
-    pub vkMergePipelineCaches: unsafe extern fn(RawVkDevice, RawVkPipelineCache, u32, *const RawVkPipelineCache) -> RawVkResult,
-    pub vkCreateGraphicsPipelines: unsafe extern fn(RawVkDevice, RawVkPipelineCache, u32, *const RawVkGraphicsPipelineCreateInfo, *const c_void, *const RawVkPipeline) -> RawVkResult,
-    pub vkCreateComputePipelines: unsafe extern fn(RawVkDevice, RawVkPipelineCache, u32, *const RawVkComputePipelineCreateInfo, *const c_void, *const RawVkPipeline) -> RawVkResult,
+    pub vkGetPipelineCacheData: unsafe extern fn(RawVkDevice, RawVkPipelineCache, *mut usize, *mut c_void) -> RawVkResult,
+    pub vkMergePipelineCaches: unsafe extern fn(RawVkDevice, RawVkPipelineCache, u32, *mut RawVkPipelineCache) -> RawVkResult,
+    pub vkCreateGraphicsPipelines: unsafe extern fn(RawVkDevice, RawVkPipelineCache, u32, *mut RawVkGraphicsPipelineCreateInfo, *const c_void, *mut RawVkPipeline) -> RawVkResult,
+    pub vkCreateComputePipelines: unsafe extern fn(RawVkDevice, RawVkPipelineCache, u32, *mut RawVkComputePipelineCreateInfo, *const c_void, *mut RawVkPipeline) -> RawVkResult,
     pub vkDestroyPipeline: unsafe extern fn(RawVkDevice, RawVkPipeline, *const c_void),
-    pub vkCreatePipelineLayout: unsafe extern fn(RawVkDevice, *const RawVkPipelineLayoutCreateInfo, *const c_void, *const RawVkPipelineLayout) -> RawVkResult,
+    pub vkCreatePipelineLayout: unsafe extern fn(RawVkDevice, *mut RawVkPipelineLayoutCreateInfo, *const c_void, *mut RawVkPipelineLayout) -> RawVkResult,
     pub vkDestroyPipelineLayout: unsafe extern fn(RawVkDevice, RawVkPipelineLayout, *const c_void),
-    pub vkCreateSampler: unsafe extern fn(RawVkDevice, *const RawVkSamplerCreateInfo, *const c_void, *const RawVkSampler) -> RawVkResult,
+    pub vkCreateSampler: unsafe extern fn(RawVkDevice, *mut RawVkSamplerCreateInfo, *const c_void, *mut RawVkSampler) -> RawVkResult,
     pub vkDestroySampler: unsafe extern fn(RawVkDevice, RawVkSampler, *const c_void),
-    pub vkCreateDescriptorSetLayout: unsafe extern fn(RawVkDevice, *const RawVkDescriptorSetLayoutCreateInfo, *const c_void, *const RawVkDescriptorSetLayout) -> RawVkResult,
+    pub vkCreateDescriptorSetLayout: unsafe extern fn(RawVkDevice, *mut RawVkDescriptorSetLayoutCreateInfo, *const c_void, *mut RawVkDescriptorSetLayout) -> RawVkResult,
     pub vkDestroyDescriptorSetLayout: unsafe extern fn(RawVkDevice, RawVkDescriptorSetLayout, *const c_void),
-    pub vkCreateDescriptorPool: unsafe extern fn(RawVkDevice, *const RawVkDescriptorPoolCreateInfo, *const c_void, *const RawVkDescriptorPool) -> RawVkResult,
+    pub vkCreateDescriptorPool: unsafe extern fn(RawVkDevice, *mut RawVkDescriptorPoolCreateInfo, *const c_void, *mut RawVkDescriptorPool) -> RawVkResult,
     pub vkDestroyDescriptorPool: unsafe extern fn(RawVkDevice, RawVkDescriptorPool, *const c_void),
     pub vkResetDescriptorPool: unsafe extern fn(RawVkDevice, RawVkDescriptorPool, RawVkDescriptorPoolResetFlags) -> RawVkResult,
-    pub vkAllocateDescriptorSets: unsafe extern fn(RawVkDevice, *const RawVkDescriptorSetAllocateInfo, *const RawVkDescriptorSet) -> RawVkResult,
-    pub vkFreeDescriptorSets: unsafe extern fn(RawVkDevice, RawVkDescriptorPool, u32, *const RawVkDescriptorSet) -> RawVkResult,
-    pub vkUpdateDescriptorSets: unsafe extern fn(RawVkDevice, u32, *const RawVkWriteDescriptorSet, u32, *const RawVkCopyDescriptorSet),
-    pub vkCreateFramebuffer: unsafe extern fn(RawVkDevice, *const RawVkFramebufferCreateInfo, *const c_void, *const RawVkFramebuffer) -> RawVkResult,
+    pub vkAllocateDescriptorSets: unsafe extern fn(RawVkDevice, *mut RawVkDescriptorSetAllocateInfo, *mut RawVkDescriptorSet) -> RawVkResult,
+    pub vkFreeDescriptorSets: unsafe extern fn(RawVkDevice, RawVkDescriptorPool, u32, *mut RawVkDescriptorSet) -> RawVkResult,
+    pub vkUpdateDescriptorSets: unsafe extern fn(RawVkDevice, u32, *mut RawVkWriteDescriptorSet, u32, *mut RawVkCopyDescriptorSet),
+    pub vkCreateFramebuffer: unsafe extern fn(RawVkDevice, *mut RawVkFramebufferCreateInfo, *const c_void, *mut RawVkFramebuffer) -> RawVkResult,
     pub vkDestroyFramebuffer: unsafe extern fn(RawVkDevice, RawVkFramebuffer, *const c_void),
-    pub vkCreateRenderPass: unsafe extern fn(RawVkDevice, *const RawVkRenderPassCreateInfo, *const c_void, *const RawVkRenderPass) -> RawVkResult,
+    pub vkCreateRenderPass: unsafe extern fn(RawVkDevice, *mut RawVkRenderPassCreateInfo, *const c_void, *mut RawVkRenderPass) -> RawVkResult,
     pub vkDestroyRenderPass: unsafe extern fn(RawVkDevice, RawVkRenderPass, *const c_void),
-    pub vkGetRenderAreaGranularity: unsafe extern fn(RawVkDevice, RawVkRenderPass, *const RawVkExtent2D),
-    pub vkCreateCommandPool: unsafe extern fn(RawVkDevice, *const RawVkCommandPoolCreateInfo, *const c_void, *const RawVkCommandPool) -> RawVkResult,
+    pub vkGetRenderAreaGranularity: unsafe extern fn(RawVkDevice, RawVkRenderPass, *mut RawVkExtent2D),
+    pub vkCreateCommandPool: unsafe extern fn(RawVkDevice, *mut RawVkCommandPoolCreateInfo, *const c_void, *mut RawVkCommandPool) -> RawVkResult,
     pub vkDestroyCommandPool: unsafe extern fn(RawVkDevice, RawVkCommandPool, *const c_void),
     pub vkResetCommandPool: unsafe extern fn(RawVkDevice, RawVkCommandPool, RawVkCommandPoolResetFlags) -> RawVkResult,
-    pub vkAllocateCommandBuffers: unsafe extern fn(RawVkDevice, *const RawVkCommandBufferAllocateInfo, *const RawVkCommandBuffer) -> RawVkResult,
-    pub vkFreeCommandBuffers: unsafe extern fn(RawVkDevice, RawVkCommandPool, u32, *const RawVkCommandBuffer),
-    pub vkBeginCommandBuffer: unsafe extern fn(RawVkCommandBuffer, *const RawVkCommandBufferBeginInfo) -> RawVkResult,
+    pub vkAllocateCommandBuffers: unsafe extern fn(RawVkDevice, *mut RawVkCommandBufferAllocateInfo, *mut RawVkCommandBuffer) -> RawVkResult,
+    pub vkFreeCommandBuffers: unsafe extern fn(RawVkDevice, RawVkCommandPool, u32, *mut RawVkCommandBuffer),
+    pub vkBeginCommandBuffer: unsafe extern fn(RawVkCommandBuffer, *mut RawVkCommandBufferBeginInfo) -> RawVkResult,
     pub vkEndCommandBuffer: unsafe extern fn(RawVkCommandBuffer) -> RawVkResult,
     pub vkResetCommandBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkCommandBufferResetFlags) -> RawVkResult,
     pub vkCmdBindPipeline: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineBindPoint, RawVkPipeline),
-    pub vkCmdSetViewport: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const RawVkViewport),
-    pub vkCmdSetScissor: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const RawVkRect2D),
+    pub vkCmdSetViewport: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkViewport),
+    pub vkCmdSetScissor: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkRect2D),
     pub vkCmdSetLineWidth: unsafe extern fn(RawVkCommandBuffer, f32),
     pub vkCmdSetDepthBias: unsafe extern fn(RawVkCommandBuffer, f32, f32, f32),
     pub vkCmdSetBlendConstants: unsafe extern fn(RawVkCommandBuffer, [f32; 4]),
@@ -111,193 +111,193 @@ pub struct VkFunctionTable {
     pub vkCmdSetStencilCompareMask: unsafe extern fn(RawVkCommandBuffer, RawVkStencilFaceFlags, u32),
     pub vkCmdSetStencilWriteMask: unsafe extern fn(RawVkCommandBuffer, RawVkStencilFaceFlags, u32),
     pub vkCmdSetStencilReference: unsafe extern fn(RawVkCommandBuffer, RawVkStencilFaceFlags, u32),
-    pub vkCmdBindDescriptorSets: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineBindPoint, RawVkPipelineLayout, u32, u32, *const RawVkDescriptorSet, u32, *const u32),
+    pub vkCmdBindDescriptorSets: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineBindPoint, RawVkPipelineLayout, u32, u32, *mut RawVkDescriptorSet, u32, *mut u32),
     pub vkCmdBindIndexBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkIndexType),
-    pub vkCmdBindVertexBuffers: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const RawVkBuffer, *const u64),
+    pub vkCmdBindVertexBuffers: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkBuffer, *mut u64),
     pub vkCmdDraw: unsafe extern fn(RawVkCommandBuffer, u32, u32, u32, u32),
     pub vkCmdDrawIndexed: unsafe extern fn(RawVkCommandBuffer, u32, u32, u32, i32, u32),
     pub vkCmdDrawIndirect: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u32, u32),
     pub vkCmdDrawIndexedIndirect: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u32, u32),
     pub vkCmdDispatch: unsafe extern fn(RawVkCommandBuffer, u32, u32, u32),
     pub vkCmdDispatchIndirect: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64),
-    pub vkCmdCopyBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, RawVkBuffer, u32, *const RawVkBufferCopy),
-    pub vkCmdCopyImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkImage, RawVkImageLayout, u32, *const RawVkImageCopy),
-    pub vkCmdBlitImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkImage, RawVkImageLayout, u32, *const RawVkImageBlit, RawVkFilter),
-    pub vkCmdCopyBufferToImage: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, RawVkImage, RawVkImageLayout, u32, *const RawVkBufferImageCopy),
-    pub vkCmdCopyImageToBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkBuffer, u32, *const RawVkBufferImageCopy),
-    pub vkCmdUpdateBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u64, *const c_void),
+    pub vkCmdCopyBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, RawVkBuffer, u32, *mut RawVkBufferCopy),
+    pub vkCmdCopyImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkImage, RawVkImageLayout, u32, *mut RawVkImageCopy),
+    pub vkCmdBlitImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkImage, RawVkImageLayout, u32, *mut RawVkImageBlit, RawVkFilter),
+    pub vkCmdCopyBufferToImage: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, RawVkImage, RawVkImageLayout, u32, *mut RawVkBufferImageCopy),
+    pub vkCmdCopyImageToBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkBuffer, u32, *mut RawVkBufferImageCopy),
+    pub vkCmdUpdateBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u64, *mut c_void),
     pub vkCmdFillBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u64, u32),
-    pub vkCmdClearColorImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, *const RawVkClearColorValue, u32, *const RawVkImageSubresourceRange),
-    pub vkCmdClearDepthStencilImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, *const RawVkClearDepthStencilValue, u32, *const RawVkImageSubresourceRange),
-    pub vkCmdClearAttachments: unsafe extern fn(RawVkCommandBuffer, u32, *const RawVkClearAttachment, u32, *const RawVkClearRect),
-    pub vkCmdResolveImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkImage, RawVkImageLayout, u32, *const RawVkImageResolve),
+    pub vkCmdClearColorImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, *mut RawVkClearColorValue, u32, *mut RawVkImageSubresourceRange),
+    pub vkCmdClearDepthStencilImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, *mut RawVkClearDepthStencilValue, u32, *mut RawVkImageSubresourceRange),
+    pub vkCmdClearAttachments: unsafe extern fn(RawVkCommandBuffer, u32, *mut RawVkClearAttachment, u32, *mut RawVkClearRect),
+    pub vkCmdResolveImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkImage, RawVkImageLayout, u32, *mut RawVkImageResolve),
     pub vkCmdSetEvent: unsafe extern fn(RawVkCommandBuffer, RawVkEvent, RawVkPipelineStageFlags),
     pub vkCmdResetEvent: unsafe extern fn(RawVkCommandBuffer, RawVkEvent, RawVkPipelineStageFlags),
-    pub vkCmdWaitEvents: unsafe extern fn(RawVkCommandBuffer, u32, *const RawVkEvent, RawVkPipelineStageFlags, RawVkPipelineStageFlags, u32, *const RawVkMemoryBarrier, u32, *const RawVkBufferMemoryBarrier, u32, *const RawVkImageMemoryBarrier),
-    pub vkCmdPipelineBarrier: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineStageFlags, RawVkPipelineStageFlags, RawVkDependencyFlags, u32, *const RawVkMemoryBarrier, u32, *const RawVkBufferMemoryBarrier, u32, *const RawVkImageMemoryBarrier),
+    pub vkCmdWaitEvents: unsafe extern fn(RawVkCommandBuffer, u32, *mut RawVkEvent, RawVkPipelineStageFlags, RawVkPipelineStageFlags, u32, *mut RawVkMemoryBarrier, u32, *mut RawVkBufferMemoryBarrier, u32, *mut RawVkImageMemoryBarrier),
+    pub vkCmdPipelineBarrier: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineStageFlags, RawVkPipelineStageFlags, RawVkDependencyFlags, u32, *mut RawVkMemoryBarrier, u32, *mut RawVkBufferMemoryBarrier, u32, *mut RawVkImageMemoryBarrier),
     pub vkCmdBeginQuery: unsafe extern fn(RawVkCommandBuffer, RawVkQueryPool, u32, RawVkQueryControlFlags),
     pub vkCmdEndQuery: unsafe extern fn(RawVkCommandBuffer, RawVkQueryPool, u32),
     pub vkCmdResetQueryPool: unsafe extern fn(RawVkCommandBuffer, RawVkQueryPool, u32, u32),
     pub vkCmdWriteTimestamp: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineStageFlags, RawVkQueryPool, u32),
     pub vkCmdCopyQueryPoolResults: unsafe extern fn(RawVkCommandBuffer, RawVkQueryPool, u32, u32, RawVkBuffer, u64, u64, RawVkQueryResultFlags),
-    pub vkCmdPushConstants: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineLayout, RawVkShaderStageFlags, u32, u32, *const c_void),
-    pub vkCmdBeginRenderPass: unsafe extern fn(RawVkCommandBuffer, *const RawVkRenderPassBeginInfo, RawVkSubpassContents),
+    pub vkCmdPushConstants: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineLayout, RawVkShaderStageFlags, u32, u32, *mut c_void),
+    pub vkCmdBeginRenderPass: unsafe extern fn(RawVkCommandBuffer, *mut RawVkRenderPassBeginInfo, RawVkSubpassContents),
     pub vkCmdNextSubpass: unsafe extern fn(RawVkCommandBuffer, RawVkSubpassContents),
     pub vkCmdEndRenderPass: unsafe extern fn(RawVkCommandBuffer),
-    pub vkCmdExecuteCommands: unsafe extern fn(RawVkCommandBuffer, u32, *const RawVkCommandBuffer),
-    pub vkBindBufferMemory2: unsafe extern fn(RawVkDevice, u32, *const RawVkBindBufferMemoryInfo) -> RawVkResult,
-    pub vkBindImageMemory2: unsafe extern fn(RawVkDevice, u32, *const RawVkBindImageMemoryInfo) -> RawVkResult,
-    pub vkGetDeviceGroupPeerMemoryFeatures: unsafe extern fn(RawVkDevice, u32, u32, u32, *const RawVkPeerMemoryFeatureFlags),
+    pub vkCmdExecuteCommands: unsafe extern fn(RawVkCommandBuffer, u32, *mut RawVkCommandBuffer),
+    pub vkBindBufferMemory2: unsafe extern fn(RawVkDevice, u32, *mut RawVkBindBufferMemoryInfo) -> RawVkResult,
+    pub vkBindImageMemory2: unsafe extern fn(RawVkDevice, u32, *mut RawVkBindImageMemoryInfo) -> RawVkResult,
+    pub vkGetDeviceGroupPeerMemoryFeatures: unsafe extern fn(RawVkDevice, u32, u32, u32, *mut RawVkPeerMemoryFeatureFlags),
     pub vkCmdSetDeviceMask: unsafe extern fn(RawVkCommandBuffer, u32),
     pub vkCmdDispatchBase: unsafe extern fn(RawVkCommandBuffer, u32, u32, u32, u32, u32, u32),
-    pub vkEnumeratePhysicalDeviceGroups: unsafe extern fn(RawVkInstance, *const u32, *const RawVkPhysicalDeviceGroupProperties) -> RawVkResult,
-    pub vkGetImageMemoryRequirements2: unsafe extern fn(RawVkDevice, *const RawVkImageMemoryRequirementsInfo2, *const RawVkMemoryRequirements2),
-    pub vkGetBufferMemoryRequirements2: unsafe extern fn(RawVkDevice, *const RawVkBufferMemoryRequirementsInfo2, *const RawVkMemoryRequirements2),
-    pub vkGetImageSparseMemoryRequirements2: unsafe extern fn(RawVkDevice, *const RawVkImageSparseMemoryRequirementsInfo2, *const u32, *const RawVkSparseImageMemoryRequirements2),
-    pub vkGetPhysicalDeviceFeatures2: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceFeatures2),
-    pub vkGetPhysicalDeviceProperties2: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceProperties2),
-    pub vkGetPhysicalDeviceFormatProperties2: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, *const RawVkFormatProperties2),
-    pub vkGetPhysicalDeviceImageFormatProperties2: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceImageFormatInfo2, *const RawVkImageFormatProperties2) -> RawVkResult,
-    pub vkGetPhysicalDeviceQueueFamilyProperties2: unsafe extern fn(RawVkPhysicalDevice, *const u32, *const RawVkQueueFamilyProperties2),
-    pub vkGetPhysicalDeviceMemoryProperties2: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceMemoryProperties2),
-    pub vkGetPhysicalDeviceSparseImageFormatProperties2: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceSparseImageFormatInfo2, *const u32, *const RawVkSparseImageFormatProperties2),
+    pub vkEnumeratePhysicalDeviceGroups: unsafe extern fn(RawVkInstance, *mut u32, *mut RawVkPhysicalDeviceGroupProperties) -> RawVkResult,
+    pub vkGetImageMemoryRequirements2: unsafe extern fn(RawVkDevice, *mut RawVkImageMemoryRequirementsInfo2, *mut RawVkMemoryRequirements2),
+    pub vkGetBufferMemoryRequirements2: unsafe extern fn(RawVkDevice, *mut RawVkBufferMemoryRequirementsInfo2, *mut RawVkMemoryRequirements2),
+    pub vkGetImageSparseMemoryRequirements2: unsafe extern fn(RawVkDevice, *mut RawVkImageSparseMemoryRequirementsInfo2, *mut u32, *mut RawVkSparseImageMemoryRequirements2),
+    pub vkGetPhysicalDeviceFeatures2: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceFeatures2),
+    pub vkGetPhysicalDeviceProperties2: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceProperties2),
+    pub vkGetPhysicalDeviceFormatProperties2: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, *mut RawVkFormatProperties2),
+    pub vkGetPhysicalDeviceImageFormatProperties2: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceImageFormatInfo2, *mut RawVkImageFormatProperties2) -> RawVkResult,
+    pub vkGetPhysicalDeviceQueueFamilyProperties2: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut RawVkQueueFamilyProperties2),
+    pub vkGetPhysicalDeviceMemoryProperties2: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceMemoryProperties2),
+    pub vkGetPhysicalDeviceSparseImageFormatProperties2: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceSparseImageFormatInfo2, *mut u32, *mut RawVkSparseImageFormatProperties2),
     pub vkTrimCommandPool: unsafe extern fn(RawVkDevice, RawVkCommandPool, RawVkCommandPoolTrimFlags),
-    pub vkGetDeviceQueue2: unsafe extern fn(RawVkDevice, *const RawVkDeviceQueueInfo2, *const RawVkQueue),
-    pub vkCreateSamplerYcbcrConversion: unsafe extern fn(RawVkDevice, *const RawVkSamplerYcbcrConversionCreateInfo, *const c_void, *const RawVkSamplerYcbcrConversion) -> RawVkResult,
+    pub vkGetDeviceQueue2: unsafe extern fn(RawVkDevice, *mut RawVkDeviceQueueInfo2, *mut RawVkQueue),
+    pub vkCreateSamplerYcbcrConversion: unsafe extern fn(RawVkDevice, *mut RawVkSamplerYcbcrConversionCreateInfo, *const c_void, *mut RawVkSamplerYcbcrConversion) -> RawVkResult,
     pub vkDestroySamplerYcbcrConversion: unsafe extern fn(RawVkDevice, RawVkSamplerYcbcrConversion, *const c_void),
-    pub vkCreateDescriptorUpdateTemplate: unsafe extern fn(RawVkDevice, *const RawVkDescriptorUpdateTemplateCreateInfo, *const c_void, *const RawVkDescriptorUpdateTemplate) -> RawVkResult,
+    pub vkCreateDescriptorUpdateTemplate: unsafe extern fn(RawVkDevice, *mut RawVkDescriptorUpdateTemplateCreateInfo, *const c_void, *mut RawVkDescriptorUpdateTemplate) -> RawVkResult,
     pub vkDestroyDescriptorUpdateTemplate: unsafe extern fn(RawVkDevice, RawVkDescriptorUpdateTemplate, *const c_void),
-    pub vkUpdateDescriptorSetWithTemplate: unsafe extern fn(RawVkDevice, RawVkDescriptorSet, RawVkDescriptorUpdateTemplate, *const c_void),
-    pub vkGetPhysicalDeviceExternalBufferProperties: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceExternalBufferInfo, *const RawVkExternalBufferProperties),
-    pub vkGetPhysicalDeviceExternalFenceProperties: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceExternalFenceInfo, *const RawVkExternalFenceProperties),
-    pub vkGetPhysicalDeviceExternalSemaphoreProperties: unsafe extern fn(RawVkPhysicalDevice, *const RawVkPhysicalDeviceExternalSemaphoreInfo, *const RawVkExternalSemaphoreProperties),
-    pub vkGetDescriptorSetLayoutSupport: unsafe extern fn(RawVkDevice, *const RawVkDescriptorSetLayoutCreateInfo, *const RawVkDescriptorSetLayoutSupport),
+    pub vkUpdateDescriptorSetWithTemplate: unsafe extern fn(RawVkDevice, RawVkDescriptorSet, RawVkDescriptorUpdateTemplate, *mut c_void),
+    pub vkGetPhysicalDeviceExternalBufferProperties: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceExternalBufferInfo, *mut RawVkExternalBufferProperties),
+    pub vkGetPhysicalDeviceExternalFenceProperties: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceExternalFenceInfo, *mut RawVkExternalFenceProperties),
+    pub vkGetPhysicalDeviceExternalSemaphoreProperties: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceExternalSemaphoreInfo, *mut RawVkExternalSemaphoreProperties),
+    pub vkGetDescriptorSetLayoutSupport: unsafe extern fn(RawVkDevice, *mut RawVkDescriptorSetLayoutCreateInfo, *mut RawVkDescriptorSetLayoutSupport),
     pub vkDestroySurfaceKHR: unsafe extern fn(RawVkInstance, khr::RawVkSurface, *const c_void),
-    pub vkGetPhysicalDeviceSurfaceSupportKHR: unsafe extern fn(RawVkPhysicalDevice, u32, khr::RawVkSurface, *const u32) -> RawVkResult,
-    pub vkGetPhysicalDeviceSurfaceCapabilitiesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *const khr::RawVkSurfaceCapabilities) -> RawVkResult,
-    pub vkGetPhysicalDeviceSurfaceFormatsKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *const u32, *const khr::RawVkSurfaceFormat) -> RawVkResult,
-    pub vkGetPhysicalDeviceSurfacePresentModesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *const u32, *const khr::RawVkPresentMode) -> RawVkResult,
-    pub vkCreateSwapchainKHR: unsafe extern fn(RawVkDevice, *const khr::RawVkSwapchainCreateInfo, *const c_void, *const khr::RawVkSwapchain) -> RawVkResult,
+    pub vkGetPhysicalDeviceSurfaceSupportKHR: unsafe extern fn(RawVkPhysicalDevice, u32, khr::RawVkSurface, *mut u32) -> RawVkResult,
+    pub vkGetPhysicalDeviceSurfaceCapabilitiesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *mut khr::RawVkSurfaceCapabilities) -> RawVkResult,
+    pub vkGetPhysicalDeviceSurfaceFormatsKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *mut u32, *mut khr::RawVkSurfaceFormat) -> RawVkResult,
+    pub vkGetPhysicalDeviceSurfacePresentModesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *mut u32, *mut khr::RawVkPresentMode) -> RawVkResult,
+    pub vkCreateSwapchainKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkSwapchainCreateInfo, *const c_void, *mut khr::RawVkSwapchain) -> RawVkResult,
     pub vkDestroySwapchainKHR: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, *const c_void),
-    pub vkGetSwapchainImagesKHR: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, *const u32, *const RawVkImage) -> RawVkResult,
-    pub vkAcquireNextImageKHR: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, u64, RawVkSemaphore, RawVkFence, *const u32) -> RawVkResult,
-    pub vkQueuePresentKHR: unsafe extern fn(RawVkQueue, *const khr::RawVkPresentInfo) -> RawVkResult,
-    pub vkGetDeviceGroupPresentCapabilitiesKHR: unsafe extern fn(RawVkDevice, *const khr::RawVkDeviceGroupPresentCapabilities) -> RawVkResult,
-    pub vkGetDeviceGroupSurfacePresentModesKHR: unsafe extern fn(RawVkDevice, khr::RawVkSurface, *const khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult,
-    pub vkGetPhysicalDevicePresentRectanglesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *const u32, *const RawVkRect2D) -> RawVkResult,
-    pub vkAcquireNextImage2KHR: unsafe extern fn(RawVkDevice, *const khr::RawVkAcquireNextImageInfo, *const u32) -> RawVkResult,
-    pub vkGetPhysicalDeviceDisplayPropertiesKHR: unsafe extern fn(RawVkPhysicalDevice, *const u32, *const khr::RawVkDisplayProperties) -> RawVkResult,
-    pub vkGetPhysicalDeviceDisplayPlanePropertiesKHR: unsafe extern fn(RawVkPhysicalDevice, *const u32, *const khr::RawVkDisplayPlaneProperties) -> RawVkResult,
-    pub vkGetDisplayPlaneSupportedDisplaysKHR: unsafe extern fn(RawVkPhysicalDevice, u32, *const u32, *const khr::RawVkDisplay) -> RawVkResult,
-    pub vkGetDisplayModePropertiesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplay, *const u32, *const khr::RawVkDisplayModeProperties) -> RawVkResult,
-    pub vkCreateDisplayModeKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplay, *const khr::RawVkDisplayModeCreateInfo, *const c_void, *const khr::RawVkDisplayMode) -> RawVkResult,
-    pub vkGetDisplayPlaneCapabilitiesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplayMode, u32, *const khr::RawVkDisplayPlaneCapabilities) -> RawVkResult,
-    pub vkCreateDisplayPlaneSurfaceKHR: unsafe extern fn(RawVkInstance, *const khr::RawVkDisplaySurfaceCreateInfo, *const c_void, *const khr::RawVkSurface) -> RawVkResult,
-    pub vkCreateSharedSwapchainsKHR: unsafe extern fn(RawVkDevice, u32, *const khr::RawVkSwapchainCreateInfo, *const c_void, *const khr::RawVkSwapchain) -> RawVkResult,
-    pub vkGetMemoryFdKHR: unsafe extern fn(RawVkDevice, *const khr::RawVkMemoryGetFdInfo, *const i32) -> RawVkResult,
-    pub vkGetMemoryFdPropertiesKHR: unsafe extern fn(RawVkDevice, RawVkExternalMemoryHandleTypeFlags, i32, *const khr::RawVkMemoryFdProperties) -> RawVkResult,
-    pub vkImportSemaphoreFdKHR: unsafe extern fn(RawVkDevice, *const khr::RawVkImportSemaphoreFdInfo) -> RawVkResult,
-    pub vkGetSemaphoreFdKHR: unsafe extern fn(RawVkDevice, *const khr::RawVkSemaphoreGetFdInfo, *const i32) -> RawVkResult,
-    pub vkCmdPushDescriptorSetKHR: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineBindPoint, RawVkPipelineLayout, u32, u32, *const RawVkWriteDescriptorSet),
-    pub vkCmdPushDescriptorSetWithTemplateKHR: unsafe extern fn(RawVkCommandBuffer, RawVkDescriptorUpdateTemplate, RawVkPipelineLayout, u32, *const c_void),
-    pub vkCreateRenderPass2KHR: unsafe extern fn(RawVkDevice, *const khr::RawVkRenderPassCreateInfo2, *const c_void, *const RawVkRenderPass) -> RawVkResult,
-    pub vkCmdBeginRenderPass2KHR: unsafe extern fn(RawVkCommandBuffer, *const RawVkRenderPassBeginInfo, *const khr::RawVkSubpassBeginInfo),
-    pub vkCmdNextSubpass2KHR: unsafe extern fn(RawVkCommandBuffer, *const khr::RawVkSubpassBeginInfo, *const khr::RawVkSubpassEndInfo),
-    pub vkCmdEndRenderPass2KHR: unsafe extern fn(RawVkCommandBuffer, *const khr::RawVkSubpassEndInfo),
+    pub vkGetSwapchainImagesKHR: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, *mut u32, *mut RawVkImage) -> RawVkResult,
+    pub vkAcquireNextImageKHR: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, u64, RawVkSemaphore, RawVkFence, *mut u32) -> RawVkResult,
+    pub vkQueuePresentKHR: unsafe extern fn(RawVkQueue, *mut khr::RawVkPresentInfo) -> RawVkResult,
+    pub vkGetDeviceGroupPresentCapabilitiesKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkDeviceGroupPresentCapabilities) -> RawVkResult,
+    pub vkGetDeviceGroupSurfacePresentModesKHR: unsafe extern fn(RawVkDevice, khr::RawVkSurface, *mut khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult,
+    pub vkGetPhysicalDevicePresentRectanglesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *mut u32, *mut RawVkRect2D) -> RawVkResult,
+    pub vkAcquireNextImage2KHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkAcquireNextImageInfo, *mut u32) -> RawVkResult,
+    pub vkGetPhysicalDeviceDisplayPropertiesKHR: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut khr::RawVkDisplayProperties) -> RawVkResult,
+    pub vkGetPhysicalDeviceDisplayPlanePropertiesKHR: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut khr::RawVkDisplayPlaneProperties) -> RawVkResult,
+    pub vkGetDisplayPlaneSupportedDisplaysKHR: unsafe extern fn(RawVkPhysicalDevice, u32, *mut u32, *mut khr::RawVkDisplay) -> RawVkResult,
+    pub vkGetDisplayModePropertiesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplay, *mut u32, *mut khr::RawVkDisplayModeProperties) -> RawVkResult,
+    pub vkCreateDisplayModeKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplay, *mut khr::RawVkDisplayModeCreateInfo, *const c_void, *mut khr::RawVkDisplayMode) -> RawVkResult,
+    pub vkGetDisplayPlaneCapabilitiesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplayMode, u32, *mut khr::RawVkDisplayPlaneCapabilities) -> RawVkResult,
+    pub vkCreateDisplayPlaneSurfaceKHR: unsafe extern fn(RawVkInstance, *mut khr::RawVkDisplaySurfaceCreateInfo, *const c_void, *mut khr::RawVkSurface) -> RawVkResult,
+    pub vkCreateSharedSwapchainsKHR: unsafe extern fn(RawVkDevice, u32, *mut khr::RawVkSwapchainCreateInfo, *const c_void, *mut khr::RawVkSwapchain) -> RawVkResult,
+    pub vkGetMemoryFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkMemoryGetFdInfo, *mut i32) -> RawVkResult,
+    pub vkGetMemoryFdPropertiesKHR: unsafe extern fn(RawVkDevice, RawVkExternalMemoryHandleTypeFlags, i32, *mut khr::RawVkMemoryFdProperties) -> RawVkResult,
+    pub vkImportSemaphoreFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkImportSemaphoreFdInfo) -> RawVkResult,
+    pub vkGetSemaphoreFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkSemaphoreGetFdInfo, *mut i32) -> RawVkResult,
+    pub vkCmdPushDescriptorSetKHR: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineBindPoint, RawVkPipelineLayout, u32, u32, *mut RawVkWriteDescriptorSet),
+    pub vkCmdPushDescriptorSetWithTemplateKHR: unsafe extern fn(RawVkCommandBuffer, RawVkDescriptorUpdateTemplate, RawVkPipelineLayout, u32, *mut c_void),
+    pub vkCreateRenderPass2KHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkRenderPassCreateInfo2, *const c_void, *mut RawVkRenderPass) -> RawVkResult,
+    pub vkCmdBeginRenderPass2KHR: unsafe extern fn(RawVkCommandBuffer, *mut RawVkRenderPassBeginInfo, *mut khr::RawVkSubpassBeginInfo),
+    pub vkCmdNextSubpass2KHR: unsafe extern fn(RawVkCommandBuffer, *mut khr::RawVkSubpassBeginInfo, *mut khr::RawVkSubpassEndInfo),
+    pub vkCmdEndRenderPass2KHR: unsafe extern fn(RawVkCommandBuffer, *mut khr::RawVkSubpassEndInfo),
     pub vkGetSwapchainStatusKHR: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain) -> RawVkResult,
-    pub vkImportFenceFdKHR: unsafe extern fn(RawVkDevice, *const khr::RawVkImportFenceFdInfo) -> RawVkResult,
-    pub vkGetFenceFdKHR: unsafe extern fn(RawVkDevice, *const khr::RawVkFenceGetFdInfo, *const i32) -> RawVkResult,
-    pub vkGetPhysicalDeviceSurfaceCapabilities2KHR: unsafe extern fn(RawVkPhysicalDevice, *const khr::RawVkPhysicalDeviceSurfaceInfo2, *const khr::RawVkSurfaceCapabilities2) -> RawVkResult,
-    pub vkGetPhysicalDeviceSurfaceFormats2KHR: unsafe extern fn(RawVkPhysicalDevice, *const khr::RawVkPhysicalDeviceSurfaceInfo2, *const u32, *const khr::RawVkSurfaceFormat2) -> RawVkResult,
-    pub vkGetPhysicalDeviceDisplayProperties2KHR: unsafe extern fn(RawVkPhysicalDevice, *const u32, *const khr::RawVkDisplayProperties2) -> RawVkResult,
-    pub vkGetPhysicalDeviceDisplayPlaneProperties2KHR: unsafe extern fn(RawVkPhysicalDevice, *const u32, *const khr::RawVkDisplayPlaneProperties2) -> RawVkResult,
-    pub vkGetDisplayModeProperties2KHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplay, *const u32, *const khr::RawVkDisplayModeProperties2) -> RawVkResult,
-    pub vkGetDisplayPlaneCapabilities2KHR: unsafe extern fn(RawVkPhysicalDevice, *const khr::RawVkDisplayPlaneInfo2, *const khr::RawVkDisplayPlaneCapabilities2) -> RawVkResult,
+    pub vkImportFenceFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkImportFenceFdInfo) -> RawVkResult,
+    pub vkGetFenceFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkFenceGetFdInfo, *mut i32) -> RawVkResult,
+    pub vkGetPhysicalDeviceSurfaceCapabilities2KHR: unsafe extern fn(RawVkPhysicalDevice, *mut khr::RawVkPhysicalDeviceSurfaceInfo2, *mut khr::RawVkSurfaceCapabilities2) -> RawVkResult,
+    pub vkGetPhysicalDeviceSurfaceFormats2KHR: unsafe extern fn(RawVkPhysicalDevice, *mut khr::RawVkPhysicalDeviceSurfaceInfo2, *mut u32, *mut khr::RawVkSurfaceFormat2) -> RawVkResult,
+    pub vkGetPhysicalDeviceDisplayProperties2KHR: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut khr::RawVkDisplayProperties2) -> RawVkResult,
+    pub vkGetPhysicalDeviceDisplayPlaneProperties2KHR: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut khr::RawVkDisplayPlaneProperties2) -> RawVkResult,
+    pub vkGetDisplayModeProperties2KHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplay, *mut u32, *mut khr::RawVkDisplayModeProperties2) -> RawVkResult,
+    pub vkGetDisplayPlaneCapabilities2KHR: unsafe extern fn(RawVkPhysicalDevice, *mut khr::RawVkDisplayPlaneInfo2, *mut khr::RawVkDisplayPlaneCapabilities2) -> RawVkResult,
     pub vkCmdDrawIndirectCountKHR: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u32, u32),
     pub vkCmdDrawIndexedIndirectCountKHR: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u32, u32),
-    pub vkCreateDebugReportCallbackEXT: unsafe extern fn(RawVkInstance, *const ext::RawVkDebugReportCallbackCreateInfo, *const c_void, *const ext::RawVkDebugReportCallback) -> RawVkResult,
+    pub vkCreateDebugReportCallbackEXT: unsafe extern fn(RawVkInstance, *mut ext::RawVkDebugReportCallbackCreateInfo, *const c_void, *mut ext::RawVkDebugReportCallback) -> RawVkResult,
     pub vkDestroyDebugReportCallbackEXT: unsafe extern fn(RawVkInstance, ext::RawVkDebugReportCallback, *const c_void),
-    pub vkDebugReportMessageEXT: unsafe extern fn(RawVkInstance, ext::RawVkDebugReportFlags, ext::RawVkDebugReportObjectType, u64, usize, i32, *const c_char, *const c_char),
-    pub vkDebugMarkerSetObjectTagEXT: unsafe extern fn(RawVkDevice, *const ext::RawVkDebugMarkerObjectTagInfo) -> RawVkResult,
-    pub vkDebugMarkerSetObjectNameEXT: unsafe extern fn(RawVkDevice, *const ext::RawVkDebugMarkerObjectNameInfo) -> RawVkResult,
-    pub vkCmdDebugMarkerBeginEXT: unsafe extern fn(RawVkCommandBuffer, *const ext::RawVkDebugMarkerMarkerInfo),
+    pub vkDebugReportMessageEXT: unsafe extern fn(RawVkInstance, ext::RawVkDebugReportFlags, ext::RawVkDebugReportObjectType, u64, usize, i32, *mut c_char, *mut c_char),
+    pub vkDebugMarkerSetObjectTagEXT: unsafe extern fn(RawVkDevice, *mut ext::RawVkDebugMarkerObjectTagInfo) -> RawVkResult,
+    pub vkDebugMarkerSetObjectNameEXT: unsafe extern fn(RawVkDevice, *mut ext::RawVkDebugMarkerObjectNameInfo) -> RawVkResult,
+    pub vkCmdDebugMarkerBeginEXT: unsafe extern fn(RawVkCommandBuffer, *mut ext::RawVkDebugMarkerMarkerInfo),
     pub vkCmdDebugMarkerEndEXT: unsafe extern fn(RawVkCommandBuffer),
-    pub vkCmdDebugMarkerInsertEXT: unsafe extern fn(RawVkCommandBuffer, *const ext::RawVkDebugMarkerMarkerInfo),
-    pub vkCmdBindTransformFeedbackBuffersEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const RawVkBuffer, *const u64, *const u64),
-    pub vkCmdBeginTransformFeedbackEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const RawVkBuffer, *const u64),
-    pub vkCmdEndTransformFeedbackEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const RawVkBuffer, *const u64),
+    pub vkCmdDebugMarkerInsertEXT: unsafe extern fn(RawVkCommandBuffer, *mut ext::RawVkDebugMarkerMarkerInfo),
+    pub vkCmdBindTransformFeedbackBuffersEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkBuffer, *mut u64, *mut u64),
+    pub vkCmdBeginTransformFeedbackEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkBuffer, *mut u64),
+    pub vkCmdEndTransformFeedbackEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkBuffer, *mut u64),
     pub vkCmdBeginQueryIndexedEXT: unsafe extern fn(RawVkCommandBuffer, RawVkQueryPool, u32, RawVkQueryControlFlags, u32),
     pub vkCmdEndQueryIndexedEXT: unsafe extern fn(RawVkCommandBuffer, RawVkQueryPool, u32, u32),
     pub vkCmdDrawIndirectByteCountEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, RawVkBuffer, u64, u32, u32),
     pub vkCmdDrawIndirectCountAMD: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u32, u32),
     pub vkCmdDrawIndexedIndirectCountAMD: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u32, u32),
-    pub vkGetShaderInfoAMD: unsafe extern fn(RawVkDevice, RawVkPipeline, RawVkShaderStageFlags, amd::RawVkShaderInfoType, *const usize, *const c_void) -> RawVkResult,
-    pub vkGetPhysicalDeviceExternalImageFormatPropertiesNV: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, RawVkImageType, RawVkImageTiling, RawVkImageUsageFlags, RawVkImageCreateFlags, nv::RawVkExternalMemoryHandleTypeFlags, *const nv::RawVkExternalImageFormatProperties) -> RawVkResult,
-    pub vkCmdBeginConditionalRenderingEXT: unsafe extern fn(RawVkCommandBuffer, *const ext::RawVkConditionalRenderingBeginInfo),
+    pub vkGetShaderInfoAMD: unsafe extern fn(RawVkDevice, RawVkPipeline, RawVkShaderStageFlags, amd::RawVkShaderInfoType, *mut usize, *mut c_void) -> RawVkResult,
+    pub vkGetPhysicalDeviceExternalImageFormatPropertiesNV: unsafe extern fn(RawVkPhysicalDevice, RawVkFormat, RawVkImageType, RawVkImageTiling, RawVkImageUsageFlags, RawVkImageCreateFlags, nv::RawVkExternalMemoryHandleTypeFlags, *mut nv::RawVkExternalImageFormatProperties) -> RawVkResult,
+    pub vkCmdBeginConditionalRenderingEXT: unsafe extern fn(RawVkCommandBuffer, *mut ext::RawVkConditionalRenderingBeginInfo),
     pub vkCmdEndConditionalRenderingEXT: unsafe extern fn(RawVkCommandBuffer),
-    pub vkCmdProcessCommandsNVX: unsafe extern fn(RawVkCommandBuffer, *const nvx::RawVkCmdProcessCommandsInfo),
-    pub vkCmdReserveSpaceForCommandsNVX: unsafe extern fn(RawVkCommandBuffer, *const nvx::RawVkCmdReserveSpaceForCommandsInfo),
-    pub vkCreateIndirectCommandsLayoutNVX: unsafe extern fn(RawVkDevice, *const nvx::RawVkIndirectCommandsLayoutCreateInfo, *const c_void, *const nvx::RawVkIndirectCommandsLayout) -> RawVkResult,
+    pub vkCmdProcessCommandsNVX: unsafe extern fn(RawVkCommandBuffer, *mut nvx::RawVkCmdProcessCommandsInfo),
+    pub vkCmdReserveSpaceForCommandsNVX: unsafe extern fn(RawVkCommandBuffer, *mut nvx::RawVkCmdReserveSpaceForCommandsInfo),
+    pub vkCreateIndirectCommandsLayoutNVX: unsafe extern fn(RawVkDevice, *mut nvx::RawVkIndirectCommandsLayoutCreateInfo, *const c_void, *mut nvx::RawVkIndirectCommandsLayout) -> RawVkResult,
     pub vkDestroyIndirectCommandsLayoutNVX: unsafe extern fn(RawVkDevice, nvx::RawVkIndirectCommandsLayout, *const c_void),
-    pub vkCreateObjectTableNVX: unsafe extern fn(RawVkDevice, *const nvx::RawVkObjectTableCreateInfo, *const c_void, *const nvx::RawVkObjectTable) -> RawVkResult,
+    pub vkCreateObjectTableNVX: unsafe extern fn(RawVkDevice, *mut nvx::RawVkObjectTableCreateInfo, *const c_void, *mut nvx::RawVkObjectTable) -> RawVkResult,
     pub vkDestroyObjectTableNVX: unsafe extern fn(RawVkDevice, nvx::RawVkObjectTable, *const c_void),
-    pub vkRegisterObjectsNVX: unsafe extern fn(RawVkDevice, nvx::RawVkObjectTable, u32, *const *const nvx::RawVkObjectTableEntry, *const u32) -> RawVkResult,
-    pub vkUnregisterObjectsNVX: unsafe extern fn(RawVkDevice, nvx::RawVkObjectTable, u32, *const nvx::RawVkObjectEntryType, *const u32) -> RawVkResult,
-    pub vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX: unsafe extern fn(RawVkPhysicalDevice, *const nvx::RawVkDeviceGeneratedCommandsFeatures, *const nvx::RawVkDeviceGeneratedCommandsLimits),
-    pub vkCmdSetViewportWScalingNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const nv::RawVkViewportWScaling),
+    pub vkRegisterObjectsNVX: unsafe extern fn(RawVkDevice, nvx::RawVkObjectTable, u32, *mut *mut nvx::RawVkObjectTableEntry, *mut u32) -> RawVkResult,
+    pub vkUnregisterObjectsNVX: unsafe extern fn(RawVkDevice, nvx::RawVkObjectTable, u32, *mut nvx::RawVkObjectEntryType, *mut u32) -> RawVkResult,
+    pub vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX: unsafe extern fn(RawVkPhysicalDevice, *mut nvx::RawVkDeviceGeneratedCommandsFeatures, *mut nvx::RawVkDeviceGeneratedCommandsLimits),
+    pub vkCmdSetViewportWScalingNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut nv::RawVkViewportWScaling),
     pub vkReleaseDisplayEXT: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplay) -> RawVkResult,
-    pub vkGetPhysicalDeviceSurfaceCapabilities2EXT: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *const ext::RawVkSurfaceCapabilities2) -> RawVkResult,
-    pub vkDisplayPowerControlEXT: unsafe extern fn(RawVkDevice, khr::RawVkDisplay, *const ext::RawVkDisplayPowerInfo) -> RawVkResult,
-    pub vkRegisterDeviceEventEXT: unsafe extern fn(RawVkDevice, *const ext::RawVkDeviceEventInfo, *const c_void, *const RawVkFence) -> RawVkResult,
-    pub vkRegisterDisplayEventEXT: unsafe extern fn(RawVkDevice, khr::RawVkDisplay, *const ext::RawVkDisplayEventInfo, *const c_void, *const RawVkFence) -> RawVkResult,
-    pub vkGetSwapchainCounterEXT: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, ext::RawVkSurfaceCounterFlags, *const u64) -> RawVkResult,
-    pub vkGetRefreshCycleDurationGOOGLE: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, *const google::RawVkRefreshCycleDuration) -> RawVkResult,
-    pub vkGetPastPresentationTimingGOOGLE: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, *const u32, *const google::RawVkPastPresentationTiming) -> RawVkResult,
-    pub vkCmdSetDiscardRectangleEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const RawVkRect2D),
-    pub vkSetHdrMetadataEXT: unsafe extern fn(RawVkDevice, u32, *const khr::RawVkSwapchain, *const ext::RawVkHdrMetadata),
-    pub vkSetDebugUtilsObjectNameEXT: unsafe extern fn(RawVkDevice, *const ext::RawVkDebugUtilsObjectNameInfo) -> RawVkResult,
-    pub vkSetDebugUtilsObjectTagEXT: unsafe extern fn(RawVkDevice, *const ext::RawVkDebugUtilsObjectTagInfo) -> RawVkResult,
-    pub vkQueueBeginDebugUtilsLabelEXT: unsafe extern fn(RawVkQueue, *const ext::RawVkDebugUtilsLabel),
+    pub vkGetPhysicalDeviceSurfaceCapabilities2EXT: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkSurface, *mut ext::RawVkSurfaceCapabilities2) -> RawVkResult,
+    pub vkDisplayPowerControlEXT: unsafe extern fn(RawVkDevice, khr::RawVkDisplay, *mut ext::RawVkDisplayPowerInfo) -> RawVkResult,
+    pub vkRegisterDeviceEventEXT: unsafe extern fn(RawVkDevice, *mut ext::RawVkDeviceEventInfo, *const c_void, *mut RawVkFence) -> RawVkResult,
+    pub vkRegisterDisplayEventEXT: unsafe extern fn(RawVkDevice, khr::RawVkDisplay, *mut ext::RawVkDisplayEventInfo, *const c_void, *mut RawVkFence) -> RawVkResult,
+    pub vkGetSwapchainCounterEXT: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, ext::RawVkSurfaceCounterFlags, *mut u64) -> RawVkResult,
+    pub vkGetRefreshCycleDurationGOOGLE: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, *mut google::RawVkRefreshCycleDuration) -> RawVkResult,
+    pub vkGetPastPresentationTimingGOOGLE: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, *mut u32, *mut google::RawVkPastPresentationTiming) -> RawVkResult,
+    pub vkCmdSetDiscardRectangleEXT: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkRect2D),
+    pub vkSetHdrMetadataEXT: unsafe extern fn(RawVkDevice, u32, *mut khr::RawVkSwapchain, *mut ext::RawVkHdrMetadata),
+    pub vkSetDebugUtilsObjectNameEXT: unsafe extern fn(RawVkDevice, *mut ext::RawVkDebugUtilsObjectNameInfo) -> RawVkResult,
+    pub vkSetDebugUtilsObjectTagEXT: unsafe extern fn(RawVkDevice, *mut ext::RawVkDebugUtilsObjectTagInfo) -> RawVkResult,
+    pub vkQueueBeginDebugUtilsLabelEXT: unsafe extern fn(RawVkQueue, *mut ext::RawVkDebugUtilsLabel),
     pub vkQueueEndDebugUtilsLabelEXT: unsafe extern fn(RawVkQueue),
-    pub vkQueueInsertDebugUtilsLabelEXT: unsafe extern fn(RawVkQueue, *const ext::RawVkDebugUtilsLabel),
-    pub vkCmdBeginDebugUtilsLabelEXT: unsafe extern fn(RawVkCommandBuffer, *const ext::RawVkDebugUtilsLabel),
+    pub vkQueueInsertDebugUtilsLabelEXT: unsafe extern fn(RawVkQueue, *mut ext::RawVkDebugUtilsLabel),
+    pub vkCmdBeginDebugUtilsLabelEXT: unsafe extern fn(RawVkCommandBuffer, *mut ext::RawVkDebugUtilsLabel),
     pub vkCmdEndDebugUtilsLabelEXT: unsafe extern fn(RawVkCommandBuffer),
-    pub vkCmdInsertDebugUtilsLabelEXT: unsafe extern fn(RawVkCommandBuffer, *const ext::RawVkDebugUtilsLabel),
-    pub vkCreateDebugUtilsMessengerEXT: unsafe extern fn(RawVkInstance, *const ext::RawVkDebugUtilsMessengerCreateInfo, *const c_void, *const ext::RawVkDebugUtilsMessenger) -> RawVkResult,
+    pub vkCmdInsertDebugUtilsLabelEXT: unsafe extern fn(RawVkCommandBuffer, *mut ext::RawVkDebugUtilsLabel),
+    pub vkCreateDebugUtilsMessengerEXT: unsafe extern fn(RawVkInstance, *mut ext::RawVkDebugUtilsMessengerCreateInfo, *const c_void, *mut ext::RawVkDebugUtilsMessenger) -> RawVkResult,
     pub vkDestroyDebugUtilsMessengerEXT: unsafe extern fn(RawVkInstance, ext::RawVkDebugUtilsMessenger, *const c_void),
-    pub vkSubmitDebugUtilsMessageEXT: unsafe extern fn(RawVkInstance, ext::RawVkDebugUtilsMessageSeverityFlags, ext::RawVkDebugUtilsMessageTypeFlags, *const ext::RawVkDebugUtilsMessengerCallbackData),
-    pub vkCmdSetSampleLocationsEXT: unsafe extern fn(RawVkCommandBuffer, *const ext::RawVkSampleLocationsInfo),
-    pub vkGetPhysicalDeviceMultisamplePropertiesEXT: unsafe extern fn(RawVkPhysicalDevice, RawVkSampleCountFlags, *const ext::RawVkMultisampleProperties),
-    pub vkGetImageDrmFormatModifierPropertiesEXT: unsafe extern fn(RawVkDevice, RawVkImage, *const ext::RawVkImageDrmFormatModifierProperties) -> RawVkResult,
-    pub vkCreateValidationCacheEXT: unsafe extern fn(RawVkDevice, *const ext::RawVkValidationCacheCreateInfo, *const c_void, *const ext::RawVkValidationCache) -> RawVkResult,
+    pub vkSubmitDebugUtilsMessageEXT: unsafe extern fn(RawVkInstance, ext::RawVkDebugUtilsMessageSeverityFlags, ext::RawVkDebugUtilsMessageTypeFlags, *mut ext::RawVkDebugUtilsMessengerCallbackData),
+    pub vkCmdSetSampleLocationsEXT: unsafe extern fn(RawVkCommandBuffer, *mut ext::RawVkSampleLocationsInfo),
+    pub vkGetPhysicalDeviceMultisamplePropertiesEXT: unsafe extern fn(RawVkPhysicalDevice, RawVkSampleCountFlags, *mut ext::RawVkMultisampleProperties),
+    pub vkGetImageDrmFormatModifierPropertiesEXT: unsafe extern fn(RawVkDevice, RawVkImage, *mut ext::RawVkImageDrmFormatModifierProperties) -> RawVkResult,
+    pub vkCreateValidationCacheEXT: unsafe extern fn(RawVkDevice, *mut ext::RawVkValidationCacheCreateInfo, *const c_void, *mut ext::RawVkValidationCache) -> RawVkResult,
     pub vkDestroyValidationCacheEXT: unsafe extern fn(RawVkDevice, ext::RawVkValidationCache, *const c_void),
-    pub vkMergeValidationCachesEXT: unsafe extern fn(RawVkDevice, ext::RawVkValidationCache, u32, *const ext::RawVkValidationCache) -> RawVkResult,
-    pub vkGetValidationCacheDataEXT: unsafe extern fn(RawVkDevice, ext::RawVkValidationCache, *const usize, *const c_void) -> RawVkResult,
+    pub vkMergeValidationCachesEXT: unsafe extern fn(RawVkDevice, ext::RawVkValidationCache, u32, *mut ext::RawVkValidationCache) -> RawVkResult,
+    pub vkGetValidationCacheDataEXT: unsafe extern fn(RawVkDevice, ext::RawVkValidationCache, *mut usize, *mut c_void) -> RawVkResult,
     pub vkCmdBindShadingRateImageNV: unsafe extern fn(RawVkCommandBuffer, RawVkImageView, RawVkImageLayout),
-    pub vkCmdSetViewportShadingRatePaletteNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const nv::RawVkShadingRatePalette),
-    pub vkCmdSetCoarseSampleOrderNV: unsafe extern fn(RawVkCommandBuffer, nv::RawVkCoarseSampleOrderType, u32, *const nv::RawVkCoarseSampleOrderCustom),
-    pub vkCreateAccelerationStructureNV: unsafe extern fn(RawVkDevice, *const nv::RawVkAccelerationStructureCreateInfo, *const c_void, *const nv::RawVkAccelerationStructure) -> RawVkResult,
+    pub vkCmdSetViewportShadingRatePaletteNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut nv::RawVkShadingRatePalette),
+    pub vkCmdSetCoarseSampleOrderNV: unsafe extern fn(RawVkCommandBuffer, nv::RawVkCoarseSampleOrderType, u32, *mut nv::RawVkCoarseSampleOrderCustom),
+    pub vkCreateAccelerationStructureNV: unsafe extern fn(RawVkDevice, *mut nv::RawVkAccelerationStructureCreateInfo, *const c_void, *mut nv::RawVkAccelerationStructure) -> RawVkResult,
     pub vkDestroyAccelerationStructureNV: unsafe extern fn(RawVkDevice, nv::RawVkAccelerationStructure, *const c_void),
-    pub vkGetAccelerationStructureMemoryRequirementsNV: unsafe extern fn(RawVkDevice, *const nv::RawVkAccelerationStructureMemoryRequirementsInfo, *const khr::RawVkMemoryRequirements2),
-    pub vkBindAccelerationStructureMemoryNV: unsafe extern fn(RawVkDevice, u32, *const nv::RawVkBindAccelerationStructureMemoryInfo) -> RawVkResult,
-    pub vkCmdBuildAccelerationStructureNV: unsafe extern fn(RawVkCommandBuffer, *const nv::RawVkAccelerationStructureInfo, RawVkBuffer, u64, u32, nv::RawVkAccelerationStructure, nv::RawVkAccelerationStructure, RawVkBuffer, u64),
+    pub vkGetAccelerationStructureMemoryRequirementsNV: unsafe extern fn(RawVkDevice, *mut nv::RawVkAccelerationStructureMemoryRequirementsInfo, *mut khr::RawVkMemoryRequirements2),
+    pub vkBindAccelerationStructureMemoryNV: unsafe extern fn(RawVkDevice, u32, *mut nv::RawVkBindAccelerationStructureMemoryInfo) -> RawVkResult,
+    pub vkCmdBuildAccelerationStructureNV: unsafe extern fn(RawVkCommandBuffer, *mut nv::RawVkAccelerationStructureInfo, RawVkBuffer, u64, u32, nv::RawVkAccelerationStructure, nv::RawVkAccelerationStructure, RawVkBuffer, u64),
     pub vkCmdCopyAccelerationStructureNV: unsafe extern fn(RawVkCommandBuffer, nv::RawVkAccelerationStructure, nv::RawVkAccelerationStructure, nv::RawVkCopyAccelerationStructureMode),
     pub vkCmdTraceRaysNV: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u64, RawVkBuffer, u64, u64, RawVkBuffer, u64, u64, u32, u32, u32),
-    pub vkCreateRayTracingPipelinesNV: unsafe extern fn(RawVkDevice, RawVkPipelineCache, u32, *const nv::RawVkRayTracingPipelineCreateInfo, *const c_void, *const RawVkPipeline) -> RawVkResult,
-    pub vkGetRayTracingShaderGroupHandlesNV: unsafe extern fn(RawVkDevice, RawVkPipeline, u32, u32, usize, *const c_void) -> RawVkResult,
-    pub vkGetAccelerationStructureHandleNV: unsafe extern fn(RawVkDevice, nv::RawVkAccelerationStructure, usize, *const c_void) -> RawVkResult,
-    pub vkCmdWriteAccelerationStructuresPropertiesNV: unsafe extern fn(RawVkCommandBuffer, u32, *const nv::RawVkAccelerationStructure, RawVkQueryType, RawVkQueryPool, u32),
+    pub vkCreateRayTracingPipelinesNV: unsafe extern fn(RawVkDevice, RawVkPipelineCache, u32, *mut nv::RawVkRayTracingPipelineCreateInfo, *const c_void, *mut RawVkPipeline) -> RawVkResult,
+    pub vkGetRayTracingShaderGroupHandlesNV: unsafe extern fn(RawVkDevice, RawVkPipeline, u32, u32, usize, *mut c_void) -> RawVkResult,
+    pub vkGetAccelerationStructureHandleNV: unsafe extern fn(RawVkDevice, nv::RawVkAccelerationStructure, usize, *mut c_void) -> RawVkResult,
+    pub vkCmdWriteAccelerationStructuresPropertiesNV: unsafe extern fn(RawVkCommandBuffer, u32, *mut nv::RawVkAccelerationStructure, RawVkQueryType, RawVkQueryPool, u32),
     pub vkCompileDeferredNV: unsafe extern fn(RawVkDevice, RawVkPipeline, u32) -> RawVkResult,
-    pub vkGetMemoryHostPointerPropertiesEXT: unsafe extern fn(RawVkDevice, RawVkExternalMemoryHandleTypeFlags, *const c_void, *const ext::RawVkMemoryHostPointerProperties) -> RawVkResult,
+    pub vkGetMemoryHostPointerPropertiesEXT: unsafe extern fn(RawVkDevice, RawVkExternalMemoryHandleTypeFlags, *mut c_void, *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult,
     pub vkCmdWriteBufferMarkerAMD: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineStageFlags, RawVkBuffer, u64, u32),
-    pub vkGetPhysicalDeviceCalibrateableTimeDomainsEXT: unsafe extern fn(RawVkPhysicalDevice, *const u32, *const ext::RawVkTimeDomain) -> RawVkResult,
-    pub vkGetCalibratedTimestampsEXT: unsafe extern fn(RawVkDevice, u32, *const ext::RawVkCalibratedTimestampInfo, *const u64, *const u64) -> RawVkResult,
+    pub vkGetPhysicalDeviceCalibrateableTimeDomainsEXT: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut ext::RawVkTimeDomain) -> RawVkResult,
+    pub vkGetCalibratedTimestampsEXT: unsafe extern fn(RawVkDevice, u32, *mut ext::RawVkCalibratedTimestampInfo, *mut u64, *mut u64) -> RawVkResult,
     pub vkCmdDrawMeshTasksNV: unsafe extern fn(RawVkCommandBuffer, u32, u32),
     pub vkCmdDrawMeshTasksIndirectNV: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u32, u32),
     pub vkCmdDrawMeshTasksIndirectCountNV: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u32, u32),
-    pub vkCmdSetExclusiveScissorNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *const RawVkRect2D),
-    pub vkCmdSetCheckpointNV: unsafe extern fn(RawVkCommandBuffer, *const c_void),
-    pub vkGetQueueCheckpointDataNV: unsafe extern fn(RawVkQueue, *const u32, *const nv::RawVkCheckpointData),
+    pub vkCmdSetExclusiveScissorNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkRect2D),
+    pub vkCmdSetCheckpointNV: unsafe extern fn(RawVkCommandBuffer, *mut c_void),
+    pub vkGetQueueCheckpointDataNV: unsafe extern fn(RawVkQueue, *mut u32, *mut nv::RawVkCheckpointData),
 }
 
 impl VkFunctionTable {
@@ -892,43 +892,43 @@ impl VkFunctionTable {
 unsafe extern fn null_instance_vkDestroyInstance(instance: RawVkInstance, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyInstance\"");
 }
-unsafe extern fn null_instance_vkEnumeratePhysicalDevices(instance: RawVkInstance, physical_device_count: *const u32, physical_devices: *const RawVkPhysicalDevice) -> RawVkResult {
+unsafe extern fn null_instance_vkEnumeratePhysicalDevices(instance: RawVkInstance, physical_device_count: *mut u32, physical_devices: *mut RawVkPhysicalDevice) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkEnumeratePhysicalDevices\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceFeatures(physical_device: RawVkPhysicalDevice, features: *const RawVkPhysicalDeviceFeatures) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceFeatures(physical_device: RawVkPhysicalDevice, features: *mut RawVkPhysicalDeviceFeatures) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceFeatures\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, format_properties: *const RawVkFormatProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, format_properties: *mut RawVkFormatProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceFormatProperties\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceImageFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, tiling: RawVkImageTiling, usage: RawVkImageUsageFlags, flags: RawVkImageCreateFlags, image_format_properties: *const RawVkImageFormatProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceImageFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, tiling: RawVkImageTiling, usage: RawVkImageUsageFlags, flags: RawVkImageCreateFlags, image_format_properties: *mut RawVkImageFormatProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceImageFormatProperties\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceProperties(physical_device: RawVkPhysicalDevice, properties: *const RawVkPhysicalDeviceProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceProperties(physical_device: RawVkPhysicalDevice, properties: *mut RawVkPhysicalDeviceProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceProperties\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceQueueFamilyProperties(physical_device: RawVkPhysicalDevice, queue_family_property_count: *const u32, queue_family_properties: *const RawVkQueueFamilyProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceQueueFamilyProperties(physical_device: RawVkPhysicalDevice, queue_family_property_count: *mut u32, queue_family_properties: *mut RawVkQueueFamilyProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceQueueFamilyProperties\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceMemoryProperties(physical_device: RawVkPhysicalDevice, memory_properties: *const RawVkPhysicalDeviceMemoryProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceMemoryProperties(physical_device: RawVkPhysicalDevice, memory_properties: *mut RawVkPhysicalDeviceMemoryProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceMemoryProperties\"");
 }
-unsafe extern fn null_instance_vkCreateDevice(physical_device: RawVkPhysicalDevice, create_info: *const RawVkDeviceCreateInfo, allocator: *const c_void, device: *const RawVkDevice) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateDevice(physical_device: RawVkPhysicalDevice, create_info: *mut RawVkDeviceCreateInfo, allocator: *const c_void, device: *mut RawVkDevice) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDevice\"");
 }
 unsafe extern fn null_instance_vkDestroyDevice(device: RawVkDevice, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyDevice\"");
 }
-unsafe extern fn null_instance_vkEnumerateDeviceExtensionProperties(physical_device: RawVkPhysicalDevice, layer_name: *const c_char, property_count: *const u32, properties: *const RawVkExtensionProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkEnumerateDeviceExtensionProperties(physical_device: RawVkPhysicalDevice, layer_name: *mut c_char, property_count: *mut u32, properties: *mut RawVkExtensionProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkEnumerateDeviceExtensionProperties\"");
 }
-unsafe extern fn null_instance_vkEnumerateDeviceLayerProperties(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const RawVkLayerProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkEnumerateDeviceLayerProperties(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut RawVkLayerProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkEnumerateDeviceLayerProperties\"");
 }
-unsafe extern fn null_instance_vkGetDeviceQueue(device: RawVkDevice, queue_family_index: u32, queue_index: u32, queue: *const RawVkQueue) {
+unsafe extern fn null_instance_vkGetDeviceQueue(device: RawVkDevice, queue_family_index: u32, queue_index: u32, queue: *mut RawVkQueue) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDeviceQueue\"");
 }
-unsafe extern fn null_instance_vkQueueSubmit(queue: RawVkQueue, submit_count: u32, submits: *const RawVkSubmitInfo, fence: RawVkFence) -> RawVkResult {
+unsafe extern fn null_instance_vkQueueSubmit(queue: RawVkQueue, submit_count: u32, submits: *mut RawVkSubmitInfo, fence: RawVkFence) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkQueueSubmit\"");
 }
 unsafe extern fn null_instance_vkQueueWaitIdle(queue: RawVkQueue) -> RawVkResult {
@@ -937,25 +937,25 @@ unsafe extern fn null_instance_vkQueueWaitIdle(queue: RawVkQueue) -> RawVkResult
 unsafe extern fn null_instance_vkDeviceWaitIdle(device: RawVkDevice) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDeviceWaitIdle\"");
 }
-unsafe extern fn null_instance_vkAllocateMemory(device: RawVkDevice, allocate_info: *const RawVkMemoryAllocateInfo, allocator: *const c_void, memory: *const RawVkDeviceMemory) -> RawVkResult {
+unsafe extern fn null_instance_vkAllocateMemory(device: RawVkDevice, allocate_info: *mut RawVkMemoryAllocateInfo, allocator: *const c_void, memory: *mut RawVkDeviceMemory) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkAllocateMemory\"");
 }
 unsafe extern fn null_instance_vkFreeMemory(device: RawVkDevice, memory: RawVkDeviceMemory, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkFreeMemory\"");
 }
-unsafe extern fn null_instance_vkMapMemory(device: RawVkDevice, memory: RawVkDeviceMemory, offset: u64, size: u64, flags: RawVkMemoryMapFlags, data: *const *const c_void) -> RawVkResult {
+unsafe extern fn null_instance_vkMapMemory(device: RawVkDevice, memory: RawVkDeviceMemory, offset: u64, size: u64, flags: RawVkMemoryMapFlags, data: *mut *mut c_void) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkMapMemory\"");
 }
 unsafe extern fn null_instance_vkUnmapMemory(device: RawVkDevice, memory: RawVkDeviceMemory) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkUnmapMemory\"");
 }
-unsafe extern fn null_instance_vkFlushMappedMemoryRanges(device: RawVkDevice, memory_range_count: u32, memory_ranges: *const RawVkMappedMemoryRange) -> RawVkResult {
+unsafe extern fn null_instance_vkFlushMappedMemoryRanges(device: RawVkDevice, memory_range_count: u32, memory_ranges: *mut RawVkMappedMemoryRange) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkFlushMappedMemoryRanges\"");
 }
-unsafe extern fn null_instance_vkInvalidateMappedMemoryRanges(device: RawVkDevice, memory_range_count: u32, memory_ranges: *const RawVkMappedMemoryRange) -> RawVkResult {
+unsafe extern fn null_instance_vkInvalidateMappedMemoryRanges(device: RawVkDevice, memory_range_count: u32, memory_ranges: *mut RawVkMappedMemoryRange) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkInvalidateMappedMemoryRanges\"");
 }
-unsafe extern fn null_instance_vkGetDeviceMemoryCommitment(device: RawVkDevice, memory: RawVkDeviceMemory, committed_memory_in_bytes: *const u64) {
+unsafe extern fn null_instance_vkGetDeviceMemoryCommitment(device: RawVkDevice, memory: RawVkDeviceMemory, committed_memory_in_bytes: *mut u64) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDeviceMemoryCommitment\"");
 }
 unsafe extern fn null_instance_vkBindBufferMemory(device: RawVkDevice, buffer: RawVkBuffer, memory: RawVkDeviceMemory, memory_offset: u64) -> RawVkResult {
@@ -964,43 +964,43 @@ unsafe extern fn null_instance_vkBindBufferMemory(device: RawVkDevice, buffer: R
 unsafe extern fn null_instance_vkBindImageMemory(device: RawVkDevice, image: RawVkImage, memory: RawVkDeviceMemory, memory_offset: u64) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkBindImageMemory\"");
 }
-unsafe extern fn null_instance_vkGetBufferMemoryRequirements(device: RawVkDevice, buffer: RawVkBuffer, memory_requirements: *const RawVkMemoryRequirements) {
+unsafe extern fn null_instance_vkGetBufferMemoryRequirements(device: RawVkDevice, buffer: RawVkBuffer, memory_requirements: *mut RawVkMemoryRequirements) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetBufferMemoryRequirements\"");
 }
-unsafe extern fn null_instance_vkGetImageMemoryRequirements(device: RawVkDevice, image: RawVkImage, memory_requirements: *const RawVkMemoryRequirements) {
+unsafe extern fn null_instance_vkGetImageMemoryRequirements(device: RawVkDevice, image: RawVkImage, memory_requirements: *mut RawVkMemoryRequirements) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetImageMemoryRequirements\"");
 }
-unsafe extern fn null_instance_vkGetImageSparseMemoryRequirements(device: RawVkDevice, image: RawVkImage, sparse_memory_requirement_count: *const u32, sparse_memory_requirements: *const RawVkSparseImageMemoryRequirements) {
+unsafe extern fn null_instance_vkGetImageSparseMemoryRequirements(device: RawVkDevice, image: RawVkImage, sparse_memory_requirement_count: *mut u32, sparse_memory_requirements: *mut RawVkSparseImageMemoryRequirements) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetImageSparseMemoryRequirements\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSparseImageFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, samples: RawVkSampleCountFlags, usage: RawVkImageUsageFlags, tiling: RawVkImageTiling, property_count: *const u32, properties: *const RawVkSparseImageFormatProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSparseImageFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, samples: RawVkSampleCountFlags, usage: RawVkImageUsageFlags, tiling: RawVkImageTiling, property_count: *mut u32, properties: *mut RawVkSparseImageFormatProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSparseImageFormatProperties\"");
 }
-unsafe extern fn null_instance_vkQueueBindSparse(queue: RawVkQueue, bind_info_count: u32, bind_info: *const RawVkBindSparseInfo, fence: RawVkFence) -> RawVkResult {
+unsafe extern fn null_instance_vkQueueBindSparse(queue: RawVkQueue, bind_info_count: u32, bind_info: *mut RawVkBindSparseInfo, fence: RawVkFence) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkQueueBindSparse\"");
 }
-unsafe extern fn null_instance_vkCreateFence(device: RawVkDevice, create_info: *const RawVkFenceCreateInfo, allocator: *const c_void, fence: *const RawVkFence) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateFence(device: RawVkDevice, create_info: *mut RawVkFenceCreateInfo, allocator: *const c_void, fence: *mut RawVkFence) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateFence\"");
 }
 unsafe extern fn null_instance_vkDestroyFence(device: RawVkDevice, fence: RawVkFence, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyFence\"");
 }
-unsafe extern fn null_instance_vkResetFences(device: RawVkDevice, fence_count: u32, fences: *const RawVkFence) -> RawVkResult {
+unsafe extern fn null_instance_vkResetFences(device: RawVkDevice, fence_count: u32, fences: *mut RawVkFence) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkResetFences\"");
 }
 unsafe extern fn null_instance_vkGetFenceStatus(device: RawVkDevice, fence: RawVkFence) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetFenceStatus\"");
 }
-unsafe extern fn null_instance_vkWaitForFences(device: RawVkDevice, fence_count: u32, fences: *const RawVkFence, wait_all: u32, timeout: u64) -> RawVkResult {
+unsafe extern fn null_instance_vkWaitForFences(device: RawVkDevice, fence_count: u32, fences: *mut RawVkFence, wait_all: u32, timeout: u64) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkWaitForFences\"");
 }
-unsafe extern fn null_instance_vkCreateSemaphore(device: RawVkDevice, create_info: *const RawVkSemaphoreCreateInfo, allocator: *const c_void, semaphore: *const RawVkSemaphore) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateSemaphore(device: RawVkDevice, create_info: *mut RawVkSemaphoreCreateInfo, allocator: *const c_void, semaphore: *mut RawVkSemaphore) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateSemaphore\"");
 }
 unsafe extern fn null_instance_vkDestroySemaphore(device: RawVkDevice, semaphore: RawVkSemaphore, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroySemaphore\"");
 }
-unsafe extern fn null_instance_vkCreateEvent(device: RawVkDevice, create_info: *const RawVkEventCreateInfo, allocator: *const c_void, event: *const RawVkEvent) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateEvent(device: RawVkDevice, create_info: *mut RawVkEventCreateInfo, allocator: *const c_void, event: *mut RawVkEvent) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateEvent\"");
 }
 unsafe extern fn null_instance_vkDestroyEvent(device: RawVkDevice, event: RawVkEvent, allocator: *const c_void) {
@@ -1015,88 +1015,88 @@ unsafe extern fn null_instance_vkSetEvent(device: RawVkDevice, event: RawVkEvent
 unsafe extern fn null_instance_vkResetEvent(device: RawVkDevice, event: RawVkEvent) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkResetEvent\"");
 }
-unsafe extern fn null_instance_vkCreateQueryPool(device: RawVkDevice, create_info: *const RawVkQueryPoolCreateInfo, allocator: *const c_void, query_pool: *const RawVkQueryPool) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateQueryPool(device: RawVkDevice, create_info: *mut RawVkQueryPoolCreateInfo, allocator: *const c_void, query_pool: *mut RawVkQueryPool) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateQueryPool\"");
 }
 unsafe extern fn null_instance_vkDestroyQueryPool(device: RawVkDevice, query_pool: RawVkQueryPool, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyQueryPool\"");
 }
-unsafe extern fn null_instance_vkGetQueryPoolResults(device: RawVkDevice, query_pool: RawVkQueryPool, first_query: u32, query_count: u32, data_size: usize, data: *const c_void, stride: u64, flags: RawVkQueryResultFlags) -> RawVkResult {
+unsafe extern fn null_instance_vkGetQueryPoolResults(device: RawVkDevice, query_pool: RawVkQueryPool, first_query: u32, query_count: u32, data_size: usize, data: *mut c_void, stride: u64, flags: RawVkQueryResultFlags) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetQueryPoolResults\"");
 }
-unsafe extern fn null_instance_vkCreateBuffer(device: RawVkDevice, create_info: *const RawVkBufferCreateInfo, allocator: *const c_void, buffer: *const RawVkBuffer) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateBuffer(device: RawVkDevice, create_info: *mut RawVkBufferCreateInfo, allocator: *const c_void, buffer: *mut RawVkBuffer) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateBuffer\"");
 }
 unsafe extern fn null_instance_vkDestroyBuffer(device: RawVkDevice, buffer: RawVkBuffer, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyBuffer\"");
 }
-unsafe extern fn null_instance_vkCreateBufferView(device: RawVkDevice, create_info: *const RawVkBufferViewCreateInfo, allocator: *const c_void, view: *const RawVkBufferView) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateBufferView(device: RawVkDevice, create_info: *mut RawVkBufferViewCreateInfo, allocator: *const c_void, view: *mut RawVkBufferView) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateBufferView\"");
 }
 unsafe extern fn null_instance_vkDestroyBufferView(device: RawVkDevice, buffer_view: RawVkBufferView, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyBufferView\"");
 }
-unsafe extern fn null_instance_vkCreateImage(device: RawVkDevice, create_info: *const RawVkImageCreateInfo, allocator: *const c_void, image: *const RawVkImage) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateImage(device: RawVkDevice, create_info: *mut RawVkImageCreateInfo, allocator: *const c_void, image: *mut RawVkImage) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateImage\"");
 }
 unsafe extern fn null_instance_vkDestroyImage(device: RawVkDevice, image: RawVkImage, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyImage\"");
 }
-unsafe extern fn null_instance_vkGetImageSubresourceLayout(device: RawVkDevice, image: RawVkImage, subresource: *const RawVkImageSubresource, layout: *const RawVkSubresourceLayout) {
+unsafe extern fn null_instance_vkGetImageSubresourceLayout(device: RawVkDevice, image: RawVkImage, subresource: *mut RawVkImageSubresource, layout: *mut RawVkSubresourceLayout) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetImageSubresourceLayout\"");
 }
-unsafe extern fn null_instance_vkCreateImageView(device: RawVkDevice, create_info: *const RawVkImageViewCreateInfo, allocator: *const c_void, view: *const RawVkImageView) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateImageView(device: RawVkDevice, create_info: *mut RawVkImageViewCreateInfo, allocator: *const c_void, view: *mut RawVkImageView) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateImageView\"");
 }
 unsafe extern fn null_instance_vkDestroyImageView(device: RawVkDevice, image_view: RawVkImageView, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyImageView\"");
 }
-unsafe extern fn null_instance_vkCreateShaderModule(device: RawVkDevice, create_info: *const RawVkShaderModuleCreateInfo, allocator: *const c_void, shader_module: *const RawVkShaderModule) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateShaderModule(device: RawVkDevice, create_info: *mut RawVkShaderModuleCreateInfo, allocator: *const c_void, shader_module: *mut RawVkShaderModule) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateShaderModule\"");
 }
 unsafe extern fn null_instance_vkDestroyShaderModule(device: RawVkDevice, shader_module: RawVkShaderModule, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyShaderModule\"");
 }
-unsafe extern fn null_instance_vkCreatePipelineCache(device: RawVkDevice, create_info: *const RawVkPipelineCacheCreateInfo, allocator: *const c_void, pipeline_cache: *const RawVkPipelineCache) -> RawVkResult {
+unsafe extern fn null_instance_vkCreatePipelineCache(device: RawVkDevice, create_info: *mut RawVkPipelineCacheCreateInfo, allocator: *const c_void, pipeline_cache: *mut RawVkPipelineCache) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreatePipelineCache\"");
 }
 unsafe extern fn null_instance_vkDestroyPipelineCache(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyPipelineCache\"");
 }
-unsafe extern fn null_instance_vkGetPipelineCacheData(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, data_size: *const usize, data: *const c_void) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPipelineCacheData(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, data_size: *mut usize, data: *mut c_void) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPipelineCacheData\"");
 }
-unsafe extern fn null_instance_vkMergePipelineCaches(device: RawVkDevice, dst_cache: RawVkPipelineCache, src_cache_count: u32, src_caches: *const RawVkPipelineCache) -> RawVkResult {
+unsafe extern fn null_instance_vkMergePipelineCaches(device: RawVkDevice, dst_cache: RawVkPipelineCache, src_cache_count: u32, src_caches: *mut RawVkPipelineCache) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkMergePipelineCaches\"");
 }
-unsafe extern fn null_instance_vkCreateGraphicsPipelines(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *const RawVkGraphicsPipelineCreateInfo, allocator: *const c_void, pipelines: *const RawVkPipeline) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateGraphicsPipelines(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *mut RawVkGraphicsPipelineCreateInfo, allocator: *const c_void, pipelines: *mut RawVkPipeline) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateGraphicsPipelines\"");
 }
-unsafe extern fn null_instance_vkCreateComputePipelines(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *const RawVkComputePipelineCreateInfo, allocator: *const c_void, pipelines: *const RawVkPipeline) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateComputePipelines(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *mut RawVkComputePipelineCreateInfo, allocator: *const c_void, pipelines: *mut RawVkPipeline) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateComputePipelines\"");
 }
 unsafe extern fn null_instance_vkDestroyPipeline(device: RawVkDevice, pipeline: RawVkPipeline, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyPipeline\"");
 }
-unsafe extern fn null_instance_vkCreatePipelineLayout(device: RawVkDevice, create_info: *const RawVkPipelineLayoutCreateInfo, allocator: *const c_void, pipeline_layout: *const RawVkPipelineLayout) -> RawVkResult {
+unsafe extern fn null_instance_vkCreatePipelineLayout(device: RawVkDevice, create_info: *mut RawVkPipelineLayoutCreateInfo, allocator: *const c_void, pipeline_layout: *mut RawVkPipelineLayout) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreatePipelineLayout\"");
 }
 unsafe extern fn null_instance_vkDestroyPipelineLayout(device: RawVkDevice, pipeline_layout: RawVkPipelineLayout, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyPipelineLayout\"");
 }
-unsafe extern fn null_instance_vkCreateSampler(device: RawVkDevice, create_info: *const RawVkSamplerCreateInfo, allocator: *const c_void, sampler: *const RawVkSampler) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateSampler(device: RawVkDevice, create_info: *mut RawVkSamplerCreateInfo, allocator: *const c_void, sampler: *mut RawVkSampler) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateSampler\"");
 }
 unsafe extern fn null_instance_vkDestroySampler(device: RawVkDevice, sampler: RawVkSampler, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroySampler\"");
 }
-unsafe extern fn null_instance_vkCreateDescriptorSetLayout(device: RawVkDevice, create_info: *const RawVkDescriptorSetLayoutCreateInfo, allocator: *const c_void, set_layout: *const RawVkDescriptorSetLayout) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateDescriptorSetLayout(device: RawVkDevice, create_info: *mut RawVkDescriptorSetLayoutCreateInfo, allocator: *const c_void, set_layout: *mut RawVkDescriptorSetLayout) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDescriptorSetLayout\"");
 }
 unsafe extern fn null_instance_vkDestroyDescriptorSetLayout(device: RawVkDevice, descriptor_set_layout: RawVkDescriptorSetLayout, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyDescriptorSetLayout\"");
 }
-unsafe extern fn null_instance_vkCreateDescriptorPool(device: RawVkDevice, create_info: *const RawVkDescriptorPoolCreateInfo, allocator: *const c_void, descriptor_pool: *const RawVkDescriptorPool) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateDescriptorPool(device: RawVkDevice, create_info: *mut RawVkDescriptorPoolCreateInfo, allocator: *const c_void, descriptor_pool: *mut RawVkDescriptorPool) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDescriptorPool\"");
 }
 unsafe extern fn null_instance_vkDestroyDescriptorPool(device: RawVkDevice, descriptor_pool: RawVkDescriptorPool, allocator: *const c_void) {
@@ -1105,31 +1105,31 @@ unsafe extern fn null_instance_vkDestroyDescriptorPool(device: RawVkDevice, desc
 unsafe extern fn null_instance_vkResetDescriptorPool(device: RawVkDevice, descriptor_pool: RawVkDescriptorPool, flags: RawVkDescriptorPoolResetFlags) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkResetDescriptorPool\"");
 }
-unsafe extern fn null_instance_vkAllocateDescriptorSets(device: RawVkDevice, allocate_info: *const RawVkDescriptorSetAllocateInfo, descriptor_sets: *const RawVkDescriptorSet) -> RawVkResult {
+unsafe extern fn null_instance_vkAllocateDescriptorSets(device: RawVkDevice, allocate_info: *mut RawVkDescriptorSetAllocateInfo, descriptor_sets: *mut RawVkDescriptorSet) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkAllocateDescriptorSets\"");
 }
-unsafe extern fn null_instance_vkFreeDescriptorSets(device: RawVkDevice, descriptor_pool: RawVkDescriptorPool, descriptor_set_count: u32, descriptor_sets: *const RawVkDescriptorSet) -> RawVkResult {
+unsafe extern fn null_instance_vkFreeDescriptorSets(device: RawVkDevice, descriptor_pool: RawVkDescriptorPool, descriptor_set_count: u32, descriptor_sets: *mut RawVkDescriptorSet) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkFreeDescriptorSets\"");
 }
-unsafe extern fn null_instance_vkUpdateDescriptorSets(device: RawVkDevice, descriptor_write_count: u32, descriptor_writes: *const RawVkWriteDescriptorSet, descriptor_copy_count: u32, descriptor_copies: *const RawVkCopyDescriptorSet) {
+unsafe extern fn null_instance_vkUpdateDescriptorSets(device: RawVkDevice, descriptor_write_count: u32, descriptor_writes: *mut RawVkWriteDescriptorSet, descriptor_copy_count: u32, descriptor_copies: *mut RawVkCopyDescriptorSet) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkUpdateDescriptorSets\"");
 }
-unsafe extern fn null_instance_vkCreateFramebuffer(device: RawVkDevice, create_info: *const RawVkFramebufferCreateInfo, allocator: *const c_void, framebuffer: *const RawVkFramebuffer) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateFramebuffer(device: RawVkDevice, create_info: *mut RawVkFramebufferCreateInfo, allocator: *const c_void, framebuffer: *mut RawVkFramebuffer) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateFramebuffer\"");
 }
 unsafe extern fn null_instance_vkDestroyFramebuffer(device: RawVkDevice, framebuffer: RawVkFramebuffer, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyFramebuffer\"");
 }
-unsafe extern fn null_instance_vkCreateRenderPass(device: RawVkDevice, create_info: *const RawVkRenderPassCreateInfo, allocator: *const c_void, render_pass: *const RawVkRenderPass) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateRenderPass(device: RawVkDevice, create_info: *mut RawVkRenderPassCreateInfo, allocator: *const c_void, render_pass: *mut RawVkRenderPass) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateRenderPass\"");
 }
 unsafe extern fn null_instance_vkDestroyRenderPass(device: RawVkDevice, render_pass: RawVkRenderPass, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyRenderPass\"");
 }
-unsafe extern fn null_instance_vkGetRenderAreaGranularity(device: RawVkDevice, render_pass: RawVkRenderPass, granularity: *const RawVkExtent2D) {
+unsafe extern fn null_instance_vkGetRenderAreaGranularity(device: RawVkDevice, render_pass: RawVkRenderPass, granularity: *mut RawVkExtent2D) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetRenderAreaGranularity\"");
 }
-unsafe extern fn null_instance_vkCreateCommandPool(device: RawVkDevice, create_info: *const RawVkCommandPoolCreateInfo, allocator: *const c_void, command_pool: *const RawVkCommandPool) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateCommandPool(device: RawVkDevice, create_info: *mut RawVkCommandPoolCreateInfo, allocator: *const c_void, command_pool: *mut RawVkCommandPool) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateCommandPool\"");
 }
 unsafe extern fn null_instance_vkDestroyCommandPool(device: RawVkDevice, command_pool: RawVkCommandPool, allocator: *const c_void) {
@@ -1138,13 +1138,13 @@ unsafe extern fn null_instance_vkDestroyCommandPool(device: RawVkDevice, command
 unsafe extern fn null_instance_vkResetCommandPool(device: RawVkDevice, command_pool: RawVkCommandPool, flags: RawVkCommandPoolResetFlags) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkResetCommandPool\"");
 }
-unsafe extern fn null_instance_vkAllocateCommandBuffers(device: RawVkDevice, allocate_info: *const RawVkCommandBufferAllocateInfo, command_buffers: *const RawVkCommandBuffer) -> RawVkResult {
+unsafe extern fn null_instance_vkAllocateCommandBuffers(device: RawVkDevice, allocate_info: *mut RawVkCommandBufferAllocateInfo, command_buffers: *mut RawVkCommandBuffer) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkAllocateCommandBuffers\"");
 }
-unsafe extern fn null_instance_vkFreeCommandBuffers(device: RawVkDevice, command_pool: RawVkCommandPool, command_buffer_count: u32, command_buffers: *const RawVkCommandBuffer) {
+unsafe extern fn null_instance_vkFreeCommandBuffers(device: RawVkDevice, command_pool: RawVkCommandPool, command_buffer_count: u32, command_buffers: *mut RawVkCommandBuffer) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkFreeCommandBuffers\"");
 }
-unsafe extern fn null_instance_vkBeginCommandBuffer(command_buffer: RawVkCommandBuffer, begin_info: *const RawVkCommandBufferBeginInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkBeginCommandBuffer(command_buffer: RawVkCommandBuffer, begin_info: *mut RawVkCommandBufferBeginInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkBeginCommandBuffer\"");
 }
 unsafe extern fn null_instance_vkEndCommandBuffer(command_buffer: RawVkCommandBuffer) -> RawVkResult {
@@ -1156,10 +1156,10 @@ unsafe extern fn null_instance_vkResetCommandBuffer(command_buffer: RawVkCommand
 unsafe extern fn null_instance_vkCmdBindPipeline(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, pipeline: RawVkPipeline) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBindPipeline\"");
 }
-unsafe extern fn null_instance_vkCmdSetViewport(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, viewports: *const RawVkViewport) {
+unsafe extern fn null_instance_vkCmdSetViewport(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, viewports: *mut RawVkViewport) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetViewport\"");
 }
-unsafe extern fn null_instance_vkCmdSetScissor(command_buffer: RawVkCommandBuffer, first_scissor: u32, scissor_count: u32, scissors: *const RawVkRect2D) {
+unsafe extern fn null_instance_vkCmdSetScissor(command_buffer: RawVkCommandBuffer, first_scissor: u32, scissor_count: u32, scissors: *mut RawVkRect2D) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetScissor\"");
 }
 unsafe extern fn null_instance_vkCmdSetLineWidth(command_buffer: RawVkCommandBuffer, line_width: f32) {
@@ -1183,13 +1183,13 @@ unsafe extern fn null_instance_vkCmdSetStencilWriteMask(command_buffer: RawVkCom
 unsafe extern fn null_instance_vkCmdSetStencilReference(command_buffer: RawVkCommandBuffer, face_mask: RawVkStencilFaceFlags, reference: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetStencilReference\"");
 }
-unsafe extern fn null_instance_vkCmdBindDescriptorSets(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, first_set: u32, descriptor_set_count: u32, descriptor_sets: *const RawVkDescriptorSet, dynamic_offset_count: u32, dynamic_offsets: *const u32) {
+unsafe extern fn null_instance_vkCmdBindDescriptorSets(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, first_set: u32, descriptor_set_count: u32, descriptor_sets: *mut RawVkDescriptorSet, dynamic_offset_count: u32, dynamic_offsets: *mut u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBindDescriptorSets\"");
 }
 unsafe extern fn null_instance_vkCmdBindIndexBuffer(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, index_type: RawVkIndexType) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBindIndexBuffer\"");
 }
-unsafe extern fn null_instance_vkCmdBindVertexBuffers(command_buffer: RawVkCommandBuffer, first_binding: u32, binding_count: u32, buffers: *const RawVkBuffer, offsets: *const u64) {
+unsafe extern fn null_instance_vkCmdBindVertexBuffers(command_buffer: RawVkCommandBuffer, first_binding: u32, binding_count: u32, buffers: *mut RawVkBuffer, offsets: *mut u64) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBindVertexBuffers\"");
 }
 unsafe extern fn null_instance_vkCmdDraw(command_buffer: RawVkCommandBuffer, vertex_count: u32, instance_count: u32, first_vertex: u32, first_instance: u32) {
@@ -1210,37 +1210,37 @@ unsafe extern fn null_instance_vkCmdDispatch(command_buffer: RawVkCommandBuffer,
 unsafe extern fn null_instance_vkCmdDispatchIndirect(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDispatchIndirect\"");
 }
-unsafe extern fn null_instance_vkCmdCopyBuffer(command_buffer: RawVkCommandBuffer, src_buffer: RawVkBuffer, dst_buffer: RawVkBuffer, region_count: u32, regions: *const RawVkBufferCopy) {
+unsafe extern fn null_instance_vkCmdCopyBuffer(command_buffer: RawVkCommandBuffer, src_buffer: RawVkBuffer, dst_buffer: RawVkBuffer, region_count: u32, regions: *mut RawVkBufferCopy) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdCopyBuffer\"");
 }
-unsafe extern fn null_instance_vkCmdCopyImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *const RawVkImageCopy) {
+unsafe extern fn null_instance_vkCmdCopyImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *mut RawVkImageCopy) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdCopyImage\"");
 }
-unsafe extern fn null_instance_vkCmdBlitImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *const RawVkImageBlit, filter: RawVkFilter) {
+unsafe extern fn null_instance_vkCmdBlitImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *mut RawVkImageBlit, filter: RawVkFilter) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBlitImage\"");
 }
-unsafe extern fn null_instance_vkCmdCopyBufferToImage(command_buffer: RawVkCommandBuffer, src_buffer: RawVkBuffer, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *const RawVkBufferImageCopy) {
+unsafe extern fn null_instance_vkCmdCopyBufferToImage(command_buffer: RawVkCommandBuffer, src_buffer: RawVkBuffer, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *mut RawVkBufferImageCopy) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdCopyBufferToImage\"");
 }
-unsafe extern fn null_instance_vkCmdCopyImageToBuffer(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_buffer: RawVkBuffer, region_count: u32, regions: *const RawVkBufferImageCopy) {
+unsafe extern fn null_instance_vkCmdCopyImageToBuffer(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_buffer: RawVkBuffer, region_count: u32, regions: *mut RawVkBufferImageCopy) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdCopyImageToBuffer\"");
 }
-unsafe extern fn null_instance_vkCmdUpdateBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, data_size: u64, data: *const c_void) {
+unsafe extern fn null_instance_vkCmdUpdateBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, data_size: u64, data: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdUpdateBuffer\"");
 }
 unsafe extern fn null_instance_vkCmdFillBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, size: u64, data: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdFillBuffer\"");
 }
-unsafe extern fn null_instance_vkCmdClearColorImage(command_buffer: RawVkCommandBuffer, image: RawVkImage, image_layout: RawVkImageLayout, color: *const RawVkClearColorValue, range_count: u32, ranges: *const RawVkImageSubresourceRange) {
+unsafe extern fn null_instance_vkCmdClearColorImage(command_buffer: RawVkCommandBuffer, image: RawVkImage, image_layout: RawVkImageLayout, color: *mut RawVkClearColorValue, range_count: u32, ranges: *mut RawVkImageSubresourceRange) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdClearColorImage\"");
 }
-unsafe extern fn null_instance_vkCmdClearDepthStencilImage(command_buffer: RawVkCommandBuffer, image: RawVkImage, image_layout: RawVkImageLayout, depth_stencil: *const RawVkClearDepthStencilValue, range_count: u32, ranges: *const RawVkImageSubresourceRange) {
+unsafe extern fn null_instance_vkCmdClearDepthStencilImage(command_buffer: RawVkCommandBuffer, image: RawVkImage, image_layout: RawVkImageLayout, depth_stencil: *mut RawVkClearDepthStencilValue, range_count: u32, ranges: *mut RawVkImageSubresourceRange) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdClearDepthStencilImage\"");
 }
-unsafe extern fn null_instance_vkCmdClearAttachments(command_buffer: RawVkCommandBuffer, attachment_count: u32, attachments: *const RawVkClearAttachment, rect_count: u32, rects: *const RawVkClearRect) {
+unsafe extern fn null_instance_vkCmdClearAttachments(command_buffer: RawVkCommandBuffer, attachment_count: u32, attachments: *mut RawVkClearAttachment, rect_count: u32, rects: *mut RawVkClearRect) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdClearAttachments\"");
 }
-unsafe extern fn null_instance_vkCmdResolveImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *const RawVkImageResolve) {
+unsafe extern fn null_instance_vkCmdResolveImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *mut RawVkImageResolve) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdResolveImage\"");
 }
 unsafe extern fn null_instance_vkCmdSetEvent(command_buffer: RawVkCommandBuffer, event: RawVkEvent, stage_mask: RawVkPipelineStageFlags) {
@@ -1249,10 +1249,10 @@ unsafe extern fn null_instance_vkCmdSetEvent(command_buffer: RawVkCommandBuffer,
 unsafe extern fn null_instance_vkCmdResetEvent(command_buffer: RawVkCommandBuffer, event: RawVkEvent, stage_mask: RawVkPipelineStageFlags) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdResetEvent\"");
 }
-unsafe extern fn null_instance_vkCmdWaitEvents(command_buffer: RawVkCommandBuffer, event_count: u32, events: *const RawVkEvent, src_stage_mask: RawVkPipelineStageFlags, dst_stage_mask: RawVkPipelineStageFlags, memory_barrier_count: u32, memory_barriers: *const RawVkMemoryBarrier, buffer_memory_barrier_count: u32, buffer_memory_barriers: *const RawVkBufferMemoryBarrier, image_memory_barrier_count: u32, image_memory_barriers: *const RawVkImageMemoryBarrier) {
+unsafe extern fn null_instance_vkCmdWaitEvents(command_buffer: RawVkCommandBuffer, event_count: u32, events: *mut RawVkEvent, src_stage_mask: RawVkPipelineStageFlags, dst_stage_mask: RawVkPipelineStageFlags, memory_barrier_count: u32, memory_barriers: *mut RawVkMemoryBarrier, buffer_memory_barrier_count: u32, buffer_memory_barriers: *mut RawVkBufferMemoryBarrier, image_memory_barrier_count: u32, image_memory_barriers: *mut RawVkImageMemoryBarrier) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdWaitEvents\"");
 }
-unsafe extern fn null_instance_vkCmdPipelineBarrier(command_buffer: RawVkCommandBuffer, src_stage_mask: RawVkPipelineStageFlags, dst_stage_mask: RawVkPipelineStageFlags, dependency_flags: RawVkDependencyFlags, memory_barrier_count: u32, memory_barriers: *const RawVkMemoryBarrier, buffer_memory_barrier_count: u32, buffer_memory_barriers: *const RawVkBufferMemoryBarrier, image_memory_barrier_count: u32, image_memory_barriers: *const RawVkImageMemoryBarrier) {
+unsafe extern fn null_instance_vkCmdPipelineBarrier(command_buffer: RawVkCommandBuffer, src_stage_mask: RawVkPipelineStageFlags, dst_stage_mask: RawVkPipelineStageFlags, dependency_flags: RawVkDependencyFlags, memory_barrier_count: u32, memory_barriers: *mut RawVkMemoryBarrier, buffer_memory_barrier_count: u32, buffer_memory_barriers: *mut RawVkBufferMemoryBarrier, image_memory_barrier_count: u32, image_memory_barriers: *mut RawVkImageMemoryBarrier) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdPipelineBarrier\"");
 }
 unsafe extern fn null_instance_vkCmdBeginQuery(command_buffer: RawVkCommandBuffer, query_pool: RawVkQueryPool, query: u32, flags: RawVkQueryControlFlags) {
@@ -1270,10 +1270,10 @@ unsafe extern fn null_instance_vkCmdWriteTimestamp(command_buffer: RawVkCommandB
 unsafe extern fn null_instance_vkCmdCopyQueryPoolResults(command_buffer: RawVkCommandBuffer, query_pool: RawVkQueryPool, first_query: u32, query_count: u32, dst_buffer: RawVkBuffer, dst_offset: u64, stride: u64, flags: RawVkQueryResultFlags) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdCopyQueryPoolResults\"");
 }
-unsafe extern fn null_instance_vkCmdPushConstants(command_buffer: RawVkCommandBuffer, layout: RawVkPipelineLayout, stage_flags: RawVkShaderStageFlags, offset: u32, size: u32, values: *const c_void) {
+unsafe extern fn null_instance_vkCmdPushConstants(command_buffer: RawVkCommandBuffer, layout: RawVkPipelineLayout, stage_flags: RawVkShaderStageFlags, offset: u32, size: u32, values: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdPushConstants\"");
 }
-unsafe extern fn null_instance_vkCmdBeginRenderPass(command_buffer: RawVkCommandBuffer, render_pass_begin: *const RawVkRenderPassBeginInfo, contents: RawVkSubpassContents) {
+unsafe extern fn null_instance_vkCmdBeginRenderPass(command_buffer: RawVkCommandBuffer, render_pass_begin: *mut RawVkRenderPassBeginInfo, contents: RawVkSubpassContents) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBeginRenderPass\"");
 }
 unsafe extern fn null_instance_vkCmdNextSubpass(command_buffer: RawVkCommandBuffer, contents: RawVkSubpassContents) {
@@ -1282,16 +1282,16 @@ unsafe extern fn null_instance_vkCmdNextSubpass(command_buffer: RawVkCommandBuff
 unsafe extern fn null_instance_vkCmdEndRenderPass(command_buffer: RawVkCommandBuffer) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdEndRenderPass\"");
 }
-unsafe extern fn null_instance_vkCmdExecuteCommands(command_buffer: RawVkCommandBuffer, command_buffer_count: u32, command_buffers: *const RawVkCommandBuffer) {
+unsafe extern fn null_instance_vkCmdExecuteCommands(command_buffer: RawVkCommandBuffer, command_buffer_count: u32, command_buffers: *mut RawVkCommandBuffer) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdExecuteCommands\"");
 }
-unsafe extern fn null_instance_vkBindBufferMemory2(device: RawVkDevice, bind_info_count: u32, bind_infos: *const RawVkBindBufferMemoryInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkBindBufferMemory2(device: RawVkDevice, bind_info_count: u32, bind_infos: *mut RawVkBindBufferMemoryInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkBindBufferMemory2\"");
 }
-unsafe extern fn null_instance_vkBindImageMemory2(device: RawVkDevice, bind_info_count: u32, bind_infos: *const RawVkBindImageMemoryInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkBindImageMemory2(device: RawVkDevice, bind_info_count: u32, bind_infos: *mut RawVkBindImageMemoryInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkBindImageMemory2\"");
 }
-unsafe extern fn null_instance_vkGetDeviceGroupPeerMemoryFeatures(device: RawVkDevice, heap_index: u32, local_device_index: u32, remote_device_index: u32, peer_memory_features: *const RawVkPeerMemoryFeatureFlags) {
+unsafe extern fn null_instance_vkGetDeviceGroupPeerMemoryFeatures(device: RawVkDevice, heap_index: u32, local_device_index: u32, remote_device_index: u32, peer_memory_features: *mut RawVkPeerMemoryFeatureFlags) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDeviceGroupPeerMemoryFeatures\"");
 }
 unsafe extern fn null_instance_vkCmdSetDeviceMask(command_buffer: RawVkCommandBuffer, device_mask: u32) {
@@ -1300,193 +1300,193 @@ unsafe extern fn null_instance_vkCmdSetDeviceMask(command_buffer: RawVkCommandBu
 unsafe extern fn null_instance_vkCmdDispatchBase(command_buffer: RawVkCommandBuffer, base_group_x: u32, base_group_y: u32, base_group_z: u32, group_count_x: u32, group_count_y: u32, group_count_z: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDispatchBase\"");
 }
-unsafe extern fn null_instance_vkEnumeratePhysicalDeviceGroups(instance: RawVkInstance, physical_device_group_count: *const u32, physical_device_group_properties: *const RawVkPhysicalDeviceGroupProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkEnumeratePhysicalDeviceGroups(instance: RawVkInstance, physical_device_group_count: *mut u32, physical_device_group_properties: *mut RawVkPhysicalDeviceGroupProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkEnumeratePhysicalDeviceGroups\"");
 }
-unsafe extern fn null_instance_vkGetImageMemoryRequirements2(device: RawVkDevice, info: *const RawVkImageMemoryRequirementsInfo2, memory_requirements: *const RawVkMemoryRequirements2) {
+unsafe extern fn null_instance_vkGetImageMemoryRequirements2(device: RawVkDevice, info: *mut RawVkImageMemoryRequirementsInfo2, memory_requirements: *mut RawVkMemoryRequirements2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetImageMemoryRequirements2\"");
 }
-unsafe extern fn null_instance_vkGetBufferMemoryRequirements2(device: RawVkDevice, info: *const RawVkBufferMemoryRequirementsInfo2, memory_requirements: *const RawVkMemoryRequirements2) {
+unsafe extern fn null_instance_vkGetBufferMemoryRequirements2(device: RawVkDevice, info: *mut RawVkBufferMemoryRequirementsInfo2, memory_requirements: *mut RawVkMemoryRequirements2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetBufferMemoryRequirements2\"");
 }
-unsafe extern fn null_instance_vkGetImageSparseMemoryRequirements2(device: RawVkDevice, info: *const RawVkImageSparseMemoryRequirementsInfo2, sparse_memory_requirement_count: *const u32, sparse_memory_requirements: *const RawVkSparseImageMemoryRequirements2) {
+unsafe extern fn null_instance_vkGetImageSparseMemoryRequirements2(device: RawVkDevice, info: *mut RawVkImageSparseMemoryRequirementsInfo2, sparse_memory_requirement_count: *mut u32, sparse_memory_requirements: *mut RawVkSparseImageMemoryRequirements2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetImageSparseMemoryRequirements2\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceFeatures2(physical_device: RawVkPhysicalDevice, features: *const RawVkPhysicalDeviceFeatures2) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceFeatures2(physical_device: RawVkPhysicalDevice, features: *mut RawVkPhysicalDeviceFeatures2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceFeatures2\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceProperties2(physical_device: RawVkPhysicalDevice, properties: *const RawVkPhysicalDeviceProperties2) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceProperties2(physical_device: RawVkPhysicalDevice, properties: *mut RawVkPhysicalDeviceProperties2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceProperties2\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceFormatProperties2(physical_device: RawVkPhysicalDevice, format: RawVkFormat, format_properties: *const RawVkFormatProperties2) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceFormatProperties2(physical_device: RawVkPhysicalDevice, format: RawVkFormat, format_properties: *mut RawVkFormatProperties2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceFormatProperties2\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceImageFormatProperties2(physical_device: RawVkPhysicalDevice, image_format_info: *const RawVkPhysicalDeviceImageFormatInfo2, image_format_properties: *const RawVkImageFormatProperties2) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceImageFormatProperties2(physical_device: RawVkPhysicalDevice, image_format_info: *mut RawVkPhysicalDeviceImageFormatInfo2, image_format_properties: *mut RawVkImageFormatProperties2) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceImageFormatProperties2\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceQueueFamilyProperties2(physical_device: RawVkPhysicalDevice, queue_family_property_count: *const u32, queue_family_properties: *const RawVkQueueFamilyProperties2) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceQueueFamilyProperties2(physical_device: RawVkPhysicalDevice, queue_family_property_count: *mut u32, queue_family_properties: *mut RawVkQueueFamilyProperties2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceQueueFamilyProperties2\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceMemoryProperties2(physical_device: RawVkPhysicalDevice, memory_properties: *const RawVkPhysicalDeviceMemoryProperties2) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceMemoryProperties2(physical_device: RawVkPhysicalDevice, memory_properties: *mut RawVkPhysicalDeviceMemoryProperties2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceMemoryProperties2\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSparseImageFormatProperties2(physical_device: RawVkPhysicalDevice, format_info: *const RawVkPhysicalDeviceSparseImageFormatInfo2, property_count: *const u32, properties: *const RawVkSparseImageFormatProperties2) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSparseImageFormatProperties2(physical_device: RawVkPhysicalDevice, format_info: *mut RawVkPhysicalDeviceSparseImageFormatInfo2, property_count: *mut u32, properties: *mut RawVkSparseImageFormatProperties2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSparseImageFormatProperties2\"");
 }
 unsafe extern fn null_instance_vkTrimCommandPool(device: RawVkDevice, command_pool: RawVkCommandPool, flags: RawVkCommandPoolTrimFlags) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkTrimCommandPool\"");
 }
-unsafe extern fn null_instance_vkGetDeviceQueue2(device: RawVkDevice, queue_info: *const RawVkDeviceQueueInfo2, queue: *const RawVkQueue) {
+unsafe extern fn null_instance_vkGetDeviceQueue2(device: RawVkDevice, queue_info: *mut RawVkDeviceQueueInfo2, queue: *mut RawVkQueue) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDeviceQueue2\"");
 }
-unsafe extern fn null_instance_vkCreateSamplerYcbcrConversion(device: RawVkDevice, create_info: *const RawVkSamplerYcbcrConversionCreateInfo, allocator: *const c_void, ycbcr_conversion: *const RawVkSamplerYcbcrConversion) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateSamplerYcbcrConversion(device: RawVkDevice, create_info: *mut RawVkSamplerYcbcrConversionCreateInfo, allocator: *const c_void, ycbcr_conversion: *mut RawVkSamplerYcbcrConversion) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateSamplerYcbcrConversion\"");
 }
 unsafe extern fn null_instance_vkDestroySamplerYcbcrConversion(device: RawVkDevice, ycbcr_conversion: RawVkSamplerYcbcrConversion, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroySamplerYcbcrConversion\"");
 }
-unsafe extern fn null_instance_vkCreateDescriptorUpdateTemplate(device: RawVkDevice, create_info: *const RawVkDescriptorUpdateTemplateCreateInfo, allocator: *const c_void, descriptor_update_template: *const RawVkDescriptorUpdateTemplate) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateDescriptorUpdateTemplate(device: RawVkDevice, create_info: *mut RawVkDescriptorUpdateTemplateCreateInfo, allocator: *const c_void, descriptor_update_template: *mut RawVkDescriptorUpdateTemplate) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDescriptorUpdateTemplate\"");
 }
 unsafe extern fn null_instance_vkDestroyDescriptorUpdateTemplate(device: RawVkDevice, descriptor_update_template: RawVkDescriptorUpdateTemplate, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyDescriptorUpdateTemplate\"");
 }
-unsafe extern fn null_instance_vkUpdateDescriptorSetWithTemplate(device: RawVkDevice, descriptor_set: RawVkDescriptorSet, descriptor_update_template: RawVkDescriptorUpdateTemplate, data: *const c_void) {
+unsafe extern fn null_instance_vkUpdateDescriptorSetWithTemplate(device: RawVkDevice, descriptor_set: RawVkDescriptorSet, descriptor_update_template: RawVkDescriptorUpdateTemplate, data: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkUpdateDescriptorSetWithTemplate\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceExternalBufferProperties(physical_device: RawVkPhysicalDevice, external_buffer_info: *const RawVkPhysicalDeviceExternalBufferInfo, external_buffer_properties: *const RawVkExternalBufferProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceExternalBufferProperties(physical_device: RawVkPhysicalDevice, external_buffer_info: *mut RawVkPhysicalDeviceExternalBufferInfo, external_buffer_properties: *mut RawVkExternalBufferProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceExternalBufferProperties\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceExternalFenceProperties(physical_device: RawVkPhysicalDevice, external_fence_info: *const RawVkPhysicalDeviceExternalFenceInfo, external_fence_properties: *const RawVkExternalFenceProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceExternalFenceProperties(physical_device: RawVkPhysicalDevice, external_fence_info: *mut RawVkPhysicalDeviceExternalFenceInfo, external_fence_properties: *mut RawVkExternalFenceProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceExternalFenceProperties\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceExternalSemaphoreProperties(physical_device: RawVkPhysicalDevice, external_semaphore_info: *const RawVkPhysicalDeviceExternalSemaphoreInfo, external_semaphore_properties: *const RawVkExternalSemaphoreProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceExternalSemaphoreProperties(physical_device: RawVkPhysicalDevice, external_semaphore_info: *mut RawVkPhysicalDeviceExternalSemaphoreInfo, external_semaphore_properties: *mut RawVkExternalSemaphoreProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceExternalSemaphoreProperties\"");
 }
-unsafe extern fn null_instance_vkGetDescriptorSetLayoutSupport(device: RawVkDevice, create_info: *const RawVkDescriptorSetLayoutCreateInfo, support: *const RawVkDescriptorSetLayoutSupport) {
+unsafe extern fn null_instance_vkGetDescriptorSetLayoutSupport(device: RawVkDevice, create_info: *mut RawVkDescriptorSetLayoutCreateInfo, support: *mut RawVkDescriptorSetLayoutSupport) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDescriptorSetLayoutSupport\"");
 }
 unsafe extern fn null_instance_vkDestroySurfaceKHR(instance: RawVkInstance, surface: khr::RawVkSurface, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroySurfaceKHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: khr::RawVkSurface, supported: *const u32) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: khr::RawVkSurface, supported: *mut u32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceSupportKHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_capabilities: *const khr::RawVkSurfaceCapabilities) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_capabilities: *mut khr::RawVkSurfaceCapabilities) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceCapabilitiesKHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_format_count: *const u32, surface_formats: *const khr::RawVkSurfaceFormat) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_format_count: *mut u32, surface_formats: *mut khr::RawVkSurfaceFormat) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceFormatsKHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, present_mode_count: *const u32, present_modes: *const khr::RawVkPresentMode) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, present_mode_count: *mut u32, present_modes: *mut khr::RawVkPresentMode) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfacePresentModesKHR\"");
 }
-unsafe extern fn null_instance_vkCreateSwapchainKHR(device: RawVkDevice, create_info: *const khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchain: *const khr::RawVkSwapchain) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateSwapchainKHR(device: RawVkDevice, create_info: *mut khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchain: *mut khr::RawVkSwapchain) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateSwapchainKHR\"");
 }
 unsafe extern fn null_instance_vkDestroySwapchainKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroySwapchainKHR\"");
 }
-unsafe extern fn null_instance_vkGetSwapchainImagesKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, swapchain_image_count: *const u32, swapchain_images: *const RawVkImage) -> RawVkResult {
+unsafe extern fn null_instance_vkGetSwapchainImagesKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, swapchain_image_count: *mut u32, swapchain_images: *mut RawVkImage) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetSwapchainImagesKHR\"");
 }
-unsafe extern fn null_instance_vkAcquireNextImageKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, timeout: u64, semaphore: RawVkSemaphore, fence: RawVkFence, image_index: *const u32) -> RawVkResult {
+unsafe extern fn null_instance_vkAcquireNextImageKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, timeout: u64, semaphore: RawVkSemaphore, fence: RawVkFence, image_index: *mut u32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkAcquireNextImageKHR\"");
 }
-unsafe extern fn null_instance_vkQueuePresentKHR(queue: RawVkQueue, present_info: *const khr::RawVkPresentInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkQueuePresentKHR(queue: RawVkQueue, present_info: *mut khr::RawVkPresentInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkQueuePresentKHR\"");
 }
-unsafe extern fn null_instance_vkGetDeviceGroupPresentCapabilitiesKHR(device: RawVkDevice, device_group_present_capabilities: *const khr::RawVkDeviceGroupPresentCapabilities) -> RawVkResult {
+unsafe extern fn null_instance_vkGetDeviceGroupPresentCapabilitiesKHR(device: RawVkDevice, device_group_present_capabilities: *mut khr::RawVkDeviceGroupPresentCapabilities) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDeviceGroupPresentCapabilitiesKHR\"");
 }
-unsafe extern fn null_instance_vkGetDeviceGroupSurfacePresentModesKHR(device: RawVkDevice, surface: khr::RawVkSurface, modes: *const khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult {
+unsafe extern fn null_instance_vkGetDeviceGroupSurfacePresentModesKHR(device: RawVkDevice, surface: khr::RawVkSurface, modes: *mut khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDeviceGroupSurfacePresentModesKHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDevicePresentRectanglesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, rect_count: *const u32, rects: *const RawVkRect2D) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDevicePresentRectanglesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, rect_count: *mut u32, rects: *mut RawVkRect2D) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDevicePresentRectanglesKHR\"");
 }
-unsafe extern fn null_instance_vkAcquireNextImage2KHR(device: RawVkDevice, acquire_info: *const khr::RawVkAcquireNextImageInfo, image_index: *const u32) -> RawVkResult {
+unsafe extern fn null_instance_vkAcquireNextImage2KHR(device: RawVkDevice, acquire_info: *mut khr::RawVkAcquireNextImageInfo, image_index: *mut u32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkAcquireNextImage2KHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceDisplayPropertiesKHR(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const khr::RawVkDisplayProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceDisplayPropertiesKHR(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut khr::RawVkDisplayProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceDisplayPropertiesKHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceDisplayPlanePropertiesKHR(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const khr::RawVkDisplayPlaneProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceDisplayPlanePropertiesKHR(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut khr::RawVkDisplayPlaneProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceDisplayPlanePropertiesKHR\"");
 }
-unsafe extern fn null_instance_vkGetDisplayPlaneSupportedDisplaysKHR(physical_device: RawVkPhysicalDevice, plane_index: u32, display_count: *const u32, displays: *const khr::RawVkDisplay) -> RawVkResult {
+unsafe extern fn null_instance_vkGetDisplayPlaneSupportedDisplaysKHR(physical_device: RawVkPhysicalDevice, plane_index: u32, display_count: *mut u32, displays: *mut khr::RawVkDisplay) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDisplayPlaneSupportedDisplaysKHR\"");
 }
-unsafe extern fn null_instance_vkGetDisplayModePropertiesKHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, property_count: *const u32, properties: *const khr::RawVkDisplayModeProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetDisplayModePropertiesKHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, property_count: *mut u32, properties: *mut khr::RawVkDisplayModeProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDisplayModePropertiesKHR\"");
 }
-unsafe extern fn null_instance_vkCreateDisplayModeKHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, create_info: *const khr::RawVkDisplayModeCreateInfo, allocator: *const c_void, mode: *const khr::RawVkDisplayMode) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateDisplayModeKHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, create_info: *mut khr::RawVkDisplayModeCreateInfo, allocator: *const c_void, mode: *mut khr::RawVkDisplayMode) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDisplayModeKHR\"");
 }
-unsafe extern fn null_instance_vkGetDisplayPlaneCapabilitiesKHR(physical_device: RawVkPhysicalDevice, mode: khr::RawVkDisplayMode, plane_index: u32, capabilities: *const khr::RawVkDisplayPlaneCapabilities) -> RawVkResult {
+unsafe extern fn null_instance_vkGetDisplayPlaneCapabilitiesKHR(physical_device: RawVkPhysicalDevice, mode: khr::RawVkDisplayMode, plane_index: u32, capabilities: *mut khr::RawVkDisplayPlaneCapabilities) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDisplayPlaneCapabilitiesKHR\"");
 }
-unsafe extern fn null_instance_vkCreateDisplayPlaneSurfaceKHR(instance: RawVkInstance, create_info: *const khr::RawVkDisplaySurfaceCreateInfo, allocator: *const c_void, surface: *const khr::RawVkSurface) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateDisplayPlaneSurfaceKHR(instance: RawVkInstance, create_info: *mut khr::RawVkDisplaySurfaceCreateInfo, allocator: *const c_void, surface: *mut khr::RawVkSurface) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDisplayPlaneSurfaceKHR\"");
 }
-unsafe extern fn null_instance_vkCreateSharedSwapchainsKHR(device: RawVkDevice, swapchain_count: u32, create_infos: *const khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchains: *const khr::RawVkSwapchain) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateSharedSwapchainsKHR(device: RawVkDevice, swapchain_count: u32, create_infos: *mut khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchains: *mut khr::RawVkSwapchain) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateSharedSwapchainsKHR\"");
 }
-unsafe extern fn null_instance_vkGetMemoryFdKHR(device: RawVkDevice, get_fd_info: *const khr::RawVkMemoryGetFdInfo, fd: *const i32) -> RawVkResult {
+unsafe extern fn null_instance_vkGetMemoryFdKHR(device: RawVkDevice, get_fd_info: *mut khr::RawVkMemoryGetFdInfo, fd: *mut i32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetMemoryFdKHR\"");
 }
-unsafe extern fn null_instance_vkGetMemoryFdPropertiesKHR(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, fd: i32, memory_fd_properties: *const khr::RawVkMemoryFdProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetMemoryFdPropertiesKHR(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, fd: i32, memory_fd_properties: *mut khr::RawVkMemoryFdProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetMemoryFdPropertiesKHR\"");
 }
-unsafe extern fn null_instance_vkImportSemaphoreFdKHR(device: RawVkDevice, import_semaphore_fd_info: *const khr::RawVkImportSemaphoreFdInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkImportSemaphoreFdKHR(device: RawVkDevice, import_semaphore_fd_info: *mut khr::RawVkImportSemaphoreFdInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkImportSemaphoreFdKHR\"");
 }
-unsafe extern fn null_instance_vkGetSemaphoreFdKHR(device: RawVkDevice, get_fd_info: *const khr::RawVkSemaphoreGetFdInfo, fd: *const i32) -> RawVkResult {
+unsafe extern fn null_instance_vkGetSemaphoreFdKHR(device: RawVkDevice, get_fd_info: *mut khr::RawVkSemaphoreGetFdInfo, fd: *mut i32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetSemaphoreFdKHR\"");
 }
-unsafe extern fn null_instance_vkCmdPushDescriptorSetKHR(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, set: u32, descriptor_write_count: u32, descriptor_writes: *const RawVkWriteDescriptorSet) {
+unsafe extern fn null_instance_vkCmdPushDescriptorSetKHR(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, set: u32, descriptor_write_count: u32, descriptor_writes: *mut RawVkWriteDescriptorSet) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdPushDescriptorSetKHR\"");
 }
-unsafe extern fn null_instance_vkCmdPushDescriptorSetWithTemplateKHR(command_buffer: RawVkCommandBuffer, descriptor_update_template: RawVkDescriptorUpdateTemplate, layout: RawVkPipelineLayout, set: u32, data: *const c_void) {
+unsafe extern fn null_instance_vkCmdPushDescriptorSetWithTemplateKHR(command_buffer: RawVkCommandBuffer, descriptor_update_template: RawVkDescriptorUpdateTemplate, layout: RawVkPipelineLayout, set: u32, data: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdPushDescriptorSetWithTemplateKHR\"");
 }
-unsafe extern fn null_instance_vkCreateRenderPass2KHR(device: RawVkDevice, create_info: *const khr::RawVkRenderPassCreateInfo2, allocator: *const c_void, render_pass: *const RawVkRenderPass) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateRenderPass2KHR(device: RawVkDevice, create_info: *mut khr::RawVkRenderPassCreateInfo2, allocator: *const c_void, render_pass: *mut RawVkRenderPass) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateRenderPass2KHR\"");
 }
-unsafe extern fn null_instance_vkCmdBeginRenderPass2KHR(command_buffer: RawVkCommandBuffer, render_pass_begin: *const RawVkRenderPassBeginInfo, subpass_begin_info: *const khr::RawVkSubpassBeginInfo) {
+unsafe extern fn null_instance_vkCmdBeginRenderPass2KHR(command_buffer: RawVkCommandBuffer, render_pass_begin: *mut RawVkRenderPassBeginInfo, subpass_begin_info: *mut khr::RawVkSubpassBeginInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBeginRenderPass2KHR\"");
 }
-unsafe extern fn null_instance_vkCmdNextSubpass2KHR(command_buffer: RawVkCommandBuffer, subpass_begin_info: *const khr::RawVkSubpassBeginInfo, subpass_end_info: *const khr::RawVkSubpassEndInfo) {
+unsafe extern fn null_instance_vkCmdNextSubpass2KHR(command_buffer: RawVkCommandBuffer, subpass_begin_info: *mut khr::RawVkSubpassBeginInfo, subpass_end_info: *mut khr::RawVkSubpassEndInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdNextSubpass2KHR\"");
 }
-unsafe extern fn null_instance_vkCmdEndRenderPass2KHR(command_buffer: RawVkCommandBuffer, subpass_end_info: *const khr::RawVkSubpassEndInfo) {
+unsafe extern fn null_instance_vkCmdEndRenderPass2KHR(command_buffer: RawVkCommandBuffer, subpass_end_info: *mut khr::RawVkSubpassEndInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdEndRenderPass2KHR\"");
 }
 unsafe extern fn null_instance_vkGetSwapchainStatusKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetSwapchainStatusKHR\"");
 }
-unsafe extern fn null_instance_vkImportFenceFdKHR(device: RawVkDevice, import_fence_fd_info: *const khr::RawVkImportFenceFdInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkImportFenceFdKHR(device: RawVkDevice, import_fence_fd_info: *mut khr::RawVkImportFenceFdInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkImportFenceFdKHR\"");
 }
-unsafe extern fn null_instance_vkGetFenceFdKHR(device: RawVkDevice, get_fd_info: *const khr::RawVkFenceGetFdInfo, fd: *const i32) -> RawVkResult {
+unsafe extern fn null_instance_vkGetFenceFdKHR(device: RawVkDevice, get_fd_info: *mut khr::RawVkFenceGetFdInfo, fd: *mut i32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetFenceFdKHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceCapabilities2KHR(physical_device: RawVkPhysicalDevice, surface_info: *const khr::RawVkPhysicalDeviceSurfaceInfo2, surface_capabilities: *const khr::RawVkSurfaceCapabilities2) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceCapabilities2KHR(physical_device: RawVkPhysicalDevice, surface_info: *mut khr::RawVkPhysicalDeviceSurfaceInfo2, surface_capabilities: *mut khr::RawVkSurfaceCapabilities2) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceCapabilities2KHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceFormats2KHR(physical_device: RawVkPhysicalDevice, surface_info: *const khr::RawVkPhysicalDeviceSurfaceInfo2, surface_format_count: *const u32, surface_formats: *const khr::RawVkSurfaceFormat2) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceFormats2KHR(physical_device: RawVkPhysicalDevice, surface_info: *mut khr::RawVkPhysicalDeviceSurfaceInfo2, surface_format_count: *mut u32, surface_formats: *mut khr::RawVkSurfaceFormat2) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceFormats2KHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceDisplayProperties2KHR(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const khr::RawVkDisplayProperties2) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceDisplayProperties2KHR(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut khr::RawVkDisplayProperties2) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceDisplayProperties2KHR\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceDisplayPlaneProperties2KHR(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const khr::RawVkDisplayPlaneProperties2) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceDisplayPlaneProperties2KHR(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut khr::RawVkDisplayPlaneProperties2) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceDisplayPlaneProperties2KHR\"");
 }
-unsafe extern fn null_instance_vkGetDisplayModeProperties2KHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, property_count: *const u32, properties: *const khr::RawVkDisplayModeProperties2) -> RawVkResult {
+unsafe extern fn null_instance_vkGetDisplayModeProperties2KHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, property_count: *mut u32, properties: *mut khr::RawVkDisplayModeProperties2) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDisplayModeProperties2KHR\"");
 }
-unsafe extern fn null_instance_vkGetDisplayPlaneCapabilities2KHR(physical_device: RawVkPhysicalDevice, display_plane_info: *const khr::RawVkDisplayPlaneInfo2, capabilities: *const khr::RawVkDisplayPlaneCapabilities2) -> RawVkResult {
+unsafe extern fn null_instance_vkGetDisplayPlaneCapabilities2KHR(physical_device: RawVkPhysicalDevice, display_plane_info: *mut khr::RawVkDisplayPlaneInfo2, capabilities: *mut khr::RawVkDisplayPlaneCapabilities2) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDisplayPlaneCapabilities2KHR\"");
 }
 unsafe extern fn null_instance_vkCmdDrawIndirectCountKHR(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
@@ -1495,37 +1495,37 @@ unsafe extern fn null_instance_vkCmdDrawIndirectCountKHR(command_buffer: RawVkCo
 unsafe extern fn null_instance_vkCmdDrawIndexedIndirectCountKHR(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDrawIndexedIndirectCountKHR\"");
 }
-unsafe extern fn null_instance_vkCreateDebugReportCallbackEXT(instance: RawVkInstance, create_info: *const ext::RawVkDebugReportCallbackCreateInfo, allocator: *const c_void, callback: *const ext::RawVkDebugReportCallback) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateDebugReportCallbackEXT(instance: RawVkInstance, create_info: *mut ext::RawVkDebugReportCallbackCreateInfo, allocator: *const c_void, callback: *mut ext::RawVkDebugReportCallback) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDebugReportCallbackEXT\"");
 }
 unsafe extern fn null_instance_vkDestroyDebugReportCallbackEXT(instance: RawVkInstance, callback: ext::RawVkDebugReportCallback, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyDebugReportCallbackEXT\"");
 }
-unsafe extern fn null_instance_vkDebugReportMessageEXT(instance: RawVkInstance, flags: ext::RawVkDebugReportFlags, object_type: ext::RawVkDebugReportObjectType, object: u64, location: usize, message_code: i32, layer_prefix: *const c_char, message: *const c_char) {
+unsafe extern fn null_instance_vkDebugReportMessageEXT(instance: RawVkInstance, flags: ext::RawVkDebugReportFlags, object_type: ext::RawVkDebugReportObjectType, object: u64, location: usize, message_code: i32, layer_prefix: *mut c_char, message: *mut c_char) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDebugReportMessageEXT\"");
 }
-unsafe extern fn null_instance_vkDebugMarkerSetObjectTagEXT(device: RawVkDevice, tag_info: *const ext::RawVkDebugMarkerObjectTagInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkDebugMarkerSetObjectTagEXT(device: RawVkDevice, tag_info: *mut ext::RawVkDebugMarkerObjectTagInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDebugMarkerSetObjectTagEXT\"");
 }
-unsafe extern fn null_instance_vkDebugMarkerSetObjectNameEXT(device: RawVkDevice, name_info: *const ext::RawVkDebugMarkerObjectNameInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkDebugMarkerSetObjectNameEXT(device: RawVkDevice, name_info: *mut ext::RawVkDebugMarkerObjectNameInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDebugMarkerSetObjectNameEXT\"");
 }
-unsafe extern fn null_instance_vkCmdDebugMarkerBeginEXT(command_buffer: RawVkCommandBuffer, marker_info: *const ext::RawVkDebugMarkerMarkerInfo) {
+unsafe extern fn null_instance_vkCmdDebugMarkerBeginEXT(command_buffer: RawVkCommandBuffer, marker_info: *mut ext::RawVkDebugMarkerMarkerInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDebugMarkerBeginEXT\"");
 }
 unsafe extern fn null_instance_vkCmdDebugMarkerEndEXT(command_buffer: RawVkCommandBuffer) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDebugMarkerEndEXT\"");
 }
-unsafe extern fn null_instance_vkCmdDebugMarkerInsertEXT(command_buffer: RawVkCommandBuffer, marker_info: *const ext::RawVkDebugMarkerMarkerInfo) {
+unsafe extern fn null_instance_vkCmdDebugMarkerInsertEXT(command_buffer: RawVkCommandBuffer, marker_info: *mut ext::RawVkDebugMarkerMarkerInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDebugMarkerInsertEXT\"");
 }
-unsafe extern fn null_instance_vkCmdBindTransformFeedbackBuffersEXT(command_buffer: RawVkCommandBuffer, first_binding: u32, binding_count: u32, buffers: *const RawVkBuffer, offsets: *const u64, sizes: *const u64) {
+unsafe extern fn null_instance_vkCmdBindTransformFeedbackBuffersEXT(command_buffer: RawVkCommandBuffer, first_binding: u32, binding_count: u32, buffers: *mut RawVkBuffer, offsets: *mut u64, sizes: *mut u64) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBindTransformFeedbackBuffersEXT\"");
 }
-unsafe extern fn null_instance_vkCmdBeginTransformFeedbackEXT(command_buffer: RawVkCommandBuffer, first_counter_buffer: u32, counter_buffer_count: u32, counter_buffers: *const RawVkBuffer, counter_buffer_offsets: *const u64) {
+unsafe extern fn null_instance_vkCmdBeginTransformFeedbackEXT(command_buffer: RawVkCommandBuffer, first_counter_buffer: u32, counter_buffer_count: u32, counter_buffers: *mut RawVkBuffer, counter_buffer_offsets: *mut u64) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBeginTransformFeedbackEXT\"");
 }
-unsafe extern fn null_instance_vkCmdEndTransformFeedbackEXT(command_buffer: RawVkCommandBuffer, first_counter_buffer: u32, counter_buffer_count: u32, counter_buffers: *const RawVkBuffer, counter_buffer_offsets: *const u64) {
+unsafe extern fn null_instance_vkCmdEndTransformFeedbackEXT(command_buffer: RawVkCommandBuffer, first_counter_buffer: u32, counter_buffer_count: u32, counter_buffers: *mut RawVkBuffer, counter_buffer_offsets: *mut u64) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdEndTransformFeedbackEXT\"");
 }
 unsafe extern fn null_instance_vkCmdBeginQueryIndexedEXT(command_buffer: RawVkCommandBuffer, query_pool: RawVkQueryPool, query: u32, flags: RawVkQueryControlFlags, index: u32) {
@@ -1543,154 +1543,154 @@ unsafe extern fn null_instance_vkCmdDrawIndirectCountAMD(command_buffer: RawVkCo
 unsafe extern fn null_instance_vkCmdDrawIndexedIndirectCountAMD(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDrawIndexedIndirectCountAMD\"");
 }
-unsafe extern fn null_instance_vkGetShaderInfoAMD(device: RawVkDevice, pipeline: RawVkPipeline, shader_stage: RawVkShaderStageFlags, info_type: amd::RawVkShaderInfoType, info_size: *const usize, info: *const c_void) -> RawVkResult {
+unsafe extern fn null_instance_vkGetShaderInfoAMD(device: RawVkDevice, pipeline: RawVkPipeline, shader_stage: RawVkShaderStageFlags, info_type: amd::RawVkShaderInfoType, info_size: *mut usize, info: *mut c_void) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetShaderInfoAMD\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceExternalImageFormatPropertiesNV(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, tiling: RawVkImageTiling, usage: RawVkImageUsageFlags, flags: RawVkImageCreateFlags, external_handle_type: nv::RawVkExternalMemoryHandleTypeFlags, external_image_format_properties: *const nv::RawVkExternalImageFormatProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceExternalImageFormatPropertiesNV(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, tiling: RawVkImageTiling, usage: RawVkImageUsageFlags, flags: RawVkImageCreateFlags, external_handle_type: nv::RawVkExternalMemoryHandleTypeFlags, external_image_format_properties: *mut nv::RawVkExternalImageFormatProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceExternalImageFormatPropertiesNV\"");
 }
-unsafe extern fn null_instance_vkCmdBeginConditionalRenderingEXT(command_buffer: RawVkCommandBuffer, conditional_rendering_begin: *const ext::RawVkConditionalRenderingBeginInfo) {
+unsafe extern fn null_instance_vkCmdBeginConditionalRenderingEXT(command_buffer: RawVkCommandBuffer, conditional_rendering_begin: *mut ext::RawVkConditionalRenderingBeginInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBeginConditionalRenderingEXT\"");
 }
 unsafe extern fn null_instance_vkCmdEndConditionalRenderingEXT(command_buffer: RawVkCommandBuffer) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdEndConditionalRenderingEXT\"");
 }
-unsafe extern fn null_instance_vkCmdProcessCommandsNVX(command_buffer: RawVkCommandBuffer, process_commands_info: *const nvx::RawVkCmdProcessCommandsInfo) {
+unsafe extern fn null_instance_vkCmdProcessCommandsNVX(command_buffer: RawVkCommandBuffer, process_commands_info: *mut nvx::RawVkCmdProcessCommandsInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdProcessCommandsNVX\"");
 }
-unsafe extern fn null_instance_vkCmdReserveSpaceForCommandsNVX(command_buffer: RawVkCommandBuffer, reserve_space_info: *const nvx::RawVkCmdReserveSpaceForCommandsInfo) {
+unsafe extern fn null_instance_vkCmdReserveSpaceForCommandsNVX(command_buffer: RawVkCommandBuffer, reserve_space_info: *mut nvx::RawVkCmdReserveSpaceForCommandsInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdReserveSpaceForCommandsNVX\"");
 }
-unsafe extern fn null_instance_vkCreateIndirectCommandsLayoutNVX(device: RawVkDevice, create_info: *const nvx::RawVkIndirectCommandsLayoutCreateInfo, allocator: *const c_void, indirect_commands_layout: *const nvx::RawVkIndirectCommandsLayout) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateIndirectCommandsLayoutNVX(device: RawVkDevice, create_info: *mut nvx::RawVkIndirectCommandsLayoutCreateInfo, allocator: *const c_void, indirect_commands_layout: *mut nvx::RawVkIndirectCommandsLayout) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateIndirectCommandsLayoutNVX\"");
 }
 unsafe extern fn null_instance_vkDestroyIndirectCommandsLayoutNVX(device: RawVkDevice, indirect_commands_layout: nvx::RawVkIndirectCommandsLayout, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyIndirectCommandsLayoutNVX\"");
 }
-unsafe extern fn null_instance_vkCreateObjectTableNVX(device: RawVkDevice, create_info: *const nvx::RawVkObjectTableCreateInfo, allocator: *const c_void, object_table: *const nvx::RawVkObjectTable) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateObjectTableNVX(device: RawVkDevice, create_info: *mut nvx::RawVkObjectTableCreateInfo, allocator: *const c_void, object_table: *mut nvx::RawVkObjectTable) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateObjectTableNVX\"");
 }
 unsafe extern fn null_instance_vkDestroyObjectTableNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyObjectTableNVX\"");
 }
-unsafe extern fn null_instance_vkRegisterObjectsNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, object_count: u32, object_table_entries: *const *const nvx::RawVkObjectTableEntry, object_indices: *const u32) -> RawVkResult {
+unsafe extern fn null_instance_vkRegisterObjectsNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, object_count: u32, object_table_entries: *mut *mut nvx::RawVkObjectTableEntry, object_indices: *mut u32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkRegisterObjectsNVX\"");
 }
-unsafe extern fn null_instance_vkUnregisterObjectsNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, object_count: u32, object_entry_types: *const nvx::RawVkObjectEntryType, object_indices: *const u32) -> RawVkResult {
+unsafe extern fn null_instance_vkUnregisterObjectsNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, object_count: u32, object_entry_types: *mut nvx::RawVkObjectEntryType, object_indices: *mut u32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkUnregisterObjectsNVX\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX(physical_device: RawVkPhysicalDevice, features: *const nvx::RawVkDeviceGeneratedCommandsFeatures, limits: *const nvx::RawVkDeviceGeneratedCommandsLimits) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX(physical_device: RawVkPhysicalDevice, features: *mut nvx::RawVkDeviceGeneratedCommandsFeatures, limits: *mut nvx::RawVkDeviceGeneratedCommandsLimits) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX\"");
 }
-unsafe extern fn null_instance_vkCmdSetViewportWScalingNV(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, viewport_wscalings: *const nv::RawVkViewportWScaling) {
+unsafe extern fn null_instance_vkCmdSetViewportWScalingNV(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, viewport_wscalings: *mut nv::RawVkViewportWScaling) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetViewportWScalingNV\"");
 }
 unsafe extern fn null_instance_vkReleaseDisplayEXT(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkReleaseDisplayEXT\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceCapabilities2EXT(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_capabilities: *const ext::RawVkSurfaceCapabilities2) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceSurfaceCapabilities2EXT(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_capabilities: *mut ext::RawVkSurfaceCapabilities2) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceCapabilities2EXT\"");
 }
-unsafe extern fn null_instance_vkDisplayPowerControlEXT(device: RawVkDevice, display: khr::RawVkDisplay, display_power_info: *const ext::RawVkDisplayPowerInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkDisplayPowerControlEXT(device: RawVkDevice, display: khr::RawVkDisplay, display_power_info: *mut ext::RawVkDisplayPowerInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDisplayPowerControlEXT\"");
 }
-unsafe extern fn null_instance_vkRegisterDeviceEventEXT(device: RawVkDevice, device_event_info: *const ext::RawVkDeviceEventInfo, allocator: *const c_void, fence: *const RawVkFence) -> RawVkResult {
+unsafe extern fn null_instance_vkRegisterDeviceEventEXT(device: RawVkDevice, device_event_info: *mut ext::RawVkDeviceEventInfo, allocator: *const c_void, fence: *mut RawVkFence) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkRegisterDeviceEventEXT\"");
 }
-unsafe extern fn null_instance_vkRegisterDisplayEventEXT(device: RawVkDevice, display: khr::RawVkDisplay, display_event_info: *const ext::RawVkDisplayEventInfo, allocator: *const c_void, fence: *const RawVkFence) -> RawVkResult {
+unsafe extern fn null_instance_vkRegisterDisplayEventEXT(device: RawVkDevice, display: khr::RawVkDisplay, display_event_info: *mut ext::RawVkDisplayEventInfo, allocator: *const c_void, fence: *mut RawVkFence) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkRegisterDisplayEventEXT\"");
 }
-unsafe extern fn null_instance_vkGetSwapchainCounterEXT(device: RawVkDevice, swapchain: khr::RawVkSwapchain, counter: ext::RawVkSurfaceCounterFlags, counter_value: *const u64) -> RawVkResult {
+unsafe extern fn null_instance_vkGetSwapchainCounterEXT(device: RawVkDevice, swapchain: khr::RawVkSwapchain, counter: ext::RawVkSurfaceCounterFlags, counter_value: *mut u64) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetSwapchainCounterEXT\"");
 }
-unsafe extern fn null_instance_vkGetRefreshCycleDurationGOOGLE(device: RawVkDevice, swapchain: khr::RawVkSwapchain, display_timing_properties: *const google::RawVkRefreshCycleDuration) -> RawVkResult {
+unsafe extern fn null_instance_vkGetRefreshCycleDurationGOOGLE(device: RawVkDevice, swapchain: khr::RawVkSwapchain, display_timing_properties: *mut google::RawVkRefreshCycleDuration) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetRefreshCycleDurationGOOGLE\"");
 }
-unsafe extern fn null_instance_vkGetPastPresentationTimingGOOGLE(device: RawVkDevice, swapchain: khr::RawVkSwapchain, presentation_timing_count: *const u32, presentation_timings: *const google::RawVkPastPresentationTiming) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPastPresentationTimingGOOGLE(device: RawVkDevice, swapchain: khr::RawVkSwapchain, presentation_timing_count: *mut u32, presentation_timings: *mut google::RawVkPastPresentationTiming) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPastPresentationTimingGOOGLE\"");
 }
-unsafe extern fn null_instance_vkCmdSetDiscardRectangleEXT(command_buffer: RawVkCommandBuffer, first_discard_rectangle: u32, discard_rectangle_count: u32, discard_rectangles: *const RawVkRect2D) {
+unsafe extern fn null_instance_vkCmdSetDiscardRectangleEXT(command_buffer: RawVkCommandBuffer, first_discard_rectangle: u32, discard_rectangle_count: u32, discard_rectangles: *mut RawVkRect2D) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetDiscardRectangleEXT\"");
 }
-unsafe extern fn null_instance_vkSetHdrMetadataEXT(device: RawVkDevice, swapchain_count: u32, swapchains: *const khr::RawVkSwapchain, metadata: *const ext::RawVkHdrMetadata) {
+unsafe extern fn null_instance_vkSetHdrMetadataEXT(device: RawVkDevice, swapchain_count: u32, swapchains: *mut khr::RawVkSwapchain, metadata: *mut ext::RawVkHdrMetadata) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkSetHdrMetadataEXT\"");
 }
-unsafe extern fn null_instance_vkSetDebugUtilsObjectNameEXT(device: RawVkDevice, name_info: *const ext::RawVkDebugUtilsObjectNameInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkSetDebugUtilsObjectNameEXT(device: RawVkDevice, name_info: *mut ext::RawVkDebugUtilsObjectNameInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkSetDebugUtilsObjectNameEXT\"");
 }
-unsafe extern fn null_instance_vkSetDebugUtilsObjectTagEXT(device: RawVkDevice, tag_info: *const ext::RawVkDebugUtilsObjectTagInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkSetDebugUtilsObjectTagEXT(device: RawVkDevice, tag_info: *mut ext::RawVkDebugUtilsObjectTagInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkSetDebugUtilsObjectTagEXT\"");
 }
-unsafe extern fn null_instance_vkQueueBeginDebugUtilsLabelEXT(queue: RawVkQueue, label_info: *const ext::RawVkDebugUtilsLabel) {
+unsafe extern fn null_instance_vkQueueBeginDebugUtilsLabelEXT(queue: RawVkQueue, label_info: *mut ext::RawVkDebugUtilsLabel) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkQueueBeginDebugUtilsLabelEXT\"");
 }
 unsafe extern fn null_instance_vkQueueEndDebugUtilsLabelEXT(queue: RawVkQueue) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkQueueEndDebugUtilsLabelEXT\"");
 }
-unsafe extern fn null_instance_vkQueueInsertDebugUtilsLabelEXT(queue: RawVkQueue, label_info: *const ext::RawVkDebugUtilsLabel) {
+unsafe extern fn null_instance_vkQueueInsertDebugUtilsLabelEXT(queue: RawVkQueue, label_info: *mut ext::RawVkDebugUtilsLabel) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkQueueInsertDebugUtilsLabelEXT\"");
 }
-unsafe extern fn null_instance_vkCmdBeginDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer, label_info: *const ext::RawVkDebugUtilsLabel) {
+unsafe extern fn null_instance_vkCmdBeginDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer, label_info: *mut ext::RawVkDebugUtilsLabel) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBeginDebugUtilsLabelEXT\"");
 }
 unsafe extern fn null_instance_vkCmdEndDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdEndDebugUtilsLabelEXT\"");
 }
-unsafe extern fn null_instance_vkCmdInsertDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer, label_info: *const ext::RawVkDebugUtilsLabel) {
+unsafe extern fn null_instance_vkCmdInsertDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer, label_info: *mut ext::RawVkDebugUtilsLabel) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdInsertDebugUtilsLabelEXT\"");
 }
-unsafe extern fn null_instance_vkCreateDebugUtilsMessengerEXT(instance: RawVkInstance, create_info: *const ext::RawVkDebugUtilsMessengerCreateInfo, allocator: *const c_void, messenger: *const ext::RawVkDebugUtilsMessenger) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateDebugUtilsMessengerEXT(instance: RawVkInstance, create_info: *mut ext::RawVkDebugUtilsMessengerCreateInfo, allocator: *const c_void, messenger: *mut ext::RawVkDebugUtilsMessenger) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDebugUtilsMessengerEXT\"");
 }
 unsafe extern fn null_instance_vkDestroyDebugUtilsMessengerEXT(instance: RawVkInstance, messenger: ext::RawVkDebugUtilsMessenger, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyDebugUtilsMessengerEXT\"");
 }
-unsafe extern fn null_instance_vkSubmitDebugUtilsMessageEXT(instance: RawVkInstance, message_severity: ext::RawVkDebugUtilsMessageSeverityFlags, message_types: ext::RawVkDebugUtilsMessageTypeFlags, callback_data: *const ext::RawVkDebugUtilsMessengerCallbackData) {
+unsafe extern fn null_instance_vkSubmitDebugUtilsMessageEXT(instance: RawVkInstance, message_severity: ext::RawVkDebugUtilsMessageSeverityFlags, message_types: ext::RawVkDebugUtilsMessageTypeFlags, callback_data: *mut ext::RawVkDebugUtilsMessengerCallbackData) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkSubmitDebugUtilsMessageEXT\"");
 }
-unsafe extern fn null_instance_vkCmdSetSampleLocationsEXT(command_buffer: RawVkCommandBuffer, sample_locations_info: *const ext::RawVkSampleLocationsInfo) {
+unsafe extern fn null_instance_vkCmdSetSampleLocationsEXT(command_buffer: RawVkCommandBuffer, sample_locations_info: *mut ext::RawVkSampleLocationsInfo) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetSampleLocationsEXT\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceMultisamplePropertiesEXT(physical_device: RawVkPhysicalDevice, samples: RawVkSampleCountFlags, multisample_properties: *const ext::RawVkMultisampleProperties) {
+unsafe extern fn null_instance_vkGetPhysicalDeviceMultisamplePropertiesEXT(physical_device: RawVkPhysicalDevice, samples: RawVkSampleCountFlags, multisample_properties: *mut ext::RawVkMultisampleProperties) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceMultisamplePropertiesEXT\"");
 }
-unsafe extern fn null_instance_vkGetImageDrmFormatModifierPropertiesEXT(device: RawVkDevice, image: RawVkImage, properties: *const ext::RawVkImageDrmFormatModifierProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetImageDrmFormatModifierPropertiesEXT(device: RawVkDevice, image: RawVkImage, properties: *mut ext::RawVkImageDrmFormatModifierProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetImageDrmFormatModifierPropertiesEXT\"");
 }
-unsafe extern fn null_instance_vkCreateValidationCacheEXT(device: RawVkDevice, create_info: *const ext::RawVkValidationCacheCreateInfo, allocator: *const c_void, validation_cache: *const ext::RawVkValidationCache) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateValidationCacheEXT(device: RawVkDevice, create_info: *mut ext::RawVkValidationCacheCreateInfo, allocator: *const c_void, validation_cache: *mut ext::RawVkValidationCache) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateValidationCacheEXT\"");
 }
 unsafe extern fn null_instance_vkDestroyValidationCacheEXT(device: RawVkDevice, validation_cache: ext::RawVkValidationCache, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyValidationCacheEXT\"");
 }
-unsafe extern fn null_instance_vkMergeValidationCachesEXT(device: RawVkDevice, dst_cache: ext::RawVkValidationCache, src_cache_count: u32, src_caches: *const ext::RawVkValidationCache) -> RawVkResult {
+unsafe extern fn null_instance_vkMergeValidationCachesEXT(device: RawVkDevice, dst_cache: ext::RawVkValidationCache, src_cache_count: u32, src_caches: *mut ext::RawVkValidationCache) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkMergeValidationCachesEXT\"");
 }
-unsafe extern fn null_instance_vkGetValidationCacheDataEXT(device: RawVkDevice, validation_cache: ext::RawVkValidationCache, data_size: *const usize, data: *const c_void) -> RawVkResult {
+unsafe extern fn null_instance_vkGetValidationCacheDataEXT(device: RawVkDevice, validation_cache: ext::RawVkValidationCache, data_size: *mut usize, data: *mut c_void) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetValidationCacheDataEXT\"");
 }
 unsafe extern fn null_instance_vkCmdBindShadingRateImageNV(command_buffer: RawVkCommandBuffer, image_view: RawVkImageView, image_layout: RawVkImageLayout) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBindShadingRateImageNV\"");
 }
-unsafe extern fn null_instance_vkCmdSetViewportShadingRatePaletteNV(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, shading_rate_palettes: *const nv::RawVkShadingRatePalette) {
+unsafe extern fn null_instance_vkCmdSetViewportShadingRatePaletteNV(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, shading_rate_palettes: *mut nv::RawVkShadingRatePalette) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetViewportShadingRatePaletteNV\"");
 }
-unsafe extern fn null_instance_vkCmdSetCoarseSampleOrderNV(command_buffer: RawVkCommandBuffer, sample_order_type: nv::RawVkCoarseSampleOrderType, custom_sample_order_count: u32, custom_sample_orders: *const nv::RawVkCoarseSampleOrderCustom) {
+unsafe extern fn null_instance_vkCmdSetCoarseSampleOrderNV(command_buffer: RawVkCommandBuffer, sample_order_type: nv::RawVkCoarseSampleOrderType, custom_sample_order_count: u32, custom_sample_orders: *mut nv::RawVkCoarseSampleOrderCustom) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetCoarseSampleOrderNV\"");
 }
-unsafe extern fn null_instance_vkCreateAccelerationStructureNV(device: RawVkDevice, create_info: *const nv::RawVkAccelerationStructureCreateInfo, allocator: *const c_void, acceleration_structure: *const nv::RawVkAccelerationStructure) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateAccelerationStructureNV(device: RawVkDevice, create_info: *mut nv::RawVkAccelerationStructureCreateInfo, allocator: *const c_void, acceleration_structure: *mut nv::RawVkAccelerationStructure) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateAccelerationStructureNV\"");
 }
 unsafe extern fn null_instance_vkDestroyAccelerationStructureNV(device: RawVkDevice, acceleration_structure: nv::RawVkAccelerationStructure, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyAccelerationStructureNV\"");
 }
-unsafe extern fn null_instance_vkGetAccelerationStructureMemoryRequirementsNV(device: RawVkDevice, info: *const nv::RawVkAccelerationStructureMemoryRequirementsInfo, memory_requirements: *const khr::RawVkMemoryRequirements2) {
+unsafe extern fn null_instance_vkGetAccelerationStructureMemoryRequirementsNV(device: RawVkDevice, info: *mut nv::RawVkAccelerationStructureMemoryRequirementsInfo, memory_requirements: *mut khr::RawVkMemoryRequirements2) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetAccelerationStructureMemoryRequirementsNV\"");
 }
-unsafe extern fn null_instance_vkBindAccelerationStructureMemoryNV(device: RawVkDevice, bind_info_count: u32, bind_infos: *const nv::RawVkBindAccelerationStructureMemoryInfo) -> RawVkResult {
+unsafe extern fn null_instance_vkBindAccelerationStructureMemoryNV(device: RawVkDevice, bind_info_count: u32, bind_infos: *mut nv::RawVkBindAccelerationStructureMemoryInfo) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkBindAccelerationStructureMemoryNV\"");
 }
-unsafe extern fn null_instance_vkCmdBuildAccelerationStructureNV(command_buffer: RawVkCommandBuffer, info: *const nv::RawVkAccelerationStructureInfo, instance_data: RawVkBuffer, instance_offset: u64, update: u32, dst: nv::RawVkAccelerationStructure, src: nv::RawVkAccelerationStructure, scratch: RawVkBuffer, scratch_offset: u64) {
+unsafe extern fn null_instance_vkCmdBuildAccelerationStructureNV(command_buffer: RawVkCommandBuffer, info: *mut nv::RawVkAccelerationStructureInfo, instance_data: RawVkBuffer, instance_offset: u64, update: u32, dst: nv::RawVkAccelerationStructure, src: nv::RawVkAccelerationStructure, scratch: RawVkBuffer, scratch_offset: u64) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdBuildAccelerationStructureNV\"");
 }
 unsafe extern fn null_instance_vkCmdCopyAccelerationStructureNV(command_buffer: RawVkCommandBuffer, dst: nv::RawVkAccelerationStructure, src: nv::RawVkAccelerationStructure, mode: nv::RawVkCopyAccelerationStructureMode) {
@@ -1699,31 +1699,31 @@ unsafe extern fn null_instance_vkCmdCopyAccelerationStructureNV(command_buffer: 
 unsafe extern fn null_instance_vkCmdTraceRaysNV(command_buffer: RawVkCommandBuffer, raygen_shader_binding_table_buffer: RawVkBuffer, raygen_shader_binding_offset: u64, miss_shader_binding_table_buffer: RawVkBuffer, miss_shader_binding_offset: u64, miss_shader_binding_stride: u64, hit_shader_binding_table_buffer: RawVkBuffer, hit_shader_binding_offset: u64, hit_shader_binding_stride: u64, callable_shader_binding_table_buffer: RawVkBuffer, callable_shader_binding_offset: u64, callable_shader_binding_stride: u64, width: u32, height: u32, depth: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdTraceRaysNV\"");
 }
-unsafe extern fn null_instance_vkCreateRayTracingPipelinesNV(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *const nv::RawVkRayTracingPipelineCreateInfo, allocator: *const c_void, pipelines: *const RawVkPipeline) -> RawVkResult {
+unsafe extern fn null_instance_vkCreateRayTracingPipelinesNV(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *mut nv::RawVkRayTracingPipelineCreateInfo, allocator: *const c_void, pipelines: *mut RawVkPipeline) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateRayTracingPipelinesNV\"");
 }
-unsafe extern fn null_instance_vkGetRayTracingShaderGroupHandlesNV(device: RawVkDevice, pipeline: RawVkPipeline, first_group: u32, group_count: u32, data_size: usize, data: *const c_void) -> RawVkResult {
+unsafe extern fn null_instance_vkGetRayTracingShaderGroupHandlesNV(device: RawVkDevice, pipeline: RawVkPipeline, first_group: u32, group_count: u32, data_size: usize, data: *mut c_void) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetRayTracingShaderGroupHandlesNV\"");
 }
-unsafe extern fn null_instance_vkGetAccelerationStructureHandleNV(device: RawVkDevice, acceleration_structure: nv::RawVkAccelerationStructure, data_size: usize, data: *const c_void) -> RawVkResult {
+unsafe extern fn null_instance_vkGetAccelerationStructureHandleNV(device: RawVkDevice, acceleration_structure: nv::RawVkAccelerationStructure, data_size: usize, data: *mut c_void) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetAccelerationStructureHandleNV\"");
 }
-unsafe extern fn null_instance_vkCmdWriteAccelerationStructuresPropertiesNV(command_buffer: RawVkCommandBuffer, acceleration_structure_count: u32, acceleration_structures: *const nv::RawVkAccelerationStructure, query_type: RawVkQueryType, query_pool: RawVkQueryPool, first_query: u32) {
+unsafe extern fn null_instance_vkCmdWriteAccelerationStructuresPropertiesNV(command_buffer: RawVkCommandBuffer, acceleration_structure_count: u32, acceleration_structures: *mut nv::RawVkAccelerationStructure, query_type: RawVkQueryType, query_pool: RawVkQueryPool, first_query: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdWriteAccelerationStructuresPropertiesNV\"");
 }
 unsafe extern fn null_instance_vkCompileDeferredNV(device: RawVkDevice, pipeline: RawVkPipeline, shader: u32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCompileDeferredNV\"");
 }
-unsafe extern fn null_instance_vkGetMemoryHostPointerPropertiesEXT(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, host_pointer: *const c_void, memory_host_pointer_properties: *const ext::RawVkMemoryHostPointerProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetMemoryHostPointerPropertiesEXT(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, host_pointer: *mut c_void, memory_host_pointer_properties: *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetMemoryHostPointerPropertiesEXT\"");
 }
 unsafe extern fn null_instance_vkCmdWriteBufferMarkerAMD(command_buffer: RawVkCommandBuffer, pipeline_stage: RawVkPipelineStageFlags, dst_buffer: RawVkBuffer, dst_offset: u64, marker: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdWriteBufferMarkerAMD\"");
 }
-unsafe extern fn null_instance_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT(physical_device: RawVkPhysicalDevice, time_domain_count: *const u32, time_domains: *const ext::RawVkTimeDomain) -> RawVkResult {
+unsafe extern fn null_instance_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT(physical_device: RawVkPhysicalDevice, time_domain_count: *mut u32, time_domains: *mut ext::RawVkTimeDomain) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceCalibrateableTimeDomainsEXT\"");
 }
-unsafe extern fn null_instance_vkGetCalibratedTimestampsEXT(device: RawVkDevice, timestamp_count: u32, timestamp_infos: *const ext::RawVkCalibratedTimestampInfo, timestamps: *const u64, max_deviation: *const u64) -> RawVkResult {
+unsafe extern fn null_instance_vkGetCalibratedTimestampsEXT(device: RawVkDevice, timestamp_count: u32, timestamp_infos: *mut ext::RawVkCalibratedTimestampInfo, timestamps: *mut u64, max_deviation: *mut u64) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetCalibratedTimestampsEXT\"");
 }
 unsafe extern fn null_instance_vkCmdDrawMeshTasksNV(command_buffer: RawVkCommandBuffer, task_count: u32, first_task: u32) {
@@ -1735,55 +1735,55 @@ unsafe extern fn null_instance_vkCmdDrawMeshTasksIndirectNV(command_buffer: RawV
 unsafe extern fn null_instance_vkCmdDrawMeshTasksIndirectCountNV(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDrawMeshTasksIndirectCountNV\"");
 }
-unsafe extern fn null_instance_vkCmdSetExclusiveScissorNV(command_buffer: RawVkCommandBuffer, first_exclusive_scissor: u32, exclusive_scissor_count: u32, exclusive_scissors: *const RawVkRect2D) {
+unsafe extern fn null_instance_vkCmdSetExclusiveScissorNV(command_buffer: RawVkCommandBuffer, first_exclusive_scissor: u32, exclusive_scissor_count: u32, exclusive_scissors: *mut RawVkRect2D) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetExclusiveScissorNV\"");
 }
-unsafe extern fn null_instance_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBuffer, checkpoint_marker: *const c_void) {
+unsafe extern fn null_instance_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBuffer, checkpoint_marker: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetCheckpointNV\"");
 }
-unsafe extern fn null_instance_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *const u32, checkpoint_data: *const nv::RawVkCheckpointData) {
+unsafe extern fn null_instance_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *mut u32, checkpoint_data: *mut nv::RawVkCheckpointData) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetQueueCheckpointDataNV\"");
 }
 unsafe extern fn null_device_vkDestroyInstance(instance: RawVkInstance, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyInstance\"");
 }
-unsafe extern fn null_device_vkEnumeratePhysicalDevices(instance: RawVkInstance, physical_device_count: *const u32, physical_devices: *const RawVkPhysicalDevice) -> RawVkResult {
+unsafe extern fn null_device_vkEnumeratePhysicalDevices(instance: RawVkInstance, physical_device_count: *mut u32, physical_devices: *mut RawVkPhysicalDevice) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkEnumeratePhysicalDevices\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceFeatures(physical_device: RawVkPhysicalDevice, features: *const RawVkPhysicalDeviceFeatures) {
+unsafe extern fn null_device_vkGetPhysicalDeviceFeatures(physical_device: RawVkPhysicalDevice, features: *mut RawVkPhysicalDeviceFeatures) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceFeatures\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, format_properties: *const RawVkFormatProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, format_properties: *mut RawVkFormatProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceFormatProperties\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceImageFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, tiling: RawVkImageTiling, usage: RawVkImageUsageFlags, flags: RawVkImageCreateFlags, image_format_properties: *const RawVkImageFormatProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceImageFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, tiling: RawVkImageTiling, usage: RawVkImageUsageFlags, flags: RawVkImageCreateFlags, image_format_properties: *mut RawVkImageFormatProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceImageFormatProperties\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceProperties(physical_device: RawVkPhysicalDevice, properties: *const RawVkPhysicalDeviceProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceProperties(physical_device: RawVkPhysicalDevice, properties: *mut RawVkPhysicalDeviceProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceProperties\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceQueueFamilyProperties(physical_device: RawVkPhysicalDevice, queue_family_property_count: *const u32, queue_family_properties: *const RawVkQueueFamilyProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceQueueFamilyProperties(physical_device: RawVkPhysicalDevice, queue_family_property_count: *mut u32, queue_family_properties: *mut RawVkQueueFamilyProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceQueueFamilyProperties\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceMemoryProperties(physical_device: RawVkPhysicalDevice, memory_properties: *const RawVkPhysicalDeviceMemoryProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceMemoryProperties(physical_device: RawVkPhysicalDevice, memory_properties: *mut RawVkPhysicalDeviceMemoryProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceMemoryProperties\"");
 }
-unsafe extern fn null_device_vkCreateDevice(physical_device: RawVkPhysicalDevice, create_info: *const RawVkDeviceCreateInfo, allocator: *const c_void, device: *const RawVkDevice) -> RawVkResult {
+unsafe extern fn null_device_vkCreateDevice(physical_device: RawVkPhysicalDevice, create_info: *mut RawVkDeviceCreateInfo, allocator: *const c_void, device: *mut RawVkDevice) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDevice\"");
 }
 unsafe extern fn null_device_vkDestroyDevice(device: RawVkDevice, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyDevice\"");
 }
-unsafe extern fn null_device_vkEnumerateDeviceExtensionProperties(physical_device: RawVkPhysicalDevice, layer_name: *const c_char, property_count: *const u32, properties: *const RawVkExtensionProperties) -> RawVkResult {
+unsafe extern fn null_device_vkEnumerateDeviceExtensionProperties(physical_device: RawVkPhysicalDevice, layer_name: *mut c_char, property_count: *mut u32, properties: *mut RawVkExtensionProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkEnumerateDeviceExtensionProperties\"");
 }
-unsafe extern fn null_device_vkEnumerateDeviceLayerProperties(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const RawVkLayerProperties) -> RawVkResult {
+unsafe extern fn null_device_vkEnumerateDeviceLayerProperties(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut RawVkLayerProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkEnumerateDeviceLayerProperties\"");
 }
-unsafe extern fn null_device_vkGetDeviceQueue(device: RawVkDevice, queue_family_index: u32, queue_index: u32, queue: *const RawVkQueue) {
+unsafe extern fn null_device_vkGetDeviceQueue(device: RawVkDevice, queue_family_index: u32, queue_index: u32, queue: *mut RawVkQueue) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDeviceQueue\"");
 }
-unsafe extern fn null_device_vkQueueSubmit(queue: RawVkQueue, submit_count: u32, submits: *const RawVkSubmitInfo, fence: RawVkFence) -> RawVkResult {
+unsafe extern fn null_device_vkQueueSubmit(queue: RawVkQueue, submit_count: u32, submits: *mut RawVkSubmitInfo, fence: RawVkFence) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkQueueSubmit\"");
 }
 unsafe extern fn null_device_vkQueueWaitIdle(queue: RawVkQueue) -> RawVkResult {
@@ -1792,25 +1792,25 @@ unsafe extern fn null_device_vkQueueWaitIdle(queue: RawVkQueue) -> RawVkResult {
 unsafe extern fn null_device_vkDeviceWaitIdle(device: RawVkDevice) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDeviceWaitIdle\"");
 }
-unsafe extern fn null_device_vkAllocateMemory(device: RawVkDevice, allocate_info: *const RawVkMemoryAllocateInfo, allocator: *const c_void, memory: *const RawVkDeviceMemory) -> RawVkResult {
+unsafe extern fn null_device_vkAllocateMemory(device: RawVkDevice, allocate_info: *mut RawVkMemoryAllocateInfo, allocator: *const c_void, memory: *mut RawVkDeviceMemory) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkAllocateMemory\"");
 }
 unsafe extern fn null_device_vkFreeMemory(device: RawVkDevice, memory: RawVkDeviceMemory, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkFreeMemory\"");
 }
-unsafe extern fn null_device_vkMapMemory(device: RawVkDevice, memory: RawVkDeviceMemory, offset: u64, size: u64, flags: RawVkMemoryMapFlags, data: *const *const c_void) -> RawVkResult {
+unsafe extern fn null_device_vkMapMemory(device: RawVkDevice, memory: RawVkDeviceMemory, offset: u64, size: u64, flags: RawVkMemoryMapFlags, data: *mut *mut c_void) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkMapMemory\"");
 }
 unsafe extern fn null_device_vkUnmapMemory(device: RawVkDevice, memory: RawVkDeviceMemory) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkUnmapMemory\"");
 }
-unsafe extern fn null_device_vkFlushMappedMemoryRanges(device: RawVkDevice, memory_range_count: u32, memory_ranges: *const RawVkMappedMemoryRange) -> RawVkResult {
+unsafe extern fn null_device_vkFlushMappedMemoryRanges(device: RawVkDevice, memory_range_count: u32, memory_ranges: *mut RawVkMappedMemoryRange) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkFlushMappedMemoryRanges\"");
 }
-unsafe extern fn null_device_vkInvalidateMappedMemoryRanges(device: RawVkDevice, memory_range_count: u32, memory_ranges: *const RawVkMappedMemoryRange) -> RawVkResult {
+unsafe extern fn null_device_vkInvalidateMappedMemoryRanges(device: RawVkDevice, memory_range_count: u32, memory_ranges: *mut RawVkMappedMemoryRange) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkInvalidateMappedMemoryRanges\"");
 }
-unsafe extern fn null_device_vkGetDeviceMemoryCommitment(device: RawVkDevice, memory: RawVkDeviceMemory, committed_memory_in_bytes: *const u64) {
+unsafe extern fn null_device_vkGetDeviceMemoryCommitment(device: RawVkDevice, memory: RawVkDeviceMemory, committed_memory_in_bytes: *mut u64) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDeviceMemoryCommitment\"");
 }
 unsafe extern fn null_device_vkBindBufferMemory(device: RawVkDevice, buffer: RawVkBuffer, memory: RawVkDeviceMemory, memory_offset: u64) -> RawVkResult {
@@ -1819,43 +1819,43 @@ unsafe extern fn null_device_vkBindBufferMemory(device: RawVkDevice, buffer: Raw
 unsafe extern fn null_device_vkBindImageMemory(device: RawVkDevice, image: RawVkImage, memory: RawVkDeviceMemory, memory_offset: u64) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkBindImageMemory\"");
 }
-unsafe extern fn null_device_vkGetBufferMemoryRequirements(device: RawVkDevice, buffer: RawVkBuffer, memory_requirements: *const RawVkMemoryRequirements) {
+unsafe extern fn null_device_vkGetBufferMemoryRequirements(device: RawVkDevice, buffer: RawVkBuffer, memory_requirements: *mut RawVkMemoryRequirements) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetBufferMemoryRequirements\"");
 }
-unsafe extern fn null_device_vkGetImageMemoryRequirements(device: RawVkDevice, image: RawVkImage, memory_requirements: *const RawVkMemoryRequirements) {
+unsafe extern fn null_device_vkGetImageMemoryRequirements(device: RawVkDevice, image: RawVkImage, memory_requirements: *mut RawVkMemoryRequirements) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetImageMemoryRequirements\"");
 }
-unsafe extern fn null_device_vkGetImageSparseMemoryRequirements(device: RawVkDevice, image: RawVkImage, sparse_memory_requirement_count: *const u32, sparse_memory_requirements: *const RawVkSparseImageMemoryRequirements) {
+unsafe extern fn null_device_vkGetImageSparseMemoryRequirements(device: RawVkDevice, image: RawVkImage, sparse_memory_requirement_count: *mut u32, sparse_memory_requirements: *mut RawVkSparseImageMemoryRequirements) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetImageSparseMemoryRequirements\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSparseImageFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, samples: RawVkSampleCountFlags, usage: RawVkImageUsageFlags, tiling: RawVkImageTiling, property_count: *const u32, properties: *const RawVkSparseImageFormatProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceSparseImageFormatProperties(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, samples: RawVkSampleCountFlags, usage: RawVkImageUsageFlags, tiling: RawVkImageTiling, property_count: *mut u32, properties: *mut RawVkSparseImageFormatProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSparseImageFormatProperties\"");
 }
-unsafe extern fn null_device_vkQueueBindSparse(queue: RawVkQueue, bind_info_count: u32, bind_info: *const RawVkBindSparseInfo, fence: RawVkFence) -> RawVkResult {
+unsafe extern fn null_device_vkQueueBindSparse(queue: RawVkQueue, bind_info_count: u32, bind_info: *mut RawVkBindSparseInfo, fence: RawVkFence) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkQueueBindSparse\"");
 }
-unsafe extern fn null_device_vkCreateFence(device: RawVkDevice, create_info: *const RawVkFenceCreateInfo, allocator: *const c_void, fence: *const RawVkFence) -> RawVkResult {
+unsafe extern fn null_device_vkCreateFence(device: RawVkDevice, create_info: *mut RawVkFenceCreateInfo, allocator: *const c_void, fence: *mut RawVkFence) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateFence\"");
 }
 unsafe extern fn null_device_vkDestroyFence(device: RawVkDevice, fence: RawVkFence, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyFence\"");
 }
-unsafe extern fn null_device_vkResetFences(device: RawVkDevice, fence_count: u32, fences: *const RawVkFence) -> RawVkResult {
+unsafe extern fn null_device_vkResetFences(device: RawVkDevice, fence_count: u32, fences: *mut RawVkFence) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkResetFences\"");
 }
 unsafe extern fn null_device_vkGetFenceStatus(device: RawVkDevice, fence: RawVkFence) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetFenceStatus\"");
 }
-unsafe extern fn null_device_vkWaitForFences(device: RawVkDevice, fence_count: u32, fences: *const RawVkFence, wait_all: u32, timeout: u64) -> RawVkResult {
+unsafe extern fn null_device_vkWaitForFences(device: RawVkDevice, fence_count: u32, fences: *mut RawVkFence, wait_all: u32, timeout: u64) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkWaitForFences\"");
 }
-unsafe extern fn null_device_vkCreateSemaphore(device: RawVkDevice, create_info: *const RawVkSemaphoreCreateInfo, allocator: *const c_void, semaphore: *const RawVkSemaphore) -> RawVkResult {
+unsafe extern fn null_device_vkCreateSemaphore(device: RawVkDevice, create_info: *mut RawVkSemaphoreCreateInfo, allocator: *const c_void, semaphore: *mut RawVkSemaphore) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateSemaphore\"");
 }
 unsafe extern fn null_device_vkDestroySemaphore(device: RawVkDevice, semaphore: RawVkSemaphore, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroySemaphore\"");
 }
-unsafe extern fn null_device_vkCreateEvent(device: RawVkDevice, create_info: *const RawVkEventCreateInfo, allocator: *const c_void, event: *const RawVkEvent) -> RawVkResult {
+unsafe extern fn null_device_vkCreateEvent(device: RawVkDevice, create_info: *mut RawVkEventCreateInfo, allocator: *const c_void, event: *mut RawVkEvent) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateEvent\"");
 }
 unsafe extern fn null_device_vkDestroyEvent(device: RawVkDevice, event: RawVkEvent, allocator: *const c_void) {
@@ -1870,88 +1870,88 @@ unsafe extern fn null_device_vkSetEvent(device: RawVkDevice, event: RawVkEvent) 
 unsafe extern fn null_device_vkResetEvent(device: RawVkDevice, event: RawVkEvent) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkResetEvent\"");
 }
-unsafe extern fn null_device_vkCreateQueryPool(device: RawVkDevice, create_info: *const RawVkQueryPoolCreateInfo, allocator: *const c_void, query_pool: *const RawVkQueryPool) -> RawVkResult {
+unsafe extern fn null_device_vkCreateQueryPool(device: RawVkDevice, create_info: *mut RawVkQueryPoolCreateInfo, allocator: *const c_void, query_pool: *mut RawVkQueryPool) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateQueryPool\"");
 }
 unsafe extern fn null_device_vkDestroyQueryPool(device: RawVkDevice, query_pool: RawVkQueryPool, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyQueryPool\"");
 }
-unsafe extern fn null_device_vkGetQueryPoolResults(device: RawVkDevice, query_pool: RawVkQueryPool, first_query: u32, query_count: u32, data_size: usize, data: *const c_void, stride: u64, flags: RawVkQueryResultFlags) -> RawVkResult {
+unsafe extern fn null_device_vkGetQueryPoolResults(device: RawVkDevice, query_pool: RawVkQueryPool, first_query: u32, query_count: u32, data_size: usize, data: *mut c_void, stride: u64, flags: RawVkQueryResultFlags) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetQueryPoolResults\"");
 }
-unsafe extern fn null_device_vkCreateBuffer(device: RawVkDevice, create_info: *const RawVkBufferCreateInfo, allocator: *const c_void, buffer: *const RawVkBuffer) -> RawVkResult {
+unsafe extern fn null_device_vkCreateBuffer(device: RawVkDevice, create_info: *mut RawVkBufferCreateInfo, allocator: *const c_void, buffer: *mut RawVkBuffer) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateBuffer\"");
 }
 unsafe extern fn null_device_vkDestroyBuffer(device: RawVkDevice, buffer: RawVkBuffer, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyBuffer\"");
 }
-unsafe extern fn null_device_vkCreateBufferView(device: RawVkDevice, create_info: *const RawVkBufferViewCreateInfo, allocator: *const c_void, view: *const RawVkBufferView) -> RawVkResult {
+unsafe extern fn null_device_vkCreateBufferView(device: RawVkDevice, create_info: *mut RawVkBufferViewCreateInfo, allocator: *const c_void, view: *mut RawVkBufferView) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateBufferView\"");
 }
 unsafe extern fn null_device_vkDestroyBufferView(device: RawVkDevice, buffer_view: RawVkBufferView, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyBufferView\"");
 }
-unsafe extern fn null_device_vkCreateImage(device: RawVkDevice, create_info: *const RawVkImageCreateInfo, allocator: *const c_void, image: *const RawVkImage) -> RawVkResult {
+unsafe extern fn null_device_vkCreateImage(device: RawVkDevice, create_info: *mut RawVkImageCreateInfo, allocator: *const c_void, image: *mut RawVkImage) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateImage\"");
 }
 unsafe extern fn null_device_vkDestroyImage(device: RawVkDevice, image: RawVkImage, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyImage\"");
 }
-unsafe extern fn null_device_vkGetImageSubresourceLayout(device: RawVkDevice, image: RawVkImage, subresource: *const RawVkImageSubresource, layout: *const RawVkSubresourceLayout) {
+unsafe extern fn null_device_vkGetImageSubresourceLayout(device: RawVkDevice, image: RawVkImage, subresource: *mut RawVkImageSubresource, layout: *mut RawVkSubresourceLayout) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetImageSubresourceLayout\"");
 }
-unsafe extern fn null_device_vkCreateImageView(device: RawVkDevice, create_info: *const RawVkImageViewCreateInfo, allocator: *const c_void, view: *const RawVkImageView) -> RawVkResult {
+unsafe extern fn null_device_vkCreateImageView(device: RawVkDevice, create_info: *mut RawVkImageViewCreateInfo, allocator: *const c_void, view: *mut RawVkImageView) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateImageView\"");
 }
 unsafe extern fn null_device_vkDestroyImageView(device: RawVkDevice, image_view: RawVkImageView, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyImageView\"");
 }
-unsafe extern fn null_device_vkCreateShaderModule(device: RawVkDevice, create_info: *const RawVkShaderModuleCreateInfo, allocator: *const c_void, shader_module: *const RawVkShaderModule) -> RawVkResult {
+unsafe extern fn null_device_vkCreateShaderModule(device: RawVkDevice, create_info: *mut RawVkShaderModuleCreateInfo, allocator: *const c_void, shader_module: *mut RawVkShaderModule) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateShaderModule\"");
 }
 unsafe extern fn null_device_vkDestroyShaderModule(device: RawVkDevice, shader_module: RawVkShaderModule, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyShaderModule\"");
 }
-unsafe extern fn null_device_vkCreatePipelineCache(device: RawVkDevice, create_info: *const RawVkPipelineCacheCreateInfo, allocator: *const c_void, pipeline_cache: *const RawVkPipelineCache) -> RawVkResult {
+unsafe extern fn null_device_vkCreatePipelineCache(device: RawVkDevice, create_info: *mut RawVkPipelineCacheCreateInfo, allocator: *const c_void, pipeline_cache: *mut RawVkPipelineCache) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreatePipelineCache\"");
 }
 unsafe extern fn null_device_vkDestroyPipelineCache(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyPipelineCache\"");
 }
-unsafe extern fn null_device_vkGetPipelineCacheData(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, data_size: *const usize, data: *const c_void) -> RawVkResult {
+unsafe extern fn null_device_vkGetPipelineCacheData(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, data_size: *mut usize, data: *mut c_void) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPipelineCacheData\"");
 }
-unsafe extern fn null_device_vkMergePipelineCaches(device: RawVkDevice, dst_cache: RawVkPipelineCache, src_cache_count: u32, src_caches: *const RawVkPipelineCache) -> RawVkResult {
+unsafe extern fn null_device_vkMergePipelineCaches(device: RawVkDevice, dst_cache: RawVkPipelineCache, src_cache_count: u32, src_caches: *mut RawVkPipelineCache) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkMergePipelineCaches\"");
 }
-unsafe extern fn null_device_vkCreateGraphicsPipelines(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *const RawVkGraphicsPipelineCreateInfo, allocator: *const c_void, pipelines: *const RawVkPipeline) -> RawVkResult {
+unsafe extern fn null_device_vkCreateGraphicsPipelines(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *mut RawVkGraphicsPipelineCreateInfo, allocator: *const c_void, pipelines: *mut RawVkPipeline) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateGraphicsPipelines\"");
 }
-unsafe extern fn null_device_vkCreateComputePipelines(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *const RawVkComputePipelineCreateInfo, allocator: *const c_void, pipelines: *const RawVkPipeline) -> RawVkResult {
+unsafe extern fn null_device_vkCreateComputePipelines(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *mut RawVkComputePipelineCreateInfo, allocator: *const c_void, pipelines: *mut RawVkPipeline) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateComputePipelines\"");
 }
 unsafe extern fn null_device_vkDestroyPipeline(device: RawVkDevice, pipeline: RawVkPipeline, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyPipeline\"");
 }
-unsafe extern fn null_device_vkCreatePipelineLayout(device: RawVkDevice, create_info: *const RawVkPipelineLayoutCreateInfo, allocator: *const c_void, pipeline_layout: *const RawVkPipelineLayout) -> RawVkResult {
+unsafe extern fn null_device_vkCreatePipelineLayout(device: RawVkDevice, create_info: *mut RawVkPipelineLayoutCreateInfo, allocator: *const c_void, pipeline_layout: *mut RawVkPipelineLayout) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreatePipelineLayout\"");
 }
 unsafe extern fn null_device_vkDestroyPipelineLayout(device: RawVkDevice, pipeline_layout: RawVkPipelineLayout, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyPipelineLayout\"");
 }
-unsafe extern fn null_device_vkCreateSampler(device: RawVkDevice, create_info: *const RawVkSamplerCreateInfo, allocator: *const c_void, sampler: *const RawVkSampler) -> RawVkResult {
+unsafe extern fn null_device_vkCreateSampler(device: RawVkDevice, create_info: *mut RawVkSamplerCreateInfo, allocator: *const c_void, sampler: *mut RawVkSampler) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateSampler\"");
 }
 unsafe extern fn null_device_vkDestroySampler(device: RawVkDevice, sampler: RawVkSampler, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroySampler\"");
 }
-unsafe extern fn null_device_vkCreateDescriptorSetLayout(device: RawVkDevice, create_info: *const RawVkDescriptorSetLayoutCreateInfo, allocator: *const c_void, set_layout: *const RawVkDescriptorSetLayout) -> RawVkResult {
+unsafe extern fn null_device_vkCreateDescriptorSetLayout(device: RawVkDevice, create_info: *mut RawVkDescriptorSetLayoutCreateInfo, allocator: *const c_void, set_layout: *mut RawVkDescriptorSetLayout) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDescriptorSetLayout\"");
 }
 unsafe extern fn null_device_vkDestroyDescriptorSetLayout(device: RawVkDevice, descriptor_set_layout: RawVkDescriptorSetLayout, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyDescriptorSetLayout\"");
 }
-unsafe extern fn null_device_vkCreateDescriptorPool(device: RawVkDevice, create_info: *const RawVkDescriptorPoolCreateInfo, allocator: *const c_void, descriptor_pool: *const RawVkDescriptorPool) -> RawVkResult {
+unsafe extern fn null_device_vkCreateDescriptorPool(device: RawVkDevice, create_info: *mut RawVkDescriptorPoolCreateInfo, allocator: *const c_void, descriptor_pool: *mut RawVkDescriptorPool) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDescriptorPool\"");
 }
 unsafe extern fn null_device_vkDestroyDescriptorPool(device: RawVkDevice, descriptor_pool: RawVkDescriptorPool, allocator: *const c_void) {
@@ -1960,31 +1960,31 @@ unsafe extern fn null_device_vkDestroyDescriptorPool(device: RawVkDevice, descri
 unsafe extern fn null_device_vkResetDescriptorPool(device: RawVkDevice, descriptor_pool: RawVkDescriptorPool, flags: RawVkDescriptorPoolResetFlags) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkResetDescriptorPool\"");
 }
-unsafe extern fn null_device_vkAllocateDescriptorSets(device: RawVkDevice, allocate_info: *const RawVkDescriptorSetAllocateInfo, descriptor_sets: *const RawVkDescriptorSet) -> RawVkResult {
+unsafe extern fn null_device_vkAllocateDescriptorSets(device: RawVkDevice, allocate_info: *mut RawVkDescriptorSetAllocateInfo, descriptor_sets: *mut RawVkDescriptorSet) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkAllocateDescriptorSets\"");
 }
-unsafe extern fn null_device_vkFreeDescriptorSets(device: RawVkDevice, descriptor_pool: RawVkDescriptorPool, descriptor_set_count: u32, descriptor_sets: *const RawVkDescriptorSet) -> RawVkResult {
+unsafe extern fn null_device_vkFreeDescriptorSets(device: RawVkDevice, descriptor_pool: RawVkDescriptorPool, descriptor_set_count: u32, descriptor_sets: *mut RawVkDescriptorSet) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkFreeDescriptorSets\"");
 }
-unsafe extern fn null_device_vkUpdateDescriptorSets(device: RawVkDevice, descriptor_write_count: u32, descriptor_writes: *const RawVkWriteDescriptorSet, descriptor_copy_count: u32, descriptor_copies: *const RawVkCopyDescriptorSet) {
+unsafe extern fn null_device_vkUpdateDescriptorSets(device: RawVkDevice, descriptor_write_count: u32, descriptor_writes: *mut RawVkWriteDescriptorSet, descriptor_copy_count: u32, descriptor_copies: *mut RawVkCopyDescriptorSet) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkUpdateDescriptorSets\"");
 }
-unsafe extern fn null_device_vkCreateFramebuffer(device: RawVkDevice, create_info: *const RawVkFramebufferCreateInfo, allocator: *const c_void, framebuffer: *const RawVkFramebuffer) -> RawVkResult {
+unsafe extern fn null_device_vkCreateFramebuffer(device: RawVkDevice, create_info: *mut RawVkFramebufferCreateInfo, allocator: *const c_void, framebuffer: *mut RawVkFramebuffer) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateFramebuffer\"");
 }
 unsafe extern fn null_device_vkDestroyFramebuffer(device: RawVkDevice, framebuffer: RawVkFramebuffer, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyFramebuffer\"");
 }
-unsafe extern fn null_device_vkCreateRenderPass(device: RawVkDevice, create_info: *const RawVkRenderPassCreateInfo, allocator: *const c_void, render_pass: *const RawVkRenderPass) -> RawVkResult {
+unsafe extern fn null_device_vkCreateRenderPass(device: RawVkDevice, create_info: *mut RawVkRenderPassCreateInfo, allocator: *const c_void, render_pass: *mut RawVkRenderPass) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateRenderPass\"");
 }
 unsafe extern fn null_device_vkDestroyRenderPass(device: RawVkDevice, render_pass: RawVkRenderPass, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyRenderPass\"");
 }
-unsafe extern fn null_device_vkGetRenderAreaGranularity(device: RawVkDevice, render_pass: RawVkRenderPass, granularity: *const RawVkExtent2D) {
+unsafe extern fn null_device_vkGetRenderAreaGranularity(device: RawVkDevice, render_pass: RawVkRenderPass, granularity: *mut RawVkExtent2D) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetRenderAreaGranularity\"");
 }
-unsafe extern fn null_device_vkCreateCommandPool(device: RawVkDevice, create_info: *const RawVkCommandPoolCreateInfo, allocator: *const c_void, command_pool: *const RawVkCommandPool) -> RawVkResult {
+unsafe extern fn null_device_vkCreateCommandPool(device: RawVkDevice, create_info: *mut RawVkCommandPoolCreateInfo, allocator: *const c_void, command_pool: *mut RawVkCommandPool) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateCommandPool\"");
 }
 unsafe extern fn null_device_vkDestroyCommandPool(device: RawVkDevice, command_pool: RawVkCommandPool, allocator: *const c_void) {
@@ -1993,13 +1993,13 @@ unsafe extern fn null_device_vkDestroyCommandPool(device: RawVkDevice, command_p
 unsafe extern fn null_device_vkResetCommandPool(device: RawVkDevice, command_pool: RawVkCommandPool, flags: RawVkCommandPoolResetFlags) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkResetCommandPool\"");
 }
-unsafe extern fn null_device_vkAllocateCommandBuffers(device: RawVkDevice, allocate_info: *const RawVkCommandBufferAllocateInfo, command_buffers: *const RawVkCommandBuffer) -> RawVkResult {
+unsafe extern fn null_device_vkAllocateCommandBuffers(device: RawVkDevice, allocate_info: *mut RawVkCommandBufferAllocateInfo, command_buffers: *mut RawVkCommandBuffer) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkAllocateCommandBuffers\"");
 }
-unsafe extern fn null_device_vkFreeCommandBuffers(device: RawVkDevice, command_pool: RawVkCommandPool, command_buffer_count: u32, command_buffers: *const RawVkCommandBuffer) {
+unsafe extern fn null_device_vkFreeCommandBuffers(device: RawVkDevice, command_pool: RawVkCommandPool, command_buffer_count: u32, command_buffers: *mut RawVkCommandBuffer) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkFreeCommandBuffers\"");
 }
-unsafe extern fn null_device_vkBeginCommandBuffer(command_buffer: RawVkCommandBuffer, begin_info: *const RawVkCommandBufferBeginInfo) -> RawVkResult {
+unsafe extern fn null_device_vkBeginCommandBuffer(command_buffer: RawVkCommandBuffer, begin_info: *mut RawVkCommandBufferBeginInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkBeginCommandBuffer\"");
 }
 unsafe extern fn null_device_vkEndCommandBuffer(command_buffer: RawVkCommandBuffer) -> RawVkResult {
@@ -2011,10 +2011,10 @@ unsafe extern fn null_device_vkResetCommandBuffer(command_buffer: RawVkCommandBu
 unsafe extern fn null_device_vkCmdBindPipeline(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, pipeline: RawVkPipeline) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBindPipeline\"");
 }
-unsafe extern fn null_device_vkCmdSetViewport(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, viewports: *const RawVkViewport) {
+unsafe extern fn null_device_vkCmdSetViewport(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, viewports: *mut RawVkViewport) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetViewport\"");
 }
-unsafe extern fn null_device_vkCmdSetScissor(command_buffer: RawVkCommandBuffer, first_scissor: u32, scissor_count: u32, scissors: *const RawVkRect2D) {
+unsafe extern fn null_device_vkCmdSetScissor(command_buffer: RawVkCommandBuffer, first_scissor: u32, scissor_count: u32, scissors: *mut RawVkRect2D) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetScissor\"");
 }
 unsafe extern fn null_device_vkCmdSetLineWidth(command_buffer: RawVkCommandBuffer, line_width: f32) {
@@ -2038,13 +2038,13 @@ unsafe extern fn null_device_vkCmdSetStencilWriteMask(command_buffer: RawVkComma
 unsafe extern fn null_device_vkCmdSetStencilReference(command_buffer: RawVkCommandBuffer, face_mask: RawVkStencilFaceFlags, reference: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetStencilReference\"");
 }
-unsafe extern fn null_device_vkCmdBindDescriptorSets(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, first_set: u32, descriptor_set_count: u32, descriptor_sets: *const RawVkDescriptorSet, dynamic_offset_count: u32, dynamic_offsets: *const u32) {
+unsafe extern fn null_device_vkCmdBindDescriptorSets(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, first_set: u32, descriptor_set_count: u32, descriptor_sets: *mut RawVkDescriptorSet, dynamic_offset_count: u32, dynamic_offsets: *mut u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBindDescriptorSets\"");
 }
 unsafe extern fn null_device_vkCmdBindIndexBuffer(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, index_type: RawVkIndexType) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBindIndexBuffer\"");
 }
-unsafe extern fn null_device_vkCmdBindVertexBuffers(command_buffer: RawVkCommandBuffer, first_binding: u32, binding_count: u32, buffers: *const RawVkBuffer, offsets: *const u64) {
+unsafe extern fn null_device_vkCmdBindVertexBuffers(command_buffer: RawVkCommandBuffer, first_binding: u32, binding_count: u32, buffers: *mut RawVkBuffer, offsets: *mut u64) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBindVertexBuffers\"");
 }
 unsafe extern fn null_device_vkCmdDraw(command_buffer: RawVkCommandBuffer, vertex_count: u32, instance_count: u32, first_vertex: u32, first_instance: u32) {
@@ -2065,37 +2065,37 @@ unsafe extern fn null_device_vkCmdDispatch(command_buffer: RawVkCommandBuffer, g
 unsafe extern fn null_device_vkCmdDispatchIndirect(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDispatchIndirect\"");
 }
-unsafe extern fn null_device_vkCmdCopyBuffer(command_buffer: RawVkCommandBuffer, src_buffer: RawVkBuffer, dst_buffer: RawVkBuffer, region_count: u32, regions: *const RawVkBufferCopy) {
+unsafe extern fn null_device_vkCmdCopyBuffer(command_buffer: RawVkCommandBuffer, src_buffer: RawVkBuffer, dst_buffer: RawVkBuffer, region_count: u32, regions: *mut RawVkBufferCopy) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdCopyBuffer\"");
 }
-unsafe extern fn null_device_vkCmdCopyImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *const RawVkImageCopy) {
+unsafe extern fn null_device_vkCmdCopyImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *mut RawVkImageCopy) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdCopyImage\"");
 }
-unsafe extern fn null_device_vkCmdBlitImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *const RawVkImageBlit, filter: RawVkFilter) {
+unsafe extern fn null_device_vkCmdBlitImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *mut RawVkImageBlit, filter: RawVkFilter) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBlitImage\"");
 }
-unsafe extern fn null_device_vkCmdCopyBufferToImage(command_buffer: RawVkCommandBuffer, src_buffer: RawVkBuffer, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *const RawVkBufferImageCopy) {
+unsafe extern fn null_device_vkCmdCopyBufferToImage(command_buffer: RawVkCommandBuffer, src_buffer: RawVkBuffer, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *mut RawVkBufferImageCopy) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdCopyBufferToImage\"");
 }
-unsafe extern fn null_device_vkCmdCopyImageToBuffer(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_buffer: RawVkBuffer, region_count: u32, regions: *const RawVkBufferImageCopy) {
+unsafe extern fn null_device_vkCmdCopyImageToBuffer(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_buffer: RawVkBuffer, region_count: u32, regions: *mut RawVkBufferImageCopy) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdCopyImageToBuffer\"");
 }
-unsafe extern fn null_device_vkCmdUpdateBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, data_size: u64, data: *const c_void) {
+unsafe extern fn null_device_vkCmdUpdateBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, data_size: u64, data: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdUpdateBuffer\"");
 }
 unsafe extern fn null_device_vkCmdFillBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, size: u64, data: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdFillBuffer\"");
 }
-unsafe extern fn null_device_vkCmdClearColorImage(command_buffer: RawVkCommandBuffer, image: RawVkImage, image_layout: RawVkImageLayout, color: *const RawVkClearColorValue, range_count: u32, ranges: *const RawVkImageSubresourceRange) {
+unsafe extern fn null_device_vkCmdClearColorImage(command_buffer: RawVkCommandBuffer, image: RawVkImage, image_layout: RawVkImageLayout, color: *mut RawVkClearColorValue, range_count: u32, ranges: *mut RawVkImageSubresourceRange) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdClearColorImage\"");
 }
-unsafe extern fn null_device_vkCmdClearDepthStencilImage(command_buffer: RawVkCommandBuffer, image: RawVkImage, image_layout: RawVkImageLayout, depth_stencil: *const RawVkClearDepthStencilValue, range_count: u32, ranges: *const RawVkImageSubresourceRange) {
+unsafe extern fn null_device_vkCmdClearDepthStencilImage(command_buffer: RawVkCommandBuffer, image: RawVkImage, image_layout: RawVkImageLayout, depth_stencil: *mut RawVkClearDepthStencilValue, range_count: u32, ranges: *mut RawVkImageSubresourceRange) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdClearDepthStencilImage\"");
 }
-unsafe extern fn null_device_vkCmdClearAttachments(command_buffer: RawVkCommandBuffer, attachment_count: u32, attachments: *const RawVkClearAttachment, rect_count: u32, rects: *const RawVkClearRect) {
+unsafe extern fn null_device_vkCmdClearAttachments(command_buffer: RawVkCommandBuffer, attachment_count: u32, attachments: *mut RawVkClearAttachment, rect_count: u32, rects: *mut RawVkClearRect) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdClearAttachments\"");
 }
-unsafe extern fn null_device_vkCmdResolveImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *const RawVkImageResolve) {
+unsafe extern fn null_device_vkCmdResolveImage(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_image: RawVkImage, dst_image_layout: RawVkImageLayout, region_count: u32, regions: *mut RawVkImageResolve) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdResolveImage\"");
 }
 unsafe extern fn null_device_vkCmdSetEvent(command_buffer: RawVkCommandBuffer, event: RawVkEvent, stage_mask: RawVkPipelineStageFlags) {
@@ -2104,10 +2104,10 @@ unsafe extern fn null_device_vkCmdSetEvent(command_buffer: RawVkCommandBuffer, e
 unsafe extern fn null_device_vkCmdResetEvent(command_buffer: RawVkCommandBuffer, event: RawVkEvent, stage_mask: RawVkPipelineStageFlags) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdResetEvent\"");
 }
-unsafe extern fn null_device_vkCmdWaitEvents(command_buffer: RawVkCommandBuffer, event_count: u32, events: *const RawVkEvent, src_stage_mask: RawVkPipelineStageFlags, dst_stage_mask: RawVkPipelineStageFlags, memory_barrier_count: u32, memory_barriers: *const RawVkMemoryBarrier, buffer_memory_barrier_count: u32, buffer_memory_barriers: *const RawVkBufferMemoryBarrier, image_memory_barrier_count: u32, image_memory_barriers: *const RawVkImageMemoryBarrier) {
+unsafe extern fn null_device_vkCmdWaitEvents(command_buffer: RawVkCommandBuffer, event_count: u32, events: *mut RawVkEvent, src_stage_mask: RawVkPipelineStageFlags, dst_stage_mask: RawVkPipelineStageFlags, memory_barrier_count: u32, memory_barriers: *mut RawVkMemoryBarrier, buffer_memory_barrier_count: u32, buffer_memory_barriers: *mut RawVkBufferMemoryBarrier, image_memory_barrier_count: u32, image_memory_barriers: *mut RawVkImageMemoryBarrier) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdWaitEvents\"");
 }
-unsafe extern fn null_device_vkCmdPipelineBarrier(command_buffer: RawVkCommandBuffer, src_stage_mask: RawVkPipelineStageFlags, dst_stage_mask: RawVkPipelineStageFlags, dependency_flags: RawVkDependencyFlags, memory_barrier_count: u32, memory_barriers: *const RawVkMemoryBarrier, buffer_memory_barrier_count: u32, buffer_memory_barriers: *const RawVkBufferMemoryBarrier, image_memory_barrier_count: u32, image_memory_barriers: *const RawVkImageMemoryBarrier) {
+unsafe extern fn null_device_vkCmdPipelineBarrier(command_buffer: RawVkCommandBuffer, src_stage_mask: RawVkPipelineStageFlags, dst_stage_mask: RawVkPipelineStageFlags, dependency_flags: RawVkDependencyFlags, memory_barrier_count: u32, memory_barriers: *mut RawVkMemoryBarrier, buffer_memory_barrier_count: u32, buffer_memory_barriers: *mut RawVkBufferMemoryBarrier, image_memory_barrier_count: u32, image_memory_barriers: *mut RawVkImageMemoryBarrier) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdPipelineBarrier\"");
 }
 unsafe extern fn null_device_vkCmdBeginQuery(command_buffer: RawVkCommandBuffer, query_pool: RawVkQueryPool, query: u32, flags: RawVkQueryControlFlags) {
@@ -2125,10 +2125,10 @@ unsafe extern fn null_device_vkCmdWriteTimestamp(command_buffer: RawVkCommandBuf
 unsafe extern fn null_device_vkCmdCopyQueryPoolResults(command_buffer: RawVkCommandBuffer, query_pool: RawVkQueryPool, first_query: u32, query_count: u32, dst_buffer: RawVkBuffer, dst_offset: u64, stride: u64, flags: RawVkQueryResultFlags) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdCopyQueryPoolResults\"");
 }
-unsafe extern fn null_device_vkCmdPushConstants(command_buffer: RawVkCommandBuffer, layout: RawVkPipelineLayout, stage_flags: RawVkShaderStageFlags, offset: u32, size: u32, values: *const c_void) {
+unsafe extern fn null_device_vkCmdPushConstants(command_buffer: RawVkCommandBuffer, layout: RawVkPipelineLayout, stage_flags: RawVkShaderStageFlags, offset: u32, size: u32, values: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdPushConstants\"");
 }
-unsafe extern fn null_device_vkCmdBeginRenderPass(command_buffer: RawVkCommandBuffer, render_pass_begin: *const RawVkRenderPassBeginInfo, contents: RawVkSubpassContents) {
+unsafe extern fn null_device_vkCmdBeginRenderPass(command_buffer: RawVkCommandBuffer, render_pass_begin: *mut RawVkRenderPassBeginInfo, contents: RawVkSubpassContents) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBeginRenderPass\"");
 }
 unsafe extern fn null_device_vkCmdNextSubpass(command_buffer: RawVkCommandBuffer, contents: RawVkSubpassContents) {
@@ -2137,16 +2137,16 @@ unsafe extern fn null_device_vkCmdNextSubpass(command_buffer: RawVkCommandBuffer
 unsafe extern fn null_device_vkCmdEndRenderPass(command_buffer: RawVkCommandBuffer) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdEndRenderPass\"");
 }
-unsafe extern fn null_device_vkCmdExecuteCommands(command_buffer: RawVkCommandBuffer, command_buffer_count: u32, command_buffers: *const RawVkCommandBuffer) {
+unsafe extern fn null_device_vkCmdExecuteCommands(command_buffer: RawVkCommandBuffer, command_buffer_count: u32, command_buffers: *mut RawVkCommandBuffer) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdExecuteCommands\"");
 }
-unsafe extern fn null_device_vkBindBufferMemory2(device: RawVkDevice, bind_info_count: u32, bind_infos: *const RawVkBindBufferMemoryInfo) -> RawVkResult {
+unsafe extern fn null_device_vkBindBufferMemory2(device: RawVkDevice, bind_info_count: u32, bind_infos: *mut RawVkBindBufferMemoryInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkBindBufferMemory2\"");
 }
-unsafe extern fn null_device_vkBindImageMemory2(device: RawVkDevice, bind_info_count: u32, bind_infos: *const RawVkBindImageMemoryInfo) -> RawVkResult {
+unsafe extern fn null_device_vkBindImageMemory2(device: RawVkDevice, bind_info_count: u32, bind_infos: *mut RawVkBindImageMemoryInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkBindImageMemory2\"");
 }
-unsafe extern fn null_device_vkGetDeviceGroupPeerMemoryFeatures(device: RawVkDevice, heap_index: u32, local_device_index: u32, remote_device_index: u32, peer_memory_features: *const RawVkPeerMemoryFeatureFlags) {
+unsafe extern fn null_device_vkGetDeviceGroupPeerMemoryFeatures(device: RawVkDevice, heap_index: u32, local_device_index: u32, remote_device_index: u32, peer_memory_features: *mut RawVkPeerMemoryFeatureFlags) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDeviceGroupPeerMemoryFeatures\"");
 }
 unsafe extern fn null_device_vkCmdSetDeviceMask(command_buffer: RawVkCommandBuffer, device_mask: u32) {
@@ -2155,193 +2155,193 @@ unsafe extern fn null_device_vkCmdSetDeviceMask(command_buffer: RawVkCommandBuff
 unsafe extern fn null_device_vkCmdDispatchBase(command_buffer: RawVkCommandBuffer, base_group_x: u32, base_group_y: u32, base_group_z: u32, group_count_x: u32, group_count_y: u32, group_count_z: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDispatchBase\"");
 }
-unsafe extern fn null_device_vkEnumeratePhysicalDeviceGroups(instance: RawVkInstance, physical_device_group_count: *const u32, physical_device_group_properties: *const RawVkPhysicalDeviceGroupProperties) -> RawVkResult {
+unsafe extern fn null_device_vkEnumeratePhysicalDeviceGroups(instance: RawVkInstance, physical_device_group_count: *mut u32, physical_device_group_properties: *mut RawVkPhysicalDeviceGroupProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkEnumeratePhysicalDeviceGroups\"");
 }
-unsafe extern fn null_device_vkGetImageMemoryRequirements2(device: RawVkDevice, info: *const RawVkImageMemoryRequirementsInfo2, memory_requirements: *const RawVkMemoryRequirements2) {
+unsafe extern fn null_device_vkGetImageMemoryRequirements2(device: RawVkDevice, info: *mut RawVkImageMemoryRequirementsInfo2, memory_requirements: *mut RawVkMemoryRequirements2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetImageMemoryRequirements2\"");
 }
-unsafe extern fn null_device_vkGetBufferMemoryRequirements2(device: RawVkDevice, info: *const RawVkBufferMemoryRequirementsInfo2, memory_requirements: *const RawVkMemoryRequirements2) {
+unsafe extern fn null_device_vkGetBufferMemoryRequirements2(device: RawVkDevice, info: *mut RawVkBufferMemoryRequirementsInfo2, memory_requirements: *mut RawVkMemoryRequirements2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetBufferMemoryRequirements2\"");
 }
-unsafe extern fn null_device_vkGetImageSparseMemoryRequirements2(device: RawVkDevice, info: *const RawVkImageSparseMemoryRequirementsInfo2, sparse_memory_requirement_count: *const u32, sparse_memory_requirements: *const RawVkSparseImageMemoryRequirements2) {
+unsafe extern fn null_device_vkGetImageSparseMemoryRequirements2(device: RawVkDevice, info: *mut RawVkImageSparseMemoryRequirementsInfo2, sparse_memory_requirement_count: *mut u32, sparse_memory_requirements: *mut RawVkSparseImageMemoryRequirements2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetImageSparseMemoryRequirements2\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceFeatures2(physical_device: RawVkPhysicalDevice, features: *const RawVkPhysicalDeviceFeatures2) {
+unsafe extern fn null_device_vkGetPhysicalDeviceFeatures2(physical_device: RawVkPhysicalDevice, features: *mut RawVkPhysicalDeviceFeatures2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceFeatures2\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceProperties2(physical_device: RawVkPhysicalDevice, properties: *const RawVkPhysicalDeviceProperties2) {
+unsafe extern fn null_device_vkGetPhysicalDeviceProperties2(physical_device: RawVkPhysicalDevice, properties: *mut RawVkPhysicalDeviceProperties2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceProperties2\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceFormatProperties2(physical_device: RawVkPhysicalDevice, format: RawVkFormat, format_properties: *const RawVkFormatProperties2) {
+unsafe extern fn null_device_vkGetPhysicalDeviceFormatProperties2(physical_device: RawVkPhysicalDevice, format: RawVkFormat, format_properties: *mut RawVkFormatProperties2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceFormatProperties2\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceImageFormatProperties2(physical_device: RawVkPhysicalDevice, image_format_info: *const RawVkPhysicalDeviceImageFormatInfo2, image_format_properties: *const RawVkImageFormatProperties2) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceImageFormatProperties2(physical_device: RawVkPhysicalDevice, image_format_info: *mut RawVkPhysicalDeviceImageFormatInfo2, image_format_properties: *mut RawVkImageFormatProperties2) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceImageFormatProperties2\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceQueueFamilyProperties2(physical_device: RawVkPhysicalDevice, queue_family_property_count: *const u32, queue_family_properties: *const RawVkQueueFamilyProperties2) {
+unsafe extern fn null_device_vkGetPhysicalDeviceQueueFamilyProperties2(physical_device: RawVkPhysicalDevice, queue_family_property_count: *mut u32, queue_family_properties: *mut RawVkQueueFamilyProperties2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceQueueFamilyProperties2\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceMemoryProperties2(physical_device: RawVkPhysicalDevice, memory_properties: *const RawVkPhysicalDeviceMemoryProperties2) {
+unsafe extern fn null_device_vkGetPhysicalDeviceMemoryProperties2(physical_device: RawVkPhysicalDevice, memory_properties: *mut RawVkPhysicalDeviceMemoryProperties2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceMemoryProperties2\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSparseImageFormatProperties2(physical_device: RawVkPhysicalDevice, format_info: *const RawVkPhysicalDeviceSparseImageFormatInfo2, property_count: *const u32, properties: *const RawVkSparseImageFormatProperties2) {
+unsafe extern fn null_device_vkGetPhysicalDeviceSparseImageFormatProperties2(physical_device: RawVkPhysicalDevice, format_info: *mut RawVkPhysicalDeviceSparseImageFormatInfo2, property_count: *mut u32, properties: *mut RawVkSparseImageFormatProperties2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSparseImageFormatProperties2\"");
 }
 unsafe extern fn null_device_vkTrimCommandPool(device: RawVkDevice, command_pool: RawVkCommandPool, flags: RawVkCommandPoolTrimFlags) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkTrimCommandPool\"");
 }
-unsafe extern fn null_device_vkGetDeviceQueue2(device: RawVkDevice, queue_info: *const RawVkDeviceQueueInfo2, queue: *const RawVkQueue) {
+unsafe extern fn null_device_vkGetDeviceQueue2(device: RawVkDevice, queue_info: *mut RawVkDeviceQueueInfo2, queue: *mut RawVkQueue) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDeviceQueue2\"");
 }
-unsafe extern fn null_device_vkCreateSamplerYcbcrConversion(device: RawVkDevice, create_info: *const RawVkSamplerYcbcrConversionCreateInfo, allocator: *const c_void, ycbcr_conversion: *const RawVkSamplerYcbcrConversion) -> RawVkResult {
+unsafe extern fn null_device_vkCreateSamplerYcbcrConversion(device: RawVkDevice, create_info: *mut RawVkSamplerYcbcrConversionCreateInfo, allocator: *const c_void, ycbcr_conversion: *mut RawVkSamplerYcbcrConversion) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateSamplerYcbcrConversion\"");
 }
 unsafe extern fn null_device_vkDestroySamplerYcbcrConversion(device: RawVkDevice, ycbcr_conversion: RawVkSamplerYcbcrConversion, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroySamplerYcbcrConversion\"");
 }
-unsafe extern fn null_device_vkCreateDescriptorUpdateTemplate(device: RawVkDevice, create_info: *const RawVkDescriptorUpdateTemplateCreateInfo, allocator: *const c_void, descriptor_update_template: *const RawVkDescriptorUpdateTemplate) -> RawVkResult {
+unsafe extern fn null_device_vkCreateDescriptorUpdateTemplate(device: RawVkDevice, create_info: *mut RawVkDescriptorUpdateTemplateCreateInfo, allocator: *const c_void, descriptor_update_template: *mut RawVkDescriptorUpdateTemplate) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDescriptorUpdateTemplate\"");
 }
 unsafe extern fn null_device_vkDestroyDescriptorUpdateTemplate(device: RawVkDevice, descriptor_update_template: RawVkDescriptorUpdateTemplate, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyDescriptorUpdateTemplate\"");
 }
-unsafe extern fn null_device_vkUpdateDescriptorSetWithTemplate(device: RawVkDevice, descriptor_set: RawVkDescriptorSet, descriptor_update_template: RawVkDescriptorUpdateTemplate, data: *const c_void) {
+unsafe extern fn null_device_vkUpdateDescriptorSetWithTemplate(device: RawVkDevice, descriptor_set: RawVkDescriptorSet, descriptor_update_template: RawVkDescriptorUpdateTemplate, data: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkUpdateDescriptorSetWithTemplate\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceExternalBufferProperties(physical_device: RawVkPhysicalDevice, external_buffer_info: *const RawVkPhysicalDeviceExternalBufferInfo, external_buffer_properties: *const RawVkExternalBufferProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceExternalBufferProperties(physical_device: RawVkPhysicalDevice, external_buffer_info: *mut RawVkPhysicalDeviceExternalBufferInfo, external_buffer_properties: *mut RawVkExternalBufferProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceExternalBufferProperties\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceExternalFenceProperties(physical_device: RawVkPhysicalDevice, external_fence_info: *const RawVkPhysicalDeviceExternalFenceInfo, external_fence_properties: *const RawVkExternalFenceProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceExternalFenceProperties(physical_device: RawVkPhysicalDevice, external_fence_info: *mut RawVkPhysicalDeviceExternalFenceInfo, external_fence_properties: *mut RawVkExternalFenceProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceExternalFenceProperties\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceExternalSemaphoreProperties(physical_device: RawVkPhysicalDevice, external_semaphore_info: *const RawVkPhysicalDeviceExternalSemaphoreInfo, external_semaphore_properties: *const RawVkExternalSemaphoreProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceExternalSemaphoreProperties(physical_device: RawVkPhysicalDevice, external_semaphore_info: *mut RawVkPhysicalDeviceExternalSemaphoreInfo, external_semaphore_properties: *mut RawVkExternalSemaphoreProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceExternalSemaphoreProperties\"");
 }
-unsafe extern fn null_device_vkGetDescriptorSetLayoutSupport(device: RawVkDevice, create_info: *const RawVkDescriptorSetLayoutCreateInfo, support: *const RawVkDescriptorSetLayoutSupport) {
+unsafe extern fn null_device_vkGetDescriptorSetLayoutSupport(device: RawVkDevice, create_info: *mut RawVkDescriptorSetLayoutCreateInfo, support: *mut RawVkDescriptorSetLayoutSupport) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDescriptorSetLayoutSupport\"");
 }
 unsafe extern fn null_device_vkDestroySurfaceKHR(instance: RawVkInstance, surface: khr::RawVkSurface, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroySurfaceKHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: khr::RawVkSurface, supported: *const u32) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceSupportKHR(physical_device: RawVkPhysicalDevice, queue_family_index: u32, surface: khr::RawVkSurface, supported: *mut u32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceSupportKHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_capabilities: *const khr::RawVkSurfaceCapabilities) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_capabilities: *mut khr::RawVkSurfaceCapabilities) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceCapabilitiesKHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_format_count: *const u32, surface_formats: *const khr::RawVkSurfaceFormat) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_format_count: *mut u32, surface_formats: *mut khr::RawVkSurfaceFormat) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceFormatsKHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, present_mode_count: *const u32, present_modes: *const khr::RawVkPresentMode) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, present_mode_count: *mut u32, present_modes: *mut khr::RawVkPresentMode) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfacePresentModesKHR\"");
 }
-unsafe extern fn null_device_vkCreateSwapchainKHR(device: RawVkDevice, create_info: *const khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchain: *const khr::RawVkSwapchain) -> RawVkResult {
+unsafe extern fn null_device_vkCreateSwapchainKHR(device: RawVkDevice, create_info: *mut khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchain: *mut khr::RawVkSwapchain) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateSwapchainKHR\"");
 }
 unsafe extern fn null_device_vkDestroySwapchainKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroySwapchainKHR\"");
 }
-unsafe extern fn null_device_vkGetSwapchainImagesKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, swapchain_image_count: *const u32, swapchain_images: *const RawVkImage) -> RawVkResult {
+unsafe extern fn null_device_vkGetSwapchainImagesKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, swapchain_image_count: *mut u32, swapchain_images: *mut RawVkImage) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetSwapchainImagesKHR\"");
 }
-unsafe extern fn null_device_vkAcquireNextImageKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, timeout: u64, semaphore: RawVkSemaphore, fence: RawVkFence, image_index: *const u32) -> RawVkResult {
+unsafe extern fn null_device_vkAcquireNextImageKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain, timeout: u64, semaphore: RawVkSemaphore, fence: RawVkFence, image_index: *mut u32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkAcquireNextImageKHR\"");
 }
-unsafe extern fn null_device_vkQueuePresentKHR(queue: RawVkQueue, present_info: *const khr::RawVkPresentInfo) -> RawVkResult {
+unsafe extern fn null_device_vkQueuePresentKHR(queue: RawVkQueue, present_info: *mut khr::RawVkPresentInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkQueuePresentKHR\"");
 }
-unsafe extern fn null_device_vkGetDeviceGroupPresentCapabilitiesKHR(device: RawVkDevice, device_group_present_capabilities: *const khr::RawVkDeviceGroupPresentCapabilities) -> RawVkResult {
+unsafe extern fn null_device_vkGetDeviceGroupPresentCapabilitiesKHR(device: RawVkDevice, device_group_present_capabilities: *mut khr::RawVkDeviceGroupPresentCapabilities) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDeviceGroupPresentCapabilitiesKHR\"");
 }
-unsafe extern fn null_device_vkGetDeviceGroupSurfacePresentModesKHR(device: RawVkDevice, surface: khr::RawVkSurface, modes: *const khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult {
+unsafe extern fn null_device_vkGetDeviceGroupSurfacePresentModesKHR(device: RawVkDevice, surface: khr::RawVkSurface, modes: *mut khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDeviceGroupSurfacePresentModesKHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDevicePresentRectanglesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, rect_count: *const u32, rects: *const RawVkRect2D) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDevicePresentRectanglesKHR(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, rect_count: *mut u32, rects: *mut RawVkRect2D) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDevicePresentRectanglesKHR\"");
 }
-unsafe extern fn null_device_vkAcquireNextImage2KHR(device: RawVkDevice, acquire_info: *const khr::RawVkAcquireNextImageInfo, image_index: *const u32) -> RawVkResult {
+unsafe extern fn null_device_vkAcquireNextImage2KHR(device: RawVkDevice, acquire_info: *mut khr::RawVkAcquireNextImageInfo, image_index: *mut u32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkAcquireNextImage2KHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceDisplayPropertiesKHR(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const khr::RawVkDisplayProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceDisplayPropertiesKHR(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut khr::RawVkDisplayProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceDisplayPropertiesKHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceDisplayPlanePropertiesKHR(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const khr::RawVkDisplayPlaneProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceDisplayPlanePropertiesKHR(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut khr::RawVkDisplayPlaneProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceDisplayPlanePropertiesKHR\"");
 }
-unsafe extern fn null_device_vkGetDisplayPlaneSupportedDisplaysKHR(physical_device: RawVkPhysicalDevice, plane_index: u32, display_count: *const u32, displays: *const khr::RawVkDisplay) -> RawVkResult {
+unsafe extern fn null_device_vkGetDisplayPlaneSupportedDisplaysKHR(physical_device: RawVkPhysicalDevice, plane_index: u32, display_count: *mut u32, displays: *mut khr::RawVkDisplay) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDisplayPlaneSupportedDisplaysKHR\"");
 }
-unsafe extern fn null_device_vkGetDisplayModePropertiesKHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, property_count: *const u32, properties: *const khr::RawVkDisplayModeProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetDisplayModePropertiesKHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, property_count: *mut u32, properties: *mut khr::RawVkDisplayModeProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDisplayModePropertiesKHR\"");
 }
-unsafe extern fn null_device_vkCreateDisplayModeKHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, create_info: *const khr::RawVkDisplayModeCreateInfo, allocator: *const c_void, mode: *const khr::RawVkDisplayMode) -> RawVkResult {
+unsafe extern fn null_device_vkCreateDisplayModeKHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, create_info: *mut khr::RawVkDisplayModeCreateInfo, allocator: *const c_void, mode: *mut khr::RawVkDisplayMode) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDisplayModeKHR\"");
 }
-unsafe extern fn null_device_vkGetDisplayPlaneCapabilitiesKHR(physical_device: RawVkPhysicalDevice, mode: khr::RawVkDisplayMode, plane_index: u32, capabilities: *const khr::RawVkDisplayPlaneCapabilities) -> RawVkResult {
+unsafe extern fn null_device_vkGetDisplayPlaneCapabilitiesKHR(physical_device: RawVkPhysicalDevice, mode: khr::RawVkDisplayMode, plane_index: u32, capabilities: *mut khr::RawVkDisplayPlaneCapabilities) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDisplayPlaneCapabilitiesKHR\"");
 }
-unsafe extern fn null_device_vkCreateDisplayPlaneSurfaceKHR(instance: RawVkInstance, create_info: *const khr::RawVkDisplaySurfaceCreateInfo, allocator: *const c_void, surface: *const khr::RawVkSurface) -> RawVkResult {
+unsafe extern fn null_device_vkCreateDisplayPlaneSurfaceKHR(instance: RawVkInstance, create_info: *mut khr::RawVkDisplaySurfaceCreateInfo, allocator: *const c_void, surface: *mut khr::RawVkSurface) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDisplayPlaneSurfaceKHR\"");
 }
-unsafe extern fn null_device_vkCreateSharedSwapchainsKHR(device: RawVkDevice, swapchain_count: u32, create_infos: *const khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchains: *const khr::RawVkSwapchain) -> RawVkResult {
+unsafe extern fn null_device_vkCreateSharedSwapchainsKHR(device: RawVkDevice, swapchain_count: u32, create_infos: *mut khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchains: *mut khr::RawVkSwapchain) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateSharedSwapchainsKHR\"");
 }
-unsafe extern fn null_device_vkGetMemoryFdKHR(device: RawVkDevice, get_fd_info: *const khr::RawVkMemoryGetFdInfo, fd: *const i32) -> RawVkResult {
+unsafe extern fn null_device_vkGetMemoryFdKHR(device: RawVkDevice, get_fd_info: *mut khr::RawVkMemoryGetFdInfo, fd: *mut i32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetMemoryFdKHR\"");
 }
-unsafe extern fn null_device_vkGetMemoryFdPropertiesKHR(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, fd: i32, memory_fd_properties: *const khr::RawVkMemoryFdProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetMemoryFdPropertiesKHR(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, fd: i32, memory_fd_properties: *mut khr::RawVkMemoryFdProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetMemoryFdPropertiesKHR\"");
 }
-unsafe extern fn null_device_vkImportSemaphoreFdKHR(device: RawVkDevice, import_semaphore_fd_info: *const khr::RawVkImportSemaphoreFdInfo) -> RawVkResult {
+unsafe extern fn null_device_vkImportSemaphoreFdKHR(device: RawVkDevice, import_semaphore_fd_info: *mut khr::RawVkImportSemaphoreFdInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkImportSemaphoreFdKHR\"");
 }
-unsafe extern fn null_device_vkGetSemaphoreFdKHR(device: RawVkDevice, get_fd_info: *const khr::RawVkSemaphoreGetFdInfo, fd: *const i32) -> RawVkResult {
+unsafe extern fn null_device_vkGetSemaphoreFdKHR(device: RawVkDevice, get_fd_info: *mut khr::RawVkSemaphoreGetFdInfo, fd: *mut i32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetSemaphoreFdKHR\"");
 }
-unsafe extern fn null_device_vkCmdPushDescriptorSetKHR(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, set: u32, descriptor_write_count: u32, descriptor_writes: *const RawVkWriteDescriptorSet) {
+unsafe extern fn null_device_vkCmdPushDescriptorSetKHR(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, set: u32, descriptor_write_count: u32, descriptor_writes: *mut RawVkWriteDescriptorSet) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdPushDescriptorSetKHR\"");
 }
-unsafe extern fn null_device_vkCmdPushDescriptorSetWithTemplateKHR(command_buffer: RawVkCommandBuffer, descriptor_update_template: RawVkDescriptorUpdateTemplate, layout: RawVkPipelineLayout, set: u32, data: *const c_void) {
+unsafe extern fn null_device_vkCmdPushDescriptorSetWithTemplateKHR(command_buffer: RawVkCommandBuffer, descriptor_update_template: RawVkDescriptorUpdateTemplate, layout: RawVkPipelineLayout, set: u32, data: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdPushDescriptorSetWithTemplateKHR\"");
 }
-unsafe extern fn null_device_vkCreateRenderPass2KHR(device: RawVkDevice, create_info: *const khr::RawVkRenderPassCreateInfo2, allocator: *const c_void, render_pass: *const RawVkRenderPass) -> RawVkResult {
+unsafe extern fn null_device_vkCreateRenderPass2KHR(device: RawVkDevice, create_info: *mut khr::RawVkRenderPassCreateInfo2, allocator: *const c_void, render_pass: *mut RawVkRenderPass) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateRenderPass2KHR\"");
 }
-unsafe extern fn null_device_vkCmdBeginRenderPass2KHR(command_buffer: RawVkCommandBuffer, render_pass_begin: *const RawVkRenderPassBeginInfo, subpass_begin_info: *const khr::RawVkSubpassBeginInfo) {
+unsafe extern fn null_device_vkCmdBeginRenderPass2KHR(command_buffer: RawVkCommandBuffer, render_pass_begin: *mut RawVkRenderPassBeginInfo, subpass_begin_info: *mut khr::RawVkSubpassBeginInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBeginRenderPass2KHR\"");
 }
-unsafe extern fn null_device_vkCmdNextSubpass2KHR(command_buffer: RawVkCommandBuffer, subpass_begin_info: *const khr::RawVkSubpassBeginInfo, subpass_end_info: *const khr::RawVkSubpassEndInfo) {
+unsafe extern fn null_device_vkCmdNextSubpass2KHR(command_buffer: RawVkCommandBuffer, subpass_begin_info: *mut khr::RawVkSubpassBeginInfo, subpass_end_info: *mut khr::RawVkSubpassEndInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdNextSubpass2KHR\"");
 }
-unsafe extern fn null_device_vkCmdEndRenderPass2KHR(command_buffer: RawVkCommandBuffer, subpass_end_info: *const khr::RawVkSubpassEndInfo) {
+unsafe extern fn null_device_vkCmdEndRenderPass2KHR(command_buffer: RawVkCommandBuffer, subpass_end_info: *mut khr::RawVkSubpassEndInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdEndRenderPass2KHR\"");
 }
 unsafe extern fn null_device_vkGetSwapchainStatusKHR(device: RawVkDevice, swapchain: khr::RawVkSwapchain) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetSwapchainStatusKHR\"");
 }
-unsafe extern fn null_device_vkImportFenceFdKHR(device: RawVkDevice, import_fence_fd_info: *const khr::RawVkImportFenceFdInfo) -> RawVkResult {
+unsafe extern fn null_device_vkImportFenceFdKHR(device: RawVkDevice, import_fence_fd_info: *mut khr::RawVkImportFenceFdInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkImportFenceFdKHR\"");
 }
-unsafe extern fn null_device_vkGetFenceFdKHR(device: RawVkDevice, get_fd_info: *const khr::RawVkFenceGetFdInfo, fd: *const i32) -> RawVkResult {
+unsafe extern fn null_device_vkGetFenceFdKHR(device: RawVkDevice, get_fd_info: *mut khr::RawVkFenceGetFdInfo, fd: *mut i32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetFenceFdKHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceCapabilities2KHR(physical_device: RawVkPhysicalDevice, surface_info: *const khr::RawVkPhysicalDeviceSurfaceInfo2, surface_capabilities: *const khr::RawVkSurfaceCapabilities2) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceCapabilities2KHR(physical_device: RawVkPhysicalDevice, surface_info: *mut khr::RawVkPhysicalDeviceSurfaceInfo2, surface_capabilities: *mut khr::RawVkSurfaceCapabilities2) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceCapabilities2KHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceFormats2KHR(physical_device: RawVkPhysicalDevice, surface_info: *const khr::RawVkPhysicalDeviceSurfaceInfo2, surface_format_count: *const u32, surface_formats: *const khr::RawVkSurfaceFormat2) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceFormats2KHR(physical_device: RawVkPhysicalDevice, surface_info: *mut khr::RawVkPhysicalDeviceSurfaceInfo2, surface_format_count: *mut u32, surface_formats: *mut khr::RawVkSurfaceFormat2) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceFormats2KHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceDisplayProperties2KHR(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const khr::RawVkDisplayProperties2) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceDisplayProperties2KHR(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut khr::RawVkDisplayProperties2) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceDisplayProperties2KHR\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceDisplayPlaneProperties2KHR(physical_device: RawVkPhysicalDevice, property_count: *const u32, properties: *const khr::RawVkDisplayPlaneProperties2) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceDisplayPlaneProperties2KHR(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut khr::RawVkDisplayPlaneProperties2) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceDisplayPlaneProperties2KHR\"");
 }
-unsafe extern fn null_device_vkGetDisplayModeProperties2KHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, property_count: *const u32, properties: *const khr::RawVkDisplayModeProperties2) -> RawVkResult {
+unsafe extern fn null_device_vkGetDisplayModeProperties2KHR(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay, property_count: *mut u32, properties: *mut khr::RawVkDisplayModeProperties2) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDisplayModeProperties2KHR\"");
 }
-unsafe extern fn null_device_vkGetDisplayPlaneCapabilities2KHR(physical_device: RawVkPhysicalDevice, display_plane_info: *const khr::RawVkDisplayPlaneInfo2, capabilities: *const khr::RawVkDisplayPlaneCapabilities2) -> RawVkResult {
+unsafe extern fn null_device_vkGetDisplayPlaneCapabilities2KHR(physical_device: RawVkPhysicalDevice, display_plane_info: *mut khr::RawVkDisplayPlaneInfo2, capabilities: *mut khr::RawVkDisplayPlaneCapabilities2) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDisplayPlaneCapabilities2KHR\"");
 }
 unsafe extern fn null_device_vkCmdDrawIndirectCountKHR(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
@@ -2350,37 +2350,37 @@ unsafe extern fn null_device_vkCmdDrawIndirectCountKHR(command_buffer: RawVkComm
 unsafe extern fn null_device_vkCmdDrawIndexedIndirectCountKHR(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDrawIndexedIndirectCountKHR\"");
 }
-unsafe extern fn null_device_vkCreateDebugReportCallbackEXT(instance: RawVkInstance, create_info: *const ext::RawVkDebugReportCallbackCreateInfo, allocator: *const c_void, callback: *const ext::RawVkDebugReportCallback) -> RawVkResult {
+unsafe extern fn null_device_vkCreateDebugReportCallbackEXT(instance: RawVkInstance, create_info: *mut ext::RawVkDebugReportCallbackCreateInfo, allocator: *const c_void, callback: *mut ext::RawVkDebugReportCallback) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDebugReportCallbackEXT\"");
 }
 unsafe extern fn null_device_vkDestroyDebugReportCallbackEXT(instance: RawVkInstance, callback: ext::RawVkDebugReportCallback, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyDebugReportCallbackEXT\"");
 }
-unsafe extern fn null_device_vkDebugReportMessageEXT(instance: RawVkInstance, flags: ext::RawVkDebugReportFlags, object_type: ext::RawVkDebugReportObjectType, object: u64, location: usize, message_code: i32, layer_prefix: *const c_char, message: *const c_char) {
+unsafe extern fn null_device_vkDebugReportMessageEXT(instance: RawVkInstance, flags: ext::RawVkDebugReportFlags, object_type: ext::RawVkDebugReportObjectType, object: u64, location: usize, message_code: i32, layer_prefix: *mut c_char, message: *mut c_char) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDebugReportMessageEXT\"");
 }
-unsafe extern fn null_device_vkDebugMarkerSetObjectTagEXT(device: RawVkDevice, tag_info: *const ext::RawVkDebugMarkerObjectTagInfo) -> RawVkResult {
+unsafe extern fn null_device_vkDebugMarkerSetObjectTagEXT(device: RawVkDevice, tag_info: *mut ext::RawVkDebugMarkerObjectTagInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDebugMarkerSetObjectTagEXT\"");
 }
-unsafe extern fn null_device_vkDebugMarkerSetObjectNameEXT(device: RawVkDevice, name_info: *const ext::RawVkDebugMarkerObjectNameInfo) -> RawVkResult {
+unsafe extern fn null_device_vkDebugMarkerSetObjectNameEXT(device: RawVkDevice, name_info: *mut ext::RawVkDebugMarkerObjectNameInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDebugMarkerSetObjectNameEXT\"");
 }
-unsafe extern fn null_device_vkCmdDebugMarkerBeginEXT(command_buffer: RawVkCommandBuffer, marker_info: *const ext::RawVkDebugMarkerMarkerInfo) {
+unsafe extern fn null_device_vkCmdDebugMarkerBeginEXT(command_buffer: RawVkCommandBuffer, marker_info: *mut ext::RawVkDebugMarkerMarkerInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDebugMarkerBeginEXT\"");
 }
 unsafe extern fn null_device_vkCmdDebugMarkerEndEXT(command_buffer: RawVkCommandBuffer) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDebugMarkerEndEXT\"");
 }
-unsafe extern fn null_device_vkCmdDebugMarkerInsertEXT(command_buffer: RawVkCommandBuffer, marker_info: *const ext::RawVkDebugMarkerMarkerInfo) {
+unsafe extern fn null_device_vkCmdDebugMarkerInsertEXT(command_buffer: RawVkCommandBuffer, marker_info: *mut ext::RawVkDebugMarkerMarkerInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDebugMarkerInsertEXT\"");
 }
-unsafe extern fn null_device_vkCmdBindTransformFeedbackBuffersEXT(command_buffer: RawVkCommandBuffer, first_binding: u32, binding_count: u32, buffers: *const RawVkBuffer, offsets: *const u64, sizes: *const u64) {
+unsafe extern fn null_device_vkCmdBindTransformFeedbackBuffersEXT(command_buffer: RawVkCommandBuffer, first_binding: u32, binding_count: u32, buffers: *mut RawVkBuffer, offsets: *mut u64, sizes: *mut u64) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBindTransformFeedbackBuffersEXT\"");
 }
-unsafe extern fn null_device_vkCmdBeginTransformFeedbackEXT(command_buffer: RawVkCommandBuffer, first_counter_buffer: u32, counter_buffer_count: u32, counter_buffers: *const RawVkBuffer, counter_buffer_offsets: *const u64) {
+unsafe extern fn null_device_vkCmdBeginTransformFeedbackEXT(command_buffer: RawVkCommandBuffer, first_counter_buffer: u32, counter_buffer_count: u32, counter_buffers: *mut RawVkBuffer, counter_buffer_offsets: *mut u64) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBeginTransformFeedbackEXT\"");
 }
-unsafe extern fn null_device_vkCmdEndTransformFeedbackEXT(command_buffer: RawVkCommandBuffer, first_counter_buffer: u32, counter_buffer_count: u32, counter_buffers: *const RawVkBuffer, counter_buffer_offsets: *const u64) {
+unsafe extern fn null_device_vkCmdEndTransformFeedbackEXT(command_buffer: RawVkCommandBuffer, first_counter_buffer: u32, counter_buffer_count: u32, counter_buffers: *mut RawVkBuffer, counter_buffer_offsets: *mut u64) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdEndTransformFeedbackEXT\"");
 }
 unsafe extern fn null_device_vkCmdBeginQueryIndexedEXT(command_buffer: RawVkCommandBuffer, query_pool: RawVkQueryPool, query: u32, flags: RawVkQueryControlFlags, index: u32) {
@@ -2398,154 +2398,154 @@ unsafe extern fn null_device_vkCmdDrawIndirectCountAMD(command_buffer: RawVkComm
 unsafe extern fn null_device_vkCmdDrawIndexedIndirectCountAMD(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDrawIndexedIndirectCountAMD\"");
 }
-unsafe extern fn null_device_vkGetShaderInfoAMD(device: RawVkDevice, pipeline: RawVkPipeline, shader_stage: RawVkShaderStageFlags, info_type: amd::RawVkShaderInfoType, info_size: *const usize, info: *const c_void) -> RawVkResult {
+unsafe extern fn null_device_vkGetShaderInfoAMD(device: RawVkDevice, pipeline: RawVkPipeline, shader_stage: RawVkShaderStageFlags, info_type: amd::RawVkShaderInfoType, info_size: *mut usize, info: *mut c_void) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetShaderInfoAMD\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceExternalImageFormatPropertiesNV(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, tiling: RawVkImageTiling, usage: RawVkImageUsageFlags, flags: RawVkImageCreateFlags, external_handle_type: nv::RawVkExternalMemoryHandleTypeFlags, external_image_format_properties: *const nv::RawVkExternalImageFormatProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceExternalImageFormatPropertiesNV(physical_device: RawVkPhysicalDevice, format: RawVkFormat, type_: RawVkImageType, tiling: RawVkImageTiling, usage: RawVkImageUsageFlags, flags: RawVkImageCreateFlags, external_handle_type: nv::RawVkExternalMemoryHandleTypeFlags, external_image_format_properties: *mut nv::RawVkExternalImageFormatProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceExternalImageFormatPropertiesNV\"");
 }
-unsafe extern fn null_device_vkCmdBeginConditionalRenderingEXT(command_buffer: RawVkCommandBuffer, conditional_rendering_begin: *const ext::RawVkConditionalRenderingBeginInfo) {
+unsafe extern fn null_device_vkCmdBeginConditionalRenderingEXT(command_buffer: RawVkCommandBuffer, conditional_rendering_begin: *mut ext::RawVkConditionalRenderingBeginInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBeginConditionalRenderingEXT\"");
 }
 unsafe extern fn null_device_vkCmdEndConditionalRenderingEXT(command_buffer: RawVkCommandBuffer) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdEndConditionalRenderingEXT\"");
 }
-unsafe extern fn null_device_vkCmdProcessCommandsNVX(command_buffer: RawVkCommandBuffer, process_commands_info: *const nvx::RawVkCmdProcessCommandsInfo) {
+unsafe extern fn null_device_vkCmdProcessCommandsNVX(command_buffer: RawVkCommandBuffer, process_commands_info: *mut nvx::RawVkCmdProcessCommandsInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdProcessCommandsNVX\"");
 }
-unsafe extern fn null_device_vkCmdReserveSpaceForCommandsNVX(command_buffer: RawVkCommandBuffer, reserve_space_info: *const nvx::RawVkCmdReserveSpaceForCommandsInfo) {
+unsafe extern fn null_device_vkCmdReserveSpaceForCommandsNVX(command_buffer: RawVkCommandBuffer, reserve_space_info: *mut nvx::RawVkCmdReserveSpaceForCommandsInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdReserveSpaceForCommandsNVX\"");
 }
-unsafe extern fn null_device_vkCreateIndirectCommandsLayoutNVX(device: RawVkDevice, create_info: *const nvx::RawVkIndirectCommandsLayoutCreateInfo, allocator: *const c_void, indirect_commands_layout: *const nvx::RawVkIndirectCommandsLayout) -> RawVkResult {
+unsafe extern fn null_device_vkCreateIndirectCommandsLayoutNVX(device: RawVkDevice, create_info: *mut nvx::RawVkIndirectCommandsLayoutCreateInfo, allocator: *const c_void, indirect_commands_layout: *mut nvx::RawVkIndirectCommandsLayout) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateIndirectCommandsLayoutNVX\"");
 }
 unsafe extern fn null_device_vkDestroyIndirectCommandsLayoutNVX(device: RawVkDevice, indirect_commands_layout: nvx::RawVkIndirectCommandsLayout, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyIndirectCommandsLayoutNVX\"");
 }
-unsafe extern fn null_device_vkCreateObjectTableNVX(device: RawVkDevice, create_info: *const nvx::RawVkObjectTableCreateInfo, allocator: *const c_void, object_table: *const nvx::RawVkObjectTable) -> RawVkResult {
+unsafe extern fn null_device_vkCreateObjectTableNVX(device: RawVkDevice, create_info: *mut nvx::RawVkObjectTableCreateInfo, allocator: *const c_void, object_table: *mut nvx::RawVkObjectTable) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateObjectTableNVX\"");
 }
 unsafe extern fn null_device_vkDestroyObjectTableNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyObjectTableNVX\"");
 }
-unsafe extern fn null_device_vkRegisterObjectsNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, object_count: u32, object_table_entries: *const *const nvx::RawVkObjectTableEntry, object_indices: *const u32) -> RawVkResult {
+unsafe extern fn null_device_vkRegisterObjectsNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, object_count: u32, object_table_entries: *mut *mut nvx::RawVkObjectTableEntry, object_indices: *mut u32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkRegisterObjectsNVX\"");
 }
-unsafe extern fn null_device_vkUnregisterObjectsNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, object_count: u32, object_entry_types: *const nvx::RawVkObjectEntryType, object_indices: *const u32) -> RawVkResult {
+unsafe extern fn null_device_vkUnregisterObjectsNVX(device: RawVkDevice, object_table: nvx::RawVkObjectTable, object_count: u32, object_entry_types: *mut nvx::RawVkObjectEntryType, object_indices: *mut u32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkUnregisterObjectsNVX\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX(physical_device: RawVkPhysicalDevice, features: *const nvx::RawVkDeviceGeneratedCommandsFeatures, limits: *const nvx::RawVkDeviceGeneratedCommandsLimits) {
+unsafe extern fn null_device_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX(physical_device: RawVkPhysicalDevice, features: *mut nvx::RawVkDeviceGeneratedCommandsFeatures, limits: *mut nvx::RawVkDeviceGeneratedCommandsLimits) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX\"");
 }
-unsafe extern fn null_device_vkCmdSetViewportWScalingNV(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, viewport_wscalings: *const nv::RawVkViewportWScaling) {
+unsafe extern fn null_device_vkCmdSetViewportWScalingNV(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, viewport_wscalings: *mut nv::RawVkViewportWScaling) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetViewportWScalingNV\"");
 }
 unsafe extern fn null_device_vkReleaseDisplayEXT(physical_device: RawVkPhysicalDevice, display: khr::RawVkDisplay) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkReleaseDisplayEXT\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceCapabilities2EXT(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_capabilities: *const ext::RawVkSurfaceCapabilities2) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceSurfaceCapabilities2EXT(physical_device: RawVkPhysicalDevice, surface: khr::RawVkSurface, surface_capabilities: *mut ext::RawVkSurfaceCapabilities2) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSurfaceCapabilities2EXT\"");
 }
-unsafe extern fn null_device_vkDisplayPowerControlEXT(device: RawVkDevice, display: khr::RawVkDisplay, display_power_info: *const ext::RawVkDisplayPowerInfo) -> RawVkResult {
+unsafe extern fn null_device_vkDisplayPowerControlEXT(device: RawVkDevice, display: khr::RawVkDisplay, display_power_info: *mut ext::RawVkDisplayPowerInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDisplayPowerControlEXT\"");
 }
-unsafe extern fn null_device_vkRegisterDeviceEventEXT(device: RawVkDevice, device_event_info: *const ext::RawVkDeviceEventInfo, allocator: *const c_void, fence: *const RawVkFence) -> RawVkResult {
+unsafe extern fn null_device_vkRegisterDeviceEventEXT(device: RawVkDevice, device_event_info: *mut ext::RawVkDeviceEventInfo, allocator: *const c_void, fence: *mut RawVkFence) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkRegisterDeviceEventEXT\"");
 }
-unsafe extern fn null_device_vkRegisterDisplayEventEXT(device: RawVkDevice, display: khr::RawVkDisplay, display_event_info: *const ext::RawVkDisplayEventInfo, allocator: *const c_void, fence: *const RawVkFence) -> RawVkResult {
+unsafe extern fn null_device_vkRegisterDisplayEventEXT(device: RawVkDevice, display: khr::RawVkDisplay, display_event_info: *mut ext::RawVkDisplayEventInfo, allocator: *const c_void, fence: *mut RawVkFence) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkRegisterDisplayEventEXT\"");
 }
-unsafe extern fn null_device_vkGetSwapchainCounterEXT(device: RawVkDevice, swapchain: khr::RawVkSwapchain, counter: ext::RawVkSurfaceCounterFlags, counter_value: *const u64) -> RawVkResult {
+unsafe extern fn null_device_vkGetSwapchainCounterEXT(device: RawVkDevice, swapchain: khr::RawVkSwapchain, counter: ext::RawVkSurfaceCounterFlags, counter_value: *mut u64) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetSwapchainCounterEXT\"");
 }
-unsafe extern fn null_device_vkGetRefreshCycleDurationGOOGLE(device: RawVkDevice, swapchain: khr::RawVkSwapchain, display_timing_properties: *const google::RawVkRefreshCycleDuration) -> RawVkResult {
+unsafe extern fn null_device_vkGetRefreshCycleDurationGOOGLE(device: RawVkDevice, swapchain: khr::RawVkSwapchain, display_timing_properties: *mut google::RawVkRefreshCycleDuration) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetRefreshCycleDurationGOOGLE\"");
 }
-unsafe extern fn null_device_vkGetPastPresentationTimingGOOGLE(device: RawVkDevice, swapchain: khr::RawVkSwapchain, presentation_timing_count: *const u32, presentation_timings: *const google::RawVkPastPresentationTiming) -> RawVkResult {
+unsafe extern fn null_device_vkGetPastPresentationTimingGOOGLE(device: RawVkDevice, swapchain: khr::RawVkSwapchain, presentation_timing_count: *mut u32, presentation_timings: *mut google::RawVkPastPresentationTiming) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPastPresentationTimingGOOGLE\"");
 }
-unsafe extern fn null_device_vkCmdSetDiscardRectangleEXT(command_buffer: RawVkCommandBuffer, first_discard_rectangle: u32, discard_rectangle_count: u32, discard_rectangles: *const RawVkRect2D) {
+unsafe extern fn null_device_vkCmdSetDiscardRectangleEXT(command_buffer: RawVkCommandBuffer, first_discard_rectangle: u32, discard_rectangle_count: u32, discard_rectangles: *mut RawVkRect2D) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetDiscardRectangleEXT\"");
 }
-unsafe extern fn null_device_vkSetHdrMetadataEXT(device: RawVkDevice, swapchain_count: u32, swapchains: *const khr::RawVkSwapchain, metadata: *const ext::RawVkHdrMetadata) {
+unsafe extern fn null_device_vkSetHdrMetadataEXT(device: RawVkDevice, swapchain_count: u32, swapchains: *mut khr::RawVkSwapchain, metadata: *mut ext::RawVkHdrMetadata) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkSetHdrMetadataEXT\"");
 }
-unsafe extern fn null_device_vkSetDebugUtilsObjectNameEXT(device: RawVkDevice, name_info: *const ext::RawVkDebugUtilsObjectNameInfo) -> RawVkResult {
+unsafe extern fn null_device_vkSetDebugUtilsObjectNameEXT(device: RawVkDevice, name_info: *mut ext::RawVkDebugUtilsObjectNameInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkSetDebugUtilsObjectNameEXT\"");
 }
-unsafe extern fn null_device_vkSetDebugUtilsObjectTagEXT(device: RawVkDevice, tag_info: *const ext::RawVkDebugUtilsObjectTagInfo) -> RawVkResult {
+unsafe extern fn null_device_vkSetDebugUtilsObjectTagEXT(device: RawVkDevice, tag_info: *mut ext::RawVkDebugUtilsObjectTagInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkSetDebugUtilsObjectTagEXT\"");
 }
-unsafe extern fn null_device_vkQueueBeginDebugUtilsLabelEXT(queue: RawVkQueue, label_info: *const ext::RawVkDebugUtilsLabel) {
+unsafe extern fn null_device_vkQueueBeginDebugUtilsLabelEXT(queue: RawVkQueue, label_info: *mut ext::RawVkDebugUtilsLabel) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkQueueBeginDebugUtilsLabelEXT\"");
 }
 unsafe extern fn null_device_vkQueueEndDebugUtilsLabelEXT(queue: RawVkQueue) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkQueueEndDebugUtilsLabelEXT\"");
 }
-unsafe extern fn null_device_vkQueueInsertDebugUtilsLabelEXT(queue: RawVkQueue, label_info: *const ext::RawVkDebugUtilsLabel) {
+unsafe extern fn null_device_vkQueueInsertDebugUtilsLabelEXT(queue: RawVkQueue, label_info: *mut ext::RawVkDebugUtilsLabel) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkQueueInsertDebugUtilsLabelEXT\"");
 }
-unsafe extern fn null_device_vkCmdBeginDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer, label_info: *const ext::RawVkDebugUtilsLabel) {
+unsafe extern fn null_device_vkCmdBeginDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer, label_info: *mut ext::RawVkDebugUtilsLabel) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBeginDebugUtilsLabelEXT\"");
 }
 unsafe extern fn null_device_vkCmdEndDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdEndDebugUtilsLabelEXT\"");
 }
-unsafe extern fn null_device_vkCmdInsertDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer, label_info: *const ext::RawVkDebugUtilsLabel) {
+unsafe extern fn null_device_vkCmdInsertDebugUtilsLabelEXT(command_buffer: RawVkCommandBuffer, label_info: *mut ext::RawVkDebugUtilsLabel) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdInsertDebugUtilsLabelEXT\"");
 }
-unsafe extern fn null_device_vkCreateDebugUtilsMessengerEXT(instance: RawVkInstance, create_info: *const ext::RawVkDebugUtilsMessengerCreateInfo, allocator: *const c_void, messenger: *const ext::RawVkDebugUtilsMessenger) -> RawVkResult {
+unsafe extern fn null_device_vkCreateDebugUtilsMessengerEXT(instance: RawVkInstance, create_info: *mut ext::RawVkDebugUtilsMessengerCreateInfo, allocator: *const c_void, messenger: *mut ext::RawVkDebugUtilsMessenger) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDebugUtilsMessengerEXT\"");
 }
 unsafe extern fn null_device_vkDestroyDebugUtilsMessengerEXT(instance: RawVkInstance, messenger: ext::RawVkDebugUtilsMessenger, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyDebugUtilsMessengerEXT\"");
 }
-unsafe extern fn null_device_vkSubmitDebugUtilsMessageEXT(instance: RawVkInstance, message_severity: ext::RawVkDebugUtilsMessageSeverityFlags, message_types: ext::RawVkDebugUtilsMessageTypeFlags, callback_data: *const ext::RawVkDebugUtilsMessengerCallbackData) {
+unsafe extern fn null_device_vkSubmitDebugUtilsMessageEXT(instance: RawVkInstance, message_severity: ext::RawVkDebugUtilsMessageSeverityFlags, message_types: ext::RawVkDebugUtilsMessageTypeFlags, callback_data: *mut ext::RawVkDebugUtilsMessengerCallbackData) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkSubmitDebugUtilsMessageEXT\"");
 }
-unsafe extern fn null_device_vkCmdSetSampleLocationsEXT(command_buffer: RawVkCommandBuffer, sample_locations_info: *const ext::RawVkSampleLocationsInfo) {
+unsafe extern fn null_device_vkCmdSetSampleLocationsEXT(command_buffer: RawVkCommandBuffer, sample_locations_info: *mut ext::RawVkSampleLocationsInfo) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetSampleLocationsEXT\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceMultisamplePropertiesEXT(physical_device: RawVkPhysicalDevice, samples: RawVkSampleCountFlags, multisample_properties: *const ext::RawVkMultisampleProperties) {
+unsafe extern fn null_device_vkGetPhysicalDeviceMultisamplePropertiesEXT(physical_device: RawVkPhysicalDevice, samples: RawVkSampleCountFlags, multisample_properties: *mut ext::RawVkMultisampleProperties) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceMultisamplePropertiesEXT\"");
 }
-unsafe extern fn null_device_vkGetImageDrmFormatModifierPropertiesEXT(device: RawVkDevice, image: RawVkImage, properties: *const ext::RawVkImageDrmFormatModifierProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetImageDrmFormatModifierPropertiesEXT(device: RawVkDevice, image: RawVkImage, properties: *mut ext::RawVkImageDrmFormatModifierProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetImageDrmFormatModifierPropertiesEXT\"");
 }
-unsafe extern fn null_device_vkCreateValidationCacheEXT(device: RawVkDevice, create_info: *const ext::RawVkValidationCacheCreateInfo, allocator: *const c_void, validation_cache: *const ext::RawVkValidationCache) -> RawVkResult {
+unsafe extern fn null_device_vkCreateValidationCacheEXT(device: RawVkDevice, create_info: *mut ext::RawVkValidationCacheCreateInfo, allocator: *const c_void, validation_cache: *mut ext::RawVkValidationCache) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateValidationCacheEXT\"");
 }
 unsafe extern fn null_device_vkDestroyValidationCacheEXT(device: RawVkDevice, validation_cache: ext::RawVkValidationCache, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyValidationCacheEXT\"");
 }
-unsafe extern fn null_device_vkMergeValidationCachesEXT(device: RawVkDevice, dst_cache: ext::RawVkValidationCache, src_cache_count: u32, src_caches: *const ext::RawVkValidationCache) -> RawVkResult {
+unsafe extern fn null_device_vkMergeValidationCachesEXT(device: RawVkDevice, dst_cache: ext::RawVkValidationCache, src_cache_count: u32, src_caches: *mut ext::RawVkValidationCache) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkMergeValidationCachesEXT\"");
 }
-unsafe extern fn null_device_vkGetValidationCacheDataEXT(device: RawVkDevice, validation_cache: ext::RawVkValidationCache, data_size: *const usize, data: *const c_void) -> RawVkResult {
+unsafe extern fn null_device_vkGetValidationCacheDataEXT(device: RawVkDevice, validation_cache: ext::RawVkValidationCache, data_size: *mut usize, data: *mut c_void) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetValidationCacheDataEXT\"");
 }
 unsafe extern fn null_device_vkCmdBindShadingRateImageNV(command_buffer: RawVkCommandBuffer, image_view: RawVkImageView, image_layout: RawVkImageLayout) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBindShadingRateImageNV\"");
 }
-unsafe extern fn null_device_vkCmdSetViewportShadingRatePaletteNV(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, shading_rate_palettes: *const nv::RawVkShadingRatePalette) {
+unsafe extern fn null_device_vkCmdSetViewportShadingRatePaletteNV(command_buffer: RawVkCommandBuffer, first_viewport: u32, viewport_count: u32, shading_rate_palettes: *mut nv::RawVkShadingRatePalette) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetViewportShadingRatePaletteNV\"");
 }
-unsafe extern fn null_device_vkCmdSetCoarseSampleOrderNV(command_buffer: RawVkCommandBuffer, sample_order_type: nv::RawVkCoarseSampleOrderType, custom_sample_order_count: u32, custom_sample_orders: *const nv::RawVkCoarseSampleOrderCustom) {
+unsafe extern fn null_device_vkCmdSetCoarseSampleOrderNV(command_buffer: RawVkCommandBuffer, sample_order_type: nv::RawVkCoarseSampleOrderType, custom_sample_order_count: u32, custom_sample_orders: *mut nv::RawVkCoarseSampleOrderCustom) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetCoarseSampleOrderNV\"");
 }
-unsafe extern fn null_device_vkCreateAccelerationStructureNV(device: RawVkDevice, create_info: *const nv::RawVkAccelerationStructureCreateInfo, allocator: *const c_void, acceleration_structure: *const nv::RawVkAccelerationStructure) -> RawVkResult {
+unsafe extern fn null_device_vkCreateAccelerationStructureNV(device: RawVkDevice, create_info: *mut nv::RawVkAccelerationStructureCreateInfo, allocator: *const c_void, acceleration_structure: *mut nv::RawVkAccelerationStructure) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateAccelerationStructureNV\"");
 }
 unsafe extern fn null_device_vkDestroyAccelerationStructureNV(device: RawVkDevice, acceleration_structure: nv::RawVkAccelerationStructure, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyAccelerationStructureNV\"");
 }
-unsafe extern fn null_device_vkGetAccelerationStructureMemoryRequirementsNV(device: RawVkDevice, info: *const nv::RawVkAccelerationStructureMemoryRequirementsInfo, memory_requirements: *const khr::RawVkMemoryRequirements2) {
+unsafe extern fn null_device_vkGetAccelerationStructureMemoryRequirementsNV(device: RawVkDevice, info: *mut nv::RawVkAccelerationStructureMemoryRequirementsInfo, memory_requirements: *mut khr::RawVkMemoryRequirements2) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetAccelerationStructureMemoryRequirementsNV\"");
 }
-unsafe extern fn null_device_vkBindAccelerationStructureMemoryNV(device: RawVkDevice, bind_info_count: u32, bind_infos: *const nv::RawVkBindAccelerationStructureMemoryInfo) -> RawVkResult {
+unsafe extern fn null_device_vkBindAccelerationStructureMemoryNV(device: RawVkDevice, bind_info_count: u32, bind_infos: *mut nv::RawVkBindAccelerationStructureMemoryInfo) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkBindAccelerationStructureMemoryNV\"");
 }
-unsafe extern fn null_device_vkCmdBuildAccelerationStructureNV(command_buffer: RawVkCommandBuffer, info: *const nv::RawVkAccelerationStructureInfo, instance_data: RawVkBuffer, instance_offset: u64, update: u32, dst: nv::RawVkAccelerationStructure, src: nv::RawVkAccelerationStructure, scratch: RawVkBuffer, scratch_offset: u64) {
+unsafe extern fn null_device_vkCmdBuildAccelerationStructureNV(command_buffer: RawVkCommandBuffer, info: *mut nv::RawVkAccelerationStructureInfo, instance_data: RawVkBuffer, instance_offset: u64, update: u32, dst: nv::RawVkAccelerationStructure, src: nv::RawVkAccelerationStructure, scratch: RawVkBuffer, scratch_offset: u64) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdBuildAccelerationStructureNV\"");
 }
 unsafe extern fn null_device_vkCmdCopyAccelerationStructureNV(command_buffer: RawVkCommandBuffer, dst: nv::RawVkAccelerationStructure, src: nv::RawVkAccelerationStructure, mode: nv::RawVkCopyAccelerationStructureMode) {
@@ -2554,31 +2554,31 @@ unsafe extern fn null_device_vkCmdCopyAccelerationStructureNV(command_buffer: Ra
 unsafe extern fn null_device_vkCmdTraceRaysNV(command_buffer: RawVkCommandBuffer, raygen_shader_binding_table_buffer: RawVkBuffer, raygen_shader_binding_offset: u64, miss_shader_binding_table_buffer: RawVkBuffer, miss_shader_binding_offset: u64, miss_shader_binding_stride: u64, hit_shader_binding_table_buffer: RawVkBuffer, hit_shader_binding_offset: u64, hit_shader_binding_stride: u64, callable_shader_binding_table_buffer: RawVkBuffer, callable_shader_binding_offset: u64, callable_shader_binding_stride: u64, width: u32, height: u32, depth: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdTraceRaysNV\"");
 }
-unsafe extern fn null_device_vkCreateRayTracingPipelinesNV(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *const nv::RawVkRayTracingPipelineCreateInfo, allocator: *const c_void, pipelines: *const RawVkPipeline) -> RawVkResult {
+unsafe extern fn null_device_vkCreateRayTracingPipelinesNV(device: RawVkDevice, pipeline_cache: RawVkPipelineCache, create_info_count: u32, create_infos: *mut nv::RawVkRayTracingPipelineCreateInfo, allocator: *const c_void, pipelines: *mut RawVkPipeline) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateRayTracingPipelinesNV\"");
 }
-unsafe extern fn null_device_vkGetRayTracingShaderGroupHandlesNV(device: RawVkDevice, pipeline: RawVkPipeline, first_group: u32, group_count: u32, data_size: usize, data: *const c_void) -> RawVkResult {
+unsafe extern fn null_device_vkGetRayTracingShaderGroupHandlesNV(device: RawVkDevice, pipeline: RawVkPipeline, first_group: u32, group_count: u32, data_size: usize, data: *mut c_void) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetRayTracingShaderGroupHandlesNV\"");
 }
-unsafe extern fn null_device_vkGetAccelerationStructureHandleNV(device: RawVkDevice, acceleration_structure: nv::RawVkAccelerationStructure, data_size: usize, data: *const c_void) -> RawVkResult {
+unsafe extern fn null_device_vkGetAccelerationStructureHandleNV(device: RawVkDevice, acceleration_structure: nv::RawVkAccelerationStructure, data_size: usize, data: *mut c_void) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetAccelerationStructureHandleNV\"");
 }
-unsafe extern fn null_device_vkCmdWriteAccelerationStructuresPropertiesNV(command_buffer: RawVkCommandBuffer, acceleration_structure_count: u32, acceleration_structures: *const nv::RawVkAccelerationStructure, query_type: RawVkQueryType, query_pool: RawVkQueryPool, first_query: u32) {
+unsafe extern fn null_device_vkCmdWriteAccelerationStructuresPropertiesNV(command_buffer: RawVkCommandBuffer, acceleration_structure_count: u32, acceleration_structures: *mut nv::RawVkAccelerationStructure, query_type: RawVkQueryType, query_pool: RawVkQueryPool, first_query: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdWriteAccelerationStructuresPropertiesNV\"");
 }
 unsafe extern fn null_device_vkCompileDeferredNV(device: RawVkDevice, pipeline: RawVkPipeline, shader: u32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCompileDeferredNV\"");
 }
-unsafe extern fn null_device_vkGetMemoryHostPointerPropertiesEXT(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, host_pointer: *const c_void, memory_host_pointer_properties: *const ext::RawVkMemoryHostPointerProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetMemoryHostPointerPropertiesEXT(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, host_pointer: *mut c_void, memory_host_pointer_properties: *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetMemoryHostPointerPropertiesEXT\"");
 }
 unsafe extern fn null_device_vkCmdWriteBufferMarkerAMD(command_buffer: RawVkCommandBuffer, pipeline_stage: RawVkPipelineStageFlags, dst_buffer: RawVkBuffer, dst_offset: u64, marker: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdWriteBufferMarkerAMD\"");
 }
-unsafe extern fn null_device_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT(physical_device: RawVkPhysicalDevice, time_domain_count: *const u32, time_domains: *const ext::RawVkTimeDomain) -> RawVkResult {
+unsafe extern fn null_device_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT(physical_device: RawVkPhysicalDevice, time_domain_count: *mut u32, time_domains: *mut ext::RawVkTimeDomain) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceCalibrateableTimeDomainsEXT\"");
 }
-unsafe extern fn null_device_vkGetCalibratedTimestampsEXT(device: RawVkDevice, timestamp_count: u32, timestamp_infos: *const ext::RawVkCalibratedTimestampInfo, timestamps: *const u64, max_deviation: *const u64) -> RawVkResult {
+unsafe extern fn null_device_vkGetCalibratedTimestampsEXT(device: RawVkDevice, timestamp_count: u32, timestamp_infos: *mut ext::RawVkCalibratedTimestampInfo, timestamps: *mut u64, max_deviation: *mut u64) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetCalibratedTimestampsEXT\"");
 }
 unsafe extern fn null_device_vkCmdDrawMeshTasksNV(command_buffer: RawVkCommandBuffer, task_count: u32, first_task: u32) {
@@ -2590,12 +2590,12 @@ unsafe extern fn null_device_vkCmdDrawMeshTasksIndirectNV(command_buffer: RawVkC
 unsafe extern fn null_device_vkCmdDrawMeshTasksIndirectCountNV(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDrawMeshTasksIndirectCountNV\"");
 }
-unsafe extern fn null_device_vkCmdSetExclusiveScissorNV(command_buffer: RawVkCommandBuffer, first_exclusive_scissor: u32, exclusive_scissor_count: u32, exclusive_scissors: *const RawVkRect2D) {
+unsafe extern fn null_device_vkCmdSetExclusiveScissorNV(command_buffer: RawVkCommandBuffer, first_exclusive_scissor: u32, exclusive_scissor_count: u32, exclusive_scissors: *mut RawVkRect2D) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetExclusiveScissorNV\"");
 }
-unsafe extern fn null_device_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBuffer, checkpoint_marker: *const c_void) {
+unsafe extern fn null_device_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBuffer, checkpoint_marker: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetCheckpointNV\"");
 }
-unsafe extern fn null_device_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *const u32, checkpoint_data: *const nv::RawVkCheckpointData) {
+unsafe extern fn null_device_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *mut u32, checkpoint_data: *mut nv::RawVkCheckpointData) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetQueueCheckpointDataNV\"");
 }

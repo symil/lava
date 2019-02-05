@@ -27,7 +27,7 @@ pub struct VkPhysicalDeviceFragmentDensityMapProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFragmentDensityMapProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub min_fragment_density_texel_size: RawVkExtent2D,
     pub max_fragment_density_texel_size: RawVkExtent2D,
     pub fragment_density_invocations: u32,
@@ -36,7 +36,7 @@ pub struct RawVkPhysicalDeviceFragmentDensityMapProperties {
 impl VkWrappedType<RawVkPhysicalDeviceFragmentDensityMapProperties> for VkPhysicalDeviceFragmentDensityMapProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceFragmentDensityMapProperties, dst: &mut RawVkPhysicalDeviceFragmentDensityMapProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentDensityMapPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.min_fragment_density_texel_size = vk_to_raw_value(&src.min_fragment_density_texel_size);
         dst.max_fragment_density_texel_size = vk_to_raw_value(&src.max_fragment_density_texel_size);
         dst.fragment_density_invocations = vk_to_raw_value(&src.fragment_density_invocations);

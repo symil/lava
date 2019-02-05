@@ -25,14 +25,14 @@ pub struct VkPhysicalDeviceExternalFenceInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalFenceInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_type: RawVkExternalFenceHandleTypeFlags,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceExternalFenceInfo> for VkPhysicalDeviceExternalFenceInfo {
     fn vk_to_raw(src: &VkPhysicalDeviceExternalFenceInfo, dst: &mut RawVkPhysicalDeviceExternalFenceInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalFenceInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }

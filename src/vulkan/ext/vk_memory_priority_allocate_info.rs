@@ -24,14 +24,14 @@ pub struct VkMemoryPriorityAllocateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryPriorityAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub priority: f32,
 }
 
 impl VkWrappedType<RawVkMemoryPriorityAllocateInfo> for VkMemoryPriorityAllocateInfo {
     fn vk_to_raw(src: &VkMemoryPriorityAllocateInfo, dst: &mut RawVkMemoryPriorityAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryPriorityAllocateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.priority = src.priority;
     }
 }

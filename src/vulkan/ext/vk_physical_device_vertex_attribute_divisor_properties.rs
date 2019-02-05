@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceVertexAttributeDivisorProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVertexAttributeDivisorProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_vertex_attrib_divisor: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceVertexAttributeDivisorProperties> for VkPhysicalDeviceVertexAttributeDivisorProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceVertexAttributeDivisorProperties, dst: &mut RawVkPhysicalDeviceVertexAttributeDivisorProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVertexAttributeDivisorPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_vertex_attrib_divisor = vk_to_raw_value(&src.max_vertex_attrib_divisor);
     }
 }

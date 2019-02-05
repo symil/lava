@@ -25,7 +25,7 @@ pub struct VkDisplayProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub display_properties: RawVkDisplayProperties,
 }
 

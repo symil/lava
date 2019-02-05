@@ -24,14 +24,14 @@ pub struct VkImageDrmFormatModifierProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageDrmFormatModifierProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub drm_format_modifier: u64,
 }
 
 impl VkWrappedType<RawVkImageDrmFormatModifierProperties> for VkImageDrmFormatModifierProperties {
     fn vk_to_raw(src: &VkImageDrmFormatModifierProperties, dst: &mut RawVkImageDrmFormatModifierProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageDrmFormatModifierPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.drm_format_modifier = vk_to_raw_value(&src.drm_format_modifier);
     }
 }

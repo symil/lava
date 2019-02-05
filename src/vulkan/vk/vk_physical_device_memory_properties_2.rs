@@ -25,14 +25,14 @@ pub struct VkPhysicalDeviceMemoryProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub memory_properties: RawVkPhysicalDeviceMemoryProperties,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceMemoryProperties2> for VkPhysicalDeviceMemoryProperties2 {
     fn vk_to_raw(src: &VkPhysicalDeviceMemoryProperties2, dst: &mut RawVkPhysicalDeviceMemoryProperties2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryProperties2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.memory_properties = vk_to_raw_value(&src.memory_properties);
     }
 }

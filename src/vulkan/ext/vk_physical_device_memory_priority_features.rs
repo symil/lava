@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceMemoryPriorityFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryPriorityFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub memory_priority: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceMemoryPriorityFeatures> for VkPhysicalDeviceMemoryPriorityFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceMemoryPriorityFeatures, dst: &mut RawVkPhysicalDeviceMemoryPriorityFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryPriorityFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.memory_priority = vk_to_raw_value(&src.memory_priority);
     }
 }

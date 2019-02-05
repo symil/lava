@@ -357,7 +357,7 @@ function functionToMethod(handle, func) {
                 ``,
                 wrappedFunctionCall,
                 ``,
-                `let${setupResult ? ' mut' : ''} ${wrappedResultVarName} = ${createdType.toWrapped(getRawVarName)}.unwrap();`
+                `let${setupResult ? ' mut' : ''} ${wrappedResultVarName} = ${createdType.toWrapped(getRawVarName)};`
             );
 
             if (setupResult) {
@@ -370,7 +370,7 @@ function functionToMethod(handle, func) {
                 }
             }
 
-            if (createdType.freeRaw) {
+            if (createdType.typeName.startsWith('Vk')) {
                 freeStataments.push(`free(${rawResultName} as *mut u8);`);
                 // freeStataments.push(`${createdType.freeRaw(getRawVarName)};`);
             }

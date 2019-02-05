@@ -28,7 +28,7 @@ pub struct VkCmdReserveSpaceForCommandsInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCmdReserveSpaceForCommandsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_table: RawVkObjectTable,
     pub indirect_commands_layout: RawVkIndirectCommandsLayout,
     pub max_sequences_count: u32,
@@ -37,7 +37,7 @@ pub struct RawVkCmdReserveSpaceForCommandsInfo {
 impl VkWrappedType<RawVkCmdReserveSpaceForCommandsInfo> for VkCmdReserveSpaceForCommandsInfo {
     fn vk_to_raw(src: &VkCmdReserveSpaceForCommandsInfo, dst: &mut RawVkCmdReserveSpaceForCommandsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CmdReserveSpaceForCommandsInfoNvx);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.object_table = vk_to_raw_value(&src.object_table);
         dst.indirect_commands_layout = vk_to_raw_value(&src.indirect_commands_layout);
         dst.max_sequences_count = vk_to_raw_value(&src.max_sequences_count);

@@ -25,15 +25,15 @@ pub struct VkDeviceGroupDeviceCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupDeviceCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub physical_device_count: u32,
-    pub physical_devices: *const RawVkPhysicalDevice,
+    pub physical_devices: *mut RawVkPhysicalDevice,
 }
 
 impl VkWrappedType<RawVkDeviceGroupDeviceCreateInfo> for VkDeviceGroupDeviceCreateInfo {
     fn vk_to_raw(src: &VkDeviceGroupDeviceCreateInfo, dst: &mut RawVkDeviceGroupDeviceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupDeviceCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.physical_device_count = src.physical_devices.len() as u32;
         dst.physical_devices = new_ptr_vk_array(&src.physical_devices);
     }

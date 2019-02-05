@@ -33,7 +33,7 @@ pub struct RawVkDescriptorSetLayoutBinding {
     pub descriptor_type: RawVkDescriptorType,
     pub descriptor_count: u32,
     pub stage_flags: RawVkShaderStageFlags,
-    pub immutable_samplers: *const RawVkSampler,
+    pub immutable_samplers: *mut RawVkSampler,
 }
 
 impl VkWrappedType<RawVkDescriptorSetLayoutBinding> for VkDescriptorSetLayoutBinding {

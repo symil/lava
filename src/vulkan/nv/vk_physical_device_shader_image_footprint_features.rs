@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceShaderImageFootprintFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShaderImageFootprintFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub image_footprint: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceShaderImageFootprintFeatures> for VkPhysicalDeviceShaderImageFootprintFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceShaderImageFootprintFeatures, dst: &mut RawVkPhysicalDeviceShaderImageFootprintFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderImageFootprintFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.image_footprint = vk_to_raw_value(&src.image_footprint);
     }
 }

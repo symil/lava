@@ -33,23 +33,23 @@ pub struct VkDebugUtilsMessengerCallbackData {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsMessengerCallbackData {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDebugUtilsMessengerCallbackDataFlags,
-    pub message_id_name: *const c_char,
+    pub message_id_name: *mut c_char,
     pub message_id_number: i32,
-    pub message: *const c_char,
+    pub message: *mut c_char,
     pub queue_label_count: u32,
-    pub queue_labels: *const RawVkDebugUtilsLabel,
+    pub queue_labels: *mut RawVkDebugUtilsLabel,
     pub cmd_buf_label_count: u32,
-    pub cmd_buf_labels: *const RawVkDebugUtilsLabel,
+    pub cmd_buf_labels: *mut RawVkDebugUtilsLabel,
     pub object_count: u32,
-    pub objects: *const RawVkDebugUtilsObjectNameInfo,
+    pub objects: *mut RawVkDebugUtilsObjectNameInfo,
 }
 
 impl VkWrappedType<RawVkDebugUtilsMessengerCallbackData> for VkDebugUtilsMessengerCallbackData {
     fn vk_to_raw(src: &VkDebugUtilsMessengerCallbackData, dst: &mut RawVkDebugUtilsMessengerCallbackData) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsMessengerCallbackDataExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.message_id_name = new_ptr_string_checked(&src.message_id_name);
         dst.message_id_number = vk_to_raw_value(&src.message_id_number);

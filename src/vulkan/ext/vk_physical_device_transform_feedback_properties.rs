@@ -33,7 +33,7 @@ pub struct VkPhysicalDeviceTransformFeedbackProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceTransformFeedbackProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_transform_feedback_streams: u32,
     pub max_transform_feedback_buffers: u32,
     pub max_transform_feedback_buffer_size: u64,
@@ -49,7 +49,7 @@ pub struct RawVkPhysicalDeviceTransformFeedbackProperties {
 impl VkWrappedType<RawVkPhysicalDeviceTransformFeedbackProperties> for VkPhysicalDeviceTransformFeedbackProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceTransformFeedbackProperties, dst: &mut RawVkPhysicalDeviceTransformFeedbackProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceTransformFeedbackPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_transform_feedback_streams = vk_to_raw_value(&src.max_transform_feedback_streams);
         dst.max_transform_feedback_buffers = vk_to_raw_value(&src.max_transform_feedback_buffers);
         dst.max_transform_feedback_buffer_size = vk_to_raw_value(&src.max_transform_feedback_buffer_size);

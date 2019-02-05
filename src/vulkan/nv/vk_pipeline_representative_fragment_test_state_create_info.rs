@@ -24,14 +24,14 @@ pub struct VkPipelineRepresentativeFragmentTestStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRepresentativeFragmentTestStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub representative_fragment_test_enable: u32,
 }
 
 impl VkWrappedType<RawVkPipelineRepresentativeFragmentTestStateCreateInfo> for VkPipelineRepresentativeFragmentTestStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineRepresentativeFragmentTestStateCreateInfo, dst: &mut RawVkPipelineRepresentativeFragmentTestStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRepresentativeFragmentTestStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.representative_fragment_test_enable = vk_to_raw_value(&src.representative_fragment_test_enable);
     }
 }

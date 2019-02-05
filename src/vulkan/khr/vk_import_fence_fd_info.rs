@@ -30,7 +30,7 @@ pub struct VkImportFenceFdInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportFenceFdInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub fence: RawVkFence,
     pub flags: RawVkFenceImportFlags,
     pub handle_type: RawVkExternalFenceHandleTypeFlags,
@@ -40,7 +40,7 @@ pub struct RawVkImportFenceFdInfo {
 impl VkWrappedType<RawVkImportFenceFdInfo> for VkImportFenceFdInfo {
     fn vk_to_raw(src: &VkImportFenceFdInfo, dst: &mut RawVkImportFenceFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImportFenceFdInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.fence = vk_to_raw_value(&src.fence);
         dst.flags = vk_to_raw_value(&src.flags);
         dst.handle_type = vk_to_raw_value(&src.handle_type);

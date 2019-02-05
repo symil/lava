@@ -29,17 +29,17 @@ pub struct VkSampleLocationsInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSampleLocationsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub sample_locations_per_pixel: RawVkSampleCountFlags,
     pub sample_location_grid_size: RawVkExtent2D,
     pub sample_locations_count: u32,
-    pub sample_locations: *const RawVkSampleLocation,
+    pub sample_locations: *mut RawVkSampleLocation,
 }
 
 impl VkWrappedType<RawVkSampleLocationsInfo> for VkSampleLocationsInfo {
     fn vk_to_raw(src: &VkSampleLocationsInfo, dst: &mut RawVkSampleLocationsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SampleLocationsInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.sample_locations_per_pixel = vk_to_raw_value(&src.sample_locations_per_pixel);
         dst.sample_location_grid_size = vk_to_raw_value(&src.sample_location_grid_size);
         dst.sample_locations_count = src.sample_locations.len() as u32;

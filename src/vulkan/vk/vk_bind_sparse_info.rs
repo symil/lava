@@ -32,23 +32,23 @@ pub struct VkBindSparseInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindSparseInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub wait_semaphore_count: u32,
-    pub wait_semaphores: *const RawVkSemaphore,
+    pub wait_semaphores: *mut RawVkSemaphore,
     pub buffer_bind_count: u32,
-    pub buffer_binds: *const RawVkSparseBufferMemoryBindInfo,
+    pub buffer_binds: *mut RawVkSparseBufferMemoryBindInfo,
     pub image_opaque_bind_count: u32,
-    pub image_opaque_binds: *const RawVkSparseImageOpaqueMemoryBindInfo,
+    pub image_opaque_binds: *mut RawVkSparseImageOpaqueMemoryBindInfo,
     pub image_bind_count: u32,
-    pub image_binds: *const RawVkSparseImageMemoryBindInfo,
+    pub image_binds: *mut RawVkSparseImageMemoryBindInfo,
     pub signal_semaphore_count: u32,
-    pub signal_semaphores: *const RawVkSemaphore,
+    pub signal_semaphores: *mut RawVkSemaphore,
 }
 
 impl VkWrappedType<RawVkBindSparseInfo> for VkBindSparseInfo {
     fn vk_to_raw(src: &VkBindSparseInfo, dst: &mut RawVkBindSparseInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindSparseInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.wait_semaphore_count = src.wait_semaphores.len() as u32;
         dst.wait_semaphores = new_ptr_vk_array(&src.wait_semaphores);
         dst.buffer_bind_count = src.buffer_binds.len() as u32;

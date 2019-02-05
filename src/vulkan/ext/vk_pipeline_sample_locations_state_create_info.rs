@@ -26,7 +26,7 @@ pub struct VkPipelineSampleLocationsStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineSampleLocationsStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub sample_locations_enable: u32,
     pub sample_locations_info: RawVkSampleLocationsInfo,
 }
@@ -34,7 +34,7 @@ pub struct RawVkPipelineSampleLocationsStateCreateInfo {
 impl VkWrappedType<RawVkPipelineSampleLocationsStateCreateInfo> for VkPipelineSampleLocationsStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineSampleLocationsStateCreateInfo, dst: &mut RawVkPipelineSampleLocationsStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineSampleLocationsStateCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.sample_locations_enable = vk_to_raw_value(&src.sample_locations_enable);
         dst.sample_locations_info = vk_to_raw_value(&src.sample_locations_info);
     }

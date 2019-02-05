@@ -28,7 +28,7 @@ pub struct VkPhysicalDeviceDepthStencilResolveProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDepthStencilResolveProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub supported_depth_resolve_modes: RawVkResolveModeFlags,
     pub supported_stencil_resolve_modes: RawVkResolveModeFlags,
     pub independent_resolve_none: u32,
@@ -38,7 +38,7 @@ pub struct RawVkPhysicalDeviceDepthStencilResolveProperties {
 impl VkWrappedType<RawVkPhysicalDeviceDepthStencilResolveProperties> for VkPhysicalDeviceDepthStencilResolveProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceDepthStencilResolveProperties, dst: &mut RawVkPhysicalDeviceDepthStencilResolveProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDepthStencilResolvePropertiesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.supported_depth_resolve_modes = vk_to_raw_value(&src.supported_depth_resolve_modes);
         dst.supported_stencil_resolve_modes = vk_to_raw_value(&src.supported_stencil_resolve_modes);
         dst.independent_resolve_none = vk_to_raw_value(&src.independent_resolve_none);

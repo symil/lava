@@ -24,14 +24,14 @@ pub struct VkPhysicalDevicePushDescriptorProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevicePushDescriptorProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_push_descriptors: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDevicePushDescriptorProperties> for VkPhysicalDevicePushDescriptorProperties {
     fn vk_to_raw(src: &VkPhysicalDevicePushDescriptorProperties, dst: &mut RawVkPhysicalDevicePushDescriptorProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePushDescriptorPropertiesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_push_descriptors = vk_to_raw_value(&src.max_push_descriptors);
     }
 }

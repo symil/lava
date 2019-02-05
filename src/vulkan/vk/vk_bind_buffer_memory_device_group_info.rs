@@ -24,15 +24,15 @@ pub struct VkBindBufferMemoryDeviceGroupInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindBufferMemoryDeviceGroupInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub device_index_count: u32,
-    pub device_indices: *const u32,
+    pub device_indices: *mut u32,
 }
 
 impl VkWrappedType<RawVkBindBufferMemoryDeviceGroupInfo> for VkBindBufferMemoryDeviceGroupInfo {
     fn vk_to_raw(src: &VkBindBufferMemoryDeviceGroupInfo, dst: &mut RawVkBindBufferMemoryDeviceGroupInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindBufferMemoryDeviceGroupInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.device_index_count = src.device_indices.len() as u32;
         dst.device_indices = new_ptr_vk_array(&src.device_indices);
     }

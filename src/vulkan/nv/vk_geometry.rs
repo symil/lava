@@ -29,7 +29,7 @@ pub struct VkGeometry {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometry {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub geometry_type: RawVkGeometryType,
     pub geometry: RawVkGeometryData,
     pub flags: RawVkGeometryFlags,
@@ -38,7 +38,7 @@ pub struct RawVkGeometry {
 impl VkWrappedType<RawVkGeometry> for VkGeometry {
     fn vk_to_raw(src: &VkGeometry, dst: &mut RawVkGeometry) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GeometryNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.geometry_type = vk_to_raw_value(&src.geometry_type);
         dst.geometry = vk_to_raw_value(&src.geometry);
         dst.flags = vk_to_raw_value(&src.flags);

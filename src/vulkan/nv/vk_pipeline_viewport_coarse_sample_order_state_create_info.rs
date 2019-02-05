@@ -27,16 +27,16 @@ pub struct VkPipelineViewportCoarseSampleOrderStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportCoarseSampleOrderStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub sample_order_type: RawVkCoarseSampleOrderType,
     pub custom_sample_order_count: u32,
-    pub custom_sample_orders: *const RawVkCoarseSampleOrderCustom,
+    pub custom_sample_orders: *mut RawVkCoarseSampleOrderCustom,
 }
 
 impl VkWrappedType<RawVkPipelineViewportCoarseSampleOrderStateCreateInfo> for VkPipelineViewportCoarseSampleOrderStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportCoarseSampleOrderStateCreateInfo, dst: &mut RawVkPipelineViewportCoarseSampleOrderStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportCoarseSampleOrderStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.sample_order_type = vk_to_raw_value(&src.sample_order_type);
         dst.custom_sample_order_count = src.custom_sample_orders.len() as u32;
         dst.custom_sample_orders = new_ptr_vk_array(&src.custom_sample_orders);

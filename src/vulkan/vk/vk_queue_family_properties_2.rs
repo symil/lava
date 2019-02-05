@@ -25,14 +25,14 @@ pub struct VkQueueFamilyProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueueFamilyProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub queue_family_properties: RawVkQueueFamilyProperties,
 }
 
 impl VkWrappedType<RawVkQueueFamilyProperties2> for VkQueueFamilyProperties2 {
     fn vk_to_raw(src: &VkQueueFamilyProperties2, dst: &mut RawVkQueueFamilyProperties2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::QueueFamilyProperties2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.queue_family_properties = vk_to_raw_value(&src.queue_family_properties);
     }
 }

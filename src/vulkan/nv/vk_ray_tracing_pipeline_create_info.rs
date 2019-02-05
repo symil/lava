@@ -35,12 +35,12 @@ pub struct VkRayTracingPipelineCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRayTracingPipelineCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineCreateFlags,
     pub stage_count: u32,
-    pub stages: *const RawVkPipelineShaderStageCreateInfo,
+    pub stages: *mut RawVkPipelineShaderStageCreateInfo,
     pub group_count: u32,
-    pub groups: *const RawVkRayTracingShaderGroupCreateInfo,
+    pub groups: *mut RawVkRayTracingShaderGroupCreateInfo,
     pub max_recursion_depth: u32,
     pub layout: RawVkPipelineLayout,
     pub base_pipeline_handle: RawVkPipeline,
@@ -50,7 +50,7 @@ pub struct RawVkRayTracingPipelineCreateInfo {
 impl<'a> VkWrappedType<RawVkRayTracingPipelineCreateInfo> for VkRayTracingPipelineCreateInfo<'a> {
     fn vk_to_raw(src: &VkRayTracingPipelineCreateInfo, dst: &mut RawVkRayTracingPipelineCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RayTracingPipelineCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage_count = src.stages.len() as u32;
         dst.stages = new_ptr_vk_array(&src.stages);

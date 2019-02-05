@@ -24,7 +24,7 @@ pub struct VkPresentRegion {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentRegion {
     pub rectangle_count: u32,
-    pub rectangles: *const RawVkRectLayer,
+    pub rectangles: *mut RawVkRectLayer,
 }
 
 impl VkWrappedType<RawVkPresentRegion> for VkPresentRegion {

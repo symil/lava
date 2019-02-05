@@ -97,4 +97,56 @@ impl VkQueue {
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
+    
+    /// Wrapper for [vkQueuePresentKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueuePresentKHR.html).
+    pub fn present(&self, present_info: khr::VkPresentInfo) -> Result<(), VkResult> {
+        unsafe {
+            let raw_present_info = new_ptr_vk_value(&present_info);
+            let vk_result = ((&*self._fn_table).vkQueuePresentKHR)(self._handle, raw_present_info);
+            free_vk_ptr(raw_present_info);
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+        }
+    }
+    
+    /// Wrapper for [vkQueueBeginDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueBeginDebugUtilsLabelEXT.html).
+    pub fn begin_debug_utils_label(&self, label_info: ext::VkDebugUtilsLabel) {
+        unsafe {
+            let raw_label_info = new_ptr_vk_value(&label_info);
+            ((&*self._fn_table).vkQueueBeginDebugUtilsLabelEXT)(self._handle, raw_label_info);
+            free_vk_ptr(raw_label_info);
+        }
+    }
+    
+    /// Wrapper for [vkQueueEndDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueEndDebugUtilsLabelEXT.html).
+    pub fn end_debug_utils_label(&self) {
+        unsafe {
+            ((&*self._fn_table).vkQueueEndDebugUtilsLabelEXT)(self._handle);
+        }
+    }
+    
+    /// Wrapper for [vkQueueInsertDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueInsertDebugUtilsLabelEXT.html).
+    pub fn insert_debug_utils_label(&self, label_info: ext::VkDebugUtilsLabel) {
+        unsafe {
+            let raw_label_info = new_ptr_vk_value(&label_info);
+            ((&*self._fn_table).vkQueueInsertDebugUtilsLabelEXT)(self._handle, raw_label_info);
+            free_vk_ptr(raw_label_info);
+        }
+    }
+    
+    /// Wrapper for [vkGetQueueCheckpointDataNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetQueueCheckpointDataNV.html).
+    pub fn get_checkpoint_data(&self) -> Vec<nv::VkCheckpointData> {
+        unsafe {
+            let mut raw_checkpoint_data : *mut nv::RawVkCheckpointData = ptr::null_mut();
+            let raw_checkpoint_data_count = &mut mem::zeroed() as *mut u32;
+            ((&*self._fn_table).vkGetQueueCheckpointDataNV)(self._handle, raw_checkpoint_data_count, raw_checkpoint_data);
+            raw_checkpoint_data = calloc(*raw_checkpoint_data_count as usize, mem::size_of::<nv::RawVkCheckpointData>()) as *mut nv::RawVkCheckpointData;
+            
+            ((&*self._fn_table).vkGetQueueCheckpointDataNV)(self._handle, raw_checkpoint_data_count, raw_checkpoint_data);
+            
+            let mut checkpoint_data = new_vk_array(*raw_checkpoint_data_count, raw_checkpoint_data);
+            for elt in &mut checkpoint_data { VkSetup::vk_setup(elt, self._fn_table); }
+            free(raw_checkpoint_data as *mut u8);
+            checkpoint_data
+        }
+    }
 }

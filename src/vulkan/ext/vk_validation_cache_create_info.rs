@@ -26,19 +26,19 @@ pub struct VkValidationCacheCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkValidationCacheCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkValidationCacheCreateFlags,
     pub initial_data_size: usize,
-    pub initial_data: *const c_void,
+    pub initial_data: *mut c_void,
 }
 
 impl<'a> VkWrappedType<RawVkValidationCacheCreateInfo> for VkValidationCacheCreateInfo<'a> {
     fn vk_to_raw(src: &VkValidationCacheCreateInfo, dst: &mut RawVkValidationCacheCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ValidationCacheCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.initial_data_size = src.initial_data.len();
-        dst.initial_data = src.initial_data.as_ptr();
+        dst.initial_data = get_vec_ptr(src.initial_data);
     }
 }
 

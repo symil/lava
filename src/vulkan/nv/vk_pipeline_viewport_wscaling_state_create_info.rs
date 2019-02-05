@@ -26,16 +26,16 @@ pub struct VkPipelineViewportWScalingStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportWScalingStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub viewport_wscaling_enable: u32,
     pub viewport_count: u32,
-    pub viewport_wscalings: *const RawVkViewportWScaling,
+    pub viewport_wscalings: *mut RawVkViewportWScaling,
 }
 
 impl VkWrappedType<RawVkPipelineViewportWScalingStateCreateInfo> for VkPipelineViewportWScalingStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportWScalingStateCreateInfo, dst: &mut RawVkPipelineViewportWScalingStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportWScalingStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.viewport_wscaling_enable = vk_to_raw_value(&src.viewport_wscaling_enable);
         dst.viewport_count = get_array_option_len(&src.viewport_wscalings) as u32;
         dst.viewport_wscalings = new_ptr_vk_array_checked(&src.viewport_wscalings);

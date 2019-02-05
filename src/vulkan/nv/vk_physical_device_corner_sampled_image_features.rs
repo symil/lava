@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceCornerSampledImageFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceCornerSampledImageFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub corner_sampled_image: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceCornerSampledImageFeatures> for VkPhysicalDeviceCornerSampledImageFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceCornerSampledImageFeatures, dst: &mut RawVkPhysicalDeviceCornerSampledImageFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceCornerSampledImageFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.corner_sampled_image = vk_to_raw_value(&src.corner_sampled_image);
     }
 }

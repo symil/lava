@@ -25,14 +25,14 @@ pub struct VkBufferDeviceAddressInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferDeviceAddressInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub buffer: RawVkBuffer,
 }
 
 impl VkWrappedType<RawVkBufferDeviceAddressInfo> for VkBufferDeviceAddressInfo {
     fn vk_to_raw(src: &VkBufferDeviceAddressInfo, dst: &mut RawVkBufferDeviceAddressInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferDeviceAddressInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.buffer = vk_to_raw_value(&src.buffer);
     }
 }

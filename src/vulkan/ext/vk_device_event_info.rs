@@ -25,14 +25,14 @@ pub struct VkDeviceEventInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceEventInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub device_event: RawVkDeviceEventType,
 }
 
 impl VkWrappedType<RawVkDeviceEventInfo> for VkDeviceEventInfo {
     fn vk_to_raw(src: &VkDeviceEventInfo, dst: &mut RawVkDeviceEventInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceEventInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.device_event = vk_to_raw_value(&src.device_event);
     }
 }

@@ -27,16 +27,16 @@ pub struct VkDescriptorSetLayoutCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetLayoutCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDescriptorSetLayoutCreateFlags,
     pub binding_count: u32,
-    pub bindings: *const RawVkDescriptorSetLayoutBinding,
+    pub bindings: *mut RawVkDescriptorSetLayoutBinding,
 }
 
 impl VkWrappedType<RawVkDescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfo {
     fn vk_to_raw(src: &VkDescriptorSetLayoutCreateInfo, dst: &mut RawVkDescriptorSetLayoutCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetLayoutCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.binding_count = src.bindings.len() as u32;
         dst.bindings = new_ptr_vk_array(&src.bindings);

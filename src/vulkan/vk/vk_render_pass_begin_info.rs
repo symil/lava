@@ -31,18 +31,18 @@ pub struct VkRenderPassBeginInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub render_pass: RawVkRenderPass,
     pub framebuffer: RawVkFramebuffer,
     pub render_area: RawVkRect2D,
     pub clear_value_count: u32,
-    pub clear_values: *const RawVkClearValue,
+    pub clear_values: *mut RawVkClearValue,
 }
 
 impl VkWrappedType<RawVkRenderPassBeginInfo> for VkRenderPassBeginInfo {
     fn vk_to_raw(src: &VkRenderPassBeginInfo, dst: &mut RawVkRenderPassBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassBeginInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.render_pass = vk_to_raw_value(&src.render_pass);
         dst.framebuffer = vk_to_raw_value(&src.framebuffer);
         dst.render_area = vk_to_raw_value(&src.render_area);

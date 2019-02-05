@@ -44,7 +44,7 @@ pub struct VkImageCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkImageCreateFlags,
     pub image_type: RawVkImageType,
     pub format: RawVkFormat,
@@ -56,14 +56,14 @@ pub struct RawVkImageCreateInfo {
     pub usage: RawVkImageUsageFlags,
     pub sharing_mode: RawVkSharingMode,
     pub queue_family_index_count: u32,
-    pub queue_family_indices: *const u32,
+    pub queue_family_indices: *mut u32,
     pub initial_layout: RawVkImageLayout,
 }
 
 impl VkWrappedType<RawVkImageCreateInfo> for VkImageCreateInfo {
     fn vk_to_raw(src: &VkImageCreateInfo, dst: &mut RawVkImageCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.image_type = vk_to_raw_value(&src.image_type);
         dst.format = vk_to_raw_value(&src.format);

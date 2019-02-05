@@ -27,17 +27,17 @@ pub struct VkPhysicalDeviceImageDrmFormatModifierInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceImageDrmFormatModifierInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub drm_format_modifier: u64,
     pub sharing_mode: RawVkSharingMode,
     pub queue_family_index_count: u32,
-    pub queue_family_indices: *const u32,
+    pub queue_family_indices: *mut u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceImageDrmFormatModifierInfo> for VkPhysicalDeviceImageDrmFormatModifierInfo {
     fn vk_to_raw(src: &VkPhysicalDeviceImageDrmFormatModifierInfo, dst: &mut RawVkPhysicalDeviceImageDrmFormatModifierInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceImageDrmFormatModifierInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.drm_format_modifier = vk_to_raw_value(&src.drm_format_modifier);
         dst.sharing_mode = vk_to_raw_value(&src.sharing_mode);
         dst.queue_family_index_count = src.queue_family_indices.len() as u32;

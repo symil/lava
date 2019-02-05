@@ -24,14 +24,14 @@ pub struct VkCommandBufferInheritanceConditionalRenderingInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferInheritanceConditionalRenderingInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub conditional_rendering_enable: u32,
 }
 
 impl VkWrappedType<RawVkCommandBufferInheritanceConditionalRenderingInfo> for VkCommandBufferInheritanceConditionalRenderingInfo {
     fn vk_to_raw(src: &VkCommandBufferInheritanceConditionalRenderingInfo, dst: &mut RawVkCommandBufferInheritanceConditionalRenderingInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferInheritanceConditionalRenderingInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.conditional_rendering_enable = vk_to_raw_value(&src.conditional_rendering_enable);
     }
 }

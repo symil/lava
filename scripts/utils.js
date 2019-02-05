@@ -244,23 +244,18 @@ function getCountVarNameValue(countFieldName, getVarName) {
 function getFieldsInformation(fields, structName) {
     const infos = [];
 
-    const doesOutputHandle = isOutputHandleStruct(structName);
-
-    for (let field of fields) {
+    for (const field of fields) {
         const rawTypeName = getFieldRawTypeName(field);
         const wrappedTypeName = getFieldWrappedTypeName(field);
 
         const arraySize = field.arraySize;
         const isCount = !!(field.countFor && field.countFor.length);
-        const isPointer = field.isPointer;
         const isDoublePointer = field.isDoublePointer;
         const isPointerArray = field.isPointer && (field.countField || field.name === 'pSampleMask');
         const isPointerValue = field.isPointer && !isPointerArray;
         const isStaticArray = !field.isPointer && !!arraySize;
         const isPrimitiveType = rawTypeName === wrappedTypeName;
-        const isHandleType = !isPrimitiveType && !!getHandle(field);
-        const isOptional = field.isOptional;
-        const isConst = field.isConst;
+        const isOptional = field.isOptional && (structName || field.isConst || field !== fields.last());
 
         const varName = '[VarName]';
         const countVarName = '[CountVarName]';
@@ -271,7 +266,6 @@ function getFieldsInformation(fields, structName) {
         const arrayVarNameValue = isCount ? cToRustVarName(field.countFor[0]) : null;
         const countField = (field.countField && fields.find(f => f.name === field.countField)) || {};
         const countVarIsPointer = countField.isPointer;
-        const isInputHandle = isHandleType && !doesOutputHandle;
 
         let rawType = null;
         let wrappedType = null;
@@ -280,27 +274,33 @@ function getFieldsInformation(fields, structName) {
         let defValue = null;
         let freeRaw = null;
 
-        if (field.name === 'sType' && field.values) {
+        if (field.name === 'pAllocator') {
+            rawType = '*const c_void';
+            wrappedType = '*const c_void';
+            toRaw = varName;
+            toWrapped = varName;
+            defValue = 'ptr::null()';
+        } else if (field.name === 'sType' && field.values) {
             rawType = 'RawVkStructureType';
             toRaw = () => `vk_to_raw_value(&VkStructureType::${toPascalCase(field.values.substring('VK_STRUCTURE_TYPE_'.length))})`;
         } else if (field.name === 'pNext') {
-            rawType = `*const c_void`;
-            toRaw = `ptr::null()`;
+            rawType = `*mut c_void`;
+            toRaw = `ptr::null_mut()`;
         } else if (field.name === 'pCode') {
-            rawType = '*const u8';
+            rawType = '*mut u8';
             wrappedType = '&[u8]';
-            toRaw = `${varName}.as_ptr()`;
+            toRaw = `get_vec_ptr(${varName})`;
             defValue = '&[]';
         } else if (field.fullType === 'void**') {
-            rawType = `*const *const c_void`;
-            wrappedType = `*const *const c_void`;
+            rawType = `*mut *mut c_void`;
+            wrappedType = `*mut *mut c_void`;
             toRaw = varName;
             toWrapped = varName;
-            defValue = 'ptr::null()'
+            defValue = 'ptr::null_mut()'
         } else if (/(const )?void\*$/.test(field.fullType)) {
             if (field.countField) {
-                rawType = `*const c_void`;
-                toRaw = `${varName}.as_ptr()`;
+                rawType = `*mut c_void`;
+                toRaw = `get_vec_ptr(${varName})`;
 
                 if (countVarIsPointer) {
                     wrappedType = `Vec<c_void>`;
@@ -312,14 +312,14 @@ function getFieldsInformation(fields, structName) {
                     defValue = '&[]';
                 }
             } else {
-                rawType = `*const c_void`;
-                wrappedType = `*const c_void`;
+                rawType = `*mut c_void`;
+                wrappedType = `*mut c_void`;
                 toRaw = varName;
                 toWrapped = varName;
-                defValue = 'ptr::null()';
+                defValue = 'ptr::null_mut()';
             }
         } else if (isCount) {
-            rawType = isPointerValue ? `*const ${rawTypeName}` : rawTypeName;
+            rawType = isPointerValue ? `*mut ${rawTypeName}` : rawTypeName;
 
             let lenValue = '';
 
@@ -346,14 +346,14 @@ function getFieldsInformation(fields, structName) {
                 `return '${lenValue}'.replace(/makeVarName\\((\\w+)\\)/g, function(_, name) { return makeVarName(name); });`,
             ].join('\n'));
         } else if (field.fullType === 'const char* const*') {
-            rawType = `*const *const c_char`;
+            rawType = `*mut *mut c_char`;
             freeRaw = `free_ptr(${varName})`;
             wrappedType = `Vec<String>`;
             toRaw = `new_ptr_string_array(&${varName})`;
             toWrapped = `new_string_vec(${countVarName}, ${varName} as *const *const c_char)`;
             defValue = `Vec::new()`;
         } else if (field.fullType === 'const char*') {
-            rawType = `*const c_char`;
+            rawType = `*mut c_char`;
             freeRaw = `free_ptr(${varName})`;
 
             if (isOptional) {
@@ -382,12 +382,12 @@ function getFieldsInformation(fields, structName) {
                     vecLength += ' as usize';
                 }
 
-                rawType = `*const ${rawTypeName}`;
+                rawType = `*mut ${rawTypeName}`;
                 freeRaw = `free_ptr(${varName})`;
 
                 if (isOptional) {
                     wrappedType = `Option<Vec<${wrappedTypeName}>>`;
-                    toRaw = `vec_option_to_ptr(&${varName})`;
+                    toRaw = `get_vec_ptr_checked(&${varName})`;
                     defValue = `None`;
 
                     if (field.countField) {
@@ -395,7 +395,7 @@ function getFieldsInformation(fields, structName) {
                     }
                 } else {
                     wrappedType = `Vec<${wrappedTypeName}>`;
-                    toRaw = `${varName}.as_ptr()`;
+                    toRaw = `get_vec_ptr(&${varName})`;
                     defValue = `Vec::new()`;
 
                     if (field.countField) {
@@ -403,7 +403,7 @@ function getFieldsInformation(fields, structName) {
                     }
                 }
             } else if (isPointerValue) {
-                rawType = `*const ${rawTypeName}`;
+                rawType = `*mut ${rawTypeName}`;
                 freeRaw = `free_ptr(${varName})`;
                 wrappedType = wrappedTypeName;
                 toRaw = `&${varName} as *const ${rawTypeName}`;
@@ -435,7 +435,7 @@ function getFieldsInformation(fields, structName) {
                 const countPrefix = countField.isPointer ? '*' : '';
                 const countSuffix = countField.typeName === 'size_t' ? '' : ' as usize';
 
-                rawType = `*const *const ${rawTypeName}`;
+                rawType = `*mut *mut ${rawTypeName}`;
                 if (fieldIsStruct) {
                     freeRaw = `free_vk_ptr_array_array(${countPrefix}${countVarName}${countSuffix}, ${varName})`;
                 } else {
@@ -448,7 +448,7 @@ function getFieldsInformation(fields, structName) {
                 const countPrefix = countField.isPointer ? '*' : '';
                 const countSuffix = countField.typeName === 'size_t' ? '' : ' as usize';
 
-                rawType = `*const ${rawTypeName}`;
+                rawType = `*mut ${rawTypeName}`;
                 if (fieldIsStruct) {
                     freeRaw = `free_vk_ptr_array(${countPrefix}${countVarName}${countSuffix}, ${varName})`;
                 } else {
@@ -467,7 +467,7 @@ function getFieldsInformation(fields, structName) {
                     defValue = `Vec::new()`;
                 }
             } else if (isPointerValue) {
-                rawType = `*const ${rawTypeName}`;
+                rawType = `*mut ${rawTypeName}`;
 
                 if (fieldIsStruct) {
                     freeRaw = `free_vk_ptr(${varName})`;

@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceComputeShaderDerivativesFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceComputeShaderDerivativesFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub compute_derivative_group_quads: u32,
     pub compute_derivative_group_linear: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceComputeShaderDerivativesFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceComputeShaderDerivativesFeatures> for VkPhysicalDeviceComputeShaderDerivativesFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceComputeShaderDerivativesFeatures, dst: &mut RawVkPhysicalDeviceComputeShaderDerivativesFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceComputeShaderDerivativesFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.compute_derivative_group_quads = vk_to_raw_value(&src.compute_derivative_group_quads);
         dst.compute_derivative_group_linear = vk_to_raw_value(&src.compute_derivative_group_linear);
     }

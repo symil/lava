@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceMemoryBudgetProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryBudgetProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub heap_budget: [u64; 16],
     pub heap_usage: [u64; 16],
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceMemoryBudgetProperties {
 impl VkWrappedType<RawVkPhysicalDeviceMemoryBudgetProperties> for VkPhysicalDeviceMemoryBudgetProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceMemoryBudgetProperties, dst: &mut RawVkPhysicalDeviceMemoryBudgetProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryBudgetPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.heap_budget = unsafe { let mut dst_array : [u64; 16] = mem::uninitialized(); vk_to_raw_array(&src.heap_budget, &mut dst_array); dst_array };
         dst.heap_usage = unsafe { let mut dst_array : [u64; 16] = mem::uninitialized(); vk_to_raw_array(&src.heap_usage, &mut dst_array); dst_array };
     }

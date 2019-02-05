@@ -25,14 +25,14 @@ pub struct VkPhysicalDeviceExternalImageFormatInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalImageFormatInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceExternalImageFormatInfo> for VkPhysicalDeviceExternalImageFormatInfo {
     fn vk_to_raw(src: &VkPhysicalDeviceExternalImageFormatInfo, dst: &mut RawVkPhysicalDeviceExternalImageFormatInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalImageFormatInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }

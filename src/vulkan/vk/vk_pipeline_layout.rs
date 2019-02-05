@@ -65,4 +65,11 @@ impl VkPipelineLayout {
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
+    
+    /// Wrapper for [vkDestroyPipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyPipelineLayout.html).
+    pub fn destroy(&self) {
+        unsafe {
+            ((&*self._fn_table).vkDestroyPipelineLayout)((*self._fn_table).device, self._handle, ptr::null());
+        }
+    }
 }

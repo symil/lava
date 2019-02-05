@@ -27,16 +27,16 @@ pub struct VkPipelineViewportSwizzleStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportSwizzleStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineViewportSwizzleStateCreateFlags,
     pub viewport_count: u32,
-    pub viewport_swizzles: *const RawVkViewportSwizzle,
+    pub viewport_swizzles: *mut RawVkViewportSwizzle,
 }
 
 impl VkWrappedType<RawVkPipelineViewportSwizzleStateCreateInfo> for VkPipelineViewportSwizzleStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportSwizzleStateCreateInfo, dst: &mut RawVkPipelineViewportSwizzleStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportSwizzleStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.viewport_count = src.viewport_swizzles.len() as u32;
         dst.viewport_swizzles = new_ptr_vk_array(&src.viewport_swizzles);

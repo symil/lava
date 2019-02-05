@@ -25,14 +25,14 @@ pub struct VkPhysicalDeviceSurfaceInfo2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSurfaceInfo2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub surface: RawVkSurface,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceSurfaceInfo2> for VkPhysicalDeviceSurfaceInfo2 {
     fn vk_to_raw(src: &VkPhysicalDeviceSurfaceInfo2, dst: &mut RawVkPhysicalDeviceSurfaceInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSurfaceInfo2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.surface = vk_to_raw_value(&src.surface);
     }
 }

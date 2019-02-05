@@ -27,7 +27,7 @@ pub struct VkSparseBufferMemoryBindInfo {
 pub struct RawVkSparseBufferMemoryBindInfo {
     pub buffer: RawVkBuffer,
     pub bind_count: u32,
-    pub binds: *const RawVkSparseMemoryBind,
+    pub binds: *mut RawVkSparseMemoryBind,
 }
 
 impl VkWrappedType<RawVkSparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfo {

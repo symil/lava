@@ -25,7 +25,7 @@ pub struct VkFilterCubicImageViewImageFormatProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFilterCubicImageViewImageFormatProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub filter_cubic: u32,
     pub filter_cubic_minmax: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkFilterCubicImageViewImageFormatProperties {
 impl VkWrappedType<RawVkFilterCubicImageViewImageFormatProperties> for VkFilterCubicImageViewImageFormatProperties {
     fn vk_to_raw(src: &VkFilterCubicImageViewImageFormatProperties, dst: &mut RawVkFilterCubicImageViewImageFormatProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::FilterCubicImageViewImageFormatPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.filter_cubic = vk_to_raw_value(&src.filter_cubic);
         dst.filter_cubic_minmax = vk_to_raw_value(&src.filter_cubic_minmax);
     }

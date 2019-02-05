@@ -49,7 +49,7 @@ pub struct VkSwapchainCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSwapchainCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkSwapchainCreateFlags,
     pub surface: RawVkSurface,
     pub min_image_count: u32,
@@ -60,7 +60,7 @@ pub struct RawVkSwapchainCreateInfo {
     pub image_usage: RawVkImageUsageFlags,
     pub image_sharing_mode: RawVkSharingMode,
     pub queue_family_index_count: u32,
-    pub queue_family_indices: *const u32,
+    pub queue_family_indices: *mut u32,
     pub pre_transform: RawVkSurfaceTransformFlags,
     pub composite_alpha: RawVkCompositeAlphaFlags,
     pub present_mode: RawVkPresentMode,
@@ -71,7 +71,7 @@ pub struct RawVkSwapchainCreateInfo {
 impl VkWrappedType<RawVkSwapchainCreateInfo> for VkSwapchainCreateInfo {
     fn vk_to_raw(src: &VkSwapchainCreateInfo, dst: &mut RawVkSwapchainCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SwapchainCreateInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.surface = vk_to_raw_value(&src.surface);
         dst.min_image_count = vk_to_raw_value(&src.min_image_count);

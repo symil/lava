@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceVertexAttributeDivisorFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVertexAttributeDivisorFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub vertex_attribute_instance_rate_divisor: u32,
     pub vertex_attribute_instance_rate_zero_divisor: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceVertexAttributeDivisorFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceVertexAttributeDivisorFeatures> for VkPhysicalDeviceVertexAttributeDivisorFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceVertexAttributeDivisorFeatures, dst: &mut RawVkPhysicalDeviceVertexAttributeDivisorFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVertexAttributeDivisorFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.vertex_attribute_instance_rate_divisor = vk_to_raw_value(&src.vertex_attribute_instance_rate_divisor);
         dst.vertex_attribute_instance_rate_zero_divisor = vk_to_raw_value(&src.vertex_attribute_instance_rate_zero_divisor);
     }

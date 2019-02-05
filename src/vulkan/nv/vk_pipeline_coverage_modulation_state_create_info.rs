@@ -29,23 +29,23 @@ pub struct VkPipelineCoverageModulationStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineCoverageModulationStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineCoverageModulationStateCreateFlags,
     pub coverage_modulation_mode: RawVkCoverageModulationMode,
     pub coverage_modulation_table_enable: u32,
     pub coverage_modulation_table_count: u32,
-    pub coverage_modulation_table: *const f32,
+    pub coverage_modulation_table: *mut f32,
 }
 
 impl VkWrappedType<RawVkPipelineCoverageModulationStateCreateInfo> for VkPipelineCoverageModulationStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineCoverageModulationStateCreateInfo, dst: &mut RawVkPipelineCoverageModulationStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineCoverageModulationStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.coverage_modulation_mode = vk_to_raw_value(&src.coverage_modulation_mode);
         dst.coverage_modulation_table_enable = vk_to_raw_value(&src.coverage_modulation_table_enable);
         dst.coverage_modulation_table_count = get_array_option_len(&src.coverage_modulation_table) as u32;
-        dst.coverage_modulation_table = vec_option_to_ptr(&src.coverage_modulation_table);
+        dst.coverage_modulation_table = get_vec_ptr_checked(&src.coverage_modulation_table);
     }
 }
 

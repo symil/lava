@@ -27,15 +27,15 @@ pub struct VkCommandBufferBeginInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkCommandBufferUsageFlags,
-    pub inheritance_info: *const RawVkCommandBufferInheritanceInfo,
+    pub inheritance_info: *mut RawVkCommandBufferInheritanceInfo,
 }
 
 impl VkWrappedType<RawVkCommandBufferBeginInfo> for VkCommandBufferBeginInfo {
     fn vk_to_raw(src: &VkCommandBufferBeginInfo, dst: &mut RawVkCommandBufferBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferBeginInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.inheritance_info = new_ptr_vk_value_checked(&src.inheritance_info);
     }

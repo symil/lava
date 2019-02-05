@@ -25,14 +25,14 @@ pub struct VkDisplayPlaneCapabilities2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneCapabilities2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub capabilities: RawVkDisplayPlaneCapabilities,
 }
 
 impl VkWrappedType<RawVkDisplayPlaneCapabilities2> for VkDisplayPlaneCapabilities2 {
     fn vk_to_raw(src: &VkDisplayPlaneCapabilities2, dst: &mut RawVkDisplayPlaneCapabilities2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPlaneCapabilities2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.capabilities = vk_to_raw_value(&src.capabilities);
     }
 }

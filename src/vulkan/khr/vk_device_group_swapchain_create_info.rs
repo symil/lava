@@ -25,14 +25,14 @@ pub struct VkDeviceGroupSwapchainCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupSwapchainCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub modes: RawVkDeviceGroupPresentModeFlags,
 }
 
 impl VkWrappedType<RawVkDeviceGroupSwapchainCreateInfo> for VkDeviceGroupSwapchainCreateInfo {
     fn vk_to_raw(src: &VkDeviceGroupSwapchainCreateInfo, dst: &mut RawVkDeviceGroupSwapchainCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupSwapchainCreateInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.modes = vk_to_raw_value(&src.modes);
     }
 }

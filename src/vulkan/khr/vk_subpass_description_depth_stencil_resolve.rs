@@ -28,16 +28,16 @@ pub struct VkSubpassDescriptionDepthStencilResolve {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDescriptionDepthStencilResolve {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub depth_resolve_mode: RawVkResolveModeFlags,
     pub stencil_resolve_mode: RawVkResolveModeFlags,
-    pub depth_stencil_resolve_attachment: *const RawVkAttachmentReference2,
+    pub depth_stencil_resolve_attachment: *mut RawVkAttachmentReference2,
 }
 
 impl VkWrappedType<RawVkSubpassDescriptionDepthStencilResolve> for VkSubpassDescriptionDepthStencilResolve {
     fn vk_to_raw(src: &VkSubpassDescriptionDepthStencilResolve, dst: &mut RawVkSubpassDescriptionDepthStencilResolve) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SubpassDescriptionDepthStencilResolveKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.depth_resolve_mode = vk_to_raw_value(&src.depth_resolve_mode);
         dst.stencil_resolve_mode = vk_to_raw_value(&src.stencil_resolve_mode);
         dst.depth_stencil_resolve_attachment = new_ptr_vk_value_checked(&src.depth_stencil_resolve_attachment);

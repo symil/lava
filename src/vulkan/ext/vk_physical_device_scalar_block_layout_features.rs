@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceScalarBlockLayoutFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceScalarBlockLayoutFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub scalar_block_layout: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceScalarBlockLayoutFeatures> for VkPhysicalDeviceScalarBlockLayoutFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceScalarBlockLayoutFeatures, dst: &mut RawVkPhysicalDeviceScalarBlockLayoutFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceScalarBlockLayoutFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.scalar_block_layout = vk_to_raw_value(&src.scalar_block_layout);
     }
 }

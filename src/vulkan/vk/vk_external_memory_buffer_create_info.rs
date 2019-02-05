@@ -25,14 +25,14 @@ pub struct VkExternalMemoryBufferCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalMemoryBufferCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
 impl VkWrappedType<RawVkExternalMemoryBufferCreateInfo> for VkExternalMemoryBufferCreateInfo {
     fn vk_to_raw(src: &VkExternalMemoryBufferCreateInfo, dst: &mut RawVkExternalMemoryBufferCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ExternalMemoryBufferCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }

@@ -65,4 +65,11 @@ impl VkDebugReportCallback {
     pub fn vk_handle(&self) -> u64 {
         self._handle
     }
+    
+    /// Wrapper for [vkDestroyDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDebugReportCallbackEXT.html).
+    pub fn destroy(&self) {
+        unsafe {
+            ((&*self._fn_table).vkDestroyDebugReportCallbackEXT)((*self._fn_table).instance, self._handle, ptr::null());
+        }
+    }
 }

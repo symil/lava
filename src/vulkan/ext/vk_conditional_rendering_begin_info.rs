@@ -28,7 +28,7 @@ pub struct VkConditionalRenderingBeginInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkConditionalRenderingBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub buffer: RawVkBuffer,
     pub offset: u64,
     pub flags: RawVkConditionalRenderingFlags,
@@ -37,7 +37,7 @@ pub struct RawVkConditionalRenderingBeginInfo {
 impl VkWrappedType<RawVkConditionalRenderingBeginInfo> for VkConditionalRenderingBeginInfo {
     fn vk_to_raw(src: &VkConditionalRenderingBeginInfo, dst: &mut RawVkConditionalRenderingBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ConditionalRenderingBeginInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.buffer = vk_to_raw_value(&src.buffer);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.flags = vk_to_raw_value(&src.flags);

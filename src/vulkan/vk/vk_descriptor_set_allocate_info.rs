@@ -27,16 +27,16 @@ pub struct VkDescriptorSetAllocateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub descriptor_pool: RawVkDescriptorPool,
     pub descriptor_set_count: u32,
-    pub set_layouts: *const RawVkDescriptorSetLayout,
+    pub set_layouts: *mut RawVkDescriptorSetLayout,
 }
 
 impl VkWrappedType<RawVkDescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfo {
     fn vk_to_raw(src: &VkDescriptorSetAllocateInfo, dst: &mut RawVkDescriptorSetAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetAllocateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.descriptor_pool = vk_to_raw_value(&src.descriptor_pool);
         dst.descriptor_set_count = src.set_layouts.len() as u32;
         dst.set_layouts = new_ptr_vk_array(&src.set_layouts);

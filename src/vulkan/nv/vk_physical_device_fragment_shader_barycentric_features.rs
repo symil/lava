@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceFragmentShaderBarycentricFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFragmentShaderBarycentricFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub fragment_shader_barycentric: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceFragmentShaderBarycentricFeatures> for VkPhysicalDeviceFragmentShaderBarycentricFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceFragmentShaderBarycentricFeatures, dst: &mut RawVkPhysicalDeviceFragmentShaderBarycentricFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentShaderBarycentricFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.fragment_shader_barycentric = vk_to_raw_value(&src.fragment_shader_barycentric);
     }
 }

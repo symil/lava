@@ -25,15 +25,15 @@ pub struct VkDebugMarkerMarkerInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugMarkerMarkerInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub marker_name: *const c_char,
+    pub next: *mut c_void,
+    pub marker_name: *mut c_char,
     pub color: [f32; 4],
 }
 
 impl VkWrappedType<RawVkDebugMarkerMarkerInfo> for VkDebugMarkerMarkerInfo {
     fn vk_to_raw(src: &VkDebugMarkerMarkerInfo, dst: &mut RawVkDebugMarkerMarkerInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugMarkerMarkerInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.marker_name = new_ptr_string(&src.marker_name);
         dst.color = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array };
     }

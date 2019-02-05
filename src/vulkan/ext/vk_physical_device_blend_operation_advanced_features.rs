@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceBlendOperationAdvancedFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceBlendOperationAdvancedFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub advanced_blend_coherent_operations: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceBlendOperationAdvancedFeatures> for VkPhysicalDeviceBlendOperationAdvancedFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceBlendOperationAdvancedFeatures, dst: &mut RawVkPhysicalDeviceBlendOperationAdvancedFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceBlendOperationAdvancedFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.advanced_blend_coherent_operations = vk_to_raw_value(&src.advanced_blend_coherent_operations);
     }
 }

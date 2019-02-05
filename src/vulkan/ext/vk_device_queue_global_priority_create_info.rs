@@ -25,14 +25,14 @@ pub struct VkDeviceQueueGlobalPriorityCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceQueueGlobalPriorityCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub global_priority: RawVkQueueGlobalPriority,
 }
 
 impl VkWrappedType<RawVkDeviceQueueGlobalPriorityCreateInfo> for VkDeviceQueueGlobalPriorityCreateInfo {
     fn vk_to_raw(src: &VkDeviceQueueGlobalPriorityCreateInfo, dst: &mut RawVkDeviceQueueGlobalPriorityCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceQueueGlobalPriorityCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.global_priority = vk_to_raw_value(&src.global_priority);
     }
 }

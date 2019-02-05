@@ -36,7 +36,7 @@ pub struct VkDisplaySurfaceCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplaySurfaceCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDisplaySurfaceCreateFlags,
     pub display_mode: RawVkDisplayMode,
     pub plane_index: u32,
@@ -50,7 +50,7 @@ pub struct RawVkDisplaySurfaceCreateInfo {
 impl VkWrappedType<RawVkDisplaySurfaceCreateInfo> for VkDisplaySurfaceCreateInfo {
     fn vk_to_raw(src: &VkDisplaySurfaceCreateInfo, dst: &mut RawVkDisplaySurfaceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplaySurfaceCreateInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.display_mode = vk_to_raw_value(&src.display_mode);
         dst.plane_index = vk_to_raw_value(&src.plane_index);

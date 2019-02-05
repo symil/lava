@@ -29,7 +29,7 @@ pub struct VkPhysicalDeviceExternalBufferInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalBufferInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkBufferCreateFlags,
     pub usage: RawVkBufferUsageFlags,
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
@@ -38,7 +38,7 @@ pub struct RawVkPhysicalDeviceExternalBufferInfo {
 impl VkWrappedType<RawVkPhysicalDeviceExternalBufferInfo> for VkPhysicalDeviceExternalBufferInfo {
     fn vk_to_raw(src: &VkPhysicalDeviceExternalBufferInfo, dst: &mut RawVkPhysicalDeviceExternalBufferInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalBufferInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.usage = vk_to_raw_value(&src.usage);
         dst.handle_type = vk_to_raw_value(&src.handle_type);

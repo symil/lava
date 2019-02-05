@@ -33,11 +33,11 @@ pub struct VkObjectTableCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_count: u32,
-    pub object_entry_types: *const RawVkObjectEntryType,
-    pub object_entry_counts: *const u32,
-    pub object_entry_usage_flags: *const RawVkObjectEntryUsageFlags,
+    pub object_entry_types: *mut RawVkObjectEntryType,
+    pub object_entry_counts: *mut u32,
+    pub object_entry_usage_flags: *mut RawVkObjectEntryUsageFlags,
     pub max_uniform_buffers_per_descriptor: u32,
     pub max_storage_buffers_per_descriptor: u32,
     pub max_storage_images_per_descriptor: u32,
@@ -48,7 +48,7 @@ pub struct RawVkObjectTableCreateInfo {
 impl VkWrappedType<RawVkObjectTableCreateInfo> for VkObjectTableCreateInfo {
     fn vk_to_raw(src: &VkObjectTableCreateInfo, dst: &mut RawVkObjectTableCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ObjectTableCreateInfoNvx);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.object_count = cmp::max(cmp::max(src.object_entry_types.len(), src.object_entry_counts.len()), src.object_entry_usage_flags.len()) as u32;
         dst.object_entry_types = new_ptr_vk_array(&src.object_entry_types);
         dst.object_entry_counts = new_ptr_vk_array(&src.object_entry_counts);

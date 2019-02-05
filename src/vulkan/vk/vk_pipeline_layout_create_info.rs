@@ -29,18 +29,18 @@ pub struct VkPipelineLayoutCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineLayoutCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineLayoutCreateFlags,
     pub set_layout_count: u32,
-    pub set_layouts: *const RawVkDescriptorSetLayout,
+    pub set_layouts: *mut RawVkDescriptorSetLayout,
     pub push_constant_range_count: u32,
-    pub push_constant_ranges: *const RawVkPushConstantRange,
+    pub push_constant_ranges: *mut RawVkPushConstantRange,
 }
 
 impl VkWrappedType<RawVkPipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfo {
     fn vk_to_raw(src: &VkPipelineLayoutCreateInfo, dst: &mut RawVkPipelineLayoutCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineLayoutCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.set_layout_count = src.set_layouts.len() as u32;
         dst.set_layouts = new_ptr_vk_array(&src.set_layouts);

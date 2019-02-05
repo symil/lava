@@ -26,7 +26,7 @@ pub struct VkPhysicalDeviceGroupProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceGroupProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub physical_device_count: u32,
     pub physical_devices: [RawVkPhysicalDevice; 32],
     pub subset_allocation: u32,
@@ -35,7 +35,7 @@ pub struct RawVkPhysicalDeviceGroupProperties {
 impl VkWrappedType<RawVkPhysicalDeviceGroupProperties> for VkPhysicalDeviceGroupProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceGroupProperties, dst: &mut RawVkPhysicalDeviceGroupProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceGroupProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.physical_device_count = src.physical_devices.len() as u32;
         dst.physical_devices = unsafe { let mut dst_array : [RawVkPhysicalDevice; 32] = mem::uninitialized(); vk_to_raw_array(&src.physical_devices, &mut dst_array); dst_array };
         dst.subset_allocation = vk_to_raw_value(&src.subset_allocation);

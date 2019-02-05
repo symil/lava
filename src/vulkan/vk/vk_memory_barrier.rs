@@ -26,7 +26,7 @@ pub struct VkMemoryBarrier {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryBarrier {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub src_access_mask: RawVkAccessFlags,
     pub dst_access_mask: RawVkAccessFlags,
 }
@@ -34,7 +34,7 @@ pub struct RawVkMemoryBarrier {
 impl VkWrappedType<RawVkMemoryBarrier> for VkMemoryBarrier {
     fn vk_to_raw(src: &VkMemoryBarrier, dst: &mut RawVkMemoryBarrier) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryBarrier);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.src_access_mask = vk_to_raw_value(&src.src_access_mask);
         dst.dst_access_mask = vk_to_raw_value(&src.dst_access_mask);
     }

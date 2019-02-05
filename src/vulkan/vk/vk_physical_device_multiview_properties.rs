@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceMultiviewProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMultiviewProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_multiview_view_count: u32,
     pub max_multiview_instance_index: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceMultiviewProperties {
 impl VkWrappedType<RawVkPhysicalDeviceMultiviewProperties> for VkPhysicalDeviceMultiviewProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceMultiviewProperties, dst: &mut RawVkPhysicalDeviceMultiviewProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_multiview_view_count = vk_to_raw_value(&src.max_multiview_view_count);
         dst.max_multiview_instance_index = vk_to_raw_value(&src.max_multiview_instance_index);
     }

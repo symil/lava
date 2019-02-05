@@ -26,17 +26,17 @@ pub struct VkBindImageMemoryDeviceGroupInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemoryDeviceGroupInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub device_index_count: u32,
-    pub device_indices: *const u32,
+    pub device_indices: *mut u32,
     pub split_instance_bind_region_count: u32,
-    pub split_instance_bind_regions: *const RawVkRect2D,
+    pub split_instance_bind_regions: *mut RawVkRect2D,
 }
 
 impl VkWrappedType<RawVkBindImageMemoryDeviceGroupInfo> for VkBindImageMemoryDeviceGroupInfo {
     fn vk_to_raw(src: &VkBindImageMemoryDeviceGroupInfo, dst: &mut RawVkBindImageMemoryDeviceGroupInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindImageMemoryDeviceGroupInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.device_index_count = src.device_indices.len() as u32;
         dst.device_indices = new_ptr_vk_array(&src.device_indices);
         dst.split_instance_bind_region_count = src.split_instance_bind_regions.len() as u32;

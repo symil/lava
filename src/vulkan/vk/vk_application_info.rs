@@ -29,10 +29,10 @@ pub struct VkApplicationInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkApplicationInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
-    pub application_name: *const c_char,
+    pub next: *mut c_void,
+    pub application_name: *mut c_char,
     pub application_version: u32,
-    pub engine_name: *const c_char,
+    pub engine_name: *mut c_char,
     pub engine_version: u32,
     pub api_version: u32,
 }
@@ -40,7 +40,7 @@ pub struct RawVkApplicationInfo {
 impl VkWrappedType<RawVkApplicationInfo> for VkApplicationInfo {
     fn vk_to_raw(src: &VkApplicationInfo, dst: &mut RawVkApplicationInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ApplicationInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.application_name = new_ptr_string_checked(&src.application_name);
         dst.application_version = src.application_version;
         dst.engine_name = new_ptr_string_checked(&src.engine_name);

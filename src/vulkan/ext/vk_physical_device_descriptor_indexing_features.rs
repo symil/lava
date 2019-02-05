@@ -43,7 +43,7 @@ pub struct VkPhysicalDeviceDescriptorIndexingFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDescriptorIndexingFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shader_input_attachment_array_dynamic_indexing: u32,
     pub shader_uniform_texel_buffer_array_dynamic_indexing: u32,
     pub shader_storage_texel_buffer_array_dynamic_indexing: u32,
@@ -69,7 +69,7 @@ pub struct RawVkPhysicalDeviceDescriptorIndexingFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceDescriptorIndexingFeatures> for VkPhysicalDeviceDescriptorIndexingFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceDescriptorIndexingFeatures, dst: &mut RawVkPhysicalDeviceDescriptorIndexingFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDescriptorIndexingFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shader_input_attachment_array_dynamic_indexing = vk_to_raw_value(&src.shader_input_attachment_array_dynamic_indexing);
         dst.shader_uniform_texel_buffer_array_dynamic_indexing = vk_to_raw_value(&src.shader_uniform_texel_buffer_array_dynamic_indexing);
         dst.shader_storage_texel_buffer_array_dynamic_indexing = vk_to_raw_value(&src.shader_storage_texel_buffer_array_dynamic_indexing);

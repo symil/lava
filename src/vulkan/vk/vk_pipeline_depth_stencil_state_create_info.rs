@@ -36,7 +36,7 @@ pub struct VkPipelineDepthStencilStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineDepthStencilStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineDepthStencilStateCreateFlags,
     pub depth_test_enable: u32,
     pub depth_write_enable: u32,
@@ -52,7 +52,7 @@ pub struct RawVkPipelineDepthStencilStateCreateInfo {
 impl VkWrappedType<RawVkPipelineDepthStencilStateCreateInfo> for VkPipelineDepthStencilStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineDepthStencilStateCreateInfo, dst: &mut RawVkPipelineDepthStencilStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineDepthStencilStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.depth_test_enable = vk_to_raw_value(&src.depth_test_enable);
         dst.depth_write_enable = vk_to_raw_value(&src.depth_write_enable);

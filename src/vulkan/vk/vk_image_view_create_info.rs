@@ -35,7 +35,7 @@ pub struct VkImageViewCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageViewCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkImageViewCreateFlags,
     pub image: RawVkImage,
     pub view_type: RawVkImageViewType,
@@ -47,7 +47,7 @@ pub struct RawVkImageViewCreateInfo {
 impl VkWrappedType<RawVkImageViewCreateInfo> for VkImageViewCreateInfo {
     fn vk_to_raw(src: &VkImageViewCreateInfo, dst: &mut RawVkImageViewCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageViewCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.image = vk_to_raw_value(&src.image);
         dst.view_type = vk_to_raw_value(&src.view_type);

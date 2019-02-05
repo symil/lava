@@ -41,7 +41,7 @@ pub fn vk_enumerate_instance_extension_properties(layer_name: Option<String>) ->
         
         vk_result = vkEnumerateInstanceExtensionProperties(raw_layer_name, raw_property_count, raw_properties);
         
-        let properties = new_vk_array_checked(*raw_property_count, raw_properties).unwrap();
+        let properties = new_vk_array(*raw_property_count, raw_properties);
         free_ptr(raw_layer_name);
         free(raw_properties as *mut u8);
         if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
@@ -59,7 +59,7 @@ pub fn vk_enumerate_instance_layer_properties() -> Result<Vec<VkLayerProperties>
         
         vk_result = vkEnumerateInstanceLayerProperties(raw_property_count, raw_properties);
         
-        let properties = new_vk_array_checked(*raw_property_count, raw_properties).unwrap();
+        let properties = new_vk_array(*raw_property_count, raw_properties);
         free(raw_properties as *mut u8);
         if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
     }
@@ -79,8 +79,8 @@ pub fn vk_enumerate_instance_version() -> Result<VkVersion, (VkResult, VkVersion
 }
 
 extern {
-    fn vkCreateInstance(create_info: *const RawVkInstanceCreateInfo, allocator: *const c_void, instance: *const RawVkInstance) -> RawVkResult;
-    fn vkEnumerateInstanceExtensionProperties(layer_name: *const c_char, property_count: *const u32, properties: *const RawVkExtensionProperties) -> RawVkResult;
-    fn vkEnumerateInstanceLayerProperties(property_count: *const u32, properties: *const RawVkLayerProperties) -> RawVkResult;
-    fn vkEnumerateInstanceVersion(api_version: *const u32) -> RawVkResult;
+    fn vkCreateInstance(create_info: *mut RawVkInstanceCreateInfo, allocator: *const c_void, instance: *mut RawVkInstance) -> RawVkResult;
+    fn vkEnumerateInstanceExtensionProperties(layer_name: *mut c_char, property_count: *mut u32, properties: *mut RawVkExtensionProperties) -> RawVkResult;
+    fn vkEnumerateInstanceLayerProperties(property_count: *mut u32, properties: *mut RawVkLayerProperties) -> RawVkResult;
+    fn vkEnumerateInstanceVersion(api_version: *mut u32) -> RawVkResult;
 }

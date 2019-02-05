@@ -34,7 +34,7 @@ pub struct VkSubpassDependency2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassDependency2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub src_subpass: u32,
     pub dst_subpass: u32,
     pub src_stage_mask: RawVkPipelineStageFlags,
@@ -48,7 +48,7 @@ pub struct RawVkSubpassDependency2 {
 impl VkWrappedType<RawVkSubpassDependency2> for VkSubpassDependency2 {
     fn vk_to_raw(src: &VkSubpassDependency2, dst: &mut RawVkSubpassDependency2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SubpassDependency2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.src_subpass = vk_to_raw_value(&src.src_subpass);
         dst.dst_subpass = vk_to_raw_value(&src.dst_subpass);
         dst.src_stage_mask = vk_to_raw_value(&src.src_stage_mask);

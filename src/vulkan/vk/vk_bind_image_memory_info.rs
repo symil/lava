@@ -28,7 +28,7 @@ pub struct VkBindImageMemoryInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemoryInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub image: RawVkImage,
     pub memory: RawVkDeviceMemory,
     pub memory_offset: u64,
@@ -37,7 +37,7 @@ pub struct RawVkBindImageMemoryInfo {
 impl VkWrappedType<RawVkBindImageMemoryInfo> for VkBindImageMemoryInfo {
     fn vk_to_raw(src: &VkBindImageMemoryInfo, dst: &mut RawVkBindImageMemoryInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindImageMemoryInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.image = vk_to_raw_value(&src.image);
         dst.memory = vk_to_raw_value(&src.memory);
         dst.memory_offset = vk_to_raw_value(&src.memory_offset);

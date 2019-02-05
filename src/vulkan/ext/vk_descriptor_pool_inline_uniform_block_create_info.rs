@@ -24,14 +24,14 @@ pub struct VkDescriptorPoolInlineUniformBlockCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorPoolInlineUniformBlockCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_inline_uniform_block_bindings: u32,
 }
 
 impl VkWrappedType<RawVkDescriptorPoolInlineUniformBlockCreateInfo> for VkDescriptorPoolInlineUniformBlockCreateInfo {
     fn vk_to_raw(src: &VkDescriptorPoolInlineUniformBlockCreateInfo, dst: &mut RawVkDescriptorPoolInlineUniformBlockCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorPoolInlineUniformBlockCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_inline_uniform_block_bindings = vk_to_raw_value(&src.max_inline_uniform_block_bindings);
     }
 }

@@ -30,7 +30,7 @@ pub struct VkImportSemaphoreFdInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportSemaphoreFdInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub semaphore: RawVkSemaphore,
     pub flags: RawVkSemaphoreImportFlags,
     pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
@@ -40,7 +40,7 @@ pub struct RawVkImportSemaphoreFdInfo {
 impl VkWrappedType<RawVkImportSemaphoreFdInfo> for VkImportSemaphoreFdInfo {
     fn vk_to_raw(src: &VkImportSemaphoreFdInfo, dst: &mut RawVkImportSemaphoreFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImportSemaphoreFdInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.semaphore = vk_to_raw_value(&src.semaphore);
         dst.flags = vk_to_raw_value(&src.flags);
         dst.handle_type = vk_to_raw_value(&src.handle_type);

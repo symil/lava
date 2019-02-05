@@ -25,9 +25,9 @@ pub struct VkSpecializationInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSpecializationInfo {
     pub map_entry_count: u32,
-    pub map_entries: *const RawVkSpecializationMapEntry,
+    pub map_entries: *mut RawVkSpecializationMapEntry,
     pub data_size: usize,
-    pub data: *const c_void,
+    pub data: *mut c_void,
 }
 
 impl<'a> VkWrappedType<RawVkSpecializationInfo> for VkSpecializationInfo<'a> {
@@ -35,7 +35,7 @@ impl<'a> VkWrappedType<RawVkSpecializationInfo> for VkSpecializationInfo<'a> {
         dst.map_entry_count = src.map_entries.len() as u32;
         dst.map_entries = new_ptr_vk_array(&src.map_entries);
         dst.data_size = src.data.len();
-        dst.data = src.data.as_ptr();
+        dst.data = get_vec_ptr(src.data);
     }
 }
 

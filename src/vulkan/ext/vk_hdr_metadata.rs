@@ -32,7 +32,7 @@ pub struct VkHdrMetadata {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkHdrMetadata {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub display_primary_red: RawVkXYColor,
     pub display_primary_green: RawVkXYColor,
     pub display_primary_blue: RawVkXYColor,
@@ -46,7 +46,7 @@ pub struct RawVkHdrMetadata {
 impl VkWrappedType<RawVkHdrMetadata> for VkHdrMetadata {
     fn vk_to_raw(src: &VkHdrMetadata, dst: &mut RawVkHdrMetadata) {
         dst.s_type = vk_to_raw_value(&VkStructureType::HdrMetadataExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.display_primary_red = vk_to_raw_value(&src.display_primary_red);
         dst.display_primary_green = vk_to_raw_value(&src.display_primary_green);
         dst.display_primary_blue = vk_to_raw_value(&src.display_primary_blue);

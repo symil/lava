@@ -27,7 +27,7 @@ pub struct VkAccelerationStructureMemoryRequirementsInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAccelerationStructureMemoryRequirementsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub type_: RawVkAccelerationStructureMemoryRequirementsType,
     pub acceleration_structure: RawVkAccelerationStructure,
 }
@@ -35,7 +35,7 @@ pub struct RawVkAccelerationStructureMemoryRequirementsInfo {
 impl VkWrappedType<RawVkAccelerationStructureMemoryRequirementsInfo> for VkAccelerationStructureMemoryRequirementsInfo {
     fn vk_to_raw(src: &VkAccelerationStructureMemoryRequirementsInfo, dst: &mut RawVkAccelerationStructureMemoryRequirementsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AccelerationStructureMemoryRequirementsInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.acceleration_structure = vk_to_raw_value(&src.acceleration_structure);
     }

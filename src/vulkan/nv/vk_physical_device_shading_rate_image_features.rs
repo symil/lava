@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceShadingRateImageFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShadingRateImageFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shading_rate_image: u32,
     pub shading_rate_coarse_sample_order: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceShadingRateImageFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceShadingRateImageFeatures> for VkPhysicalDeviceShadingRateImageFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceShadingRateImageFeatures, dst: &mut RawVkPhysicalDeviceShadingRateImageFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShadingRateImageFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shading_rate_image = vk_to_raw_value(&src.shading_rate_image);
         dst.shading_rate_coarse_sample_order = vk_to_raw_value(&src.shading_rate_coarse_sample_order);
     }

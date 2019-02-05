@@ -30,18 +30,18 @@ pub struct VkAccelerationStructureInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAccelerationStructureInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub type_: RawVkAccelerationStructureType,
     pub flags: RawVkBuildAccelerationStructureFlags,
     pub instance_count: u32,
     pub geometry_count: u32,
-    pub geometries: *const RawVkGeometry,
+    pub geometries: *mut RawVkGeometry,
 }
 
 impl VkWrappedType<RawVkAccelerationStructureInfo> for VkAccelerationStructureInfo {
     fn vk_to_raw(src: &VkAccelerationStructureInfo, dst: &mut RawVkAccelerationStructureInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AccelerationStructureInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.flags = vk_to_raw_value(&src.flags);
         dst.instance_count = vk_to_raw_value(&src.instance_count);

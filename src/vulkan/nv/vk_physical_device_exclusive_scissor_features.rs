@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceExclusiveScissorFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExclusiveScissorFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub exclusive_scissor: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceExclusiveScissorFeatures> for VkPhysicalDeviceExclusiveScissorFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceExclusiveScissorFeatures, dst: &mut RawVkPhysicalDeviceExclusiveScissorFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExclusiveScissorFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.exclusive_scissor = vk_to_raw_value(&src.exclusive_scissor);
     }
 }

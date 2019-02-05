@@ -26,16 +26,16 @@ pub struct VkPipelineViewportShadingRateImageStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportShadingRateImageStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shading_rate_image_enable: u32,
     pub viewport_count: u32,
-    pub shading_rate_palettes: *const RawVkShadingRatePalette,
+    pub shading_rate_palettes: *mut RawVkShadingRatePalette,
 }
 
 impl VkWrappedType<RawVkPipelineViewportShadingRateImageStateCreateInfo> for VkPipelineViewportShadingRateImageStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportShadingRateImageStateCreateInfo, dst: &mut RawVkPipelineViewportShadingRateImageStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportShadingRateImageStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shading_rate_image_enable = vk_to_raw_value(&src.shading_rate_image_enable);
         dst.viewport_count = get_array_option_len(&src.shading_rate_palettes) as u32;
         dst.shading_rate_palettes = new_ptr_vk_array_checked(&src.shading_rate_palettes);
