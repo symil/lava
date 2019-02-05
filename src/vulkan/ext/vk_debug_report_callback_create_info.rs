@@ -13,7 +13,7 @@ use vulkan::ext::*;
 /// Payload of a debug report callback.
 /// Contains all fields of [PFN_vkDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/PFN_vkDebugReportCallbackEXT.html).
 #[derive(Debug)]
-pub struct VkDebugReportCallbackMessageData {
+pub struct VkDebugReportCallbackData {
     pub flags: VkDebugReportFlags,
     pub object_type: VkDebugReportObjectType,
     pub object: u64,
@@ -36,13 +36,13 @@ pub struct RawVkDebugReportCallbackCreateInfo {
 /// Wrapper for [VkDebugReportCallbackCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportCallbackCreateInfoEXT.html)
 pub struct VkDebugReportCallbackCreateInfo {
     pub flags: VkDebugReportFlags,
-    pub callback: fn(VkDebugReportCallbackMessageData)
+    pub callback: fn(VkDebugReportCallbackData)
 }
 
 unsafe extern fn c_debug_callback(flags: u32, object_type: i32, object: u64, location: usize, message_code: i32, layer_prefix: *const c_char, message: *const c_char, user_data: *mut c_void) -> u32 {
-    let func : fn(VkDebugReportCallbackMessageData) = mem::transmute(user_data);
+    let func : fn(VkDebugReportCallbackData) = mem::transmute(user_data);
 
-    func(VkDebugReportCallbackMessageData {
+    func(VkDebugReportCallbackData {
         flags: RawVkDebugReportFlags::vk_to_wrapped(&flags),
         object_type: RawVkDebugReportObjectType::vk_to_wrapped(&object_type),
         object: object,
@@ -62,7 +62,7 @@ impl VkWrappedType<RawVkDebugReportCallbackCreateInfo> for VkDebugReportCallback
             dst.p_next = ptr::null();
             dst.flags = vk_to_raw_value(&src.flags);
             dst.callback = c_debug_callback;
-            dst.user_data = mem::transmute::<fn(VkDebugReportCallbackMessageData), *mut c_void>(src.callback);
+            dst.user_data = mem::transmute::<fn(VkDebugReportCallbackData), *mut c_void>(src.callback);
         }
     }
 }

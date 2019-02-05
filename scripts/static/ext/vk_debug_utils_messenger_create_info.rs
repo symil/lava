@@ -8,6 +8,8 @@ use utils::vk_ptr::*;
 use vulkan::vk::*;
 use vulkan::ext::*;
 
+type VkDebugUtilsMessengerCallback = fn(VkDebugUtilsMessageSeverityFlags, VkDebugUtilsMessageTypeFlags, *const c_void);
+
 #[doc(hidden)]
 #[repr(C)]
 pub struct RawVkDebugUtilsMessengerCreateInfo {
@@ -16,28 +18,43 @@ pub struct RawVkDebugUtilsMessengerCreateInfo {
     flags: u32,
     message_severity: u32,
     message_type: u32,
-    user_callback: extern fn(),
+    user_callback: unsafe extern fn(RawVkDebugUtilsMessageSeverityFlags, RawVkDebugUtilsMessageTypeFlags, *const RawVkDebugUtilsMessengerCallbackData, *mut c_void) -> u32,
     user_data: *mut c_void
 }
 
-/// Wrapper for [VkDebugUtilsMessengerCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCreateInfo.html)
+/// Wrapper for [VkDebugUtilsMessengerCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCreateInfo.html).
+/// 
+/// NOT IMPLEMENTED YET
 pub struct VkDebugUtilsMessengerCreateInfo {
     pub flags: VkDebugUtilsMessengerCreateFlags,
     pub message_severity: VkDebugUtilsMessageSeverityFlags,
     pub message_type: VkDebugUtilsMessageTypeFlags,
-    pub user_callback: extern fn(),
-    pub user_data: *mut c_void
+    pub user_callback: VkDebugUtilsMessengerCallback
+}
+
+unsafe extern fn raw_callback(message_severity: RawVkDebugUtilsMessageSeverityFlags, message_types: RawVkDebugUtilsMessageTypeFlags, callback_data: *const RawVkDebugUtilsMessengerCallbackData, user_data: *mut c_void) -> u32 {
+    let func : VkDebugUtilsMessengerCallback = mem::transmute(user_data);
+
+    func(
+        RawVkDebugUtilsMessageSeverityFlags::vk_to_wrapped(&message_severity),
+        RawVkDebugUtilsMessageSeverityFlags::vk_to_wrapped(&message_types),
+        callback_data as *const c_void
+    );
+
+    0
 }
 
 impl VkWrappedType<RawVkDebugUtilsMessengerCreateInfo> for VkDebugUtilsMessengerCreateInfo {
     fn vk_to_raw(src: &VkDebugUtilsMessengerCreateInfo, dst: &mut RawVkDebugUtilsMessengerCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsMessengerCreateInfoExt);
-        dst.p_next = ptr::null();
-        dst.flags = vk_to_raw_value(&src.flags);
-        dst.message_severity = vk_to_raw_value(&src.message_severity);
-        dst.message_type = vk_to_raw_value(&src.message_type);
-        dst.user_callback = src.user_callback;
-        dst.user_data = src.user_data;
+        unsafe {
+            dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsMessengerCreateInfoExt);
+            dst.p_next = ptr::null();
+            dst.flags = vk_to_raw_value(&src.flags);
+            dst.message_severity = vk_to_raw_value(&src.message_severity);
+            dst.message_type = vk_to_raw_value(&src.message_type);
+            dst.user_callback = raw_callback;
+            dst.user_data = mem::transmute::<VkDebugUtilsMessengerCallback, *mut c_void>(src.user_callback);
+        }
     }
 }
 

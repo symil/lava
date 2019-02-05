@@ -114,7 +114,12 @@ function genImplVkRawType(def) {
             `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
                 `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                     def.wrappedTypeName,
-                    wrappedFields.map(field => `${field.varName}: ${field.toWrapped(varName => `src.${varName}`)},`)
+                    wrappedFields.map(field => {
+                        if (!field.toWrapped) {
+                            console.log(field);
+                        }
+                        return `${field.varName}: ${field.toWrapped(varName => `src.${varName}`)},`;
+                    })
                 ],
             ]
         ];

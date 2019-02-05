@@ -21,13 +21,14 @@ It comes with the following restrictions (that should be lifted in the future):
 
 - no way to provide allocator callbacks
 - no way to set the `pNext` field of structures (always set to `NULL`)
+- the wrapper for `VkDebugUtilsMessengerCreateInfoEXT` is not implemented
 
 ## Usage
 
 Add this dependency to your `Cargo.toml` file:
 ```
 [dependencies]
-lava = "0.3.0"
+lava = "0.3.2"
 ```
 
 ## Examples
@@ -54,7 +55,7 @@ fn main() {
 
     let debug_report_callback = instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
         flags: VkDebugReportFlags!(warning, error),
-        callback: |data: VkDebugReportCallbackMessageData| {
+        callback: |data: VkDebugReportCallbackData| {
             println!("{}", data.message);
         }
     }).expect("Faield to create debug callback");
