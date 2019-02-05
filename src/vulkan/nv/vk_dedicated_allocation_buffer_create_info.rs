@@ -59,7 +59,7 @@ impl VkSetup for VkDedicatedAllocationBufferCreateInfo {
 }
 
 impl VkFree for RawVkDedicatedAllocationBufferCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

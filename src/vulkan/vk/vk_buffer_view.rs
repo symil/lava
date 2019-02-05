@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkBufferView = u64;
 
 /// Wrapper for [VkBufferView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferView.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkBufferView {
     _handle: RawVkBufferView,
     _fn_table: *mut VkFunctionTable

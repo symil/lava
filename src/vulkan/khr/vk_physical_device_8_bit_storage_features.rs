@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDevice8BitStorageFeatures {
 }
 
 impl VkFree for RawVkPhysicalDevice8BitStorageFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -16,9 +16,9 @@ use vulkan::vk::{VkSubresourceLayout,RawVkSubresourceLayout};
 
 /// Wrapper for [VkImageDrmFormatModifierExplicitCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageDrmFormatModifierExplicitCreateInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkImageDrmFormatModifierExplicitCreateInfo<'a> {
+pub struct VkImageDrmFormatModifierExplicitCreateInfo {
     pub drm_format_modifier: usize,
-    pub plane_layouts: &'a [VkSubresourceLayout],
+    pub plane_layouts: Vec<VkSubresourceLayout>,
 }
 
 #[doc(hidden)]
@@ -29,36 +29,45 @@ pub struct RawVkImageDrmFormatModifierExplicitCreateInfo {
     pub next: *const c_void,
     pub drm_format_modifier: u64,
     pub drm_format_modifier_plane_count: u32,
-    pub plane_layouts: *mut RawVkSubresourceLayout,
+    pub plane_layouts: *const RawVkSubresourceLayout,
 }
 
-impl<'a> VkWrappedType<RawVkImageDrmFormatModifierExplicitCreateInfo> for VkImageDrmFormatModifierExplicitCreateInfo<'a> {
+impl VkWrappedType<RawVkImageDrmFormatModifierExplicitCreateInfo> for VkImageDrmFormatModifierExplicitCreateInfo {
     fn vk_to_raw(src: &VkImageDrmFormatModifierExplicitCreateInfo, dst: &mut RawVkImageDrmFormatModifierExplicitCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageDrmFormatModifierExplicitCreateInfoExt);
         dst.next = ptr::null();
         dst.drm_format_modifier = vk_to_raw_value(&src.drm_format_modifier);
         dst.drm_format_modifier_plane_count = src.plane_layouts.len() as u32;
-        dst.plane_layouts = new_ptr_vk_array(src.plane_layouts);
+        dst.plane_layouts = new_ptr_vk_array(&src.plane_layouts);
     }
 }
 
-impl Default for VkImageDrmFormatModifierExplicitCreateInfo<'static> {
-    fn default() -> VkImageDrmFormatModifierExplicitCreateInfo<'static> {
+impl VkRawType<VkImageDrmFormatModifierExplicitCreateInfo> for RawVkImageDrmFormatModifierExplicitCreateInfo {
+    fn vk_to_wrapped(src: &RawVkImageDrmFormatModifierExplicitCreateInfo) -> VkImageDrmFormatModifierExplicitCreateInfo {
         VkImageDrmFormatModifierExplicitCreateInfo {
-            drm_format_modifier: 0,
-            plane_layouts: &[],
+            drm_format_modifier: u64::vk_to_wrapped(&src.drm_format_modifier),
+            plane_layouts: new_vk_array(src.drm_format_modifier_plane_count, src.plane_layouts),
         }
     }
 }
 
-impl<'a> VkSetup for VkImageDrmFormatModifierExplicitCreateInfo<'a> {
+impl Default for VkImageDrmFormatModifierExplicitCreateInfo {
+    fn default() -> VkImageDrmFormatModifierExplicitCreateInfo {
+        VkImageDrmFormatModifierExplicitCreateInfo {
+            drm_format_modifier: 0,
+            plane_layouts: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkImageDrmFormatModifierExplicitCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkImageDrmFormatModifierExplicitCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.drm_format_modifier_plane_count as usize, self.plane_layouts);
     }
 }

@@ -48,7 +48,7 @@ impl VkRawType<VkDeviceEventInfo> for RawVkDeviceEventInfo {
 impl Default for VkDeviceEventInfo {
     fn default() -> VkDeviceEventInfo {
         VkDeviceEventInfo {
-            device_event: VkDeviceEventType::default(),
+            device_event: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDeviceEventInfo {
 }
 
 impl VkFree for RawVkDeviceEventInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

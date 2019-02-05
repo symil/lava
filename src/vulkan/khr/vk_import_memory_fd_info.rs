@@ -52,7 +52,7 @@ impl VkRawType<VkImportMemoryFdInfo> for RawVkImportMemoryFdInfo {
 impl Default for VkImportMemoryFdInfo {
     fn default() -> VkImportMemoryFdInfo {
         VkImportMemoryFdInfo {
-            handle_type: VkExternalMemoryHandleTypeFlags::default(),
+            handle_type: Default::default(),
             fd: 0,
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkImportMemoryFdInfo {
 }
 
 impl VkFree for RawVkImportMemoryFdInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

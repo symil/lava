@@ -15,8 +15,8 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 
 /// Wrapper for [VkBindBufferMemoryDeviceGroupInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindBufferMemoryDeviceGroupInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkBindBufferMemoryDeviceGroupInfo<'a> {
-    pub device_indices: &'a [usize],
+pub struct VkBindBufferMemoryDeviceGroupInfo {
+    pub device_indices: Vec<usize>,
 }
 
 #[doc(hidden)]
@@ -26,34 +26,42 @@ pub struct RawVkBindBufferMemoryDeviceGroupInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub device_index_count: u32,
-    pub device_indices: *mut u32,
+    pub device_indices: *const u32,
 }
 
-impl<'a> VkWrappedType<RawVkBindBufferMemoryDeviceGroupInfo> for VkBindBufferMemoryDeviceGroupInfo<'a> {
+impl VkWrappedType<RawVkBindBufferMemoryDeviceGroupInfo> for VkBindBufferMemoryDeviceGroupInfo {
     fn vk_to_raw(src: &VkBindBufferMemoryDeviceGroupInfo, dst: &mut RawVkBindBufferMemoryDeviceGroupInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindBufferMemoryDeviceGroupInfo);
         dst.next = ptr::null();
         dst.device_index_count = src.device_indices.len() as u32;
-        dst.device_indices = new_ptr_vk_array(src.device_indices);
+        dst.device_indices = new_ptr_vk_array(&src.device_indices);
     }
 }
 
-impl Default for VkBindBufferMemoryDeviceGroupInfo<'static> {
-    fn default() -> VkBindBufferMemoryDeviceGroupInfo<'static> {
+impl VkRawType<VkBindBufferMemoryDeviceGroupInfo> for RawVkBindBufferMemoryDeviceGroupInfo {
+    fn vk_to_wrapped(src: &RawVkBindBufferMemoryDeviceGroupInfo) -> VkBindBufferMemoryDeviceGroupInfo {
         VkBindBufferMemoryDeviceGroupInfo {
-            device_indices: &[],
+            device_indices: new_vk_array(src.device_index_count, src.device_indices),
         }
     }
 }
 
-impl<'a> VkSetup for VkBindBufferMemoryDeviceGroupInfo<'a> {
+impl Default for VkBindBufferMemoryDeviceGroupInfo {
+    fn default() -> VkBindBufferMemoryDeviceGroupInfo {
+        VkBindBufferMemoryDeviceGroupInfo {
+            device_indices: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkBindBufferMemoryDeviceGroupInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkBindBufferMemoryDeviceGroupInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.device_indices);
     }
 }

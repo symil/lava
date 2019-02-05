@@ -94,7 +94,7 @@ impl VkSetup for VkPhysicalDeviceRayTracingProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceRayTracingProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

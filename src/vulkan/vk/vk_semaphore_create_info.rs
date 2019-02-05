@@ -48,7 +48,7 @@ impl VkRawType<VkSemaphoreCreateInfo> for RawVkSemaphoreCreateInfo {
 impl Default for VkSemaphoreCreateInfo {
     fn default() -> VkSemaphoreCreateInfo {
         VkSemaphoreCreateInfo {
-            flags: VkSemaphoreCreateFlags::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSemaphoreCreateInfo {
 }
 
 impl VkFree for RawVkSemaphoreCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

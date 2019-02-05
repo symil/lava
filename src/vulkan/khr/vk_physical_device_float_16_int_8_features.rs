@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceFloat16Int8Features {
 }
 
 impl VkFree for RawVkPhysicalDeviceFloat16Int8Features {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -48,7 +48,7 @@ impl VkRawType<VkQueueFamilyCheckpointProperties> for RawVkQueueFamilyCheckpoint
 impl Default for VkQueueFamilyCheckpointProperties {
     fn default() -> VkQueueFamilyCheckpointProperties {
         VkQueueFamilyCheckpointProperties {
-            checkpoint_execution_stage_mask: VkPipelineStageFlags::default(),
+            checkpoint_execution_stage_mask: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkQueueFamilyCheckpointProperties {
 }
 
 impl VkFree for RawVkQueueFamilyCheckpointProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

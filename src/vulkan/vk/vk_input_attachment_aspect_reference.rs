@@ -53,7 +53,7 @@ impl Default for VkInputAttachmentAspectReference {
         VkInputAttachmentAspectReference {
             subpass: 0,
             input_attachment_index: 0,
-            aspect_mask: VkImageAspectFlags::default(),
+            aspect_mask: Default::default(),
         }
     }
 }
@@ -65,7 +65,7 @@ impl VkSetup for VkInputAttachmentAspectReference {
 }
 
 impl VkFree for RawVkInputAttachmentAspectReference {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

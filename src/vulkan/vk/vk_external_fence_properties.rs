@@ -57,9 +57,9 @@ impl VkRawType<VkExternalFenceProperties> for RawVkExternalFenceProperties {
 impl Default for VkExternalFenceProperties {
     fn default() -> VkExternalFenceProperties {
         VkExternalFenceProperties {
-            export_from_imported_handle_types: VkExternalFenceHandleTypeFlags::default(),
-            compatible_handle_types: VkExternalFenceHandleTypeFlags::default(),
-            external_fence_features: VkExternalFenceFeatureFlags::default(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
+            external_fence_features: Default::default(),
         }
     }
 }
@@ -71,7 +71,7 @@ impl VkSetup for VkExternalFenceProperties {
 }
 
 impl VkFree for RawVkExternalFenceProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

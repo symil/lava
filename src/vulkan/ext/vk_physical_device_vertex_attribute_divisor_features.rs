@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceVertexAttributeDivisorFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceVertexAttributeDivisorFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -17,9 +17,9 @@ use vulkan::vk::{VkDynamicState,RawVkDynamicState};
 
 /// Wrapper for [VkPipelineDynamicStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDynamicStateCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineDynamicStateCreateInfo<'a> {
+pub struct VkPipelineDynamicStateCreateInfo {
     pub flags: VkPipelineDynamicStateCreateFlags,
-    pub dynamic_states: &'a [VkDynamicState],
+    pub dynamic_states: Vec<VkDynamicState>,
 }
 
 #[doc(hidden)]
@@ -30,36 +30,45 @@ pub struct RawVkPipelineDynamicStateCreateInfo {
     pub next: *const c_void,
     pub flags: RawVkPipelineDynamicStateCreateFlags,
     pub dynamic_state_count: u32,
-    pub dynamic_states: *mut RawVkDynamicState,
+    pub dynamic_states: *const RawVkDynamicState,
 }
 
-impl<'a> VkWrappedType<RawVkPipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineDynamicStateCreateInfo, dst: &mut RawVkPipelineDynamicStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineDynamicStateCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.dynamic_state_count = src.dynamic_states.len() as u32;
-        dst.dynamic_states = new_ptr_vk_array(src.dynamic_states);
+        dst.dynamic_states = new_ptr_vk_array(&src.dynamic_states);
     }
 }
 
-impl Default for VkPipelineDynamicStateCreateInfo<'static> {
-    fn default() -> VkPipelineDynamicStateCreateInfo<'static> {
+impl VkRawType<VkPipelineDynamicStateCreateInfo> for RawVkPipelineDynamicStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineDynamicStateCreateInfo) -> VkPipelineDynamicStateCreateInfo {
         VkPipelineDynamicStateCreateInfo {
-            flags: VkPipelineDynamicStateCreateFlags::default(),
-            dynamic_states: &[],
+            flags: RawVkPipelineDynamicStateCreateFlags::vk_to_wrapped(&src.flags),
+            dynamic_states: new_vk_array(src.dynamic_state_count, src.dynamic_states),
         }
     }
 }
 
-impl<'a> VkSetup for VkPipelineDynamicStateCreateInfo<'a> {
+impl Default for VkPipelineDynamicStateCreateInfo {
+    fn default() -> VkPipelineDynamicStateCreateInfo {
+        VkPipelineDynamicStateCreateInfo {
+            flags: Default::default(),
+            dynamic_states: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkPipelineDynamicStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineDynamicStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.dynamic_states);
     }
 }

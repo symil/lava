@@ -54,7 +54,7 @@ impl VkSetup for VkRefreshCycleDuration {
 }
 
 impl VkFree for RawVkRefreshCycleDuration {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

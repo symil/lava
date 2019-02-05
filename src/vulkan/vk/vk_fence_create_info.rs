@@ -48,7 +48,7 @@ impl VkRawType<VkFenceCreateInfo> for RawVkFenceCreateInfo {
 impl Default for VkFenceCreateInfo {
     fn default() -> VkFenceCreateInfo {
         VkFenceCreateInfo {
-            flags: VkFenceCreateFlags::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkFenceCreateInfo {
 }
 
 impl VkFree for RawVkFenceCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

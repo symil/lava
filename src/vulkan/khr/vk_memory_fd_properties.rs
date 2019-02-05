@@ -59,7 +59,7 @@ impl VkSetup for VkMemoryFdProperties {
 }
 
 impl VkFree for RawVkMemoryFdProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

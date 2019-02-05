@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceRepresentativeFragmentTestFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceRepresentativeFragmentTestFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -17,10 +17,10 @@ use vulkan::khr::{VkAttachmentReference2,RawVkAttachmentReference2};
 
 /// Wrapper for [VkSubpassDescriptionDepthStencilResolveKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionDepthStencilResolveKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkSubpassDescriptionDepthStencilResolve<'a> {
+pub struct VkSubpassDescriptionDepthStencilResolve {
     pub depth_resolve_mode: VkResolveModeFlags,
     pub stencil_resolve_mode: VkResolveModeFlags,
-    pub depth_stencil_resolve_attachment: Option<&'a VkAttachmentReference2>,
+    pub depth_stencil_resolve_attachment: Option<VkAttachmentReference2>,
 }
 
 #[doc(hidden)]
@@ -31,37 +31,47 @@ pub struct RawVkSubpassDescriptionDepthStencilResolve {
     pub next: *const c_void,
     pub depth_resolve_mode: RawVkResolveModeFlags,
     pub stencil_resolve_mode: RawVkResolveModeFlags,
-    pub depth_stencil_resolve_attachment: *mut RawVkAttachmentReference2,
+    pub depth_stencil_resolve_attachment: *const RawVkAttachmentReference2,
 }
 
-impl<'a> VkWrappedType<RawVkSubpassDescriptionDepthStencilResolve> for VkSubpassDescriptionDepthStencilResolve<'a> {
+impl VkWrappedType<RawVkSubpassDescriptionDepthStencilResolve> for VkSubpassDescriptionDepthStencilResolve {
     fn vk_to_raw(src: &VkSubpassDescriptionDepthStencilResolve, dst: &mut RawVkSubpassDescriptionDepthStencilResolve) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SubpassDescriptionDepthStencilResolveKhr);
         dst.next = ptr::null();
         dst.depth_resolve_mode = vk_to_raw_value(&src.depth_resolve_mode);
         dst.stencil_resolve_mode = vk_to_raw_value(&src.stencil_resolve_mode);
-        dst.depth_stencil_resolve_attachment = new_ptr_vk_value_checked(src.depth_stencil_resolve_attachment);
+        dst.depth_stencil_resolve_attachment = new_ptr_vk_value_checked(&src.depth_stencil_resolve_attachment);
     }
 }
 
-impl Default for VkSubpassDescriptionDepthStencilResolve<'static> {
-    fn default() -> VkSubpassDescriptionDepthStencilResolve<'static> {
+impl VkRawType<VkSubpassDescriptionDepthStencilResolve> for RawVkSubpassDescriptionDepthStencilResolve {
+    fn vk_to_wrapped(src: &RawVkSubpassDescriptionDepthStencilResolve) -> VkSubpassDescriptionDepthStencilResolve {
         VkSubpassDescriptionDepthStencilResolve {
-            depth_resolve_mode: VkResolveModeFlags::default(),
-            stencil_resolve_mode: VkResolveModeFlags::default(),
+            depth_resolve_mode: RawVkResolveModeFlags::vk_to_wrapped(&src.depth_resolve_mode),
+            stencil_resolve_mode: RawVkResolveModeFlags::vk_to_wrapped(&src.stencil_resolve_mode),
+            depth_stencil_resolve_attachment: new_vk_value_checked(src.depth_stencil_resolve_attachment),
+        }
+    }
+}
+
+impl Default for VkSubpassDescriptionDepthStencilResolve {
+    fn default() -> VkSubpassDescriptionDepthStencilResolve {
+        VkSubpassDescriptionDepthStencilResolve {
+            depth_resolve_mode: Default::default(),
+            stencil_resolve_mode: Default::default(),
             depth_stencil_resolve_attachment: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkSubpassDescriptionDepthStencilResolve<'a> {
+impl VkSetup for VkSubpassDescriptionDepthStencilResolve {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkSubpassDescriptionDepthStencilResolve {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr(self.depth_stencil_resolve_attachment);
     }
 }

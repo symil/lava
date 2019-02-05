@@ -48,7 +48,7 @@ impl VkRawType<VkMultisampleProperties> for RawVkMultisampleProperties {
 impl Default for VkMultisampleProperties {
     fn default() -> VkMultisampleProperties {
         VkMultisampleProperties {
-            max_sample_location_grid_size: VkExtent2D::default(),
+            max_sample_location_grid_size: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkMultisampleProperties {
 }
 
 impl VkFree for RawVkMultisampleProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.max_sample_location_grid_size);
+    fn vk_free(&self) {
+        
     }
 }

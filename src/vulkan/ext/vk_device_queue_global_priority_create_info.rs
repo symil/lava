@@ -48,7 +48,7 @@ impl VkRawType<VkDeviceQueueGlobalPriorityCreateInfo> for RawVkDeviceQueueGlobal
 impl Default for VkDeviceQueueGlobalPriorityCreateInfo {
     fn default() -> VkDeviceQueueGlobalPriorityCreateInfo {
         VkDeviceQueueGlobalPriorityCreateInfo {
-            global_priority: VkQueueGlobalPriority::default(),
+            global_priority: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDeviceQueueGlobalPriorityCreateInfo {
 }
 
 impl VkFree for RawVkDeviceQueueGlobalPriorityCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

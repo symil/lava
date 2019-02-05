@@ -57,8 +57,8 @@ impl VkRawType<VkPipelineInputAssemblyStateCreateInfo> for RawVkPipelineInputAss
 impl Default for VkPipelineInputAssemblyStateCreateInfo {
     fn default() -> VkPipelineInputAssemblyStateCreateInfo {
         VkPipelineInputAssemblyStateCreateInfo {
-            flags: VkPipelineInputAssemblyStateCreateFlags::default(),
-            topology: VkPrimitiveTopology::default(),
+            flags: Default::default(),
+            topology: Default::default(),
             primitive_restart_enable: false,
         }
     }
@@ -71,7 +71,7 @@ impl VkSetup for VkPipelineInputAssemblyStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineInputAssemblyStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

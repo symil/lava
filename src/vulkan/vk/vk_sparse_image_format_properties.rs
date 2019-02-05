@@ -53,9 +53,9 @@ impl VkRawType<VkSparseImageFormatProperties> for RawVkSparseImageFormatProperti
 impl Default for VkSparseImageFormatProperties {
     fn default() -> VkSparseImageFormatProperties {
         VkSparseImageFormatProperties {
-            aspect_mask: VkImageAspectFlags::default(),
-            image_granularity: VkExtent3D::default(),
-            flags: VkSparseImageFormatFlags::default(),
+            aspect_mask: Default::default(),
+            image_granularity: Default::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -67,7 +67,7 @@ impl VkSetup for VkSparseImageFormatProperties {
 }
 
 impl VkFree for RawVkSparseImageFormatProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent3D::vk_free(&mut self.image_granularity);
+    fn vk_free(&self) {
+        
     }
 }

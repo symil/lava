@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkPipelineCache = u64;
 
 /// Wrapper for [VkPipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCache.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkPipelineCache {
     _handle: RawVkPipelineCache,
     _fn_table: *mut VkFunctionTable
@@ -64,39 +64,5 @@ impl VkPipelineCache {
     /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
-    }
-    
-    /// Wrapper for [vkDestroyPipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyPipelineCache.html).
-    pub fn destroy(&self) {
-        unsafe {
-            ((&*self._fn_table).vkDestroyPipelineCache)((*self._fn_table).device, self._handle, ptr::null());
-        }
-    }
-    
-    /// Wrapper for [vkGetPipelineCacheData](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPipelineCacheData.html).
-    pub fn get_data(&self) -> Result<Vec<c_void>, (VkResult, Vec<c_void>)> {
-        unsafe {
-            let mut vk_result = 0;
-            let mut raw_data : *mut c_void = ptr::null_mut();
-            let raw_data_size = &mut mem::zeroed() as *mut usize;
-            vk_result = ((&*self._fn_table).vkGetPipelineCacheData)((*self._fn_table).device, self._handle, raw_data_size, raw_data);
-            raw_data = calloc(*raw_data_size as usize, mem::size_of::<c_void>()) as *mut c_void;
-            
-            vk_result = ((&*self._fn_table).vkGetPipelineCacheData)((*self._fn_table).device, self._handle, raw_data_size, raw_data);
-            
-            let data = Vec::from_raw_parts(raw_data, *raw_data_size, *raw_data_size);
-            if vk_result == 0 { Ok(data) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), data)) }
-        }
-    }
-    
-    /// Wrapper for [vkMergePipelineCaches](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMergePipelineCaches.html).
-    pub fn merge(&self, src_caches: &[&VkPipelineCache]) -> Result<(), VkResult> {
-        unsafe {
-            let raw_src_cache_count = src_caches.len() as u32;
-            let raw_src_caches = new_ptr_vk_array_from_ref(src_caches);
-            let vk_result = ((&*self._fn_table).vkMergePipelineCaches)((*self._fn_table).device, self._handle, raw_src_cache_count, raw_src_caches);
-            free_ptr(raw_src_caches);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
     }
 }

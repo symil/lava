@@ -44,7 +44,7 @@ impl VkSetup for VkDisplayModeProperties2 {
 }
 
 impl VkFree for RawVkDisplayModeProperties2 {
-    fn vk_free(&mut self) {
-        RawVkDisplayModeProperties::vk_free(&mut self.display_mode_properties);
+    fn vk_free(&self) {
+        
     }
 }

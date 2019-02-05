@@ -311,12 +311,10 @@ function parseStructs() {
             }
 
             field.isOptional = !!xmlMember.optional;
-            if (field.typeName !== 'void') {
-                field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
+            field.countField = (xmlMember.len || '').split(',').find(str => fields.some(field => field.name === str));
 
-                if (areCountAndArray(lastField, field)) {
-                    field.countField = lastField.name;
-                }
+            if (areCountAndArray(lastField, field)) {
+                field.countField = lastField.name;
             }
 
             lastField = field;
@@ -335,11 +333,19 @@ function parseStructs() {
 }
 
 function areCountAndArray(field1, field2) {
-    return field1
-        && field2
-        && field1.name.startsWith(field2.name.substring(0, field2.name.length - 1))
-        && field1.name.endsWith('Count')
-        && field1.fullType === 'uint32_t';
+    return field1 && field2 &&
+    (
+        (
+            (field1.name === 'dataSize' || field1.name === 'pDataSize') &&
+            field2.name === 'pData'
+        )
+    ||
+        (
+            field1.name.startsWith(field2.name.substring(0, field2.name.length - 1)) &&
+            field1.name.endsWith('Count') &&
+            field1.fullType === 'uint32_t'
+        )
+    );
 }
 
 function parseFunctions() {

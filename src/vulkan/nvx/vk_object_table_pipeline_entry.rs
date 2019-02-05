@@ -17,10 +17,10 @@ use vulkan::vk::{VkPipeline,RawVkPipeline};
 
 /// Wrapper for [VkObjectTablePipelineEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTablePipelineEntryNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkObjectTablePipelineEntry<'a> {
+pub struct VkObjectTablePipelineEntry {
     pub type_: VkObjectEntryType,
     pub flags: VkObjectEntryUsageFlags,
-    pub pipeline: &'a VkPipeline,
+    pub pipeline: VkPipeline,
 }
 
 #[doc(hidden)]
@@ -32,32 +32,42 @@ pub struct RawVkObjectTablePipelineEntry {
     pub pipeline: RawVkPipeline,
 }
 
-impl<'a> VkWrappedType<RawVkObjectTablePipelineEntry> for VkObjectTablePipelineEntry<'a> {
+impl VkWrappedType<RawVkObjectTablePipelineEntry> for VkObjectTablePipelineEntry {
     fn vk_to_raw(src: &VkObjectTablePipelineEntry, dst: &mut RawVkObjectTablePipelineEntry) {
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.pipeline = vk_to_raw_value(src.pipeline);
+        dst.pipeline = vk_to_raw_value(&src.pipeline);
     }
 }
 
-impl Default for VkObjectTablePipelineEntry<'static> {
-    fn default() -> VkObjectTablePipelineEntry<'static> {
+impl VkRawType<VkObjectTablePipelineEntry> for RawVkObjectTablePipelineEntry {
+    fn vk_to_wrapped(src: &RawVkObjectTablePipelineEntry) -> VkObjectTablePipelineEntry {
         VkObjectTablePipelineEntry {
-            type_: VkObjectEntryType::default(),
-            flags: VkObjectEntryUsageFlags::default(),
-            pipeline: vk_null_ref(),
+            type_: RawVkObjectEntryType::vk_to_wrapped(&src.type_),
+            flags: RawVkObjectEntryUsageFlags::vk_to_wrapped(&src.flags),
+            pipeline: RawVkPipeline::vk_to_wrapped(&src.pipeline),
         }
     }
 }
 
-impl<'a> VkSetup for VkObjectTablePipelineEntry<'a> {
+impl Default for VkObjectTablePipelineEntry {
+    fn default() -> VkObjectTablePipelineEntry {
+        VkObjectTablePipelineEntry {
+            type_: Default::default(),
+            flags: Default::default(),
+            pipeline: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkObjectTablePipelineEntry {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.pipeline, fn_table);
     }
 }
 
 impl VkFree for RawVkObjectTablePipelineEntry {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

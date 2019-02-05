@@ -19,11 +19,11 @@ use vulkan::vk::{VkClearValue,RawVkClearValue};
 
 /// Wrapper for [VkRenderPassBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassBeginInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkRenderPassBeginInfo<'a, 'b, 'c> {
-    pub render_pass: &'a VkRenderPass,
-    pub framebuffer: &'b VkFramebuffer,
+pub struct VkRenderPassBeginInfo {
+    pub render_pass: VkRenderPass,
+    pub framebuffer: VkFramebuffer,
     pub render_area: VkRect2D,
-    pub clear_values: &'c [VkClearValue],
+    pub clear_values: Vec<VkClearValue>,
 }
 
 #[doc(hidden)]
@@ -36,41 +36,42 @@ pub struct RawVkRenderPassBeginInfo {
     pub framebuffer: RawVkFramebuffer,
     pub render_area: RawVkRect2D,
     pub clear_value_count: u32,
-    pub clear_values: *mut RawVkClearValue,
+    pub clear_values: *const RawVkClearValue,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkRenderPassBeginInfo> for VkRenderPassBeginInfo<'a, 'b, 'c> {
+impl VkWrappedType<RawVkRenderPassBeginInfo> for VkRenderPassBeginInfo {
     fn vk_to_raw(src: &VkRenderPassBeginInfo, dst: &mut RawVkRenderPassBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassBeginInfo);
         dst.next = ptr::null();
-        dst.render_pass = vk_to_raw_value(src.render_pass);
-        dst.framebuffer = vk_to_raw_value(src.framebuffer);
+        dst.render_pass = vk_to_raw_value(&src.render_pass);
+        dst.framebuffer = vk_to_raw_value(&src.framebuffer);
         dst.render_area = vk_to_raw_value(&src.render_area);
         dst.clear_value_count = src.clear_values.len() as u32;
-        dst.clear_values = new_ptr_vk_array(src.clear_values);
+        dst.clear_values = new_ptr_vk_array(&src.clear_values);
     }
 }
 
-impl Default for VkRenderPassBeginInfo<'static, 'static, 'static> {
-    fn default() -> VkRenderPassBeginInfo<'static, 'static, 'static> {
+impl Default for VkRenderPassBeginInfo {
+    fn default() -> VkRenderPassBeginInfo {
         VkRenderPassBeginInfo {
-            render_pass: vk_null_ref(),
-            framebuffer: vk_null_ref(),
-            render_area: VkRect2D::default(),
-            clear_values: &[],
+            render_pass: Default::default(),
+            framebuffer: Default::default(),
+            render_area: Default::default(),
+            clear_values: Vec::new(),
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkRenderPassBeginInfo<'a, 'b, 'c> {
+impl VkSetup for VkRenderPassBeginInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.render_pass, fn_table);
+        VkSetup::vk_setup(&mut self.framebuffer, fn_table);
         VkSetup::vk_setup(&mut self.render_area, fn_table);
     }
 }
 
 impl VkFree for RawVkRenderPassBeginInfo {
-    fn vk_free(&mut self) {
-        RawVkRect2D::vk_free(&mut self.render_area);
+    fn vk_free(&self) {
         free_ptr(self.clear_values);
     }
 }

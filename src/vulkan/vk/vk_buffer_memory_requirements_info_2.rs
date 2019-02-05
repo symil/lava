@@ -16,8 +16,8 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkBufferMemoryRequirementsInfo2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferMemoryRequirementsInfo2.html).
 #[derive(Debug, Clone)]
-pub struct VkBufferMemoryRequirementsInfo2<'a> {
-    pub buffer: &'a VkBuffer,
+pub struct VkBufferMemoryRequirementsInfo2 {
+    pub buffer: VkBuffer,
 }
 
 #[doc(hidden)]
@@ -29,30 +29,38 @@ pub struct RawVkBufferMemoryRequirementsInfo2 {
     pub buffer: RawVkBuffer,
 }
 
-impl<'a> VkWrappedType<RawVkBufferMemoryRequirementsInfo2> for VkBufferMemoryRequirementsInfo2<'a> {
+impl VkWrappedType<RawVkBufferMemoryRequirementsInfo2> for VkBufferMemoryRequirementsInfo2 {
     fn vk_to_raw(src: &VkBufferMemoryRequirementsInfo2, dst: &mut RawVkBufferMemoryRequirementsInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferMemoryRequirementsInfo2);
         dst.next = ptr::null();
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.buffer = vk_to_raw_value(&src.buffer);
     }
 }
 
-impl Default for VkBufferMemoryRequirementsInfo2<'static> {
-    fn default() -> VkBufferMemoryRequirementsInfo2<'static> {
+impl VkRawType<VkBufferMemoryRequirementsInfo2> for RawVkBufferMemoryRequirementsInfo2 {
+    fn vk_to_wrapped(src: &RawVkBufferMemoryRequirementsInfo2) -> VkBufferMemoryRequirementsInfo2 {
         VkBufferMemoryRequirementsInfo2 {
-            buffer: vk_null_ref(),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
         }
     }
 }
 
-impl<'a> VkSetup for VkBufferMemoryRequirementsInfo2<'a> {
+impl Default for VkBufferMemoryRequirementsInfo2 {
+    fn default() -> VkBufferMemoryRequirementsInfo2 {
+        VkBufferMemoryRequirementsInfo2 {
+            buffer: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkBufferMemoryRequirementsInfo2 {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkBufferMemoryRequirementsInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

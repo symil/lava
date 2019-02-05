@@ -74,7 +74,7 @@ impl VkSetup for VkPhysicalDeviceSparseProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceSparseProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

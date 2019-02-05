@@ -15,8 +15,8 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 
 /// Wrapper for [VkDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsLabelEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDebugUtilsLabel<'a> {
-    pub label_name: &'a str,
+pub struct VkDebugUtilsLabel {
+    pub label_name: String,
     pub color: [f32; 4],
 }
 
@@ -26,36 +26,45 @@ pub struct VkDebugUtilsLabel<'a> {
 pub struct RawVkDebugUtilsLabel {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
-    pub label_name: *mut c_char,
+    pub label_name: *const c_char,
     pub color: [f32; 4],
 }
 
-impl<'a> VkWrappedType<RawVkDebugUtilsLabel> for VkDebugUtilsLabel<'a> {
+impl VkWrappedType<RawVkDebugUtilsLabel> for VkDebugUtilsLabel {
     fn vk_to_raw(src: &VkDebugUtilsLabel, dst: &mut RawVkDebugUtilsLabel) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsLabelExt);
         dst.next = ptr::null();
-        dst.label_name = new_ptr_string(src.label_name);
+        dst.label_name = new_ptr_string(&src.label_name);
         dst.color = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array };
     }
 }
 
-impl Default for VkDebugUtilsLabel<'static> {
-    fn default() -> VkDebugUtilsLabel<'static> {
+impl VkRawType<VkDebugUtilsLabel> for RawVkDebugUtilsLabel {
+    fn vk_to_wrapped(src: &RawVkDebugUtilsLabel) -> VkDebugUtilsLabel {
         VkDebugUtilsLabel {
-            label_name: "",
+            label_name: new_string(src.label_name),
+            color: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array },
+        }
+    }
+}
+
+impl Default for VkDebugUtilsLabel {
+    fn default() -> VkDebugUtilsLabel {
+        VkDebugUtilsLabel {
+            label_name: String::new(),
             color: [0.0; 4],
         }
     }
 }
 
-impl<'a> VkSetup for VkDebugUtilsLabel<'a> {
+impl VkSetup for VkDebugUtilsLabel {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDebugUtilsLabel {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.label_name);
     }
 }

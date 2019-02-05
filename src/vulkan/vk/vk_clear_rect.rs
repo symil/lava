@@ -51,7 +51,7 @@ impl VkRawType<VkClearRect> for RawVkClearRect {
 impl Default for VkClearRect {
     fn default() -> VkClearRect {
         VkClearRect {
-            rect: VkRect2D::default(),
+            rect: Default::default(),
             base_array_layer: 0,
             layer_count: 0,
         }
@@ -65,7 +65,7 @@ impl VkSetup for VkClearRect {
 }
 
 impl VkFree for RawVkClearRect {
-    fn vk_free(&mut self) {
-        RawVkRect2D::vk_free(&mut self.rect);
+    fn vk_free(&self) {
+        
     }
 }

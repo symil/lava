@@ -16,8 +16,8 @@ use vulkan::google::{VkPresentTime,RawVkPresentTime};
 
 /// Wrapper for [VkPresentTimesInfoGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentTimesInfoGOOGLE.html).
 #[derive(Debug, Clone)]
-pub struct VkPresentTimesInfo<'a> {
-    pub times: Option<&'a [VkPresentTime]>,
+pub struct VkPresentTimesInfo {
+    pub times: Option<Vec<VkPresentTime>>,
 }
 
 #[doc(hidden)]
@@ -27,34 +27,42 @@ pub struct RawVkPresentTimesInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub swapchain_count: u32,
-    pub times: *mut RawVkPresentTime,
+    pub times: *const RawVkPresentTime,
 }
 
-impl<'a> VkWrappedType<RawVkPresentTimesInfo> for VkPresentTimesInfo<'a> {
+impl VkWrappedType<RawVkPresentTimesInfo> for VkPresentTimesInfo {
     fn vk_to_raw(src: &VkPresentTimesInfo, dst: &mut RawVkPresentTimesInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PresentTimesInfoGoogle);
         dst.next = ptr::null();
-        dst.swapchain_count = get_array_option_len(src.times) as u32;
-        dst.times = new_ptr_vk_array_checked(src.times);
+        dst.swapchain_count = get_array_option_len(&src.times) as u32;
+        dst.times = new_ptr_vk_array_checked(&src.times);
     }
 }
 
-impl Default for VkPresentTimesInfo<'static> {
-    fn default() -> VkPresentTimesInfo<'static> {
+impl VkRawType<VkPresentTimesInfo> for RawVkPresentTimesInfo {
+    fn vk_to_wrapped(src: &RawVkPresentTimesInfo) -> VkPresentTimesInfo {
+        VkPresentTimesInfo {
+            times: new_vk_array_checked(src.swapchain_count, src.times),
+        }
+    }
+}
+
+impl Default for VkPresentTimesInfo {
+    fn default() -> VkPresentTimesInfo {
         VkPresentTimesInfo {
             times: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkPresentTimesInfo<'a> {
+impl VkSetup for VkPresentTimesInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPresentTimesInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.swapchain_count as usize, self.times);
     }
 }

@@ -48,7 +48,7 @@ impl VkRawType<VkEventCreateInfo> for RawVkEventCreateInfo {
 impl Default for VkEventCreateInfo {
     fn default() -> VkEventCreateInfo {
         VkEventCreateInfo {
-            flags: VkEventCreateFlags::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkEventCreateInfo {
 }
 
 impl VkFree for RawVkEventCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

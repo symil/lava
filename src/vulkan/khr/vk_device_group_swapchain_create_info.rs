@@ -48,7 +48,7 @@ impl VkRawType<VkDeviceGroupSwapchainCreateInfo> for RawVkDeviceGroupSwapchainCr
 impl Default for VkDeviceGroupSwapchainCreateInfo {
     fn default() -> VkDeviceGroupSwapchainCreateInfo {
         VkDeviceGroupSwapchainCreateInfo {
-            modes: VkDeviceGroupPresentModeFlags::default(),
+            modes: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDeviceGroupSwapchainCreateInfo {
 }
 
 impl VkFree for RawVkDeviceGroupSwapchainCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

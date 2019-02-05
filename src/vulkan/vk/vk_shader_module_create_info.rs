@@ -45,7 +45,7 @@ impl<'a> VkWrappedType<RawVkShaderModuleCreateInfo> for VkShaderModuleCreateInfo
 impl Default for VkShaderModuleCreateInfo<'static> {
     fn default() -> VkShaderModuleCreateInfo<'static> {
         VkShaderModuleCreateInfo {
-            flags: VkShaderModuleCreateFlags::default(),
+            flags: Default::default(),
             code: &[],
         }
     }
@@ -58,7 +58,7 @@ impl<'a> VkSetup for VkShaderModuleCreateInfo<'a> {
 }
 
 impl VkFree for RawVkShaderModuleCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

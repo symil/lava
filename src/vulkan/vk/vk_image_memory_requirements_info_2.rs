@@ -16,8 +16,8 @@ use vulkan::vk::{VkImage,RawVkImage};
 
 /// Wrapper for [VkImageMemoryRequirementsInfo2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageMemoryRequirementsInfo2.html).
 #[derive(Debug, Clone)]
-pub struct VkImageMemoryRequirementsInfo2<'a> {
-    pub image: &'a VkImage,
+pub struct VkImageMemoryRequirementsInfo2 {
+    pub image: VkImage,
 }
 
 #[doc(hidden)]
@@ -29,30 +29,38 @@ pub struct RawVkImageMemoryRequirementsInfo2 {
     pub image: RawVkImage,
 }
 
-impl<'a> VkWrappedType<RawVkImageMemoryRequirementsInfo2> for VkImageMemoryRequirementsInfo2<'a> {
+impl VkWrappedType<RawVkImageMemoryRequirementsInfo2> for VkImageMemoryRequirementsInfo2 {
     fn vk_to_raw(src: &VkImageMemoryRequirementsInfo2, dst: &mut RawVkImageMemoryRequirementsInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageMemoryRequirementsInfo2);
         dst.next = ptr::null();
-        dst.image = vk_to_raw_value(src.image);
+        dst.image = vk_to_raw_value(&src.image);
     }
 }
 
-impl Default for VkImageMemoryRequirementsInfo2<'static> {
-    fn default() -> VkImageMemoryRequirementsInfo2<'static> {
+impl VkRawType<VkImageMemoryRequirementsInfo2> for RawVkImageMemoryRequirementsInfo2 {
+    fn vk_to_wrapped(src: &RawVkImageMemoryRequirementsInfo2) -> VkImageMemoryRequirementsInfo2 {
         VkImageMemoryRequirementsInfo2 {
-            image: vk_null_ref(),
+            image: RawVkImage::vk_to_wrapped(&src.image),
         }
     }
 }
 
-impl<'a> VkSetup for VkImageMemoryRequirementsInfo2<'a> {
+impl Default for VkImageMemoryRequirementsInfo2 {
+    fn default() -> VkImageMemoryRequirementsInfo2 {
+        VkImageMemoryRequirementsInfo2 {
+            image: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkImageMemoryRequirementsInfo2 {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.image, fn_table);
     }
 }
 
 impl VkFree for RawVkImageMemoryRequirementsInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

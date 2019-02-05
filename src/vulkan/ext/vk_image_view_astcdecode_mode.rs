@@ -48,7 +48,7 @@ impl VkRawType<VkImageViewASTCDecodeMode> for RawVkImageViewASTCDecodeMode {
 impl Default for VkImageViewASTCDecodeMode {
     fn default() -> VkImageViewASTCDecodeMode {
         VkImageViewASTCDecodeMode {
-            decode_mode: VkFormat::default(),
+            decode_mode: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkImageViewASTCDecodeMode {
 }
 
 impl VkFree for RawVkImageViewASTCDecodeMode {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -48,7 +48,7 @@ impl VkRawType<VkExportMemoryAllocateInfo> for RawVkExportMemoryAllocateInfo {
 impl Default for VkExportMemoryAllocateInfo {
     fn default() -> VkExportMemoryAllocateInfo {
         VkExportMemoryAllocateInfo {
-            handle_types: VkExternalMemoryHandleTypeFlags::default(),
+            handle_types: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExportMemoryAllocateInfo {
 }
 
 impl VkFree for RawVkExportMemoryAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

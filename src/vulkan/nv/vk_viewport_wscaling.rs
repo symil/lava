@@ -59,7 +59,7 @@ impl VkSetup for VkViewportWScaling {
 }
 
 impl VkFree for RawVkViewportWScaling {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -52,7 +52,7 @@ impl VkRawType<VkCommandPoolCreateInfo> for RawVkCommandPoolCreateInfo {
 impl Default for VkCommandPoolCreateInfo {
     fn default() -> VkCommandPoolCreateInfo {
         VkCommandPoolCreateInfo {
-            flags: VkCommandPoolCreateFlags::default(),
+            flags: Default::default(),
             queue_family_index: 0,
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkCommandPoolCreateInfo {
 }
 
 impl VkFree for RawVkCommandPoolCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

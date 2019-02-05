@@ -48,7 +48,7 @@ impl VkRawType<VkExternalBufferProperties> for RawVkExternalBufferProperties {
 impl Default for VkExternalBufferProperties {
     fn default() -> VkExternalBufferProperties {
         VkExternalBufferProperties {
-            external_memory_properties: VkExternalMemoryProperties::default(),
+            external_memory_properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExternalBufferProperties {
 }
 
 impl VkFree for RawVkExternalBufferProperties {
-    fn vk_free(&mut self) {
-        RawVkExternalMemoryProperties::vk_free(&mut self.external_memory_properties);
+    fn vk_free(&self) {
+        
     }
 }

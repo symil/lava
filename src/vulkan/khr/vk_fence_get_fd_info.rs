@@ -17,8 +17,8 @@ use vulkan::vk::{VkExternalFenceHandleTypeFlags,RawVkExternalFenceHandleTypeFlag
 
 /// Wrapper for [VkFenceGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFenceGetFdInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkFenceGetFdInfo<'a> {
-    pub fence: &'a VkFence,
+pub struct VkFenceGetFdInfo {
+    pub fence: VkFence,
     pub handle_type: VkExternalFenceHandleTypeFlags,
 }
 
@@ -32,32 +32,41 @@ pub struct RawVkFenceGetFdInfo {
     pub handle_type: RawVkExternalFenceHandleTypeFlags,
 }
 
-impl<'a> VkWrappedType<RawVkFenceGetFdInfo> for VkFenceGetFdInfo<'a> {
+impl VkWrappedType<RawVkFenceGetFdInfo> for VkFenceGetFdInfo {
     fn vk_to_raw(src: &VkFenceGetFdInfo, dst: &mut RawVkFenceGetFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::FenceGetFdInfoKhr);
         dst.next = ptr::null();
-        dst.fence = vk_to_raw_value(src.fence);
+        dst.fence = vk_to_raw_value(&src.fence);
         dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }
 
-impl Default for VkFenceGetFdInfo<'static> {
-    fn default() -> VkFenceGetFdInfo<'static> {
+impl VkRawType<VkFenceGetFdInfo> for RawVkFenceGetFdInfo {
+    fn vk_to_wrapped(src: &RawVkFenceGetFdInfo) -> VkFenceGetFdInfo {
         VkFenceGetFdInfo {
-            fence: vk_null_ref(),
-            handle_type: VkExternalFenceHandleTypeFlags::default(),
+            fence: RawVkFence::vk_to_wrapped(&src.fence),
+            handle_type: RawVkExternalFenceHandleTypeFlags::vk_to_wrapped(&src.handle_type),
         }
     }
 }
 
-impl<'a> VkSetup for VkFenceGetFdInfo<'a> {
+impl Default for VkFenceGetFdInfo {
+    fn default() -> VkFenceGetFdInfo {
+        VkFenceGetFdInfo {
+            fence: Default::default(),
+            handle_type: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkFenceGetFdInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.fence, fn_table);
     }
 }
 
 impl VkFree for RawVkFenceGetFdInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -16,8 +16,8 @@ use vulkan::khr::{VkSurface,RawVkSurface};
 
 /// Wrapper for [VkPhysicalDeviceSurfaceInfo2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSurfaceInfo2KHR.html).
 #[derive(Debug, Clone)]
-pub struct VkPhysicalDeviceSurfaceInfo2<'a> {
-    pub surface: &'a VkSurface,
+pub struct VkPhysicalDeviceSurfaceInfo2 {
+    pub surface: VkSurface,
 }
 
 #[doc(hidden)]
@@ -29,30 +29,38 @@ pub struct RawVkPhysicalDeviceSurfaceInfo2 {
     pub surface: RawVkSurface,
 }
 
-impl<'a> VkWrappedType<RawVkPhysicalDeviceSurfaceInfo2> for VkPhysicalDeviceSurfaceInfo2<'a> {
+impl VkWrappedType<RawVkPhysicalDeviceSurfaceInfo2> for VkPhysicalDeviceSurfaceInfo2 {
     fn vk_to_raw(src: &VkPhysicalDeviceSurfaceInfo2, dst: &mut RawVkPhysicalDeviceSurfaceInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSurfaceInfo2Khr);
         dst.next = ptr::null();
-        dst.surface = vk_to_raw_value(src.surface);
+        dst.surface = vk_to_raw_value(&src.surface);
     }
 }
 
-impl Default for VkPhysicalDeviceSurfaceInfo2<'static> {
-    fn default() -> VkPhysicalDeviceSurfaceInfo2<'static> {
+impl VkRawType<VkPhysicalDeviceSurfaceInfo2> for RawVkPhysicalDeviceSurfaceInfo2 {
+    fn vk_to_wrapped(src: &RawVkPhysicalDeviceSurfaceInfo2) -> VkPhysicalDeviceSurfaceInfo2 {
         VkPhysicalDeviceSurfaceInfo2 {
-            surface: vk_null_ref(),
+            surface: RawVkSurface::vk_to_wrapped(&src.surface),
         }
     }
 }
 
-impl<'a> VkSetup for VkPhysicalDeviceSurfaceInfo2<'a> {
+impl Default for VkPhysicalDeviceSurfaceInfo2 {
+    fn default() -> VkPhysicalDeviceSurfaceInfo2 {
+        VkPhysicalDeviceSurfaceInfo2 {
+            surface: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkPhysicalDeviceSurfaceInfo2 {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.surface, fn_table);
     }
 }
 
 impl VkFree for RawVkPhysicalDeviceSurfaceInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

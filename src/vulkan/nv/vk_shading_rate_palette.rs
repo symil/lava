@@ -15,8 +15,8 @@ use vulkan::nv::{VkShadingRatePaletteEntry,RawVkShadingRatePaletteEntry};
 
 /// Wrapper for [VkShadingRatePaletteNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShadingRatePaletteNV.html).
 #[derive(Debug, Clone)]
-pub struct VkShadingRatePalette<'a> {
-    pub shading_rate_palette_entries: &'a [VkShadingRatePaletteEntry],
+pub struct VkShadingRatePalette {
+    pub shading_rate_palette_entries: Vec<VkShadingRatePaletteEntry>,
 }
 
 #[doc(hidden)]
@@ -24,32 +24,40 @@ pub struct VkShadingRatePalette<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShadingRatePalette {
     pub shading_rate_palette_entry_count: u32,
-    pub shading_rate_palette_entries: *mut RawVkShadingRatePaletteEntry,
+    pub shading_rate_palette_entries: *const RawVkShadingRatePaletteEntry,
 }
 
-impl<'a> VkWrappedType<RawVkShadingRatePalette> for VkShadingRatePalette<'a> {
+impl VkWrappedType<RawVkShadingRatePalette> for VkShadingRatePalette {
     fn vk_to_raw(src: &VkShadingRatePalette, dst: &mut RawVkShadingRatePalette) {
         dst.shading_rate_palette_entry_count = src.shading_rate_palette_entries.len() as u32;
-        dst.shading_rate_palette_entries = new_ptr_vk_array(src.shading_rate_palette_entries);
+        dst.shading_rate_palette_entries = new_ptr_vk_array(&src.shading_rate_palette_entries);
     }
 }
 
-impl Default for VkShadingRatePalette<'static> {
-    fn default() -> VkShadingRatePalette<'static> {
+impl VkRawType<VkShadingRatePalette> for RawVkShadingRatePalette {
+    fn vk_to_wrapped(src: &RawVkShadingRatePalette) -> VkShadingRatePalette {
         VkShadingRatePalette {
-            shading_rate_palette_entries: &[],
+            shading_rate_palette_entries: new_vk_array(src.shading_rate_palette_entry_count, src.shading_rate_palette_entries),
         }
     }
 }
 
-impl<'a> VkSetup for VkShadingRatePalette<'a> {
+impl Default for VkShadingRatePalette {
+    fn default() -> VkShadingRatePalette {
+        VkShadingRatePalette {
+            shading_rate_palette_entries: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkShadingRatePalette {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkShadingRatePalette {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.shading_rate_palette_entries);
     }
 }

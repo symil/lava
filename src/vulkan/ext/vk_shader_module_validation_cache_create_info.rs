@@ -16,8 +16,8 @@ use vulkan::ext::{VkValidationCache,RawVkValidationCache};
 
 /// Wrapper for [VkShaderModuleValidationCacheCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModuleValidationCacheCreateInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkShaderModuleValidationCacheCreateInfo<'a> {
-    pub validation_cache: &'a VkValidationCache,
+pub struct VkShaderModuleValidationCacheCreateInfo {
+    pub validation_cache: VkValidationCache,
 }
 
 #[doc(hidden)]
@@ -29,30 +29,38 @@ pub struct RawVkShaderModuleValidationCacheCreateInfo {
     pub validation_cache: RawVkValidationCache,
 }
 
-impl<'a> VkWrappedType<RawVkShaderModuleValidationCacheCreateInfo> for VkShaderModuleValidationCacheCreateInfo<'a> {
+impl VkWrappedType<RawVkShaderModuleValidationCacheCreateInfo> for VkShaderModuleValidationCacheCreateInfo {
     fn vk_to_raw(src: &VkShaderModuleValidationCacheCreateInfo, dst: &mut RawVkShaderModuleValidationCacheCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ShaderModuleValidationCacheCreateInfoExt);
         dst.next = ptr::null();
-        dst.validation_cache = vk_to_raw_value(src.validation_cache);
+        dst.validation_cache = vk_to_raw_value(&src.validation_cache);
     }
 }
 
-impl Default for VkShaderModuleValidationCacheCreateInfo<'static> {
-    fn default() -> VkShaderModuleValidationCacheCreateInfo<'static> {
+impl VkRawType<VkShaderModuleValidationCacheCreateInfo> for RawVkShaderModuleValidationCacheCreateInfo {
+    fn vk_to_wrapped(src: &RawVkShaderModuleValidationCacheCreateInfo) -> VkShaderModuleValidationCacheCreateInfo {
         VkShaderModuleValidationCacheCreateInfo {
-            validation_cache: vk_null_ref(),
+            validation_cache: RawVkValidationCache::vk_to_wrapped(&src.validation_cache),
         }
     }
 }
 
-impl<'a> VkSetup for VkShaderModuleValidationCacheCreateInfo<'a> {
+impl Default for VkShaderModuleValidationCacheCreateInfo {
+    fn default() -> VkShaderModuleValidationCacheCreateInfo {
+        VkShaderModuleValidationCacheCreateInfo {
+            validation_cache: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkShaderModuleValidationCacheCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.validation_cache, fn_table);
     }
 }
 
 impl VkFree for RawVkShaderModuleValidationCacheCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

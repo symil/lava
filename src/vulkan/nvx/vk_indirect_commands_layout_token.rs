@@ -55,7 +55,7 @@ impl VkRawType<VkIndirectCommandsLayoutToken> for RawVkIndirectCommandsLayoutTok
 impl Default for VkIndirectCommandsLayoutToken {
     fn default() -> VkIndirectCommandsLayoutToken {
         VkIndirectCommandsLayoutToken {
-            token_type: VkIndirectCommandsTokenType::default(),
+            token_type: Default::default(),
             binding_unit: 0,
             dynamic_count: 0,
             divisor: 0,
@@ -70,7 +70,7 @@ impl VkSetup for VkIndirectCommandsLayoutToken {
 }
 
 impl VkFree for RawVkIndirectCommandsLayoutToken {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

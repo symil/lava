@@ -43,7 +43,7 @@ impl VkSetup for VkPhysicalDeviceProperties2 {
 }
 
 impl VkFree for RawVkPhysicalDeviceProperties2 {
-    fn vk_free(&mut self) {
-        RawVkPhysicalDeviceProperties::vk_free(&mut self.properties);
+    fn vk_free(&self) {
+        
     }
 }

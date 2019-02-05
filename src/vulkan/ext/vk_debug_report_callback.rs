@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkDebugReportCallback = u64;
 
 /// Wrapper for [VkDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportCallbackEXT.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkDebugReportCallback {
     _handle: RawVkDebugReportCallback,
     _fn_table: *mut VkFunctionTable
@@ -64,12 +64,5 @@ impl VkDebugReportCallback {
     /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
-    }
-    
-    /// Wrapper for [vkDestroyDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDebugReportCallbackEXT.html).
-    pub fn destroy(&self) {
-        unsafe {
-            ((&*self._fn_table).vkDestroyDebugReportCallbackEXT)((*self._fn_table).instance, self._handle, ptr::null());
-        }
     }
 }

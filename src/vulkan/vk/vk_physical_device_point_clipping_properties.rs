@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDevicePointClippingProperties> for RawVkPhysicalDeviceP
 impl Default for VkPhysicalDevicePointClippingProperties {
     fn default() -> VkPhysicalDevicePointClippingProperties {
         VkPhysicalDevicePointClippingProperties {
-            point_clipping_behavior: VkPointClippingBehavior::default(),
+            point_clipping_behavior: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDevicePointClippingProperties {
 }
 
 impl VkFree for RawVkPhysicalDevicePointClippingProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -18,19 +18,14 @@ use vulkan::ext::{VkDebugUtilsObjectNameInfo,RawVkDebugUtilsObjectNameInfo};
 
 /// Wrapper for [VkDebugUtilsMessengerCallbackDataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCallbackDataEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'd: 'c,
-        'f: 'e,
-        'h: 'g,
-{
+pub struct VkDebugUtilsMessengerCallbackData {
     pub flags: VkDebugUtilsMessengerCallbackDataFlags,
-    pub message_id_name: Option<&'a str>,
+    pub message_id_name: Option<String>,
     pub message_id_number: isize,
-    pub message: &'b str,
-    pub queue_labels: &'c [VkDebugUtilsLabel<'d>],
-    pub cmd_buf_labels: &'e [VkDebugUtilsLabel<'f>],
-    pub objects: &'g [VkDebugUtilsObjectNameInfo<'h>],
+    pub message: String,
+    pub queue_labels: Vec<VkDebugUtilsLabel>,
+    pub cmd_buf_labels: Vec<VkDebugUtilsLabel>,
+    pub objects: Vec<VkDebugUtilsObjectNameInfo>,
 }
 
 #[doc(hidden)]
@@ -40,66 +35,70 @@ pub struct RawVkDebugUtilsMessengerCallbackData {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub flags: RawVkDebugUtilsMessengerCallbackDataFlags,
-    pub message_id_name: *mut c_char,
+    pub message_id_name: *const c_char,
     pub message_id_number: i32,
-    pub message: *mut c_char,
+    pub message: *const c_char,
     pub queue_label_count: u32,
-    pub queue_labels: *mut RawVkDebugUtilsLabel,
+    pub queue_labels: *const RawVkDebugUtilsLabel,
     pub cmd_buf_label_count: u32,
-    pub cmd_buf_labels: *mut RawVkDebugUtilsLabel,
+    pub cmd_buf_labels: *const RawVkDebugUtilsLabel,
     pub object_count: u32,
-    pub objects: *mut RawVkDebugUtilsObjectNameInfo,
+    pub objects: *const RawVkDebugUtilsObjectNameInfo,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkWrappedType<RawVkDebugUtilsMessengerCallbackData> for VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'd: 'c,
-        'f: 'e,
-        'h: 'g,
-{
+impl VkWrappedType<RawVkDebugUtilsMessengerCallbackData> for VkDebugUtilsMessengerCallbackData {
     fn vk_to_raw(src: &VkDebugUtilsMessengerCallbackData, dst: &mut RawVkDebugUtilsMessengerCallbackData) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsMessengerCallbackDataExt);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.message_id_name = new_ptr_string_checked(src.message_id_name);
+        dst.message_id_name = new_ptr_string_checked(&src.message_id_name);
         dst.message_id_number = vk_to_raw_value(&src.message_id_number);
-        dst.message = new_ptr_string(src.message);
+        dst.message = new_ptr_string(&src.message);
         dst.queue_label_count = src.queue_labels.len() as u32;
-        dst.queue_labels = new_ptr_vk_array(src.queue_labels);
+        dst.queue_labels = new_ptr_vk_array(&src.queue_labels);
         dst.cmd_buf_label_count = src.cmd_buf_labels.len() as u32;
-        dst.cmd_buf_labels = new_ptr_vk_array(src.cmd_buf_labels);
+        dst.cmd_buf_labels = new_ptr_vk_array(&src.cmd_buf_labels);
         dst.object_count = src.objects.len() as u32;
-        dst.objects = new_ptr_vk_array(src.objects);
+        dst.objects = new_ptr_vk_array(&src.objects);
     }
 }
 
-impl Default for VkDebugUtilsMessengerCallbackData<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkDebugUtilsMessengerCallbackData<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl VkRawType<VkDebugUtilsMessengerCallbackData> for RawVkDebugUtilsMessengerCallbackData {
+    fn vk_to_wrapped(src: &RawVkDebugUtilsMessengerCallbackData) -> VkDebugUtilsMessengerCallbackData {
         VkDebugUtilsMessengerCallbackData {
-            flags: VkDebugUtilsMessengerCallbackDataFlags::default(),
-            message_id_name: None,
-            message_id_number: 0,
-            message: "",
-            queue_labels: &[],
-            cmd_buf_labels: &[],
-            objects: &[],
+            flags: RawVkDebugUtilsMessengerCallbackDataFlags::vk_to_wrapped(&src.flags),
+            message_id_name: new_string_checked(src.message_id_name),
+            message_id_number: i32::vk_to_wrapped(&src.message_id_number),
+            message: new_string(src.message),
+            queue_labels: new_vk_array(src.queue_label_count, src.queue_labels),
+            cmd_buf_labels: new_vk_array(src.cmd_buf_label_count, src.cmd_buf_labels),
+            objects: new_vk_array(src.object_count, src.objects),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkSetup for VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'd: 'c,
-        'f: 'e,
-        'h: 'g,
-{
+impl Default for VkDebugUtilsMessengerCallbackData {
+    fn default() -> VkDebugUtilsMessengerCallbackData {
+        VkDebugUtilsMessengerCallbackData {
+            flags: Default::default(),
+            message_id_name: None,
+            message_id_number: 0,
+            message: String::new(),
+            queue_labels: Vec::new(),
+            cmd_buf_labels: Vec::new(),
+            objects: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkDebugUtilsMessengerCallbackData {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDebugUtilsMessengerCallbackData {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.message_id_name);
         free_ptr(self.message);
         free_vk_ptr_array(self.queue_label_count as usize, self.queue_labels);

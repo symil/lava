@@ -15,9 +15,9 @@ use vulkan::ext::{VkSampleLocationsInfo,RawVkSampleLocationsInfo};
 
 /// Wrapper for [VkSubpassSampleLocationsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassSampleLocationsEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkSubpassSampleLocations<'a> {
+pub struct VkSubpassSampleLocations {
     pub subpass_index: usize,
-    pub sample_locations_info: VkSampleLocationsInfo<'a>,
+    pub sample_locations_info: VkSampleLocationsInfo,
 }
 
 #[doc(hidden)]
@@ -28,30 +28,39 @@ pub struct RawVkSubpassSampleLocations {
     pub sample_locations_info: RawVkSampleLocationsInfo,
 }
 
-impl<'a> VkWrappedType<RawVkSubpassSampleLocations> for VkSubpassSampleLocations<'a> {
+impl VkWrappedType<RawVkSubpassSampleLocations> for VkSubpassSampleLocations {
     fn vk_to_raw(src: &VkSubpassSampleLocations, dst: &mut RawVkSubpassSampleLocations) {
         dst.subpass_index = vk_to_raw_value(&src.subpass_index);
         dst.sample_locations_info = vk_to_raw_value(&src.sample_locations_info);
     }
 }
 
-impl Default for VkSubpassSampleLocations<'static> {
-    fn default() -> VkSubpassSampleLocations<'static> {
+impl VkRawType<VkSubpassSampleLocations> for RawVkSubpassSampleLocations {
+    fn vk_to_wrapped(src: &RawVkSubpassSampleLocations) -> VkSubpassSampleLocations {
         VkSubpassSampleLocations {
-            subpass_index: 0,
-            sample_locations_info: VkSampleLocationsInfo::default(),
+            subpass_index: u32::vk_to_wrapped(&src.subpass_index),
+            sample_locations_info: RawVkSampleLocationsInfo::vk_to_wrapped(&src.sample_locations_info),
         }
     }
 }
 
-impl<'a> VkSetup for VkSubpassSampleLocations<'a> {
+impl Default for VkSubpassSampleLocations {
+    fn default() -> VkSubpassSampleLocations {
+        VkSubpassSampleLocations {
+            subpass_index: 0,
+            sample_locations_info: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkSubpassSampleLocations {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.sample_locations_info, fn_table);
     }
 }
 
 impl VkFree for RawVkSubpassSampleLocations {
-    fn vk_free(&mut self) {
-        RawVkSampleLocationsInfo::vk_free(&mut self.sample_locations_info);
+    fn vk_free(&self) {
+        
     }
 }

@@ -16,8 +16,8 @@ use vulkan::vk::{VkInputAttachmentAspectReference,RawVkInputAttachmentAspectRefe
 
 /// Wrapper for [VkRenderPassInputAttachmentAspectCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassInputAttachmentAspectCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkRenderPassInputAttachmentAspectCreateInfo<'a> {
-    pub aspect_references: &'a [VkInputAttachmentAspectReference],
+pub struct VkRenderPassInputAttachmentAspectCreateInfo {
+    pub aspect_references: Vec<VkInputAttachmentAspectReference>,
 }
 
 #[doc(hidden)]
@@ -27,34 +27,42 @@ pub struct RawVkRenderPassInputAttachmentAspectCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub aspect_reference_count: u32,
-    pub aspect_references: *mut RawVkInputAttachmentAspectReference,
+    pub aspect_references: *const RawVkInputAttachmentAspectReference,
 }
 
-impl<'a> VkWrappedType<RawVkRenderPassInputAttachmentAspectCreateInfo> for VkRenderPassInputAttachmentAspectCreateInfo<'a> {
+impl VkWrappedType<RawVkRenderPassInputAttachmentAspectCreateInfo> for VkRenderPassInputAttachmentAspectCreateInfo {
     fn vk_to_raw(src: &VkRenderPassInputAttachmentAspectCreateInfo, dst: &mut RawVkRenderPassInputAttachmentAspectCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassInputAttachmentAspectCreateInfo);
         dst.next = ptr::null();
         dst.aspect_reference_count = src.aspect_references.len() as u32;
-        dst.aspect_references = new_ptr_vk_array(src.aspect_references);
+        dst.aspect_references = new_ptr_vk_array(&src.aspect_references);
     }
 }
 
-impl Default for VkRenderPassInputAttachmentAspectCreateInfo<'static> {
-    fn default() -> VkRenderPassInputAttachmentAspectCreateInfo<'static> {
+impl VkRawType<VkRenderPassInputAttachmentAspectCreateInfo> for RawVkRenderPassInputAttachmentAspectCreateInfo {
+    fn vk_to_wrapped(src: &RawVkRenderPassInputAttachmentAspectCreateInfo) -> VkRenderPassInputAttachmentAspectCreateInfo {
         VkRenderPassInputAttachmentAspectCreateInfo {
-            aspect_references: &[],
+            aspect_references: new_vk_array(src.aspect_reference_count, src.aspect_references),
         }
     }
 }
 
-impl<'a> VkSetup for VkRenderPassInputAttachmentAspectCreateInfo<'a> {
+impl Default for VkRenderPassInputAttachmentAspectCreateInfo {
+    fn default() -> VkRenderPassInputAttachmentAspectCreateInfo {
+        VkRenderPassInputAttachmentAspectCreateInfo {
+            aspect_references: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkRenderPassInputAttachmentAspectCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkRenderPassInputAttachmentAspectCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.aspect_reference_count as usize, self.aspect_references);
     }
 }

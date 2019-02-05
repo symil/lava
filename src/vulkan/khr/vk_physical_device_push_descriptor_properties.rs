@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDevicePushDescriptorProperties {
 }
 
 impl VkFree for RawVkPhysicalDevicePushDescriptorProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

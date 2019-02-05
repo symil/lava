@@ -65,8 +65,8 @@ impl VkSetup for VkPhysicalDeviceMemoryProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceMemoryProperties {
-    fn vk_free(&mut self) {
-        for elt in self.memory_types.iter_mut() { RawVkMemoryType::vk_free(elt); };
-        for elt in self.memory_heaps.iter_mut() { RawVkMemoryHeap::vk_free(elt); };
+    fn vk_free(&self) {
+        for elt in self.memory_types.iter() { RawVkMemoryType::vk_free(elt); };
+        for elt in self.memory_heaps.iter() { RawVkMemoryHeap::vk_free(elt); };
     }
 }

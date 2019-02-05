@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkQueryPool = u64;
 
 /// Wrapper for [VkQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPool.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkQueryPool {
     _handle: RawVkQueryPool,
     _fn_table: *mut VkFunctionTable
@@ -74,12 +74,12 @@ impl VkQueryPool {
     }
     
     /// Wrapper for [vkGetQueryPoolResults](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetQueryPoolResults.html).
-    pub fn get_results(&self, first_query: usize, query_count: usize, data: &mut [c_void], stride: usize, flags: VkQueryResultFlags) -> Result<(), VkResult> {
+    pub fn get_results(&self, first_query: usize, query_count: usize, data: &[c_void], stride: usize, flags: VkQueryResultFlags) -> Result<(), VkResult> {
         unsafe {
             let raw_first_query = vk_to_raw_value(&first_query);
             let raw_query_count = vk_to_raw_value(&query_count);
             let raw_data_size = data.len();
-            let raw_data = data.as_mut_ptr();
+            let raw_data = data.as_ptr();
             let raw_stride = vk_to_raw_value(&stride);
             let raw_flags = vk_to_raw_value(&flags);
             let vk_result = ((&*self._fn_table).vkGetQueryPoolResults)((*self._fn_table).device, self._handle, raw_first_query, raw_query_count, raw_data_size, raw_data, raw_stride, raw_flags);

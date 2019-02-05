@@ -56,7 +56,7 @@ impl VkRawType<VkDeviceQueueInfo2> for RawVkDeviceQueueInfo2 {
 impl Default for VkDeviceQueueInfo2 {
     fn default() -> VkDeviceQueueInfo2 {
         VkDeviceQueueInfo2 {
-            flags: VkDeviceQueueCreateFlags::default(),
+            flags: Default::default(),
             queue_family_index: 0,
             queue_index: 0,
         }
@@ -70,7 +70,7 @@ impl VkSetup for VkDeviceQueueInfo2 {
 }
 
 impl VkFree for RawVkDeviceQueueInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

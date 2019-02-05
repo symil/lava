@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceTransformFeedbackFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceTransformFeedbackFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

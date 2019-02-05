@@ -65,8 +65,8 @@ impl VkRawType<VkPhysicalDeviceSampleLocationsProperties> for RawVkPhysicalDevic
 impl Default for VkPhysicalDeviceSampleLocationsProperties {
     fn default() -> VkPhysicalDeviceSampleLocationsProperties {
         VkPhysicalDeviceSampleLocationsProperties {
-            sample_location_sample_counts: VkSampleCountFlags::default(),
-            max_sample_location_grid_size: VkExtent2D::default(),
+            sample_location_sample_counts: Default::default(),
+            max_sample_location_grid_size: Default::default(),
             sample_location_coordinate_range: [0.0; 2],
             sample_location_sub_pixel_bits: 0,
             variable_sample_locations: false,
@@ -81,7 +81,7 @@ impl VkSetup for VkPhysicalDeviceSampleLocationsProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceSampleLocationsProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.max_sample_location_grid_size);
+    fn vk_free(&self) {
+        
     }
 }

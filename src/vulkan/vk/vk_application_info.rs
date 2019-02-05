@@ -16,10 +16,10 @@ use vulkan::vk::{VkVersion};
 
 /// Wrapper for [VkApplicationInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkApplicationInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkApplicationInfo<'a, 'b> {
-    pub application_name: Option<&'a str>,
+pub struct VkApplicationInfo {
+    pub application_name: Option<String>,
     pub application_version: u32,
-    pub engine_name: Option<&'b str>,
+    pub engine_name: Option<String>,
     pub engine_version: u32,
     pub api_version: VkVersion,
 }
@@ -30,45 +30,57 @@ pub struct VkApplicationInfo<'a, 'b> {
 pub struct RawVkApplicationInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
-    pub application_name: *mut c_char,
+    pub application_name: *const c_char,
     pub application_version: u32,
-    pub engine_name: *mut c_char,
+    pub engine_name: *const c_char,
     pub engine_version: u32,
     pub api_version: u32,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkApplicationInfo> for VkApplicationInfo<'a, 'b> {
+impl VkWrappedType<RawVkApplicationInfo> for VkApplicationInfo {
     fn vk_to_raw(src: &VkApplicationInfo, dst: &mut RawVkApplicationInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ApplicationInfo);
         dst.next = ptr::null();
-        dst.application_name = new_ptr_string_checked(src.application_name);
+        dst.application_name = new_ptr_string_checked(&src.application_name);
         dst.application_version = src.application_version;
-        dst.engine_name = new_ptr_string_checked(src.engine_name);
+        dst.engine_name = new_ptr_string_checked(&src.engine_name);
         dst.engine_version = src.engine_version;
         dst.api_version = vk_to_raw_value(&src.api_version);
     }
 }
 
-impl Default for VkApplicationInfo<'static, 'static> {
-    fn default() -> VkApplicationInfo<'static, 'static> {
+impl VkRawType<VkApplicationInfo> for RawVkApplicationInfo {
+    fn vk_to_wrapped(src: &RawVkApplicationInfo) -> VkApplicationInfo {
+        VkApplicationInfo {
+            application_name: new_string_checked(src.application_name),
+            application_version: src.application_version,
+            engine_name: new_string_checked(src.engine_name),
+            engine_version: src.engine_version,
+            api_version: u32::vk_to_wrapped(&src.api_version),
+        }
+    }
+}
+
+impl Default for VkApplicationInfo {
+    fn default() -> VkApplicationInfo {
         VkApplicationInfo {
             application_name: None,
             application_version: 0,
             engine_name: None,
             engine_version: 0,
-            api_version: VkVersion::default(),
+            api_version: Default::default(),
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkApplicationInfo<'a, 'b> {
+impl VkSetup for VkApplicationInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkApplicationInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.application_name);
         free_ptr(self.engine_name);
     }

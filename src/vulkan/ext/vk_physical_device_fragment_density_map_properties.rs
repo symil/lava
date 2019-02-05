@@ -56,8 +56,8 @@ impl VkRawType<VkPhysicalDeviceFragmentDensityMapProperties> for RawVkPhysicalDe
 impl Default for VkPhysicalDeviceFragmentDensityMapProperties {
     fn default() -> VkPhysicalDeviceFragmentDensityMapProperties {
         VkPhysicalDeviceFragmentDensityMapProperties {
-            min_fragment_density_texel_size: VkExtent2D::default(),
-            max_fragment_density_texel_size: VkExtent2D::default(),
+            min_fragment_density_texel_size: Default::default(),
+            max_fragment_density_texel_size: Default::default(),
             fragment_density_invocations: false,
         }
     }
@@ -71,8 +71,7 @@ impl VkSetup for VkPhysicalDeviceFragmentDensityMapProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceFragmentDensityMapProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.min_fragment_density_texel_size);
-        RawVkExtent2D::vk_free(&mut self.max_fragment_density_texel_size);
+    fn vk_free(&self) {
+        
     }
 }

@@ -58,7 +58,7 @@ impl Default for VkPipelineColorBlendAdvancedStateCreateInfo {
         VkPipelineColorBlendAdvancedStateCreateInfo {
             src_premultiplied: false,
             dst_premultiplied: false,
-            blend_overlap: VkBlendOverlap::default(),
+            blend_overlap: Default::default(),
         }
     }
 }
@@ -70,7 +70,7 @@ impl VkSetup for VkPipelineColorBlendAdvancedStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineColorBlendAdvancedStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

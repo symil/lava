@@ -56,10 +56,10 @@ impl VkRawType<VkQueueFamilyProperties> for RawVkQueueFamilyProperties {
 impl Default for VkQueueFamilyProperties {
     fn default() -> VkQueueFamilyProperties {
         VkQueueFamilyProperties {
-            queue_flags: VkQueueFlags::default(),
+            queue_flags: Default::default(),
             queue_count: 0,
             timestamp_valid_bits: 0,
-            min_image_transfer_granularity: VkExtent3D::default(),
+            min_image_transfer_granularity: Default::default(),
         }
     }
 }
@@ -71,7 +71,7 @@ impl VkSetup for VkQueueFamilyProperties {
 }
 
 impl VkFree for RawVkQueueFamilyProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent3D::vk_free(&mut self.min_image_transfer_granularity);
+    fn vk_free(&self) {
+        
     }
 }

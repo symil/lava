@@ -64,7 +64,7 @@ impl VkSetup for VkFilterCubicImageViewImageFormatProperties {
 }
 
 impl VkFree for RawVkFilterCubicImageViewImageFormatProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

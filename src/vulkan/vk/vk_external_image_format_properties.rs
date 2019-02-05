@@ -48,7 +48,7 @@ impl VkRawType<VkExternalImageFormatProperties> for RawVkExternalImageFormatProp
 impl Default for VkExternalImageFormatProperties {
     fn default() -> VkExternalImageFormatProperties {
         VkExternalImageFormatProperties {
-            external_memory_properties: VkExternalMemoryProperties::default(),
+            external_memory_properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExternalImageFormatProperties {
 }
 
 impl VkFree for RawVkExternalImageFormatProperties {
-    fn vk_free(&mut self) {
-        RawVkExternalMemoryProperties::vk_free(&mut self.external_memory_properties);
+    fn vk_free(&self) {
+        
     }
 }

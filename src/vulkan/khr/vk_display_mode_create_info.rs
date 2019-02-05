@@ -53,8 +53,8 @@ impl VkRawType<VkDisplayModeCreateInfo> for RawVkDisplayModeCreateInfo {
 impl Default for VkDisplayModeCreateInfo {
     fn default() -> VkDisplayModeCreateInfo {
         VkDisplayModeCreateInfo {
-            flags: VkDisplayModeCreateFlags::default(),
-            parameters: VkDisplayModeParameters::default(),
+            flags: Default::default(),
+            parameters: Default::default(),
         }
     }
 }
@@ -66,7 +66,7 @@ impl VkSetup for VkDisplayModeCreateInfo {
 }
 
 impl VkFree for RawVkDisplayModeCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkDisplayModeParameters::vk_free(&mut self.parameters);
+    fn vk_free(&self) {
+        
     }
 }

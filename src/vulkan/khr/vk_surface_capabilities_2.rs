@@ -48,7 +48,7 @@ impl VkRawType<VkSurfaceCapabilities2> for RawVkSurfaceCapabilities2 {
 impl Default for VkSurfaceCapabilities2 {
     fn default() -> VkSurfaceCapabilities2 {
         VkSurfaceCapabilities2 {
-            surface_capabilities: VkSurfaceCapabilities::default(),
+            surface_capabilities: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSurfaceCapabilities2 {
 }
 
 impl VkFree for RawVkSurfaceCapabilities2 {
-    fn vk_free(&mut self) {
-        RawVkSurfaceCapabilities::vk_free(&mut self.surface_capabilities);
+    fn vk_free(&self) {
+        
     }
 }

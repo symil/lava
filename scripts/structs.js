@@ -172,7 +172,7 @@ function genImplVkFree(def) {
 
     return [
         `impl VkFree for ${def.rawTypeName}`, [
-            `fn vk_free(&mut self)`,
+            `fn vk_free(&self)`,
             fieldsToFree.map(field => `${field.freeRaw(varName => `self.${varName}`)};`)
         ]
     ]

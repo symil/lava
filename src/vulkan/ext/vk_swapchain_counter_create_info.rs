@@ -48,7 +48,7 @@ impl VkRawType<VkSwapchainCounterCreateInfo> for RawVkSwapchainCounterCreateInfo
 impl Default for VkSwapchainCounterCreateInfo {
     fn default() -> VkSwapchainCounterCreateInfo {
         VkSwapchainCounterCreateInfo {
-            surface_counters: VkSurfaceCounterFlags::default(),
+            surface_counters: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSwapchainCounterCreateInfo {
 }
 
 impl VkFree for RawVkSwapchainCounterCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -48,7 +48,7 @@ impl Default for VkMemoryHeap {
     fn default() -> VkMemoryHeap {
         VkMemoryHeap {
             size: 0,
-            flags: VkMemoryHeapFlags::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkMemoryHeap {
 }
 
 impl VkFree for RawVkMemoryHeap {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

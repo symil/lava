@@ -48,7 +48,7 @@ impl VkRawType<VkBindImagePlaneMemoryInfo> for RawVkBindImagePlaneMemoryInfo {
 impl Default for VkBindImagePlaneMemoryInfo {
     fn default() -> VkBindImagePlaneMemoryInfo {
         VkBindImagePlaneMemoryInfo {
-            plane_aspect: VkImageAspectFlags::default(),
+            plane_aspect: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkBindImagePlaneMemoryInfo {
 }
 
 impl VkFree for RawVkBindImagePlaneMemoryInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

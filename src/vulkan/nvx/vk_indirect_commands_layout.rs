@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkIndirectCommandsLayout = u64;
 
 /// Wrapper for [VkIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutNVX.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkIndirectCommandsLayout {
     _handle: RawVkIndirectCommandsLayout,
     _fn_table: *mut VkFunctionTable
@@ -64,12 +64,5 @@ impl VkIndirectCommandsLayout {
     /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
-    }
-    
-    /// Wrapper for [vkDestroyIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyIndirectCommandsLayoutNVX.html).
-    pub fn destroy(&self) {
-        unsafe {
-            ((&*self._fn_table).vkDestroyIndirectCommandsLayoutNVX)((*self._fn_table).device, self._handle, ptr::null());
-        }
     }
 }

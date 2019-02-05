@@ -62,10 +62,10 @@ impl VkRawType<VkQueryPoolCreateInfo> for RawVkQueryPoolCreateInfo {
 impl Default for VkQueryPoolCreateInfo {
     fn default() -> VkQueryPoolCreateInfo {
         VkQueryPoolCreateInfo {
-            flags: VkQueryPoolCreateFlags::default(),
-            query_type: VkQueryType::default(),
+            flags: Default::default(),
+            query_type: Default::default(),
             query_count: 0,
-            pipeline_statistics: VkQueryPipelineStatisticFlags::default(),
+            pipeline_statistics: Default::default(),
         }
     }
 }
@@ -77,7 +77,7 @@ impl VkSetup for VkQueryPoolCreateInfo {
 }
 
 impl VkFree for RawVkQueryPoolCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDeviceMemoryProperties2> for RawVkPhysicalDeviceMemoryP
 impl Default for VkPhysicalDeviceMemoryProperties2 {
     fn default() -> VkPhysicalDeviceMemoryProperties2 {
         VkPhysicalDeviceMemoryProperties2 {
-            memory_properties: VkPhysicalDeviceMemoryProperties::default(),
+            memory_properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDeviceMemoryProperties2 {
 }
 
 impl VkFree for RawVkPhysicalDeviceMemoryProperties2 {
-    fn vk_free(&mut self) {
-        RawVkPhysicalDeviceMemoryProperties::vk_free(&mut self.memory_properties);
+    fn vk_free(&self) {
+        
     }
 }

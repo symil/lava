@@ -66,7 +66,7 @@ impl Default for VkDescriptorUpdateTemplateEntry {
             dst_binding: 0,
             dst_array_element: 0,
             descriptor_count: 0,
-            descriptor_type: VkDescriptorType::default(),
+            descriptor_type: Default::default(),
             offset: 0,
             stride: 0,
         }
@@ -80,7 +80,7 @@ impl VkSetup for VkDescriptorUpdateTemplateEntry {
 }
 
 impl VkFree for RawVkDescriptorUpdateTemplateEntry {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

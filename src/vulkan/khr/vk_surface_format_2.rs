@@ -48,7 +48,7 @@ impl VkRawType<VkSurfaceFormat2> for RawVkSurfaceFormat2 {
 impl Default for VkSurfaceFormat2 {
     fn default() -> VkSurfaceFormat2 {
         VkSurfaceFormat2 {
-            surface_format: VkSurfaceFormat::default(),
+            surface_format: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSurfaceFormat2 {
 }
 
 impl VkFree for RawVkSurfaceFormat2 {
-    fn vk_free(&mut self) {
-        RawVkSurfaceFormat::vk_free(&mut self.surface_format);
+    fn vk_free(&self) {
+        
     }
 }

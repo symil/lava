@@ -48,7 +48,7 @@ impl VkRawType<VkDisplayPowerInfo> for RawVkDisplayPowerInfo {
 impl Default for VkDisplayPowerInfo {
     fn default() -> VkDisplayPowerInfo {
         VkDisplayPowerInfo {
-            power_state: VkDisplayPowerState::default(),
+            power_state: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDisplayPowerInfo {
 }
 
 impl VkFree for RawVkDisplayPowerInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -15,5 +15,5 @@ pub trait VkSetup {
 }
 
 pub trait VkFree {
-    fn vk_free(&mut self);
+    fn vk_free(&self);
 }

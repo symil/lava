@@ -20,8 +20,7 @@ pub struct VkDebugMarkerObjectTagInfo<'a> {
     pub object_type: VkDebugReportObjectType,
     pub object: usize,
     pub tag_name: usize,
-    pub tag_size: usize,
-    pub tag: &'a c_void,
+    pub tag: &'a [c_void],
 }
 
 #[doc(hidden)]
@@ -44,19 +43,18 @@ impl<'a> VkWrappedType<RawVkDebugMarkerObjectTagInfo> for VkDebugMarkerObjectTag
         dst.object_type = vk_to_raw_value(&src.object_type);
         dst.object = vk_to_raw_value(&src.object);
         dst.tag_name = vk_to_raw_value(&src.tag_name);
-        dst.tag_size = src.tag_size;
-        dst.tag = src.tag as *const c_void;
+        dst.tag_size = src.tag.len();
+        dst.tag = src.tag.as_ptr();
     }
 }
 
 impl Default for VkDebugMarkerObjectTagInfo<'static> {
     fn default() -> VkDebugMarkerObjectTagInfo<'static> {
         VkDebugMarkerObjectTagInfo {
-            object_type: VkDebugReportObjectType::default(),
+            object_type: Default::default(),
             object: 0,
             tag_name: 0,
-            tag_size: 0,
-            tag: &0,
+            tag: &[],
         }
     }
 }
@@ -68,7 +66,7 @@ impl<'a> VkSetup for VkDebugMarkerObjectTagInfo<'a> {
 }
 
 impl VkFree for RawVkDebugMarkerObjectTagInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

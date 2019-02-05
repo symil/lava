@@ -76,10 +76,10 @@ impl VkRawType<VkHdrMetadata> for RawVkHdrMetadata {
 impl Default for VkHdrMetadata {
     fn default() -> VkHdrMetadata {
         VkHdrMetadata {
-            display_primary_red: VkXYColor::default(),
-            display_primary_green: VkXYColor::default(),
-            display_primary_blue: VkXYColor::default(),
-            white_point: VkXYColor::default(),
+            display_primary_red: Default::default(),
+            display_primary_green: Default::default(),
+            display_primary_blue: Default::default(),
+            white_point: Default::default(),
             max_luminance: 0.0,
             min_luminance: 0.0,
             max_content_light_level: 0.0,
@@ -98,10 +98,7 @@ impl VkSetup for VkHdrMetadata {
 }
 
 impl VkFree for RawVkHdrMetadata {
-    fn vk_free(&mut self) {
-        RawVkXYColor::vk_free(&mut self.display_primary_red);
-        RawVkXYColor::vk_free(&mut self.display_primary_green);
-        RawVkXYColor::vk_free(&mut self.display_primary_blue);
-        RawVkXYColor::vk_free(&mut self.white_point);
+    fn vk_free(&self) {
+        
     }
 }

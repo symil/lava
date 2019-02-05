@@ -52,7 +52,7 @@ impl VkRawType<VkImportMemoryHostPointerInfo> for RawVkImportMemoryHostPointerIn
 impl Default for VkImportMemoryHostPointerInfo {
     fn default() -> VkImportMemoryHostPointerInfo {
         VkImportMemoryHostPointerInfo {
-            handle_type: VkExternalMemoryHandleTypeFlags::default(),
+            handle_type: Default::default(),
             host_pointer: ptr::null(),
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkImportMemoryHostPointerInfo {
 }
 
 impl VkFree for RawVkImportMemoryHostPointerInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -57,8 +57,8 @@ impl VkRawType<VkPipelineRasterizationConservativeStateCreateInfo> for RawVkPipe
 impl Default for VkPipelineRasterizationConservativeStateCreateInfo {
     fn default() -> VkPipelineRasterizationConservativeStateCreateInfo {
         VkPipelineRasterizationConservativeStateCreateInfo {
-            flags: VkPipelineRasterizationConservativeStateCreateFlags::default(),
-            conservative_rasterization_mode: VkConservativeRasterizationMode::default(),
+            flags: Default::default(),
+            conservative_rasterization_mode: Default::default(),
             extra_primitive_overestimation_size: 0.0,
         }
     }
@@ -71,7 +71,7 @@ impl VkSetup for VkPipelineRasterizationConservativeStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineRasterizationConservativeStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

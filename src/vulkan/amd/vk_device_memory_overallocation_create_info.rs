@@ -48,7 +48,7 @@ impl VkRawType<VkDeviceMemoryOverallocationCreateInfo> for RawVkDeviceMemoryOver
 impl Default for VkDeviceMemoryOverallocationCreateInfo {
     fn default() -> VkDeviceMemoryOverallocationCreateInfo {
         VkDeviceMemoryOverallocationCreateInfo {
-            overallocation_behavior: VkMemoryOverallocationBehavior::default(),
+            overallocation_behavior: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDeviceMemoryOverallocationCreateInfo {
 }
 
 impl VkFree for RawVkDeviceMemoryOverallocationCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

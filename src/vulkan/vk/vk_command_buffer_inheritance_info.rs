@@ -19,10 +19,10 @@ use vulkan::vk::{VkQueryPipelineStatisticFlags,RawVkQueryPipelineStatisticFlags}
 
 /// Wrapper for [VkCommandBufferInheritanceInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferInheritanceInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkCommandBufferInheritanceInfo<'a, 'b> {
-    pub render_pass: Option<&'a VkRenderPass>,
+pub struct VkCommandBufferInheritanceInfo {
+    pub render_pass: VkRenderPass,
     pub subpass: usize,
-    pub framebuffer: Option<&'b VkFramebuffer>,
+    pub framebuffer: VkFramebuffer,
     pub occlusion_query_enable: bool,
     pub query_flags: VkQueryControlFlags,
     pub pipeline_statistics: VkQueryPipelineStatisticFlags,
@@ -42,40 +42,54 @@ pub struct RawVkCommandBufferInheritanceInfo {
     pub pipeline_statistics: RawVkQueryPipelineStatisticFlags,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkCommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfo<'a, 'b> {
+impl VkWrappedType<RawVkCommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfo {
     fn vk_to_raw(src: &VkCommandBufferInheritanceInfo, dst: &mut RawVkCommandBufferInheritanceInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferInheritanceInfo);
         dst.next = ptr::null();
-        dst.render_pass = if src.render_pass.is_some() { vk_to_raw_value(src.render_pass.unwrap()) } else { 0 };
+        dst.render_pass = vk_to_raw_value(&src.render_pass);
         dst.subpass = vk_to_raw_value(&src.subpass);
-        dst.framebuffer = if src.framebuffer.is_some() { vk_to_raw_value(src.framebuffer.unwrap()) } else { 0 };
+        dst.framebuffer = vk_to_raw_value(&src.framebuffer);
         dst.occlusion_query_enable = vk_to_raw_value(&src.occlusion_query_enable);
         dst.query_flags = vk_to_raw_value(&src.query_flags);
         dst.pipeline_statistics = vk_to_raw_value(&src.pipeline_statistics);
     }
 }
 
-impl Default for VkCommandBufferInheritanceInfo<'static, 'static> {
-    fn default() -> VkCommandBufferInheritanceInfo<'static, 'static> {
+impl VkRawType<VkCommandBufferInheritanceInfo> for RawVkCommandBufferInheritanceInfo {
+    fn vk_to_wrapped(src: &RawVkCommandBufferInheritanceInfo) -> VkCommandBufferInheritanceInfo {
         VkCommandBufferInheritanceInfo {
-            render_pass: None,
-            subpass: 0,
-            framebuffer: None,
-            occlusion_query_enable: false,
-            query_flags: VkQueryControlFlags::default(),
-            pipeline_statistics: VkQueryPipelineStatisticFlags::default(),
+            render_pass: RawVkRenderPass::vk_to_wrapped(&src.render_pass),
+            subpass: u32::vk_to_wrapped(&src.subpass),
+            framebuffer: RawVkFramebuffer::vk_to_wrapped(&src.framebuffer),
+            occlusion_query_enable: u32::vk_to_wrapped(&src.occlusion_query_enable),
+            query_flags: RawVkQueryControlFlags::vk_to_wrapped(&src.query_flags),
+            pipeline_statistics: RawVkQueryPipelineStatisticFlags::vk_to_wrapped(&src.pipeline_statistics),
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkCommandBufferInheritanceInfo<'a, 'b> {
+impl Default for VkCommandBufferInheritanceInfo {
+    fn default() -> VkCommandBufferInheritanceInfo {
+        VkCommandBufferInheritanceInfo {
+            render_pass: Default::default(),
+            subpass: 0,
+            framebuffer: Default::default(),
+            occlusion_query_enable: false,
+            query_flags: Default::default(),
+            pipeline_statistics: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkCommandBufferInheritanceInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.render_pass, fn_table);
+        VkSetup::vk_setup(&mut self.framebuffer, fn_table);
     }
 }
 
 impl VkFree for RawVkCommandBufferInheritanceInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -52,9 +52,9 @@ impl VkRawType<VkExternalMemoryProperties> for RawVkExternalMemoryProperties {
 impl Default for VkExternalMemoryProperties {
     fn default() -> VkExternalMemoryProperties {
         VkExternalMemoryProperties {
-            external_memory_features: VkExternalMemoryFeatureFlags::default(),
-            export_from_imported_handle_types: VkExternalMemoryHandleTypeFlags::default(),
-            compatible_handle_types: VkExternalMemoryHandleTypeFlags::default(),
+            external_memory_features: Default::default(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
         }
     }
 }
@@ -66,7 +66,7 @@ impl VkSetup for VkExternalMemoryProperties {
 }
 
 impl VkFree for RawVkExternalMemoryProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

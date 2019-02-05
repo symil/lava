@@ -18,9 +18,9 @@ use vulkan::vk::{VkFormat,RawVkFormat};
 
 /// Wrapper for [VkBufferViewCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferViewCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkBufferViewCreateInfo<'a> {
+pub struct VkBufferViewCreateInfo {
     pub flags: VkBufferViewCreateFlags,
-    pub buffer: &'a VkBuffer,
+    pub buffer: VkBuffer,
     pub format: VkFormat,
     pub offset: usize,
     pub range: usize,
@@ -39,38 +39,50 @@ pub struct RawVkBufferViewCreateInfo {
     pub range: u64,
 }
 
-impl<'a> VkWrappedType<RawVkBufferViewCreateInfo> for VkBufferViewCreateInfo<'a> {
+impl VkWrappedType<RawVkBufferViewCreateInfo> for VkBufferViewCreateInfo {
     fn vk_to_raw(src: &VkBufferViewCreateInfo, dst: &mut RawVkBufferViewCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferViewCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.buffer = vk_to_raw_value(&src.buffer);
         dst.format = vk_to_raw_value(&src.format);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.range = vk_to_raw_value(&src.range);
     }
 }
 
-impl Default for VkBufferViewCreateInfo<'static> {
-    fn default() -> VkBufferViewCreateInfo<'static> {
+impl VkRawType<VkBufferViewCreateInfo> for RawVkBufferViewCreateInfo {
+    fn vk_to_wrapped(src: &RawVkBufferViewCreateInfo) -> VkBufferViewCreateInfo {
         VkBufferViewCreateInfo {
-            flags: VkBufferViewCreateFlags::default(),
-            buffer: vk_null_ref(),
-            format: VkFormat::default(),
+            flags: RawVkBufferViewCreateFlags::vk_to_wrapped(&src.flags),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
+            format: RawVkFormat::vk_to_wrapped(&src.format),
+            offset: u64::vk_to_wrapped(&src.offset),
+            range: u64::vk_to_wrapped(&src.range),
+        }
+    }
+}
+
+impl Default for VkBufferViewCreateInfo {
+    fn default() -> VkBufferViewCreateInfo {
+        VkBufferViewCreateInfo {
+            flags: Default::default(),
+            buffer: Default::default(),
+            format: Default::default(),
             offset: 0,
             range: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkBufferViewCreateInfo<'a> {
+impl VkSetup for VkBufferViewCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkBufferViewCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

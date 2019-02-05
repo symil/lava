@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDeviceExternalImageFormatInfo> for RawVkPhysicalDeviceE
 impl Default for VkPhysicalDeviceExternalImageFormatInfo {
     fn default() -> VkPhysicalDeviceExternalImageFormatInfo {
         VkPhysicalDeviceExternalImageFormatInfo {
-            handle_type: VkExternalMemoryHandleTypeFlags::default(),
+            handle_type: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDeviceExternalImageFormatInfo {
 }
 
 impl VkFree for RawVkPhysicalDeviceExternalImageFormatInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

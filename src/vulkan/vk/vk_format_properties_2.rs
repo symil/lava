@@ -48,7 +48,7 @@ impl VkRawType<VkFormatProperties2> for RawVkFormatProperties2 {
 impl Default for VkFormatProperties2 {
     fn default() -> VkFormatProperties2 {
         VkFormatProperties2 {
-            format_properties: VkFormatProperties::default(),
+            format_properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkFormatProperties2 {
 }
 
 impl VkFree for RawVkFormatProperties2 {
-    fn vk_free(&mut self) {
-        RawVkFormatProperties::vk_free(&mut self.format_properties);
+    fn vk_free(&self) {
+        
     }
 }

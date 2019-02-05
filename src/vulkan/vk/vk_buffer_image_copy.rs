@@ -68,9 +68,9 @@ impl Default for VkBufferImageCopy {
             buffer_offset: 0,
             buffer_row_length: 0,
             buffer_image_height: 0,
-            image_subresource: VkImageSubresourceLayers::default(),
-            image_offset: VkOffset3D::default(),
-            image_extent: VkExtent3D::default(),
+            image_subresource: Default::default(),
+            image_offset: Default::default(),
+            image_extent: Default::default(),
         }
     }
 }
@@ -84,9 +84,7 @@ impl VkSetup for VkBufferImageCopy {
 }
 
 impl VkFree for RawVkBufferImageCopy {
-    fn vk_free(&mut self) {
-        RawVkImageSubresourceLayers::vk_free(&mut self.image_subresource);
-        RawVkOffset3D::vk_free(&mut self.image_offset);
-        RawVkExtent3D::vk_free(&mut self.image_extent);
+    fn vk_free(&self) {
+        
     }
 }

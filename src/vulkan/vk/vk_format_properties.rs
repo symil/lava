@@ -51,9 +51,9 @@ impl VkRawType<VkFormatProperties> for RawVkFormatProperties {
 impl Default for VkFormatProperties {
     fn default() -> VkFormatProperties {
         VkFormatProperties {
-            linear_tiling_features: VkFormatFeatureFlags::default(),
-            optimal_tiling_features: VkFormatFeatureFlags::default(),
-            buffer_features: VkFormatFeatureFlags::default(),
+            linear_tiling_features: Default::default(),
+            optimal_tiling_features: Default::default(),
+            buffer_features: Default::default(),
         }
     }
 }
@@ -65,7 +65,7 @@ impl VkSetup for VkFormatProperties {
 }
 
 impl VkFree for RawVkFormatProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

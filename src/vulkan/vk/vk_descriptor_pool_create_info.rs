@@ -17,10 +17,10 @@ use vulkan::vk::{VkDescriptorPoolSize,RawVkDescriptorPoolSize};
 
 /// Wrapper for [VkDescriptorPoolCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPoolCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorPoolCreateInfo<'a> {
+pub struct VkDescriptorPoolCreateInfo {
     pub flags: VkDescriptorPoolCreateFlags,
     pub max_sets: usize,
-    pub pool_sizes: &'a [VkDescriptorPoolSize],
+    pub pool_sizes: Vec<VkDescriptorPoolSize>,
 }
 
 #[doc(hidden)]
@@ -32,38 +32,48 @@ pub struct RawVkDescriptorPoolCreateInfo {
     pub flags: RawVkDescriptorPoolCreateFlags,
     pub max_sets: u32,
     pub pool_size_count: u32,
-    pub pool_sizes: *mut RawVkDescriptorPoolSize,
+    pub pool_sizes: *const RawVkDescriptorPoolSize,
 }
 
-impl<'a> VkWrappedType<RawVkDescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfo<'a> {
+impl VkWrappedType<RawVkDescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfo {
     fn vk_to_raw(src: &VkDescriptorPoolCreateInfo, dst: &mut RawVkDescriptorPoolCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorPoolCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.max_sets = vk_to_raw_value(&src.max_sets);
         dst.pool_size_count = src.pool_sizes.len() as u32;
-        dst.pool_sizes = new_ptr_vk_array(src.pool_sizes);
+        dst.pool_sizes = new_ptr_vk_array(&src.pool_sizes);
     }
 }
 
-impl Default for VkDescriptorPoolCreateInfo<'static> {
-    fn default() -> VkDescriptorPoolCreateInfo<'static> {
+impl VkRawType<VkDescriptorPoolCreateInfo> for RawVkDescriptorPoolCreateInfo {
+    fn vk_to_wrapped(src: &RawVkDescriptorPoolCreateInfo) -> VkDescriptorPoolCreateInfo {
         VkDescriptorPoolCreateInfo {
-            flags: VkDescriptorPoolCreateFlags::default(),
-            max_sets: 0,
-            pool_sizes: &[],
+            flags: RawVkDescriptorPoolCreateFlags::vk_to_wrapped(&src.flags),
+            max_sets: u32::vk_to_wrapped(&src.max_sets),
+            pool_sizes: new_vk_array(src.pool_size_count, src.pool_sizes),
         }
     }
 }
 
-impl<'a> VkSetup for VkDescriptorPoolCreateInfo<'a> {
+impl Default for VkDescriptorPoolCreateInfo {
+    fn default() -> VkDescriptorPoolCreateInfo {
+        VkDescriptorPoolCreateInfo {
+            flags: Default::default(),
+            max_sets: 0,
+            pool_sizes: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkDescriptorPoolCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDescriptorPoolCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.pool_size_count as usize, self.pool_sizes);
     }
 }

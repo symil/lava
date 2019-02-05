@@ -45,7 +45,7 @@ impl VkRawType<VkBaseOutStructure> for RawVkBaseOutStructure {
 impl Default for VkBaseOutStructure {
     fn default() -> VkBaseOutStructure {
         VkBaseOutStructure {
-            s_type: VkStructureType::default(),
+            s_type: Default::default(),
         }
     }
 }
@@ -57,7 +57,7 @@ impl VkSetup for VkBaseOutStructure {
 }
 
 impl VkFree for RawVkBaseOutStructure {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

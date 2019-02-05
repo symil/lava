@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkDescriptorPool = u64;
 
 /// Wrapper for [VkDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPool.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorPool {
     _handle: RawVkDescriptorPool,
     _fn_table: *mut VkFunctionTable
@@ -64,32 +64,5 @@ impl VkDescriptorPool {
     /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
-    }
-    
-    /// Wrapper for [vkDestroyDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDescriptorPool.html).
-    pub fn destroy(&self) {
-        unsafe {
-            ((&*self._fn_table).vkDestroyDescriptorPool)((*self._fn_table).device, self._handle, ptr::null());
-        }
-    }
-    
-    /// Wrapper for [vkResetDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetDescriptorPool.html).
-    pub fn reset(&self, flags: VkDescriptorPoolResetFlags) -> Result<(), VkResult> {
-        unsafe {
-            let raw_flags = vk_to_raw_value(&flags);
-            let vk_result = ((&*self._fn_table).vkResetDescriptorPool)((*self._fn_table).device, self._handle, raw_flags);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkFreeDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeDescriptorSets.html).
-    pub fn free_descriptor_sets(&self, descriptor_sets: &[&VkDescriptorSet]) -> Result<(), VkResult> {
-        unsafe {
-            let raw_descriptor_set_count = descriptor_sets.len() as u32;
-            let raw_descriptor_sets = new_ptr_vk_array_from_ref(descriptor_sets);
-            let vk_result = ((&*self._fn_table).vkFreeDescriptorSets)((*self._fn_table).device, self._handle, raw_descriptor_set_count, raw_descriptor_sets);
-            free_ptr(raw_descriptor_sets);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
     }
 }

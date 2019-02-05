@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkRenderPass = u64;
 
 /// Wrapper for [VkRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPass.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkRenderPass {
     _handle: RawVkRenderPass,
     _fn_table: *mut VkFunctionTable
@@ -64,27 +64,5 @@ impl VkRenderPass {
     /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
-    }
-    
-    /// Wrapper for [vkDestroyRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyRenderPass.html).
-    pub fn destroy(&self) {
-        unsafe {
-            ((&*self._fn_table).vkDestroyRenderPass)((*self._fn_table).device, self._handle, ptr::null());
-        }
-    }
-    
-    /// Wrapper for [vkGetRenderAreaGranularity](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRenderAreaGranularity.html).
-    pub fn get_render_area_granularity(&self) -> VkExtent2D {
-        unsafe {
-            let raw_granularity = &mut mem::zeroed() as *mut RawVkExtent2D;
-            
-            ((&*self._fn_table).vkGetRenderAreaGranularity)((*self._fn_table).device, self._handle, raw_granularity);
-            
-            let mut granularity = new_vk_value(raw_granularity);
-            let fn_table = self._fn_table;
-            VkSetup::vk_setup(&mut granularity, fn_table);
-            RawVkExtent2D::vk_free(raw_granularity.as_mut().unwrap());
-            granularity
-        }
     }
 }

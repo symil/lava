@@ -64,7 +64,7 @@ impl VkSetup for VkDispatchIndirectCommand {
 }
 
 impl VkFree for RawVkDispatchIndirectCommand {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

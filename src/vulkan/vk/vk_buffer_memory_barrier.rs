@@ -17,12 +17,12 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkBufferMemoryBarrier](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferMemoryBarrier.html).
 #[derive(Debug, Clone)]
-pub struct VkBufferMemoryBarrier<'a> {
+pub struct VkBufferMemoryBarrier {
     pub src_access_mask: VkAccessFlags,
     pub dst_access_mask: VkAccessFlags,
     pub src_queue_family_index: usize,
     pub dst_queue_family_index: usize,
-    pub buffer: &'a VkBuffer,
+    pub buffer: VkBuffer,
     pub offset: usize,
     pub size: usize,
 }
@@ -42,7 +42,7 @@ pub struct RawVkBufferMemoryBarrier {
     pub size: u64,
 }
 
-impl<'a> VkWrappedType<RawVkBufferMemoryBarrier> for VkBufferMemoryBarrier<'a> {
+impl VkWrappedType<RawVkBufferMemoryBarrier> for VkBufferMemoryBarrier {
     fn vk_to_raw(src: &VkBufferMemoryBarrier, dst: &mut RawVkBufferMemoryBarrier) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferMemoryBarrier);
         dst.next = ptr::null();
@@ -50,34 +50,48 @@ impl<'a> VkWrappedType<RawVkBufferMemoryBarrier> for VkBufferMemoryBarrier<'a> {
         dst.dst_access_mask = vk_to_raw_value(&src.dst_access_mask);
         dst.src_queue_family_index = vk_to_raw_value(&src.src_queue_family_index);
         dst.dst_queue_family_index = vk_to_raw_value(&src.dst_queue_family_index);
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.buffer = vk_to_raw_value(&src.buffer);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.size = vk_to_raw_value(&src.size);
     }
 }
 
-impl Default for VkBufferMemoryBarrier<'static> {
-    fn default() -> VkBufferMemoryBarrier<'static> {
+impl VkRawType<VkBufferMemoryBarrier> for RawVkBufferMemoryBarrier {
+    fn vk_to_wrapped(src: &RawVkBufferMemoryBarrier) -> VkBufferMemoryBarrier {
         VkBufferMemoryBarrier {
-            src_access_mask: VkAccessFlags::default(),
-            dst_access_mask: VkAccessFlags::default(),
+            src_access_mask: RawVkAccessFlags::vk_to_wrapped(&src.src_access_mask),
+            dst_access_mask: RawVkAccessFlags::vk_to_wrapped(&src.dst_access_mask),
+            src_queue_family_index: u32::vk_to_wrapped(&src.src_queue_family_index),
+            dst_queue_family_index: u32::vk_to_wrapped(&src.dst_queue_family_index),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
+            offset: u64::vk_to_wrapped(&src.offset),
+            size: u64::vk_to_wrapped(&src.size),
+        }
+    }
+}
+
+impl Default for VkBufferMemoryBarrier {
+    fn default() -> VkBufferMemoryBarrier {
+        VkBufferMemoryBarrier {
+            src_access_mask: Default::default(),
+            dst_access_mask: Default::default(),
             src_queue_family_index: 0,
             dst_queue_family_index: 0,
-            buffer: vk_null_ref(),
+            buffer: Default::default(),
             offset: 0,
             size: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkBufferMemoryBarrier<'a> {
+impl VkSetup for VkBufferMemoryBarrier {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkBufferMemoryBarrier {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

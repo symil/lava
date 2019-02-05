@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceMaintenance3Properties {
 }
 
 impl VkFree for RawVkPhysicalDeviceMaintenance3Properties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

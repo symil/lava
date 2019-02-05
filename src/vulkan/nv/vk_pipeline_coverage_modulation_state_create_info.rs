@@ -17,11 +17,11 @@ use vulkan::nv::{VkCoverageModulationMode,RawVkCoverageModulationMode};
 
 /// Wrapper for [VkPipelineCoverageModulationStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCoverageModulationStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineCoverageModulationStateCreateInfo<'a> {
+pub struct VkPipelineCoverageModulationStateCreateInfo {
     pub flags: VkPipelineCoverageModulationStateCreateFlags,
     pub coverage_modulation_mode: VkCoverageModulationMode,
     pub coverage_modulation_table_enable: bool,
-    pub coverage_modulation_table: Option<&'a [f32]>,
+    pub coverage_modulation_table: Option<Vec<f32>>,
 }
 
 #[doc(hidden)]
@@ -37,37 +37,48 @@ pub struct RawVkPipelineCoverageModulationStateCreateInfo {
     pub coverage_modulation_table: *const f32,
 }
 
-impl<'a> VkWrappedType<RawVkPipelineCoverageModulationStateCreateInfo> for VkPipelineCoverageModulationStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineCoverageModulationStateCreateInfo> for VkPipelineCoverageModulationStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineCoverageModulationStateCreateInfo, dst: &mut RawVkPipelineCoverageModulationStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineCoverageModulationStateCreateInfoNv);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.coverage_modulation_mode = vk_to_raw_value(&src.coverage_modulation_mode);
         dst.coverage_modulation_table_enable = vk_to_raw_value(&src.coverage_modulation_table_enable);
-        dst.coverage_modulation_table_count = get_array_option_len(src.coverage_modulation_table) as u32;
-        dst.coverage_modulation_table = slice_option_to_ptr(src.coverage_modulation_table);
+        dst.coverage_modulation_table_count = get_array_option_len(&src.coverage_modulation_table) as u32;
+        dst.coverage_modulation_table = vec_option_to_ptr(&src.coverage_modulation_table);
     }
 }
 
-impl Default for VkPipelineCoverageModulationStateCreateInfo<'static> {
-    fn default() -> VkPipelineCoverageModulationStateCreateInfo<'static> {
+impl VkRawType<VkPipelineCoverageModulationStateCreateInfo> for RawVkPipelineCoverageModulationStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineCoverageModulationStateCreateInfo) -> VkPipelineCoverageModulationStateCreateInfo {
         VkPipelineCoverageModulationStateCreateInfo {
-            flags: VkPipelineCoverageModulationStateCreateFlags::default(),
-            coverage_modulation_mode: VkCoverageModulationMode::default(),
+            flags: RawVkPipelineCoverageModulationStateCreateFlags::vk_to_wrapped(&src.flags),
+            coverage_modulation_mode: RawVkCoverageModulationMode::vk_to_wrapped(&src.coverage_modulation_mode),
+            coverage_modulation_table_enable: u32::vk_to_wrapped(&src.coverage_modulation_table_enable),
+            coverage_modulation_table: vec_from_ptr_checked(src.coverage_modulation_table_count as usize, src.coverage_modulation_table),
+        }
+    }
+}
+
+impl Default for VkPipelineCoverageModulationStateCreateInfo {
+    fn default() -> VkPipelineCoverageModulationStateCreateInfo {
+        VkPipelineCoverageModulationStateCreateInfo {
+            flags: Default::default(),
+            coverage_modulation_mode: Default::default(),
             coverage_modulation_table_enable: false,
             coverage_modulation_table: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkPipelineCoverageModulationStateCreateInfo<'a> {
+impl VkSetup for VkPipelineCoverageModulationStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineCoverageModulationStateCreateInfo {
-    fn vk_free(&mut self) {
-        
+    fn vk_free(&self) {
+        free_ptr(self.coverage_modulation_table);
     }
 }

@@ -17,8 +17,8 @@ use vulkan::vk::{VkCommandBufferLevel,RawVkCommandBufferLevel};
 
 /// Wrapper for [VkCommandBufferAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferAllocateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkCommandBufferAllocateInfo<'a> {
-    pub command_pool: &'a VkCommandPool,
+pub struct VkCommandBufferAllocateInfo {
+    pub command_pool: VkCommandPool,
     pub level: VkCommandBufferLevel,
     pub command_buffer_count: usize,
 }
@@ -34,34 +34,44 @@ pub struct RawVkCommandBufferAllocateInfo {
     pub command_buffer_count: u32,
 }
 
-impl<'a> VkWrappedType<RawVkCommandBufferAllocateInfo> for VkCommandBufferAllocateInfo<'a> {
+impl VkWrappedType<RawVkCommandBufferAllocateInfo> for VkCommandBufferAllocateInfo {
     fn vk_to_raw(src: &VkCommandBufferAllocateInfo, dst: &mut RawVkCommandBufferAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferAllocateInfo);
         dst.next = ptr::null();
-        dst.command_pool = vk_to_raw_value(src.command_pool);
+        dst.command_pool = vk_to_raw_value(&src.command_pool);
         dst.level = vk_to_raw_value(&src.level);
         dst.command_buffer_count = vk_to_raw_value(&src.command_buffer_count);
     }
 }
 
-impl Default for VkCommandBufferAllocateInfo<'static> {
-    fn default() -> VkCommandBufferAllocateInfo<'static> {
+impl VkRawType<VkCommandBufferAllocateInfo> for RawVkCommandBufferAllocateInfo {
+    fn vk_to_wrapped(src: &RawVkCommandBufferAllocateInfo) -> VkCommandBufferAllocateInfo {
         VkCommandBufferAllocateInfo {
-            command_pool: vk_null_ref(),
-            level: VkCommandBufferLevel::default(),
+            command_pool: RawVkCommandPool::vk_to_wrapped(&src.command_pool),
+            level: RawVkCommandBufferLevel::vk_to_wrapped(&src.level),
+            command_buffer_count: u32::vk_to_wrapped(&src.command_buffer_count),
+        }
+    }
+}
+
+impl Default for VkCommandBufferAllocateInfo {
+    fn default() -> VkCommandBufferAllocateInfo {
+        VkCommandBufferAllocateInfo {
+            command_pool: Default::default(),
+            level: Default::default(),
             command_buffer_count: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkCommandBufferAllocateInfo<'a> {
+impl VkSetup for VkCommandBufferAllocateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.command_pool, fn_table);
     }
 }
 
 impl VkFree for RawVkCommandBufferAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

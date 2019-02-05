@@ -59,7 +59,7 @@ impl VkSetup for VkPipelineRepresentativeFragmentTestStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineRepresentativeFragmentTestStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

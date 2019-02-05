@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceInlineUniformBlockFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceInlineUniformBlockFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -99,7 +99,7 @@ impl VkSetup for VkPhysicalDeviceConservativeRasterizationProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceConservativeRasterizationProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

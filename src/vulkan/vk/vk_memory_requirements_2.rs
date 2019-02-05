@@ -48,7 +48,7 @@ impl VkRawType<VkMemoryRequirements2> for RawVkMemoryRequirements2 {
 impl Default for VkMemoryRequirements2 {
     fn default() -> VkMemoryRequirements2 {
         VkMemoryRequirements2 {
-            memory_requirements: VkMemoryRequirements::default(),
+            memory_requirements: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkMemoryRequirements2 {
 }
 
 impl VkFree for RawVkMemoryRequirements2 {
-    fn vk_free(&mut self) {
-        RawVkMemoryRequirements::vk_free(&mut self.memory_requirements);
+    fn vk_free(&self) {
+        
     }
 }

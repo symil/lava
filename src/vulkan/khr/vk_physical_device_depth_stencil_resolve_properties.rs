@@ -60,8 +60,8 @@ impl VkRawType<VkPhysicalDeviceDepthStencilResolveProperties> for RawVkPhysicalD
 impl Default for VkPhysicalDeviceDepthStencilResolveProperties {
     fn default() -> VkPhysicalDeviceDepthStencilResolveProperties {
         VkPhysicalDeviceDepthStencilResolveProperties {
-            supported_depth_resolve_modes: VkResolveModeFlags::default(),
-            supported_stencil_resolve_modes: VkResolveModeFlags::default(),
+            supported_depth_resolve_modes: Default::default(),
+            supported_stencil_resolve_modes: Default::default(),
             independent_resolve_none: false,
             independent_resolve: false,
         }
@@ -75,7 +75,7 @@ impl VkSetup for VkPhysicalDeviceDepthStencilResolveProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceDepthStencilResolveProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

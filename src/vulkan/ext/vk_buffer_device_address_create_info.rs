@@ -59,7 +59,7 @@ impl VkSetup for VkBufferDeviceAddressCreateInfo {
 }
 
 impl VkFree for RawVkBufferDeviceAddressCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

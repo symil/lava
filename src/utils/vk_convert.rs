@@ -70,6 +70,14 @@ pub fn new_vk_array<R : VkRawType<W>, W>(length: u32, ptr: *const R) -> Vec<W> {
     }
 }
 
+pub fn new_vk_array_checked<R : VkRawType<W>, W>(length: u32, ptr: *const R) -> Option<Vec<W>> {
+    if ptr.is_null() {
+        None
+    } else {
+        Some(new_vk_array(length, ptr))
+    }
+}
+
 pub fn new_vk_value<R : VkRawType<W>, W>(ptr: *const R) -> W {
     unsafe {
         R::vk_to_wrapped(&*ptr)
@@ -101,6 +109,7 @@ pub fn new_array<T : Copy>(length: u32, ptr: *const T) -> Vec<T> {
 
 pub fn new_string(ptr: *const c_char) -> String {
     unsafe {
+        // TODO: remove condition?
         if ptr.is_null() {
             String::from("")
         } else {
@@ -117,19 +126,44 @@ pub fn new_string_checked(ptr: *const c_char) -> Option<String> {
     }
 }
 
-pub unsafe fn get_vk_instance_function_pointer(instance: RawVkInstance, name: &str) -> *mut c_void {
+pub fn new_string_vec(length: u32, ptr: *const *const c_char) -> Vec<String> {
+    let len = length as usize;
+    let mut result : Vec<String> = Vec::with_capacity(len);
+
+    for i in 0..len {
+        result.push(new_string(unsafe { *ptr.add(i) }));
+    }
+
+    result
+}
+
+pub fn vec_from_ptr<T>(length: usize, ptr: *const T) -> Vec<T> {
+    unsafe {
+        Vec::from_raw_parts(mem::transmute(ptr), length, length)
+    }
+}
+
+pub fn vec_from_ptr_checked<T>(length: usize, ptr: *const T) -> Option<Vec<T>> {
+    if ptr.is_null() {
+        None
+    } else {
+        Some(vec_from_ptr(length, ptr))
+    }
+}
+
+pub unsafe fn get_vk_instance_function_pointer(instance: RawVkInstance, name: &str) -> *const c_void {
     let c_string = CString::new(name).unwrap();
 
     vkGetInstanceProcAddr(instance, c_string.as_c_str().as_ptr())
 }
 
-pub unsafe fn get_vk_device_function_pointer(device: RawVkDevice, name: &str) -> *mut c_void {
+pub unsafe fn get_vk_device_function_pointer(device: RawVkDevice, name: &str) -> *const c_void {
     let c_string = CString::new(name).unwrap();
 
     vkGetDeviceProcAddr(device, c_string.as_c_str().as_ptr())
 }
 
 extern {
-    fn vkGetInstanceProcAddr(instance: RawVkInstance, name: *const c_char) -> *mut c_void;
-    fn vkGetDeviceProcAddr(device: RawVkDevice, name: *const c_char) -> *mut c_void;
+    fn vkGetInstanceProcAddr(instance: RawVkInstance, name: *const c_char) -> *const c_void;
+    fn vkGetDeviceProcAddr(device: RawVkDevice, name: *const c_char) -> *const c_void;
 }

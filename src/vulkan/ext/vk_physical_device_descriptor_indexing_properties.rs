@@ -169,7 +169,7 @@ impl VkSetup for VkPhysicalDeviceDescriptorIndexingProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceDescriptorIndexingProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

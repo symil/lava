@@ -48,7 +48,7 @@ impl VkRawType<VkImageViewUsageCreateInfo> for RawVkImageViewUsageCreateInfo {
 impl Default for VkImageViewUsageCreateInfo {
     fn default() -> VkImageViewUsageCreateInfo {
         VkImageViewUsageCreateInfo {
-            usage: VkImageUsageFlags::default(),
+            usage: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkImageViewUsageCreateInfo {
 }
 
 impl VkFree for RawVkImageViewUsageCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -47,7 +47,7 @@ impl VkRawType<VkMemoryType> for RawVkMemoryType {
 impl Default for VkMemoryType {
     fn default() -> VkMemoryType {
         VkMemoryType {
-            property_flags: VkMemoryPropertyFlags::default(),
+            property_flags: Default::default(),
             heap_index: 0,
         }
     }
@@ -60,7 +60,7 @@ impl VkSetup for VkMemoryType {
 }
 
 impl VkFree for RawVkMemoryType {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

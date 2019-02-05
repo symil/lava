@@ -55,10 +55,10 @@ impl VkRawType<VkComponentMapping> for RawVkComponentMapping {
 impl Default for VkComponentMapping {
     fn default() -> VkComponentMapping {
         VkComponentMapping {
-            r: VkComponentSwizzle::default(),
-            g: VkComponentSwizzle::default(),
-            b: VkComponentSwizzle::default(),
-            a: VkComponentSwizzle::default(),
+            r: Default::default(),
+            g: Default::default(),
+            b: Default::default(),
+            a: Default::default(),
         }
     }
 }
@@ -70,7 +70,7 @@ impl VkSetup for VkComponentMapping {
 }
 
 impl VkFree for RawVkComponentMapping {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

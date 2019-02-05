@@ -48,7 +48,7 @@ impl VkRawType<VkPipelineTessellationDomainOriginStateCreateInfo> for RawVkPipel
 impl Default for VkPipelineTessellationDomainOriginStateCreateInfo {
     fn default() -> VkPipelineTessellationDomainOriginStateCreateInfo {
         VkPipelineTessellationDomainOriginStateCreateInfo {
-            domain_origin: VkTessellationDomainOrigin::default(),
+            domain_origin: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPipelineTessellationDomainOriginStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineTessellationDomainOriginStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

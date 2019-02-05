@@ -48,7 +48,7 @@ impl VkRawType<VkSamplerReductionModeCreateInfo> for RawVkSamplerReductionModeCr
 impl Default for VkSamplerReductionModeCreateInfo {
     fn default() -> VkSamplerReductionModeCreateInfo {
         VkSamplerReductionModeCreateInfo {
-            reduction_mode: VkSamplerReductionMode::default(),
+            reduction_mode: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSamplerReductionModeCreateInfo {
 }
 
 impl VkFree for RawVkSamplerReductionModeCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

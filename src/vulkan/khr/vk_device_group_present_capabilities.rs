@@ -53,7 +53,7 @@ impl Default for VkDeviceGroupPresentCapabilities {
     fn default() -> VkDeviceGroupPresentCapabilities {
         VkDeviceGroupPresentCapabilities {
             present_mask: [0; 32],
-            modes: VkDeviceGroupPresentModeFlags::default(),
+            modes: Default::default(),
         }
     }
 }
@@ -65,7 +65,7 @@ impl VkSetup for VkDeviceGroupPresentCapabilities {
 }
 
 impl VkFree for RawVkDeviceGroupPresentCapabilities {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

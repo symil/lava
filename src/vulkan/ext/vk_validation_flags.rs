@@ -16,8 +16,8 @@ use vulkan::ext::{VkValidationCheck,RawVkValidationCheck};
 
 /// Wrapper for [VkValidationFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationFlagBitsEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkValidationFlags<'a> {
-    pub disabled_validation_checks: &'a [VkValidationCheck],
+pub struct VkValidationFlags {
+    pub disabled_validation_checks: Vec<VkValidationCheck>,
 }
 
 #[doc(hidden)]
@@ -27,34 +27,42 @@ pub struct RawVkValidationFlags {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub disabled_validation_check_count: u32,
-    pub disabled_validation_checks: *mut RawVkValidationCheck,
+    pub disabled_validation_checks: *const RawVkValidationCheck,
 }
 
-impl<'a> VkWrappedType<RawVkValidationFlags> for VkValidationFlags<'a> {
+impl VkWrappedType<RawVkValidationFlags> for VkValidationFlags {
     fn vk_to_raw(src: &VkValidationFlags, dst: &mut RawVkValidationFlags) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ValidationFlagsExt);
         dst.next = ptr::null();
         dst.disabled_validation_check_count = src.disabled_validation_checks.len() as u32;
-        dst.disabled_validation_checks = new_ptr_vk_array(src.disabled_validation_checks);
+        dst.disabled_validation_checks = new_ptr_vk_array(&src.disabled_validation_checks);
     }
 }
 
-impl Default for VkValidationFlags<'static> {
-    fn default() -> VkValidationFlags<'static> {
+impl VkRawType<VkValidationFlags> for RawVkValidationFlags {
+    fn vk_to_wrapped(src: &RawVkValidationFlags) -> VkValidationFlags {
         VkValidationFlags {
-            disabled_validation_checks: &[],
+            disabled_validation_checks: new_vk_array(src.disabled_validation_check_count, src.disabled_validation_checks),
         }
     }
 }
 
-impl<'a> VkSetup for VkValidationFlags<'a> {
+impl Default for VkValidationFlags {
+    fn default() -> VkValidationFlags {
+        VkValidationFlags {
+            disabled_validation_checks: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkValidationFlags {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkValidationFlags {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.disabled_validation_checks);
     }
 }

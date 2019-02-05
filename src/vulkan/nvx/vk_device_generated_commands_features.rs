@@ -59,7 +59,7 @@ impl VkSetup for VkDeviceGeneratedCommandsFeatures {
 }
 
 impl VkFree for RawVkDeviceGeneratedCommandsFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

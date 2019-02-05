@@ -68,11 +68,11 @@ impl VkRawType<VkPhysicalDeviceSparseImageFormatInfo2> for RawVkPhysicalDeviceSp
 impl Default for VkPhysicalDeviceSparseImageFormatInfo2 {
     fn default() -> VkPhysicalDeviceSparseImageFormatInfo2 {
         VkPhysicalDeviceSparseImageFormatInfo2 {
-            format: VkFormat::default(),
-            type_: VkImageType::default(),
-            samples: VkSampleCountFlags::default(),
-            usage: VkImageUsageFlags::default(),
-            tiling: VkImageTiling::default(),
+            format: Default::default(),
+            type_: Default::default(),
+            samples: Default::default(),
+            usage: Default::default(),
+            tiling: Default::default(),
         }
     }
 }
@@ -84,7 +84,7 @@ impl VkSetup for VkPhysicalDeviceSparseImageFormatInfo2 {
 }
 
 impl VkFree for RawVkPhysicalDeviceSparseImageFormatInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

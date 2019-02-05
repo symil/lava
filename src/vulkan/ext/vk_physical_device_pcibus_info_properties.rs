@@ -74,7 +74,7 @@ impl VkSetup for VkPhysicalDevicePCIBusInfoProperties {
 }
 
 impl VkFree for RawVkPhysicalDevicePCIBusInfoProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -16,8 +16,8 @@ use vulkan::khr::{VkDeviceGroupPresentModeFlags,RawVkDeviceGroupPresentModeFlags
 
 /// Wrapper for [VkDeviceGroupPresentInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupPresentInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkDeviceGroupPresentInfo<'a> {
-    pub device_masks: &'a [u32],
+pub struct VkDeviceGroupPresentInfo {
+    pub device_masks: Vec<u32>,
     pub mode: VkDeviceGroupPresentModeFlags,
 }
 
@@ -32,7 +32,7 @@ pub struct RawVkDeviceGroupPresentInfo {
     pub mode: RawVkDeviceGroupPresentModeFlags,
 }
 
-impl<'a> VkWrappedType<RawVkDeviceGroupPresentInfo> for VkDeviceGroupPresentInfo<'a> {
+impl VkWrappedType<RawVkDeviceGroupPresentInfo> for VkDeviceGroupPresentInfo {
     fn vk_to_raw(src: &VkDeviceGroupPresentInfo, dst: &mut RawVkDeviceGroupPresentInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupPresentInfoKhr);
         dst.next = ptr::null();
@@ -42,23 +42,32 @@ impl<'a> VkWrappedType<RawVkDeviceGroupPresentInfo> for VkDeviceGroupPresentInfo
     }
 }
 
-impl Default for VkDeviceGroupPresentInfo<'static> {
-    fn default() -> VkDeviceGroupPresentInfo<'static> {
+impl VkRawType<VkDeviceGroupPresentInfo> for RawVkDeviceGroupPresentInfo {
+    fn vk_to_wrapped(src: &RawVkDeviceGroupPresentInfo) -> VkDeviceGroupPresentInfo {
         VkDeviceGroupPresentInfo {
-            device_masks: &[],
-            mode: VkDeviceGroupPresentModeFlags::default(),
+            device_masks: vec_from_ptr(src.swapchain_count as usize, src.device_masks),
+            mode: RawVkDeviceGroupPresentModeFlags::vk_to_wrapped(&src.mode),
         }
     }
 }
 
-impl<'a> VkSetup for VkDeviceGroupPresentInfo<'a> {
+impl Default for VkDeviceGroupPresentInfo {
+    fn default() -> VkDeviceGroupPresentInfo {
+        VkDeviceGroupPresentInfo {
+            device_masks: Vec::new(),
+            mode: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkDeviceGroupPresentInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDeviceGroupPresentInfo {
-    fn vk_free(&mut self) {
-        
+    fn vk_free(&self) {
+        free_ptr(self.device_masks);
     }
 }

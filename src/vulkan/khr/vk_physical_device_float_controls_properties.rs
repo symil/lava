@@ -139,7 +139,7 @@ impl VkSetup for VkPhysicalDeviceFloatControlsProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceFloatControlsProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

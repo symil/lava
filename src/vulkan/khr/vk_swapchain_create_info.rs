@@ -26,9 +26,9 @@ use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 
 /// Wrapper for [VkSwapchainCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainCreateInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkSwapchainCreateInfo<'a, 'b, 'c> {
+pub struct VkSwapchainCreateInfo {
     pub flags: VkSwapchainCreateFlags,
-    pub surface: &'a VkSurface,
+    pub surface: VkSurface,
     pub min_image_count: usize,
     pub image_format: VkFormat,
     pub image_color_space: VkColorSpace,
@@ -36,12 +36,12 @@ pub struct VkSwapchainCreateInfo<'a, 'b, 'c> {
     pub image_array_layers: usize,
     pub image_usage: VkImageUsageFlags,
     pub image_sharing_mode: VkSharingMode,
-    pub queue_family_indices: &'b [usize],
+    pub queue_family_indices: Vec<usize>,
     pub pre_transform: VkSurfaceTransformFlags,
     pub composite_alpha: VkCompositeAlphaFlags,
     pub present_mode: VkPresentMode,
     pub clipped: bool,
-    pub old_swapchain: Option<&'c VkSwapchain>,
+    pub old_swapchain: VkSwapchain,
 }
 
 #[doc(hidden)]
@@ -60,7 +60,7 @@ pub struct RawVkSwapchainCreateInfo {
     pub image_usage: RawVkImageUsageFlags,
     pub image_sharing_mode: RawVkSharingMode,
     pub queue_family_index_count: u32,
-    pub queue_family_indices: *mut u32,
+    pub queue_family_indices: *const u32,
     pub pre_transform: RawVkSurfaceTransformFlags,
     pub composite_alpha: RawVkCompositeAlphaFlags,
     pub present_mode: RawVkPresentMode,
@@ -68,12 +68,12 @@ pub struct RawVkSwapchainCreateInfo {
     pub old_swapchain: RawVkSwapchain,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkSwapchainCreateInfo> for VkSwapchainCreateInfo<'a, 'b, 'c> {
+impl VkWrappedType<RawVkSwapchainCreateInfo> for VkSwapchainCreateInfo {
     fn vk_to_raw(src: &VkSwapchainCreateInfo, dst: &mut RawVkSwapchainCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SwapchainCreateInfoKhr);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.surface = vk_to_raw_value(src.surface);
+        dst.surface = vk_to_raw_value(&src.surface);
         dst.min_image_count = vk_to_raw_value(&src.min_image_count);
         dst.image_format = vk_to_raw_value(&src.image_format);
         dst.image_color_space = vk_to_raw_value(&src.image_color_space);
@@ -82,46 +82,69 @@ impl<'a, 'b, 'c> VkWrappedType<RawVkSwapchainCreateInfo> for VkSwapchainCreateIn
         dst.image_usage = vk_to_raw_value(&src.image_usage);
         dst.image_sharing_mode = vk_to_raw_value(&src.image_sharing_mode);
         dst.queue_family_index_count = src.queue_family_indices.len() as u32;
-        dst.queue_family_indices = new_ptr_vk_array(src.queue_family_indices);
+        dst.queue_family_indices = new_ptr_vk_array(&src.queue_family_indices);
         dst.pre_transform = vk_to_raw_value(&src.pre_transform);
         dst.composite_alpha = vk_to_raw_value(&src.composite_alpha);
         dst.present_mode = vk_to_raw_value(&src.present_mode);
         dst.clipped = vk_to_raw_value(&src.clipped);
-        dst.old_swapchain = if src.old_swapchain.is_some() { vk_to_raw_value(src.old_swapchain.unwrap()) } else { 0 };
+        dst.old_swapchain = vk_to_raw_value(&src.old_swapchain);
     }
 }
 
-impl Default for VkSwapchainCreateInfo<'static, 'static, 'static> {
-    fn default() -> VkSwapchainCreateInfo<'static, 'static, 'static> {
+impl VkRawType<VkSwapchainCreateInfo> for RawVkSwapchainCreateInfo {
+    fn vk_to_wrapped(src: &RawVkSwapchainCreateInfo) -> VkSwapchainCreateInfo {
         VkSwapchainCreateInfo {
-            flags: VkSwapchainCreateFlags::default(),
-            surface: vk_null_ref(),
-            min_image_count: 0,
-            image_format: VkFormat::default(),
-            image_color_space: VkColorSpace::default(),
-            image_extent: VkExtent2D::default(),
-            image_array_layers: 0,
-            image_usage: VkImageUsageFlags::default(),
-            image_sharing_mode: VkSharingMode::default(),
-            queue_family_indices: &[],
-            pre_transform: VkSurfaceTransformFlags::default(),
-            composite_alpha: VkCompositeAlphaFlags::default(),
-            present_mode: VkPresentMode::default(),
-            clipped: false,
-            old_swapchain: None,
+            flags: RawVkSwapchainCreateFlags::vk_to_wrapped(&src.flags),
+            surface: RawVkSurface::vk_to_wrapped(&src.surface),
+            min_image_count: u32::vk_to_wrapped(&src.min_image_count),
+            image_format: RawVkFormat::vk_to_wrapped(&src.image_format),
+            image_color_space: RawVkColorSpace::vk_to_wrapped(&src.image_color_space),
+            image_extent: RawVkExtent2D::vk_to_wrapped(&src.image_extent),
+            image_array_layers: u32::vk_to_wrapped(&src.image_array_layers),
+            image_usage: RawVkImageUsageFlags::vk_to_wrapped(&src.image_usage),
+            image_sharing_mode: RawVkSharingMode::vk_to_wrapped(&src.image_sharing_mode),
+            queue_family_indices: new_vk_array(src.queue_family_index_count, src.queue_family_indices),
+            pre_transform: RawVkSurfaceTransformFlags::vk_to_wrapped(&src.pre_transform),
+            composite_alpha: RawVkCompositeAlphaFlags::vk_to_wrapped(&src.composite_alpha),
+            present_mode: RawVkPresentMode::vk_to_wrapped(&src.present_mode),
+            clipped: u32::vk_to_wrapped(&src.clipped),
+            old_swapchain: RawVkSwapchain::vk_to_wrapped(&src.old_swapchain),
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkSwapchainCreateInfo<'a, 'b, 'c> {
+impl Default for VkSwapchainCreateInfo {
+    fn default() -> VkSwapchainCreateInfo {
+        VkSwapchainCreateInfo {
+            flags: Default::default(),
+            surface: Default::default(),
+            min_image_count: 0,
+            image_format: Default::default(),
+            image_color_space: Default::default(),
+            image_extent: Default::default(),
+            image_array_layers: 0,
+            image_usage: Default::default(),
+            image_sharing_mode: Default::default(),
+            queue_family_indices: Vec::new(),
+            pre_transform: Default::default(),
+            composite_alpha: Default::default(),
+            present_mode: Default::default(),
+            clipped: false,
+            old_swapchain: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkSwapchainCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.surface, fn_table);
         VkSetup::vk_setup(&mut self.image_extent, fn_table);
+        VkSetup::vk_setup(&mut self.old_swapchain, fn_table);
     }
 }
 
 impl VkFree for RawVkSwapchainCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.image_extent);
+    fn vk_free(&self) {
         free_ptr(self.queue_family_indices);
     }
 }

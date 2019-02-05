@@ -16,10 +16,10 @@ use vulkan::vk::{VkObjectType,RawVkObjectType};
 
 /// Wrapper for [VkDebugUtilsObjectNameInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsObjectNameInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDebugUtilsObjectNameInfo<'a> {
+pub struct VkDebugUtilsObjectNameInfo {
     pub object_type: VkObjectType,
     pub object_handle: usize,
-    pub object_name: Option<&'a str>,
+    pub object_name: Option<String>,
 }
 
 #[doc(hidden)]
@@ -30,37 +30,47 @@ pub struct RawVkDebugUtilsObjectNameInfo {
     pub next: *const c_void,
     pub object_type: RawVkObjectType,
     pub object_handle: u64,
-    pub object_name: *mut c_char,
+    pub object_name: *const c_char,
 }
 
-impl<'a> VkWrappedType<RawVkDebugUtilsObjectNameInfo> for VkDebugUtilsObjectNameInfo<'a> {
+impl VkWrappedType<RawVkDebugUtilsObjectNameInfo> for VkDebugUtilsObjectNameInfo {
     fn vk_to_raw(src: &VkDebugUtilsObjectNameInfo, dst: &mut RawVkDebugUtilsObjectNameInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsObjectNameInfoExt);
         dst.next = ptr::null();
         dst.object_type = vk_to_raw_value(&src.object_type);
         dst.object_handle = vk_to_raw_value(&src.object_handle);
-        dst.object_name = new_ptr_string_checked(src.object_name);
+        dst.object_name = new_ptr_string_checked(&src.object_name);
     }
 }
 
-impl Default for VkDebugUtilsObjectNameInfo<'static> {
-    fn default() -> VkDebugUtilsObjectNameInfo<'static> {
+impl VkRawType<VkDebugUtilsObjectNameInfo> for RawVkDebugUtilsObjectNameInfo {
+    fn vk_to_wrapped(src: &RawVkDebugUtilsObjectNameInfo) -> VkDebugUtilsObjectNameInfo {
         VkDebugUtilsObjectNameInfo {
-            object_type: VkObjectType::default(),
+            object_type: RawVkObjectType::vk_to_wrapped(&src.object_type),
+            object_handle: u64::vk_to_wrapped(&src.object_handle),
+            object_name: new_string_checked(src.object_name),
+        }
+    }
+}
+
+impl Default for VkDebugUtilsObjectNameInfo {
+    fn default() -> VkDebugUtilsObjectNameInfo {
+        VkDebugUtilsObjectNameInfo {
+            object_type: Default::default(),
             object_handle: 0,
             object_name: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkDebugUtilsObjectNameInfo<'a> {
+impl VkSetup for VkDebugUtilsObjectNameInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDebugUtilsObjectNameInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.object_name);
     }
 }

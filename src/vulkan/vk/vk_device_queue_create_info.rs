@@ -16,10 +16,10 @@ use vulkan::vk::{VkDeviceQueueCreateFlags,RawVkDeviceQueueCreateFlags};
 
 /// Wrapper for [VkDeviceQueueCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceQueueCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDeviceQueueCreateInfo<'a> {
+pub struct VkDeviceQueueCreateInfo {
     pub flags: VkDeviceQueueCreateFlags,
     pub queue_family_index: usize,
-    pub queue_priorities: &'a [f32],
+    pub queue_priorities: Vec<f32>,
 }
 
 #[doc(hidden)]
@@ -34,7 +34,7 @@ pub struct RawVkDeviceQueueCreateInfo {
     pub queue_priorities: *const f32,
 }
 
-impl<'a> VkWrappedType<RawVkDeviceQueueCreateInfo> for VkDeviceQueueCreateInfo<'a> {
+impl VkWrappedType<RawVkDeviceQueueCreateInfo> for VkDeviceQueueCreateInfo {
     fn vk_to_raw(src: &VkDeviceQueueCreateInfo, dst: &mut RawVkDeviceQueueCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceQueueCreateInfo);
         dst.next = ptr::null();
@@ -45,24 +45,34 @@ impl<'a> VkWrappedType<RawVkDeviceQueueCreateInfo> for VkDeviceQueueCreateInfo<'
     }
 }
 
-impl Default for VkDeviceQueueCreateInfo<'static> {
-    fn default() -> VkDeviceQueueCreateInfo<'static> {
+impl VkRawType<VkDeviceQueueCreateInfo> for RawVkDeviceQueueCreateInfo {
+    fn vk_to_wrapped(src: &RawVkDeviceQueueCreateInfo) -> VkDeviceQueueCreateInfo {
         VkDeviceQueueCreateInfo {
-            flags: VkDeviceQueueCreateFlags::default(),
-            queue_family_index: 0,
-            queue_priorities: &[],
+            flags: RawVkDeviceQueueCreateFlags::vk_to_wrapped(&src.flags),
+            queue_family_index: u32::vk_to_wrapped(&src.queue_family_index),
+            queue_priorities: vec_from_ptr(src.queue_count as usize, src.queue_priorities),
         }
     }
 }
 
-impl<'a> VkSetup for VkDeviceQueueCreateInfo<'a> {
+impl Default for VkDeviceQueueCreateInfo {
+    fn default() -> VkDeviceQueueCreateInfo {
+        VkDeviceQueueCreateInfo {
+            flags: Default::default(),
+            queue_family_index: 0,
+            queue_priorities: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkDeviceQueueCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDeviceQueueCreateInfo {
-    fn vk_free(&mut self) {
-        
+    fn vk_free(&self) {
+        free_ptr(self.queue_priorities);
     }
 }

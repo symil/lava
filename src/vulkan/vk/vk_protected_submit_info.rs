@@ -59,7 +59,7 @@ impl VkSetup for VkProtectedSubmitInfo {
 }
 
 impl VkFree for RawVkProtectedSubmitInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

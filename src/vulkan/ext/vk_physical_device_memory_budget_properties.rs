@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceMemoryBudgetProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceMemoryBudgetProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

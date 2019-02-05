@@ -77,15 +77,15 @@ impl VkRawType<VkDisplayPlaneCapabilities> for RawVkDisplayPlaneCapabilities {
 impl Default for VkDisplayPlaneCapabilities {
     fn default() -> VkDisplayPlaneCapabilities {
         VkDisplayPlaneCapabilities {
-            supported_alpha: VkDisplayPlaneAlphaFlags::default(),
-            min_src_position: VkOffset2D::default(),
-            max_src_position: VkOffset2D::default(),
-            min_src_extent: VkExtent2D::default(),
-            max_src_extent: VkExtent2D::default(),
-            min_dst_position: VkOffset2D::default(),
-            max_dst_position: VkOffset2D::default(),
-            min_dst_extent: VkExtent2D::default(),
-            max_dst_extent: VkExtent2D::default(),
+            supported_alpha: Default::default(),
+            min_src_position: Default::default(),
+            max_src_position: Default::default(),
+            min_src_extent: Default::default(),
+            max_src_extent: Default::default(),
+            min_dst_position: Default::default(),
+            max_dst_position: Default::default(),
+            min_dst_extent: Default::default(),
+            max_dst_extent: Default::default(),
         }
     }
 }
@@ -104,14 +104,7 @@ impl VkSetup for VkDisplayPlaneCapabilities {
 }
 
 impl VkFree for RawVkDisplayPlaneCapabilities {
-    fn vk_free(&mut self) {
-        RawVkOffset2D::vk_free(&mut self.min_src_position);
-        RawVkOffset2D::vk_free(&mut self.max_src_position);
-        RawVkExtent2D::vk_free(&mut self.min_src_extent);
-        RawVkExtent2D::vk_free(&mut self.max_src_extent);
-        RawVkOffset2D::vk_free(&mut self.min_dst_position);
-        RawVkOffset2D::vk_free(&mut self.max_dst_position);
-        RawVkExtent2D::vk_free(&mut self.min_dst_extent);
-        RawVkExtent2D::vk_free(&mut self.max_dst_extent);
+    fn vk_free(&self) {
+        
     }
 }

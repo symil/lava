@@ -57,9 +57,9 @@ impl VkRawType<VkExternalSemaphoreProperties> for RawVkExternalSemaphoreProperti
 impl Default for VkExternalSemaphoreProperties {
     fn default() -> VkExternalSemaphoreProperties {
         VkExternalSemaphoreProperties {
-            export_from_imported_handle_types: VkExternalSemaphoreHandleTypeFlags::default(),
-            compatible_handle_types: VkExternalSemaphoreHandleTypeFlags::default(),
-            external_semaphore_features: VkExternalSemaphoreFeatureFlags::default(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
+            external_semaphore_features: Default::default(),
         }
     }
 }
@@ -71,7 +71,7 @@ impl VkSetup for VkExternalSemaphoreProperties {
 }
 
 impl VkFree for RawVkExternalSemaphoreProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

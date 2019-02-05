@@ -16,12 +16,9 @@ use vulkan::vk::{VkSparseImageMemoryBind,RawVkSparseImageMemoryBind};
 
 /// Wrapper for [VkSparseImageMemoryBindInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryBindInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkSparseImageMemoryBindInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
-    pub image: &'a VkImage,
-    pub binds: &'b [VkSparseImageMemoryBind<'c>],
+pub struct VkSparseImageMemoryBindInfo {
+    pub image: VkImage,
+    pub binds: Vec<VkSparseImageMemoryBind>,
 }
 
 #[doc(hidden)]
@@ -30,40 +27,43 @@ pub struct VkSparseImageMemoryBindInfo<'a, 'b, 'c>
 pub struct RawVkSparseImageMemoryBindInfo {
     pub image: RawVkImage,
     pub bind_count: u32,
-    pub binds: *mut RawVkSparseImageMemoryBind,
+    pub binds: *const RawVkSparseImageMemoryBind,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkSparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
+impl VkWrappedType<RawVkSparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfo {
     fn vk_to_raw(src: &VkSparseImageMemoryBindInfo, dst: &mut RawVkSparseImageMemoryBindInfo) {
-        dst.image = vk_to_raw_value(src.image);
+        dst.image = vk_to_raw_value(&src.image);
         dst.bind_count = src.binds.len() as u32;
-        dst.binds = new_ptr_vk_array(src.binds);
+        dst.binds = new_ptr_vk_array(&src.binds);
     }
 }
 
-impl Default for VkSparseImageMemoryBindInfo<'static, 'static, 'static> {
-    fn default() -> VkSparseImageMemoryBindInfo<'static, 'static, 'static> {
+impl VkRawType<VkSparseImageMemoryBindInfo> for RawVkSparseImageMemoryBindInfo {
+    fn vk_to_wrapped(src: &RawVkSparseImageMemoryBindInfo) -> VkSparseImageMemoryBindInfo {
         VkSparseImageMemoryBindInfo {
-            image: vk_null_ref(),
-            binds: &[],
+            image: RawVkImage::vk_to_wrapped(&src.image),
+            binds: new_vk_array(src.bind_count, src.binds),
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkSparseImageMemoryBindInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
+impl Default for VkSparseImageMemoryBindInfo {
+    fn default() -> VkSparseImageMemoryBindInfo {
+        VkSparseImageMemoryBindInfo {
+            image: Default::default(),
+            binds: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkSparseImageMemoryBindInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.image, fn_table);
     }
 }
 
 impl VkFree for RawVkSparseImageMemoryBindInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.bind_count as usize, self.binds);
     }
 }

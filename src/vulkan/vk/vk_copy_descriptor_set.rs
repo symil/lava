@@ -16,11 +16,11 @@ use vulkan::vk::{VkDescriptorSet,RawVkDescriptorSet};
 
 /// Wrapper for [VkCopyDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyDescriptorSet.html).
 #[derive(Debug, Clone)]
-pub struct VkCopyDescriptorSet<'a, 'b> {
-    pub src_set: &'a VkDescriptorSet,
+pub struct VkCopyDescriptorSet {
+    pub src_set: VkDescriptorSet,
     pub src_binding: usize,
     pub src_array_element: usize,
-    pub dst_set: &'b VkDescriptorSet,
+    pub dst_set: VkDescriptorSet,
     pub dst_binding: usize,
     pub dst_array_element: usize,
     pub descriptor_count: usize,
@@ -41,27 +41,41 @@ pub struct RawVkCopyDescriptorSet {
     pub descriptor_count: u32,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkCopyDescriptorSet> for VkCopyDescriptorSet<'a, 'b> {
+impl VkWrappedType<RawVkCopyDescriptorSet> for VkCopyDescriptorSet {
     fn vk_to_raw(src: &VkCopyDescriptorSet, dst: &mut RawVkCopyDescriptorSet) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CopyDescriptorSet);
         dst.next = ptr::null();
-        dst.src_set = vk_to_raw_value(src.src_set);
+        dst.src_set = vk_to_raw_value(&src.src_set);
         dst.src_binding = vk_to_raw_value(&src.src_binding);
         dst.src_array_element = vk_to_raw_value(&src.src_array_element);
-        dst.dst_set = vk_to_raw_value(src.dst_set);
+        dst.dst_set = vk_to_raw_value(&src.dst_set);
         dst.dst_binding = vk_to_raw_value(&src.dst_binding);
         dst.dst_array_element = vk_to_raw_value(&src.dst_array_element);
         dst.descriptor_count = vk_to_raw_value(&src.descriptor_count);
     }
 }
 
-impl Default for VkCopyDescriptorSet<'static, 'static> {
-    fn default() -> VkCopyDescriptorSet<'static, 'static> {
+impl VkRawType<VkCopyDescriptorSet> for RawVkCopyDescriptorSet {
+    fn vk_to_wrapped(src: &RawVkCopyDescriptorSet) -> VkCopyDescriptorSet {
         VkCopyDescriptorSet {
-            src_set: vk_null_ref(),
+            src_set: RawVkDescriptorSet::vk_to_wrapped(&src.src_set),
+            src_binding: u32::vk_to_wrapped(&src.src_binding),
+            src_array_element: u32::vk_to_wrapped(&src.src_array_element),
+            dst_set: RawVkDescriptorSet::vk_to_wrapped(&src.dst_set),
+            dst_binding: u32::vk_to_wrapped(&src.dst_binding),
+            dst_array_element: u32::vk_to_wrapped(&src.dst_array_element),
+            descriptor_count: u32::vk_to_wrapped(&src.descriptor_count),
+        }
+    }
+}
+
+impl Default for VkCopyDescriptorSet {
+    fn default() -> VkCopyDescriptorSet {
+        VkCopyDescriptorSet {
+            src_set: Default::default(),
             src_binding: 0,
             src_array_element: 0,
-            dst_set: vk_null_ref(),
+            dst_set: Default::default(),
             dst_binding: 0,
             dst_array_element: 0,
             descriptor_count: 0,
@@ -69,14 +83,15 @@ impl Default for VkCopyDescriptorSet<'static, 'static> {
     }
 }
 
-impl<'a, 'b> VkSetup for VkCopyDescriptorSet<'a, 'b> {
+impl VkSetup for VkCopyDescriptorSet {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.src_set, fn_table);
+        VkSetup::vk_setup(&mut self.dst_set, fn_table);
     }
 }
 
 impl VkFree for RawVkCopyDescriptorSet {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

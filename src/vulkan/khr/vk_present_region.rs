@@ -15,8 +15,8 @@ use vulkan::khr::{VkRectLayer,RawVkRectLayer};
 
 /// Wrapper for [VkPresentRegionKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentRegionKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkPresentRegion<'a> {
-    pub rectangles: Option<&'a [VkRectLayer]>,
+pub struct VkPresentRegion {
+    pub rectangles: Option<Vec<VkRectLayer>>,
 }
 
 #[doc(hidden)]
@@ -24,32 +24,40 @@ pub struct VkPresentRegion<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentRegion {
     pub rectangle_count: u32,
-    pub rectangles: *mut RawVkRectLayer,
+    pub rectangles: *const RawVkRectLayer,
 }
 
-impl<'a> VkWrappedType<RawVkPresentRegion> for VkPresentRegion<'a> {
+impl VkWrappedType<RawVkPresentRegion> for VkPresentRegion {
     fn vk_to_raw(src: &VkPresentRegion, dst: &mut RawVkPresentRegion) {
-        dst.rectangle_count = get_array_option_len(src.rectangles) as u32;
-        dst.rectangles = new_ptr_vk_array_checked(src.rectangles);
+        dst.rectangle_count = get_array_option_len(&src.rectangles) as u32;
+        dst.rectangles = new_ptr_vk_array_checked(&src.rectangles);
     }
 }
 
-impl Default for VkPresentRegion<'static> {
-    fn default() -> VkPresentRegion<'static> {
+impl VkRawType<VkPresentRegion> for RawVkPresentRegion {
+    fn vk_to_wrapped(src: &RawVkPresentRegion) -> VkPresentRegion {
+        VkPresentRegion {
+            rectangles: new_vk_array_checked(src.rectangle_count, src.rectangles),
+        }
+    }
+}
+
+impl Default for VkPresentRegion {
+    fn default() -> VkPresentRegion {
         VkPresentRegion {
             rectangles: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkPresentRegion<'a> {
+impl VkSetup for VkPresentRegion {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPresentRegion {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.rectangle_count as usize, self.rectangles);
     }
 }

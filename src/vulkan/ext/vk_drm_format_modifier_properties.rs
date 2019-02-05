@@ -53,7 +53,7 @@ impl Default for VkDrmFormatModifierProperties {
         VkDrmFormatModifierProperties {
             drm_format_modifier: 0,
             drm_format_modifier_plane_count: 0,
-            drm_format_modifier_tiling_features: VkFormatFeatureFlags::default(),
+            drm_format_modifier_tiling_features: Default::default(),
         }
     }
 }
@@ -65,7 +65,7 @@ impl VkSetup for VkDrmFormatModifierProperties {
 }
 
 impl VkFree for RawVkDrmFormatModifierProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

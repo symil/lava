@@ -48,7 +48,7 @@ impl VkRawType<VkSparseImageFormatProperties2> for RawVkSparseImageFormatPropert
 impl Default for VkSparseImageFormatProperties2 {
     fn default() -> VkSparseImageFormatProperties2 {
         VkSparseImageFormatProperties2 {
-            properties: VkSparseImageFormatProperties::default(),
+            properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSparseImageFormatProperties2 {
 }
 
 impl VkFree for RawVkSparseImageFormatProperties2 {
-    fn vk_free(&mut self) {
-        RawVkSparseImageFormatProperties::vk_free(&mut self.properties);
+    fn vk_free(&self) {
+        
     }
 }

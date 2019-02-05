@@ -48,7 +48,7 @@ impl VkRawType<VkSharedPresentSurfaceCapabilities> for RawVkSharedPresentSurface
 impl Default for VkSharedPresentSurfaceCapabilities {
     fn default() -> VkSharedPresentSurfaceCapabilities {
         VkSharedPresentSurfaceCapabilities {
-            shared_present_supported_usage_flags: VkImageUsageFlags::default(),
+            shared_present_supported_usage_flags: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSharedPresentSurfaceCapabilities {
 }
 
 impl VkFree for RawVkSharedPresentSurfaceCapabilities {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -62,8 +62,8 @@ impl Default for VkPhysicalDeviceSubgroupProperties {
     fn default() -> VkPhysicalDeviceSubgroupProperties {
         VkPhysicalDeviceSubgroupProperties {
             subgroup_size: 0,
-            supported_stages: VkShaderStageFlags::default(),
-            supported_operations: VkSubgroupFeatureFlags::default(),
+            supported_stages: Default::default(),
+            supported_operations: Default::default(),
             quad_operations_in_all_stages: false,
         }
     }
@@ -76,7 +76,7 @@ impl VkSetup for VkPhysicalDeviceSubgroupProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceSubgroupProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

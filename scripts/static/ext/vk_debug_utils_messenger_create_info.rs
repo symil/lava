@@ -59,7 +59,7 @@ impl VkWrappedType<RawVkDebugUtilsMessengerCreateInfo> for VkDebugUtilsMessenger
 }
 
 impl VkFree for RawVkDebugUtilsMessengerCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

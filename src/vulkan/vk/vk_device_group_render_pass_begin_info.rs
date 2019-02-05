@@ -16,9 +16,9 @@ use vulkan::vk::{VkRect2D,RawVkRect2D};
 
 /// Wrapper for [VkDeviceGroupRenderPassBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupRenderPassBeginInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDeviceGroupRenderPassBeginInfo<'a> {
+pub struct VkDeviceGroupRenderPassBeginInfo {
     pub device_mask: u32,
-    pub device_render_areas: &'a [VkRect2D],
+    pub device_render_areas: Vec<VkRect2D>,
 }
 
 #[doc(hidden)]
@@ -29,36 +29,45 @@ pub struct RawVkDeviceGroupRenderPassBeginInfo {
     pub next: *const c_void,
     pub device_mask: u32,
     pub device_render_area_count: u32,
-    pub device_render_areas: *mut RawVkRect2D,
+    pub device_render_areas: *const RawVkRect2D,
 }
 
-impl<'a> VkWrappedType<RawVkDeviceGroupRenderPassBeginInfo> for VkDeviceGroupRenderPassBeginInfo<'a> {
+impl VkWrappedType<RawVkDeviceGroupRenderPassBeginInfo> for VkDeviceGroupRenderPassBeginInfo {
     fn vk_to_raw(src: &VkDeviceGroupRenderPassBeginInfo, dst: &mut RawVkDeviceGroupRenderPassBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupRenderPassBeginInfo);
         dst.next = ptr::null();
         dst.device_mask = src.device_mask;
         dst.device_render_area_count = src.device_render_areas.len() as u32;
-        dst.device_render_areas = new_ptr_vk_array(src.device_render_areas);
+        dst.device_render_areas = new_ptr_vk_array(&src.device_render_areas);
     }
 }
 
-impl Default for VkDeviceGroupRenderPassBeginInfo<'static> {
-    fn default() -> VkDeviceGroupRenderPassBeginInfo<'static> {
+impl VkRawType<VkDeviceGroupRenderPassBeginInfo> for RawVkDeviceGroupRenderPassBeginInfo {
+    fn vk_to_wrapped(src: &RawVkDeviceGroupRenderPassBeginInfo) -> VkDeviceGroupRenderPassBeginInfo {
         VkDeviceGroupRenderPassBeginInfo {
-            device_mask: 0,
-            device_render_areas: &[],
+            device_mask: src.device_mask,
+            device_render_areas: new_vk_array(src.device_render_area_count, src.device_render_areas),
         }
     }
 }
 
-impl<'a> VkSetup for VkDeviceGroupRenderPassBeginInfo<'a> {
+impl Default for VkDeviceGroupRenderPassBeginInfo {
+    fn default() -> VkDeviceGroupRenderPassBeginInfo {
+        VkDeviceGroupRenderPassBeginInfo {
+            device_mask: 0,
+            device_render_areas: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkDeviceGroupRenderPassBeginInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDeviceGroupRenderPassBeginInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.device_render_area_count as usize, self.device_render_areas);
     }
 }

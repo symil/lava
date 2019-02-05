@@ -48,7 +48,7 @@ impl VkRawType<VkExternalMemoryBufferCreateInfo> for RawVkExternalMemoryBufferCr
 impl Default for VkExternalMemoryBufferCreateInfo {
     fn default() -> VkExternalMemoryBufferCreateInfo {
         VkExternalMemoryBufferCreateInfo {
-            handle_types: VkExternalMemoryHandleTypeFlags::default(),
+            handle_types: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExternalMemoryBufferCreateInfo {
 }
 
 impl VkFree for RawVkExternalMemoryBufferCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

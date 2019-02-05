@@ -59,7 +59,7 @@ impl VkSetup for VkVertexInputBindingDivisorDescription {
 }
 
 impl VkFree for RawVkVertexInputBindingDivisorDescription {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

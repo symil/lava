@@ -16,8 +16,8 @@ use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 
 /// Wrapper for [VkBindImageMemorySwapchainInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindImageMemorySwapchainInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkBindImageMemorySwapchainInfo<'a> {
-    pub swapchain: &'a VkSwapchain,
+pub struct VkBindImageMemorySwapchainInfo {
+    pub swapchain: VkSwapchain,
     pub image_index: usize,
 }
 
@@ -31,32 +31,41 @@ pub struct RawVkBindImageMemorySwapchainInfo {
     pub image_index: u32,
 }
 
-impl<'a> VkWrappedType<RawVkBindImageMemorySwapchainInfo> for VkBindImageMemorySwapchainInfo<'a> {
+impl VkWrappedType<RawVkBindImageMemorySwapchainInfo> for VkBindImageMemorySwapchainInfo {
     fn vk_to_raw(src: &VkBindImageMemorySwapchainInfo, dst: &mut RawVkBindImageMemorySwapchainInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindImageMemorySwapchainInfoKhr);
         dst.next = ptr::null();
-        dst.swapchain = vk_to_raw_value(src.swapchain);
+        dst.swapchain = vk_to_raw_value(&src.swapchain);
         dst.image_index = vk_to_raw_value(&src.image_index);
     }
 }
 
-impl Default for VkBindImageMemorySwapchainInfo<'static> {
-    fn default() -> VkBindImageMemorySwapchainInfo<'static> {
+impl VkRawType<VkBindImageMemorySwapchainInfo> for RawVkBindImageMemorySwapchainInfo {
+    fn vk_to_wrapped(src: &RawVkBindImageMemorySwapchainInfo) -> VkBindImageMemorySwapchainInfo {
         VkBindImageMemorySwapchainInfo {
-            swapchain: vk_null_ref(),
+            swapchain: RawVkSwapchain::vk_to_wrapped(&src.swapchain),
+            image_index: u32::vk_to_wrapped(&src.image_index),
+        }
+    }
+}
+
+impl Default for VkBindImageMemorySwapchainInfo {
+    fn default() -> VkBindImageMemorySwapchainInfo {
+        VkBindImageMemorySwapchainInfo {
+            swapchain: Default::default(),
             image_index: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkBindImageMemorySwapchainInfo<'a> {
+impl VkSetup for VkBindImageMemorySwapchainInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.swapchain, fn_table);
     }
 }
 
 impl VkFree for RawVkBindImageMemorySwapchainInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

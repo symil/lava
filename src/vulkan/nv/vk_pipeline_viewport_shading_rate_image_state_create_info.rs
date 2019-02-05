@@ -16,12 +16,9 @@ use vulkan::nv::{VkShadingRatePalette,RawVkShadingRatePalette};
 
 /// Wrapper for [VkPipelineViewportShadingRateImageStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportShadingRateImageStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineViewportShadingRateImageStateCreateInfo<'a, 'b>
-    where
-        'b: 'a,
-{
+pub struct VkPipelineViewportShadingRateImageStateCreateInfo {
     pub shading_rate_image_enable: bool,
-    pub shading_rate_palettes: Option<&'a [VkShadingRatePalette<'b>]>,
+    pub shading_rate_palettes: Option<Vec<VkShadingRatePalette>>,
 }
 
 #[doc(hidden)]
@@ -32,24 +29,30 @@ pub struct RawVkPipelineViewportShadingRateImageStateCreateInfo {
     pub next: *const c_void,
     pub shading_rate_image_enable: u32,
     pub viewport_count: u32,
-    pub shading_rate_palettes: *mut RawVkShadingRatePalette,
+    pub shading_rate_palettes: *const RawVkShadingRatePalette,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkPipelineViewportShadingRateImageStateCreateInfo> for VkPipelineViewportShadingRateImageStateCreateInfo<'a, 'b>
-    where
-        'b: 'a,
-{
+impl VkWrappedType<RawVkPipelineViewportShadingRateImageStateCreateInfo> for VkPipelineViewportShadingRateImageStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportShadingRateImageStateCreateInfo, dst: &mut RawVkPipelineViewportShadingRateImageStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportShadingRateImageStateCreateInfoNv);
         dst.next = ptr::null();
         dst.shading_rate_image_enable = vk_to_raw_value(&src.shading_rate_image_enable);
-        dst.viewport_count = get_array_option_len(src.shading_rate_palettes) as u32;
-        dst.shading_rate_palettes = new_ptr_vk_array_checked(src.shading_rate_palettes);
+        dst.viewport_count = get_array_option_len(&src.shading_rate_palettes) as u32;
+        dst.shading_rate_palettes = new_ptr_vk_array_checked(&src.shading_rate_palettes);
     }
 }
 
-impl Default for VkPipelineViewportShadingRateImageStateCreateInfo<'static, 'static> {
-    fn default() -> VkPipelineViewportShadingRateImageStateCreateInfo<'static, 'static> {
+impl VkRawType<VkPipelineViewportShadingRateImageStateCreateInfo> for RawVkPipelineViewportShadingRateImageStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineViewportShadingRateImageStateCreateInfo) -> VkPipelineViewportShadingRateImageStateCreateInfo {
+        VkPipelineViewportShadingRateImageStateCreateInfo {
+            shading_rate_image_enable: u32::vk_to_wrapped(&src.shading_rate_image_enable),
+            shading_rate_palettes: new_vk_array_checked(src.viewport_count, src.shading_rate_palettes),
+        }
+    }
+}
+
+impl Default for VkPipelineViewportShadingRateImageStateCreateInfo {
+    fn default() -> VkPipelineViewportShadingRateImageStateCreateInfo {
         VkPipelineViewportShadingRateImageStateCreateInfo {
             shading_rate_image_enable: false,
             shading_rate_palettes: None,
@@ -57,17 +60,14 @@ impl Default for VkPipelineViewportShadingRateImageStateCreateInfo<'static, 'sta
     }
 }
 
-impl<'a, 'b> VkSetup for VkPipelineViewportShadingRateImageStateCreateInfo<'a, 'b>
-    where
-        'b: 'a,
-{
+impl VkSetup for VkPipelineViewportShadingRateImageStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineViewportShadingRateImageStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.viewport_count as usize, self.shading_rate_palettes);
     }
 }

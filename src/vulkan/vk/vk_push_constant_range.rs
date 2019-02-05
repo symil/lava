@@ -51,7 +51,7 @@ impl VkRawType<VkPushConstantRange> for RawVkPushConstantRange {
 impl Default for VkPushConstantRange {
     fn default() -> VkPushConstantRange {
         VkPushConstantRange {
-            stage_flags: VkShaderStageFlags::default(),
+            stage_flags: Default::default(),
             offset: 0,
             size: 0,
         }
@@ -65,7 +65,7 @@ impl VkSetup for VkPushConstantRange {
 }
 
 impl VkFree for RawVkPushConstantRange {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

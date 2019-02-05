@@ -68,10 +68,10 @@ impl VkRawType<VkStencilOpState> for RawVkStencilOpState {
 impl Default for VkStencilOpState {
     fn default() -> VkStencilOpState {
         VkStencilOpState {
-            fail_op: VkStencilOp::default(),
-            pass_op: VkStencilOp::default(),
-            depth_fail_op: VkStencilOp::default(),
-            compare_op: VkCompareOp::default(),
+            fail_op: Default::default(),
+            pass_op: Default::default(),
+            depth_fail_op: Default::default(),
+            compare_op: Default::default(),
             compare_mask: 0,
             write_mask: 0,
             reference: 0,
@@ -86,7 +86,7 @@ impl VkSetup for VkStencilOpState {
 }
 
 impl VkFree for RawVkStencilOpState {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -59,7 +59,7 @@ impl VkSetup for VkExtent2D {
 }
 
 impl VkFree for RawVkExtent2D {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -16,8 +16,8 @@ use vulkan::vk::{VkFormat,RawVkFormat};
 
 /// Wrapper for [VkImageFormatListCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatListCreateInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkImageFormatListCreateInfo<'a> {
-    pub view_formats: &'a [VkFormat],
+pub struct VkImageFormatListCreateInfo {
+    pub view_formats: Vec<VkFormat>,
 }
 
 #[doc(hidden)]
@@ -27,34 +27,42 @@ pub struct RawVkImageFormatListCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub view_format_count: u32,
-    pub view_formats: *mut RawVkFormat,
+    pub view_formats: *const RawVkFormat,
 }
 
-impl<'a> VkWrappedType<RawVkImageFormatListCreateInfo> for VkImageFormatListCreateInfo<'a> {
+impl VkWrappedType<RawVkImageFormatListCreateInfo> for VkImageFormatListCreateInfo {
     fn vk_to_raw(src: &VkImageFormatListCreateInfo, dst: &mut RawVkImageFormatListCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageFormatListCreateInfoKhr);
         dst.next = ptr::null();
         dst.view_format_count = src.view_formats.len() as u32;
-        dst.view_formats = new_ptr_vk_array(src.view_formats);
+        dst.view_formats = new_ptr_vk_array(&src.view_formats);
     }
 }
 
-impl Default for VkImageFormatListCreateInfo<'static> {
-    fn default() -> VkImageFormatListCreateInfo<'static> {
+impl VkRawType<VkImageFormatListCreateInfo> for RawVkImageFormatListCreateInfo {
+    fn vk_to_wrapped(src: &RawVkImageFormatListCreateInfo) -> VkImageFormatListCreateInfo {
         VkImageFormatListCreateInfo {
-            view_formats: &[],
+            view_formats: new_vk_array(src.view_format_count, src.view_formats),
         }
     }
 }
 
-impl<'a> VkSetup for VkImageFormatListCreateInfo<'a> {
+impl Default for VkImageFormatListCreateInfo {
+    fn default() -> VkImageFormatListCreateInfo {
+        VkImageFormatListCreateInfo {
+            view_formats: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkImageFormatListCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkImageFormatListCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.view_formats);
     }
 }

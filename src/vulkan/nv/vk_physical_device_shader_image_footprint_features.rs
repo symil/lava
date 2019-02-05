@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceShaderImageFootprintFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceShaderImageFootprintFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

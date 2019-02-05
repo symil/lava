@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceShaderAtomicInt64Features {
 }
 
 impl VkFree for RawVkPhysicalDeviceShaderAtomicInt64Features {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

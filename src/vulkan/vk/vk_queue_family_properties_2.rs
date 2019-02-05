@@ -48,7 +48,7 @@ impl VkRawType<VkQueueFamilyProperties2> for RawVkQueueFamilyProperties2 {
 impl Default for VkQueueFamilyProperties2 {
     fn default() -> VkQueueFamilyProperties2 {
         VkQueueFamilyProperties2 {
-            queue_family_properties: VkQueueFamilyProperties::default(),
+            queue_family_properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkQueueFamilyProperties2 {
 }
 
 impl VkFree for RawVkQueueFamilyProperties2 {
-    fn vk_free(&mut self) {
-        RawVkQueueFamilyProperties::vk_free(&mut self.queue_family_properties);
+    fn vk_free(&self) {
+        
     }
 }

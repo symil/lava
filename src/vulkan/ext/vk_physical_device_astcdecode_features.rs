@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceASTCDecodeFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceASTCDecodeFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

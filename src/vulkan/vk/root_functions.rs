@@ -11,9 +11,9 @@ use vulkan::vk::*;
 
 
 /// Wrapper for [vkCreateInstance](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateInstance.html).
-pub fn vk_create_instance(create_info: &VkInstanceCreateInfo) -> Result<VkInstance, (VkResult, VkInstance)> {
+pub fn vk_create_instance(create_info: VkInstanceCreateInfo) -> Result<VkInstance, (VkResult, VkInstance)> {
     unsafe {
-        let raw_create_info = new_ptr_vk_value(create_info);
+        let raw_create_info = new_ptr_vk_value(&create_info);
         let mut vk_result = 0;
         let raw_instance = &mut mem::zeroed() as *mut RawVkInstance;
         
@@ -30,9 +30,9 @@ pub fn vk_create_instance(create_info: &VkInstanceCreateInfo) -> Result<VkInstan
 }
 
 /// Wrapper for [vkEnumerateInstanceExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateInstanceExtensionProperties.html).
-pub fn vk_enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
+pub fn vk_enumerate_instance_extension_properties(layer_name: Option<String>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
     unsafe {
-        let raw_layer_name = new_ptr_string_checked(layer_name);
+        let raw_layer_name = new_ptr_string_checked(&layer_name);
         let mut vk_result = 0;
         let mut raw_properties : *mut RawVkExtensionProperties = ptr::null_mut();
         let raw_property_count = &mut mem::zeroed() as *mut u32;
@@ -41,9 +41,9 @@ pub fn vk_enumerate_instance_extension_properties(layer_name: Option<&str>) -> R
         
         vk_result = vkEnumerateInstanceExtensionProperties(raw_layer_name, raw_property_count, raw_properties);
         
-        let properties = new_vk_array(*raw_property_count, raw_properties);
+        let properties = new_vk_array_checked(*raw_property_count, raw_properties).unwrap();
         free_ptr(raw_layer_name);
-        free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+        free(raw_properties as *mut u8);
         if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
     }
 }
@@ -59,8 +59,8 @@ pub fn vk_enumerate_instance_layer_properties() -> Result<Vec<VkLayerProperties>
         
         vk_result = vkEnumerateInstanceLayerProperties(raw_property_count, raw_properties);
         
-        let properties = new_vk_array(*raw_property_count, raw_properties);
-        free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+        let properties = new_vk_array_checked(*raw_property_count, raw_properties).unwrap();
+        free(raw_properties as *mut u8);
         if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
     }
 }
@@ -79,8 +79,8 @@ pub fn vk_enumerate_instance_version() -> Result<VkVersion, (VkResult, VkVersion
 }
 
 extern {
-    fn vkCreateInstance(create_info: *mut RawVkInstanceCreateInfo, allocator: *const c_void, instance: *mut RawVkInstance) -> RawVkResult;
-    fn vkEnumerateInstanceExtensionProperties(layer_name: *mut c_char, property_count: *mut u32, properties: *mut RawVkExtensionProperties) -> RawVkResult;
-    fn vkEnumerateInstanceLayerProperties(property_count: *mut u32, properties: *mut RawVkLayerProperties) -> RawVkResult;
-    fn vkEnumerateInstanceVersion(api_version: *mut u32) -> RawVkResult;
+    fn vkCreateInstance(create_info: *const RawVkInstanceCreateInfo, allocator: *const c_void, instance: *const RawVkInstance) -> RawVkResult;
+    fn vkEnumerateInstanceExtensionProperties(layer_name: *const c_char, property_count: *const u32, properties: *const RawVkExtensionProperties) -> RawVkResult;
+    fn vkEnumerateInstanceLayerProperties(property_count: *const u32, properties: *const RawVkLayerProperties) -> RawVkResult;
+    fn vkEnumerateInstanceVersion(api_version: *const u32) -> RawVkResult;
 }

@@ -52,8 +52,8 @@ impl VkRawType<VkMemoryBarrier> for RawVkMemoryBarrier {
 impl Default for VkMemoryBarrier {
     fn default() -> VkMemoryBarrier {
         VkMemoryBarrier {
-            src_access_mask: VkAccessFlags::default(),
-            dst_access_mask: VkAccessFlags::default(),
+            src_access_mask: Default::default(),
+            dst_access_mask: Default::default(),
         }
     }
 }
@@ -65,7 +65,7 @@ impl VkSetup for VkMemoryBarrier {
 }
 
 impl VkFree for RawVkMemoryBarrier {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

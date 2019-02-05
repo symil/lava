@@ -74,7 +74,7 @@ impl VkSetup for VkPhysicalDevice16BitStorageFeatures {
 }
 
 impl VkFree for RawVkPhysicalDevice16BitStorageFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -58,8 +58,8 @@ impl Default for VkAttachmentReference2 {
     fn default() -> VkAttachmentReference2 {
         VkAttachmentReference2 {
             attachment: 0,
-            layout: VkImageLayout::default(),
-            aspect_mask: VkImageAspectFlags::default(),
+            layout: Default::default(),
+            aspect_mask: Default::default(),
         }
     }
 }
@@ -71,7 +71,7 @@ impl VkSetup for VkAttachmentReference2 {
 }
 
 impl VkFree for RawVkAttachmentReference2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

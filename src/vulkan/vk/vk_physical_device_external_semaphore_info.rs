@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDeviceExternalSemaphoreInfo> for RawVkPhysicalDeviceExt
 impl Default for VkPhysicalDeviceExternalSemaphoreInfo {
     fn default() -> VkPhysicalDeviceExternalSemaphoreInfo {
         VkPhysicalDeviceExternalSemaphoreInfo {
-            handle_type: VkExternalSemaphoreHandleTypeFlags::default(),
+            handle_type: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDeviceExternalSemaphoreInfo {
 }
 
 impl VkFree for RawVkPhysicalDeviceExternalSemaphoreInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

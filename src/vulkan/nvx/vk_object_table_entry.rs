@@ -48,8 +48,8 @@ impl VkRawType<VkObjectTableEntry> for RawVkObjectTableEntry {
 impl Default for VkObjectTableEntry {
     fn default() -> VkObjectTableEntry {
         VkObjectTableEntry {
-            type_: VkObjectEntryType::default(),
-            flags: VkObjectEntryUsageFlags::default(),
+            type_: Default::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -61,7 +61,7 @@ impl VkSetup for VkObjectTableEntry {
 }
 
 impl VkFree for RawVkObjectTableEntry {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

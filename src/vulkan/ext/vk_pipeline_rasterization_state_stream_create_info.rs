@@ -52,7 +52,7 @@ impl VkRawType<VkPipelineRasterizationStateStreamCreateInfo> for RawVkPipelineRa
 impl Default for VkPipelineRasterizationStateStreamCreateInfo {
     fn default() -> VkPipelineRasterizationStateStreamCreateInfo {
         VkPipelineRasterizationStateStreamCreateInfo {
-            flags: VkPipelineRasterizationStateStreamCreateFlags::default(),
+            flags: Default::default(),
             rasterization_stream: 0,
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkPipelineRasterizationStateStreamCreateInfo {
 }
 
 impl VkFree for RawVkPipelineRasterizationStateStreamCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

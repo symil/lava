@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDeviceImageViewImageFormatInfo> for RawVkPhysicalDevice
 impl Default for VkPhysicalDeviceImageViewImageFormatInfo {
     fn default() -> VkPhysicalDeviceImageViewImageFormatInfo {
         VkPhysicalDeviceImageViewImageFormatInfo {
-            image_view_type: VkImageViewType::default(),
+            image_view_type: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDeviceImageViewImageFormatInfo {
 }
 
 impl VkFree for RawVkPhysicalDeviceImageViewImageFormatInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

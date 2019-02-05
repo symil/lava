@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkDevice = u64;
 
 /// Wrapper for [VkDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDevice.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkDevice {
     _handle: RawVkDevice,
     _fn_table: *mut VkFunctionTable
@@ -99,9 +99,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkAllocateMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateMemory.html).
-    pub fn allocate_memory(&self, allocate_info: &VkMemoryAllocateInfo) -> Result<VkDeviceMemory, (VkResult, VkDeviceMemory)> {
+    pub fn allocate_memory(&self, allocate_info: VkMemoryAllocateInfo) -> Result<VkDeviceMemory, (VkResult, VkDeviceMemory)> {
         unsafe {
-            let raw_allocate_info = new_ptr_vk_value(allocate_info);
+            let raw_allocate_info = new_ptr_vk_value(&allocate_info);
             let mut vk_result = 0;
             let raw_memory = &mut mem::zeroed() as *mut RawVkDeviceMemory;
             
@@ -118,10 +118,10 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkFlushMappedMemoryRanges](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFlushMappedMemoryRanges.html).
-    pub fn flush_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> Result<(), VkResult> {
+    pub fn flush_mapped_memory_ranges(&self, memory_ranges: Vec<VkMappedMemoryRange>) -> Result<(), VkResult> {
         unsafe {
             let raw_memory_range_count = memory_ranges.len() as u32;
-            let raw_memory_ranges = new_ptr_vk_array(memory_ranges);
+            let raw_memory_ranges = new_ptr_vk_array(&memory_ranges);
             let vk_result = ((&*self._fn_table).vkFlushMappedMemoryRanges)(self._handle, raw_memory_range_count, raw_memory_ranges);
             free_vk_ptr_array(raw_memory_range_count as usize, raw_memory_ranges);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
@@ -129,20 +129,64 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkInvalidateMappedMemoryRanges](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkInvalidateMappedMemoryRanges.html).
-    pub fn invalidate_mapped_memory_ranges(&self, memory_ranges: &[VkMappedMemoryRange]) -> Result<(), VkResult> {
+    pub fn invalidate_mapped_memory_ranges(&self, memory_ranges: Vec<VkMappedMemoryRange>) -> Result<(), VkResult> {
         unsafe {
             let raw_memory_range_count = memory_ranges.len() as u32;
-            let raw_memory_ranges = new_ptr_vk_array(memory_ranges);
+            let raw_memory_ranges = new_ptr_vk_array(&memory_ranges);
             let vk_result = ((&*self._fn_table).vkInvalidateMappedMemoryRanges)(self._handle, raw_memory_range_count, raw_memory_ranges);
             free_vk_ptr_array(raw_memory_range_count as usize, raw_memory_ranges);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
-    /// Wrapper for [vkCreateFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateFence.html).
-    pub fn create_fence(&self, create_info: &VkFenceCreateInfo) -> Result<VkFence, (VkResult, VkFence)> {
+    /// Wrapper for [vkBindImageMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindImageMemory.html).
+    pub fn bind_image_memory(&self, image: VkImage, memory: VkDeviceMemory, memory_offset: usize) -> Result<(), VkResult> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_image = vk_to_raw_value(&image);
+            let raw_memory = vk_to_raw_value(&memory);
+            let raw_memory_offset = vk_to_raw_value(&memory_offset);
+            let vk_result = ((&*self._fn_table).vkBindImageMemory)(self._handle, raw_image, raw_memory, raw_memory_offset);
+            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+        }
+    }
+    
+    /// Wrapper for [vkGetImageMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageMemoryRequirements.html).
+    pub fn get_image_memory_requirements(&self, image: VkImage) -> VkMemoryRequirements {
+        unsafe {
+            let raw_image = vk_to_raw_value(&image);
+            let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements;
+            
+            ((&*self._fn_table).vkGetImageMemoryRequirements)(self._handle, raw_image, raw_memory_requirements);
+            
+            let mut memory_requirements = new_vk_value(raw_memory_requirements);
+            let fn_table = self._fn_table;
+            VkSetup::vk_setup(&mut memory_requirements, fn_table);
+            memory_requirements
+        }
+    }
+    
+    /// Wrapper for [vkGetImageSparseMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageSparseMemoryRequirements.html).
+    pub fn get_image_sparse_memory_requirements(&self, image: VkImage) -> Vec<VkSparseImageMemoryRequirements> {
+        unsafe {
+            let raw_image = vk_to_raw_value(&image);
+            let mut raw_sparse_memory_requirements : *mut RawVkSparseImageMemoryRequirements = ptr::null_mut();
+            let raw_sparse_memory_requirement_count = &mut mem::zeroed() as *mut u32;
+            ((&*self._fn_table).vkGetImageSparseMemoryRequirements)(self._handle, raw_image, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
+            raw_sparse_memory_requirements = calloc(*raw_sparse_memory_requirement_count as usize, mem::size_of::<RawVkSparseImageMemoryRequirements>()) as *mut RawVkSparseImageMemoryRequirements;
+            
+            ((&*self._fn_table).vkGetImageSparseMemoryRequirements)(self._handle, raw_image, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
+            
+            let mut sparse_memory_requirements = new_vk_array_checked(*raw_sparse_memory_requirement_count, raw_sparse_memory_requirements).unwrap();
+            for elt in &mut sparse_memory_requirements { VkSetup::vk_setup(elt, self._fn_table); }
+            free(raw_sparse_memory_requirements as *mut u8);
+            sparse_memory_requirements
+        }
+    }
+    
+    /// Wrapper for [vkCreateFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateFence.html).
+    pub fn create_fence(&self, create_info: VkFenceCreateInfo) -> Result<VkFence, (VkResult, VkFence)> {
+        unsafe {
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_fence = &mut mem::zeroed() as *mut RawVkFence;
             
@@ -159,10 +203,10 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkResetFences](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetFences.html).
-    pub fn reset_fences(&self, fences: &[&VkFence]) -> Result<(), VkResult> {
+    pub fn reset_fences(&self, fences: Vec<VkFence>) -> Result<(), VkResult> {
         unsafe {
             let raw_fence_count = fences.len() as u32;
-            let raw_fences = new_ptr_vk_array_from_ref(fences);
+            let raw_fences = new_ptr_vk_array(&fences);
             let vk_result = ((&*self._fn_table).vkResetFences)(self._handle, raw_fence_count, raw_fences);
             free_ptr(raw_fences);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
@@ -170,10 +214,10 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkWaitForFences](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWaitForFences.html).
-    pub fn wait_for_fences(&self, fences: &[&VkFence], wait_all: bool, timeout: u64) -> Result<(), VkResult> {
+    pub fn wait_for_fences(&self, fences: Vec<VkFence>, wait_all: bool, timeout: u64) -> Result<(), VkResult> {
         unsafe {
             let raw_fence_count = fences.len() as u32;
-            let raw_fences = new_ptr_vk_array_from_ref(fences);
+            let raw_fences = new_ptr_vk_array(&fences);
             let raw_wait_all = vk_to_raw_value(&wait_all);
             let raw_timeout = timeout;
             let vk_result = ((&*self._fn_table).vkWaitForFences)(self._handle, raw_fence_count, raw_fences, raw_wait_all, raw_timeout);
@@ -183,9 +227,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateSemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSemaphore.html).
-    pub fn create_semaphore(&self, create_info: &VkSemaphoreCreateInfo) -> Result<VkSemaphore, (VkResult, VkSemaphore)> {
+    pub fn create_semaphore(&self, create_info: VkSemaphoreCreateInfo) -> Result<VkSemaphore, (VkResult, VkSemaphore)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_semaphore = &mut mem::zeroed() as *mut RawVkSemaphore;
             
@@ -202,9 +246,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateEvent.html).
-    pub fn create_event(&self, create_info: &VkEventCreateInfo) -> Result<VkEvent, (VkResult, VkEvent)> {
+    pub fn create_event(&self, create_info: VkEventCreateInfo) -> Result<VkEvent, (VkResult, VkEvent)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_event = &mut mem::zeroed() as *mut RawVkEvent;
             
@@ -221,9 +265,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateQueryPool.html).
-    pub fn create_query_pool(&self, create_info: &VkQueryPoolCreateInfo) -> Result<VkQueryPool, (VkResult, VkQueryPool)> {
+    pub fn create_query_pool(&self, create_info: VkQueryPoolCreateInfo) -> Result<VkQueryPool, (VkResult, VkQueryPool)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_query_pool = &mut mem::zeroed() as *mut RawVkQueryPool;
             
@@ -240,9 +284,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateBuffer.html).
-    pub fn create_buffer(&self, create_info: &VkBufferCreateInfo) -> Result<VkBuffer, (VkResult, VkBuffer)> {
+    pub fn create_buffer(&self, create_info: VkBufferCreateInfo) -> Result<VkBuffer, (VkResult, VkBuffer)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_buffer = &mut mem::zeroed() as *mut RawVkBuffer;
             
@@ -259,9 +303,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateBufferView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateBufferView.html).
-    pub fn create_buffer_view(&self, create_info: &VkBufferViewCreateInfo) -> Result<VkBufferView, (VkResult, VkBufferView)> {
+    pub fn create_buffer_view(&self, create_info: VkBufferViewCreateInfo) -> Result<VkBufferView, (VkResult, VkBufferView)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_view = &mut mem::zeroed() as *mut RawVkBufferView;
             
@@ -278,9 +322,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateImage.html).
-    pub fn create_image(&self, create_info: &VkImageCreateInfo) -> Result<VkImage, (VkResult, VkImage)> {
+    pub fn create_image(&self, create_info: VkImageCreateInfo) -> Result<VkImage, (VkResult, VkImage)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_image = &mut mem::zeroed() as *mut RawVkImage;
             
@@ -293,912 +337,6 @@ impl VkDevice {
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(image) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateImageView.html).
-    pub fn create_image_view(&self, create_info: &VkImageViewCreateInfo) -> Result<VkImageView, (VkResult, VkImageView)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_view = &mut mem::zeroed() as *mut RawVkImageView;
-            
-            vk_result = ((&*self._fn_table).vkCreateImageView)(self._handle, raw_create_info, ptr::null(), raw_view);
-            
-            let mut view = new_vk_value(raw_view);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut view, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(view) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), view)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateShaderModule](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateShaderModule.html).
-    pub fn create_shader_module(&self, create_info: &VkShaderModuleCreateInfo) -> Result<VkShaderModule, (VkResult, VkShaderModule)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_shader_module = &mut mem::zeroed() as *mut RawVkShaderModule;
-            
-            vk_result = ((&*self._fn_table).vkCreateShaderModule)(self._handle, raw_create_info, ptr::null(), raw_shader_module);
-            
-            let mut shader_module = new_vk_value(raw_shader_module);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut shader_module, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(shader_module) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), shader_module)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreatePipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreatePipelineCache.html).
-    pub fn create_pipeline_cache(&self, create_info: &VkPipelineCacheCreateInfo) -> Result<VkPipelineCache, (VkResult, VkPipelineCache)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_pipeline_cache = &mut mem::zeroed() as *mut RawVkPipelineCache;
-            
-            vk_result = ((&*self._fn_table).vkCreatePipelineCache)(self._handle, raw_create_info, ptr::null(), raw_pipeline_cache);
-            
-            let mut pipeline_cache = new_vk_value(raw_pipeline_cache);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut pipeline_cache, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(pipeline_cache) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), pipeline_cache)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateGraphicsPipelines](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateGraphicsPipelines.html).
-    pub fn create_graphics_pipelines(&self, pipeline_cache: Option<&VkPipelineCache>, create_infos: &[VkGraphicsPipelineCreateInfo]) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
-        unsafe {
-            let raw_pipeline_cache = if pipeline_cache.is_some() { vk_to_raw_value(pipeline_cache.unwrap()) } else { 0 };
-            let raw_create_info_count = create_infos.len() as u32;
-            let raw_create_infos = new_ptr_vk_array(create_infos);
-            let mut vk_result = 0;
-            let raw_pipelines = calloc(raw_create_info_count as usize, mem::size_of::<RawVkPipeline>()) as *mut RawVkPipeline;
-            
-            vk_result = ((&*self._fn_table).vkCreateGraphicsPipelines)(self._handle, raw_pipeline_cache, raw_create_info_count, raw_create_infos, ptr::null(), raw_pipelines);
-            
-            let mut pipelines = new_vk_array(raw_create_info_count, raw_pipelines);
-            if vk_result == 0 {
-                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table); }
-            }
-            free_vk_ptr_array(raw_create_info_count as usize, raw_create_infos);
-            free_ptr(raw_pipelines);
-            if vk_result == 0 { Ok(pipelines) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), pipelines)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateComputePipelines](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html).
-    pub fn create_compute_pipelines(&self, pipeline_cache: Option<&VkPipelineCache>, create_infos: &[VkComputePipelineCreateInfo]) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
-        unsafe {
-            let raw_pipeline_cache = if pipeline_cache.is_some() { vk_to_raw_value(pipeline_cache.unwrap()) } else { 0 };
-            let raw_create_info_count = create_infos.len() as u32;
-            let raw_create_infos = new_ptr_vk_array(create_infos);
-            let mut vk_result = 0;
-            let raw_pipelines = calloc(raw_create_info_count as usize, mem::size_of::<RawVkPipeline>()) as *mut RawVkPipeline;
-            
-            vk_result = ((&*self._fn_table).vkCreateComputePipelines)(self._handle, raw_pipeline_cache, raw_create_info_count, raw_create_infos, ptr::null(), raw_pipelines);
-            
-            let mut pipelines = new_vk_array(raw_create_info_count, raw_pipelines);
-            if vk_result == 0 {
-                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table); }
-            }
-            free_vk_ptr_array(raw_create_info_count as usize, raw_create_infos);
-            free_ptr(raw_pipelines);
-            if vk_result == 0 { Ok(pipelines) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), pipelines)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreatePipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreatePipelineLayout.html).
-    pub fn create_pipeline_layout(&self, create_info: &VkPipelineLayoutCreateInfo) -> Result<VkPipelineLayout, (VkResult, VkPipelineLayout)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_pipeline_layout = &mut mem::zeroed() as *mut RawVkPipelineLayout;
-            
-            vk_result = ((&*self._fn_table).vkCreatePipelineLayout)(self._handle, raw_create_info, ptr::null(), raw_pipeline_layout);
-            
-            let mut pipeline_layout = new_vk_value(raw_pipeline_layout);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut pipeline_layout, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(pipeline_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), pipeline_layout)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateSampler](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSampler.html).
-    pub fn create_sampler(&self, create_info: &VkSamplerCreateInfo) -> Result<VkSampler, (VkResult, VkSampler)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_sampler = &mut mem::zeroed() as *mut RawVkSampler;
-            
-            vk_result = ((&*self._fn_table).vkCreateSampler)(self._handle, raw_create_info, ptr::null(), raw_sampler);
-            
-            let mut sampler = new_vk_value(raw_sampler);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut sampler, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(sampler) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), sampler)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateDescriptorSetLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorSetLayout.html).
-    pub fn create_descriptor_set_layout(&self, create_info: &VkDescriptorSetLayoutCreateInfo) -> Result<VkDescriptorSetLayout, (VkResult, VkDescriptorSetLayout)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_set_layout = &mut mem::zeroed() as *mut RawVkDescriptorSetLayout;
-            
-            vk_result = ((&*self._fn_table).vkCreateDescriptorSetLayout)(self._handle, raw_create_info, ptr::null(), raw_set_layout);
-            
-            let mut set_layout = new_vk_value(raw_set_layout);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut set_layout, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(set_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), set_layout)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorPool.html).
-    pub fn create_descriptor_pool(&self, create_info: &VkDescriptorPoolCreateInfo) -> Result<VkDescriptorPool, (VkResult, VkDescriptorPool)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_descriptor_pool = &mut mem::zeroed() as *mut RawVkDescriptorPool;
-            
-            vk_result = ((&*self._fn_table).vkCreateDescriptorPool)(self._handle, raw_create_info, ptr::null(), raw_descriptor_pool);
-            
-            let mut descriptor_pool = new_vk_value(raw_descriptor_pool);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut descriptor_pool, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(descriptor_pool) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), descriptor_pool)) }
-        }
-    }
-    
-    /// Wrapper for [vkAllocateDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateDescriptorSets.html).
-    pub fn allocate_descriptor_sets(&self, allocate_info: &VkDescriptorSetAllocateInfo) -> Result<Vec<VkDescriptorSet>, (VkResult, Vec<VkDescriptorSet>)> {
-        unsafe {
-            let raw_allocate_info = new_ptr_vk_value(allocate_info);
-            let mut vk_result = 0;
-            let raw_descriptor_sets = calloc((&*raw_allocate_info).descriptor_set_count as usize, mem::size_of::<RawVkDescriptorSet>()) as *mut RawVkDescriptorSet;
-            
-            vk_result = ((&*self._fn_table).vkAllocateDescriptorSets)(self._handle, raw_allocate_info, raw_descriptor_sets);
-            
-            let mut descriptor_sets = new_vk_array((&*raw_allocate_info).descriptor_set_count, raw_descriptor_sets);
-            if vk_result == 0 {
-                for elt in &mut descriptor_sets { VkSetup::vk_setup(elt, self._fn_table); }
-            }
-            free_vk_ptr(raw_allocate_info);
-            free_ptr(raw_descriptor_sets);
-            if vk_result == 0 { Ok(descriptor_sets) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), descriptor_sets)) }
-        }
-    }
-    
-    /// Wrapper for [vkUpdateDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUpdateDescriptorSets.html).
-    pub fn update_descriptor_sets(&self, descriptor_writes: &[VkWriteDescriptorSet], descriptor_copies: &[VkCopyDescriptorSet]) {
-        unsafe {
-            let raw_descriptor_write_count = descriptor_writes.len() as u32;
-            let raw_descriptor_writes = new_ptr_vk_array(descriptor_writes);
-            let raw_descriptor_copy_count = descriptor_copies.len() as u32;
-            let raw_descriptor_copies = new_ptr_vk_array(descriptor_copies);
-            ((&*self._fn_table).vkUpdateDescriptorSets)(self._handle, raw_descriptor_write_count, raw_descriptor_writes, raw_descriptor_copy_count, raw_descriptor_copies);
-            free_vk_ptr_array(raw_descriptor_write_count as usize, raw_descriptor_writes);
-            free_vk_ptr_array(raw_descriptor_copy_count as usize, raw_descriptor_copies);
-        }
-    }
-    
-    /// Wrapper for [vkCreateFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateFramebuffer.html).
-    pub fn create_framebuffer(&self, create_info: &VkFramebufferCreateInfo) -> Result<VkFramebuffer, (VkResult, VkFramebuffer)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_framebuffer = &mut mem::zeroed() as *mut RawVkFramebuffer;
-            
-            vk_result = ((&*self._fn_table).vkCreateFramebuffer)(self._handle, raw_create_info, ptr::null(), raw_framebuffer);
-            
-            let mut framebuffer = new_vk_value(raw_framebuffer);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut framebuffer, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(framebuffer) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), framebuffer)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass.html).
-    pub fn create_render_pass(&self, create_info: &VkRenderPassCreateInfo) -> Result<VkRenderPass, (VkResult, VkRenderPass)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_render_pass = &mut mem::zeroed() as *mut RawVkRenderPass;
-            
-            vk_result = ((&*self._fn_table).vkCreateRenderPass)(self._handle, raw_create_info, ptr::null(), raw_render_pass);
-            
-            let mut render_pass = new_vk_value(raw_render_pass);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut render_pass, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(render_pass) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), render_pass)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateCommandPool.html).
-    pub fn create_command_pool(&self, create_info: &VkCommandPoolCreateInfo) -> Result<VkCommandPool, (VkResult, VkCommandPool)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_command_pool = &mut mem::zeroed() as *mut RawVkCommandPool;
-            
-            vk_result = ((&*self._fn_table).vkCreateCommandPool)(self._handle, raw_create_info, ptr::null(), raw_command_pool);
-            
-            let mut command_pool = new_vk_value(raw_command_pool);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut command_pool, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(command_pool) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), command_pool)) }
-        }
-    }
-    
-    /// Wrapper for [vkAllocateCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocateCommandBuffers.html).
-    pub fn allocate_command_buffers(&self, allocate_info: &VkCommandBufferAllocateInfo) -> Result<Vec<VkCommandBuffer>, (VkResult, Vec<VkCommandBuffer>)> {
-        unsafe {
-            let raw_allocate_info = new_ptr_vk_value(allocate_info);
-            let mut vk_result = 0;
-            let raw_command_buffers = calloc((&*raw_allocate_info).command_buffer_count as usize, mem::size_of::<RawVkCommandBuffer>()) as *mut RawVkCommandBuffer;
-            
-            vk_result = ((&*self._fn_table).vkAllocateCommandBuffers)(self._handle, raw_allocate_info, raw_command_buffers);
-            
-            let mut command_buffers = new_vk_array((&*raw_allocate_info).command_buffer_count, raw_command_buffers);
-            if vk_result == 0 {
-                for elt in &mut command_buffers { VkSetup::vk_setup(elt, self._fn_table); }
-            }
-            free_vk_ptr(raw_allocate_info);
-            free_ptr(raw_command_buffers);
-            if vk_result == 0 { Ok(command_buffers) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), command_buffers)) }
-        }
-    }
-    
-    /// Wrapper for [vkBindBufferMemory2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindBufferMemory2.html).
-    pub fn bind_buffer_memory_2(&self, bind_infos: &[VkBindBufferMemoryInfo]) -> Result<(), VkResult> {
-        unsafe {
-            let raw_bind_info_count = bind_infos.len() as u32;
-            let raw_bind_infos = new_ptr_vk_array(bind_infos);
-            let vk_result = ((&*self._fn_table).vkBindBufferMemory2)(self._handle, raw_bind_info_count, raw_bind_infos);
-            free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_infos);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkBindImageMemory2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindImageMemory2.html).
-    pub fn bind_image_memory_2(&self, bind_infos: &[VkBindImageMemoryInfo]) -> Result<(), VkResult> {
-        unsafe {
-            let raw_bind_info_count = bind_infos.len() as u32;
-            let raw_bind_infos = new_ptr_vk_array(bind_infos);
-            let vk_result = ((&*self._fn_table).vkBindImageMemory2)(self._handle, raw_bind_info_count, raw_bind_infos);
-            free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_infos);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetDeviceGroupPeerMemoryFeatures](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupPeerMemoryFeatures.html).
-    pub fn get_group_peer_memory_features(&self, heap_index: usize, local_device_index: usize, remote_device_index: usize) -> VkPeerMemoryFeatureFlags {
-        unsafe {
-            let raw_heap_index = vk_to_raw_value(&heap_index);
-            let raw_local_device_index = vk_to_raw_value(&local_device_index);
-            let raw_remote_device_index = vk_to_raw_value(&remote_device_index);
-            let raw_peer_memory_features = &mut mem::zeroed() as *mut RawVkPeerMemoryFeatureFlags;
-            
-            ((&*self._fn_table).vkGetDeviceGroupPeerMemoryFeatures)(self._handle, raw_heap_index, raw_local_device_index, raw_remote_device_index, raw_peer_memory_features);
-            
-            let peer_memory_features = new_vk_value(raw_peer_memory_features);
-            peer_memory_features
-        }
-    }
-    
-    /// Wrapper for [vkGetImageMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageMemoryRequirements2.html).
-    pub fn get_image_memory_requirements_2(&self, info: &VkImageMemoryRequirementsInfo2) -> VkMemoryRequirements2 {
-        unsafe {
-            let raw_info = new_ptr_vk_value(info);
-            let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements2;
-            
-            ((&*self._fn_table).vkGetImageMemoryRequirements2)(self._handle, raw_info, raw_memory_requirements);
-            
-            let mut memory_requirements = new_vk_value(raw_memory_requirements);
-            let fn_table = self._fn_table;
-            VkSetup::vk_setup(&mut memory_requirements, fn_table);
-            free_vk_ptr(raw_info);
-            RawVkMemoryRequirements2::vk_free(raw_memory_requirements.as_mut().unwrap());
-            memory_requirements
-        }
-    }
-    
-    /// Wrapper for [vkGetBufferMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferMemoryRequirements2.html).
-    pub fn get_buffer_memory_requirements_2(&self, info: &VkBufferMemoryRequirementsInfo2) -> VkMemoryRequirements2 {
-        unsafe {
-            let raw_info = new_ptr_vk_value(info);
-            let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements2;
-            
-            ((&*self._fn_table).vkGetBufferMemoryRequirements2)(self._handle, raw_info, raw_memory_requirements);
-            
-            let mut memory_requirements = new_vk_value(raw_memory_requirements);
-            let fn_table = self._fn_table;
-            VkSetup::vk_setup(&mut memory_requirements, fn_table);
-            free_vk_ptr(raw_info);
-            RawVkMemoryRequirements2::vk_free(raw_memory_requirements.as_mut().unwrap());
-            memory_requirements
-        }
-    }
-    
-    /// Wrapper for [vkGetImageSparseMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageSparseMemoryRequirements2.html).
-    pub fn get_image_sparse_memory_requirements_2(&self, info: &VkImageSparseMemoryRequirementsInfo2) -> Vec<VkSparseImageMemoryRequirements2> {
-        unsafe {
-            let raw_info = new_ptr_vk_value(info);
-            let mut raw_sparse_memory_requirements : *mut RawVkSparseImageMemoryRequirements2 = ptr::null_mut();
-            let raw_sparse_memory_requirement_count = &mut mem::zeroed() as *mut u32;
-            ((&*self._fn_table).vkGetImageSparseMemoryRequirements2)(self._handle, raw_info, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
-            raw_sparse_memory_requirements = calloc(*raw_sparse_memory_requirement_count as usize, mem::size_of::<RawVkSparseImageMemoryRequirements2>()) as *mut RawVkSparseImageMemoryRequirements2;
-            
-            ((&*self._fn_table).vkGetImageSparseMemoryRequirements2)(self._handle, raw_info, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
-            
-            let mut sparse_memory_requirements = new_vk_array(*raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
-            for elt in &mut sparse_memory_requirements { VkSetup::vk_setup(elt, self._fn_table); }
-            free_vk_ptr(raw_info);
-            free_vk_ptr_array(*raw_sparse_memory_requirement_count as usize, raw_sparse_memory_requirements);
-            sparse_memory_requirements
-        }
-    }
-    
-    /// Wrapper for [vkGetDeviceQueue2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceQueue2.html).
-    pub fn get_queue_2(&self, queue_info: &VkDeviceQueueInfo2) -> VkQueue {
-        unsafe {
-            let raw_queue_info = new_ptr_vk_value(queue_info);
-            let raw_queue = &mut mem::zeroed() as *mut RawVkQueue;
-            
-            ((&*self._fn_table).vkGetDeviceQueue2)(self._handle, raw_queue_info, raw_queue);
-            
-            let mut queue = new_vk_value(raw_queue);
-            let fn_table = self._fn_table;
-            VkSetup::vk_setup(&mut queue, fn_table);
-            free_vk_ptr(raw_queue_info);
-            queue
-        }
-    }
-    
-    /// Wrapper for [vkCreateSamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSamplerYcbcrConversion.html).
-    pub fn create_sampler_ycbcr_conversion(&self, create_info: &VkSamplerYcbcrConversionCreateInfo) -> Result<VkSamplerYcbcrConversion, (VkResult, VkSamplerYcbcrConversion)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_ycbcr_conversion = &mut mem::zeroed() as *mut RawVkSamplerYcbcrConversion;
-            
-            vk_result = ((&*self._fn_table).vkCreateSamplerYcbcrConversion)(self._handle, raw_create_info, ptr::null(), raw_ycbcr_conversion);
-            
-            let mut ycbcr_conversion = new_vk_value(raw_ycbcr_conversion);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut ycbcr_conversion, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(ycbcr_conversion) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ycbcr_conversion)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateDescriptorUpdateTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDescriptorUpdateTemplate.html).
-    pub fn create_descriptor_update_template(&self, create_info: &VkDescriptorUpdateTemplateCreateInfo) -> Result<VkDescriptorUpdateTemplate, (VkResult, VkDescriptorUpdateTemplate)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_descriptor_update_template = &mut mem::zeroed() as *mut RawVkDescriptorUpdateTemplate;
-            
-            vk_result = ((&*self._fn_table).vkCreateDescriptorUpdateTemplate)(self._handle, raw_create_info, ptr::null(), raw_descriptor_update_template);
-            
-            let mut descriptor_update_template = new_vk_value(raw_descriptor_update_template);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut descriptor_update_template, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(descriptor_update_template) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), descriptor_update_template)) }
-        }
-    }
-    
-    /// Wrapper for [vkUpdateDescriptorSetWithTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUpdateDescriptorSetWithTemplate.html).
-    pub fn update_descriptor_set_with_template(&self, descriptor_set: &VkDescriptorSet, descriptor_update_template: &VkDescriptorUpdateTemplate, data: &c_void) {
-        unsafe {
-            let raw_descriptor_set = vk_to_raw_value(descriptor_set);
-            let raw_descriptor_update_template = vk_to_raw_value(descriptor_update_template);
-            let raw_data = data as *const c_void;
-            ((&*self._fn_table).vkUpdateDescriptorSetWithTemplate)(self._handle, raw_descriptor_set, raw_descriptor_update_template, raw_data);
-        }
-    }
-    
-    /// Wrapper for [vkGetDescriptorSetLayoutSupport](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDescriptorSetLayoutSupport.html).
-    pub fn get_descriptor_set_layout_support(&self, create_info: &VkDescriptorSetLayoutCreateInfo) -> VkDescriptorSetLayoutSupport {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let raw_support = &mut mem::zeroed() as *mut RawVkDescriptorSetLayoutSupport;
-            
-            ((&*self._fn_table).vkGetDescriptorSetLayoutSupport)(self._handle, raw_create_info, raw_support);
-            
-            let mut support = new_vk_value(raw_support);
-            let fn_table = self._fn_table;
-            VkSetup::vk_setup(&mut support, fn_table);
-            free_vk_ptr(raw_create_info);
-            RawVkDescriptorSetLayoutSupport::vk_free(raw_support.as_mut().unwrap());
-            support
-        }
-    }
-    
-    /// Wrapper for [vkCreateSwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSwapchainKHR.html).
-    pub fn create_swapchain(&self, create_info: &khr::VkSwapchainCreateInfo) -> Result<khr::VkSwapchain, (VkResult, khr::VkSwapchain)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_swapchain = &mut mem::zeroed() as *mut khr::RawVkSwapchain;
-            
-            vk_result = ((&*self._fn_table).vkCreateSwapchainKHR)(self._handle, raw_create_info, ptr::null(), raw_swapchain);
-            
-            let mut swapchain = new_vk_value(raw_swapchain);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut swapchain, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(swapchain) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), swapchain)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetDeviceGroupPresentCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupPresentCapabilitiesKHR.html).
-    pub fn get_group_present_capabilities(&self) -> Result<khr::VkDeviceGroupPresentCapabilities, (VkResult, khr::VkDeviceGroupPresentCapabilities)> {
-        unsafe {
-            let mut vk_result = 0;
-            let raw_device_group_present_capabilities = &mut mem::zeroed() as *mut khr::RawVkDeviceGroupPresentCapabilities;
-            
-            vk_result = ((&*self._fn_table).vkGetDeviceGroupPresentCapabilitiesKHR)(self._handle, raw_device_group_present_capabilities);
-            
-            let mut device_group_present_capabilities = new_vk_value(raw_device_group_present_capabilities);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut device_group_present_capabilities, fn_table);
-            }
-            khr::RawVkDeviceGroupPresentCapabilities::vk_free(raw_device_group_present_capabilities.as_mut().unwrap());
-            if vk_result == 0 { Ok(device_group_present_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), device_group_present_capabilities)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetDeviceGroupSurfacePresentModesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupSurfacePresentModesKHR.html).
-    pub fn get_group_surface_present_modes(&self, surface: &khr::VkSurface) -> Result<khr::VkDeviceGroupPresentModeFlags, (VkResult, khr::VkDeviceGroupPresentModeFlags)> {
-        unsafe {
-            let raw_surface = vk_to_raw_value(surface);
-            let mut vk_result = 0;
-            let raw_modes = &mut mem::zeroed() as *mut khr::RawVkDeviceGroupPresentModeFlags;
-            
-            vk_result = ((&*self._fn_table).vkGetDeviceGroupSurfacePresentModesKHR)(self._handle, raw_surface, raw_modes);
-            
-            let modes = new_vk_value(raw_modes);
-            if vk_result == 0 { Ok(modes) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), modes)) }
-        }
-    }
-    
-    /// Wrapper for [vkAcquireNextImage2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireNextImage2KHR.html).
-    pub fn acquire_next_image_2(&self, acquire_info: &khr::VkAcquireNextImageInfo) -> Result<usize, (VkResult, usize)> {
-        unsafe {
-            let raw_acquire_info = new_ptr_vk_value(acquire_info);
-            let mut vk_result = 0;
-            let raw_image_index = &mut mem::zeroed() as *mut u32;
-            
-            vk_result = ((&*self._fn_table).vkAcquireNextImage2KHR)(self._handle, raw_acquire_info, raw_image_index);
-            
-            let image_index = new_vk_value(raw_image_index);
-            free_vk_ptr(raw_acquire_info);
-            if vk_result == 0 { Ok(image_index) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image_index)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateSharedSwapchainsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSharedSwapchainsKHR.html).
-    pub fn create_shared_swapchains(&self, create_infos: &[khr::VkSwapchainCreateInfo]) -> Result<Vec<khr::VkSwapchain>, (VkResult, Vec<khr::VkSwapchain>)> {
-        unsafe {
-            let raw_swapchain_count = create_infos.len() as u32;
-            let raw_create_infos = new_ptr_vk_array(create_infos);
-            let mut vk_result = 0;
-            let raw_swapchains = calloc(raw_swapchain_count as usize, mem::size_of::<khr::RawVkSwapchain>()) as *mut khr::RawVkSwapchain;
-            
-            vk_result = ((&*self._fn_table).vkCreateSharedSwapchainsKHR)(self._handle, raw_swapchain_count, raw_create_infos, ptr::null(), raw_swapchains);
-            
-            let mut swapchains = new_vk_array(raw_swapchain_count, raw_swapchains);
-            if vk_result == 0 {
-                for elt in &mut swapchains { VkSetup::vk_setup(elt, self._fn_table); }
-            }
-            free_vk_ptr_array(raw_swapchain_count as usize, raw_create_infos);
-            free_ptr(raw_swapchains);
-            if vk_result == 0 { Ok(swapchains) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), swapchains)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetMemoryFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryFdKHR.html).
-    pub fn get_memory_fd(&self, get_fd_info: &khr::VkMemoryGetFdInfo) -> Result<i32, (VkResult, i32)> {
-        unsafe {
-            let raw_get_fd_info = new_ptr_vk_value(get_fd_info);
-            let mut vk_result = 0;
-            let raw_fd = &mut mem::zeroed() as *mut i32;
-            
-            vk_result = ((&*self._fn_table).vkGetMemoryFdKHR)(self._handle, raw_get_fd_info, raw_fd);
-            
-            let fd = *raw_fd;
-            free_vk_ptr(raw_get_fd_info);
-            if vk_result == 0 { Ok(fd) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fd)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetMemoryFdPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryFdPropertiesKHR.html).
-    pub fn get_memory_fd_properties(&self, handle_type: VkExternalMemoryHandleTypeFlags, fd: i32) -> Result<khr::VkMemoryFdProperties, (VkResult, khr::VkMemoryFdProperties)> {
-        unsafe {
-            let raw_handle_type = vk_to_raw_value(&handle_type);
-            let raw_fd = fd;
-            let mut vk_result = 0;
-            let raw_memory_fd_properties = &mut mem::zeroed() as *mut khr::RawVkMemoryFdProperties;
-            
-            vk_result = ((&*self._fn_table).vkGetMemoryFdPropertiesKHR)(self._handle, raw_handle_type, raw_fd, raw_memory_fd_properties);
-            
-            let mut memory_fd_properties = new_vk_value(raw_memory_fd_properties);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut memory_fd_properties, fn_table);
-            }
-            khr::RawVkMemoryFdProperties::vk_free(raw_memory_fd_properties.as_mut().unwrap());
-            if vk_result == 0 { Ok(memory_fd_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), memory_fd_properties)) }
-        }
-    }
-    
-    /// Wrapper for [vkImportSemaphoreFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkImportSemaphoreFdKHR.html).
-    pub fn import_semaphore_fd(&self, import_semaphore_fd_info: &khr::VkImportSemaphoreFdInfo) -> Result<(), VkResult> {
-        unsafe {
-            let raw_import_semaphore_fd_info = new_ptr_vk_value(import_semaphore_fd_info);
-            let vk_result = ((&*self._fn_table).vkImportSemaphoreFdKHR)(self._handle, raw_import_semaphore_fd_info);
-            free_vk_ptr(raw_import_semaphore_fd_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetSemaphoreFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSemaphoreFdKHR.html).
-    pub fn get_semaphore_fd(&self, get_fd_info: &khr::VkSemaphoreGetFdInfo) -> Result<i32, (VkResult, i32)> {
-        unsafe {
-            let raw_get_fd_info = new_ptr_vk_value(get_fd_info);
-            let mut vk_result = 0;
-            let raw_fd = &mut mem::zeroed() as *mut i32;
-            
-            vk_result = ((&*self._fn_table).vkGetSemaphoreFdKHR)(self._handle, raw_get_fd_info, raw_fd);
-            
-            let fd = *raw_fd;
-            free_vk_ptr(raw_get_fd_info);
-            if vk_result == 0 { Ok(fd) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fd)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateRenderPass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass2KHR.html).
-    pub fn create_render_pass_2(&self, create_info: &khr::VkRenderPassCreateInfo2) -> Result<VkRenderPass, (VkResult, VkRenderPass)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_render_pass = &mut mem::zeroed() as *mut RawVkRenderPass;
-            
-            vk_result = ((&*self._fn_table).vkCreateRenderPass2KHR)(self._handle, raw_create_info, ptr::null(), raw_render_pass);
-            
-            let mut render_pass = new_vk_value(raw_render_pass);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut render_pass, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(render_pass) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), render_pass)) }
-        }
-    }
-    
-    /// Wrapper for [vkImportFenceFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkImportFenceFdKHR.html).
-    pub fn import_fence_fd(&self, import_fence_fd_info: &khr::VkImportFenceFdInfo) -> Result<(), VkResult> {
-        unsafe {
-            let raw_import_fence_fd_info = new_ptr_vk_value(import_fence_fd_info);
-            let vk_result = ((&*self._fn_table).vkImportFenceFdKHR)(self._handle, raw_import_fence_fd_info);
-            free_vk_ptr(raw_import_fence_fd_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetFenceFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetFenceFdKHR.html).
-    pub fn get_fence_fd(&self, get_fd_info: &khr::VkFenceGetFdInfo) -> Result<i32, (VkResult, i32)> {
-        unsafe {
-            let raw_get_fd_info = new_ptr_vk_value(get_fd_info);
-            let mut vk_result = 0;
-            let raw_fd = &mut mem::zeroed() as *mut i32;
-            
-            vk_result = ((&*self._fn_table).vkGetFenceFdKHR)(self._handle, raw_get_fd_info, raw_fd);
-            
-            let fd = *raw_fd;
-            free_vk_ptr(raw_get_fd_info);
-            if vk_result == 0 { Ok(fd) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fd)) }
-        }
-    }
-    
-    /// Wrapper for [vkDebugMarkerSetObjectTagEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDebugMarkerSetObjectTagEXT.html).
-    pub fn debug_marker_set_object_tag(&self, tag_info: &ext::VkDebugMarkerObjectTagInfo) -> Result<(), VkResult> {
-        unsafe {
-            let raw_tag_info = new_ptr_vk_value(tag_info);
-            let vk_result = ((&*self._fn_table).vkDebugMarkerSetObjectTagEXT)(self._handle, raw_tag_info);
-            free_vk_ptr(raw_tag_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkDebugMarkerSetObjectNameEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDebugMarkerSetObjectNameEXT.html).
-    pub fn debug_marker_set_object_name(&self, name_info: &ext::VkDebugMarkerObjectNameInfo) -> Result<(), VkResult> {
-        unsafe {
-            let raw_name_info = new_ptr_vk_value(name_info);
-            let vk_result = ((&*self._fn_table).vkDebugMarkerSetObjectNameEXT)(self._handle, raw_name_info);
-            free_vk_ptr(raw_name_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateIndirectCommandsLayoutNVX.html).
-    pub fn create_indirect_commands_layout(&self, create_info: &nvx::VkIndirectCommandsLayoutCreateInfo) -> Result<nvx::VkIndirectCommandsLayout, (VkResult, nvx::VkIndirectCommandsLayout)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_indirect_commands_layout = &mut mem::zeroed() as *mut nvx::RawVkIndirectCommandsLayout;
-            
-            vk_result = ((&*self._fn_table).vkCreateIndirectCommandsLayoutNVX)(self._handle, raw_create_info, ptr::null(), raw_indirect_commands_layout);
-            
-            let mut indirect_commands_layout = new_vk_value(raw_indirect_commands_layout);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut indirect_commands_layout, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(indirect_commands_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), indirect_commands_layout)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateObjectTableNVX.html).
-    pub fn create_object_table(&self, create_info: &nvx::VkObjectTableCreateInfo) -> Result<nvx::VkObjectTable, (VkResult, nvx::VkObjectTable)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_object_table = &mut mem::zeroed() as *mut nvx::RawVkObjectTable;
-            
-            vk_result = ((&*self._fn_table).vkCreateObjectTableNVX)(self._handle, raw_create_info, ptr::null(), raw_object_table);
-            
-            let mut object_table = new_vk_value(raw_object_table);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut object_table, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(object_table) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), object_table)) }
-        }
-    }
-    
-    /// Wrapper for [vkDisplayPowerControlEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDisplayPowerControlEXT.html).
-    pub fn display_power_control(&self, display: &khr::VkDisplay, display_power_info: &ext::VkDisplayPowerInfo) -> Result<(), VkResult> {
-        unsafe {
-            let raw_display = vk_to_raw_value(display);
-            let raw_display_power_info = new_ptr_vk_value(display_power_info);
-            let vk_result = ((&*self._fn_table).vkDisplayPowerControlEXT)(self._handle, raw_display, raw_display_power_info);
-            free_vk_ptr(raw_display_power_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkRegisterDeviceEventEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterDeviceEventEXT.html).
-    pub fn register_event(&self, device_event_info: &ext::VkDeviceEventInfo) -> Result<VkFence, (VkResult, VkFence)> {
-        unsafe {
-            let raw_device_event_info = new_ptr_vk_value(device_event_info);
-            let mut vk_result = 0;
-            let raw_fence = &mut mem::zeroed() as *mut RawVkFence;
-            
-            vk_result = ((&*self._fn_table).vkRegisterDeviceEventEXT)(self._handle, raw_device_event_info, ptr::null(), raw_fence);
-            
-            let mut fence = new_vk_value(raw_fence);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut fence, fn_table);
-            }
-            free_vk_ptr(raw_device_event_info);
-            if vk_result == 0 { Ok(fence) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fence)) }
-        }
-    }
-    
-    /// Wrapper for [vkRegisterDisplayEventEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterDisplayEventEXT.html).
-    pub fn register_display_event(&self, display: &khr::VkDisplay, display_event_info: &ext::VkDisplayEventInfo) -> Result<VkFence, (VkResult, VkFence)> {
-        unsafe {
-            let raw_display = vk_to_raw_value(display);
-            let raw_display_event_info = new_ptr_vk_value(display_event_info);
-            let mut vk_result = 0;
-            let raw_fence = &mut mem::zeroed() as *mut RawVkFence;
-            
-            vk_result = ((&*self._fn_table).vkRegisterDisplayEventEXT)(self._handle, raw_display, raw_display_event_info, ptr::null(), raw_fence);
-            
-            let mut fence = new_vk_value(raw_fence);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut fence, fn_table);
-            }
-            free_vk_ptr(raw_display_event_info);
-            if vk_result == 0 { Ok(fence) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fence)) }
-        }
-    }
-    
-    /// Wrapper for [vkSetHdrMetadataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetHdrMetadataEXT.html).
-    pub fn set_hdr_metadata(&self, swapchains: &[&khr::VkSwapchain], metadata: &[ext::VkHdrMetadata]) {
-        unsafe {
-            let raw_swapchain_count = cmp::max(swapchains.len(), metadata.len()) as u32;
-            let raw_swapchains = new_ptr_vk_array_from_ref(swapchains);
-            let raw_metadata = new_ptr_vk_array(metadata);
-            ((&*self._fn_table).vkSetHdrMetadataEXT)(self._handle, raw_swapchain_count, raw_swapchains, raw_metadata);
-            free_ptr(raw_swapchains);
-            free_vk_ptr_array(raw_swapchain_count as usize, raw_metadata);
-        }
-    }
-    
-    /// Wrapper for [vkSetDebugUtilsObjectNameEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetDebugUtilsObjectNameEXT.html).
-    pub fn set_debug_utils_object_name(&self, name_info: &ext::VkDebugUtilsObjectNameInfo) -> Result<(), VkResult> {
-        unsafe {
-            let raw_name_info = new_ptr_vk_value(name_info);
-            let vk_result = ((&*self._fn_table).vkSetDebugUtilsObjectNameEXT)(self._handle, raw_name_info);
-            free_vk_ptr(raw_name_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkSetDebugUtilsObjectTagEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetDebugUtilsObjectTagEXT.html).
-    pub fn set_debug_utils_object_tag(&self, tag_info: &ext::VkDebugUtilsObjectTagInfo) -> Result<(), VkResult> {
-        unsafe {
-            let raw_tag_info = new_ptr_vk_value(tag_info);
-            let vk_result = ((&*self._fn_table).vkSetDebugUtilsObjectTagEXT)(self._handle, raw_tag_info);
-            free_vk_ptr(raw_tag_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateValidationCacheEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateValidationCacheEXT.html).
-    pub fn create_validation_cache(&self, create_info: &ext::VkValidationCacheCreateInfo) -> Result<ext::VkValidationCache, (VkResult, ext::VkValidationCache)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_validation_cache = &mut mem::zeroed() as *mut ext::RawVkValidationCache;
-            
-            vk_result = ((&*self._fn_table).vkCreateValidationCacheEXT)(self._handle, raw_create_info, ptr::null(), raw_validation_cache);
-            
-            let mut validation_cache = new_vk_value(raw_validation_cache);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut validation_cache, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(validation_cache) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), validation_cache)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateAccelerationStructureNV.html).
-    pub fn create_acceleration_structure(&self, create_info: &nv::VkAccelerationStructureCreateInfo) -> Result<nv::VkAccelerationStructure, (VkResult, nv::VkAccelerationStructure)> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
-            let mut vk_result = 0;
-            let raw_acceleration_structure = &mut mem::zeroed() as *mut nv::RawVkAccelerationStructure;
-            
-            vk_result = ((&*self._fn_table).vkCreateAccelerationStructureNV)(self._handle, raw_create_info, ptr::null(), raw_acceleration_structure);
-            
-            let mut acceleration_structure = new_vk_value(raw_acceleration_structure);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut acceleration_structure, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(acceleration_structure) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), acceleration_structure)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetAccelerationStructureMemoryRequirementsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetAccelerationStructureMemoryRequirementsNV.html).
-    pub fn get_acceleration_structure_memory_requirements(&self, info: &nv::VkAccelerationStructureMemoryRequirementsInfo) -> khr::VkMemoryRequirements2 {
-        unsafe {
-            let raw_info = new_ptr_vk_value(info);
-            let raw_memory_requirements = &mut mem::zeroed() as *mut khr::RawVkMemoryRequirements2;
-            
-            ((&*self._fn_table).vkGetAccelerationStructureMemoryRequirementsNV)(self._handle, raw_info, raw_memory_requirements);
-            
-            let memory_requirements = new_vk_value(raw_memory_requirements);
-            free_vk_ptr(raw_info);
-            memory_requirements
-        }
-    }
-    
-    /// Wrapper for [vkBindAccelerationStructureMemoryNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindAccelerationStructureMemoryNV.html).
-    pub fn bind_acceleration_structure_memory(&self, bind_infos: &[nv::VkBindAccelerationStructureMemoryInfo]) -> Result<(), VkResult> {
-        unsafe {
-            let raw_bind_info_count = bind_infos.len() as u32;
-            let raw_bind_infos = new_ptr_vk_array(bind_infos);
-            let vk_result = ((&*self._fn_table).vkBindAccelerationStructureMemoryNV)(self._handle, raw_bind_info_count, raw_bind_infos);
-            free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_infos);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateRayTracingPipelinesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRayTracingPipelinesNV.html).
-    pub fn create_ray_tracing_pipelines(&self, pipeline_cache: Option<&VkPipelineCache>, create_infos: &[nv::VkRayTracingPipelineCreateInfo]) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
-        unsafe {
-            let raw_pipeline_cache = if pipeline_cache.is_some() { vk_to_raw_value(pipeline_cache.unwrap()) } else { 0 };
-            let raw_create_info_count = create_infos.len() as u32;
-            let raw_create_infos = new_ptr_vk_array(create_infos);
-            let mut vk_result = 0;
-            let raw_pipelines = calloc(raw_create_info_count as usize, mem::size_of::<RawVkPipeline>()) as *mut RawVkPipeline;
-            
-            vk_result = ((&*self._fn_table).vkCreateRayTracingPipelinesNV)(self._handle, raw_pipeline_cache, raw_create_info_count, raw_create_infos, ptr::null(), raw_pipelines);
-            
-            let mut pipelines = new_vk_array(raw_create_info_count, raw_pipelines);
-            if vk_result == 0 {
-                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table); }
-            }
-            free_vk_ptr_array(raw_create_info_count as usize, raw_create_infos);
-            free_ptr(raw_pipelines);
-            if vk_result == 0 { Ok(pipelines) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), pipelines)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetMemoryHostPointerPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryHostPointerPropertiesEXT.html).
-    pub fn get_memory_host_pointer_properties(&self, handle_type: VkExternalMemoryHandleTypeFlags, host_pointer: &c_void) -> Result<ext::VkMemoryHostPointerProperties, (VkResult, ext::VkMemoryHostPointerProperties)> {
-        unsafe {
-            let raw_handle_type = vk_to_raw_value(&handle_type);
-            let raw_host_pointer = host_pointer as *const c_void;
-            let mut vk_result = 0;
-            let raw_memory_host_pointer_properties = &mut mem::zeroed() as *mut ext::RawVkMemoryHostPointerProperties;
-            
-            vk_result = ((&*self._fn_table).vkGetMemoryHostPointerPropertiesEXT)(self._handle, raw_handle_type, raw_host_pointer, raw_memory_host_pointer_properties);
-            
-            let mut memory_host_pointer_properties = new_vk_value(raw_memory_host_pointer_properties);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut memory_host_pointer_properties, fn_table);
-            }
-            ext::RawVkMemoryHostPointerProperties::vk_free(raw_memory_host_pointer_properties.as_mut().unwrap());
-            if vk_result == 0 { Ok(memory_host_pointer_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), memory_host_pointer_properties)) }
-        }
-    }
-    
-    /// Wrapper for [vkGetCalibratedTimestampsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetCalibratedTimestampsEXT.html).
-    pub fn get_calibrated_timestamps(&self, timestamp_infos: &[ext::VkCalibratedTimestampInfo], timestamps: &[usize]) -> Result<usize, (VkResult, usize)> {
-        unsafe {
-            let raw_timestamp_count = timestamp_infos.len() as u32;
-            let raw_timestamp_infos = new_ptr_vk_array(timestamp_infos);
-            let raw_timestamps = new_ptr_vk_array(timestamps);
-            let mut vk_result = 0;
-            let raw_max_deviation = &mut mem::zeroed() as *mut u64;
-            
-            vk_result = ((&*self._fn_table).vkGetCalibratedTimestampsEXT)(self._handle, raw_timestamp_count, raw_timestamp_infos, raw_timestamps, raw_max_deviation);
-            
-            let max_deviation = new_vk_value(raw_max_deviation);
-            free_vk_ptr_array(raw_timestamp_count as usize, raw_timestamp_infos);
-            free_ptr(raw_timestamps);
-            if vk_result == 0 { Ok(max_deviation) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), max_deviation)) }
         }
     }
 }

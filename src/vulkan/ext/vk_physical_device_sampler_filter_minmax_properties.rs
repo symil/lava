@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceSamplerFilterMinmaxProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceSamplerFilterMinmaxProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

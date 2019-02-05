@@ -64,7 +64,7 @@ impl VkSetup for VkMemoryAllocateInfo {
 }
 
 impl VkFree for RawVkMemoryAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

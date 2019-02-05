@@ -56,7 +56,7 @@ impl VkRawType<VkPipelineCoverageToColorStateCreateInfo> for RawVkPipelineCovera
 impl Default for VkPipelineCoverageToColorStateCreateInfo {
     fn default() -> VkPipelineCoverageToColorStateCreateInfo {
         VkPipelineCoverageToColorStateCreateInfo {
-            flags: VkPipelineCoverageToColorStateCreateFlags::default(),
+            flags: Default::default(),
             coverage_to_color_enable: false,
             coverage_to_color_location: 0,
         }
@@ -70,7 +70,7 @@ impl VkSetup for VkPipelineCoverageToColorStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineCoverageToColorStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

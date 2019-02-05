@@ -16,8 +16,8 @@ use vulkan::vk::{VkImage,RawVkImage};
 
 /// Wrapper for [VkImageSparseMemoryRequirementsInfo2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSparseMemoryRequirementsInfo2.html).
 #[derive(Debug, Clone)]
-pub struct VkImageSparseMemoryRequirementsInfo2<'a> {
-    pub image: &'a VkImage,
+pub struct VkImageSparseMemoryRequirementsInfo2 {
+    pub image: VkImage,
 }
 
 #[doc(hidden)]
@@ -29,30 +29,38 @@ pub struct RawVkImageSparseMemoryRequirementsInfo2 {
     pub image: RawVkImage,
 }
 
-impl<'a> VkWrappedType<RawVkImageSparseMemoryRequirementsInfo2> for VkImageSparseMemoryRequirementsInfo2<'a> {
+impl VkWrappedType<RawVkImageSparseMemoryRequirementsInfo2> for VkImageSparseMemoryRequirementsInfo2 {
     fn vk_to_raw(src: &VkImageSparseMemoryRequirementsInfo2, dst: &mut RawVkImageSparseMemoryRequirementsInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageSparseMemoryRequirementsInfo2);
         dst.next = ptr::null();
-        dst.image = vk_to_raw_value(src.image);
+        dst.image = vk_to_raw_value(&src.image);
     }
 }
 
-impl Default for VkImageSparseMemoryRequirementsInfo2<'static> {
-    fn default() -> VkImageSparseMemoryRequirementsInfo2<'static> {
+impl VkRawType<VkImageSparseMemoryRequirementsInfo2> for RawVkImageSparseMemoryRequirementsInfo2 {
+    fn vk_to_wrapped(src: &RawVkImageSparseMemoryRequirementsInfo2) -> VkImageSparseMemoryRequirementsInfo2 {
         VkImageSparseMemoryRequirementsInfo2 {
-            image: vk_null_ref(),
+            image: RawVkImage::vk_to_wrapped(&src.image),
         }
     }
 }
 
-impl<'a> VkSetup for VkImageSparseMemoryRequirementsInfo2<'a> {
+impl Default for VkImageSparseMemoryRequirementsInfo2 {
+    fn default() -> VkImageSparseMemoryRequirementsInfo2 {
+        VkImageSparseMemoryRequirementsInfo2 {
+            image: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkImageSparseMemoryRequirementsInfo2 {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.image, fn_table);
     }
 }
 
 impl VkFree for RawVkImageSparseMemoryRequirementsInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

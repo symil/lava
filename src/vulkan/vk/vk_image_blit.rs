@@ -56,9 +56,9 @@ impl VkRawType<VkImageBlit> for RawVkImageBlit {
 impl Default for VkImageBlit {
     fn default() -> VkImageBlit {
         VkImageBlit {
-            src_subresource: VkImageSubresourceLayers::default(),
+            src_subresource: Default::default(),
             src_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
-            dst_subresource: VkImageSubresourceLayers::default(),
+            dst_subresource: Default::default(),
             dst_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
         }
     }
@@ -72,10 +72,8 @@ impl VkSetup for VkImageBlit {
 }
 
 impl VkFree for RawVkImageBlit {
-    fn vk_free(&mut self) {
-        RawVkImageSubresourceLayers::vk_free(&mut self.src_subresource);
-        for elt in self.src_offsets.iter_mut() { RawVkOffset3D::vk_free(elt); };
-        RawVkImageSubresourceLayers::vk_free(&mut self.dst_subresource);
-        for elt in self.dst_offsets.iter_mut() { RawVkOffset3D::vk_free(elt); };
+    fn vk_free(&self) {
+        for elt in self.src_offsets.iter() { RawVkOffset3D::vk_free(elt); };
+        for elt in self.dst_offsets.iter() { RawVkOffset3D::vk_free(elt); };
     }
 }

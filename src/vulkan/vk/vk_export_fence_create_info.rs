@@ -48,7 +48,7 @@ impl VkRawType<VkExportFenceCreateInfo> for RawVkExportFenceCreateInfo {
 impl Default for VkExportFenceCreateInfo {
     fn default() -> VkExportFenceCreateInfo {
         VkExportFenceCreateInfo {
-            handle_types: VkExternalFenceHandleTypeFlags::default(),
+            handle_types: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExportFenceCreateInfo {
 }
 
 impl VkFree for RawVkExportFenceCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

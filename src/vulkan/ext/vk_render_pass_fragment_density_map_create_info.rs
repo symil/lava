@@ -48,7 +48,7 @@ impl VkRawType<VkRenderPassFragmentDensityMapCreateInfo> for RawVkRenderPassFrag
 impl Default for VkRenderPassFragmentDensityMapCreateInfo {
     fn default() -> VkRenderPassFragmentDensityMapCreateInfo {
         VkRenderPassFragmentDensityMapCreateInfo {
-            fragment_density_map_attachment: VkAttachmentReference::default(),
+            fragment_density_map_attachment: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkRenderPassFragmentDensityMapCreateInfo {
 }
 
 impl VkFree for RawVkRenderPassFragmentDensityMapCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkAttachmentReference::vk_free(&mut self.fragment_density_map_attachment);
+    fn vk_free(&self) {
+        
     }
 }

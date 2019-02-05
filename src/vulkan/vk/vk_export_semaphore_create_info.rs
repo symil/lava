@@ -48,7 +48,7 @@ impl VkRawType<VkExportSemaphoreCreateInfo> for RawVkExportSemaphoreCreateInfo {
 impl Default for VkExportSemaphoreCreateInfo {
     fn default() -> VkExportSemaphoreCreateInfo {
         VkExportSemaphoreCreateInfo {
-            handle_types: VkExternalSemaphoreHandleTypeFlags::default(),
+            handle_types: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExportSemaphoreCreateInfo {
 }
 
 impl VkFree for RawVkExportSemaphoreCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -64,7 +64,7 @@ impl VkRawType<VkRayTracingShaderGroupCreateInfo> for RawVkRayTracingShaderGroup
 impl Default for VkRayTracingShaderGroupCreateInfo {
     fn default() -> VkRayTracingShaderGroupCreateInfo {
         VkRayTracingShaderGroupCreateInfo {
-            type_: VkRayTracingShaderGroupType::default(),
+            type_: Default::default(),
             general_shader: 0,
             closest_hit_shader: 0,
             any_hit_shader: 0,
@@ -80,7 +80,7 @@ impl VkSetup for VkRayTracingShaderGroupCreateInfo {
 }
 
 impl VkFree for RawVkRayTracingShaderGroupCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

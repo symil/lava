@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDeviceMultiviewFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceMultiviewFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

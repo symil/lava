@@ -56,7 +56,7 @@ impl VkRawType<VkPhysicalDeviceShadingRateImageProperties> for RawVkPhysicalDevi
 impl Default for VkPhysicalDeviceShadingRateImageProperties {
     fn default() -> VkPhysicalDeviceShadingRateImageProperties {
         VkPhysicalDeviceShadingRateImageProperties {
-            shading_rate_texel_size: VkExtent2D::default(),
+            shading_rate_texel_size: Default::default(),
             shading_rate_palette_size: 0,
             shading_rate_max_coarse_samples: 0,
         }
@@ -70,7 +70,7 @@ impl VkSetup for VkPhysicalDeviceShadingRateImageProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceShadingRateImageProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.shading_rate_texel_size);
+    fn vk_free(&self) {
+        
     }
 }

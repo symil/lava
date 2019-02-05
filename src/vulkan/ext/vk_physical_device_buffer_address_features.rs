@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDeviceBufferAddressFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceBufferAddressFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

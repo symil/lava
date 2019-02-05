@@ -18,10 +18,10 @@ use vulkan::vk::{VkRect2D,RawVkRect2D};
 
 /// Wrapper for [VkPipelineDiscardRectangleStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDiscardRectangleStateCreateInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineDiscardRectangleStateCreateInfo<'a> {
+pub struct VkPipelineDiscardRectangleStateCreateInfo {
     pub flags: VkPipelineDiscardRectangleStateCreateFlags,
     pub discard_rectangle_mode: VkDiscardRectangleMode,
-    pub discard_rectangles: Option<&'a [VkRect2D]>,
+    pub discard_rectangles: Option<Vec<VkRect2D>>,
 }
 
 #[doc(hidden)]
@@ -33,38 +33,48 @@ pub struct RawVkPipelineDiscardRectangleStateCreateInfo {
     pub flags: RawVkPipelineDiscardRectangleStateCreateFlags,
     pub discard_rectangle_mode: RawVkDiscardRectangleMode,
     pub discard_rectangle_count: u32,
-    pub discard_rectangles: *mut RawVkRect2D,
+    pub discard_rectangles: *const RawVkRect2D,
 }
 
-impl<'a> VkWrappedType<RawVkPipelineDiscardRectangleStateCreateInfo> for VkPipelineDiscardRectangleStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineDiscardRectangleStateCreateInfo> for VkPipelineDiscardRectangleStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineDiscardRectangleStateCreateInfo, dst: &mut RawVkPipelineDiscardRectangleStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineDiscardRectangleStateCreateInfoExt);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.discard_rectangle_mode = vk_to_raw_value(&src.discard_rectangle_mode);
-        dst.discard_rectangle_count = get_array_option_len(src.discard_rectangles) as u32;
-        dst.discard_rectangles = new_ptr_vk_array_checked(src.discard_rectangles);
+        dst.discard_rectangle_count = get_array_option_len(&src.discard_rectangles) as u32;
+        dst.discard_rectangles = new_ptr_vk_array_checked(&src.discard_rectangles);
     }
 }
 
-impl Default for VkPipelineDiscardRectangleStateCreateInfo<'static> {
-    fn default() -> VkPipelineDiscardRectangleStateCreateInfo<'static> {
+impl VkRawType<VkPipelineDiscardRectangleStateCreateInfo> for RawVkPipelineDiscardRectangleStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineDiscardRectangleStateCreateInfo) -> VkPipelineDiscardRectangleStateCreateInfo {
         VkPipelineDiscardRectangleStateCreateInfo {
-            flags: VkPipelineDiscardRectangleStateCreateFlags::default(),
-            discard_rectangle_mode: VkDiscardRectangleMode::default(),
+            flags: RawVkPipelineDiscardRectangleStateCreateFlags::vk_to_wrapped(&src.flags),
+            discard_rectangle_mode: RawVkDiscardRectangleMode::vk_to_wrapped(&src.discard_rectangle_mode),
+            discard_rectangles: new_vk_array_checked(src.discard_rectangle_count, src.discard_rectangles),
+        }
+    }
+}
+
+impl Default for VkPipelineDiscardRectangleStateCreateInfo {
+    fn default() -> VkPipelineDiscardRectangleStateCreateInfo {
+        VkPipelineDiscardRectangleStateCreateInfo {
+            flags: Default::default(),
+            discard_rectangle_mode: Default::default(),
             discard_rectangles: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkPipelineDiscardRectangleStateCreateInfo<'a> {
+impl VkSetup for VkPipelineDiscardRectangleStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineDiscardRectangleStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.discard_rectangle_count as usize, self.discard_rectangles);
     }
 }

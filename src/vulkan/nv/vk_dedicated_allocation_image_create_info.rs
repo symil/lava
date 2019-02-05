@@ -59,7 +59,7 @@ impl VkSetup for VkDedicatedAllocationImageCreateInfo {
 }
 
 impl VkFree for RawVkDedicatedAllocationImageCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

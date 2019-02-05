@@ -20,20 +20,14 @@ use vulkan::vk::{VkBufferView,RawVkBufferView};
 
 /// Wrapper for [VkWriteDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkWriteDescriptorSet.html).
 #[derive(Debug, Clone)]
-pub struct VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'c: 'b,
-        'd: 'b,
-        'f: 'e,
-        'h: 'g,
-{
-    pub dst_set: &'a VkDescriptorSet,
+pub struct VkWriteDescriptorSet {
+    pub dst_set: VkDescriptorSet,
     pub dst_binding: usize,
     pub dst_array_element: usize,
     pub descriptor_type: VkDescriptorType,
-    pub image_info: &'b [VkDescriptorImageInfo<'c, 'd>],
-    pub buffer_info: &'e [VkDescriptorBufferInfo<'f>],
-    pub texel_buffer_view: &'g [&'h VkBufferView],
+    pub image_info: Vec<VkDescriptorImageInfo>,
+    pub buffer_info: Vec<VkDescriptorBufferInfo>,
+    pub texel_buffer_view: Vec<VkBufferView>,
 }
 
 #[doc(hidden)]
@@ -47,60 +41,62 @@ pub struct RawVkWriteDescriptorSet {
     pub dst_array_element: u32,
     pub descriptor_count: u32,
     pub descriptor_type: RawVkDescriptorType,
-    pub image_info: *mut RawVkDescriptorImageInfo,
-    pub buffer_info: *mut RawVkDescriptorBufferInfo,
-    pub texel_buffer_view: *mut RawVkBufferView,
+    pub image_info: *const RawVkDescriptorImageInfo,
+    pub buffer_info: *const RawVkDescriptorBufferInfo,
+    pub texel_buffer_view: *const RawVkBufferView,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkWrappedType<RawVkWriteDescriptorSet> for VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'c: 'b,
-        'd: 'b,
-        'f: 'e,
-        'h: 'g,
-{
+impl VkWrappedType<RawVkWriteDescriptorSet> for VkWriteDescriptorSet {
     fn vk_to_raw(src: &VkWriteDescriptorSet, dst: &mut RawVkWriteDescriptorSet) {
         dst.s_type = vk_to_raw_value(&VkStructureType::WriteDescriptorSet);
         dst.next = ptr::null();
-        dst.dst_set = vk_to_raw_value(src.dst_set);
+        dst.dst_set = vk_to_raw_value(&src.dst_set);
         dst.dst_binding = vk_to_raw_value(&src.dst_binding);
         dst.dst_array_element = vk_to_raw_value(&src.dst_array_element);
         dst.descriptor_count = cmp::max(cmp::max(src.image_info.len(), src.buffer_info.len()), src.texel_buffer_view.len()) as u32;
         dst.descriptor_type = vk_to_raw_value(&src.descriptor_type);
-        dst.image_info = new_ptr_vk_array(src.image_info);
-        dst.buffer_info = new_ptr_vk_array(src.buffer_info);
-        dst.texel_buffer_view = new_ptr_vk_array_from_ref(src.texel_buffer_view);
+        dst.image_info = new_ptr_vk_array(&src.image_info);
+        dst.buffer_info = new_ptr_vk_array(&src.buffer_info);
+        dst.texel_buffer_view = new_ptr_vk_array(&src.texel_buffer_view);
     }
 }
 
-impl Default for VkWriteDescriptorSet<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkWriteDescriptorSet<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl VkRawType<VkWriteDescriptorSet> for RawVkWriteDescriptorSet {
+    fn vk_to_wrapped(src: &RawVkWriteDescriptorSet) -> VkWriteDescriptorSet {
         VkWriteDescriptorSet {
-            dst_set: vk_null_ref(),
-            dst_binding: 0,
-            dst_array_element: 0,
-            descriptor_type: VkDescriptorType::default(),
-            image_info: &[],
-            buffer_info: &[],
-            texel_buffer_view: &[],
+            dst_set: RawVkDescriptorSet::vk_to_wrapped(&src.dst_set),
+            dst_binding: u32::vk_to_wrapped(&src.dst_binding),
+            dst_array_element: u32::vk_to_wrapped(&src.dst_array_element),
+            descriptor_type: RawVkDescriptorType::vk_to_wrapped(&src.descriptor_type),
+            image_info: new_vk_array(src.descriptor_count, src.image_info),
+            buffer_info: new_vk_array(src.descriptor_count, src.buffer_info),
+            texel_buffer_view: new_vk_array(src.descriptor_count, src.texel_buffer_view),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkSetup for VkWriteDescriptorSet<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'c: 'b,
-        'd: 'b,
-        'f: 'e,
-        'h: 'g,
-{
+impl Default for VkWriteDescriptorSet {
+    fn default() -> VkWriteDescriptorSet {
+        VkWriteDescriptorSet {
+            dst_set: Default::default(),
+            dst_binding: 0,
+            dst_array_element: 0,
+            descriptor_type: Default::default(),
+            image_info: Vec::new(),
+            buffer_info: Vec::new(),
+            texel_buffer_view: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkWriteDescriptorSet {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.dst_set, fn_table);
     }
 }
 
 impl VkFree for RawVkWriteDescriptorSet {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.descriptor_count as usize, self.image_info);
         free_vk_ptr_array(self.descriptor_count as usize, self.buffer_info);
         free_ptr(self.texel_buffer_view);

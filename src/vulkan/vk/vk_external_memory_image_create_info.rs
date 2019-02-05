@@ -48,7 +48,7 @@ impl VkRawType<VkExternalMemoryImageCreateInfo> for RawVkExternalMemoryImageCrea
 impl Default for VkExternalMemoryImageCreateInfo {
     fn default() -> VkExternalMemoryImageCreateInfo {
         VkExternalMemoryImageCreateInfo {
-            handle_types: VkExternalMemoryHandleTypeFlags::default(),
+            handle_types: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExternalMemoryImageCreateInfo {
 }
 
 impl VkFree for RawVkExternalMemoryImageCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -68,8 +68,8 @@ impl VkRawType<VkShaderStatisticsInfo> for RawVkShaderStatisticsInfo {
 impl Default for VkShaderStatisticsInfo {
     fn default() -> VkShaderStatisticsInfo {
         VkShaderStatisticsInfo {
-            shader_stage_mask: VkShaderStageFlags::default(),
-            resource_usage: VkShaderResourceUsage::default(),
+            shader_stage_mask: Default::default(),
+            resource_usage: Default::default(),
             num_physical_vgprs: 0,
             num_physical_sgprs: 0,
             num_available_vgprs: 0,
@@ -86,7 +86,7 @@ impl VkSetup for VkShaderStatisticsInfo {
 }
 
 impl VkFree for RawVkShaderStatisticsInfo {
-    fn vk_free(&mut self) {
-        RawVkShaderResourceUsage::vk_free(&mut self.resource_usage);
+    fn vk_free(&self) {
+        
     }
 }

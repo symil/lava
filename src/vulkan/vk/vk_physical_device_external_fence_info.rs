@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDeviceExternalFenceInfo> for RawVkPhysicalDeviceExterna
 impl Default for VkPhysicalDeviceExternalFenceInfo {
     fn default() -> VkPhysicalDeviceExternalFenceInfo {
         VkPhysicalDeviceExternalFenceInfo {
-            handle_type: VkExternalFenceHandleTypeFlags::default(),
+            handle_type: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDeviceExternalFenceInfo {
 }
 
 impl VkFree for RawVkPhysicalDeviceExternalFenceInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

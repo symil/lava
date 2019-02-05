@@ -69,7 +69,7 @@ impl VkSetup for VkConformanceVersion {
 }
 
 impl VkFree for RawVkConformanceVersion {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

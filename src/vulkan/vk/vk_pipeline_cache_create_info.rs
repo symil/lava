@@ -18,8 +18,7 @@ use vulkan::vk::{VkPipelineCacheCreateFlags,RawVkPipelineCacheCreateFlags};
 #[derive(Debug, Clone)]
 pub struct VkPipelineCacheCreateInfo<'a> {
     pub flags: VkPipelineCacheCreateFlags,
-    pub initial_data_size: usize,
-    pub initial_data: &'a c_void,
+    pub initial_data: &'a [c_void],
 }
 
 #[doc(hidden)]
@@ -38,17 +37,16 @@ impl<'a> VkWrappedType<RawVkPipelineCacheCreateInfo> for VkPipelineCacheCreateIn
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineCacheCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.initial_data_size = src.initial_data_size;
-        dst.initial_data = src.initial_data as *const c_void;
+        dst.initial_data_size = src.initial_data.len();
+        dst.initial_data = src.initial_data.as_ptr();
     }
 }
 
 impl Default for VkPipelineCacheCreateInfo<'static> {
     fn default() -> VkPipelineCacheCreateInfo<'static> {
         VkPipelineCacheCreateInfo {
-            flags: VkPipelineCacheCreateFlags::default(),
-            initial_data_size: 0,
-            initial_data: &0,
+            flags: Default::default(),
+            initial_data: &[],
         }
     }
 }
@@ -60,7 +58,7 @@ impl<'a> VkSetup for VkPipelineCacheCreateInfo<'a> {
 }
 
 impl VkFree for RawVkPipelineCacheCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

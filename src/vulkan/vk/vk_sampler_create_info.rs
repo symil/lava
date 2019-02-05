@@ -113,21 +113,21 @@ impl VkRawType<VkSamplerCreateInfo> for RawVkSamplerCreateInfo {
 impl Default for VkSamplerCreateInfo {
     fn default() -> VkSamplerCreateInfo {
         VkSamplerCreateInfo {
-            flags: VkSamplerCreateFlags::default(),
-            mag_filter: VkFilter::default(),
-            min_filter: VkFilter::default(),
-            mipmap_mode: VkSamplerMipmapMode::default(),
-            address_mode_u: VkSamplerAddressMode::default(),
-            address_mode_v: VkSamplerAddressMode::default(),
-            address_mode_w: VkSamplerAddressMode::default(),
+            flags: Default::default(),
+            mag_filter: Default::default(),
+            min_filter: Default::default(),
+            mipmap_mode: Default::default(),
+            address_mode_u: Default::default(),
+            address_mode_v: Default::default(),
+            address_mode_w: Default::default(),
             mip_lod_bias: 0.0,
             anisotropy_enable: false,
             max_anisotropy: 0.0,
             compare_enable: false,
-            compare_op: VkCompareOp::default(),
+            compare_op: Default::default(),
             min_lod: 0.0,
             max_lod: 0.0,
-            border_color: VkBorderColor::default(),
+            border_color: Default::default(),
             unnormalized_coordinates: false,
         }
     }
@@ -140,7 +140,7 @@ impl VkSetup for VkSamplerCreateInfo {
 }
 
 impl VkFree for RawVkSamplerCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

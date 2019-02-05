@@ -48,7 +48,7 @@ impl VkRawType<VkSparseImageMemoryRequirements2> for RawVkSparseImageMemoryRequi
 impl Default for VkSparseImageMemoryRequirements2 {
     fn default() -> VkSparseImageMemoryRequirements2 {
         VkSparseImageMemoryRequirements2 {
-            memory_requirements: VkSparseImageMemoryRequirements::default(),
+            memory_requirements: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSparseImageMemoryRequirements2 {
 }
 
 impl VkFree for RawVkSparseImageMemoryRequirements2 {
-    fn vk_free(&mut self) {
-        RawVkSparseImageMemoryRequirements::vk_free(&mut self.memory_requirements);
+    fn vk_free(&self) {
+        
     }
 }

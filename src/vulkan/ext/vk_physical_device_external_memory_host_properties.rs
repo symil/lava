@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceExternalMemoryHostProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceExternalMemoryHostProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

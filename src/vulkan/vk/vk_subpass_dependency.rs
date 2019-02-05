@@ -71,11 +71,11 @@ impl Default for VkSubpassDependency {
         VkSubpassDependency {
             src_subpass: 0,
             dst_subpass: 0,
-            src_stage_mask: VkPipelineStageFlags::default(),
-            dst_stage_mask: VkPipelineStageFlags::default(),
-            src_access_mask: VkAccessFlags::default(),
-            dst_access_mask: VkAccessFlags::default(),
-            dependency_flags: VkDependencyFlags::default(),
+            src_stage_mask: Default::default(),
+            dst_stage_mask: Default::default(),
+            src_access_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            dependency_flags: Default::default(),
         }
     }
 }
@@ -87,7 +87,7 @@ impl VkSetup for VkSubpassDependency {
 }
 
 impl VkFree for RawVkSubpassDependency {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

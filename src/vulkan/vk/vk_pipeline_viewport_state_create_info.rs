@@ -18,10 +18,10 @@ use vulkan::vk::{VkRect2D,RawVkRect2D};
 
 /// Wrapper for [VkPipelineViewportStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportStateCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineViewportStateCreateInfo<'a, 'b> {
+pub struct VkPipelineViewportStateCreateInfo {
     pub flags: VkPipelineViewportStateCreateFlags,
-    pub viewports: Option<&'a [VkViewport]>,
-    pub scissors: Option<&'b [VkRect2D]>,
+    pub viewports: Option<Vec<VkViewport>>,
+    pub scissors: Option<Vec<VkRect2D>>,
 }
 
 #[doc(hidden)]
@@ -32,41 +32,51 @@ pub struct RawVkPipelineViewportStateCreateInfo {
     pub next: *const c_void,
     pub flags: RawVkPipelineViewportStateCreateFlags,
     pub viewport_count: u32,
-    pub viewports: *mut RawVkViewport,
+    pub viewports: *const RawVkViewport,
     pub scissor_count: u32,
-    pub scissors: *mut RawVkRect2D,
+    pub scissors: *const RawVkRect2D,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkPipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfo<'a, 'b> {
+impl VkWrappedType<RawVkPipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportStateCreateInfo, dst: &mut RawVkPipelineViewportStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportStateCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.viewport_count = get_array_option_len(src.viewports) as u32;
-        dst.viewports = new_ptr_vk_array_checked(src.viewports);
-        dst.scissor_count = get_array_option_len(src.scissors) as u32;
-        dst.scissors = new_ptr_vk_array_checked(src.scissors);
+        dst.viewport_count = get_array_option_len(&src.viewports) as u32;
+        dst.viewports = new_ptr_vk_array_checked(&src.viewports);
+        dst.scissor_count = get_array_option_len(&src.scissors) as u32;
+        dst.scissors = new_ptr_vk_array_checked(&src.scissors);
     }
 }
 
-impl Default for VkPipelineViewportStateCreateInfo<'static, 'static> {
-    fn default() -> VkPipelineViewportStateCreateInfo<'static, 'static> {
+impl VkRawType<VkPipelineViewportStateCreateInfo> for RawVkPipelineViewportStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineViewportStateCreateInfo) -> VkPipelineViewportStateCreateInfo {
         VkPipelineViewportStateCreateInfo {
-            flags: VkPipelineViewportStateCreateFlags::default(),
+            flags: RawVkPipelineViewportStateCreateFlags::vk_to_wrapped(&src.flags),
+            viewports: new_vk_array_checked(src.viewport_count, src.viewports),
+            scissors: new_vk_array_checked(src.scissor_count, src.scissors),
+        }
+    }
+}
+
+impl Default for VkPipelineViewportStateCreateInfo {
+    fn default() -> VkPipelineViewportStateCreateInfo {
+        VkPipelineViewportStateCreateInfo {
+            flags: Default::default(),
             viewports: None,
             scissors: None,
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkPipelineViewportStateCreateInfo<'a, 'b> {
+impl VkSetup for VkPipelineViewportStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineViewportStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.viewport_count as usize, self.viewports);
         free_vk_ptr_array(self.scissor_count as usize, self.scissors);
     }

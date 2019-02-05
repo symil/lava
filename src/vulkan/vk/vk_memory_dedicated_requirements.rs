@@ -64,7 +64,7 @@ impl VkSetup for VkMemoryDedicatedRequirements {
 }
 
 impl VkFree for RawVkMemoryDedicatedRequirements {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

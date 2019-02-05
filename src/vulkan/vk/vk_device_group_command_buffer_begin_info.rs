@@ -59,7 +59,7 @@ impl VkSetup for VkDeviceGroupCommandBufferBeginInfo {
 }
 
 impl VkFree for RawVkDeviceGroupCommandBufferBeginInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

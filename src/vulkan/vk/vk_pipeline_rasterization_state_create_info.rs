@@ -91,12 +91,12 @@ impl VkRawType<VkPipelineRasterizationStateCreateInfo> for RawVkPipelineRasteriz
 impl Default for VkPipelineRasterizationStateCreateInfo {
     fn default() -> VkPipelineRasterizationStateCreateInfo {
         VkPipelineRasterizationStateCreateInfo {
-            flags: VkPipelineRasterizationStateCreateFlags::default(),
+            flags: Default::default(),
             depth_clamp_enable: false,
             rasterizer_discard_enable: false,
-            polygon_mode: VkPolygonMode::default(),
-            cull_mode: VkCullModeFlags::default(),
-            front_face: VkFrontFace::default(),
+            polygon_mode: Default::default(),
+            cull_mode: Default::default(),
+            front_face: Default::default(),
             depth_bias_enable: false,
             depth_bias_constant_factor: 0.0,
             depth_bias_clamp: 0.0,
@@ -113,7 +113,7 @@ impl VkSetup for VkPipelineRasterizationStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineRasterizationStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

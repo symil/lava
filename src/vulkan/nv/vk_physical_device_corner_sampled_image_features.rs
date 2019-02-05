@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceCornerSampledImageFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceCornerSampledImageFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

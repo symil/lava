@@ -24,7 +24,7 @@ use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 
 /// Wrapper for [VkImageCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkImageCreateInfo<'a> {
+pub struct VkImageCreateInfo {
     pub flags: VkImageCreateFlags,
     pub image_type: VkImageType,
     pub format: VkFormat,
@@ -35,7 +35,7 @@ pub struct VkImageCreateInfo<'a> {
     pub tiling: VkImageTiling,
     pub usage: VkImageUsageFlags,
     pub sharing_mode: VkSharingMode,
-    pub queue_family_indices: &'a [usize],
+    pub queue_family_indices: Vec<usize>,
     pub initial_layout: VkImageLayout,
 }
 
@@ -56,11 +56,11 @@ pub struct RawVkImageCreateInfo {
     pub usage: RawVkImageUsageFlags,
     pub sharing_mode: RawVkSharingMode,
     pub queue_family_index_count: u32,
-    pub queue_family_indices: *mut u32,
+    pub queue_family_indices: *const u32,
     pub initial_layout: RawVkImageLayout,
 }
 
-impl<'a> VkWrappedType<RawVkImageCreateInfo> for VkImageCreateInfo<'a> {
+impl VkWrappedType<RawVkImageCreateInfo> for VkImageCreateInfo {
     fn vk_to_raw(src: &VkImageCreateInfo, dst: &mut RawVkImageCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageCreateInfo);
         dst.next = ptr::null();
@@ -75,39 +75,57 @@ impl<'a> VkWrappedType<RawVkImageCreateInfo> for VkImageCreateInfo<'a> {
         dst.usage = vk_to_raw_value(&src.usage);
         dst.sharing_mode = vk_to_raw_value(&src.sharing_mode);
         dst.queue_family_index_count = src.queue_family_indices.len() as u32;
-        dst.queue_family_indices = new_ptr_vk_array(src.queue_family_indices);
+        dst.queue_family_indices = new_ptr_vk_array(&src.queue_family_indices);
         dst.initial_layout = vk_to_raw_value(&src.initial_layout);
     }
 }
 
-impl Default for VkImageCreateInfo<'static> {
-    fn default() -> VkImageCreateInfo<'static> {
+impl VkRawType<VkImageCreateInfo> for RawVkImageCreateInfo {
+    fn vk_to_wrapped(src: &RawVkImageCreateInfo) -> VkImageCreateInfo {
         VkImageCreateInfo {
-            flags: VkImageCreateFlags::default(),
-            image_type: VkImageType::default(),
-            format: VkFormat::default(),
-            extent: VkExtent3D::default(),
-            mip_levels: 0,
-            array_layers: 0,
-            samples: VkSampleCountFlags::default(),
-            tiling: VkImageTiling::default(),
-            usage: VkImageUsageFlags::default(),
-            sharing_mode: VkSharingMode::default(),
-            queue_family_indices: &[],
-            initial_layout: VkImageLayout::default(),
+            flags: RawVkImageCreateFlags::vk_to_wrapped(&src.flags),
+            image_type: RawVkImageType::vk_to_wrapped(&src.image_type),
+            format: RawVkFormat::vk_to_wrapped(&src.format),
+            extent: RawVkExtent3D::vk_to_wrapped(&src.extent),
+            mip_levels: u32::vk_to_wrapped(&src.mip_levels),
+            array_layers: u32::vk_to_wrapped(&src.array_layers),
+            samples: RawVkSampleCountFlags::vk_to_wrapped(&src.samples),
+            tiling: RawVkImageTiling::vk_to_wrapped(&src.tiling),
+            usage: RawVkImageUsageFlags::vk_to_wrapped(&src.usage),
+            sharing_mode: RawVkSharingMode::vk_to_wrapped(&src.sharing_mode),
+            queue_family_indices: new_vk_array(src.queue_family_index_count, src.queue_family_indices),
+            initial_layout: RawVkImageLayout::vk_to_wrapped(&src.initial_layout),
         }
     }
 }
 
-impl<'a> VkSetup for VkImageCreateInfo<'a> {
+impl Default for VkImageCreateInfo {
+    fn default() -> VkImageCreateInfo {
+        VkImageCreateInfo {
+            flags: Default::default(),
+            image_type: Default::default(),
+            format: Default::default(),
+            extent: Default::default(),
+            mip_levels: 0,
+            array_layers: 0,
+            samples: Default::default(),
+            tiling: Default::default(),
+            usage: Default::default(),
+            sharing_mode: Default::default(),
+            queue_family_indices: Vec::new(),
+            initial_layout: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkImageCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.extent, fn_table);
     }
 }
 
 impl VkFree for RawVkImageCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkExtent3D::vk_free(&mut self.extent);
+    fn vk_free(&self) {
         free_ptr(self.queue_family_indices);
     }
 }

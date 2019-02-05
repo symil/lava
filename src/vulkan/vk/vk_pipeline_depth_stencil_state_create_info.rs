@@ -86,14 +86,14 @@ impl VkRawType<VkPipelineDepthStencilStateCreateInfo> for RawVkPipelineDepthSten
 impl Default for VkPipelineDepthStencilStateCreateInfo {
     fn default() -> VkPipelineDepthStencilStateCreateInfo {
         VkPipelineDepthStencilStateCreateInfo {
-            flags: VkPipelineDepthStencilStateCreateFlags::default(),
+            flags: Default::default(),
             depth_test_enable: false,
             depth_write_enable: false,
-            depth_compare_op: VkCompareOp::default(),
+            depth_compare_op: Default::default(),
             depth_bounds_test_enable: false,
             stencil_test_enable: false,
-            front: VkStencilOpState::default(),
-            back: VkStencilOpState::default(),
+            front: Default::default(),
+            back: Default::default(),
             min_depth_bounds: 0.0,
             max_depth_bounds: 0.0,
         }
@@ -108,8 +108,7 @@ impl VkSetup for VkPipelineDepthStencilStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineDepthStencilStateCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkStencilOpState::vk_free(&mut self.front);
-        RawVkStencilOpState::vk_free(&mut self.back);
+    fn vk_free(&self) {
+        
     }
 }

@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceScalarBlockLayoutFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceScalarBlockLayoutFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

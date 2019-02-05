@@ -52,8 +52,8 @@ impl VkRawType<VkRectLayer> for RawVkRectLayer {
 impl Default for VkRectLayer {
     fn default() -> VkRectLayer {
         VkRectLayer {
-            offset: VkOffset2D::default(),
-            extent: VkExtent2D::default(),
+            offset: Default::default(),
+            extent: Default::default(),
             layer: 0,
         }
     }
@@ -67,8 +67,7 @@ impl VkSetup for VkRectLayer {
 }
 
 impl VkFree for RawVkRectLayer {
-    fn vk_free(&mut self) {
-        RawVkOffset2D::vk_free(&mut self.offset);
-        RawVkExtent2D::vk_free(&mut self.extent);
+    fn vk_free(&self) {
+        
     }
 }

@@ -52,7 +52,7 @@ impl VkRawType<VkMemoryAllocateFlagsInfo> for RawVkMemoryAllocateFlagsInfo {
 impl Default for VkMemoryAllocateFlagsInfo {
     fn default() -> VkMemoryAllocateFlagsInfo {
         VkMemoryAllocateFlagsInfo {
-            flags: VkMemoryAllocateFlags::default(),
+            flags: Default::default(),
             device_mask: 0,
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkMemoryAllocateFlagsInfo {
 }
 
 impl VkFree for RawVkMemoryAllocateFlagsInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

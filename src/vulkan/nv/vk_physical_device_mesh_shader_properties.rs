@@ -119,7 +119,7 @@ impl VkSetup for VkPhysicalDeviceMeshShaderProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceMeshShaderProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

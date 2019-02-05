@@ -16,15 +16,9 @@ use vulkan::nv::{VkAccelerationStructureInfo,RawVkAccelerationStructureInfo};
 
 /// Wrapper for [VkAccelerationStructureCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureCreateInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkAccelerationStructureCreateInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'a,
-{
+pub struct VkAccelerationStructureCreateInfo {
     pub compacted_size: usize,
-    pub info: VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>,
+    pub info: VkAccelerationStructureInfo,
 }
 
 #[doc(hidden)]
@@ -37,13 +31,7 @@ pub struct RawVkAccelerationStructureCreateInfo {
     pub info: RawVkAccelerationStructureInfo,
 }
 
-impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkAccelerationStructureCreateInfo> for VkAccelerationStructureCreateInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'a,
-{
+impl VkWrappedType<RawVkAccelerationStructureCreateInfo> for VkAccelerationStructureCreateInfo {
     fn vk_to_raw(src: &VkAccelerationStructureCreateInfo, dst: &mut RawVkAccelerationStructureCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AccelerationStructureCreateInfoNv);
         dst.next = ptr::null();
@@ -52,29 +40,32 @@ impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkAccelerationStructureCreateInfo> for
     }
 }
 
-impl Default for VkAccelerationStructureCreateInfo<'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkAccelerationStructureCreateInfo<'static, 'static, 'static, 'static, 'static> {
+impl VkRawType<VkAccelerationStructureCreateInfo> for RawVkAccelerationStructureCreateInfo {
+    fn vk_to_wrapped(src: &RawVkAccelerationStructureCreateInfo) -> VkAccelerationStructureCreateInfo {
         VkAccelerationStructureCreateInfo {
-            compacted_size: 0,
-            info: VkAccelerationStructureInfo::default(),
+            compacted_size: u64::vk_to_wrapped(&src.compacted_size),
+            info: RawVkAccelerationStructureInfo::vk_to_wrapped(&src.info),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e> VkSetup for VkAccelerationStructureCreateInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'a,
-{
+impl Default for VkAccelerationStructureCreateInfo {
+    fn default() -> VkAccelerationStructureCreateInfo {
+        VkAccelerationStructureCreateInfo {
+            compacted_size: 0,
+            info: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkAccelerationStructureCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.info, fn_table);
     }
 }
 
 impl VkFree for RawVkAccelerationStructureCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkAccelerationStructureInfo::vk_free(&mut self.info);
+    fn vk_free(&self) {
+        
     }
 }

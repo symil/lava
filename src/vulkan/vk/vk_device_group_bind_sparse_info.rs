@@ -64,7 +64,7 @@ impl VkSetup for VkDeviceGroupBindSparseInfo {
 }
 
 impl VkFree for RawVkDeviceGroupBindSparseInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

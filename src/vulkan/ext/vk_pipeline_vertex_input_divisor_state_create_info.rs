@@ -16,8 +16,8 @@ use vulkan::ext::{VkVertexInputBindingDivisorDescription,RawVkVertexInputBinding
 
 /// Wrapper for [VkPipelineVertexInputDivisorStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineVertexInputDivisorStateCreateInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineVertexInputDivisorStateCreateInfo<'a> {
-    pub vertex_binding_divisors: &'a [VkVertexInputBindingDivisorDescription],
+pub struct VkPipelineVertexInputDivisorStateCreateInfo {
+    pub vertex_binding_divisors: Vec<VkVertexInputBindingDivisorDescription>,
 }
 
 #[doc(hidden)]
@@ -27,34 +27,42 @@ pub struct RawVkPipelineVertexInputDivisorStateCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub vertex_binding_divisor_count: u32,
-    pub vertex_binding_divisors: *mut RawVkVertexInputBindingDivisorDescription,
+    pub vertex_binding_divisors: *const RawVkVertexInputBindingDivisorDescription,
 }
 
-impl<'a> VkWrappedType<RawVkPipelineVertexInputDivisorStateCreateInfo> for VkPipelineVertexInputDivisorStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineVertexInputDivisorStateCreateInfo> for VkPipelineVertexInputDivisorStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineVertexInputDivisorStateCreateInfo, dst: &mut RawVkPipelineVertexInputDivisorStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineVertexInputDivisorStateCreateInfoExt);
         dst.next = ptr::null();
         dst.vertex_binding_divisor_count = src.vertex_binding_divisors.len() as u32;
-        dst.vertex_binding_divisors = new_ptr_vk_array(src.vertex_binding_divisors);
+        dst.vertex_binding_divisors = new_ptr_vk_array(&src.vertex_binding_divisors);
     }
 }
 
-impl Default for VkPipelineVertexInputDivisorStateCreateInfo<'static> {
-    fn default() -> VkPipelineVertexInputDivisorStateCreateInfo<'static> {
+impl VkRawType<VkPipelineVertexInputDivisorStateCreateInfo> for RawVkPipelineVertexInputDivisorStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineVertexInputDivisorStateCreateInfo) -> VkPipelineVertexInputDivisorStateCreateInfo {
         VkPipelineVertexInputDivisorStateCreateInfo {
-            vertex_binding_divisors: &[],
+            vertex_binding_divisors: new_vk_array(src.vertex_binding_divisor_count, src.vertex_binding_divisors),
         }
     }
 }
 
-impl<'a> VkSetup for VkPipelineVertexInputDivisorStateCreateInfo<'a> {
+impl Default for VkPipelineVertexInputDivisorStateCreateInfo {
+    fn default() -> VkPipelineVertexInputDivisorStateCreateInfo {
+        VkPipelineVertexInputDivisorStateCreateInfo {
+            vertex_binding_divisors: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkPipelineVertexInputDivisorStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineVertexInputDivisorStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.vertex_binding_divisor_count as usize, self.vertex_binding_divisors);
     }
 }

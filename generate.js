@@ -31,7 +31,7 @@ async function main() {
     }
 
     if (argv.includes('--delete') || argv.includes('-d')) {
-        console.log('Removing current source files...');
+        console.log('Deleting current source files...');
         removeFiles();
     }
 

@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceSamplerYcbcrConversionFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceSamplerYcbcrConversionFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

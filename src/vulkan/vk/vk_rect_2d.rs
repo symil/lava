@@ -48,8 +48,8 @@ impl VkRawType<VkRect2D> for RawVkRect2D {
 impl Default for VkRect2D {
     fn default() -> VkRect2D {
         VkRect2D {
-            offset: VkOffset2D::default(),
-            extent: VkExtent2D::default(),
+            offset: Default::default(),
+            extent: Default::default(),
         }
     }
 }
@@ -62,8 +62,7 @@ impl VkSetup for VkRect2D {
 }
 
 impl VkFree for RawVkRect2D {
-    fn vk_free(&mut self) {
-        RawVkOffset2D::vk_free(&mut self.offset);
-        RawVkExtent2D::vk_free(&mut self.extent);
+    fn vk_free(&self) {
+        
     }
 }

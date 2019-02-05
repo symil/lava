@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceComputeShaderDerivativesFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceComputeShaderDerivativesFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

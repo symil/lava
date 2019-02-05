@@ -45,7 +45,7 @@ impl VkRawType<VkBaseInStructure> for RawVkBaseInStructure {
 impl Default for VkBaseInStructure {
     fn default() -> VkBaseInStructure {
         VkBaseInStructure {
-            s_type: VkStructureType::default(),
+            s_type: Default::default(),
         }
     }
 }
@@ -57,7 +57,7 @@ impl VkSetup for VkBaseInStructure {
 }
 
 impl VkFree for RawVkBaseInStructure {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

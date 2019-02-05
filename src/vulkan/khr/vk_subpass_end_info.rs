@@ -57,7 +57,7 @@ impl VkSetup for VkSubpassEndInfo {
 }
 
 impl VkFree for RawVkSubpassEndInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

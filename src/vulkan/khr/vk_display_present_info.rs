@@ -56,8 +56,8 @@ impl VkRawType<VkDisplayPresentInfo> for RawVkDisplayPresentInfo {
 impl Default for VkDisplayPresentInfo {
     fn default() -> VkDisplayPresentInfo {
         VkDisplayPresentInfo {
-            src_rect: VkRect2D::default(),
-            dst_rect: VkRect2D::default(),
+            src_rect: Default::default(),
+            dst_rect: Default::default(),
             persistent: false,
         }
     }
@@ -71,8 +71,7 @@ impl VkSetup for VkDisplayPresentInfo {
 }
 
 impl VkFree for RawVkDisplayPresentInfo {
-    fn vk_free(&mut self) {
-        RawVkRect2D::vk_free(&mut self.src_rect);
-        RawVkRect2D::vk_free(&mut self.dst_rect);
+    fn vk_free(&self) {
+        
     }
 }

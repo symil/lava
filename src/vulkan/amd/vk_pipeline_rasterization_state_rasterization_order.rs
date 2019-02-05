@@ -48,7 +48,7 @@ impl VkRawType<VkPipelineRasterizationStateRasterizationOrder> for RawVkPipeline
 impl Default for VkPipelineRasterizationStateRasterizationOrder {
     fn default() -> VkPipelineRasterizationStateRasterizationOrder {
         VkPipelineRasterizationStateRasterizationOrder {
-            rasterization_order: VkRasterizationOrder::default(),
+            rasterization_order: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPipelineRasterizationStateRasterizationOrder {
 }
 
 impl VkFree for RawVkPipelineRasterizationStateRasterizationOrder {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -64,7 +64,7 @@ impl VkSetup for VkCoarseSampleLocation {
 }
 
 impl VkFree for RawVkCoarseSampleLocation {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

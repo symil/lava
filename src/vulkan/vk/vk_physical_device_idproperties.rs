@@ -79,7 +79,7 @@ impl VkSetup for VkPhysicalDeviceIDProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceIDProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

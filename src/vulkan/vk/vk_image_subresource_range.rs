@@ -59,7 +59,7 @@ impl VkRawType<VkImageSubresourceRange> for RawVkImageSubresourceRange {
 impl Default for VkImageSubresourceRange {
     fn default() -> VkImageSubresourceRange {
         VkImageSubresourceRange {
-            aspect_mask: VkImageAspectFlags::default(),
+            aspect_mask: Default::default(),
             base_mip_level: 0,
             level_count: 0,
             base_array_layer: 0,
@@ -75,7 +75,7 @@ impl VkSetup for VkImageSubresourceRange {
 }
 
 impl VkFree for RawVkImageSubresourceRange {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

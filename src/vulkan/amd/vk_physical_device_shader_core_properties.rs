@@ -124,7 +124,7 @@ impl VkSetup for VkPhysicalDeviceShaderCoreProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceShaderCoreProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

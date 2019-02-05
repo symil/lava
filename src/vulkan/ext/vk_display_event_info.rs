@@ -48,7 +48,7 @@ impl VkRawType<VkDisplayEventInfo> for RawVkDisplayEventInfo {
 impl Default for VkDisplayEventInfo {
     fn default() -> VkDisplayEventInfo {
         VkDisplayEventInfo {
-            display_event: VkDisplayEventType::default(),
+            display_event: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDisplayEventInfo {
 }
 
 impl VkFree for RawVkDisplayEventInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -48,7 +48,7 @@ impl VkRawType<VkSubpassBeginInfo> for RawVkSubpassBeginInfo {
 impl Default for VkSubpassBeginInfo {
     fn default() -> VkSubpassBeginInfo {
         VkSubpassBeginInfo {
-            contents: VkSubpassContents::default(),
+            contents: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSubpassBeginInfo {
 }
 
 impl VkFree for RawVkSubpassBeginInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

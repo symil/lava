@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceDiscardRectangleProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceDiscardRectangleProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

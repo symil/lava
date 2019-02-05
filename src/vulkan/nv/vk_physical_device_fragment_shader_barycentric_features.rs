@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceFragmentShaderBarycentricFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceFragmentShaderBarycentricFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

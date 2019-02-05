@@ -84,7 +84,7 @@ impl VkSetup for VkPhysicalDeviceBlendOperationAdvancedProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceBlendOperationAdvancedProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

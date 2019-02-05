@@ -59,7 +59,7 @@ impl VkSetup for VkOffset2D {
 }
 
 impl VkFree for RawVkOffset2D {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

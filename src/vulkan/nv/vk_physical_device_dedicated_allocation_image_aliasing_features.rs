@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceDedicatedAllocationImageAliasingFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceDedicatedAllocationImageAliasingFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

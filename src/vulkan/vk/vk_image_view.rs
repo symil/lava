@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkImageView = u64;
 
 /// Wrapper for [VkImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageView.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkImageView {
     _handle: RawVkImageView,
     _fn_table: *mut VkFunctionTable
@@ -64,12 +64,5 @@ impl VkImageView {
     /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
-    }
-    
-    /// Wrapper for [vkDestroyImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyImageView.html).
-    pub fn destroy(&self) {
-        unsafe {
-            ((&*self._fn_table).vkDestroyImageView)((*self._fn_table).device, self._handle, ptr::null());
-        }
     }
 }

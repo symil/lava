@@ -16,9 +16,9 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkIndirectCommandsTokenNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsTokenNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkIndirectCommandsToken<'a> {
+pub struct VkIndirectCommandsToken {
     pub token_type: VkIndirectCommandsTokenType,
-    pub buffer: &'a VkBuffer,
+    pub buffer: VkBuffer,
     pub offset: usize,
 }
 
@@ -31,32 +31,42 @@ pub struct RawVkIndirectCommandsToken {
     pub offset: u64,
 }
 
-impl<'a> VkWrappedType<RawVkIndirectCommandsToken> for VkIndirectCommandsToken<'a> {
+impl VkWrappedType<RawVkIndirectCommandsToken> for VkIndirectCommandsToken {
     fn vk_to_raw(src: &VkIndirectCommandsToken, dst: &mut RawVkIndirectCommandsToken) {
         dst.token_type = vk_to_raw_value(&src.token_type);
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.buffer = vk_to_raw_value(&src.buffer);
         dst.offset = vk_to_raw_value(&src.offset);
     }
 }
 
-impl Default for VkIndirectCommandsToken<'static> {
-    fn default() -> VkIndirectCommandsToken<'static> {
+impl VkRawType<VkIndirectCommandsToken> for RawVkIndirectCommandsToken {
+    fn vk_to_wrapped(src: &RawVkIndirectCommandsToken) -> VkIndirectCommandsToken {
         VkIndirectCommandsToken {
-            token_type: VkIndirectCommandsTokenType::default(),
-            buffer: vk_null_ref(),
+            token_type: RawVkIndirectCommandsTokenType::vk_to_wrapped(&src.token_type),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
+            offset: u64::vk_to_wrapped(&src.offset),
+        }
+    }
+}
+
+impl Default for VkIndirectCommandsToken {
+    fn default() -> VkIndirectCommandsToken {
+        VkIndirectCommandsToken {
+            token_type: Default::default(),
+            buffer: Default::default(),
             offset: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkIndirectCommandsToken<'a> {
+impl VkSetup for VkIndirectCommandsToken {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkIndirectCommandsToken {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

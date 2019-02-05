@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceShaderDrawParameterFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceShaderDrawParameterFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

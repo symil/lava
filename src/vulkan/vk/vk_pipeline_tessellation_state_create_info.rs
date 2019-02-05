@@ -52,7 +52,7 @@ impl VkRawType<VkPipelineTessellationStateCreateInfo> for RawVkPipelineTessellat
 impl Default for VkPipelineTessellationStateCreateInfo {
     fn default() -> VkPipelineTessellationStateCreateInfo {
         VkPipelineTessellationStateCreateInfo {
-            flags: VkPipelineTessellationStateCreateFlags::default(),
+            flags: Default::default(),
             patch_control_points: 0,
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkPipelineTessellationStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineTessellationStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

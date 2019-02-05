@@ -48,7 +48,7 @@ impl VkRawType<VkCalibratedTimestampInfo> for RawVkCalibratedTimestampInfo {
 impl Default for VkCalibratedTimestampInfo {
     fn default() -> VkCalibratedTimestampInfo {
         VkCalibratedTimestampInfo {
-            time_domain: VkTimeDomain::default(),
+            time_domain: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkCalibratedTimestampInfo {
 }
 
 impl VkFree for RawVkCalibratedTimestampInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

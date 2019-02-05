@@ -16,8 +16,8 @@ use vulkan::ext::{VkDescriptorBindingFlags,RawVkDescriptorBindingFlags};
 
 /// Wrapper for [VkDescriptorSetLayoutBindingFlagsCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBindingFlagsCreateInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {
-    pub binding_flags: Option<&'a [VkDescriptorBindingFlags]>,
+pub struct VkDescriptorSetLayoutBindingFlagsCreateInfo {
+    pub binding_flags: Option<Vec<VkDescriptorBindingFlags>>,
 }
 
 #[doc(hidden)]
@@ -27,34 +27,42 @@ pub struct RawVkDescriptorSetLayoutBindingFlagsCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub binding_count: u32,
-    pub binding_flags: *mut RawVkDescriptorBindingFlags,
+    pub binding_flags: *const RawVkDescriptorBindingFlags,
 }
 
-impl<'a> VkWrappedType<RawVkDescriptorSetLayoutBindingFlagsCreateInfo> for VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {
+impl VkWrappedType<RawVkDescriptorSetLayoutBindingFlagsCreateInfo> for VkDescriptorSetLayoutBindingFlagsCreateInfo {
     fn vk_to_raw(src: &VkDescriptorSetLayoutBindingFlagsCreateInfo, dst: &mut RawVkDescriptorSetLayoutBindingFlagsCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetLayoutBindingFlagsCreateInfoExt);
         dst.next = ptr::null();
-        dst.binding_count = get_array_option_len(src.binding_flags) as u32;
-        dst.binding_flags = new_ptr_vk_array_checked(src.binding_flags);
+        dst.binding_count = get_array_option_len(&src.binding_flags) as u32;
+        dst.binding_flags = new_ptr_vk_array_checked(&src.binding_flags);
     }
 }
 
-impl Default for VkDescriptorSetLayoutBindingFlagsCreateInfo<'static> {
-    fn default() -> VkDescriptorSetLayoutBindingFlagsCreateInfo<'static> {
+impl VkRawType<VkDescriptorSetLayoutBindingFlagsCreateInfo> for RawVkDescriptorSetLayoutBindingFlagsCreateInfo {
+    fn vk_to_wrapped(src: &RawVkDescriptorSetLayoutBindingFlagsCreateInfo) -> VkDescriptorSetLayoutBindingFlagsCreateInfo {
+        VkDescriptorSetLayoutBindingFlagsCreateInfo {
+            binding_flags: new_vk_array_checked(src.binding_count, src.binding_flags),
+        }
+    }
+}
+
+impl Default for VkDescriptorSetLayoutBindingFlagsCreateInfo {
+    fn default() -> VkDescriptorSetLayoutBindingFlagsCreateInfo {
         VkDescriptorSetLayoutBindingFlagsCreateInfo {
             binding_flags: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkDescriptorSetLayoutBindingFlagsCreateInfo<'a> {
+impl VkSetup for VkDescriptorSetLayoutBindingFlagsCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDescriptorSetLayoutBindingFlagsCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.binding_flags);
     }
 }

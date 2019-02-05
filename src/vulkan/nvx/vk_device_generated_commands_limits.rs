@@ -79,7 +79,7 @@ impl VkSetup for VkDeviceGeneratedCommandsLimits {
 }
 
 impl VkFree for RawVkDeviceGeneratedCommandsLimits {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

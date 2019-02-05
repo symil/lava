@@ -59,7 +59,7 @@ impl VkSetup for VkImageDrmFormatModifierProperties {
 }
 
 impl VkFree for RawVkImageDrmFormatModifierProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

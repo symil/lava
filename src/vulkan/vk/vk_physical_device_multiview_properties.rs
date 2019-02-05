@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceMultiviewProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceMultiviewProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -58,9 +58,9 @@ impl VkRawType<VkPhysicalDeviceExternalBufferInfo> for RawVkPhysicalDeviceExtern
 impl Default for VkPhysicalDeviceExternalBufferInfo {
     fn default() -> VkPhysicalDeviceExternalBufferInfo {
         VkPhysicalDeviceExternalBufferInfo {
-            flags: VkBufferCreateFlags::default(),
-            usage: VkBufferUsageFlags::default(),
-            handle_type: VkExternalMemoryHandleTypeFlags::default(),
+            flags: Default::default(),
+            usage: Default::default(),
+            handle_type: Default::default(),
         }
     }
 }
@@ -72,7 +72,7 @@ impl VkSetup for VkPhysicalDeviceExternalBufferInfo {
 }
 
 impl VkFree for RawVkPhysicalDeviceExternalBufferInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

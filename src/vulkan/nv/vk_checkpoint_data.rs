@@ -52,7 +52,7 @@ impl VkRawType<VkCheckpointData> for RawVkCheckpointData {
 impl Default for VkCheckpointData {
     fn default() -> VkCheckpointData {
         VkCheckpointData {
-            stage: VkPipelineStageFlags::default(),
+            stage: Default::default(),
             checkpoint_marker: ptr::null(),
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkCheckpointData {
 }
 
 impl VkFree for RawVkCheckpointData {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

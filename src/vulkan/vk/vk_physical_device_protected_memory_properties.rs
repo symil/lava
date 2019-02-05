@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceProtectedMemoryProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceProtectedMemoryProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

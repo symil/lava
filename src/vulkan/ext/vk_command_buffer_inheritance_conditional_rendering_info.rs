@@ -59,7 +59,7 @@ impl VkSetup for VkCommandBufferInheritanceConditionalRenderingInfo {
 }
 
 impl VkFree for RawVkCommandBufferInheritanceConditionalRenderingInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

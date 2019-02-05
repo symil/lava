@@ -59,7 +59,7 @@ impl VkSetup for VkMemoryPriorityAllocateInfo {
 }
 
 impl VkFree for RawVkMemoryPriorityAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

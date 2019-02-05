@@ -48,7 +48,7 @@ impl VkRawType<VkDisplayPlaneCapabilities2> for RawVkDisplayPlaneCapabilities2 {
 impl Default for VkDisplayPlaneCapabilities2 {
     fn default() -> VkDisplayPlaneCapabilities2 {
         VkDisplayPlaneCapabilities2 {
-            capabilities: VkDisplayPlaneCapabilities::default(),
+            capabilities: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDisplayPlaneCapabilities2 {
 }
 
 impl VkFree for RawVkDisplayPlaneCapabilities2 {
-    fn vk_free(&mut self) {
-        RawVkDisplayPlaneCapabilities::vk_free(&mut self.capabilities);
+    fn vk_free(&self) {
+        
     }
 }

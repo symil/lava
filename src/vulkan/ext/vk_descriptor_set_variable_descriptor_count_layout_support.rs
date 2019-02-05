@@ -59,7 +59,7 @@ impl VkSetup for VkDescriptorSetVariableDescriptorCountLayoutSupport {
 }
 
 impl VkFree for RawVkDescriptorSetVariableDescriptorCountLayoutSupport {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

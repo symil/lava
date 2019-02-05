@@ -59,7 +59,7 @@ impl VkSetup for VkSamplerYcbcrConversionImageFormatProperties {
 }
 
 impl VkFree for RawVkSamplerYcbcrConversionImageFormatProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

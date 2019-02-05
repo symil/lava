@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkObjectTable = u64;
 
 /// Wrapper for [VkObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableNVX.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkObjectTable {
     _handle: RawVkObjectTable,
     _fn_table: *mut VkFunctionTable
@@ -64,38 +64,5 @@ impl VkObjectTable {
     /// Returns the internal Vulkan handle for the object.
     pub fn vk_handle(&self) -> u64 {
         self._handle
-    }
-    
-    /// Wrapper for [vkDestroyObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyObjectTableNVX.html).
-    pub fn destroy(&self) {
-        unsafe {
-            ((&*self._fn_table).vkDestroyObjectTableNVX)((*self._fn_table).device, self._handle, ptr::null());
-        }
-    }
-    
-    /// Wrapper for [vkRegisterObjectsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterObjectsNVX.html).
-    pub fn register_objects(&self, object_table_entries: &[&nvx::VkObjectTableEntry], object_indices: &[usize]) -> Result<(), VkResult> {
-        unsafe {
-            let raw_object_count = cmp::max(object_table_entries.len(), object_indices.len()) as u32;
-            let raw_object_table_entries = new_ptr_vk_array_array(object_table_entries);
-            let raw_object_indices = new_ptr_vk_array(object_indices);
-            let vk_result = ((&*self._fn_table).vkRegisterObjectsNVX)((*self._fn_table).device, self._handle, raw_object_count, raw_object_table_entries, raw_object_indices);
-            free_vk_ptr_array_array(raw_object_count as usize, raw_object_table_entries);
-            free_ptr(raw_object_indices);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
-    }
-    
-    /// Wrapper for [vkUnregisterObjectsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUnregisterObjectsNVX.html).
-    pub fn unregister_objects(&self, object_entry_types: &[nvx::VkObjectEntryType], object_indices: &[usize]) -> Result<(), VkResult> {
-        unsafe {
-            let raw_object_count = cmp::max(object_entry_types.len(), object_indices.len()) as u32;
-            let raw_object_entry_types = new_ptr_vk_array(object_entry_types);
-            let raw_object_indices = new_ptr_vk_array(object_indices);
-            let vk_result = ((&*self._fn_table).vkUnregisterObjectsNVX)((*self._fn_table).device, self._handle, raw_object_count, raw_object_entry_types, raw_object_indices);
-            free_ptr(raw_object_entry_types);
-            free_ptr(raw_object_indices);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
-        }
     }
 }

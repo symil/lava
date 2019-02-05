@@ -18,16 +18,11 @@ use vulkan::vk::{VkCommandBuffer,RawVkCommandBuffer};
 
 /// Wrapper for [VkSubmitInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubmitInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkSubmitInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'b: 'a,
-        'e: 'd,
-        'g: 'f,
-{
-    pub wait_semaphores: &'a [&'b VkSemaphore],
-    pub wait_dst_stage_mask: &'c [VkPipelineStageFlags],
-    pub command_buffers: &'d [&'e VkCommandBuffer],
-    pub signal_semaphores: &'f [&'g VkSemaphore],
+pub struct VkSubmitInfo {
+    pub wait_semaphores: Vec<VkSemaphore>,
+    pub wait_dst_stage_mask: Vec<VkPipelineStageFlags>,
+    pub command_buffers: Vec<VkCommandBuffer>,
+    pub signal_semaphores: Vec<VkSemaphore>,
 }
 
 #[doc(hidden)]
@@ -37,57 +32,58 @@ pub struct RawVkSubmitInfo {
     pub s_type: RawVkStructureType,
     pub next: *const c_void,
     pub wait_semaphore_count: u32,
-    pub wait_semaphores: *mut RawVkSemaphore,
-    pub wait_dst_stage_mask: *mut RawVkPipelineStageFlags,
+    pub wait_semaphores: *const RawVkSemaphore,
+    pub wait_dst_stage_mask: *const RawVkPipelineStageFlags,
     pub command_buffer_count: u32,
-    pub command_buffers: *mut RawVkCommandBuffer,
+    pub command_buffers: *const RawVkCommandBuffer,
     pub signal_semaphore_count: u32,
-    pub signal_semaphores: *mut RawVkSemaphore,
+    pub signal_semaphores: *const RawVkSemaphore,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkSubmitInfo> for VkSubmitInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'b: 'a,
-        'e: 'd,
-        'g: 'f,
-{
+impl VkWrappedType<RawVkSubmitInfo> for VkSubmitInfo {
     fn vk_to_raw(src: &VkSubmitInfo, dst: &mut RawVkSubmitInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SubmitInfo);
         dst.next = ptr::null();
         dst.wait_semaphore_count = cmp::max(src.wait_semaphores.len(), src.wait_dst_stage_mask.len()) as u32;
-        dst.wait_semaphores = new_ptr_vk_array_from_ref(src.wait_semaphores);
-        dst.wait_dst_stage_mask = new_ptr_vk_array(src.wait_dst_stage_mask);
+        dst.wait_semaphores = new_ptr_vk_array(&src.wait_semaphores);
+        dst.wait_dst_stage_mask = new_ptr_vk_array(&src.wait_dst_stage_mask);
         dst.command_buffer_count = src.command_buffers.len() as u32;
-        dst.command_buffers = new_ptr_vk_array_from_ref(src.command_buffers);
+        dst.command_buffers = new_ptr_vk_array(&src.command_buffers);
         dst.signal_semaphore_count = src.signal_semaphores.len() as u32;
-        dst.signal_semaphores = new_ptr_vk_array_from_ref(src.signal_semaphores);
+        dst.signal_semaphores = new_ptr_vk_array(&src.signal_semaphores);
     }
 }
 
-impl Default for VkSubmitInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkSubmitInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl VkRawType<VkSubmitInfo> for RawVkSubmitInfo {
+    fn vk_to_wrapped(src: &RawVkSubmitInfo) -> VkSubmitInfo {
         VkSubmitInfo {
-            wait_semaphores: &[],
-            wait_dst_stage_mask: &[],
-            command_buffers: &[],
-            signal_semaphores: &[],
+            wait_semaphores: new_vk_array(src.wait_semaphore_count, src.wait_semaphores),
+            wait_dst_stage_mask: new_vk_array(src.wait_semaphore_count, src.wait_dst_stage_mask),
+            command_buffers: new_vk_array(src.command_buffer_count, src.command_buffers),
+            signal_semaphores: new_vk_array(src.signal_semaphore_count, src.signal_semaphores),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkSetup for VkSubmitInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'b: 'a,
-        'e: 'd,
-        'g: 'f,
-{
+impl Default for VkSubmitInfo {
+    fn default() -> VkSubmitInfo {
+        VkSubmitInfo {
+            wait_semaphores: Vec::new(),
+            wait_dst_stage_mask: Vec::new(),
+            command_buffers: Vec::new(),
+            signal_semaphores: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkSubmitInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkSubmitInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.wait_semaphores);
         free_ptr(self.wait_dst_stage_mask);
         free_ptr(self.command_buffers);

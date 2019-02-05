@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceMemoryPriorityFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceMemoryPriorityFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

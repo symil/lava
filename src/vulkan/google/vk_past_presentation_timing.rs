@@ -74,7 +74,7 @@ impl VkSetup for VkPastPresentationTiming {
 }
 
 impl VkFree for RawVkPastPresentationTiming {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

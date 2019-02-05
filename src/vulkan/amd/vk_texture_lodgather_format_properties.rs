@@ -59,7 +59,7 @@ impl VkSetup for VkTextureLODGatherFormatProperties {
 }
 
 impl VkFree for RawVkTextureLODGatherFormatProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

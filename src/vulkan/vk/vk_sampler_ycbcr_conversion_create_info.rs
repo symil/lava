@@ -81,13 +81,13 @@ impl VkRawType<VkSamplerYcbcrConversionCreateInfo> for RawVkSamplerYcbcrConversi
 impl Default for VkSamplerYcbcrConversionCreateInfo {
     fn default() -> VkSamplerYcbcrConversionCreateInfo {
         VkSamplerYcbcrConversionCreateInfo {
-            format: VkFormat::default(),
-            ycbcr_model: VkSamplerYcbcrModelConversion::default(),
-            ycbcr_range: VkSamplerYcbcrRange::default(),
-            components: VkComponentMapping::default(),
-            x_chroma_offset: VkChromaLocation::default(),
-            y_chroma_offset: VkChromaLocation::default(),
-            chroma_filter: VkFilter::default(),
+            format: Default::default(),
+            ycbcr_model: Default::default(),
+            ycbcr_range: Default::default(),
+            components: Default::default(),
+            x_chroma_offset: Default::default(),
+            y_chroma_offset: Default::default(),
+            chroma_filter: Default::default(),
             force_explicit_reconstruction: false,
         }
     }
@@ -100,7 +100,7 @@ impl VkSetup for VkSamplerYcbcrConversionCreateInfo {
 }
 
 impl VkFree for RawVkSamplerYcbcrConversionCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkComponentMapping::vk_free(&mut self.components);
+    fn vk_free(&self) {
+        
     }
 }

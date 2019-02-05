@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDeviceVulkanMemoryModelFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceVulkanMemoryModelFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceExclusiveScissorFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceExclusiveScissorFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

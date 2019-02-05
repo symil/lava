@@ -48,7 +48,7 @@ impl VkRawType<VkImageStencilUsageCreateInfo> for RawVkImageStencilUsageCreateIn
 impl Default for VkImageStencilUsageCreateInfo {
     fn default() -> VkImageStencilUsageCreateInfo {
         VkImageStencilUsageCreateInfo {
-            stencil_usage: VkImageUsageFlags::default(),
+            stencil_usage: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkImageStencilUsageCreateInfo {
 }
 
 impl VkFree for RawVkImageStencilUsageCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

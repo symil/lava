@@ -48,7 +48,7 @@ impl Default for VkAttachmentReference {
     fn default() -> VkAttachmentReference {
         VkAttachmentReference {
             attachment: 0,
-            layout: VkImageLayout::default(),
+            layout: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkAttachmentReference {
 }
 
 impl VkFree for RawVkAttachmentReference {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

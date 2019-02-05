@@ -59,7 +59,7 @@ impl VkSetup for VkClearDepthStencilValue {
 }
 
 impl VkFree for RawVkClearDepthStencilValue {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

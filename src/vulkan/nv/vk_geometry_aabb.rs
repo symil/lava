@@ -16,8 +16,8 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkGeometryAABBNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryAABBNV.html).
 #[derive(Debug, Clone)]
-pub struct VkGeometryAABB<'a> {
-    pub aabb_data: Option<&'a VkBuffer>,
+pub struct VkGeometryAABB {
+    pub aabb_data: VkBuffer,
     pub num_aabbs: usize,
     pub stride: usize,
     pub offset: usize,
@@ -35,21 +35,32 @@ pub struct RawVkGeometryAABB {
     pub offset: u64,
 }
 
-impl<'a> VkWrappedType<RawVkGeometryAABB> for VkGeometryAABB<'a> {
+impl VkWrappedType<RawVkGeometryAABB> for VkGeometryAABB {
     fn vk_to_raw(src: &VkGeometryAABB, dst: &mut RawVkGeometryAABB) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GeometryAabbNv);
         dst.next = ptr::null();
-        dst.aabb_data = if src.aabb_data.is_some() { vk_to_raw_value(src.aabb_data.unwrap()) } else { 0 };
+        dst.aabb_data = vk_to_raw_value(&src.aabb_data);
         dst.num_aabbs = vk_to_raw_value(&src.num_aabbs);
         dst.stride = vk_to_raw_value(&src.stride);
         dst.offset = vk_to_raw_value(&src.offset);
     }
 }
 
-impl Default for VkGeometryAABB<'static> {
-    fn default() -> VkGeometryAABB<'static> {
+impl VkRawType<VkGeometryAABB> for RawVkGeometryAABB {
+    fn vk_to_wrapped(src: &RawVkGeometryAABB) -> VkGeometryAABB {
         VkGeometryAABB {
-            aabb_data: None,
+            aabb_data: RawVkBuffer::vk_to_wrapped(&src.aabb_data),
+            num_aabbs: u32::vk_to_wrapped(&src.num_aabbs),
+            stride: u32::vk_to_wrapped(&src.stride),
+            offset: u64::vk_to_wrapped(&src.offset),
+        }
+    }
+}
+
+impl Default for VkGeometryAABB {
+    fn default() -> VkGeometryAABB {
+        VkGeometryAABB {
+            aabb_data: Default::default(),
             num_aabbs: 0,
             stride: 0,
             offset: 0,
@@ -57,14 +68,14 @@ impl Default for VkGeometryAABB<'static> {
     }
 }
 
-impl<'a> VkSetup for VkGeometryAABB<'a> {
+impl VkSetup for VkGeometryAABB {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.aabb_data, fn_table);
     }
 }
 
 impl VkFree for RawVkGeometryAABB {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

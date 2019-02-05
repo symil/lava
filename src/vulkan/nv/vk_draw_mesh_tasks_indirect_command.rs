@@ -59,7 +59,7 @@ impl VkSetup for VkDrawMeshTasksIndirectCommand {
 }
 
 impl VkFree for RawVkDrawMeshTasksIndirectCommand {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

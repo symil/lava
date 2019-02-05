@@ -53,7 +53,7 @@ impl VkSetup for VkPhysicalDeviceDriverProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceDriverProperties {
-    fn vk_free(&mut self) {
-        RawVkConformanceVersion::vk_free(&mut self.conformance_version);
+    fn vk_free(&self) {
+        
     }
 }

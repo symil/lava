@@ -21,13 +21,13 @@ use vulkan::vk::{VkPipelineLayout,RawVkPipelineLayout};
 
 /// Wrapper for [VkDescriptorUpdateTemplateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorUpdateTemplateCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {
+pub struct VkDescriptorUpdateTemplateCreateInfo {
     pub flags: VkDescriptorUpdateTemplateCreateFlags,
-    pub descriptor_update_entries: &'a [VkDescriptorUpdateTemplateEntry],
+    pub descriptor_update_entries: Vec<VkDescriptorUpdateTemplateEntry>,
     pub template_type: VkDescriptorUpdateTemplateType,
-    pub descriptor_set_layout: Option<&'b VkDescriptorSetLayout>,
+    pub descriptor_set_layout: VkDescriptorSetLayout,
     pub pipeline_bind_point: VkPipelineBindPoint,
-    pub pipeline_layout: &'c VkPipelineLayout,
+    pub pipeline_layout: VkPipelineLayout,
     pub set: usize,
 }
 
@@ -39,7 +39,7 @@ pub struct RawVkDescriptorUpdateTemplateCreateInfo {
     pub next: *const c_void,
     pub flags: RawVkDescriptorUpdateTemplateCreateFlags,
     pub descriptor_update_entry_count: u32,
-    pub descriptor_update_entries: *mut RawVkDescriptorUpdateTemplateEntry,
+    pub descriptor_update_entries: *const RawVkDescriptorUpdateTemplateEntry,
     pub template_type: RawVkDescriptorUpdateTemplateType,
     pub descriptor_set_layout: RawVkDescriptorSetLayout,
     pub pipeline_bind_point: RawVkPipelineBindPoint,
@@ -47,43 +47,58 @@ pub struct RawVkDescriptorUpdateTemplateCreateInfo {
     pub set: u32,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkDescriptorUpdateTemplateCreateInfo> for VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {
+impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateInfo> for VkDescriptorUpdateTemplateCreateInfo {
     fn vk_to_raw(src: &VkDescriptorUpdateTemplateCreateInfo, dst: &mut RawVkDescriptorUpdateTemplateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorUpdateTemplateCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.descriptor_update_entry_count = src.descriptor_update_entries.len() as u32;
-        dst.descriptor_update_entries = new_ptr_vk_array(src.descriptor_update_entries);
+        dst.descriptor_update_entries = new_ptr_vk_array(&src.descriptor_update_entries);
         dst.template_type = vk_to_raw_value(&src.template_type);
-        dst.descriptor_set_layout = if src.descriptor_set_layout.is_some() { vk_to_raw_value(src.descriptor_set_layout.unwrap()) } else { 0 };
+        dst.descriptor_set_layout = vk_to_raw_value(&src.descriptor_set_layout);
         dst.pipeline_bind_point = vk_to_raw_value(&src.pipeline_bind_point);
-        dst.pipeline_layout = vk_to_raw_value(src.pipeline_layout);
+        dst.pipeline_layout = vk_to_raw_value(&src.pipeline_layout);
         dst.set = vk_to_raw_value(&src.set);
     }
 }
 
-impl Default for VkDescriptorUpdateTemplateCreateInfo<'static, 'static, 'static> {
-    fn default() -> VkDescriptorUpdateTemplateCreateInfo<'static, 'static, 'static> {
+impl VkRawType<VkDescriptorUpdateTemplateCreateInfo> for RawVkDescriptorUpdateTemplateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkDescriptorUpdateTemplateCreateInfo) -> VkDescriptorUpdateTemplateCreateInfo {
         VkDescriptorUpdateTemplateCreateInfo {
-            flags: VkDescriptorUpdateTemplateCreateFlags::default(),
-            descriptor_update_entries: &[],
-            template_type: VkDescriptorUpdateTemplateType::default(),
-            descriptor_set_layout: None,
-            pipeline_bind_point: VkPipelineBindPoint::default(),
-            pipeline_layout: vk_null_ref(),
+            flags: RawVkDescriptorUpdateTemplateCreateFlags::vk_to_wrapped(&src.flags),
+            descriptor_update_entries: new_vk_array(src.descriptor_update_entry_count, src.descriptor_update_entries),
+            template_type: RawVkDescriptorUpdateTemplateType::vk_to_wrapped(&src.template_type),
+            descriptor_set_layout: RawVkDescriptorSetLayout::vk_to_wrapped(&src.descriptor_set_layout),
+            pipeline_bind_point: RawVkPipelineBindPoint::vk_to_wrapped(&src.pipeline_bind_point),
+            pipeline_layout: RawVkPipelineLayout::vk_to_wrapped(&src.pipeline_layout),
+            set: u32::vk_to_wrapped(&src.set),
+        }
+    }
+}
+
+impl Default for VkDescriptorUpdateTemplateCreateInfo {
+    fn default() -> VkDescriptorUpdateTemplateCreateInfo {
+        VkDescriptorUpdateTemplateCreateInfo {
+            flags: Default::default(),
+            descriptor_update_entries: Vec::new(),
+            template_type: Default::default(),
+            descriptor_set_layout: Default::default(),
+            pipeline_bind_point: Default::default(),
+            pipeline_layout: Default::default(),
             set: 0,
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {
+impl VkSetup for VkDescriptorUpdateTemplateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.descriptor_set_layout, fn_table);
+        VkSetup::vk_setup(&mut self.pipeline_layout, fn_table);
     }
 }
 
 impl VkFree for RawVkDescriptorUpdateTemplateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.descriptor_update_entry_count as usize, self.descriptor_update_entries);
     }
 }

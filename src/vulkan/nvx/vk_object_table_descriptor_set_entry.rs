@@ -18,11 +18,11 @@ use vulkan::vk::{VkDescriptorSet,RawVkDescriptorSet};
 
 /// Wrapper for [VkObjectTableDescriptorSetEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableDescriptorSetEntryNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkObjectTableDescriptorSetEntry<'a, 'b> {
+pub struct VkObjectTableDescriptorSetEntry {
     pub type_: VkObjectEntryType,
     pub flags: VkObjectEntryUsageFlags,
-    pub pipeline_layout: &'a VkPipelineLayout,
-    pub descriptor_set: &'b VkDescriptorSet,
+    pub pipeline_layout: VkPipelineLayout,
+    pub descriptor_set: VkDescriptorSet,
 }
 
 #[doc(hidden)]
@@ -35,34 +35,46 @@ pub struct RawVkObjectTableDescriptorSetEntry {
     pub descriptor_set: RawVkDescriptorSet,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkObjectTableDescriptorSetEntry> for VkObjectTableDescriptorSetEntry<'a, 'b> {
+impl VkWrappedType<RawVkObjectTableDescriptorSetEntry> for VkObjectTableDescriptorSetEntry {
     fn vk_to_raw(src: &VkObjectTableDescriptorSetEntry, dst: &mut RawVkObjectTableDescriptorSetEntry) {
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.pipeline_layout = vk_to_raw_value(src.pipeline_layout);
-        dst.descriptor_set = vk_to_raw_value(src.descriptor_set);
+        dst.pipeline_layout = vk_to_raw_value(&src.pipeline_layout);
+        dst.descriptor_set = vk_to_raw_value(&src.descriptor_set);
     }
 }
 
-impl Default for VkObjectTableDescriptorSetEntry<'static, 'static> {
-    fn default() -> VkObjectTableDescriptorSetEntry<'static, 'static> {
+impl VkRawType<VkObjectTableDescriptorSetEntry> for RawVkObjectTableDescriptorSetEntry {
+    fn vk_to_wrapped(src: &RawVkObjectTableDescriptorSetEntry) -> VkObjectTableDescriptorSetEntry {
         VkObjectTableDescriptorSetEntry {
-            type_: VkObjectEntryType::default(),
-            flags: VkObjectEntryUsageFlags::default(),
-            pipeline_layout: vk_null_ref(),
-            descriptor_set: vk_null_ref(),
+            type_: RawVkObjectEntryType::vk_to_wrapped(&src.type_),
+            flags: RawVkObjectEntryUsageFlags::vk_to_wrapped(&src.flags),
+            pipeline_layout: RawVkPipelineLayout::vk_to_wrapped(&src.pipeline_layout),
+            descriptor_set: RawVkDescriptorSet::vk_to_wrapped(&src.descriptor_set),
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkObjectTableDescriptorSetEntry<'a, 'b> {
+impl Default for VkObjectTableDescriptorSetEntry {
+    fn default() -> VkObjectTableDescriptorSetEntry {
+        VkObjectTableDescriptorSetEntry {
+            type_: Default::default(),
+            flags: Default::default(),
+            pipeline_layout: Default::default(),
+            descriptor_set: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkObjectTableDescriptorSetEntry {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.pipeline_layout, fn_table);
+        VkSetup::vk_setup(&mut self.descriptor_set, fn_table);
     }
 }
 
 impl VkFree for RawVkObjectTableDescriptorSetEntry {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

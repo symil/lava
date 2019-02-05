@@ -59,7 +59,7 @@ impl VkSetup for VkPresentTime {
 }
 
 impl VkFree for RawVkPresentTime {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -19,15 +19,11 @@ use vulkan::vk::{VkPipeline,RawVkPipeline};
 
 /// Wrapper for [VkComputePipelineCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkComputePipelineCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkComputePipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'd: 'c,
-        'e: 'c,
-{
+pub struct VkComputePipelineCreateInfo<'a> {
     pub flags: VkPipelineCreateFlags,
-    pub stage: VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>,
-    pub layout: &'f VkPipelineLayout,
-    pub base_pipeline_handle: Option<&'g VkPipeline>,
+    pub stage: VkPipelineShaderStageCreateInfo<'a>,
+    pub layout: VkPipelineLayout,
+    pub base_pipeline_handle: VkPipeline,
     pub base_pipeline_index: isize,
 }
 
@@ -44,46 +40,39 @@ pub struct RawVkComputePipelineCreateInfo {
     pub base_pipeline_index: i32,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkComputePipelineCreateInfo> for VkComputePipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'd: 'c,
-        'e: 'c,
-{
+impl<'a> VkWrappedType<RawVkComputePipelineCreateInfo> for VkComputePipelineCreateInfo<'a> {
     fn vk_to_raw(src: &VkComputePipelineCreateInfo, dst: &mut RawVkComputePipelineCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ComputePipelineCreateInfo);
         dst.next = ptr::null();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage = vk_to_raw_value(&src.stage);
-        dst.layout = vk_to_raw_value(src.layout);
-        dst.base_pipeline_handle = if src.base_pipeline_handle.is_some() { vk_to_raw_value(src.base_pipeline_handle.unwrap()) } else { 0 };
+        dst.layout = vk_to_raw_value(&src.layout);
+        dst.base_pipeline_handle = vk_to_raw_value(&src.base_pipeline_handle);
         dst.base_pipeline_index = vk_to_raw_value(&src.base_pipeline_index);
     }
 }
 
-impl Default for VkComputePipelineCreateInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkComputePipelineCreateInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl Default for VkComputePipelineCreateInfo<'static> {
+    fn default() -> VkComputePipelineCreateInfo<'static> {
         VkComputePipelineCreateInfo {
-            flags: VkPipelineCreateFlags::default(),
-            stage: VkPipelineShaderStageCreateInfo::default(),
-            layout: vk_null_ref(),
-            base_pipeline_handle: None,
+            flags: Default::default(),
+            stage: Default::default(),
+            layout: Default::default(),
+            base_pipeline_handle: Default::default(),
             base_pipeline_index: 0,
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkSetup for VkComputePipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'd: 'c,
-        'e: 'c,
-{
+impl<'a> VkSetup for VkComputePipelineCreateInfo<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.layout, fn_table);
+        VkSetup::vk_setup(&mut self.base_pipeline_handle, fn_table);
     }
 }
 
 impl VkFree for RawVkComputePipelineCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkPipelineShaderStageCreateInfo::vk_free(&mut self.stage);
+    fn vk_free(&self) {
+        
     }
 }

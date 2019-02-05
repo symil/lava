@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDeviceFragmentDensityMapFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceFragmentDensityMapFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

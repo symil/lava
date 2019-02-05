@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceShadingRateImageFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceShadingRateImageFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

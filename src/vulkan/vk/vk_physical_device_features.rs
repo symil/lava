@@ -336,7 +336,7 @@ impl VkSetup for VkPhysicalDeviceFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }
