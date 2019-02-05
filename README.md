@@ -21,7 +21,6 @@ It comes with the following restrictions (that should be lifted in the future):
 
 - no way to provide allocator callbacks
 - no way to set the `pNext` field of structures (always set to `NULL`)
-- debug report callbacks only forward the message to the Rust user-provided function (other pieces of information are unavailable)
 
 ## Usage
 
@@ -55,7 +54,9 @@ fn main() {
 
     let debug_report_callback = instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
         flags: VkDebugReportFlags!(warning, error),
-        callback: |msg : String| println!("{}", msg)
+        callback: |data: VkDebugReportCallbackMessageData| {
+            println!("{}", data.message);
+        }
     }).expect("Faield to create debug callback");
 
     let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");

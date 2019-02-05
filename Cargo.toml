@@ -3,7 +3,7 @@ name = "lava"
 version = "0.3.1"
 build = "build.rs"
 authors = ["Anovs <milan.sylvain@gmail.com>"]
-description = "Wrapper to manipulate Vulkan more conveniently than with the C API."
+description = "Wrapper to manipulate Vulkan more conveniently than with bindings."
 license = "MIT"
 repository = "https://github.com/Anovs/lava"
 
