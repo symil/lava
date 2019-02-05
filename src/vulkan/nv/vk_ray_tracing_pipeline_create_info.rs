@@ -20,20 +20,13 @@ use vulkan::vk::{VkPipeline,RawVkPipeline};
 
 /// Wrapper for [VkRayTracingPipelineCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingPipelineCreateInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkRayTracingPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'd,
-        'f: 'd,
-{
+pub struct VkRayTracingPipelineCreateInfo<'a, 'b> {
     pub flags: VkPipelineCreateFlags,
-    pub stages: &'a [VkPipelineShaderStageCreateInfo<'b, 'c, 'd, 'e, 'f>],
-    pub groups: &'g [VkRayTracingShaderGroupCreateInfo],
+    pub stages: Vec<VkPipelineShaderStageCreateInfo<'a, 'b>>,
+    pub groups: Vec<VkRayTracingShaderGroupCreateInfo>,
     pub max_recursion_depth: usize,
-    pub layout: &'h VkPipelineLayout,
-    pub base_pipeline_handle: Option<&'i VkPipeline>,
+    pub layout: VkPipelineLayout,
+    pub base_pipeline_handle: Option<VkPipeline>,
     pub base_pipeline_index: isize,
 }
 
@@ -42,7 +35,7 @@ pub struct VkRayTracingPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRayTracingPipelineCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineCreateFlags,
     pub stage_count: u32,
     pub stages: *mut RawVkPipelineShaderStageCreateInfo,
@@ -54,58 +47,58 @@ pub struct RawVkRayTracingPipelineCreateInfo {
     pub base_pipeline_index: i32,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i> VkWrappedType<RawVkRayTracingPipelineCreateInfo> for VkRayTracingPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'd,
-        'f: 'd,
-{
+impl<'a, 'b> VkWrappedType<RawVkRayTracingPipelineCreateInfo> for VkRayTracingPipelineCreateInfo<'a, 'b> {
     fn vk_to_raw(src: &VkRayTracingPipelineCreateInfo, dst: &mut RawVkRayTracingPipelineCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RayTracingPipelineCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage_count = src.stages.len() as u32;
-        dst.stages = new_ptr_vk_array(src.stages);
+        dst.stages = new_ptr_vk_array(&src.stages);
         dst.group_count = src.groups.len() as u32;
-        dst.groups = new_ptr_vk_array(src.groups);
+        dst.groups = new_ptr_vk_array(&src.groups);
         dst.max_recursion_depth = vk_to_raw_value(&src.max_recursion_depth);
-        dst.layout = vk_to_raw_value(src.layout);
-        dst.base_pipeline_handle = if src.base_pipeline_handle.is_some() { vk_to_raw_value(src.base_pipeline_handle.unwrap()) } else { 0 };
+        dst.layout = vk_to_raw_value(&src.layout);
+        dst.base_pipeline_handle = vk_to_raw_value_checked(&src.base_pipeline_handle);
         dst.base_pipeline_index = vk_to_raw_value(&src.base_pipeline_index);
     }
 }
 
-impl Default for VkRayTracingPipelineCreateInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkRayTracingPipelineCreateInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl<'a, 'b> VkRawType<VkRayTracingPipelineCreateInfo<'a, 'b>> for RawVkRayTracingPipelineCreateInfo {
+    fn vk_to_wrapped(src: &RawVkRayTracingPipelineCreateInfo) -> VkRayTracingPipelineCreateInfo<'a, 'b> {
         VkRayTracingPipelineCreateInfo {
-            flags: VkPipelineCreateFlags::default(),
-            stages: &[],
-            groups: &[],
+            flags: RawVkPipelineCreateFlags::vk_to_wrapped(&src.flags),
+            stages: new_vk_array(src.stage_count, src.stages),
+            groups: new_vk_array(src.group_count, src.groups),
+            max_recursion_depth: u32::vk_to_wrapped(&src.max_recursion_depth),
+            layout: RawVkPipelineLayout::vk_to_wrapped(&src.layout),
+            base_pipeline_handle: Some(RawVkPipeline::vk_to_wrapped(&src.base_pipeline_handle)),
+            base_pipeline_index: i32::vk_to_wrapped(&src.base_pipeline_index),
+        }
+    }
+}
+
+impl Default for VkRayTracingPipelineCreateInfo<'static, 'static> {
+    fn default() -> VkRayTracingPipelineCreateInfo<'static, 'static> {
+        VkRayTracingPipelineCreateInfo {
+            flags: Default::default(),
+            stages: Vec::new(),
+            groups: Vec::new(),
             max_recursion_depth: 0,
-            layout: vk_null_ref(),
+            layout: Default::default(),
             base_pipeline_handle: None,
             base_pipeline_index: 0,
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i> VkSetup for VkRayTracingPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'd,
-        'f: 'd,
-{
+impl<'a, 'b> VkSetup for VkRayTracingPipelineCreateInfo<'a, 'b> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.layout, fn_table);
     }
 }
 
 impl VkFree for RawVkRayTracingPipelineCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.stage_count as usize, self.stages);
         free_vk_ptr_array(self.group_count as usize, self.groups);
     }

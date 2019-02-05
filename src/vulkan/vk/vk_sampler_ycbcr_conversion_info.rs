@@ -16,8 +16,8 @@ use vulkan::vk::{VkSamplerYcbcrConversion,RawVkSamplerYcbcrConversion};
 
 /// Wrapper for [VkSamplerYcbcrConversionInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrConversionInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkSamplerYcbcrConversionInfo<'a> {
-    pub conversion: &'a VkSamplerYcbcrConversion,
+pub struct VkSamplerYcbcrConversionInfo {
+    pub conversion: VkSamplerYcbcrConversion,
 }
 
 #[doc(hidden)]
@@ -25,34 +25,42 @@ pub struct VkSamplerYcbcrConversionInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerYcbcrConversionInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub conversion: RawVkSamplerYcbcrConversion,
 }
 
-impl<'a> VkWrappedType<RawVkSamplerYcbcrConversionInfo> for VkSamplerYcbcrConversionInfo<'a> {
+impl VkWrappedType<RawVkSamplerYcbcrConversionInfo> for VkSamplerYcbcrConversionInfo {
     fn vk_to_raw(src: &VkSamplerYcbcrConversionInfo, dst: &mut RawVkSamplerYcbcrConversionInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SamplerYcbcrConversionInfo);
-        dst.next = ptr::null();
-        dst.conversion = vk_to_raw_value(src.conversion);
+        dst.next = ptr::null_mut();
+        dst.conversion = vk_to_raw_value(&src.conversion);
     }
 }
 
-impl Default for VkSamplerYcbcrConversionInfo<'static> {
-    fn default() -> VkSamplerYcbcrConversionInfo<'static> {
+impl VkRawType<VkSamplerYcbcrConversionInfo> for RawVkSamplerYcbcrConversionInfo {
+    fn vk_to_wrapped(src: &RawVkSamplerYcbcrConversionInfo) -> VkSamplerYcbcrConversionInfo {
         VkSamplerYcbcrConversionInfo {
-            conversion: vk_null_ref(),
+            conversion: RawVkSamplerYcbcrConversion::vk_to_wrapped(&src.conversion),
         }
     }
 }
 
-impl<'a> VkSetup for VkSamplerYcbcrConversionInfo<'a> {
+impl Default for VkSamplerYcbcrConversionInfo {
+    fn default() -> VkSamplerYcbcrConversionInfo {
+        VkSamplerYcbcrConversionInfo {
+            conversion: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkSamplerYcbcrConversionInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.conversion, fn_table);
     }
 }
 
 impl VkFree for RawVkSamplerYcbcrConversionInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

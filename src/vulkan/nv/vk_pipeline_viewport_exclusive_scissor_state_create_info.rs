@@ -16,8 +16,8 @@ use vulkan::vk::{VkRect2D,RawVkRect2D};
 
 /// Wrapper for [VkPipelineViewportExclusiveScissorStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportExclusiveScissorStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineViewportExclusiveScissorStateCreateInfo<'a> {
-    pub exclusive_scissors: Option<&'a [VkRect2D]>,
+pub struct VkPipelineViewportExclusiveScissorStateCreateInfo {
+    pub exclusive_scissors: Option<Vec<VkRect2D>>,
 }
 
 #[doc(hidden)]
@@ -25,36 +25,44 @@ pub struct VkPipelineViewportExclusiveScissorStateCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportExclusiveScissorStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub exclusive_scissor_count: u32,
     pub exclusive_scissors: *mut RawVkRect2D,
 }
 
-impl<'a> VkWrappedType<RawVkPipelineViewportExclusiveScissorStateCreateInfo> for VkPipelineViewportExclusiveScissorStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineViewportExclusiveScissorStateCreateInfo> for VkPipelineViewportExclusiveScissorStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportExclusiveScissorStateCreateInfo, dst: &mut RawVkPipelineViewportExclusiveScissorStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportExclusiveScissorStateCreateInfoNv);
-        dst.next = ptr::null();
-        dst.exclusive_scissor_count = get_array_option_len(src.exclusive_scissors) as u32;
-        dst.exclusive_scissors = new_ptr_vk_array_checked(src.exclusive_scissors);
+        dst.next = ptr::null_mut();
+        dst.exclusive_scissor_count = get_array_option_len(&src.exclusive_scissors) as u32;
+        dst.exclusive_scissors = new_ptr_vk_array_checked(&src.exclusive_scissors);
     }
 }
 
-impl Default for VkPipelineViewportExclusiveScissorStateCreateInfo<'static> {
-    fn default() -> VkPipelineViewportExclusiveScissorStateCreateInfo<'static> {
+impl VkRawType<VkPipelineViewportExclusiveScissorStateCreateInfo> for RawVkPipelineViewportExclusiveScissorStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineViewportExclusiveScissorStateCreateInfo) -> VkPipelineViewportExclusiveScissorStateCreateInfo {
+        VkPipelineViewportExclusiveScissorStateCreateInfo {
+            exclusive_scissors: new_vk_array_checked(src.exclusive_scissor_count, src.exclusive_scissors),
+        }
+    }
+}
+
+impl Default for VkPipelineViewportExclusiveScissorStateCreateInfo {
+    fn default() -> VkPipelineViewportExclusiveScissorStateCreateInfo {
         VkPipelineViewportExclusiveScissorStateCreateInfo {
             exclusive_scissors: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkPipelineViewportExclusiveScissorStateCreateInfo<'a> {
+impl VkSetup for VkPipelineViewportExclusiveScissorStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineViewportExclusiveScissorStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.exclusive_scissor_count as usize, self.exclusive_scissors);
     }
 }

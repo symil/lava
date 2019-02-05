@@ -28,7 +28,7 @@ pub struct VkPhysicalDeviceInlineUniformBlockProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceInlineUniformBlockProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_inline_uniform_block_size: u32,
     pub max_per_stage_descriptor_inline_uniform_blocks: u32,
     pub max_per_stage_descriptor_update_after_bind_inline_uniform_blocks: u32,
@@ -39,7 +39,7 @@ pub struct RawVkPhysicalDeviceInlineUniformBlockProperties {
 impl VkWrappedType<RawVkPhysicalDeviceInlineUniformBlockProperties> for VkPhysicalDeviceInlineUniformBlockProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceInlineUniformBlockProperties, dst: &mut RawVkPhysicalDeviceInlineUniformBlockProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceInlineUniformBlockPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_inline_uniform_block_size = vk_to_raw_value(&src.max_inline_uniform_block_size);
         dst.max_per_stage_descriptor_inline_uniform_blocks = vk_to_raw_value(&src.max_per_stage_descriptor_inline_uniform_blocks);
         dst.max_per_stage_descriptor_update_after_bind_inline_uniform_blocks = vk_to_raw_value(&src.max_per_stage_descriptor_update_after_bind_inline_uniform_blocks);
@@ -79,7 +79,7 @@ impl VkSetup for VkPhysicalDeviceInlineUniformBlockProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceInlineUniformBlockProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -17,15 +17,12 @@ use vulkan::vk::{VkSampler,RawVkSampler};
 
 /// Wrapper for [VkDescriptorSetLayoutBinding](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBinding.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorSetLayoutBinding<'a, 'b>
-    where
-        'b: 'a,
-{
+pub struct VkDescriptorSetLayoutBinding {
     pub binding: usize,
     pub descriptor_type: VkDescriptorType,
     pub descriptor_count: usize,
     pub stage_flags: VkShaderStageFlags,
-    pub immutable_samplers: Option<&'a [&'b VkSampler]>,
+    pub immutable_samplers: Option<Vec<VkSampler>>,
 }
 
 #[doc(hidden)]
@@ -39,42 +36,48 @@ pub struct RawVkDescriptorSetLayoutBinding {
     pub immutable_samplers: *mut RawVkSampler,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkDescriptorSetLayoutBinding> for VkDescriptorSetLayoutBinding<'a, 'b>
-    where
-        'b: 'a,
-{
+impl VkWrappedType<RawVkDescriptorSetLayoutBinding> for VkDescriptorSetLayoutBinding {
     fn vk_to_raw(src: &VkDescriptorSetLayoutBinding, dst: &mut RawVkDescriptorSetLayoutBinding) {
         dst.binding = vk_to_raw_value(&src.binding);
         dst.descriptor_type = vk_to_raw_value(&src.descriptor_type);
         dst.descriptor_count = vk_to_raw_value(&src.descriptor_count);
         dst.stage_flags = vk_to_raw_value(&src.stage_flags);
-        dst.immutable_samplers = new_ptr_vk_array_checked_from_ref(src.immutable_samplers);
+        dst.immutable_samplers = new_ptr_vk_array_checked(&src.immutable_samplers);
     }
 }
 
-impl Default for VkDescriptorSetLayoutBinding<'static, 'static> {
-    fn default() -> VkDescriptorSetLayoutBinding<'static, 'static> {
+impl VkRawType<VkDescriptorSetLayoutBinding> for RawVkDescriptorSetLayoutBinding {
+    fn vk_to_wrapped(src: &RawVkDescriptorSetLayoutBinding) -> VkDescriptorSetLayoutBinding {
+        VkDescriptorSetLayoutBinding {
+            binding: u32::vk_to_wrapped(&src.binding),
+            descriptor_type: RawVkDescriptorType::vk_to_wrapped(&src.descriptor_type),
+            descriptor_count: u32::vk_to_wrapped(&src.descriptor_count),
+            stage_flags: RawVkShaderStageFlags::vk_to_wrapped(&src.stage_flags),
+            immutable_samplers: new_vk_array_checked(src.descriptor_count, src.immutable_samplers),
+        }
+    }
+}
+
+impl Default for VkDescriptorSetLayoutBinding {
+    fn default() -> VkDescriptorSetLayoutBinding {
         VkDescriptorSetLayoutBinding {
             binding: 0,
-            descriptor_type: VkDescriptorType::default(),
+            descriptor_type: Default::default(),
             descriptor_count: 0,
-            stage_flags: VkShaderStageFlags::default(),
+            stage_flags: Default::default(),
             immutable_samplers: None,
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkDescriptorSetLayoutBinding<'a, 'b>
-    where
-        'b: 'a,
-{
+impl VkSetup for VkDescriptorSetLayoutBinding {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDescriptorSetLayoutBinding {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.immutable_samplers);
     }
 }

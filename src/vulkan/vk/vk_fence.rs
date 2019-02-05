@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkFence = u64;
 
 /// Wrapper for [VkFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFence.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkFence {
     _handle: RawVkFence,
     _fn_table: *mut VkFunctionTable

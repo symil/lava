@@ -25,14 +25,14 @@ pub struct VkSwapchainCounterCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSwapchainCounterCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub surface_counters: RawVkSurfaceCounterFlags,
 }
 
 impl VkWrappedType<RawVkSwapchainCounterCreateInfo> for VkSwapchainCounterCreateInfo {
     fn vk_to_raw(src: &VkSwapchainCounterCreateInfo, dst: &mut RawVkSwapchainCounterCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SwapchainCounterCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.surface_counters = vk_to_raw_value(&src.surface_counters);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkSwapchainCounterCreateInfo> for RawVkSwapchainCounterCreateInfo
 impl Default for VkSwapchainCounterCreateInfo {
     fn default() -> VkSwapchainCounterCreateInfo {
         VkSwapchainCounterCreateInfo {
-            surface_counters: VkSurfaceCounterFlags::default(),
+            surface_counters: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSwapchainCounterCreateInfo {
 }
 
 impl VkFree for RawVkSwapchainCounterCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

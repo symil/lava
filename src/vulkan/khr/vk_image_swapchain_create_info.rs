@@ -16,8 +16,8 @@ use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 
 /// Wrapper for [VkImageSwapchainCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSwapchainCreateInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkImageSwapchainCreateInfo<'a> {
-    pub swapchain: Option<&'a VkSwapchain>,
+pub struct VkImageSwapchainCreateInfo {
+    pub swapchain: Option<VkSwapchain>,
 }
 
 #[doc(hidden)]
@@ -25,34 +25,42 @@ pub struct VkImageSwapchainCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageSwapchainCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain: RawVkSwapchain,
 }
 
-impl<'a> VkWrappedType<RawVkImageSwapchainCreateInfo> for VkImageSwapchainCreateInfo<'a> {
+impl VkWrappedType<RawVkImageSwapchainCreateInfo> for VkImageSwapchainCreateInfo {
     fn vk_to_raw(src: &VkImageSwapchainCreateInfo, dst: &mut RawVkImageSwapchainCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageSwapchainCreateInfoKhr);
-        dst.next = ptr::null();
-        dst.swapchain = if src.swapchain.is_some() { vk_to_raw_value(src.swapchain.unwrap()) } else { 0 };
+        dst.next = ptr::null_mut();
+        dst.swapchain = vk_to_raw_value_checked(&src.swapchain);
     }
 }
 
-impl Default for VkImageSwapchainCreateInfo<'static> {
-    fn default() -> VkImageSwapchainCreateInfo<'static> {
+impl VkRawType<VkImageSwapchainCreateInfo> for RawVkImageSwapchainCreateInfo {
+    fn vk_to_wrapped(src: &RawVkImageSwapchainCreateInfo) -> VkImageSwapchainCreateInfo {
+        VkImageSwapchainCreateInfo {
+            swapchain: Some(RawVkSwapchain::vk_to_wrapped(&src.swapchain)),
+        }
+    }
+}
+
+impl Default for VkImageSwapchainCreateInfo {
+    fn default() -> VkImageSwapchainCreateInfo {
         VkImageSwapchainCreateInfo {
             swapchain: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkImageSwapchainCreateInfo<'a> {
+impl VkSetup for VkImageSwapchainCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkImageSwapchainCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

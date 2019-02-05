@@ -18,9 +18,9 @@ use vulkan::nv::{VkGeometryFlags,RawVkGeometryFlags};
 
 /// Wrapper for [VkGeometryNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryNV.html).
 #[derive(Debug, Clone)]
-pub struct VkGeometry<'a, 'b, 'c, 'd> {
+pub struct VkGeometry {
     pub geometry_type: VkGeometryType,
-    pub geometry: VkGeometryData<'a, 'b, 'c, 'd>,
+    pub geometry: VkGeometryData,
     pub flags: VkGeometryFlags,
 }
 
@@ -29,40 +29,50 @@ pub struct VkGeometry<'a, 'b, 'c, 'd> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometry {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub geometry_type: RawVkGeometryType,
     pub geometry: RawVkGeometryData,
     pub flags: RawVkGeometryFlags,
 }
 
-impl<'a, 'b, 'c, 'd> VkWrappedType<RawVkGeometry> for VkGeometry<'a, 'b, 'c, 'd> {
+impl VkWrappedType<RawVkGeometry> for VkGeometry {
     fn vk_to_raw(src: &VkGeometry, dst: &mut RawVkGeometry) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GeometryNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.geometry_type = vk_to_raw_value(&src.geometry_type);
         dst.geometry = vk_to_raw_value(&src.geometry);
         dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 
-impl Default for VkGeometry<'static, 'static, 'static, 'static> {
-    fn default() -> VkGeometry<'static, 'static, 'static, 'static> {
+impl VkRawType<VkGeometry> for RawVkGeometry {
+    fn vk_to_wrapped(src: &RawVkGeometry) -> VkGeometry {
         VkGeometry {
-            geometry_type: VkGeometryType::default(),
-            geometry: VkGeometryData::default(),
-            flags: VkGeometryFlags::default(),
+            geometry_type: RawVkGeometryType::vk_to_wrapped(&src.geometry_type),
+            geometry: RawVkGeometryData::vk_to_wrapped(&src.geometry),
+            flags: RawVkGeometryFlags::vk_to_wrapped(&src.flags),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd> VkSetup for VkGeometry<'a, 'b, 'c, 'd> {
+impl Default for VkGeometry {
+    fn default() -> VkGeometry {
+        VkGeometry {
+            geometry_type: Default::default(),
+            geometry: Default::default(),
+            flags: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkGeometry {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.geometry, fn_table);
     }
 }
 
 impl VkFree for RawVkGeometry {
-    fn vk_free(&mut self) {
-        RawVkGeometryData::vk_free(&mut self.geometry);
+    fn vk_free(&self) {
+        
     }
 }

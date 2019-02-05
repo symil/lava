@@ -60,10 +60,10 @@ impl VkRawType<VkImageFormatProperties> for RawVkImageFormatProperties {
 impl Default for VkImageFormatProperties {
     fn default() -> VkImageFormatProperties {
         VkImageFormatProperties {
-            max_extent: VkExtent3D::default(),
+            max_extent: Default::default(),
             max_mip_levels: 0,
             max_array_layers: 0,
-            sample_counts: VkSampleCountFlags::default(),
+            sample_counts: Default::default(),
             max_resource_size: 0,
         }
     }
@@ -76,7 +76,7 @@ impl VkSetup for VkImageFormatProperties {
 }
 
 impl VkFree for RawVkImageFormatProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent3D::vk_free(&mut self.max_extent);
+    fn vk_free(&self) {
+        
     }
 }

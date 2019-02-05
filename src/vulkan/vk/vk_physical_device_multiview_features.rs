@@ -26,7 +26,7 @@ pub struct VkPhysicalDeviceMultiviewFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMultiviewFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub multiview: u32,
     pub multiview_geometry_shader: u32,
     pub multiview_tessellation_shader: u32,
@@ -35,7 +35,7 @@ pub struct RawVkPhysicalDeviceMultiviewFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceMultiviewFeatures> for VkPhysicalDeviceMultiviewFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceMultiviewFeatures, dst: &mut RawVkPhysicalDeviceMultiviewFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewFeatures);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.multiview = vk_to_raw_value(&src.multiview);
         dst.multiview_geometry_shader = vk_to_raw_value(&src.multiview_geometry_shader);
         dst.multiview_tessellation_shader = vk_to_raw_value(&src.multiview_tessellation_shader);
@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDeviceMultiviewFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceMultiviewFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

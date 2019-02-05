@@ -337,7 +337,8 @@ function functionToMethod(handle, func) {
 
             if (resutlIsStruct) {
                 freeStataments.push(
-                    `${createdRawTypeName}::vk_free(${rawResultName}.as_mut().unwrap());`
+                    // `${createdRawTypeName}::vk_free(${rawResultName}.as_ref().unwrap());`
+                    // `free_ptr(${rawResultName}));`
                 );
             }
         } else {
@@ -369,8 +370,9 @@ function functionToMethod(handle, func) {
                 }
             }
 
-            if (createdType.freeRaw) {
-                freeStataments.push(`${createdType.freeRaw(getRawVarName)};`);
+            if (createdType.typeName.startsWith('Vk')) {
+                freeStataments.push(`free(${rawResultName} as *mut u8);`);
+                // freeStataments.push(`${createdType.freeRaw(getRawVarName)};`);
             }
         }
 

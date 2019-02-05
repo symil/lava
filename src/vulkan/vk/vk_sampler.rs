@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkSampler = u64;
 
 /// Wrapper for [VkSampler](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSampler.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkSampler {
     _handle: RawVkSampler,
     _fn_table: *mut VkFunctionTable

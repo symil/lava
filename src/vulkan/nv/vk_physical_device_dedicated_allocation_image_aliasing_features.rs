@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceDedicatedAllocationImageAliasingFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDedicatedAllocationImageAliasingFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub dedicated_allocation_image_aliasing: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceDedicatedAllocationImageAliasingFeatures> for VkPhysicalDeviceDedicatedAllocationImageAliasingFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceDedicatedAllocationImageAliasingFeatures, dst: &mut RawVkPhysicalDeviceDedicatedAllocationImageAliasingFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDedicatedAllocationImageAliasingFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.dedicated_allocation_image_aliasing = vk_to_raw_value(&src.dedicated_allocation_image_aliasing);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceDedicatedAllocationImageAliasingFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceDedicatedAllocationImageAliasingFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

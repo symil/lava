@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceMultiviewPerViewAttributesProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMultiviewPerViewAttributesProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub per_view_position_all_components: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceMultiviewPerViewAttributesProperties> for VkPhysicalDeviceMultiviewPerViewAttributesProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceMultiviewPerViewAttributesProperties, dst: &mut RawVkPhysicalDeviceMultiviewPerViewAttributesProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMultiviewPerViewAttributesPropertiesNvx);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.per_view_position_all_components = vk_to_raw_value(&src.per_view_position_all_components);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceMultiviewPerViewAttributesProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceMultiviewPerViewAttributesProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

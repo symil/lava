@@ -79,7 +79,7 @@ impl VkSetup for VkViewport {
 }
 
 impl VkFree for RawVkViewport {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -64,7 +64,7 @@ impl VkSetup for VkBufferCopy {
 }
 
 impl VkFree for RawVkBufferCopy {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

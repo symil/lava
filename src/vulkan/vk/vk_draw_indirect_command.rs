@@ -69,7 +69,7 @@ impl VkSetup for VkDrawIndirectCommand {
 }
 
 impl VkFree for RawVkDrawIndirectCommand {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

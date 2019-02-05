@@ -25,14 +25,14 @@ pub struct VkQueueFamilyProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueueFamilyProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub queue_family_properties: RawVkQueueFamilyProperties,
 }
 
 impl VkWrappedType<RawVkQueueFamilyProperties2> for VkQueueFamilyProperties2 {
     fn vk_to_raw(src: &VkQueueFamilyProperties2, dst: &mut RawVkQueueFamilyProperties2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::QueueFamilyProperties2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.queue_family_properties = vk_to_raw_value(&src.queue_family_properties);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkQueueFamilyProperties2> for RawVkQueueFamilyProperties2 {
 impl Default for VkQueueFamilyProperties2 {
     fn default() -> VkQueueFamilyProperties2 {
         VkQueueFamilyProperties2 {
-            queue_family_properties: VkQueueFamilyProperties::default(),
+            queue_family_properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkQueueFamilyProperties2 {
 }
 
 impl VkFree for RawVkQueueFamilyProperties2 {
-    fn vk_free(&mut self) {
-        RawVkQueueFamilyProperties::vk_free(&mut self.queue_family_properties);
+    fn vk_free(&self) {
+        
     }
 }

@@ -15,9 +15,9 @@ use vulkan::ext::{VkSampleLocationsInfo,RawVkSampleLocationsInfo};
 
 /// Wrapper for [VkAttachmentSampleLocationsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentSampleLocationsEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkAttachmentSampleLocations<'a> {
+pub struct VkAttachmentSampleLocations {
     pub attachment_index: usize,
-    pub sample_locations_info: VkSampleLocationsInfo<'a>,
+    pub sample_locations_info: VkSampleLocationsInfo,
 }
 
 #[doc(hidden)]
@@ -28,30 +28,39 @@ pub struct RawVkAttachmentSampleLocations {
     pub sample_locations_info: RawVkSampleLocationsInfo,
 }
 
-impl<'a> VkWrappedType<RawVkAttachmentSampleLocations> for VkAttachmentSampleLocations<'a> {
+impl VkWrappedType<RawVkAttachmentSampleLocations> for VkAttachmentSampleLocations {
     fn vk_to_raw(src: &VkAttachmentSampleLocations, dst: &mut RawVkAttachmentSampleLocations) {
         dst.attachment_index = vk_to_raw_value(&src.attachment_index);
         dst.sample_locations_info = vk_to_raw_value(&src.sample_locations_info);
     }
 }
 
-impl Default for VkAttachmentSampleLocations<'static> {
-    fn default() -> VkAttachmentSampleLocations<'static> {
+impl VkRawType<VkAttachmentSampleLocations> for RawVkAttachmentSampleLocations {
+    fn vk_to_wrapped(src: &RawVkAttachmentSampleLocations) -> VkAttachmentSampleLocations {
         VkAttachmentSampleLocations {
-            attachment_index: 0,
-            sample_locations_info: VkSampleLocationsInfo::default(),
+            attachment_index: u32::vk_to_wrapped(&src.attachment_index),
+            sample_locations_info: RawVkSampleLocationsInfo::vk_to_wrapped(&src.sample_locations_info),
         }
     }
 }
 
-impl<'a> VkSetup for VkAttachmentSampleLocations<'a> {
+impl Default for VkAttachmentSampleLocations {
+    fn default() -> VkAttachmentSampleLocations {
+        VkAttachmentSampleLocations {
+            attachment_index: 0,
+            sample_locations_info: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkAttachmentSampleLocations {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.sample_locations_info, fn_table);
     }
 }
 
 impl VkFree for RawVkAttachmentSampleLocations {
-    fn vk_free(&mut self) {
-        RawVkSampleLocationsInfo::vk_free(&mut self.sample_locations_info);
+    fn vk_free(&self) {
+        
     }
 }

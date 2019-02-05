@@ -17,9 +17,9 @@ use vulkan::nv::{VkAccelerationStructure,RawVkAccelerationStructure};
 
 /// Wrapper for [VkAccelerationStructureMemoryRequirementsInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureMemoryRequirementsInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkAccelerationStructureMemoryRequirementsInfo<'a> {
+pub struct VkAccelerationStructureMemoryRequirementsInfo {
     pub type_: VkAccelerationStructureMemoryRequirementsType,
-    pub acceleration_structure: &'a VkAccelerationStructure,
+    pub acceleration_structure: VkAccelerationStructure,
 }
 
 #[doc(hidden)]
@@ -27,37 +27,46 @@ pub struct VkAccelerationStructureMemoryRequirementsInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAccelerationStructureMemoryRequirementsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub type_: RawVkAccelerationStructureMemoryRequirementsType,
     pub acceleration_structure: RawVkAccelerationStructure,
 }
 
-impl<'a> VkWrappedType<RawVkAccelerationStructureMemoryRequirementsInfo> for VkAccelerationStructureMemoryRequirementsInfo<'a> {
+impl VkWrappedType<RawVkAccelerationStructureMemoryRequirementsInfo> for VkAccelerationStructureMemoryRequirementsInfo {
     fn vk_to_raw(src: &VkAccelerationStructureMemoryRequirementsInfo, dst: &mut RawVkAccelerationStructureMemoryRequirementsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AccelerationStructureMemoryRequirementsInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.type_ = vk_to_raw_value(&src.type_);
-        dst.acceleration_structure = vk_to_raw_value(src.acceleration_structure);
+        dst.acceleration_structure = vk_to_raw_value(&src.acceleration_structure);
     }
 }
 
-impl Default for VkAccelerationStructureMemoryRequirementsInfo<'static> {
-    fn default() -> VkAccelerationStructureMemoryRequirementsInfo<'static> {
+impl VkRawType<VkAccelerationStructureMemoryRequirementsInfo> for RawVkAccelerationStructureMemoryRequirementsInfo {
+    fn vk_to_wrapped(src: &RawVkAccelerationStructureMemoryRequirementsInfo) -> VkAccelerationStructureMemoryRequirementsInfo {
         VkAccelerationStructureMemoryRequirementsInfo {
-            type_: VkAccelerationStructureMemoryRequirementsType::default(),
-            acceleration_structure: vk_null_ref(),
+            type_: RawVkAccelerationStructureMemoryRequirementsType::vk_to_wrapped(&src.type_),
+            acceleration_structure: RawVkAccelerationStructure::vk_to_wrapped(&src.acceleration_structure),
         }
     }
 }
 
-impl<'a> VkSetup for VkAccelerationStructureMemoryRequirementsInfo<'a> {
+impl Default for VkAccelerationStructureMemoryRequirementsInfo {
+    fn default() -> VkAccelerationStructureMemoryRequirementsInfo {
+        VkAccelerationStructureMemoryRequirementsInfo {
+            type_: Default::default(),
+            acceleration_structure: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkAccelerationStructureMemoryRequirementsInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.acceleration_structure, fn_table);
     }
 }
 
 impl VkFree for RawVkAccelerationStructureMemoryRequirementsInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

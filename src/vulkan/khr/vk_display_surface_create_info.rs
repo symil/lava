@@ -20,9 +20,9 @@ use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
 /// Wrapper for [VkDisplaySurfaceCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplaySurfaceCreateInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkDisplaySurfaceCreateInfo<'a> {
+pub struct VkDisplaySurfaceCreateInfo {
     pub flags: VkDisplaySurfaceCreateFlags,
-    pub display_mode: &'a VkDisplayMode,
+    pub display_mode: VkDisplayMode,
     pub plane_index: usize,
     pub plane_stack_index: usize,
     pub transform: VkSurfaceTransformFlags,
@@ -36,7 +36,7 @@ pub struct VkDisplaySurfaceCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplaySurfaceCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDisplaySurfaceCreateFlags,
     pub display_mode: RawVkDisplayMode,
     pub plane_index: u32,
@@ -47,12 +47,12 @@ pub struct RawVkDisplaySurfaceCreateInfo {
     pub image_extent: RawVkExtent2D,
 }
 
-impl<'a> VkWrappedType<RawVkDisplaySurfaceCreateInfo> for VkDisplaySurfaceCreateInfo<'a> {
+impl VkWrappedType<RawVkDisplaySurfaceCreateInfo> for VkDisplaySurfaceCreateInfo {
     fn vk_to_raw(src: &VkDisplaySurfaceCreateInfo, dst: &mut RawVkDisplaySurfaceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplaySurfaceCreateInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.display_mode = vk_to_raw_value(src.display_mode);
+        dst.display_mode = vk_to_raw_value(&src.display_mode);
         dst.plane_index = vk_to_raw_value(&src.plane_index);
         dst.plane_stack_index = vk_to_raw_value(&src.plane_stack_index);
         dst.transform = vk_to_raw_value(&src.transform);
@@ -62,29 +62,45 @@ impl<'a> VkWrappedType<RawVkDisplaySurfaceCreateInfo> for VkDisplaySurfaceCreate
     }
 }
 
-impl Default for VkDisplaySurfaceCreateInfo<'static> {
-    fn default() -> VkDisplaySurfaceCreateInfo<'static> {
+impl VkRawType<VkDisplaySurfaceCreateInfo> for RawVkDisplaySurfaceCreateInfo {
+    fn vk_to_wrapped(src: &RawVkDisplaySurfaceCreateInfo) -> VkDisplaySurfaceCreateInfo {
         VkDisplaySurfaceCreateInfo {
-            flags: VkDisplaySurfaceCreateFlags::default(),
-            display_mode: vk_null_ref(),
-            plane_index: 0,
-            plane_stack_index: 0,
-            transform: VkSurfaceTransformFlags::default(),
-            global_alpha: 0.0,
-            alpha_mode: VkDisplayPlaneAlphaFlags::default(),
-            image_extent: VkExtent2D::default(),
+            flags: RawVkDisplaySurfaceCreateFlags::vk_to_wrapped(&src.flags),
+            display_mode: RawVkDisplayMode::vk_to_wrapped(&src.display_mode),
+            plane_index: u32::vk_to_wrapped(&src.plane_index),
+            plane_stack_index: u32::vk_to_wrapped(&src.plane_stack_index),
+            transform: RawVkSurfaceTransformFlags::vk_to_wrapped(&src.transform),
+            global_alpha: src.global_alpha,
+            alpha_mode: RawVkDisplayPlaneAlphaFlags::vk_to_wrapped(&src.alpha_mode),
+            image_extent: RawVkExtent2D::vk_to_wrapped(&src.image_extent),
         }
     }
 }
 
-impl<'a> VkSetup for VkDisplaySurfaceCreateInfo<'a> {
+impl Default for VkDisplaySurfaceCreateInfo {
+    fn default() -> VkDisplaySurfaceCreateInfo {
+        VkDisplaySurfaceCreateInfo {
+            flags: Default::default(),
+            display_mode: Default::default(),
+            plane_index: 0,
+            plane_stack_index: 0,
+            transform: Default::default(),
+            global_alpha: 0.0,
+            alpha_mode: Default::default(),
+            image_extent: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkDisplaySurfaceCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.display_mode, fn_table);
         VkSetup::vk_setup(&mut self.image_extent, fn_table);
     }
 }
 
 impl VkFree for RawVkDisplaySurfaceCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.image_extent);
+    fn vk_free(&self) {
+        
     }
 }

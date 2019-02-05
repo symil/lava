@@ -48,7 +48,7 @@ impl VkSetup for VkLayerProperties {
 }
 
 impl VkFree for RawVkLayerProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

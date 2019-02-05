@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkSwapchain = u64;
 
 /// Wrapper for [VkSwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainKHR.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkSwapchain {
     _handle: RawVkSwapchain,
     _fn_table: *mut VkFunctionTable
@@ -88,17 +88,17 @@ impl VkSwapchain {
             if vk_result == 0 {
                 for elt in &mut swapchain_images { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_ptr(raw_swapchain_images);
+            free(raw_swapchain_images as *mut u8);
             if vk_result == 0 { Ok(swapchain_images) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), swapchain_images)) }
         }
     }
     
     /// Wrapper for [vkAcquireNextImageKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireNextImageKHR.html).
-    pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<&VkSemaphore>, fence: Option<&VkFence>) -> Result<usize, (VkResult, usize)> {
+    pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<VkSemaphore>, fence: Option<VkFence>) -> Result<usize, (VkResult, usize)> {
         unsafe {
             let raw_timeout = timeout;
-            let raw_semaphore = if semaphore.is_some() { vk_to_raw_value(semaphore.unwrap()) } else { 0 };
-            let raw_fence = if fence.is_some() { vk_to_raw_value(fence.unwrap()) } else { 0 };
+            let raw_semaphore = vk_to_raw_value_checked(&semaphore);
+            let raw_fence = vk_to_raw_value_checked(&fence);
             let mut vk_result = 0;
             let raw_image_index = &mut mem::zeroed() as *mut u32;
             
@@ -144,7 +144,6 @@ impl VkSwapchain {
                 let fn_table = self._fn_table;
                 VkSetup::vk_setup(&mut display_timing_properties, fn_table);
             }
-            google::RawVkRefreshCycleDuration::vk_free(raw_display_timing_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(display_timing_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), display_timing_properties)) }
         }
     }
@@ -164,7 +163,7 @@ impl VkSwapchain {
             if vk_result == 0 {
                 for elt in &mut presentation_timings { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_presentation_timing_count as usize, raw_presentation_timings);
+            free(raw_presentation_timings as *mut u8);
             if vk_result == 0 { Ok(presentation_timings) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), presentation_timings)) }
         }
     }

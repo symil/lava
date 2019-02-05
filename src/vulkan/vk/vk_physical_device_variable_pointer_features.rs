@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceVariablePointerFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVariablePointerFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub variable_pointers_storage_buffer: u32,
     pub variable_pointers: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceVariablePointerFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceVariablePointerFeatures> for VkPhysicalDeviceVariablePointerFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceVariablePointerFeatures, dst: &mut RawVkPhysicalDeviceVariablePointerFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVariablePointerFeatures);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.variable_pointers_storage_buffer = vk_to_raw_value(&src.variable_pointers_storage_buffer);
         dst.variable_pointers = vk_to_raw_value(&src.variable_pointers);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceVariablePointerFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceVariablePointerFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceFloat16Int8Features {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFloat16Int8Features {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shader_float_16: u32,
     pub shader_int_8: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceFloat16Int8Features {
 impl VkWrappedType<RawVkPhysicalDeviceFloat16Int8Features> for VkPhysicalDeviceFloat16Int8Features {
     fn vk_to_raw(src: &VkPhysicalDeviceFloat16Int8Features, dst: &mut RawVkPhysicalDeviceFloat16Int8Features) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFloat16Int8FeaturesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shader_float_16 = vk_to_raw_value(&src.shader_float_16);
         dst.shader_int_8 = vk_to_raw_value(&src.shader_int_8);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceFloat16Int8Features {
 }
 
 impl VkFree for RawVkPhysicalDeviceFloat16Int8Features {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

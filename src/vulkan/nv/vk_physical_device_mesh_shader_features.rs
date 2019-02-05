@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceMeshShaderFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMeshShaderFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub task_shader: u32,
     pub mesh_shader: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceMeshShaderFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceMeshShaderFeatures> for VkPhysicalDeviceMeshShaderFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceMeshShaderFeatures, dst: &mut RawVkPhysicalDeviceMeshShaderFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMeshShaderFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.task_shader = vk_to_raw_value(&src.task_shader);
         dst.mesh_shader = vk_to_raw_value(&src.mesh_shader);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceMeshShaderFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceMeshShaderFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

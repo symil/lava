@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkCommandPool = u64;
 
 /// Wrapper for [VkCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPool.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkCommandPool {
     _handle: RawVkCommandPool,
     _fn_table: *mut VkFunctionTable
@@ -83,10 +83,10 @@ impl VkCommandPool {
     }
     
     /// Wrapper for [vkFreeCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeCommandBuffers.html).
-    pub fn free_command_buffers(&self, command_buffers: &[&VkCommandBuffer]) {
+    pub fn free_command_buffers(&self, command_buffers: Vec<VkCommandBuffer>) {
         unsafe {
             let raw_command_buffer_count = command_buffers.len() as u32;
-            let raw_command_buffers = new_ptr_vk_array_from_ref(command_buffers);
+            let raw_command_buffers = new_ptr_vk_array(&command_buffers);
             ((&*self._fn_table).vkFreeCommandBuffers)((*self._fn_table).device, self._handle, raw_command_buffer_count, raw_command_buffers);
             free_ptr(raw_command_buffers);
         }

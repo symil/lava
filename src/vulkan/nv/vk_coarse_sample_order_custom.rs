@@ -16,10 +16,10 @@ use vulkan::nv::{VkCoarseSampleLocation,RawVkCoarseSampleLocation};
 
 /// Wrapper for [VkCoarseSampleOrderCustomNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCoarseSampleOrderCustomNV.html).
 #[derive(Debug, Clone)]
-pub struct VkCoarseSampleOrderCustom<'a> {
+pub struct VkCoarseSampleOrderCustom {
     pub shading_rate: VkShadingRatePaletteEntry,
     pub sample_count: usize,
-    pub sample_locations: &'a [VkCoarseSampleLocation],
+    pub sample_locations: Vec<VkCoarseSampleLocation>,
 }
 
 #[doc(hidden)]
@@ -32,33 +32,43 @@ pub struct RawVkCoarseSampleOrderCustom {
     pub sample_locations: *mut RawVkCoarseSampleLocation,
 }
 
-impl<'a> VkWrappedType<RawVkCoarseSampleOrderCustom> for VkCoarseSampleOrderCustom<'a> {
+impl VkWrappedType<RawVkCoarseSampleOrderCustom> for VkCoarseSampleOrderCustom {
     fn vk_to_raw(src: &VkCoarseSampleOrderCustom, dst: &mut RawVkCoarseSampleOrderCustom) {
         dst.shading_rate = vk_to_raw_value(&src.shading_rate);
         dst.sample_count = vk_to_raw_value(&src.sample_count);
         dst.sample_location_count = src.sample_locations.len() as u32;
-        dst.sample_locations = new_ptr_vk_array(src.sample_locations);
+        dst.sample_locations = new_ptr_vk_array(&src.sample_locations);
     }
 }
 
-impl Default for VkCoarseSampleOrderCustom<'static> {
-    fn default() -> VkCoarseSampleOrderCustom<'static> {
+impl VkRawType<VkCoarseSampleOrderCustom> for RawVkCoarseSampleOrderCustom {
+    fn vk_to_wrapped(src: &RawVkCoarseSampleOrderCustom) -> VkCoarseSampleOrderCustom {
         VkCoarseSampleOrderCustom {
-            shading_rate: VkShadingRatePaletteEntry::default(),
-            sample_count: 0,
-            sample_locations: &[],
+            shading_rate: RawVkShadingRatePaletteEntry::vk_to_wrapped(&src.shading_rate),
+            sample_count: u32::vk_to_wrapped(&src.sample_count),
+            sample_locations: new_vk_array(src.sample_location_count, src.sample_locations),
         }
     }
 }
 
-impl<'a> VkSetup for VkCoarseSampleOrderCustom<'a> {
+impl Default for VkCoarseSampleOrderCustom {
+    fn default() -> VkCoarseSampleOrderCustom {
+        VkCoarseSampleOrderCustom {
+            shading_rate: Default::default(),
+            sample_count: 0,
+            sample_locations: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkCoarseSampleOrderCustom {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkCoarseSampleOrderCustom {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.sample_location_count as usize, self.sample_locations);
     }
 }

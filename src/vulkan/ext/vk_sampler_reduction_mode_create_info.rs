@@ -25,14 +25,14 @@ pub struct VkSamplerReductionModeCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSamplerReductionModeCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub reduction_mode: RawVkSamplerReductionMode,
 }
 
 impl VkWrappedType<RawVkSamplerReductionModeCreateInfo> for VkSamplerReductionModeCreateInfo {
     fn vk_to_raw(src: &VkSamplerReductionModeCreateInfo, dst: &mut RawVkSamplerReductionModeCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SamplerReductionModeCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.reduction_mode = vk_to_raw_value(&src.reduction_mode);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkSamplerReductionModeCreateInfo> for RawVkSamplerReductionModeCr
 impl Default for VkSamplerReductionModeCreateInfo {
     fn default() -> VkSamplerReductionModeCreateInfo {
         VkSamplerReductionModeCreateInfo {
-            reduction_mode: VkSamplerReductionMode::default(),
+            reduction_mode: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSamplerReductionModeCreateInfo {
 }
 
 impl VkFree for RawVkSamplerReductionModeCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

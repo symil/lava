@@ -24,14 +24,14 @@ pub struct VkDescriptorSetVariableDescriptorCountLayoutSupport {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetVariableDescriptorCountLayoutSupport {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_variable_descriptor_count: u32,
 }
 
 impl VkWrappedType<RawVkDescriptorSetVariableDescriptorCountLayoutSupport> for VkDescriptorSetVariableDescriptorCountLayoutSupport {
     fn vk_to_raw(src: &VkDescriptorSetVariableDescriptorCountLayoutSupport, dst: &mut RawVkDescriptorSetVariableDescriptorCountLayoutSupport) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetVariableDescriptorCountLayoutSupportExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_variable_descriptor_count = vk_to_raw_value(&src.max_variable_descriptor_count);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkDescriptorSetVariableDescriptorCountLayoutSupport {
 }
 
 impl VkFree for RawVkDescriptorSetVariableDescriptorCountLayoutSupport {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

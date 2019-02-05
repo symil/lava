@@ -74,7 +74,7 @@ impl VkSetup for VkDrawIndexedIndirectCommand {
 }
 
 impl VkFree for RawVkDrawIndexedIndirectCommand {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

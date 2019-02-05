@@ -29,36 +29,22 @@ use vulkan::vk::{VkPipeline,RawVkPipeline};
 
 /// Wrapper for [VkGraphicsPipelineCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGraphicsPipelineCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'd,
-        'f: 'd,
-        'h: 'g,
-        'i: 'g,
-        'm: 'l,
-        'n: 'l,
-        'q: 'p,
-        't: 's,
-        'v: 'u,
-{
+pub struct VkGraphicsPipelineCreateInfo<'a, 'b> {
     pub flags: VkPipelineCreateFlags,
-    pub stages: &'a [VkPipelineShaderStageCreateInfo<'b, 'c, 'd, 'e, 'f>],
-    pub vertex_input_state: Option<&'g VkPipelineVertexInputStateCreateInfo<'h, 'i>>,
-    pub input_assembly_state: Option<&'j VkPipelineInputAssemblyStateCreateInfo>,
-    pub tessellation_state: Option<&'k VkPipelineTessellationStateCreateInfo>,
-    pub viewport_state: Option<&'l VkPipelineViewportStateCreateInfo<'m, 'n>>,
-    pub rasterization_state: &'o VkPipelineRasterizationStateCreateInfo,
-    pub multisample_state: Option<&'p VkPipelineMultisampleStateCreateInfo<'q>>,
-    pub depth_stencil_state: Option<&'r VkPipelineDepthStencilStateCreateInfo>,
-    pub color_blend_state: Option<&'s VkPipelineColorBlendStateCreateInfo<'t>>,
-    pub dynamic_state: Option<&'u VkPipelineDynamicStateCreateInfo<'v>>,
-    pub layout: &'w VkPipelineLayout,
-    pub render_pass: &'x VkRenderPass,
+    pub stages: Vec<VkPipelineShaderStageCreateInfo<'a, 'b>>,
+    pub vertex_input_state: Option<VkPipelineVertexInputStateCreateInfo>,
+    pub input_assembly_state: Option<VkPipelineInputAssemblyStateCreateInfo>,
+    pub tessellation_state: Option<VkPipelineTessellationStateCreateInfo>,
+    pub viewport_state: Option<VkPipelineViewportStateCreateInfo>,
+    pub rasterization_state: VkPipelineRasterizationStateCreateInfo,
+    pub multisample_state: Option<VkPipelineMultisampleStateCreateInfo>,
+    pub depth_stencil_state: Option<VkPipelineDepthStencilStateCreateInfo>,
+    pub color_blend_state: Option<VkPipelineColorBlendStateCreateInfo>,
+    pub dynamic_state: Option<VkPipelineDynamicStateCreateInfo>,
+    pub layout: VkPipelineLayout,
+    pub render_pass: VkRenderPass,
     pub subpass: usize,
-    pub base_pipeline_handle: Option<&'y VkPipeline>,
+    pub base_pipeline_handle: Option<VkPipeline>,
     pub base_pipeline_index: isize,
 }
 
@@ -67,7 +53,7 @@ pub struct VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGraphicsPipelineCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineCreateFlags,
     pub stage_count: u32,
     pub stages: *mut RawVkPipelineShaderStageCreateInfo,
@@ -87,60 +73,69 @@ pub struct RawVkGraphicsPipelineCreateInfo {
     pub base_pipeline_index: i32,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y> VkWrappedType<RawVkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'd,
-        'f: 'd,
-        'h: 'g,
-        'i: 'g,
-        'm: 'l,
-        'n: 'l,
-        'q: 'p,
-        't: 's,
-        'v: 'u,
-{
+impl<'a, 'b> VkWrappedType<RawVkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfo<'a, 'b> {
     fn vk_to_raw(src: &VkGraphicsPipelineCreateInfo, dst: &mut RawVkGraphicsPipelineCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GraphicsPipelineCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage_count = src.stages.len() as u32;
-        dst.stages = new_ptr_vk_array(src.stages);
-        dst.vertex_input_state = new_ptr_vk_value_checked(src.vertex_input_state);
-        dst.input_assembly_state = new_ptr_vk_value_checked(src.input_assembly_state);
-        dst.tessellation_state = new_ptr_vk_value_checked(src.tessellation_state);
-        dst.viewport_state = new_ptr_vk_value_checked(src.viewport_state);
-        dst.rasterization_state = new_ptr_vk_value(src.rasterization_state);
-        dst.multisample_state = new_ptr_vk_value_checked(src.multisample_state);
-        dst.depth_stencil_state = new_ptr_vk_value_checked(src.depth_stencil_state);
-        dst.color_blend_state = new_ptr_vk_value_checked(src.color_blend_state);
-        dst.dynamic_state = new_ptr_vk_value_checked(src.dynamic_state);
-        dst.layout = vk_to_raw_value(src.layout);
-        dst.render_pass = vk_to_raw_value(src.render_pass);
+        dst.stages = new_ptr_vk_array(&src.stages);
+        dst.vertex_input_state = new_ptr_vk_value_checked(&src.vertex_input_state);
+        dst.input_assembly_state = new_ptr_vk_value_checked(&src.input_assembly_state);
+        dst.tessellation_state = new_ptr_vk_value_checked(&src.tessellation_state);
+        dst.viewport_state = new_ptr_vk_value_checked(&src.viewport_state);
+        dst.rasterization_state = new_ptr_vk_value(&src.rasterization_state);
+        dst.multisample_state = new_ptr_vk_value_checked(&src.multisample_state);
+        dst.depth_stencil_state = new_ptr_vk_value_checked(&src.depth_stencil_state);
+        dst.color_blend_state = new_ptr_vk_value_checked(&src.color_blend_state);
+        dst.dynamic_state = new_ptr_vk_value_checked(&src.dynamic_state);
+        dst.layout = vk_to_raw_value(&src.layout);
+        dst.render_pass = vk_to_raw_value(&src.render_pass);
         dst.subpass = vk_to_raw_value(&src.subpass);
-        dst.base_pipeline_handle = if src.base_pipeline_handle.is_some() { vk_to_raw_value(src.base_pipeline_handle.unwrap()) } else { 0 };
+        dst.base_pipeline_handle = vk_to_raw_value_checked(&src.base_pipeline_handle);
         dst.base_pipeline_index = vk_to_raw_value(&src.base_pipeline_index);
     }
 }
 
-impl Default for VkGraphicsPipelineCreateInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkGraphicsPipelineCreateInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl<'a, 'b> VkRawType<VkGraphicsPipelineCreateInfo<'a, 'b>> for RawVkGraphicsPipelineCreateInfo {
+    fn vk_to_wrapped(src: &RawVkGraphicsPipelineCreateInfo) -> VkGraphicsPipelineCreateInfo<'a, 'b> {
         VkGraphicsPipelineCreateInfo {
-            flags: VkPipelineCreateFlags::default(),
-            stages: &[],
+            flags: RawVkPipelineCreateFlags::vk_to_wrapped(&src.flags),
+            stages: new_vk_array(src.stage_count, src.stages),
+            vertex_input_state: new_vk_value_checked(src.vertex_input_state),
+            input_assembly_state: new_vk_value_checked(src.input_assembly_state),
+            tessellation_state: new_vk_value_checked(src.tessellation_state),
+            viewport_state: new_vk_value_checked(src.viewport_state),
+            rasterization_state: new_vk_value(src.rasterization_state),
+            multisample_state: new_vk_value_checked(src.multisample_state),
+            depth_stencil_state: new_vk_value_checked(src.depth_stencil_state),
+            color_blend_state: new_vk_value_checked(src.color_blend_state),
+            dynamic_state: new_vk_value_checked(src.dynamic_state),
+            layout: RawVkPipelineLayout::vk_to_wrapped(&src.layout),
+            render_pass: RawVkRenderPass::vk_to_wrapped(&src.render_pass),
+            subpass: u32::vk_to_wrapped(&src.subpass),
+            base_pipeline_handle: Some(RawVkPipeline::vk_to_wrapped(&src.base_pipeline_handle)),
+            base_pipeline_index: i32::vk_to_wrapped(&src.base_pipeline_index),
+        }
+    }
+}
+
+impl Default for VkGraphicsPipelineCreateInfo<'static, 'static> {
+    fn default() -> VkGraphicsPipelineCreateInfo<'static, 'static> {
+        VkGraphicsPipelineCreateInfo {
+            flags: Default::default(),
+            stages: Vec::new(),
             vertex_input_state: None,
             input_assembly_state: None,
             tessellation_state: None,
             viewport_state: None,
-            rasterization_state: vk_null_ref(),
+            rasterization_state: Default::default(),
             multisample_state: None,
             depth_stencil_state: None,
             color_blend_state: None,
             dynamic_state: None,
-            layout: vk_null_ref(),
-            render_pass: vk_null_ref(),
+            layout: Default::default(),
+            render_pass: Default::default(),
             subpass: 0,
             base_pipeline_handle: None,
             base_pipeline_index: 0,
@@ -148,28 +143,16 @@ impl Default for VkGraphicsPipelineCreateInfo<'static, 'static, 'static, 'static
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y> VkSetup for VkGraphicsPipelineCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p, 'q, 'r, 's, 't, 'u, 'v, 'w, 'x, 'y>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'd,
-        'f: 'd,
-        'h: 'g,
-        'i: 'g,
-        'm: 'l,
-        'n: 'l,
-        'q: 'p,
-        't: 's,
-        'v: 'u,
-{
+impl<'a, 'b> VkSetup for VkGraphicsPipelineCreateInfo<'a, 'b> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.rasterization_state, fn_table);
+        VkSetup::vk_setup(&mut self.layout, fn_table);
+        VkSetup::vk_setup(&mut self.render_pass, fn_table);
     }
 }
 
 impl VkFree for RawVkGraphicsPipelineCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.stage_count as usize, self.stages);
         free_vk_ptr(self.vertex_input_state);
         free_vk_ptr(self.input_assembly_state);

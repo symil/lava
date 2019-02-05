@@ -31,7 +31,7 @@ pub struct VkPhysicalDeviceRayTracingProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceRayTracingProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shader_group_handle_size: u32,
     pub max_recursion_depth: u32,
     pub max_shader_group_stride: u32,
@@ -45,7 +45,7 @@ pub struct RawVkPhysicalDeviceRayTracingProperties {
 impl VkWrappedType<RawVkPhysicalDeviceRayTracingProperties> for VkPhysicalDeviceRayTracingProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceRayTracingProperties, dst: &mut RawVkPhysicalDeviceRayTracingProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceRayTracingPropertiesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shader_group_handle_size = vk_to_raw_value(&src.shader_group_handle_size);
         dst.max_recursion_depth = vk_to_raw_value(&src.max_recursion_depth);
         dst.max_shader_group_stride = vk_to_raw_value(&src.max_shader_group_stride);
@@ -94,7 +94,7 @@ impl VkSetup for VkPhysicalDeviceRayTracingProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceRayTracingProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

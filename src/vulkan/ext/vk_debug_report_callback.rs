@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkDebugReportCallback = u64;
 
 /// Wrapper for [VkDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportCallbackEXT.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkDebugReportCallback {
     _handle: RawVkDebugReportCallback,
     _fn_table: *mut VkFunctionTable

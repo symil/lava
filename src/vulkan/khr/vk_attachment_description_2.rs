@@ -38,7 +38,7 @@ pub struct VkAttachmentDescription2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAttachmentDescription2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkAttachmentDescriptionFlags,
     pub format: RawVkFormat,
     pub samples: RawVkSampleCountFlags,
@@ -53,7 +53,7 @@ pub struct RawVkAttachmentDescription2 {
 impl VkWrappedType<RawVkAttachmentDescription2> for VkAttachmentDescription2 {
     fn vk_to_raw(src: &VkAttachmentDescription2, dst: &mut RawVkAttachmentDescription2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AttachmentDescription2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.format = vk_to_raw_value(&src.format);
         dst.samples = vk_to_raw_value(&src.samples);
@@ -85,15 +85,15 @@ impl VkRawType<VkAttachmentDescription2> for RawVkAttachmentDescription2 {
 impl Default for VkAttachmentDescription2 {
     fn default() -> VkAttachmentDescription2 {
         VkAttachmentDescription2 {
-            flags: VkAttachmentDescriptionFlags::default(),
-            format: VkFormat::default(),
-            samples: VkSampleCountFlags::default(),
-            load_op: VkAttachmentLoadOp::default(),
-            store_op: VkAttachmentStoreOp::default(),
-            stencil_load_op: VkAttachmentLoadOp::default(),
-            stencil_store_op: VkAttachmentStoreOp::default(),
-            initial_layout: VkImageLayout::default(),
-            final_layout: VkImageLayout::default(),
+            flags: Default::default(),
+            format: Default::default(),
+            samples: Default::default(),
+            load_op: Default::default(),
+            store_op: Default::default(),
+            stencil_load_op: Default::default(),
+            stencil_store_op: Default::default(),
+            initial_layout: Default::default(),
+            final_layout: Default::default(),
         }
     }
 }
@@ -105,7 +105,7 @@ impl VkSetup for VkAttachmentDescription2 {
 }
 
 impl VkFree for RawVkAttachmentDescription2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

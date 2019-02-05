@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceProtectedMemoryFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceProtectedMemoryFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub protected_memory: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceProtectedMemoryFeatures> for VkPhysicalDeviceProtectedMemoryFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceProtectedMemoryFeatures, dst: &mut RawVkPhysicalDeviceProtectedMemoryFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceProtectedMemoryFeatures);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.protected_memory = vk_to_raw_value(&src.protected_memory);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceProtectedMemoryFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceProtectedMemoryFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

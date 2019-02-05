@@ -27,7 +27,7 @@ pub struct VkDisplayModeCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayModeCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDisplayModeCreateFlags,
     pub parameters: RawVkDisplayModeParameters,
 }
@@ -35,7 +35,7 @@ pub struct RawVkDisplayModeCreateInfo {
 impl VkWrappedType<RawVkDisplayModeCreateInfo> for VkDisplayModeCreateInfo {
     fn vk_to_raw(src: &VkDisplayModeCreateInfo, dst: &mut RawVkDisplayModeCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplayModeCreateInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.parameters = vk_to_raw_value(&src.parameters);
     }
@@ -53,8 +53,8 @@ impl VkRawType<VkDisplayModeCreateInfo> for RawVkDisplayModeCreateInfo {
 impl Default for VkDisplayModeCreateInfo {
     fn default() -> VkDisplayModeCreateInfo {
         VkDisplayModeCreateInfo {
-            flags: VkDisplayModeCreateFlags::default(),
-            parameters: VkDisplayModeParameters::default(),
+            flags: Default::default(),
+            parameters: Default::default(),
         }
     }
 }
@@ -66,7 +66,7 @@ impl VkSetup for VkDisplayModeCreateInfo {
 }
 
 impl VkFree for RawVkDisplayModeCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkDisplayModeParameters::vk_free(&mut self.parameters);
+    fn vk_free(&self) {
+        
     }
 }

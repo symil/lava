@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkPipeline = u64;
 
 /// Wrapper for [VkPipeline](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipeline.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkPipeline {
     _handle: RawVkPipeline,
     _fn_table: *mut VkFunctionTable
@@ -92,12 +92,12 @@ impl VkPipeline {
     }
     
     /// Wrapper for [vkGetRayTracingShaderGroupHandlesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRayTracingShaderGroupHandlesNV.html).
-    pub fn get_ray_tracing_shader_group_handles(&self, first_group: usize, group_count: usize, data: &mut [c_void]) -> Result<(), VkResult> {
+    pub fn get_ray_tracing_shader_group_handles(&self, first_group: usize, group_count: usize, data: &[c_void]) -> Result<(), VkResult> {
         unsafe {
             let raw_first_group = vk_to_raw_value(&first_group);
             let raw_group_count = vk_to_raw_value(&group_count);
             let raw_data_size = data.len();
-            let raw_data = data.as_mut_ptr();
+            let raw_data = get_vec_ptr(data);
             let vk_result = ((&*self._fn_table).vkGetRayTracingShaderGroupHandlesNV)((*self._fn_table).device, self._handle, raw_first_group, raw_group_count, raw_data_size, raw_data);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }

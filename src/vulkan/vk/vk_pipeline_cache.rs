@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkPipelineCache = u64;
 
 /// Wrapper for [VkPipelineCache](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCache.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkPipelineCache {
     _handle: RawVkPipelineCache,
     _fn_table: *mut VkFunctionTable
@@ -90,10 +90,10 @@ impl VkPipelineCache {
     }
     
     /// Wrapper for [vkMergePipelineCaches](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMergePipelineCaches.html).
-    pub fn merge(&self, src_caches: &[&VkPipelineCache]) -> Result<(), VkResult> {
+    pub fn merge(&self, src_caches: Vec<VkPipelineCache>) -> Result<(), VkResult> {
         unsafe {
             let raw_src_cache_count = src_caches.len() as u32;
-            let raw_src_caches = new_ptr_vk_array_from_ref(src_caches);
+            let raw_src_caches = new_ptr_vk_array(&src_caches);
             let vk_result = ((&*self._fn_table).vkMergePipelineCaches)((*self._fn_table).device, self._handle, raw_src_cache_count, raw_src_caches);
             free_ptr(raw_src_caches);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }

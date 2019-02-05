@@ -59,7 +59,7 @@ impl VkSetup for VkXYColor {
 }
 
 impl VkFree for RawVkXYColor {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

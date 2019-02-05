@@ -25,14 +25,14 @@ pub struct VkBindImagePlaneMemoryInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImagePlaneMemoryInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub plane_aspect: RawVkImageAspectFlags,
 }
 
 impl VkWrappedType<RawVkBindImagePlaneMemoryInfo> for VkBindImagePlaneMemoryInfo {
     fn vk_to_raw(src: &VkBindImagePlaneMemoryInfo, dst: &mut RawVkBindImagePlaneMemoryInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindImagePlaneMemoryInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.plane_aspect = vk_to_raw_value(&src.plane_aspect);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkBindImagePlaneMemoryInfo> for RawVkBindImagePlaneMemoryInfo {
 impl Default for VkBindImagePlaneMemoryInfo {
     fn default() -> VkBindImagePlaneMemoryInfo {
         VkBindImagePlaneMemoryInfo {
-            plane_aspect: VkImageAspectFlags::default(),
+            plane_aspect: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkBindImagePlaneMemoryInfo {
 }
 
 impl VkFree for RawVkBindImagePlaneMemoryInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

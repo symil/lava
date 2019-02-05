@@ -17,12 +17,9 @@ use vulkan::vk::{VkDescriptorSetLayout,RawVkDescriptorSetLayout};
 
 /// Wrapper for [VkDescriptorSetAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetAllocateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorSetAllocateInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
-    pub descriptor_pool: &'a VkDescriptorPool,
-    pub set_layouts: &'b [&'c VkDescriptorSetLayout],
+pub struct VkDescriptorSetAllocateInfo {
+    pub descriptor_pool: VkDescriptorPool,
+    pub set_layouts: Vec<VkDescriptorSetLayout>,
 }
 
 #[doc(hidden)]
@@ -30,45 +27,48 @@ pub struct VkDescriptorSetAllocateInfo<'a, 'b, 'c>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub descriptor_pool: RawVkDescriptorPool,
     pub descriptor_set_count: u32,
     pub set_layouts: *mut RawVkDescriptorSetLayout,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkDescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
+impl VkWrappedType<RawVkDescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfo {
     fn vk_to_raw(src: &VkDescriptorSetAllocateInfo, dst: &mut RawVkDescriptorSetAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetAllocateInfo);
-        dst.next = ptr::null();
-        dst.descriptor_pool = vk_to_raw_value(src.descriptor_pool);
+        dst.next = ptr::null_mut();
+        dst.descriptor_pool = vk_to_raw_value(&src.descriptor_pool);
         dst.descriptor_set_count = src.set_layouts.len() as u32;
-        dst.set_layouts = new_ptr_vk_array_from_ref(src.set_layouts);
+        dst.set_layouts = new_ptr_vk_array(&src.set_layouts);
     }
 }
 
-impl Default for VkDescriptorSetAllocateInfo<'static, 'static, 'static> {
-    fn default() -> VkDescriptorSetAllocateInfo<'static, 'static, 'static> {
+impl VkRawType<VkDescriptorSetAllocateInfo> for RawVkDescriptorSetAllocateInfo {
+    fn vk_to_wrapped(src: &RawVkDescriptorSetAllocateInfo) -> VkDescriptorSetAllocateInfo {
         VkDescriptorSetAllocateInfo {
-            descriptor_pool: vk_null_ref(),
-            set_layouts: &[],
+            descriptor_pool: RawVkDescriptorPool::vk_to_wrapped(&src.descriptor_pool),
+            set_layouts: new_vk_array(src.descriptor_set_count, src.set_layouts),
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkDescriptorSetAllocateInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
+impl Default for VkDescriptorSetAllocateInfo {
+    fn default() -> VkDescriptorSetAllocateInfo {
+        VkDescriptorSetAllocateInfo {
+            descriptor_pool: Default::default(),
+            set_layouts: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkDescriptorSetAllocateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.descriptor_pool, fn_table);
     }
 }
 
 impl VkFree for RawVkDescriptorSetAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.set_layouts);
     }
 }

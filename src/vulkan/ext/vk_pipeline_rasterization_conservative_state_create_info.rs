@@ -28,7 +28,7 @@ pub struct VkPipelineRasterizationConservativeStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineRasterizationConservativeStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineRasterizationConservativeStateCreateFlags,
     pub conservative_rasterization_mode: RawVkConservativeRasterizationMode,
     pub extra_primitive_overestimation_size: f32,
@@ -37,7 +37,7 @@ pub struct RawVkPipelineRasterizationConservativeStateCreateInfo {
 impl VkWrappedType<RawVkPipelineRasterizationConservativeStateCreateInfo> for VkPipelineRasterizationConservativeStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineRasterizationConservativeStateCreateInfo, dst: &mut RawVkPipelineRasterizationConservativeStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineRasterizationConservativeStateCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.conservative_rasterization_mode = vk_to_raw_value(&src.conservative_rasterization_mode);
         dst.extra_primitive_overestimation_size = src.extra_primitive_overestimation_size;
@@ -57,8 +57,8 @@ impl VkRawType<VkPipelineRasterizationConservativeStateCreateInfo> for RawVkPipe
 impl Default for VkPipelineRasterizationConservativeStateCreateInfo {
     fn default() -> VkPipelineRasterizationConservativeStateCreateInfo {
         VkPipelineRasterizationConservativeStateCreateInfo {
-            flags: VkPipelineRasterizationConservativeStateCreateFlags::default(),
-            conservative_rasterization_mode: VkConservativeRasterizationMode::default(),
+            flags: Default::default(),
+            conservative_rasterization_mode: Default::default(),
             extra_primitive_overestimation_size: 0.0,
         }
     }
@@ -71,7 +71,7 @@ impl VkSetup for VkPipelineRasterizationConservativeStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineRasterizationConservativeStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

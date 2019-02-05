@@ -17,9 +17,9 @@ use vulkan::nvx::{VkIndirectCommandsLayout,RawVkIndirectCommandsLayout};
 
 /// Wrapper for [VkCmdReserveSpaceForCommandsInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCmdReserveSpaceForCommandsInfoNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkCmdReserveSpaceForCommandsInfo<'a, 'b> {
-    pub object_table: &'a VkObjectTable,
-    pub indirect_commands_layout: &'b VkIndirectCommandsLayout,
+pub struct VkCmdReserveSpaceForCommandsInfo {
+    pub object_table: VkObjectTable,
+    pub indirect_commands_layout: VkIndirectCommandsLayout,
     pub max_sequences_count: usize,
 }
 
@@ -28,40 +28,51 @@ pub struct VkCmdReserveSpaceForCommandsInfo<'a, 'b> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCmdReserveSpaceForCommandsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_table: RawVkObjectTable,
     pub indirect_commands_layout: RawVkIndirectCommandsLayout,
     pub max_sequences_count: u32,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkCmdReserveSpaceForCommandsInfo> for VkCmdReserveSpaceForCommandsInfo<'a, 'b> {
+impl VkWrappedType<RawVkCmdReserveSpaceForCommandsInfo> for VkCmdReserveSpaceForCommandsInfo {
     fn vk_to_raw(src: &VkCmdReserveSpaceForCommandsInfo, dst: &mut RawVkCmdReserveSpaceForCommandsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CmdReserveSpaceForCommandsInfoNvx);
-        dst.next = ptr::null();
-        dst.object_table = vk_to_raw_value(src.object_table);
-        dst.indirect_commands_layout = vk_to_raw_value(src.indirect_commands_layout);
+        dst.next = ptr::null_mut();
+        dst.object_table = vk_to_raw_value(&src.object_table);
+        dst.indirect_commands_layout = vk_to_raw_value(&src.indirect_commands_layout);
         dst.max_sequences_count = vk_to_raw_value(&src.max_sequences_count);
     }
 }
 
-impl Default for VkCmdReserveSpaceForCommandsInfo<'static, 'static> {
-    fn default() -> VkCmdReserveSpaceForCommandsInfo<'static, 'static> {
+impl VkRawType<VkCmdReserveSpaceForCommandsInfo> for RawVkCmdReserveSpaceForCommandsInfo {
+    fn vk_to_wrapped(src: &RawVkCmdReserveSpaceForCommandsInfo) -> VkCmdReserveSpaceForCommandsInfo {
         VkCmdReserveSpaceForCommandsInfo {
-            object_table: vk_null_ref(),
-            indirect_commands_layout: vk_null_ref(),
+            object_table: RawVkObjectTable::vk_to_wrapped(&src.object_table),
+            indirect_commands_layout: RawVkIndirectCommandsLayout::vk_to_wrapped(&src.indirect_commands_layout),
+            max_sequences_count: u32::vk_to_wrapped(&src.max_sequences_count),
+        }
+    }
+}
+
+impl Default for VkCmdReserveSpaceForCommandsInfo {
+    fn default() -> VkCmdReserveSpaceForCommandsInfo {
+        VkCmdReserveSpaceForCommandsInfo {
+            object_table: Default::default(),
+            indirect_commands_layout: Default::default(),
             max_sequences_count: 0,
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkCmdReserveSpaceForCommandsInfo<'a, 'b> {
+impl VkSetup for VkCmdReserveSpaceForCommandsInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.object_table, fn_table);
+        VkSetup::vk_setup(&mut self.indirect_commands_layout, fn_table);
     }
 }
 
 impl VkFree for RawVkCmdReserveSpaceForCommandsInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -16,8 +16,8 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkBufferDeviceAddressInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferDeviceAddressInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkBufferDeviceAddressInfo<'a> {
-    pub buffer: &'a VkBuffer,
+pub struct VkBufferDeviceAddressInfo {
+    pub buffer: VkBuffer,
 }
 
 #[doc(hidden)]
@@ -25,34 +25,42 @@ pub struct VkBufferDeviceAddressInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBufferDeviceAddressInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub buffer: RawVkBuffer,
 }
 
-impl<'a> VkWrappedType<RawVkBufferDeviceAddressInfo> for VkBufferDeviceAddressInfo<'a> {
+impl VkWrappedType<RawVkBufferDeviceAddressInfo> for VkBufferDeviceAddressInfo {
     fn vk_to_raw(src: &VkBufferDeviceAddressInfo, dst: &mut RawVkBufferDeviceAddressInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferDeviceAddressInfoExt);
-        dst.next = ptr::null();
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.next = ptr::null_mut();
+        dst.buffer = vk_to_raw_value(&src.buffer);
     }
 }
 
-impl Default for VkBufferDeviceAddressInfo<'static> {
-    fn default() -> VkBufferDeviceAddressInfo<'static> {
+impl VkRawType<VkBufferDeviceAddressInfo> for RawVkBufferDeviceAddressInfo {
+    fn vk_to_wrapped(src: &RawVkBufferDeviceAddressInfo) -> VkBufferDeviceAddressInfo {
         VkBufferDeviceAddressInfo {
-            buffer: vk_null_ref(),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
         }
     }
 }
 
-impl<'a> VkSetup for VkBufferDeviceAddressInfo<'a> {
+impl Default for VkBufferDeviceAddressInfo {
+    fn default() -> VkBufferDeviceAddressInfo {
+        VkBufferDeviceAddressInfo {
+            buffer: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkBufferDeviceAddressInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkBufferDeviceAddressInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

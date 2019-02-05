@@ -30,7 +30,7 @@ pub struct VkPhysicalDeviceSampleLocationsProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSampleLocationsProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub sample_location_sample_counts: RawVkSampleCountFlags,
     pub max_sample_location_grid_size: RawVkExtent2D,
     pub sample_location_coordinate_range: [f32; 2],
@@ -41,7 +41,7 @@ pub struct RawVkPhysicalDeviceSampleLocationsProperties {
 impl VkWrappedType<RawVkPhysicalDeviceSampleLocationsProperties> for VkPhysicalDeviceSampleLocationsProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceSampleLocationsProperties, dst: &mut RawVkPhysicalDeviceSampleLocationsProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSampleLocationsPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.sample_location_sample_counts = vk_to_raw_value(&src.sample_location_sample_counts);
         dst.max_sample_location_grid_size = vk_to_raw_value(&src.max_sample_location_grid_size);
         dst.sample_location_coordinate_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.sample_location_coordinate_range, &mut dst_array); dst_array };
@@ -65,8 +65,8 @@ impl VkRawType<VkPhysicalDeviceSampleLocationsProperties> for RawVkPhysicalDevic
 impl Default for VkPhysicalDeviceSampleLocationsProperties {
     fn default() -> VkPhysicalDeviceSampleLocationsProperties {
         VkPhysicalDeviceSampleLocationsProperties {
-            sample_location_sample_counts: VkSampleCountFlags::default(),
-            max_sample_location_grid_size: VkExtent2D::default(),
+            sample_location_sample_counts: Default::default(),
+            max_sample_location_grid_size: Default::default(),
             sample_location_coordinate_range: [0.0; 2],
             sample_location_sub_pixel_bits: 0,
             variable_sample_locations: false,
@@ -81,7 +81,7 @@ impl VkSetup for VkPhysicalDeviceSampleLocationsProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceSampleLocationsProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.max_sample_location_grid_size);
+    fn vk_free(&self) {
+        
     }
 }

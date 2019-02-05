@@ -59,7 +59,7 @@ impl VkRawType<VkSparseImageMemoryRequirements> for RawVkSparseImageMemoryRequir
 impl Default for VkSparseImageMemoryRequirements {
     fn default() -> VkSparseImageMemoryRequirements {
         VkSparseImageMemoryRequirements {
-            format_properties: VkSparseImageFormatProperties::default(),
+            format_properties: Default::default(),
             image_mip_tail_first_lod: 0,
             image_mip_tail_size: 0,
             image_mip_tail_offset: 0,
@@ -75,7 +75,7 @@ impl VkSetup for VkSparseImageMemoryRequirements {
 }
 
 impl VkFree for RawVkSparseImageMemoryRequirements {
-    fn vk_free(&mut self) {
-        RawVkSparseImageFormatProperties::vk_free(&mut self.format_properties);
+    fn vk_free(&self) {
+        
     }
 }

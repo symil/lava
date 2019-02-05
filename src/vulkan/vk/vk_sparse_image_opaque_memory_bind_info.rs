@@ -16,12 +16,9 @@ use vulkan::vk::{VkSparseMemoryBind,RawVkSparseMemoryBind};
 
 /// Wrapper for [VkSparseImageOpaqueMemoryBindInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageOpaqueMemoryBindInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkSparseImageOpaqueMemoryBindInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
-    pub image: &'a VkImage,
-    pub binds: &'b [VkSparseMemoryBind<'c>],
+pub struct VkSparseImageOpaqueMemoryBindInfo {
+    pub image: VkImage,
+    pub binds: Vec<VkSparseMemoryBind>,
 }
 
 #[doc(hidden)]
@@ -33,37 +30,40 @@ pub struct RawVkSparseImageOpaqueMemoryBindInfo {
     pub binds: *mut RawVkSparseMemoryBind,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkSparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemoryBindInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
+impl VkWrappedType<RawVkSparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemoryBindInfo {
     fn vk_to_raw(src: &VkSparseImageOpaqueMemoryBindInfo, dst: &mut RawVkSparseImageOpaqueMemoryBindInfo) {
-        dst.image = vk_to_raw_value(src.image);
+        dst.image = vk_to_raw_value(&src.image);
         dst.bind_count = src.binds.len() as u32;
-        dst.binds = new_ptr_vk_array(src.binds);
+        dst.binds = new_ptr_vk_array(&src.binds);
     }
 }
 
-impl Default for VkSparseImageOpaqueMemoryBindInfo<'static, 'static, 'static> {
-    fn default() -> VkSparseImageOpaqueMemoryBindInfo<'static, 'static, 'static> {
+impl VkRawType<VkSparseImageOpaqueMemoryBindInfo> for RawVkSparseImageOpaqueMemoryBindInfo {
+    fn vk_to_wrapped(src: &RawVkSparseImageOpaqueMemoryBindInfo) -> VkSparseImageOpaqueMemoryBindInfo {
         VkSparseImageOpaqueMemoryBindInfo {
-            image: vk_null_ref(),
-            binds: &[],
+            image: RawVkImage::vk_to_wrapped(&src.image),
+            binds: new_vk_array(src.bind_count, src.binds),
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkSparseImageOpaqueMemoryBindInfo<'a, 'b, 'c>
-    where
-        'c: 'b,
-{
+impl Default for VkSparseImageOpaqueMemoryBindInfo {
+    fn default() -> VkSparseImageOpaqueMemoryBindInfo {
+        VkSparseImageOpaqueMemoryBindInfo {
+            image: Default::default(),
+            binds: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkSparseImageOpaqueMemoryBindInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.image, fn_table);
     }
 }
 
 impl VkFree for RawVkSparseImageOpaqueMemoryBindInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.bind_count as usize, self.binds);
     }
 }

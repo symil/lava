@@ -18,11 +18,11 @@ use vulkan::vk::{VkFence,RawVkFence};
 
 /// Wrapper for [VkAcquireNextImageInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAcquireNextImageInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkAcquireNextImageInfo<'a, 'b, 'c> {
-    pub swapchain: &'a VkSwapchain,
+pub struct VkAcquireNextImageInfo {
+    pub swapchain: VkSwapchain,
     pub timeout: u64,
-    pub semaphore: Option<&'b VkSemaphore>,
-    pub fence: Option<&'c VkFence>,
+    pub semaphore: Option<VkSemaphore>,
+    pub fence: Option<VkFence>,
     pub device_mask: u32,
 }
 
@@ -31,7 +31,7 @@ pub struct VkAcquireNextImageInfo<'a, 'b, 'c> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAcquireNextImageInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain: RawVkSwapchain,
     pub timeout: u64,
     pub semaphore: RawVkSemaphore,
@@ -39,22 +39,34 @@ pub struct RawVkAcquireNextImageInfo {
     pub device_mask: u32,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkAcquireNextImageInfo> for VkAcquireNextImageInfo<'a, 'b, 'c> {
+impl VkWrappedType<RawVkAcquireNextImageInfo> for VkAcquireNextImageInfo {
     fn vk_to_raw(src: &VkAcquireNextImageInfo, dst: &mut RawVkAcquireNextImageInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AcquireNextImageInfoKhr);
-        dst.next = ptr::null();
-        dst.swapchain = vk_to_raw_value(src.swapchain);
+        dst.next = ptr::null_mut();
+        dst.swapchain = vk_to_raw_value(&src.swapchain);
         dst.timeout = src.timeout;
-        dst.semaphore = if src.semaphore.is_some() { vk_to_raw_value(src.semaphore.unwrap()) } else { 0 };
-        dst.fence = if src.fence.is_some() { vk_to_raw_value(src.fence.unwrap()) } else { 0 };
+        dst.semaphore = vk_to_raw_value_checked(&src.semaphore);
+        dst.fence = vk_to_raw_value_checked(&src.fence);
         dst.device_mask = src.device_mask;
     }
 }
 
-impl Default for VkAcquireNextImageInfo<'static, 'static, 'static> {
-    fn default() -> VkAcquireNextImageInfo<'static, 'static, 'static> {
+impl VkRawType<VkAcquireNextImageInfo> for RawVkAcquireNextImageInfo {
+    fn vk_to_wrapped(src: &RawVkAcquireNextImageInfo) -> VkAcquireNextImageInfo {
         VkAcquireNextImageInfo {
-            swapchain: vk_null_ref(),
+            swapchain: RawVkSwapchain::vk_to_wrapped(&src.swapchain),
+            timeout: src.timeout,
+            semaphore: Some(RawVkSemaphore::vk_to_wrapped(&src.semaphore)),
+            fence: Some(RawVkFence::vk_to_wrapped(&src.fence)),
+            device_mask: src.device_mask,
+        }
+    }
+}
+
+impl Default for VkAcquireNextImageInfo {
+    fn default() -> VkAcquireNextImageInfo {
+        VkAcquireNextImageInfo {
+            swapchain: Default::default(),
             timeout: 0,
             semaphore: None,
             fence: None,
@@ -63,14 +75,14 @@ impl Default for VkAcquireNextImageInfo<'static, 'static, 'static> {
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkAcquireNextImageInfo<'a, 'b, 'c> {
+impl VkSetup for VkAcquireNextImageInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.swapchain, fn_table);
     }
 }
 
 impl VkFree for RawVkAcquireNextImageInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

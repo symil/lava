@@ -25,14 +25,14 @@ pub struct VkExportMemoryAllocateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExportMemoryAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
 impl VkWrappedType<RawVkExportMemoryAllocateInfo> for VkExportMemoryAllocateInfo {
     fn vk_to_raw(src: &VkExportMemoryAllocateInfo, dst: &mut RawVkExportMemoryAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ExportMemoryAllocateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkExportMemoryAllocateInfo> for RawVkExportMemoryAllocateInfo {
 impl Default for VkExportMemoryAllocateInfo {
     fn default() -> VkExportMemoryAllocateInfo {
         VkExportMemoryAllocateInfo {
-            handle_types: VkExternalMemoryHandleTypeFlags::default(),
+            handle_types: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExportMemoryAllocateInfo {
 }
 
 impl VkFree for RawVkExportMemoryAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

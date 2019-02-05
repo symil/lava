@@ -25,14 +25,14 @@ pub struct VkSurfaceFormat2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceFormat2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub surface_format: RawVkSurfaceFormat,
 }
 
 impl VkWrappedType<RawVkSurfaceFormat2> for VkSurfaceFormat2 {
     fn vk_to_raw(src: &VkSurfaceFormat2, dst: &mut RawVkSurfaceFormat2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceFormat2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.surface_format = vk_to_raw_value(&src.surface_format);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkSurfaceFormat2> for RawVkSurfaceFormat2 {
 impl Default for VkSurfaceFormat2 {
     fn default() -> VkSurfaceFormat2 {
         VkSurfaceFormat2 {
-            surface_format: VkSurfaceFormat::default(),
+            surface_format: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSurfaceFormat2 {
 }
 
 impl VkFree for RawVkSurfaceFormat2 {
-    fn vk_free(&mut self) {
-        RawVkSurfaceFormat::vk_free(&mut self.surface_format);
+    fn vk_free(&self) {
+        
     }
 }

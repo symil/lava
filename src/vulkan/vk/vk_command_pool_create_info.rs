@@ -26,7 +26,7 @@ pub struct VkCommandPoolCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandPoolCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkCommandPoolCreateFlags,
     pub queue_family_index: u32,
 }
@@ -34,7 +34,7 @@ pub struct RawVkCommandPoolCreateInfo {
 impl VkWrappedType<RawVkCommandPoolCreateInfo> for VkCommandPoolCreateInfo {
     fn vk_to_raw(src: &VkCommandPoolCreateInfo, dst: &mut RawVkCommandPoolCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandPoolCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.queue_family_index = vk_to_raw_value(&src.queue_family_index);
     }
@@ -52,7 +52,7 @@ impl VkRawType<VkCommandPoolCreateInfo> for RawVkCommandPoolCreateInfo {
 impl Default for VkCommandPoolCreateInfo {
     fn default() -> VkCommandPoolCreateInfo {
         VkCommandPoolCreateInfo {
-            flags: VkCommandPoolCreateFlags::default(),
+            flags: Default::default(),
             queue_family_index: 0,
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkCommandPoolCreateInfo {
 }
 
 impl VkFree for RawVkCommandPoolCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

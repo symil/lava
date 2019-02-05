@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkSemaphore = u64;
 
 /// Wrapper for [VkSemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphore.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkSemaphore {
     _handle: RawVkSemaphore,
     _fn_table: *mut VkFunctionTable

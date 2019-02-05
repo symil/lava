@@ -25,14 +25,14 @@ pub struct VkDisplayPlaneCapabilities2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneCapabilities2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub capabilities: RawVkDisplayPlaneCapabilities,
 }
 
 impl VkWrappedType<RawVkDisplayPlaneCapabilities2> for VkDisplayPlaneCapabilities2 {
     fn vk_to_raw(src: &VkDisplayPlaneCapabilities2, dst: &mut RawVkDisplayPlaneCapabilities2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPlaneCapabilities2Khr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.capabilities = vk_to_raw_value(&src.capabilities);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkDisplayPlaneCapabilities2> for RawVkDisplayPlaneCapabilities2 {
 impl Default for VkDisplayPlaneCapabilities2 {
     fn default() -> VkDisplayPlaneCapabilities2 {
         VkDisplayPlaneCapabilities2 {
-            capabilities: VkDisplayPlaneCapabilities::default(),
+            capabilities: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDisplayPlaneCapabilities2 {
 }
 
 impl VkFree for RawVkDisplayPlaneCapabilities2 {
-    fn vk_free(&mut self) {
-        RawVkDisplayPlaneCapabilities::vk_free(&mut self.capabilities);
+    fn vk_free(&self) {
+        
     }
 }

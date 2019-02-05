@@ -15,8 +15,8 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 
 /// Wrapper for [VkImageDrmFormatModifierListCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageDrmFormatModifierListCreateInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkImageDrmFormatModifierListCreateInfo<'a> {
-    pub drm_format_modifiers: &'a [usize],
+pub struct VkImageDrmFormatModifierListCreateInfo {
+    pub drm_format_modifiers: Vec<usize>,
 }
 
 #[doc(hidden)]
@@ -24,36 +24,44 @@ pub struct VkImageDrmFormatModifierListCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageDrmFormatModifierListCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub drm_format_modifier_count: u32,
     pub drm_format_modifiers: *mut u64,
 }
 
-impl<'a> VkWrappedType<RawVkImageDrmFormatModifierListCreateInfo> for VkImageDrmFormatModifierListCreateInfo<'a> {
+impl VkWrappedType<RawVkImageDrmFormatModifierListCreateInfo> for VkImageDrmFormatModifierListCreateInfo {
     fn vk_to_raw(src: &VkImageDrmFormatModifierListCreateInfo, dst: &mut RawVkImageDrmFormatModifierListCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageDrmFormatModifierListCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.drm_format_modifier_count = src.drm_format_modifiers.len() as u32;
-        dst.drm_format_modifiers = new_ptr_vk_array(src.drm_format_modifiers);
+        dst.drm_format_modifiers = new_ptr_vk_array(&src.drm_format_modifiers);
     }
 }
 
-impl Default for VkImageDrmFormatModifierListCreateInfo<'static> {
-    fn default() -> VkImageDrmFormatModifierListCreateInfo<'static> {
+impl VkRawType<VkImageDrmFormatModifierListCreateInfo> for RawVkImageDrmFormatModifierListCreateInfo {
+    fn vk_to_wrapped(src: &RawVkImageDrmFormatModifierListCreateInfo) -> VkImageDrmFormatModifierListCreateInfo {
         VkImageDrmFormatModifierListCreateInfo {
-            drm_format_modifiers: &[],
+            drm_format_modifiers: new_vk_array(src.drm_format_modifier_count, src.drm_format_modifiers),
         }
     }
 }
 
-impl<'a> VkSetup for VkImageDrmFormatModifierListCreateInfo<'a> {
+impl Default for VkImageDrmFormatModifierListCreateInfo {
+    fn default() -> VkImageDrmFormatModifierListCreateInfo {
+        VkImageDrmFormatModifierListCreateInfo {
+            drm_format_modifiers: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkImageDrmFormatModifierListCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkImageDrmFormatModifierListCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.drm_format_modifiers);
     }
 }

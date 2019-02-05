@@ -47,7 +47,7 @@ impl VkRawType<VkDescriptorPoolSize> for RawVkDescriptorPoolSize {
 impl Default for VkDescriptorPoolSize {
     fn default() -> VkDescriptorPoolSize {
         VkDescriptorPoolSize {
-            type_: VkDescriptorType::default(),
+            type_: Default::default(),
             descriptor_count: 0,
         }
     }
@@ -60,7 +60,7 @@ impl VkSetup for VkDescriptorPoolSize {
 }
 
 impl VkFree for RawVkDescriptorPoolSize {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

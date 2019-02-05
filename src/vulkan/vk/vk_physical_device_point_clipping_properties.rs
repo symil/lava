@@ -25,14 +25,14 @@ pub struct VkPhysicalDevicePointClippingProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevicePointClippingProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub point_clipping_behavior: RawVkPointClippingBehavior,
 }
 
 impl VkWrappedType<RawVkPhysicalDevicePointClippingProperties> for VkPhysicalDevicePointClippingProperties {
     fn vk_to_raw(src: &VkPhysicalDevicePointClippingProperties, dst: &mut RawVkPhysicalDevicePointClippingProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevicePointClippingProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.point_clipping_behavior = vk_to_raw_value(&src.point_clipping_behavior);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDevicePointClippingProperties> for RawVkPhysicalDeviceP
 impl Default for VkPhysicalDevicePointClippingProperties {
     fn default() -> VkPhysicalDevicePointClippingProperties {
         VkPhysicalDevicePointClippingProperties {
-            point_clipping_behavior: VkPointClippingBehavior::default(),
+            point_clipping_behavior: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDevicePointClippingProperties {
 }
 
 impl VkFree for RawVkPhysicalDevicePointClippingProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

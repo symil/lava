@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkSamplerYcbcrConversion = u64;
 
 /// Wrapper for [VkSamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrConversion.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkSamplerYcbcrConversion {
     _handle: RawVkSamplerYcbcrConversion,
     _fn_table: *mut VkFunctionTable

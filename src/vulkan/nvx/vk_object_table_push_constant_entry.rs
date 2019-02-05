@@ -18,10 +18,10 @@ use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 
 /// Wrapper for [VkObjectTablePushConstantEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTablePushConstantEntryNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkObjectTablePushConstantEntry<'a> {
+pub struct VkObjectTablePushConstantEntry {
     pub type_: VkObjectEntryType,
     pub flags: VkObjectEntryUsageFlags,
-    pub pipeline_layout: &'a VkPipelineLayout,
+    pub pipeline_layout: VkPipelineLayout,
     pub stage_flags: VkShaderStageFlags,
 }
 
@@ -35,34 +35,45 @@ pub struct RawVkObjectTablePushConstantEntry {
     pub stage_flags: RawVkShaderStageFlags,
 }
 
-impl<'a> VkWrappedType<RawVkObjectTablePushConstantEntry> for VkObjectTablePushConstantEntry<'a> {
+impl VkWrappedType<RawVkObjectTablePushConstantEntry> for VkObjectTablePushConstantEntry {
     fn vk_to_raw(src: &VkObjectTablePushConstantEntry, dst: &mut RawVkObjectTablePushConstantEntry) {
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.pipeline_layout = vk_to_raw_value(src.pipeline_layout);
+        dst.pipeline_layout = vk_to_raw_value(&src.pipeline_layout);
         dst.stage_flags = vk_to_raw_value(&src.stage_flags);
     }
 }
 
-impl Default for VkObjectTablePushConstantEntry<'static> {
-    fn default() -> VkObjectTablePushConstantEntry<'static> {
+impl VkRawType<VkObjectTablePushConstantEntry> for RawVkObjectTablePushConstantEntry {
+    fn vk_to_wrapped(src: &RawVkObjectTablePushConstantEntry) -> VkObjectTablePushConstantEntry {
         VkObjectTablePushConstantEntry {
-            type_: VkObjectEntryType::default(),
-            flags: VkObjectEntryUsageFlags::default(),
-            pipeline_layout: vk_null_ref(),
-            stage_flags: VkShaderStageFlags::default(),
+            type_: RawVkObjectEntryType::vk_to_wrapped(&src.type_),
+            flags: RawVkObjectEntryUsageFlags::vk_to_wrapped(&src.flags),
+            pipeline_layout: RawVkPipelineLayout::vk_to_wrapped(&src.pipeline_layout),
+            stage_flags: RawVkShaderStageFlags::vk_to_wrapped(&src.stage_flags),
         }
     }
 }
 
-impl<'a> VkSetup for VkObjectTablePushConstantEntry<'a> {
+impl Default for VkObjectTablePushConstantEntry {
+    fn default() -> VkObjectTablePushConstantEntry {
+        VkObjectTablePushConstantEntry {
+            type_: Default::default(),
+            flags: Default::default(),
+            pipeline_layout: Default::default(),
+            stage_flags: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkObjectTablePushConstantEntry {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.pipeline_layout, fn_table);
     }
 }
 
 impl VkFree for RawVkObjectTablePushConstantEntry {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

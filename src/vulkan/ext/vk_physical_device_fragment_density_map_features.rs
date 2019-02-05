@@ -26,7 +26,7 @@ pub struct VkPhysicalDeviceFragmentDensityMapFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceFragmentDensityMapFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub fragment_density_map: u32,
     pub fragment_density_map_dynamic: u32,
     pub fragment_density_map_non_subsampled_images: u32,
@@ -35,7 +35,7 @@ pub struct RawVkPhysicalDeviceFragmentDensityMapFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceFragmentDensityMapFeatures> for VkPhysicalDeviceFragmentDensityMapFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceFragmentDensityMapFeatures, dst: &mut RawVkPhysicalDeviceFragmentDensityMapFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFragmentDensityMapFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.fragment_density_map = vk_to_raw_value(&src.fragment_density_map);
         dst.fragment_density_map_dynamic = vk_to_raw_value(&src.fragment_density_map_dynamic);
         dst.fragment_density_map_non_subsampled_images = vk_to_raw_value(&src.fragment_density_map_non_subsampled_images);
@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDeviceFragmentDensityMapFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceFragmentDensityMapFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -29,7 +29,7 @@ pub struct VkPhysicalDeviceSubgroupProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSubgroupProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub subgroup_size: u32,
     pub supported_stages: RawVkShaderStageFlags,
     pub supported_operations: RawVkSubgroupFeatureFlags,
@@ -39,7 +39,7 @@ pub struct RawVkPhysicalDeviceSubgroupProperties {
 impl VkWrappedType<RawVkPhysicalDeviceSubgroupProperties> for VkPhysicalDeviceSubgroupProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceSubgroupProperties, dst: &mut RawVkPhysicalDeviceSubgroupProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSubgroupProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.subgroup_size = vk_to_raw_value(&src.subgroup_size);
         dst.supported_stages = vk_to_raw_value(&src.supported_stages);
         dst.supported_operations = vk_to_raw_value(&src.supported_operations);
@@ -62,8 +62,8 @@ impl Default for VkPhysicalDeviceSubgroupProperties {
     fn default() -> VkPhysicalDeviceSubgroupProperties {
         VkPhysicalDeviceSubgroupProperties {
             subgroup_size: 0,
-            supported_stages: VkShaderStageFlags::default(),
-            supported_operations: VkSubgroupFeatureFlags::default(),
+            supported_stages: Default::default(),
+            supported_operations: Default::default(),
             quad_operations_in_all_stages: false,
         }
     }
@@ -76,7 +76,7 @@ impl VkSetup for VkPhysicalDeviceSubgroupProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceSubgroupProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

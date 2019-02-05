@@ -53,7 +53,7 @@ impl Default for VkVertexInputBindingDescription {
         VkVertexInputBindingDescription {
             binding: 0,
             stride: 0,
-            input_rate: VkVertexInputRate::default(),
+            input_rate: Default::default(),
         }
     }
 }
@@ -65,7 +65,7 @@ impl VkSetup for VkVertexInputBindingDescription {
 }
 
 impl VkFree for RawVkVertexInputBindingDescription {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

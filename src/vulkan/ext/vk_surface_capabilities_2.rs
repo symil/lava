@@ -39,7 +39,7 @@ pub struct VkSurfaceCapabilities2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSurfaceCapabilities2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub min_image_count: u32,
     pub max_image_count: u32,
     pub current_extent: RawVkExtent2D,
@@ -56,7 +56,7 @@ pub struct RawVkSurfaceCapabilities2 {
 impl VkWrappedType<RawVkSurfaceCapabilities2> for VkSurfaceCapabilities2 {
     fn vk_to_raw(src: &VkSurfaceCapabilities2, dst: &mut RawVkSurfaceCapabilities2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SurfaceCapabilities2Ext);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.min_image_count = vk_to_raw_value(&src.min_image_count);
         dst.max_image_count = vk_to_raw_value(&src.max_image_count);
         dst.current_extent = vk_to_raw_value(&src.current_extent);
@@ -94,15 +94,15 @@ impl Default for VkSurfaceCapabilities2 {
         VkSurfaceCapabilities2 {
             min_image_count: 0,
             max_image_count: 0,
-            current_extent: VkExtent2D::default(),
-            min_image_extent: VkExtent2D::default(),
-            max_image_extent: VkExtent2D::default(),
+            current_extent: Default::default(),
+            min_image_extent: Default::default(),
+            max_image_extent: Default::default(),
             max_image_array_layers: 0,
-            supported_transforms: VkSurfaceTransformFlags::default(),
-            current_transform: VkSurfaceTransformFlags::default(),
-            supported_composite_alpha: VkCompositeAlphaFlags::default(),
-            supported_usage_flags: VkImageUsageFlags::default(),
-            supported_surface_counters: VkSurfaceCounterFlags::default(),
+            supported_transforms: Default::default(),
+            current_transform: Default::default(),
+            supported_composite_alpha: Default::default(),
+            supported_usage_flags: Default::default(),
+            supported_surface_counters: Default::default(),
         }
     }
 }
@@ -116,9 +116,7 @@ impl VkSetup for VkSurfaceCapabilities2 {
 }
 
 impl VkFree for RawVkSurfaceCapabilities2 {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.current_extent);
-        RawVkExtent2D::vk_free(&mut self.min_image_extent);
-        RawVkExtent2D::vk_free(&mut self.max_image_extent);
+    fn vk_free(&self) {
+        
     }
 }

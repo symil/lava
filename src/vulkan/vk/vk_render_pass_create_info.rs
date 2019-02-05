@@ -19,18 +19,11 @@ use vulkan::vk::{VkSubpassDependency,RawVkSubpassDependency};
 
 /// Wrapper for [VkRenderPassCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkRenderPassCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'c: 'b,
-        'd: 'b,
-        'e: 'b,
-        'f: 'b,
-        'g: 'b,
-{
+pub struct VkRenderPassCreateInfo {
     pub flags: VkRenderPassCreateFlags,
-    pub attachments: &'a [VkAttachmentDescription],
-    pub subpasses: &'b [VkSubpassDescription<'c, 'd, 'e, 'f, 'g>],
-    pub dependencies: &'h [VkSubpassDependency],
+    pub attachments: Vec<VkAttachmentDescription>,
+    pub subpasses: Vec<VkSubpassDescription>,
+    pub dependencies: Vec<VkSubpassDependency>,
 }
 
 #[doc(hidden)]
@@ -38,7 +31,7 @@ pub struct VkRenderPassCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkRenderPassCreateFlags,
     pub attachment_count: u32,
     pub attachments: *mut RawVkAttachmentDescription,
@@ -48,53 +41,50 @@ pub struct RawVkRenderPassCreateInfo {
     pub dependencies: *mut RawVkSubpassDependency,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkWrappedType<RawVkRenderPassCreateInfo> for VkRenderPassCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'c: 'b,
-        'd: 'b,
-        'e: 'b,
-        'f: 'b,
-        'g: 'b,
-{
+impl VkWrappedType<RawVkRenderPassCreateInfo> for VkRenderPassCreateInfo {
     fn vk_to_raw(src: &VkRenderPassCreateInfo, dst: &mut RawVkRenderPassCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.attachment_count = src.attachments.len() as u32;
-        dst.attachments = new_ptr_vk_array(src.attachments);
+        dst.attachments = new_ptr_vk_array(&src.attachments);
         dst.subpass_count = src.subpasses.len() as u32;
-        dst.subpasses = new_ptr_vk_array(src.subpasses);
+        dst.subpasses = new_ptr_vk_array(&src.subpasses);
         dst.dependency_count = src.dependencies.len() as u32;
-        dst.dependencies = new_ptr_vk_array(src.dependencies);
+        dst.dependencies = new_ptr_vk_array(&src.dependencies);
     }
 }
 
-impl Default for VkRenderPassCreateInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkRenderPassCreateInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl VkRawType<VkRenderPassCreateInfo> for RawVkRenderPassCreateInfo {
+    fn vk_to_wrapped(src: &RawVkRenderPassCreateInfo) -> VkRenderPassCreateInfo {
         VkRenderPassCreateInfo {
-            flags: VkRenderPassCreateFlags::default(),
-            attachments: &[],
-            subpasses: &[],
-            dependencies: &[],
+            flags: RawVkRenderPassCreateFlags::vk_to_wrapped(&src.flags),
+            attachments: new_vk_array(src.attachment_count, src.attachments),
+            subpasses: new_vk_array(src.subpass_count, src.subpasses),
+            dependencies: new_vk_array(src.dependency_count, src.dependencies),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkSetup for VkRenderPassCreateInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h>
-    where
-        'c: 'b,
-        'd: 'b,
-        'e: 'b,
-        'f: 'b,
-        'g: 'b,
-{
+impl Default for VkRenderPassCreateInfo {
+    fn default() -> VkRenderPassCreateInfo {
+        VkRenderPassCreateInfo {
+            flags: Default::default(),
+            attachments: Vec::new(),
+            subpasses: Vec::new(),
+            dependencies: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkRenderPassCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkRenderPassCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.attachment_count as usize, self.attachments);
         free_vk_ptr_array(self.subpass_count as usize, self.subpasses);
         free_vk_ptr_array(self.dependency_count as usize, self.dependencies);

@@ -25,14 +25,14 @@ pub struct VkPhysicalDeviceExternalSemaphoreInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceExternalSemaphoreInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceExternalSemaphoreInfo> for VkPhysicalDeviceExternalSemaphoreInfo {
     fn vk_to_raw(src: &VkPhysicalDeviceExternalSemaphoreInfo, dst: &mut RawVkPhysicalDeviceExternalSemaphoreInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceExternalSemaphoreInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDeviceExternalSemaphoreInfo> for RawVkPhysicalDeviceExt
 impl Default for VkPhysicalDeviceExternalSemaphoreInfo {
     fn default() -> VkPhysicalDeviceExternalSemaphoreInfo {
         VkPhysicalDeviceExternalSemaphoreInfo {
-            handle_type: VkExternalSemaphoreHandleTypeFlags::default(),
+            handle_type: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDeviceExternalSemaphoreInfo {
 }
 
 impl VkFree for RawVkPhysicalDeviceExternalSemaphoreInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

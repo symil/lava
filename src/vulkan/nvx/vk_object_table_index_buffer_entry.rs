@@ -18,10 +18,10 @@ use vulkan::vk::{VkIndexType,RawVkIndexType};
 
 /// Wrapper for [VkObjectTableIndexBufferEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableIndexBufferEntryNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkObjectTableIndexBufferEntry<'a> {
+pub struct VkObjectTableIndexBufferEntry {
     pub type_: VkObjectEntryType,
     pub flags: VkObjectEntryUsageFlags,
-    pub buffer: &'a VkBuffer,
+    pub buffer: VkBuffer,
     pub index_type: VkIndexType,
 }
 
@@ -35,34 +35,45 @@ pub struct RawVkObjectTableIndexBufferEntry {
     pub index_type: RawVkIndexType,
 }
 
-impl<'a> VkWrappedType<RawVkObjectTableIndexBufferEntry> for VkObjectTableIndexBufferEntry<'a> {
+impl VkWrappedType<RawVkObjectTableIndexBufferEntry> for VkObjectTableIndexBufferEntry {
     fn vk_to_raw(src: &VkObjectTableIndexBufferEntry, dst: &mut RawVkObjectTableIndexBufferEntry) {
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.buffer = vk_to_raw_value(&src.buffer);
         dst.index_type = vk_to_raw_value(&src.index_type);
     }
 }
 
-impl Default for VkObjectTableIndexBufferEntry<'static> {
-    fn default() -> VkObjectTableIndexBufferEntry<'static> {
+impl VkRawType<VkObjectTableIndexBufferEntry> for RawVkObjectTableIndexBufferEntry {
+    fn vk_to_wrapped(src: &RawVkObjectTableIndexBufferEntry) -> VkObjectTableIndexBufferEntry {
         VkObjectTableIndexBufferEntry {
-            type_: VkObjectEntryType::default(),
-            flags: VkObjectEntryUsageFlags::default(),
-            buffer: vk_null_ref(),
-            index_type: VkIndexType::default(),
+            type_: RawVkObjectEntryType::vk_to_wrapped(&src.type_),
+            flags: RawVkObjectEntryUsageFlags::vk_to_wrapped(&src.flags),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
+            index_type: RawVkIndexType::vk_to_wrapped(&src.index_type),
         }
     }
 }
 
-impl<'a> VkSetup for VkObjectTableIndexBufferEntry<'a> {
+impl Default for VkObjectTableIndexBufferEntry {
+    fn default() -> VkObjectTableIndexBufferEntry {
+        VkObjectTableIndexBufferEntry {
+            type_: Default::default(),
+            flags: Default::default(),
+            buffer: Default::default(),
+            index_type: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkObjectTableIndexBufferEntry {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkObjectTableIndexBufferEntry {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

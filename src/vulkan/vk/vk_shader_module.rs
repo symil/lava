@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkShaderModule = u64;
 
 /// Wrapper for [VkShaderModule](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModule.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkShaderModule {
     _handle: RawVkShaderModule,
     _fn_table: *mut VkFunctionTable

@@ -24,14 +24,14 @@ pub struct VkDeviceGroupCommandBufferBeginInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupCommandBufferBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub device_mask: u32,
 }
 
 impl VkWrappedType<RawVkDeviceGroupCommandBufferBeginInfo> for VkDeviceGroupCommandBufferBeginInfo {
     fn vk_to_raw(src: &VkDeviceGroupCommandBufferBeginInfo, dst: &mut RawVkDeviceGroupCommandBufferBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupCommandBufferBeginInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.device_mask = src.device_mask;
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkDeviceGroupCommandBufferBeginInfo {
 }
 
 impl VkFree for RawVkDeviceGroupCommandBufferBeginInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

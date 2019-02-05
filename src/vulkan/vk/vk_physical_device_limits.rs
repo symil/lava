@@ -543,16 +543,16 @@ impl Default for VkPhysicalDeviceLimits {
             max_framebuffer_width: 0,
             max_framebuffer_height: 0,
             max_framebuffer_layers: 0,
-            framebuffer_color_sample_counts: VkSampleCountFlags::default(),
-            framebuffer_depth_sample_counts: VkSampleCountFlags::default(),
-            framebuffer_stencil_sample_counts: VkSampleCountFlags::default(),
-            framebuffer_no_attachments_sample_counts: VkSampleCountFlags::default(),
+            framebuffer_color_sample_counts: Default::default(),
+            framebuffer_depth_sample_counts: Default::default(),
+            framebuffer_stencil_sample_counts: Default::default(),
+            framebuffer_no_attachments_sample_counts: Default::default(),
             max_color_attachments: 0,
-            sampled_image_color_sample_counts: VkSampleCountFlags::default(),
-            sampled_image_integer_sample_counts: VkSampleCountFlags::default(),
-            sampled_image_depth_sample_counts: VkSampleCountFlags::default(),
-            sampled_image_stencil_sample_counts: VkSampleCountFlags::default(),
-            storage_image_sample_counts: VkSampleCountFlags::default(),
+            sampled_image_color_sample_counts: Default::default(),
+            sampled_image_integer_sample_counts: Default::default(),
+            sampled_image_depth_sample_counts: Default::default(),
+            sampled_image_stencil_sample_counts: Default::default(),
+            storage_image_sample_counts: Default::default(),
             max_sample_mask_words: 0,
             timestamp_compute_and_graphics: false,
             timestamp_period: 0.0,
@@ -580,7 +580,7 @@ impl VkSetup for VkPhysicalDeviceLimits {
 }
 
 impl VkFree for RawVkPhysicalDeviceLimits {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

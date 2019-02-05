@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceASTCDecodeFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceASTCDecodeFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub decode_mode_shared_exponent: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceASTCDecodeFeatures> for VkPhysicalDeviceASTCDecodeFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceASTCDecodeFeatures, dst: &mut RawVkPhysicalDeviceASTCDecodeFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceAstcDecodeFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.decode_mode_shared_exponent = vk_to_raw_value(&src.decode_mode_shared_exponent);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceASTCDecodeFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceASTCDecodeFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -24,7 +24,7 @@ pub struct VkPhysicalDeviceProperties2 {
 #[repr(C)]
 pub struct RawVkPhysicalDeviceProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub properties: RawVkPhysicalDeviceProperties,
 }
 
@@ -43,7 +43,7 @@ impl VkSetup for VkPhysicalDeviceProperties2 {
 }
 
 impl VkFree for RawVkPhysicalDeviceProperties2 {
-    fn vk_free(&mut self) {
-        RawVkPhysicalDeviceProperties::vk_free(&mut self.properties);
+    fn vk_free(&self) {
+        
     }
 }

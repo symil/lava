@@ -68,8 +68,7 @@ impl VkSetup for VkPhysicalDeviceProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceProperties {
-    fn vk_free(&mut self) {
-        RawVkPhysicalDeviceLimits::vk_free(&mut self.limits);
-        RawVkPhysicalDeviceSparseProperties::vk_free(&mut self.sparse_properties);
+    fn vk_free(&self) {
+        
     }
 }

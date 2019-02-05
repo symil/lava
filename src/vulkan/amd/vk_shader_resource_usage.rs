@@ -74,7 +74,7 @@ impl VkSetup for VkShaderResourceUsage {
 }
 
 impl VkFree for RawVkShaderResourceUsage {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

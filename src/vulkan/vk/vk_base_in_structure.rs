@@ -24,13 +24,13 @@ pub struct VkBaseInStructure {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBaseInStructure {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
 }
 
 impl VkWrappedType<RawVkBaseInStructure> for VkBaseInStructure {
     fn vk_to_raw(src: &VkBaseInStructure, dst: &mut RawVkBaseInStructure) {
         dst.s_type = vk_to_raw_value(&src.s_type);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
     }
 }
 
@@ -45,7 +45,7 @@ impl VkRawType<VkBaseInStructure> for RawVkBaseInStructure {
 impl Default for VkBaseInStructure {
     fn default() -> VkBaseInStructure {
         VkBaseInStructure {
-            s_type: VkStructureType::default(),
+            s_type: Default::default(),
         }
     }
 }
@@ -57,7 +57,7 @@ impl VkSetup for VkBaseInStructure {
 }
 
 impl VkFree for RawVkBaseInStructure {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

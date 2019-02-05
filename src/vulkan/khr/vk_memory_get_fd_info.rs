@@ -17,8 +17,8 @@ use vulkan::vk::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFl
 
 /// Wrapper for [VkMemoryGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryGetFdInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkMemoryGetFdInfo<'a> {
-    pub memory: &'a VkDeviceMemory,
+pub struct VkMemoryGetFdInfo {
+    pub memory: VkDeviceMemory,
     pub handle_type: VkExternalMemoryHandleTypeFlags,
 }
 
@@ -27,37 +27,46 @@ pub struct VkMemoryGetFdInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryGetFdInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub memory: RawVkDeviceMemory,
     pub handle_type: RawVkExternalMemoryHandleTypeFlags,
 }
 
-impl<'a> VkWrappedType<RawVkMemoryGetFdInfo> for VkMemoryGetFdInfo<'a> {
+impl VkWrappedType<RawVkMemoryGetFdInfo> for VkMemoryGetFdInfo {
     fn vk_to_raw(src: &VkMemoryGetFdInfo, dst: &mut RawVkMemoryGetFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryGetFdInfoKhr);
-        dst.next = ptr::null();
-        dst.memory = vk_to_raw_value(src.memory);
+        dst.next = ptr::null_mut();
+        dst.memory = vk_to_raw_value(&src.memory);
         dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }
 
-impl Default for VkMemoryGetFdInfo<'static> {
-    fn default() -> VkMemoryGetFdInfo<'static> {
+impl VkRawType<VkMemoryGetFdInfo> for RawVkMemoryGetFdInfo {
+    fn vk_to_wrapped(src: &RawVkMemoryGetFdInfo) -> VkMemoryGetFdInfo {
         VkMemoryGetFdInfo {
-            memory: vk_null_ref(),
-            handle_type: VkExternalMemoryHandleTypeFlags::default(),
+            memory: RawVkDeviceMemory::vk_to_wrapped(&src.memory),
+            handle_type: RawVkExternalMemoryHandleTypeFlags::vk_to_wrapped(&src.handle_type),
         }
     }
 }
 
-impl<'a> VkSetup for VkMemoryGetFdInfo<'a> {
+impl Default for VkMemoryGetFdInfo {
+    fn default() -> VkMemoryGetFdInfo {
+        VkMemoryGetFdInfo {
+            memory: Default::default(),
+            handle_type: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkMemoryGetFdInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.memory, fn_table);
     }
 }
 
 impl VkFree for RawVkMemoryGetFdInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

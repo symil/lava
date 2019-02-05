@@ -17,10 +17,10 @@ use vulkan::nvx::{VkObjectEntryUsageFlags,RawVkObjectEntryUsageFlags};
 
 /// Wrapper for [VkObjectTableCreateInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableCreateInfoNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkObjectTableCreateInfo<'a, 'b, 'c> {
-    pub object_entry_types: &'a [VkObjectEntryType],
-    pub object_entry_counts: &'b [usize],
-    pub object_entry_usage_flags: &'c [VkObjectEntryUsageFlags],
+pub struct VkObjectTableCreateInfo {
+    pub object_entry_types: Vec<VkObjectEntryType>,
+    pub object_entry_counts: Vec<usize>,
+    pub object_entry_usage_flags: Vec<VkObjectEntryUsageFlags>,
     pub max_uniform_buffers_per_descriptor: usize,
     pub max_storage_buffers_per_descriptor: usize,
     pub max_storage_images_per_descriptor: usize,
@@ -33,7 +33,7 @@ pub struct VkObjectTableCreateInfo<'a, 'b, 'c> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkObjectTableCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_count: u32,
     pub object_entry_types: *mut RawVkObjectEntryType,
     pub object_entry_counts: *mut u32,
@@ -45,14 +45,14 @@ pub struct RawVkObjectTableCreateInfo {
     pub max_pipeline_layouts: u32,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkObjectTableCreateInfo> for VkObjectTableCreateInfo<'a, 'b, 'c> {
+impl VkWrappedType<RawVkObjectTableCreateInfo> for VkObjectTableCreateInfo {
     fn vk_to_raw(src: &VkObjectTableCreateInfo, dst: &mut RawVkObjectTableCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ObjectTableCreateInfoNvx);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.object_count = cmp::max(cmp::max(src.object_entry_types.len(), src.object_entry_counts.len()), src.object_entry_usage_flags.len()) as u32;
-        dst.object_entry_types = new_ptr_vk_array(src.object_entry_types);
-        dst.object_entry_counts = new_ptr_vk_array(src.object_entry_counts);
-        dst.object_entry_usage_flags = new_ptr_vk_array(src.object_entry_usage_flags);
+        dst.object_entry_types = new_ptr_vk_array(&src.object_entry_types);
+        dst.object_entry_counts = new_ptr_vk_array(&src.object_entry_counts);
+        dst.object_entry_usage_flags = new_ptr_vk_array(&src.object_entry_usage_flags);
         dst.max_uniform_buffers_per_descriptor = vk_to_raw_value(&src.max_uniform_buffers_per_descriptor);
         dst.max_storage_buffers_per_descriptor = vk_to_raw_value(&src.max_storage_buffers_per_descriptor);
         dst.max_storage_images_per_descriptor = vk_to_raw_value(&src.max_storage_images_per_descriptor);
@@ -61,12 +61,27 @@ impl<'a, 'b, 'c> VkWrappedType<RawVkObjectTableCreateInfo> for VkObjectTableCrea
     }
 }
 
-impl Default for VkObjectTableCreateInfo<'static, 'static, 'static> {
-    fn default() -> VkObjectTableCreateInfo<'static, 'static, 'static> {
+impl VkRawType<VkObjectTableCreateInfo> for RawVkObjectTableCreateInfo {
+    fn vk_to_wrapped(src: &RawVkObjectTableCreateInfo) -> VkObjectTableCreateInfo {
         VkObjectTableCreateInfo {
-            object_entry_types: &[],
-            object_entry_counts: &[],
-            object_entry_usage_flags: &[],
+            object_entry_types: new_vk_array(src.object_count, src.object_entry_types),
+            object_entry_counts: new_vk_array(src.object_count, src.object_entry_counts),
+            object_entry_usage_flags: new_vk_array(src.object_count, src.object_entry_usage_flags),
+            max_uniform_buffers_per_descriptor: u32::vk_to_wrapped(&src.max_uniform_buffers_per_descriptor),
+            max_storage_buffers_per_descriptor: u32::vk_to_wrapped(&src.max_storage_buffers_per_descriptor),
+            max_storage_images_per_descriptor: u32::vk_to_wrapped(&src.max_storage_images_per_descriptor),
+            max_sampled_images_per_descriptor: u32::vk_to_wrapped(&src.max_sampled_images_per_descriptor),
+            max_pipeline_layouts: u32::vk_to_wrapped(&src.max_pipeline_layouts),
+        }
+    }
+}
+
+impl Default for VkObjectTableCreateInfo {
+    fn default() -> VkObjectTableCreateInfo {
+        VkObjectTableCreateInfo {
+            object_entry_types: Vec::new(),
+            object_entry_counts: Vec::new(),
+            object_entry_usage_flags: Vec::new(),
             max_uniform_buffers_per_descriptor: 0,
             max_storage_buffers_per_descriptor: 0,
             max_storage_images_per_descriptor: 0,
@@ -76,14 +91,14 @@ impl Default for VkObjectTableCreateInfo<'static, 'static, 'static> {
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkObjectTableCreateInfo<'a, 'b, 'c> {
+impl VkSetup for VkObjectTableCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkObjectTableCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.object_entry_types);
         free_ptr(self.object_entry_counts);
         free_ptr(self.object_entry_usage_flags);

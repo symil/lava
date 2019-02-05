@@ -16,8 +16,8 @@ use vulkan::ext::{VkDrmFormatModifierProperties,RawVkDrmFormatModifierProperties
 
 /// Wrapper for [VkDrmFormatModifierPropertiesListEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrmFormatModifierPropertiesListEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDrmFormatModifierPropertiesList<'a> {
-    pub drm_format_modifier_properties: Option<&'a [VkDrmFormatModifierProperties]>,
+pub struct VkDrmFormatModifierPropertiesList {
+    pub drm_format_modifier_properties: Option<Vec<VkDrmFormatModifierProperties>>,
 }
 
 #[doc(hidden)]
@@ -25,36 +25,44 @@ pub struct VkDrmFormatModifierPropertiesList<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDrmFormatModifierPropertiesList {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub drm_format_modifier_count: u32,
     pub drm_format_modifier_properties: *mut RawVkDrmFormatModifierProperties,
 }
 
-impl<'a> VkWrappedType<RawVkDrmFormatModifierPropertiesList> for VkDrmFormatModifierPropertiesList<'a> {
+impl VkWrappedType<RawVkDrmFormatModifierPropertiesList> for VkDrmFormatModifierPropertiesList {
     fn vk_to_raw(src: &VkDrmFormatModifierPropertiesList, dst: &mut RawVkDrmFormatModifierPropertiesList) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DrmFormatModifierPropertiesListExt);
-        dst.next = ptr::null();
-        dst.drm_format_modifier_count = get_array_option_len(src.drm_format_modifier_properties) as u32;
-        dst.drm_format_modifier_properties = new_ptr_vk_array_checked(src.drm_format_modifier_properties);
+        dst.next = ptr::null_mut();
+        dst.drm_format_modifier_count = get_array_option_len(&src.drm_format_modifier_properties) as u32;
+        dst.drm_format_modifier_properties = new_ptr_vk_array_checked(&src.drm_format_modifier_properties);
     }
 }
 
-impl Default for VkDrmFormatModifierPropertiesList<'static> {
-    fn default() -> VkDrmFormatModifierPropertiesList<'static> {
+impl VkRawType<VkDrmFormatModifierPropertiesList> for RawVkDrmFormatModifierPropertiesList {
+    fn vk_to_wrapped(src: &RawVkDrmFormatModifierPropertiesList) -> VkDrmFormatModifierPropertiesList {
+        VkDrmFormatModifierPropertiesList {
+            drm_format_modifier_properties: new_vk_array_checked(src.drm_format_modifier_count, src.drm_format_modifier_properties),
+        }
+    }
+}
+
+impl Default for VkDrmFormatModifierPropertiesList {
+    fn default() -> VkDrmFormatModifierPropertiesList {
         VkDrmFormatModifierPropertiesList {
             drm_format_modifier_properties: None,
         }
     }
 }
 
-impl<'a> VkSetup for VkDrmFormatModifierPropertiesList<'a> {
+impl VkSetup for VkDrmFormatModifierPropertiesList {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDrmFormatModifierPropertiesList {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.drm_format_modifier_count as usize, self.drm_format_modifier_properties);
     }
 }

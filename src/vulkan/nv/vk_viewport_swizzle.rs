@@ -55,10 +55,10 @@ impl VkRawType<VkViewportSwizzle> for RawVkViewportSwizzle {
 impl Default for VkViewportSwizzle {
     fn default() -> VkViewportSwizzle {
         VkViewportSwizzle {
-            x: VkViewportCoordinateSwizzle::default(),
-            y: VkViewportCoordinateSwizzle::default(),
-            z: VkViewportCoordinateSwizzle::default(),
-            w: VkViewportCoordinateSwizzle::default(),
+            x: Default::default(),
+            y: Default::default(),
+            z: Default::default(),
+            w: Default::default(),
         }
     }
 }
@@ -70,7 +70,7 @@ impl VkSetup for VkViewportSwizzle {
 }
 
 impl VkFree for RawVkViewportSwizzle {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

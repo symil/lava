@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkPipelineLayout = u64;
 
 /// Wrapper for [VkPipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineLayout.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkPipelineLayout {
     _handle: RawVkPipelineLayout,
     _fn_table: *mut VkFunctionTable

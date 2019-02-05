@@ -80,15 +80,15 @@ impl VkRawType<VkAttachmentDescription> for RawVkAttachmentDescription {
 impl Default for VkAttachmentDescription {
     fn default() -> VkAttachmentDescription {
         VkAttachmentDescription {
-            flags: VkAttachmentDescriptionFlags::default(),
-            format: VkFormat::default(),
-            samples: VkSampleCountFlags::default(),
-            load_op: VkAttachmentLoadOp::default(),
-            store_op: VkAttachmentStoreOp::default(),
-            stencil_load_op: VkAttachmentLoadOp::default(),
-            stencil_store_op: VkAttachmentStoreOp::default(),
-            initial_layout: VkImageLayout::default(),
-            final_layout: VkImageLayout::default(),
+            flags: Default::default(),
+            format: Default::default(),
+            samples: Default::default(),
+            load_op: Default::default(),
+            store_op: Default::default(),
+            stencil_load_op: Default::default(),
+            stencil_store_op: Default::default(),
+            initial_layout: Default::default(),
+            final_layout: Default::default(),
         }
     }
 }
@@ -100,7 +100,7 @@ impl VkSetup for VkAttachmentDescription {
 }
 
 impl VkFree for RawVkAttachmentDescription {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

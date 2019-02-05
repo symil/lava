@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceShaderDrawParameterFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShaderDrawParameterFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shader_draw_parameters: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceShaderDrawParameterFeatures> for VkPhysicalDeviceShaderDrawParameterFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceShaderDrawParameterFeatures, dst: &mut RawVkPhysicalDeviceShaderDrawParameterFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderDrawParameterFeatures);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shader_draw_parameters = vk_to_raw_value(&src.shader_draw_parameters);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceShaderDrawParameterFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceShaderDrawParameterFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

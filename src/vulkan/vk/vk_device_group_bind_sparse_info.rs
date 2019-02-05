@@ -25,7 +25,7 @@ pub struct VkDeviceGroupBindSparseInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupBindSparseInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub resource_device_index: u32,
     pub memory_device_index: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkDeviceGroupBindSparseInfo {
 impl VkWrappedType<RawVkDeviceGroupBindSparseInfo> for VkDeviceGroupBindSparseInfo {
     fn vk_to_raw(src: &VkDeviceGroupBindSparseInfo, dst: &mut RawVkDeviceGroupBindSparseInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupBindSparseInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.resource_device_index = vk_to_raw_value(&src.resource_device_index);
         dst.memory_device_index = vk_to_raw_value(&src.memory_device_index);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkDeviceGroupBindSparseInfo {
 }
 
 impl VkFree for RawVkDeviceGroupBindSparseInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

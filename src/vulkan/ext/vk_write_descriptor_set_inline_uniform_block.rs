@@ -16,8 +16,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 /// Wrapper for [VkWriteDescriptorSetInlineUniformBlockEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkWriteDescriptorSetInlineUniformBlockEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkWriteDescriptorSetInlineUniformBlock<'a> {
-    pub data_size: usize,
-    pub data: &'a c_void,
+    pub data: &'a [c_void],
 }
 
 #[doc(hidden)]
@@ -25,25 +24,32 @@ pub struct VkWriteDescriptorSetInlineUniformBlock<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkWriteDescriptorSetInlineUniformBlock {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub data_size: u32,
-    pub data: *const c_void,
+    pub data: *mut c_void,
 }
 
 impl<'a> VkWrappedType<RawVkWriteDescriptorSetInlineUniformBlock> for VkWriteDescriptorSetInlineUniformBlock<'a> {
     fn vk_to_raw(src: &VkWriteDescriptorSetInlineUniformBlock, dst: &mut RawVkWriteDescriptorSetInlineUniformBlock) {
         dst.s_type = vk_to_raw_value(&VkStructureType::WriteDescriptorSetInlineUniformBlockExt);
-        dst.next = ptr::null();
-        dst.data_size = vk_to_raw_value(&src.data_size);
-        dst.data = src.data as *const c_void;
+        dst.next = ptr::null_mut();
+        dst.data_size = src.data.len() as u32;
+        dst.data = get_vec_ptr(src.data);
+    }
+}
+
+impl<'a> VkRawType<VkWriteDescriptorSetInlineUniformBlock<'a>> for RawVkWriteDescriptorSetInlineUniformBlock {
+    fn vk_to_wrapped(src: &RawVkWriteDescriptorSetInlineUniformBlock) -> VkWriteDescriptorSetInlineUniformBlock<'a> {
+        VkWriteDescriptorSetInlineUniformBlock {
+            data: slice_from_ptr(src.data_size as usize, src.data),
+        }
     }
 }
 
 impl Default for VkWriteDescriptorSetInlineUniformBlock<'static> {
     fn default() -> VkWriteDescriptorSetInlineUniformBlock<'static> {
         VkWriteDescriptorSetInlineUniformBlock {
-            data_size: 0,
-            data: &0,
+            data: &[],
         }
     }
 }
@@ -55,7 +61,7 @@ impl<'a> VkSetup for VkWriteDescriptorSetInlineUniformBlock<'a> {
 }
 
 impl VkFree for RawVkWriteDescriptorSetInlineUniformBlock {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

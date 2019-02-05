@@ -42,9 +42,9 @@ impl VkWrappedType<RawVkClearAttachment> for VkClearAttachment {
 impl Default for VkClearAttachment {
     fn default() -> VkClearAttachment {
         VkClearAttachment {
-            aspect_mask: VkImageAspectFlags::default(),
+            aspect_mask: Default::default(),
             color_attachment: 0,
-            clear_value: VkClearValue::default(),
+            clear_value: Default::default(),
         }
     }
 }
@@ -56,7 +56,7 @@ impl VkSetup for VkClearAttachment {
 }
 
 impl VkFree for RawVkClearAttachment {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

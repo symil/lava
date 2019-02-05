@@ -16,9 +16,9 @@ use vulkan::ext::{VkSampleLocationsInfo,RawVkSampleLocationsInfo};
 
 /// Wrapper for [VkPipelineSampleLocationsStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineSampleLocationsStateCreateInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineSampleLocationsStateCreateInfo<'a> {
+pub struct VkPipelineSampleLocationsStateCreateInfo {
     pub sample_locations_enable: bool,
-    pub sample_locations_info: VkSampleLocationsInfo<'a>,
+    pub sample_locations_info: VkSampleLocationsInfo,
 }
 
 #[doc(hidden)]
@@ -26,37 +26,46 @@ pub struct VkPipelineSampleLocationsStateCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineSampleLocationsStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub sample_locations_enable: u32,
     pub sample_locations_info: RawVkSampleLocationsInfo,
 }
 
-impl<'a> VkWrappedType<RawVkPipelineSampleLocationsStateCreateInfo> for VkPipelineSampleLocationsStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineSampleLocationsStateCreateInfo> for VkPipelineSampleLocationsStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineSampleLocationsStateCreateInfo, dst: &mut RawVkPipelineSampleLocationsStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineSampleLocationsStateCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.sample_locations_enable = vk_to_raw_value(&src.sample_locations_enable);
         dst.sample_locations_info = vk_to_raw_value(&src.sample_locations_info);
     }
 }
 
-impl Default for VkPipelineSampleLocationsStateCreateInfo<'static> {
-    fn default() -> VkPipelineSampleLocationsStateCreateInfo<'static> {
+impl VkRawType<VkPipelineSampleLocationsStateCreateInfo> for RawVkPipelineSampleLocationsStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineSampleLocationsStateCreateInfo) -> VkPipelineSampleLocationsStateCreateInfo {
         VkPipelineSampleLocationsStateCreateInfo {
-            sample_locations_enable: false,
-            sample_locations_info: VkSampleLocationsInfo::default(),
+            sample_locations_enable: u32::vk_to_wrapped(&src.sample_locations_enable),
+            sample_locations_info: RawVkSampleLocationsInfo::vk_to_wrapped(&src.sample_locations_info),
         }
     }
 }
 
-impl<'a> VkSetup for VkPipelineSampleLocationsStateCreateInfo<'a> {
+impl Default for VkPipelineSampleLocationsStateCreateInfo {
+    fn default() -> VkPipelineSampleLocationsStateCreateInfo {
+        VkPipelineSampleLocationsStateCreateInfo {
+            sample_locations_enable: false,
+            sample_locations_info: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkPipelineSampleLocationsStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.sample_locations_info, fn_table);
     }
 }
 
 impl VkFree for RawVkPipelineSampleLocationsStateCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkSampleLocationsInfo::vk_free(&mut self.sample_locations_info);
+    fn vk_free(&self) {
+        
     }
 }

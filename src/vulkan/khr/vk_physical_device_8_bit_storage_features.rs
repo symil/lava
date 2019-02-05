@@ -26,7 +26,7 @@ pub struct VkPhysicalDevice8BitStorageFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevice8BitStorageFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub storage_buffer_8_bit_access: u32,
     pub uniform_and_storage_buffer_8_bit_access: u32,
     pub storage_push_constant_8: u32,
@@ -35,7 +35,7 @@ pub struct RawVkPhysicalDevice8BitStorageFeatures {
 impl VkWrappedType<RawVkPhysicalDevice8BitStorageFeatures> for VkPhysicalDevice8BitStorageFeatures {
     fn vk_to_raw(src: &VkPhysicalDevice8BitStorageFeatures, dst: &mut RawVkPhysicalDevice8BitStorageFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevice8bitStorageFeaturesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.storage_buffer_8_bit_access = vk_to_raw_value(&src.storage_buffer_8_bit_access);
         dst.uniform_and_storage_buffer_8_bit_access = vk_to_raw_value(&src.uniform_and_storage_buffer_8_bit_access);
         dst.storage_push_constant_8 = vk_to_raw_value(&src.storage_push_constant_8);
@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDevice8BitStorageFeatures {
 }
 
 impl VkFree for RawVkPhysicalDevice8BitStorageFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

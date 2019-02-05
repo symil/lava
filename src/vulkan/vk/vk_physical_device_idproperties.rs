@@ -28,7 +28,7 @@ pub struct VkPhysicalDeviceIDProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceIDProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub device_uuid: [u8; 16],
     pub driver_uuid: [u8; 16],
     pub device_luid: [u8; 8],
@@ -39,7 +39,7 @@ pub struct RawVkPhysicalDeviceIDProperties {
 impl VkWrappedType<RawVkPhysicalDeviceIDProperties> for VkPhysicalDeviceIDProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceIDProperties, dst: &mut RawVkPhysicalDeviceIDProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceIdProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.device_uuid = unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.device_uuid, &mut dst_array); dst_array };
         dst.driver_uuid = unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.driver_uuid, &mut dst_array); dst_array };
         dst.device_luid = unsafe { let mut dst_array : [u8; 8] = mem::uninitialized(); to_array(&src.device_luid, &mut dst_array); dst_array };
@@ -79,7 +79,7 @@ impl VkSetup for VkPhysicalDeviceIDProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceIDProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

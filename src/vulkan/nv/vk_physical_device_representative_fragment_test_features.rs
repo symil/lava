@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceRepresentativeFragmentTestFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceRepresentativeFragmentTestFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub representative_fragment_test: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceRepresentativeFragmentTestFeatures> for VkPhysicalDeviceRepresentativeFragmentTestFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceRepresentativeFragmentTestFeatures, dst: &mut RawVkPhysicalDeviceRepresentativeFragmentTestFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceRepresentativeFragmentTestFeaturesNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.representative_fragment_test = vk_to_raw_value(&src.representative_fragment_test);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceRepresentativeFragmentTestFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceRepresentativeFragmentTestFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

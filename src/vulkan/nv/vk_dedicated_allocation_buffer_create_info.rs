@@ -24,14 +24,14 @@ pub struct VkDedicatedAllocationBufferCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDedicatedAllocationBufferCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub dedicated_allocation: u32,
 }
 
 impl VkWrappedType<RawVkDedicatedAllocationBufferCreateInfo> for VkDedicatedAllocationBufferCreateInfo {
     fn vk_to_raw(src: &VkDedicatedAllocationBufferCreateInfo, dst: &mut RawVkDedicatedAllocationBufferCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DedicatedAllocationBufferCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.dedicated_allocation = vk_to_raw_value(&src.dedicated_allocation);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkDedicatedAllocationBufferCreateInfo {
 }
 
 impl VkFree for RawVkDedicatedAllocationBufferCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

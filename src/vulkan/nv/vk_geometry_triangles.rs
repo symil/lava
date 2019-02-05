@@ -18,17 +18,17 @@ use vulkan::vk::{VkIndexType,RawVkIndexType};
 
 /// Wrapper for [VkGeometryTrianglesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryTrianglesNV.html).
 #[derive(Debug, Clone)]
-pub struct VkGeometryTriangles<'a, 'b, 'c> {
-    pub vertex_data: Option<&'a VkBuffer>,
+pub struct VkGeometryTriangles {
+    pub vertex_data: Option<VkBuffer>,
     pub vertex_offset: usize,
     pub vertex_count: usize,
     pub vertex_stride: usize,
     pub vertex_format: VkFormat,
-    pub index_data: Option<&'b VkBuffer>,
+    pub index_data: Option<VkBuffer>,
     pub index_offset: usize,
     pub index_count: usize,
     pub index_type: VkIndexType,
-    pub transform_data: Option<&'c VkBuffer>,
+    pub transform_data: Option<VkBuffer>,
     pub transform_offset: usize,
 }
 
@@ -37,7 +37,7 @@ pub struct VkGeometryTriangles<'a, 'b, 'c> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkGeometryTriangles {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub vertex_data: RawVkBuffer,
     pub vertex_offset: u64,
     pub vertex_count: u32,
@@ -51,50 +51,68 @@ pub struct RawVkGeometryTriangles {
     pub transform_offset: u64,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkGeometryTriangles> for VkGeometryTriangles<'a, 'b, 'c> {
+impl VkWrappedType<RawVkGeometryTriangles> for VkGeometryTriangles {
     fn vk_to_raw(src: &VkGeometryTriangles, dst: &mut RawVkGeometryTriangles) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GeometryTrianglesNv);
-        dst.next = ptr::null();
-        dst.vertex_data = if src.vertex_data.is_some() { vk_to_raw_value(src.vertex_data.unwrap()) } else { 0 };
+        dst.next = ptr::null_mut();
+        dst.vertex_data = vk_to_raw_value_checked(&src.vertex_data);
         dst.vertex_offset = vk_to_raw_value(&src.vertex_offset);
         dst.vertex_count = vk_to_raw_value(&src.vertex_count);
         dst.vertex_stride = vk_to_raw_value(&src.vertex_stride);
         dst.vertex_format = vk_to_raw_value(&src.vertex_format);
-        dst.index_data = if src.index_data.is_some() { vk_to_raw_value(src.index_data.unwrap()) } else { 0 };
+        dst.index_data = vk_to_raw_value_checked(&src.index_data);
         dst.index_offset = vk_to_raw_value(&src.index_offset);
         dst.index_count = vk_to_raw_value(&src.index_count);
         dst.index_type = vk_to_raw_value(&src.index_type);
-        dst.transform_data = if src.transform_data.is_some() { vk_to_raw_value(src.transform_data.unwrap()) } else { 0 };
+        dst.transform_data = vk_to_raw_value_checked(&src.transform_data);
         dst.transform_offset = vk_to_raw_value(&src.transform_offset);
     }
 }
 
-impl Default for VkGeometryTriangles<'static, 'static, 'static> {
-    fn default() -> VkGeometryTriangles<'static, 'static, 'static> {
+impl VkRawType<VkGeometryTriangles> for RawVkGeometryTriangles {
+    fn vk_to_wrapped(src: &RawVkGeometryTriangles) -> VkGeometryTriangles {
+        VkGeometryTriangles {
+            vertex_data: Some(RawVkBuffer::vk_to_wrapped(&src.vertex_data)),
+            vertex_offset: u64::vk_to_wrapped(&src.vertex_offset),
+            vertex_count: u32::vk_to_wrapped(&src.vertex_count),
+            vertex_stride: u64::vk_to_wrapped(&src.vertex_stride),
+            vertex_format: RawVkFormat::vk_to_wrapped(&src.vertex_format),
+            index_data: Some(RawVkBuffer::vk_to_wrapped(&src.index_data)),
+            index_offset: u64::vk_to_wrapped(&src.index_offset),
+            index_count: u32::vk_to_wrapped(&src.index_count),
+            index_type: RawVkIndexType::vk_to_wrapped(&src.index_type),
+            transform_data: Some(RawVkBuffer::vk_to_wrapped(&src.transform_data)),
+            transform_offset: u64::vk_to_wrapped(&src.transform_offset),
+        }
+    }
+}
+
+impl Default for VkGeometryTriangles {
+    fn default() -> VkGeometryTriangles {
         VkGeometryTriangles {
             vertex_data: None,
             vertex_offset: 0,
             vertex_count: 0,
             vertex_stride: 0,
-            vertex_format: VkFormat::default(),
+            vertex_format: Default::default(),
             index_data: None,
             index_offset: 0,
             index_count: 0,
-            index_type: VkIndexType::default(),
+            index_type: Default::default(),
             transform_data: None,
             transform_offset: 0,
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkGeometryTriangles<'a, 'b, 'c> {
+impl VkSetup for VkGeometryTriangles {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkGeometryTriangles {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

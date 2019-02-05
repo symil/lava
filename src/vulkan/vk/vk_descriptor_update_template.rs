@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkDescriptorUpdateTemplate = u64;
 
 /// Wrapper for [VkDescriptorUpdateTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorUpdateTemplate.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorUpdateTemplate {
     _handle: RawVkDescriptorUpdateTemplate,
     _fn_table: *mut VkFunctionTable

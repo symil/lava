@@ -25,14 +25,14 @@ pub struct VkEventCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkEventCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkEventCreateFlags,
 }
 
 impl VkWrappedType<RawVkEventCreateInfo> for VkEventCreateInfo {
     fn vk_to_raw(src: &VkEventCreateInfo, dst: &mut RawVkEventCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::EventCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkEventCreateInfo> for RawVkEventCreateInfo {
 impl Default for VkEventCreateInfo {
     fn default() -> VkEventCreateInfo {
         VkEventCreateInfo {
-            flags: VkEventCreateFlags::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkEventCreateInfo {
 }
 
 impl VkFree for RawVkEventCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

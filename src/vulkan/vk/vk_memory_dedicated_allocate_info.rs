@@ -17,9 +17,9 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkMemoryDedicatedAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryDedicatedAllocateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkMemoryDedicatedAllocateInfo<'a, 'b> {
-    pub image: Option<&'a VkImage>,
-    pub buffer: Option<&'b VkBuffer>,
+pub struct VkMemoryDedicatedAllocateInfo {
+    pub image: Option<VkImage>,
+    pub buffer: Option<VkBuffer>,
 }
 
 #[doc(hidden)]
@@ -27,22 +27,31 @@ pub struct VkMemoryDedicatedAllocateInfo<'a, 'b> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryDedicatedAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub image: RawVkImage,
     pub buffer: RawVkBuffer,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkMemoryDedicatedAllocateInfo> for VkMemoryDedicatedAllocateInfo<'a, 'b> {
+impl VkWrappedType<RawVkMemoryDedicatedAllocateInfo> for VkMemoryDedicatedAllocateInfo {
     fn vk_to_raw(src: &VkMemoryDedicatedAllocateInfo, dst: &mut RawVkMemoryDedicatedAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryDedicatedAllocateInfo);
-        dst.next = ptr::null();
-        dst.image = if src.image.is_some() { vk_to_raw_value(src.image.unwrap()) } else { 0 };
-        dst.buffer = if src.buffer.is_some() { vk_to_raw_value(src.buffer.unwrap()) } else { 0 };
+        dst.next = ptr::null_mut();
+        dst.image = vk_to_raw_value_checked(&src.image);
+        dst.buffer = vk_to_raw_value_checked(&src.buffer);
     }
 }
 
-impl Default for VkMemoryDedicatedAllocateInfo<'static, 'static> {
-    fn default() -> VkMemoryDedicatedAllocateInfo<'static, 'static> {
+impl VkRawType<VkMemoryDedicatedAllocateInfo> for RawVkMemoryDedicatedAllocateInfo {
+    fn vk_to_wrapped(src: &RawVkMemoryDedicatedAllocateInfo) -> VkMemoryDedicatedAllocateInfo {
+        VkMemoryDedicatedAllocateInfo {
+            image: Some(RawVkImage::vk_to_wrapped(&src.image)),
+            buffer: Some(RawVkBuffer::vk_to_wrapped(&src.buffer)),
+        }
+    }
+}
+
+impl Default for VkMemoryDedicatedAllocateInfo {
+    fn default() -> VkMemoryDedicatedAllocateInfo {
         VkMemoryDedicatedAllocateInfo {
             image: None,
             buffer: None,
@@ -50,14 +59,14 @@ impl Default for VkMemoryDedicatedAllocateInfo<'static, 'static> {
     }
 }
 
-impl<'a, 'b> VkSetup for VkMemoryDedicatedAllocateInfo<'a, 'b> {
+impl VkSetup for VkMemoryDedicatedAllocateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkMemoryDedicatedAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

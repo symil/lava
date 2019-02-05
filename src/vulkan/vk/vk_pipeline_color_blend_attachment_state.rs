@@ -74,13 +74,13 @@ impl Default for VkPipelineColorBlendAttachmentState {
     fn default() -> VkPipelineColorBlendAttachmentState {
         VkPipelineColorBlendAttachmentState {
             blend_enable: false,
-            src_color_blend_factor: VkBlendFactor::default(),
-            dst_color_blend_factor: VkBlendFactor::default(),
-            color_blend_op: VkBlendOp::default(),
-            src_alpha_blend_factor: VkBlendFactor::default(),
-            dst_alpha_blend_factor: VkBlendFactor::default(),
-            alpha_blend_op: VkBlendOp::default(),
-            color_write_mask: VkColorComponentFlags::default(),
+            src_color_blend_factor: Default::default(),
+            dst_color_blend_factor: Default::default(),
+            color_blend_op: Default::default(),
+            src_alpha_blend_factor: Default::default(),
+            dst_alpha_blend_factor: Default::default(),
+            alpha_blend_op: Default::default(),
+            color_write_mask: Default::default(),
         }
     }
 }
@@ -92,7 +92,7 @@ impl VkSetup for VkPipelineColorBlendAttachmentState {
 }
 
 impl VkFree for RawVkPipelineColorBlendAttachmentState {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

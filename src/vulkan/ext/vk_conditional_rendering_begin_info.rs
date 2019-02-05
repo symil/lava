@@ -17,8 +17,8 @@ use vulkan::ext::{VkConditionalRenderingFlags,RawVkConditionalRenderingFlags};
 
 /// Wrapper for [VkConditionalRenderingBeginInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConditionalRenderingBeginInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkConditionalRenderingBeginInfo<'a> {
-    pub buffer: &'a VkBuffer,
+pub struct VkConditionalRenderingBeginInfo {
+    pub buffer: VkBuffer,
     pub offset: usize,
     pub flags: VkConditionalRenderingFlags,
 }
@@ -28,40 +28,50 @@ pub struct VkConditionalRenderingBeginInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkConditionalRenderingBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub buffer: RawVkBuffer,
     pub offset: u64,
     pub flags: RawVkConditionalRenderingFlags,
 }
 
-impl<'a> VkWrappedType<RawVkConditionalRenderingBeginInfo> for VkConditionalRenderingBeginInfo<'a> {
+impl VkWrappedType<RawVkConditionalRenderingBeginInfo> for VkConditionalRenderingBeginInfo {
     fn vk_to_raw(src: &VkConditionalRenderingBeginInfo, dst: &mut RawVkConditionalRenderingBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ConditionalRenderingBeginInfoExt);
-        dst.next = ptr::null();
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.next = ptr::null_mut();
+        dst.buffer = vk_to_raw_value(&src.buffer);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 
-impl Default for VkConditionalRenderingBeginInfo<'static> {
-    fn default() -> VkConditionalRenderingBeginInfo<'static> {
+impl VkRawType<VkConditionalRenderingBeginInfo> for RawVkConditionalRenderingBeginInfo {
+    fn vk_to_wrapped(src: &RawVkConditionalRenderingBeginInfo) -> VkConditionalRenderingBeginInfo {
         VkConditionalRenderingBeginInfo {
-            buffer: vk_null_ref(),
-            offset: 0,
-            flags: VkConditionalRenderingFlags::default(),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
+            offset: u64::vk_to_wrapped(&src.offset),
+            flags: RawVkConditionalRenderingFlags::vk_to_wrapped(&src.flags),
         }
     }
 }
 
-impl<'a> VkSetup for VkConditionalRenderingBeginInfo<'a> {
+impl Default for VkConditionalRenderingBeginInfo {
+    fn default() -> VkConditionalRenderingBeginInfo {
+        VkConditionalRenderingBeginInfo {
+            buffer: Default::default(),
+            offset: 0,
+            flags: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkConditionalRenderingBeginInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkConditionalRenderingBeginInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

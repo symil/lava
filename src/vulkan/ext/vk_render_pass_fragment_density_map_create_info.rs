@@ -25,14 +25,14 @@ pub struct VkRenderPassFragmentDensityMapCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassFragmentDensityMapCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub fragment_density_map_attachment: RawVkAttachmentReference,
 }
 
 impl VkWrappedType<RawVkRenderPassFragmentDensityMapCreateInfo> for VkRenderPassFragmentDensityMapCreateInfo {
     fn vk_to_raw(src: &VkRenderPassFragmentDensityMapCreateInfo, dst: &mut RawVkRenderPassFragmentDensityMapCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassFragmentDensityMapCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.fragment_density_map_attachment = vk_to_raw_value(&src.fragment_density_map_attachment);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkRenderPassFragmentDensityMapCreateInfo> for RawVkRenderPassFrag
 impl Default for VkRenderPassFragmentDensityMapCreateInfo {
     fn default() -> VkRenderPassFragmentDensityMapCreateInfo {
         VkRenderPassFragmentDensityMapCreateInfo {
-            fragment_density_map_attachment: VkAttachmentReference::default(),
+            fragment_density_map_attachment: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkRenderPassFragmentDensityMapCreateInfo {
 }
 
 impl VkFree for RawVkRenderPassFragmentDensityMapCreateInfo {
-    fn vk_free(&mut self) {
-        RawVkAttachmentReference::vk_free(&mut self.fragment_density_map_attachment);
+    fn vk_free(&self) {
+        
     }
 }

@@ -99,7 +99,7 @@ function getWrappedFields(def) {
 const SPECIAL_NON_RAW_TYPES = ['VkClearValue', 'VkClearColorValue'];
 
 function isConvertibleFromRawToWrapped(def) {
-    return def.fields.every(field => !SPECIAL_NON_RAW_TYPES.includes(field.typeName) && (!field.wrappedType || field.toWrapped)) && !def.lifetimes;
+    return def.fields.every(field => !SPECIAL_NON_RAW_TYPES.includes(field.typeName) && (!field.wrappedType || field.toWrapped));
 }
 
 function isConvertibleFromWrappedToRaw(def) {
@@ -111,13 +111,10 @@ function genImplVkRawType(def) {
         const wrappedFields = getWrappedFields(def);
 
         return [
-            `impl VkRawType<${def.wrappedTypeName}> for ${def.rawTypeName}`, [
-                `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
+            `impl${def.lifetimes} VkRawType<${def.wrappedTypeName}${def.lifetimes}> for ${def.rawTypeName}`, [
+                `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}${def.lifetimes}`, [
                     def.wrappedTypeName,
                     wrappedFields.map(field => {
-                        if (!field.toWrapped) {
-                            console.log(field);
-                        }
                         return `${field.varName}: ${field.toWrapped(varName => `src.${varName}`)},`;
                     })
                 ],
@@ -172,7 +169,7 @@ function genImplVkFree(def) {
 
     return [
         `impl VkFree for ${def.rawTypeName}`, [
-            `fn vk_free(&mut self)`,
+            `fn vk_free(&self)`,
             fieldsToFree.map(field => `${field.freeRaw(varName => `self.${varName}`)};`)
         ]
     ]

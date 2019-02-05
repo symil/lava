@@ -27,7 +27,7 @@ pub struct VkPipelineCoverageToColorStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineCoverageToColorStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineCoverageToColorStateCreateFlags,
     pub coverage_to_color_enable: u32,
     pub coverage_to_color_location: u32,
@@ -36,7 +36,7 @@ pub struct RawVkPipelineCoverageToColorStateCreateInfo {
 impl VkWrappedType<RawVkPipelineCoverageToColorStateCreateInfo> for VkPipelineCoverageToColorStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineCoverageToColorStateCreateInfo, dst: &mut RawVkPipelineCoverageToColorStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineCoverageToColorStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.coverage_to_color_enable = vk_to_raw_value(&src.coverage_to_color_enable);
         dst.coverage_to_color_location = vk_to_raw_value(&src.coverage_to_color_location);
@@ -56,7 +56,7 @@ impl VkRawType<VkPipelineCoverageToColorStateCreateInfo> for RawVkPipelineCovera
 impl Default for VkPipelineCoverageToColorStateCreateInfo {
     fn default() -> VkPipelineCoverageToColorStateCreateInfo {
         VkPipelineCoverageToColorStateCreateInfo {
-            flags: VkPipelineCoverageToColorStateCreateFlags::default(),
+            flags: Default::default(),
             coverage_to_color_enable: false,
             coverage_to_color_location: 0,
         }
@@ -70,7 +70,7 @@ impl VkSetup for VkPipelineCoverageToColorStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineCoverageToColorStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

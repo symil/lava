@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceInlineUniformBlockFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceInlineUniformBlockFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub inline_uniform_block: u32,
     pub descriptor_binding_inline_uniform_block_update_after_bind: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceInlineUniformBlockFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceInlineUniformBlockFeatures> for VkPhysicalDeviceInlineUniformBlockFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceInlineUniformBlockFeatures, dst: &mut RawVkPhysicalDeviceInlineUniformBlockFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceInlineUniformBlockFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.inline_uniform_block = vk_to_raw_value(&src.inline_uniform_block);
         dst.descriptor_binding_inline_uniform_block_update_after_bind = vk_to_raw_value(&src.descriptor_binding_inline_uniform_block_update_after_bind);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceInlineUniformBlockFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceInlineUniformBlockFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

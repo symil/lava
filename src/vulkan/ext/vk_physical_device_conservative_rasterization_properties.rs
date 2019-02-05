@@ -32,7 +32,7 @@ pub struct VkPhysicalDeviceConservativeRasterizationProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceConservativeRasterizationProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub primitive_overestimation_size: f32,
     pub max_extra_primitive_overestimation_size: f32,
     pub extra_primitive_overestimation_size_granularity: f32,
@@ -47,7 +47,7 @@ pub struct RawVkPhysicalDeviceConservativeRasterizationProperties {
 impl VkWrappedType<RawVkPhysicalDeviceConservativeRasterizationProperties> for VkPhysicalDeviceConservativeRasterizationProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceConservativeRasterizationProperties, dst: &mut RawVkPhysicalDeviceConservativeRasterizationProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceConservativeRasterizationPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.primitive_overestimation_size = src.primitive_overestimation_size;
         dst.max_extra_primitive_overestimation_size = src.max_extra_primitive_overestimation_size;
         dst.extra_primitive_overestimation_size_granularity = src.extra_primitive_overestimation_size_granularity;
@@ -99,7 +99,7 @@ impl VkSetup for VkPhysicalDeviceConservativeRasterizationProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceConservativeRasterizationProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

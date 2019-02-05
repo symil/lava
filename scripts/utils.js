@@ -244,23 +244,18 @@ function getCountVarNameValue(countFieldName, getVarName) {
 function getFieldsInformation(fields, structName) {
     const infos = [];
 
-    const doesOutputHandle = isOutputHandleStruct(structName);
-
-    for (let field of fields) {
+    for (const field of fields) {
         const rawTypeName = getFieldRawTypeName(field);
         const wrappedTypeName = getFieldWrappedTypeName(field);
 
         const arraySize = field.arraySize;
         const isCount = !!(field.countFor && field.countFor.length);
-        const isPointer = field.isPointer;
         const isDoublePointer = field.isDoublePointer;
         const isPointerArray = field.isPointer && (field.countField || field.name === 'pSampleMask');
         const isPointerValue = field.isPointer && !isPointerArray;
         const isStaticArray = !field.isPointer && !!arraySize;
         const isPrimitiveType = rawTypeName === wrappedTypeName;
-        const isHandleType = !isPrimitiveType && !!getHandle(field);
-        const isOptional = field.isOptional;
-        const isConst = field.isConst;
+        const isOptional = field.isOptional && !!(structName || !field.isPointer || field.isConst || field !== fields.last());
 
         const varName = '[VarName]';
         const countVarName = '[CountVarName]';
@@ -271,7 +266,6 @@ function getFieldsInformation(fields, structName) {
         const arrayVarNameValue = isCount ? cToRustVarName(field.countFor[0]) : null;
         const countField = (field.countField && fields.find(f => f.name === field.countField)) || {};
         const countVarIsPointer = countField.isPointer;
-        const isInputHandle = isHandleType && !doesOutputHandle;
 
         let rawType = null;
         let wrappedType = null;
@@ -280,47 +274,53 @@ function getFieldsInformation(fields, structName) {
         let defValue = null;
         let freeRaw = null;
 
-        let freeMethod = null;
-        let freeMemory = false;
-
-        if (isStruct(field)) {
-            if (isDoublePointer || isPointerArray) {
-                const methodName = isDoublePointer ? 'free_vk_ptr_array_array' : 'free_vk_ptr_array';
-                const countPrefix = countField.isPointer ? '*' : '';
-                const countSuffix = countField.typeName === 'size_t' ? '' : ' as usize';
-
-                freeMethod = `${methodName}(${countPrefix}${countVarName}${countSuffix}, ${varName})`;
-            } else if (isPointer) {
-                freeMethod = `free_vk_ptr(${varName})`;
-            } else if (isStaticArray) {
-                freeMethod = `for elt in ${varName}.iter_mut() { ${rawTypeName}::vk_free(elt); }`
-            } else {
-                freeMethod = `${rawTypeName}::vk_free(&mut ${varName})`;
-            }
-        } else if (isPointer) {
-            freeMethod = `free_ptr(${varName})`;
-        }
-
-        if (field.name === 'sType' && field.values) {
+        if (field.name === 'pAllocator') {
+            rawType = '*const c_void';
+            wrappedType = '*const c_void';
+            toRaw = varName;
+            toWrapped = varName;
+            defValue = 'ptr::null()';
+        } else if (field.name === 'sType' && field.values) {
             rawType = 'RawVkStructureType';
             toRaw = () => `vk_to_raw_value(&VkStructureType::${toPascalCase(field.values.substring('VK_STRUCTURE_TYPE_'.length))})`;
         } else if (field.name === 'pNext') {
-            rawType = `*const c_void`;
-            toRaw = `ptr::null()`;
+            rawType = `*mut c_void`;
+            toRaw = `ptr::null_mut()`;
+        } else if (field.name === 'pCode') {
+            rawType = '*mut u8';
+            wrappedType = '&[u8]';
+            toRaw = `get_vec_ptr(${varName})`;
+            toWrapped = `&[]`;
+            defValue = '&[]';
         } else if (field.fullType === 'void**') {
             rawType = `*mut *mut c_void`;
             wrappedType = `*mut *mut c_void`;
             toRaw = varName;
             toWrapped = varName;
             defValue = 'ptr::null_mut()'
-        } else if (field.fullType === 'void*' && !field.countField) {
-            rawType = `*const c_void`;
-            wrappedType = `*const c_void`;
-            toRaw = varName;
-            toWrapped = varName;
-            defValue = 'ptr::null()';
+        } else if (/(const )?void\*$/.test(field.fullType)) {
+            if (field.countField) {
+                rawType = `*mut c_void`;
+                toRaw = `get_vec_ptr(${varName})`;
+
+                if (countVarIsPointer) {
+                    wrappedType = `Vec<c_void>`;
+                    toWrapped = `Vec::from_raw_parts(${varName}, *${countVarName}, *${countVarName})`;
+                    defValue = 'Vec::new()';
+                } else {
+                    wrappedType = `&[c_void]`;
+                    toWrapped = `slice_from_ptr(${countVarName} as usize, ${varName})`;
+                    defValue = '&[]';
+                }
+            } else {
+                rawType = `*mut c_void`;
+                wrappedType = `*mut c_void`;
+                toRaw = varName;
+                toWrapped = varName;
+                defValue = 'ptr::null_mut()';
+            }
         } else if (isCount) {
-            rawType = isPointerValue ? (isConst ? `*const ${rawTypeName}` : `*mut ${rawTypeName}`) : rawTypeName;
+            rawType = isPointerValue ? `*mut ${rawTypeName}` : rawTypeName;
 
             let lenValue = '';
 
@@ -330,7 +330,7 @@ function getFieldsInformation(fields, structName) {
                 if (i === 0 || arrayField.isConst || !arrayField.isPointer) {
                     // Don't use created array into account
                     const arrayName =`makeVarName(${cToRustVarName(arrayFieldName)})`; 
-                    const otherLen = arrayField.isOptional ? `get_array_option_len(${arrayName})` : `${arrayName}.len()`;
+                    const otherLen = arrayField.isOptional ? `get_array_option_len(&${arrayName})` : `${arrayName}.len()`;
                     lenValue = !lenValue ? otherLen : `cmp::max(${lenValue}, ${otherLen})`;
                 }
             }
@@ -348,40 +348,34 @@ function getFieldsInformation(fields, structName) {
             ].join('\n'));
         } else if (field.fullType === 'const char* const*') {
             rawType = `*mut *mut c_char`;
-            wrappedType = `&[&str]`;
-            toRaw = `new_ptr_string_array(${varName})`;
-            defValue = `&[]`;
-            freeMemory = true;
+            freeRaw = `free_ptr(${varName})`;
+            wrappedType = `Vec<&str>`;
+            toRaw = `new_ptr_string_array(&${varName})`;
+            toWrapped = `new_string_ref_vec(${countVarName}, ${varName} as *const *const c_char)`;
+            defValue = `Vec::new()`;
         } else if (field.fullType === 'const char*') {
-            if (doesOutputHandle) {
-                rawType = '*const c_char';
-                wrappedType =`Option<String>`;
-                toWrapped = `new_string_checked(${varName})`;
-                defValue = 'None';
-            } else {
-                rawType = `*mut c_char`;
-                freeMemory = true;
+            rawType = `*mut c_char`;
+            freeRaw = `free_ptr(${varName})`;
 
-                if (isOptional) {
-                    wrappedType =`Option<&str>`;
-                    toRaw = `new_ptr_string_checked(${varName})`;
-                    defValue = `None`;
-                } else {
-                    wrappedType =`&str`;
-                    toRaw = `new_ptr_string(${varName})`;
-                    defValue = `""`;
-                }
+            if (isOptional) {
+                wrappedType =`Option<&str>`;
+                toRaw = `new_ptr_string_checked(&${varName})`;
+                toWrapped = `new_string_ref_checked(${varName})`;
+                defValue = `None`;
+            } else {
+                wrappedType =`&str`;
+                toRaw = `new_ptr_string(${varName})`;
+                toWrapped = `new_string_ref(${varName})`;
+                defValue = `""`;
             }
         } else if (field.fullType === 'char' && field.arraySize) {
             rawType = `[c_char; ${arraySize}]`;
             wrappedType = `String`;
-            // toRaw = createStaticArray(rawTypeName, arraySize, varName, 'string_to_byte_array');
+            toRaw = createStaticArray(rawTypeName, arraySize, varName, 'string_to_byte_array');
             toWrapped = `new_string(&${varName}[0] as *const c_char)`;
-            // defValue = `String::new()`;
+            defValue = `String::new()`;
         } else if (isPrimitiveType) {
             const primitiveDefaultValue = getPrimitiveDefaultValue(wrappedTypeName);
-            let ptrQualifier = isConst ? 'const' : 'mut';
-            let refQualifier = isConst ? '' : 'mut ';
 
             if (isPointerArray) {
                 let vecLength = `${countVarIsPointer ? '*' : ''}${countVarName}`;
@@ -389,28 +383,33 @@ function getFieldsInformation(fields, structName) {
                     vecLength += ' as usize';
                 }
 
-                rawType = `*${ptrQualifier} ${rawTypeName}`;
-                toWrapped = `Vec::from_raw_parts(${varName}, ${vecLength}, ${vecLength})`; // Maybe risky
+                rawType = `*mut ${rawTypeName}`;
+                // freeRaw = `free_ptr(${varName})`;
 
                 if (isOptional) {
-                    wrappedType = `Option<&${refQualifier}[${wrappedTypeName}]>`;
-                    toRaw = `slice_option_to_ptr${isConst ? '' : '_mut'}(${varName})`;
+                    wrappedType = `Option<Vec<${wrappedTypeName}>>`;
+                    toRaw = `get_vec_ptr_checked(&${varName})`;
+                    toWrapped = `vec_from_ptr_checked(${vecLength}, ${varName})`;
                     defValue = `None`;
                 } else {
-                    wrappedType = `&${refQualifier}[${wrappedTypeName}]`;
-                    toRaw = `${varName}.${isConst ? 'as_ptr' : 'as_mut_ptr'}()`;
-                    defValue = `&[]`;
-                }
-            } else if (isPointerValue) {
-                if (rawTypeName === 'c_void') {
-                    ptrQualifier = 'const';
+                    wrappedType = `Vec<${wrappedTypeName}>`;
+                    toRaw = `get_vec_ptr(&${varName})`;
+                    toWrapped = `vec_from_ptr(${vecLength}, ${varName})`;
+                    defValue = `Vec::new()`;
                 }
 
-                rawType = `*${ptrQualifier} ${rawTypeName}`;
-                wrappedType = `&${wrappedTypeName}`;
-                toRaw = `${varName} as *${ptrQualifier} ${rawTypeName}`;
+                if (!field.countField) {
+                    // This line is specifically for the field `pSampleMask` of `VkPipelineMultisampleStateCreateInfo`
+                    // Might need to change it
+                    toWrapped = isOptional ? `None` : `vec![]`;
+                }
+            } else if (isPointerValue) {
+                rawType = `*mut ${rawTypeName}`;
+                freeRaw = `free_ptr(${varName})`;
+                wrappedType = wrappedTypeName;
+                toRaw = `&${varName} as *const ${rawTypeName}`;
                 toWrapped = `*${varName}`;
-                defValue = `&${primitiveDefaultValue}`;
+                defValue = primitiveDefaultValue;
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
 
@@ -431,44 +430,69 @@ function getFieldsInformation(fields, structName) {
                 defValue = primitiveDefaultValue;
             }
         } else {
-            freeMemory = true;
+            const fieldIsStruct = isStruct(field);
 
             if (isDoublePointer) {
+                const countPrefix = countField.isPointer ? '*' : '';
+                const countSuffix = countField.typeName === 'size_t' ? '' : ' as usize';
+
                 rawType = `*mut *mut ${rawTypeName}`;
-                wrappedType = `&[&${wrappedTypeName}]`;
-                toRaw = `new_ptr_vk_array_array(${varName})`;
-                defValue = `&[]`;
+                if (fieldIsStruct) {
+                    freeRaw = `free_vk_ptr_array_array(${countPrefix}${countVarName}${countSuffix}, ${varName})`;
+                } else {
+                    freeRaw = `free_ptr(${varName})`;
+                }
+                wrappedType = `Vec<${wrappedTypeName}>`;
+                toRaw = `new_ptr_vk_array_array(&${varName})`;
+                defValue = `Vec::new()`;
             } else if (isPointerArray) {
-                const prefixRef = isInputHandle ? '&' : '';
-                const refMethodsuffix = isInputHandle ? '_from_ref' : '';
+                const countPrefix = countField.isPointer ? '*' : '';
+                const countSuffix = countField.typeName === 'size_t' ? '' : ' as usize';
 
                 rawType = `*mut ${rawTypeName}`;
-                toWrapped = `new_vk_array(${countVarIsPointer ? '*' : ''}${countVarName}, ${varName})`;
+                if (fieldIsStruct) {
+                    freeRaw = `free_vk_ptr_array(${countPrefix}${countVarName}${countSuffix}, ${varName})`;
+                } else {
+                    freeRaw = `free_ptr(${varName})`;
+                }
 
                 if (isOptional) {
-                    wrappedType = `Option<&[${prefixRef}${wrappedTypeName}]>`;
-                    toRaw = `new_ptr_vk_array_checked${refMethodsuffix}(${varName})`;
+                    wrappedType = `Option<Vec<${wrappedTypeName}>>`;
+                    toWrapped = `new_vk_array_checked(${countVarIsPointer ? '*' : ''}${countVarName}, ${varName})`;
+                    toRaw = `new_ptr_vk_array_checked(&${varName})`;
                     defValue = `None`;
                 } else {
-                    wrappedType = `&[${prefixRef}${wrappedTypeName}]`;
-                    toRaw = `new_ptr_vk_array${refMethodsuffix}(${varName})`;
-                    defValue = `&[]`;
+                    wrappedType = `Vec<${wrappedTypeName}>`;
+                    toWrapped = `new_vk_array(${countVarIsPointer ? '*' : ''}${countVarName}, ${varName})`;
+                    toRaw = `new_ptr_vk_array(&${varName})`;
+                    defValue = `Vec::new()`;
                 }
             } else if (isPointerValue) {
                 rawType = `*mut ${rawTypeName}`;
-                toWrapped = `new_vk_value(${varName})`;
+
+                if (fieldIsStruct) {
+                    freeRaw = `free_vk_ptr(${varName})`;
+                } else {
+                    freeRaw = `free_ptr(${varName})`;
+                }
 
                 if (isOptional) {
-                    wrappedType = `Option<&${wrappedTypeName}>`;
-                    toRaw = `new_ptr_vk_value_checked(${varName})`;
+                    wrappedType = `Option<${wrappedTypeName}>`;
+                    toWrapped = `new_vk_value_checked(${varName})`;
+                    toRaw = `new_ptr_vk_value_checked(&${varName})`;
                     defValue = `None`;
                 } else {
-                    wrappedType = `&${wrappedTypeName}`;
-                    toRaw = `new_ptr_vk_value(${varName})`;
-                    defValue = `vk_null_ref()`;
+                    wrappedType = `${wrappedTypeName}`;
+                    toWrapped = `new_vk_value(${varName})`;
+                    toRaw = `new_ptr_vk_value(&${varName})`;
+                    defValue = `Default::default()`;
                 }
             } else if (isStaticArray) {
                 rawType = `[${rawTypeName}; ${arraySize}]`;
+
+                if (fieldIsStruct) {
+                    freeRaw = `for elt in ${varName}.iter() { ${rawTypeName}::vk_free(elt); }`;
+                }
 
                 if (field.countField) {
                     wrappedType = `Vec<${wrappedTypeName}>`;
@@ -481,31 +505,21 @@ function getFieldsInformation(fields, structName) {
                     toWrapped = createStaticArray(wrappedTypeName, arraySize, varName, 'vk_to_wrapped_array');
                     defValue = fillStaticArray(wrappedTypeName, arraySize);
                 }
-            } else if (isInputHandle) {
-                rawType = rawTypeName;
-
-                // toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
-
-                if (isOptional) {
-                    wrappedType = `Option<&${wrappedTypeName}>`;
-                    toRaw = `if ${varName}.is_some() { vk_to_raw_value(${varName}.unwrap()) } else { 0 }`;
-                    defValue = `None`;
-                } else {
-                    wrappedType = `&${wrappedTypeName}`;
-                    toRaw = `vk_to_raw_value(${varName})`;
-                    defValue = `vk_null_ref()`;
-                }
             } else {
                 rawType = rawTypeName;
-                wrappedType = wrappedTypeName;
-                toRaw = `vk_to_raw_value(&${varName})`;
-                toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
-                defValue = getPrimitiveDefaultValue(wrappedTypeName) || `${wrappedTypeName}::default()`;
-            }
-        }
 
-        if (freeMemory) {
-            freeRaw = freeMethod;
+                if (isOptional && !wrappedTypeName.endsWith('Flags') && wrappedTypeName.startsWith('Vk')) {
+                    wrappedType = `Option<${wrappedTypeName}>`;
+                    toRaw = `vk_to_raw_value_checked(&${varName})`;
+                    toWrapped = `Some(${rawTypeName}::vk_to_wrapped(&${varName}))`;
+                    defValue = `None`;
+                } else {
+                    wrappedType = wrappedTypeName;
+                    toRaw = `vk_to_raw_value(&${varName})`;
+                    toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
+                    defValue = getPrimitiveDefaultValue(wrappedTypeName) || `Default::default()`;
+                }
+            }
         }
 
         const info = {

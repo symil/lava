@@ -18,17 +18,11 @@ use vulkan::nv::{VkGeometry,RawVkGeometry};
 
 /// Wrapper for [VkAccelerationStructureInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'a,
-{
+pub struct VkAccelerationStructureInfo {
     pub type_: VkAccelerationStructureType,
     pub flags: VkBuildAccelerationStructureFlags,
     pub instance_count: usize,
-    pub geometries: &'a [VkGeometry<'b, 'c, 'd, 'e>],
+    pub geometries: Vec<VkGeometry>,
 }
 
 #[doc(hidden)]
@@ -36,7 +30,7 @@ pub struct VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkAccelerationStructureInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub type_: RawVkAccelerationStructureType,
     pub flags: RawVkBuildAccelerationStructureFlags,
     pub instance_count: u32,
@@ -44,49 +38,48 @@ pub struct RawVkAccelerationStructureInfo {
     pub geometries: *mut RawVkGeometry,
 }
 
-impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkAccelerationStructureInfo> for VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'a,
-{
+impl VkWrappedType<RawVkAccelerationStructureInfo> for VkAccelerationStructureInfo {
     fn vk_to_raw(src: &VkAccelerationStructureInfo, dst: &mut RawVkAccelerationStructureInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::AccelerationStructureInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.flags = vk_to_raw_value(&src.flags);
         dst.instance_count = vk_to_raw_value(&src.instance_count);
         dst.geometry_count = src.geometries.len() as u32;
-        dst.geometries = new_ptr_vk_array(src.geometries);
+        dst.geometries = new_ptr_vk_array(&src.geometries);
     }
 }
 
-impl Default for VkAccelerationStructureInfo<'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkAccelerationStructureInfo<'static, 'static, 'static, 'static, 'static> {
+impl VkRawType<VkAccelerationStructureInfo> for RawVkAccelerationStructureInfo {
+    fn vk_to_wrapped(src: &RawVkAccelerationStructureInfo) -> VkAccelerationStructureInfo {
         VkAccelerationStructureInfo {
-            type_: VkAccelerationStructureType::default(),
-            flags: VkBuildAccelerationStructureFlags::default(),
-            instance_count: 0,
-            geometries: &[],
+            type_: RawVkAccelerationStructureType::vk_to_wrapped(&src.type_),
+            flags: RawVkBuildAccelerationStructureFlags::vk_to_wrapped(&src.flags),
+            instance_count: u32::vk_to_wrapped(&src.instance_count),
+            geometries: new_vk_array(src.geometry_count, src.geometries),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e> VkSetup for VkAccelerationStructureInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'b: 'a,
-        'c: 'a,
-        'd: 'a,
-        'e: 'a,
-{
+impl Default for VkAccelerationStructureInfo {
+    fn default() -> VkAccelerationStructureInfo {
+        VkAccelerationStructureInfo {
+            type_: Default::default(),
+            flags: Default::default(),
+            instance_count: 0,
+            geometries: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkAccelerationStructureInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkAccelerationStructureInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.geometry_count as usize, self.geometries);
     }
 }

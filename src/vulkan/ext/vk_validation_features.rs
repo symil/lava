@@ -17,9 +17,9 @@ use vulkan::ext::{VkValidationFeatureDisable,RawVkValidationFeatureDisable};
 
 /// Wrapper for [VkValidationFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationFeaturesEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkValidationFeatures<'a, 'b> {
-    pub enabled_validation_features: &'a [VkValidationFeatureEnable],
-    pub disabled_validation_features: &'b [VkValidationFeatureDisable],
+pub struct VkValidationFeatures {
+    pub enabled_validation_features: Vec<VkValidationFeatureEnable>,
+    pub disabled_validation_features: Vec<VkValidationFeatureDisable>,
 }
 
 #[doc(hidden)]
@@ -27,41 +27,50 @@ pub struct VkValidationFeatures<'a, 'b> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkValidationFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub enabled_validation_feature_count: u32,
     pub enabled_validation_features: *mut RawVkValidationFeatureEnable,
     pub disabled_validation_feature_count: u32,
     pub disabled_validation_features: *mut RawVkValidationFeatureDisable,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkValidationFeatures> for VkValidationFeatures<'a, 'b> {
+impl VkWrappedType<RawVkValidationFeatures> for VkValidationFeatures {
     fn vk_to_raw(src: &VkValidationFeatures, dst: &mut RawVkValidationFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ValidationFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.enabled_validation_feature_count = src.enabled_validation_features.len() as u32;
-        dst.enabled_validation_features = new_ptr_vk_array(src.enabled_validation_features);
+        dst.enabled_validation_features = new_ptr_vk_array(&src.enabled_validation_features);
         dst.disabled_validation_feature_count = src.disabled_validation_features.len() as u32;
-        dst.disabled_validation_features = new_ptr_vk_array(src.disabled_validation_features);
+        dst.disabled_validation_features = new_ptr_vk_array(&src.disabled_validation_features);
     }
 }
 
-impl Default for VkValidationFeatures<'static, 'static> {
-    fn default() -> VkValidationFeatures<'static, 'static> {
+impl VkRawType<VkValidationFeatures> for RawVkValidationFeatures {
+    fn vk_to_wrapped(src: &RawVkValidationFeatures) -> VkValidationFeatures {
         VkValidationFeatures {
-            enabled_validation_features: &[],
-            disabled_validation_features: &[],
+            enabled_validation_features: new_vk_array(src.enabled_validation_feature_count, src.enabled_validation_features),
+            disabled_validation_features: new_vk_array(src.disabled_validation_feature_count, src.disabled_validation_features),
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkValidationFeatures<'a, 'b> {
+impl Default for VkValidationFeatures {
+    fn default() -> VkValidationFeatures {
+        VkValidationFeatures {
+            enabled_validation_features: Vec::new(),
+            disabled_validation_features: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkValidationFeatures {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkValidationFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.enabled_validation_features);
         free_ptr(self.disabled_validation_features);
     }

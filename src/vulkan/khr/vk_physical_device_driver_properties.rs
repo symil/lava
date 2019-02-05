@@ -28,7 +28,7 @@ pub struct VkPhysicalDeviceDriverProperties {
 #[repr(C)]
 pub struct RawVkPhysicalDeviceDriverProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub driver_id: RawVkDriverId,
     pub driver_name: [c_char; 256],
     pub driver_info: [c_char; 256],
@@ -53,7 +53,7 @@ impl VkSetup for VkPhysicalDeviceDriverProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceDriverProperties {
-    fn vk_free(&mut self) {
-        RawVkConformanceVersion::vk_free(&mut self.conformance_version);
+    fn vk_free(&self) {
+        
     }
 }

@@ -84,14 +84,14 @@ impl Default for VkSurfaceCapabilities {
         VkSurfaceCapabilities {
             min_image_count: 0,
             max_image_count: 0,
-            current_extent: VkExtent2D::default(),
-            min_image_extent: VkExtent2D::default(),
-            max_image_extent: VkExtent2D::default(),
+            current_extent: Default::default(),
+            min_image_extent: Default::default(),
+            max_image_extent: Default::default(),
             max_image_array_layers: 0,
-            supported_transforms: VkSurfaceTransformFlags::default(),
-            current_transform: VkSurfaceTransformFlags::default(),
-            supported_composite_alpha: VkCompositeAlphaFlags::default(),
-            supported_usage_flags: VkImageUsageFlags::default(),
+            supported_transforms: Default::default(),
+            current_transform: Default::default(),
+            supported_composite_alpha: Default::default(),
+            supported_usage_flags: Default::default(),
         }
     }
 }
@@ -105,9 +105,7 @@ impl VkSetup for VkSurfaceCapabilities {
 }
 
 impl VkFree for RawVkSurfaceCapabilities {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.current_extent);
-        RawVkExtent2D::vk_free(&mut self.min_image_extent);
-        RawVkExtent2D::vk_free(&mut self.max_image_extent);
+    fn vk_free(&self) {
+        
     }
 }

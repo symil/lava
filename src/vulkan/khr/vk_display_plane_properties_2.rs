@@ -25,7 +25,7 @@ pub struct VkDisplayPlaneProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub display_plane_properties: RawVkDisplayPlaneProperties,
 }
 
@@ -44,7 +44,7 @@ impl VkSetup for VkDisplayPlaneProperties2 {
 }
 
 impl VkFree for RawVkDisplayPlaneProperties2 {
-    fn vk_free(&mut self) {
-        RawVkDisplayPlaneProperties::vk_free(&mut self.display_plane_properties);
+    fn vk_free(&self) {
+        
     }
 }

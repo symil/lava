@@ -33,7 +33,7 @@ pub struct VkPhysicalDeviceImageFormatInfo2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceImageFormatInfo2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub format: RawVkFormat,
     pub type_: RawVkImageType,
     pub tiling: RawVkImageTiling,
@@ -44,7 +44,7 @@ pub struct RawVkPhysicalDeviceImageFormatInfo2 {
 impl VkWrappedType<RawVkPhysicalDeviceImageFormatInfo2> for VkPhysicalDeviceImageFormatInfo2 {
     fn vk_to_raw(src: &VkPhysicalDeviceImageFormatInfo2, dst: &mut RawVkPhysicalDeviceImageFormatInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceImageFormatInfo2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.format = vk_to_raw_value(&src.format);
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.tiling = vk_to_raw_value(&src.tiling);
@@ -68,11 +68,11 @@ impl VkRawType<VkPhysicalDeviceImageFormatInfo2> for RawVkPhysicalDeviceImageFor
 impl Default for VkPhysicalDeviceImageFormatInfo2 {
     fn default() -> VkPhysicalDeviceImageFormatInfo2 {
         VkPhysicalDeviceImageFormatInfo2 {
-            format: VkFormat::default(),
-            type_: VkImageType::default(),
-            tiling: VkImageTiling::default(),
-            usage: VkImageUsageFlags::default(),
-            flags: VkImageCreateFlags::default(),
+            format: Default::default(),
+            type_: Default::default(),
+            tiling: Default::default(),
+            usage: Default::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -84,7 +84,7 @@ impl VkSetup for VkPhysicalDeviceImageFormatInfo2 {
 }
 
 impl VkFree for RawVkPhysicalDeviceImageFormatInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

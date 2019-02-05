@@ -27,7 +27,7 @@ pub struct VkDisplayPresentInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPresentInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub src_rect: RawVkRect2D,
     pub dst_rect: RawVkRect2D,
     pub persistent: u32,
@@ -36,7 +36,7 @@ pub struct RawVkDisplayPresentInfo {
 impl VkWrappedType<RawVkDisplayPresentInfo> for VkDisplayPresentInfo {
     fn vk_to_raw(src: &VkDisplayPresentInfo, dst: &mut RawVkDisplayPresentInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPresentInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.src_rect = vk_to_raw_value(&src.src_rect);
         dst.dst_rect = vk_to_raw_value(&src.dst_rect);
         dst.persistent = vk_to_raw_value(&src.persistent);
@@ -56,8 +56,8 @@ impl VkRawType<VkDisplayPresentInfo> for RawVkDisplayPresentInfo {
 impl Default for VkDisplayPresentInfo {
     fn default() -> VkDisplayPresentInfo {
         VkDisplayPresentInfo {
-            src_rect: VkRect2D::default(),
-            dst_rect: VkRect2D::default(),
+            src_rect: Default::default(),
+            dst_rect: Default::default(),
             persistent: false,
         }
     }
@@ -71,8 +71,7 @@ impl VkSetup for VkDisplayPresentInfo {
 }
 
 impl VkFree for RawVkDisplayPresentInfo {
-    fn vk_free(&mut self) {
-        RawVkRect2D::vk_free(&mut self.src_rect);
-        RawVkRect2D::vk_free(&mut self.dst_rect);
+    fn vk_free(&self) {
+        
     }
 }

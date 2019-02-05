@@ -17,9 +17,9 @@ use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 
 /// Wrapper for [VkDescriptorImageInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorImageInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorImageInfo<'a, 'b> {
-    pub sampler: &'a VkSampler,
-    pub image_view: &'b VkImageView,
+pub struct VkDescriptorImageInfo {
+    pub sampler: VkSampler,
+    pub image_view: VkImageView,
     pub image_layout: VkImageLayout,
 }
 
@@ -32,32 +32,43 @@ pub struct RawVkDescriptorImageInfo {
     pub image_layout: RawVkImageLayout,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkDescriptorImageInfo> for VkDescriptorImageInfo<'a, 'b> {
+impl VkWrappedType<RawVkDescriptorImageInfo> for VkDescriptorImageInfo {
     fn vk_to_raw(src: &VkDescriptorImageInfo, dst: &mut RawVkDescriptorImageInfo) {
-        dst.sampler = vk_to_raw_value(src.sampler);
-        dst.image_view = vk_to_raw_value(src.image_view);
+        dst.sampler = vk_to_raw_value(&src.sampler);
+        dst.image_view = vk_to_raw_value(&src.image_view);
         dst.image_layout = vk_to_raw_value(&src.image_layout);
     }
 }
 
-impl Default for VkDescriptorImageInfo<'static, 'static> {
-    fn default() -> VkDescriptorImageInfo<'static, 'static> {
+impl VkRawType<VkDescriptorImageInfo> for RawVkDescriptorImageInfo {
+    fn vk_to_wrapped(src: &RawVkDescriptorImageInfo) -> VkDescriptorImageInfo {
         VkDescriptorImageInfo {
-            sampler: vk_null_ref(),
-            image_view: vk_null_ref(),
-            image_layout: VkImageLayout::default(),
+            sampler: RawVkSampler::vk_to_wrapped(&src.sampler),
+            image_view: RawVkImageView::vk_to_wrapped(&src.image_view),
+            image_layout: RawVkImageLayout::vk_to_wrapped(&src.image_layout),
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkDescriptorImageInfo<'a, 'b> {
+impl Default for VkDescriptorImageInfo {
+    fn default() -> VkDescriptorImageInfo {
+        VkDescriptorImageInfo {
+            sampler: Default::default(),
+            image_view: Default::default(),
+            image_layout: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkDescriptorImageInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.sampler, fn_table);
+        VkSetup::vk_setup(&mut self.image_view, fn_table);
     }
 }
 
 impl VkFree for RawVkDescriptorImageInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -18,11 +18,11 @@ use vulkan::vk::{VkPipelineColorBlendAttachmentState,RawVkPipelineColorBlendAtta
 
 /// Wrapper for [VkPipelineColorBlendStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineColorBlendStateCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineColorBlendStateCreateInfo<'a> {
+pub struct VkPipelineColorBlendStateCreateInfo {
     pub flags: VkPipelineColorBlendStateCreateFlags,
     pub logic_op_enable: bool,
     pub logic_op: VkLogicOp,
-    pub attachments: &'a [VkPipelineColorBlendAttachmentState],
+    pub attachments: Vec<VkPipelineColorBlendAttachmentState>,
     pub blend_constants: [f32; 4],
 }
 
@@ -31,7 +31,7 @@ pub struct VkPipelineColorBlendStateCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineColorBlendStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineColorBlendStateCreateFlags,
     pub logic_op_enable: u32,
     pub logic_op: RawVkLogicOp,
@@ -40,39 +40,51 @@ pub struct RawVkPipelineColorBlendStateCreateInfo {
     pub blend_constants: [f32; 4],
 }
 
-impl<'a> VkWrappedType<RawVkPipelineColorBlendStateCreateInfo> for VkPipelineColorBlendStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineColorBlendStateCreateInfo> for VkPipelineColorBlendStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineColorBlendStateCreateInfo, dst: &mut RawVkPipelineColorBlendStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineColorBlendStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.logic_op_enable = vk_to_raw_value(&src.logic_op_enable);
         dst.logic_op = vk_to_raw_value(&src.logic_op);
         dst.attachment_count = src.attachments.len() as u32;
-        dst.attachments = new_ptr_vk_array(src.attachments);
+        dst.attachments = new_ptr_vk_array(&src.attachments);
         dst.blend_constants = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.blend_constants, &mut dst_array); dst_array };
     }
 }
 
-impl Default for VkPipelineColorBlendStateCreateInfo<'static> {
-    fn default() -> VkPipelineColorBlendStateCreateInfo<'static> {
+impl VkRawType<VkPipelineColorBlendStateCreateInfo> for RawVkPipelineColorBlendStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineColorBlendStateCreateInfo) -> VkPipelineColorBlendStateCreateInfo {
         VkPipelineColorBlendStateCreateInfo {
-            flags: VkPipelineColorBlendStateCreateFlags::default(),
+            flags: RawVkPipelineColorBlendStateCreateFlags::vk_to_wrapped(&src.flags),
+            logic_op_enable: u32::vk_to_wrapped(&src.logic_op_enable),
+            logic_op: RawVkLogicOp::vk_to_wrapped(&src.logic_op),
+            attachments: new_vk_array(src.attachment_count, src.attachments),
+            blend_constants: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.blend_constants, &mut dst_array); dst_array },
+        }
+    }
+}
+
+impl Default for VkPipelineColorBlendStateCreateInfo {
+    fn default() -> VkPipelineColorBlendStateCreateInfo {
+        VkPipelineColorBlendStateCreateInfo {
+            flags: Default::default(),
             logic_op_enable: false,
-            logic_op: VkLogicOp::default(),
-            attachments: &[],
+            logic_op: Default::default(),
+            attachments: Vec::new(),
             blend_constants: [0.0; 4],
         }
     }
 }
 
-impl<'a> VkSetup for VkPipelineColorBlendStateCreateInfo<'a> {
+impl VkSetup for VkPipelineColorBlendStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineColorBlendStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.attachment_count as usize, self.attachments);
     }
 }

@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceConditionalRenderingFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceConditionalRenderingFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub conditional_rendering: u32,
     pub inherited_conditional_rendering: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceConditionalRenderingFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceConditionalRenderingFeatures> for VkPhysicalDeviceConditionalRenderingFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceConditionalRenderingFeatures, dst: &mut RawVkPhysicalDeviceConditionalRenderingFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceConditionalRenderingFeaturesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.conditional_rendering = vk_to_raw_value(&src.conditional_rendering);
         dst.inherited_conditional_rendering = vk_to_raw_value(&src.inherited_conditional_rendering);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceConditionalRenderingFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceConditionalRenderingFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

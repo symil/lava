@@ -17,13 +17,9 @@ use vulkan::vk::{VkDescriptorSetLayoutBinding,RawVkDescriptorSetLayoutBinding};
 
 /// Wrapper for [VkDescriptorSetLayoutCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-        'c: 'b,
-{
+pub struct VkDescriptorSetLayoutCreateInfo {
     pub flags: VkDescriptorSetLayoutCreateFlags,
-    pub bindings: &'a [VkDescriptorSetLayoutBinding<'b, 'c>],
+    pub bindings: Vec<VkDescriptorSetLayoutBinding>,
 }
 
 #[doc(hidden)]
@@ -31,47 +27,48 @@ pub struct VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetLayoutCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDescriptorSetLayoutCreateFlags,
     pub binding_count: u32,
     pub bindings: *mut RawVkDescriptorSetLayoutBinding,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkDescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-        'c: 'b,
-{
+impl VkWrappedType<RawVkDescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfo {
     fn vk_to_raw(src: &VkDescriptorSetLayoutCreateInfo, dst: &mut RawVkDescriptorSetLayoutCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetLayoutCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.binding_count = src.bindings.len() as u32;
-        dst.bindings = new_ptr_vk_array(src.bindings);
+        dst.bindings = new_ptr_vk_array(&src.bindings);
     }
 }
 
-impl Default for VkDescriptorSetLayoutCreateInfo<'static, 'static, 'static> {
-    fn default() -> VkDescriptorSetLayoutCreateInfo<'static, 'static, 'static> {
+impl VkRawType<VkDescriptorSetLayoutCreateInfo> for RawVkDescriptorSetLayoutCreateInfo {
+    fn vk_to_wrapped(src: &RawVkDescriptorSetLayoutCreateInfo) -> VkDescriptorSetLayoutCreateInfo {
         VkDescriptorSetLayoutCreateInfo {
-            flags: VkDescriptorSetLayoutCreateFlags::default(),
-            bindings: &[],
+            flags: RawVkDescriptorSetLayoutCreateFlags::vk_to_wrapped(&src.flags),
+            bindings: new_vk_array(src.binding_count, src.bindings),
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkDescriptorSetLayoutCreateInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-        'c: 'b,
-{
+impl Default for VkDescriptorSetLayoutCreateInfo {
+    fn default() -> VkDescriptorSetLayoutCreateInfo {
+        VkDescriptorSetLayoutCreateInfo {
+            flags: Default::default(),
+            bindings: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkDescriptorSetLayoutCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDescriptorSetLayoutCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.binding_count as usize, self.bindings);
     }
 }

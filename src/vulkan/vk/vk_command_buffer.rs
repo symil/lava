@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkCommandBuffer = u64;
 
 /// Wrapper for [VkCommandBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBuffer.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkCommandBuffer {
     _handle: RawVkCommandBuffer,
     _fn_table: *mut VkFunctionTable
@@ -67,9 +67,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkBeginCommandBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBeginCommandBuffer.html).
-    pub fn begin(&self, begin_info: &VkCommandBufferBeginInfo) -> Result<(), VkResult> {
+    pub fn begin(&self, begin_info: VkCommandBufferBeginInfo) -> Result<(), VkResult> {
         unsafe {
-            let raw_begin_info = new_ptr_vk_value(begin_info);
+            let raw_begin_info = new_ptr_vk_value(&begin_info);
             let vk_result = ((&*self._fn_table).vkBeginCommandBuffer)(self._handle, raw_begin_info);
             free_vk_ptr(raw_begin_info);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
@@ -94,31 +94,31 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBindPipeline](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindPipeline.html).
-    pub fn cmd_bind_pipeline(&self, pipeline_bind_point: VkPipelineBindPoint, pipeline: &VkPipeline) {
+    pub fn cmd_bind_pipeline(&self, pipeline_bind_point: VkPipelineBindPoint, pipeline: VkPipeline) {
         unsafe {
             let raw_pipeline_bind_point = vk_to_raw_value(&pipeline_bind_point);
-            let raw_pipeline = vk_to_raw_value(pipeline);
+            let raw_pipeline = vk_to_raw_value(&pipeline);
             ((&*self._fn_table).vkCmdBindPipeline)(self._handle, raw_pipeline_bind_point, raw_pipeline);
         }
     }
     
     /// Wrapper for [vkCmdSetViewport](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetViewport.html).
-    pub fn cmd_set_viewport(&self, first_viewport: usize, viewports: &[VkViewport]) {
+    pub fn cmd_set_viewport(&self, first_viewport: usize, viewports: Vec<VkViewport>) {
         unsafe {
             let raw_first_viewport = vk_to_raw_value(&first_viewport);
             let raw_viewport_count = viewports.len() as u32;
-            let raw_viewports = new_ptr_vk_array(viewports);
+            let raw_viewports = new_ptr_vk_array(&viewports);
             ((&*self._fn_table).vkCmdSetViewport)(self._handle, raw_first_viewport, raw_viewport_count, raw_viewports);
             free_vk_ptr_array(raw_viewport_count as usize, raw_viewports);
         }
     }
     
     /// Wrapper for [vkCmdSetScissor](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetScissor.html).
-    pub fn cmd_set_scissor(&self, first_scissor: usize, scissors: &[VkRect2D]) {
+    pub fn cmd_set_scissor(&self, first_scissor: usize, scissors: Vec<VkRect2D>) {
         unsafe {
             let raw_first_scissor = vk_to_raw_value(&first_scissor);
             let raw_scissor_count = scissors.len() as u32;
-            let raw_scissors = new_ptr_vk_array(scissors);
+            let raw_scissors = new_ptr_vk_array(&scissors);
             ((&*self._fn_table).vkCmdSetScissor)(self._handle, raw_first_scissor, raw_scissor_count, raw_scissors);
             free_vk_ptr_array(raw_scissor_count as usize, raw_scissors);
         }
@@ -187,15 +187,15 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBindDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindDescriptorSets.html).
-    pub fn cmd_bind_descriptor_sets(&self, pipeline_bind_point: VkPipelineBindPoint, layout: &VkPipelineLayout, first_set: usize, descriptor_sets: &[&VkDescriptorSet], dynamic_offsets: &[usize]) {
+    pub fn cmd_bind_descriptor_sets(&self, pipeline_bind_point: VkPipelineBindPoint, layout: VkPipelineLayout, first_set: usize, descriptor_sets: Vec<VkDescriptorSet>, dynamic_offsets: Vec<usize>) {
         unsafe {
             let raw_pipeline_bind_point = vk_to_raw_value(&pipeline_bind_point);
-            let raw_layout = vk_to_raw_value(layout);
+            let raw_layout = vk_to_raw_value(&layout);
             let raw_first_set = vk_to_raw_value(&first_set);
             let raw_descriptor_set_count = descriptor_sets.len() as u32;
-            let raw_descriptor_sets = new_ptr_vk_array_from_ref(descriptor_sets);
+            let raw_descriptor_sets = new_ptr_vk_array(&descriptor_sets);
             let raw_dynamic_offset_count = dynamic_offsets.len() as u32;
-            let raw_dynamic_offsets = new_ptr_vk_array(dynamic_offsets);
+            let raw_dynamic_offsets = new_ptr_vk_array(&dynamic_offsets);
             ((&*self._fn_table).vkCmdBindDescriptorSets)(self._handle, raw_pipeline_bind_point, raw_layout, raw_first_set, raw_descriptor_set_count, raw_descriptor_sets, raw_dynamic_offset_count, raw_dynamic_offsets);
             free_ptr(raw_descriptor_sets);
             free_ptr(raw_dynamic_offsets);
@@ -203,9 +203,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBindIndexBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindIndexBuffer.html).
-    pub fn cmd_bind_index_buffer(&self, buffer: &VkBuffer, offset: usize, index_type: VkIndexType) {
+    pub fn cmd_bind_index_buffer(&self, buffer: VkBuffer, offset: usize, index_type: VkIndexType) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
             let raw_index_type = vk_to_raw_value(&index_type);
             ((&*self._fn_table).vkCmdBindIndexBuffer)(self._handle, raw_buffer, raw_offset, raw_index_type);
@@ -213,12 +213,12 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBindVertexBuffers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindVertexBuffers.html).
-    pub fn cmd_bind_vertex_buffers(&self, first_binding: usize, buffers: &[&VkBuffer], offsets: &[usize]) {
+    pub fn cmd_bind_vertex_buffers(&self, first_binding: usize, buffers: Vec<VkBuffer>, offsets: Vec<usize>) {
         unsafe {
             let raw_first_binding = vk_to_raw_value(&first_binding);
             let raw_binding_count = cmp::max(buffers.len(), offsets.len()) as u32;
-            let raw_buffers = new_ptr_vk_array_from_ref(buffers);
-            let raw_offsets = new_ptr_vk_array(offsets);
+            let raw_buffers = new_ptr_vk_array(&buffers);
+            let raw_offsets = new_ptr_vk_array(&offsets);
             ((&*self._fn_table).vkCmdBindVertexBuffers)(self._handle, raw_first_binding, raw_binding_count, raw_buffers, raw_offsets);
             free_ptr(raw_buffers);
             free_ptr(raw_offsets);
@@ -249,9 +249,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDrawIndirect](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndirect.html).
-    pub fn cmd_draw_indirect(&self, buffer: &VkBuffer, offset: usize, draw_count: usize, stride: usize) {
+    pub fn cmd_draw_indirect(&self, buffer: VkBuffer, offset: usize, draw_count: usize, stride: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
             let raw_draw_count = vk_to_raw_value(&draw_count);
             let raw_stride = vk_to_raw_value(&stride);
@@ -260,9 +260,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDrawIndexedIndirect](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndexedIndirect.html).
-    pub fn cmd_draw_indexed_indirect(&self, buffer: &VkBuffer, offset: usize, draw_count: usize, stride: usize) {
+    pub fn cmd_draw_indexed_indirect(&self, buffer: VkBuffer, offset: usize, draw_count: usize, stride: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
             let raw_draw_count = vk_to_raw_value(&draw_count);
             let raw_stride = vk_to_raw_value(&stride);
@@ -281,49 +281,49 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDispatchIndirect](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDispatchIndirect.html).
-    pub fn cmd_dispatch_indirect(&self, buffer: &VkBuffer, offset: usize) {
+    pub fn cmd_dispatch_indirect(&self, buffer: VkBuffer, offset: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
             ((&*self._fn_table).vkCmdDispatchIndirect)(self._handle, raw_buffer, raw_offset);
         }
     }
     
     /// Wrapper for [vkCmdCopyBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyBuffer.html).
-    pub fn cmd_copy_buffer(&self, src_buffer: &VkBuffer, dst_buffer: &VkBuffer, regions: &[VkBufferCopy]) {
+    pub fn cmd_copy_buffer(&self, src_buffer: VkBuffer, dst_buffer: VkBuffer, regions: Vec<VkBufferCopy>) {
         unsafe {
-            let raw_src_buffer = vk_to_raw_value(src_buffer);
-            let raw_dst_buffer = vk_to_raw_value(dst_buffer);
+            let raw_src_buffer = vk_to_raw_value(&src_buffer);
+            let raw_dst_buffer = vk_to_raw_value(&dst_buffer);
             let raw_region_count = regions.len() as u32;
-            let raw_regions = new_ptr_vk_array(regions);
+            let raw_regions = new_ptr_vk_array(&regions);
             ((&*self._fn_table).vkCmdCopyBuffer)(self._handle, raw_src_buffer, raw_dst_buffer, raw_region_count, raw_regions);
             free_vk_ptr_array(raw_region_count as usize, raw_regions);
         }
     }
     
     /// Wrapper for [vkCmdCopyImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyImage.html).
-    pub fn cmd_copy_image(&self, src_image: &VkImage, src_image_layout: VkImageLayout, dst_image: &VkImage, dst_image_layout: VkImageLayout, regions: &[VkImageCopy]) {
+    pub fn cmd_copy_image(&self, src_image: VkImage, src_image_layout: VkImageLayout, dst_image: VkImage, dst_image_layout: VkImageLayout, regions: Vec<VkImageCopy>) {
         unsafe {
-            let raw_src_image = vk_to_raw_value(src_image);
+            let raw_src_image = vk_to_raw_value(&src_image);
             let raw_src_image_layout = vk_to_raw_value(&src_image_layout);
-            let raw_dst_image = vk_to_raw_value(dst_image);
+            let raw_dst_image = vk_to_raw_value(&dst_image);
             let raw_dst_image_layout = vk_to_raw_value(&dst_image_layout);
             let raw_region_count = regions.len() as u32;
-            let raw_regions = new_ptr_vk_array(regions);
+            let raw_regions = new_ptr_vk_array(&regions);
             ((&*self._fn_table).vkCmdCopyImage)(self._handle, raw_src_image, raw_src_image_layout, raw_dst_image, raw_dst_image_layout, raw_region_count, raw_regions);
             free_vk_ptr_array(raw_region_count as usize, raw_regions);
         }
     }
     
     /// Wrapper for [vkCmdBlitImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBlitImage.html).
-    pub fn cmd_blit_image(&self, src_image: &VkImage, src_image_layout: VkImageLayout, dst_image: &VkImage, dst_image_layout: VkImageLayout, regions: &[VkImageBlit], filter: VkFilter) {
+    pub fn cmd_blit_image(&self, src_image: VkImage, src_image_layout: VkImageLayout, dst_image: VkImage, dst_image_layout: VkImageLayout, regions: Vec<VkImageBlit>, filter: VkFilter) {
         unsafe {
-            let raw_src_image = vk_to_raw_value(src_image);
+            let raw_src_image = vk_to_raw_value(&src_image);
             let raw_src_image_layout = vk_to_raw_value(&src_image_layout);
-            let raw_dst_image = vk_to_raw_value(dst_image);
+            let raw_dst_image = vk_to_raw_value(&dst_image);
             let raw_dst_image_layout = vk_to_raw_value(&dst_image_layout);
             let raw_region_count = regions.len() as u32;
-            let raw_regions = new_ptr_vk_array(regions);
+            let raw_regions = new_ptr_vk_array(&regions);
             let raw_filter = vk_to_raw_value(&filter);
             ((&*self._fn_table).vkCmdBlitImage)(self._handle, raw_src_image, raw_src_image_layout, raw_dst_image, raw_dst_image_layout, raw_region_count, raw_regions, raw_filter);
             free_vk_ptr_array(raw_region_count as usize, raw_regions);
@@ -331,46 +331,46 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdCopyBufferToImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyBufferToImage.html).
-    pub fn cmd_copy_buffer_to_image(&self, src_buffer: &VkBuffer, dst_image: &VkImage, dst_image_layout: VkImageLayout, regions: &[VkBufferImageCopy]) {
+    pub fn cmd_copy_buffer_to_image(&self, src_buffer: VkBuffer, dst_image: VkImage, dst_image_layout: VkImageLayout, regions: Vec<VkBufferImageCopy>) {
         unsafe {
-            let raw_src_buffer = vk_to_raw_value(src_buffer);
-            let raw_dst_image = vk_to_raw_value(dst_image);
+            let raw_src_buffer = vk_to_raw_value(&src_buffer);
+            let raw_dst_image = vk_to_raw_value(&dst_image);
             let raw_dst_image_layout = vk_to_raw_value(&dst_image_layout);
             let raw_region_count = regions.len() as u32;
-            let raw_regions = new_ptr_vk_array(regions);
+            let raw_regions = new_ptr_vk_array(&regions);
             ((&*self._fn_table).vkCmdCopyBufferToImage)(self._handle, raw_src_buffer, raw_dst_image, raw_dst_image_layout, raw_region_count, raw_regions);
             free_vk_ptr_array(raw_region_count as usize, raw_regions);
         }
     }
     
     /// Wrapper for [vkCmdCopyImageToBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyImageToBuffer.html).
-    pub fn cmd_copy_image_to_buffer(&self, src_image: &VkImage, src_image_layout: VkImageLayout, dst_buffer: &VkBuffer, regions: &[VkBufferImageCopy]) {
+    pub fn cmd_copy_image_to_buffer(&self, src_image: VkImage, src_image_layout: VkImageLayout, dst_buffer: VkBuffer, regions: Vec<VkBufferImageCopy>) {
         unsafe {
-            let raw_src_image = vk_to_raw_value(src_image);
+            let raw_src_image = vk_to_raw_value(&src_image);
             let raw_src_image_layout = vk_to_raw_value(&src_image_layout);
-            let raw_dst_buffer = vk_to_raw_value(dst_buffer);
+            let raw_dst_buffer = vk_to_raw_value(&dst_buffer);
             let raw_region_count = regions.len() as u32;
-            let raw_regions = new_ptr_vk_array(regions);
+            let raw_regions = new_ptr_vk_array(&regions);
             ((&*self._fn_table).vkCmdCopyImageToBuffer)(self._handle, raw_src_image, raw_src_image_layout, raw_dst_buffer, raw_region_count, raw_regions);
             free_vk_ptr_array(raw_region_count as usize, raw_regions);
         }
     }
     
     /// Wrapper for [vkCmdUpdateBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdUpdateBuffer.html).
-    pub fn cmd_update_buffer(&self, dst_buffer: &VkBuffer, dst_offset: usize, data: &[c_void]) {
+    pub fn cmd_update_buffer(&self, dst_buffer: VkBuffer, dst_offset: usize, data: &[c_void]) {
         unsafe {
-            let raw_dst_buffer = vk_to_raw_value(dst_buffer);
+            let raw_dst_buffer = vk_to_raw_value(&dst_buffer);
             let raw_dst_offset = vk_to_raw_value(&dst_offset);
             let raw_data_size = data.len() as u64;
-            let raw_data = data.as_ptr();
+            let raw_data = get_vec_ptr(data);
             ((&*self._fn_table).vkCmdUpdateBuffer)(self._handle, raw_dst_buffer, raw_dst_offset, raw_data_size, raw_data);
         }
     }
     
     /// Wrapper for [vkCmdFillBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdFillBuffer.html).
-    pub fn cmd_fill_buffer(&self, dst_buffer: &VkBuffer, dst_offset: usize, size: usize, data: usize) {
+    pub fn cmd_fill_buffer(&self, dst_buffer: VkBuffer, dst_offset: usize, size: usize, data: usize) {
         unsafe {
-            let raw_dst_buffer = vk_to_raw_value(dst_buffer);
+            let raw_dst_buffer = vk_to_raw_value(&dst_buffer);
             let raw_dst_offset = vk_to_raw_value(&dst_offset);
             let raw_size = vk_to_raw_value(&size);
             let raw_data = vk_to_raw_value(&data);
@@ -379,13 +379,13 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdClearColorImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdClearColorImage.html).
-    pub fn cmd_clear_color_image(&self, image: &VkImage, image_layout: VkImageLayout, color: &VkClearColorValue, ranges: &[VkImageSubresourceRange]) {
+    pub fn cmd_clear_color_image(&self, image: VkImage, image_layout: VkImageLayout, color: VkClearColorValue, ranges: Vec<VkImageSubresourceRange>) {
         unsafe {
-            let raw_image = vk_to_raw_value(image);
+            let raw_image = vk_to_raw_value(&image);
             let raw_image_layout = vk_to_raw_value(&image_layout);
-            let raw_color = new_ptr_vk_value(color);
+            let raw_color = new_ptr_vk_value(&color);
             let raw_range_count = ranges.len() as u32;
-            let raw_ranges = new_ptr_vk_array(ranges);
+            let raw_ranges = new_ptr_vk_array(&ranges);
             ((&*self._fn_table).vkCmdClearColorImage)(self._handle, raw_image, raw_image_layout, raw_color, raw_range_count, raw_ranges);
             free_ptr(raw_color);
             free_vk_ptr_array(raw_range_count as usize, raw_ranges);
@@ -393,13 +393,13 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdClearDepthStencilImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdClearDepthStencilImage.html).
-    pub fn cmd_clear_depth_stencil_image(&self, image: &VkImage, image_layout: VkImageLayout, depth_stencil: &VkClearDepthStencilValue, ranges: &[VkImageSubresourceRange]) {
+    pub fn cmd_clear_depth_stencil_image(&self, image: VkImage, image_layout: VkImageLayout, depth_stencil: VkClearDepthStencilValue, ranges: Vec<VkImageSubresourceRange>) {
         unsafe {
-            let raw_image = vk_to_raw_value(image);
+            let raw_image = vk_to_raw_value(&image);
             let raw_image_layout = vk_to_raw_value(&image_layout);
-            let raw_depth_stencil = new_ptr_vk_value(depth_stencil);
+            let raw_depth_stencil = new_ptr_vk_value(&depth_stencil);
             let raw_range_count = ranges.len() as u32;
-            let raw_ranges = new_ptr_vk_array(ranges);
+            let raw_ranges = new_ptr_vk_array(&ranges);
             ((&*self._fn_table).vkCmdClearDepthStencilImage)(self._handle, raw_image, raw_image_layout, raw_depth_stencil, raw_range_count, raw_ranges);
             free_vk_ptr(raw_depth_stencil);
             free_vk_ptr_array(raw_range_count as usize, raw_ranges);
@@ -407,12 +407,12 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdClearAttachments](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdClearAttachments.html).
-    pub fn cmd_clear_attachments(&self, attachments: &[VkClearAttachment], rects: &[VkClearRect]) {
+    pub fn cmd_clear_attachments(&self, attachments: Vec<VkClearAttachment>, rects: Vec<VkClearRect>) {
         unsafe {
             let raw_attachment_count = attachments.len() as u32;
-            let raw_attachments = new_ptr_vk_array(attachments);
+            let raw_attachments = new_ptr_vk_array(&attachments);
             let raw_rect_count = rects.len() as u32;
-            let raw_rects = new_ptr_vk_array(rects);
+            let raw_rects = new_ptr_vk_array(&rects);
             ((&*self._fn_table).vkCmdClearAttachments)(self._handle, raw_attachment_count, raw_attachments, raw_rect_count, raw_rects);
             free_vk_ptr_array(raw_attachment_count as usize, raw_attachments);
             free_vk_ptr_array(raw_rect_count as usize, raw_rects);
@@ -420,50 +420,50 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdResolveImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdResolveImage.html).
-    pub fn cmd_resolve_image(&self, src_image: &VkImage, src_image_layout: VkImageLayout, dst_image: &VkImage, dst_image_layout: VkImageLayout, regions: &[VkImageResolve]) {
+    pub fn cmd_resolve_image(&self, src_image: VkImage, src_image_layout: VkImageLayout, dst_image: VkImage, dst_image_layout: VkImageLayout, regions: Vec<VkImageResolve>) {
         unsafe {
-            let raw_src_image = vk_to_raw_value(src_image);
+            let raw_src_image = vk_to_raw_value(&src_image);
             let raw_src_image_layout = vk_to_raw_value(&src_image_layout);
-            let raw_dst_image = vk_to_raw_value(dst_image);
+            let raw_dst_image = vk_to_raw_value(&dst_image);
             let raw_dst_image_layout = vk_to_raw_value(&dst_image_layout);
             let raw_region_count = regions.len() as u32;
-            let raw_regions = new_ptr_vk_array(regions);
+            let raw_regions = new_ptr_vk_array(&regions);
             ((&*self._fn_table).vkCmdResolveImage)(self._handle, raw_src_image, raw_src_image_layout, raw_dst_image, raw_dst_image_layout, raw_region_count, raw_regions);
             free_vk_ptr_array(raw_region_count as usize, raw_regions);
         }
     }
     
     /// Wrapper for [vkCmdSetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetEvent.html).
-    pub fn cmd_set_event(&self, event: &VkEvent, stage_mask: VkPipelineStageFlags) {
+    pub fn cmd_set_event(&self, event: VkEvent, stage_mask: VkPipelineStageFlags) {
         unsafe {
-            let raw_event = vk_to_raw_value(event);
+            let raw_event = vk_to_raw_value(&event);
             let raw_stage_mask = vk_to_raw_value(&stage_mask);
             ((&*self._fn_table).vkCmdSetEvent)(self._handle, raw_event, raw_stage_mask);
         }
     }
     
     /// Wrapper for [vkCmdResetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdResetEvent.html).
-    pub fn cmd_reset_event(&self, event: &VkEvent, stage_mask: VkPipelineStageFlags) {
+    pub fn cmd_reset_event(&self, event: VkEvent, stage_mask: VkPipelineStageFlags) {
         unsafe {
-            let raw_event = vk_to_raw_value(event);
+            let raw_event = vk_to_raw_value(&event);
             let raw_stage_mask = vk_to_raw_value(&stage_mask);
             ((&*self._fn_table).vkCmdResetEvent)(self._handle, raw_event, raw_stage_mask);
         }
     }
     
     /// Wrapper for [vkCmdWaitEvents](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdWaitEvents.html).
-    pub fn cmd_wait_events(&self, events: &[&VkEvent], src_stage_mask: VkPipelineStageFlags, dst_stage_mask: VkPipelineStageFlags, memory_barriers: &[VkMemoryBarrier], buffer_memory_barriers: &[VkBufferMemoryBarrier], image_memory_barriers: &[VkImageMemoryBarrier]) {
+    pub fn cmd_wait_events(&self, events: Vec<VkEvent>, src_stage_mask: VkPipelineStageFlags, dst_stage_mask: VkPipelineStageFlags, memory_barriers: Vec<VkMemoryBarrier>, buffer_memory_barriers: Vec<VkBufferMemoryBarrier>, image_memory_barriers: Vec<VkImageMemoryBarrier>) {
         unsafe {
             let raw_event_count = events.len() as u32;
-            let raw_events = new_ptr_vk_array_from_ref(events);
+            let raw_events = new_ptr_vk_array(&events);
             let raw_src_stage_mask = vk_to_raw_value(&src_stage_mask);
             let raw_dst_stage_mask = vk_to_raw_value(&dst_stage_mask);
             let raw_memory_barrier_count = memory_barriers.len() as u32;
-            let raw_memory_barriers = new_ptr_vk_array(memory_barriers);
+            let raw_memory_barriers = new_ptr_vk_array(&memory_barriers);
             let raw_buffer_memory_barrier_count = buffer_memory_barriers.len() as u32;
-            let raw_buffer_memory_barriers = new_ptr_vk_array(buffer_memory_barriers);
+            let raw_buffer_memory_barriers = new_ptr_vk_array(&buffer_memory_barriers);
             let raw_image_memory_barrier_count = image_memory_barriers.len() as u32;
-            let raw_image_memory_barriers = new_ptr_vk_array(image_memory_barriers);
+            let raw_image_memory_barriers = new_ptr_vk_array(&image_memory_barriers);
             ((&*self._fn_table).vkCmdWaitEvents)(self._handle, raw_event_count, raw_events, raw_src_stage_mask, raw_dst_stage_mask, raw_memory_barrier_count, raw_memory_barriers, raw_buffer_memory_barrier_count, raw_buffer_memory_barriers, raw_image_memory_barrier_count, raw_image_memory_barriers);
             free_ptr(raw_events);
             free_vk_ptr_array(raw_memory_barrier_count as usize, raw_memory_barriers);
@@ -473,17 +473,17 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdPipelineBarrier](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdPipelineBarrier.html).
-    pub fn cmd_pipeline_barrier(&self, src_stage_mask: VkPipelineStageFlags, dst_stage_mask: VkPipelineStageFlags, dependency_flags: VkDependencyFlags, memory_barriers: &[VkMemoryBarrier], buffer_memory_barriers: &[VkBufferMemoryBarrier], image_memory_barriers: &[VkImageMemoryBarrier]) {
+    pub fn cmd_pipeline_barrier(&self, src_stage_mask: VkPipelineStageFlags, dst_stage_mask: VkPipelineStageFlags, dependency_flags: VkDependencyFlags, memory_barriers: Vec<VkMemoryBarrier>, buffer_memory_barriers: Vec<VkBufferMemoryBarrier>, image_memory_barriers: Vec<VkImageMemoryBarrier>) {
         unsafe {
             let raw_src_stage_mask = vk_to_raw_value(&src_stage_mask);
             let raw_dst_stage_mask = vk_to_raw_value(&dst_stage_mask);
             let raw_dependency_flags = vk_to_raw_value(&dependency_flags);
             let raw_memory_barrier_count = memory_barriers.len() as u32;
-            let raw_memory_barriers = new_ptr_vk_array(memory_barriers);
+            let raw_memory_barriers = new_ptr_vk_array(&memory_barriers);
             let raw_buffer_memory_barrier_count = buffer_memory_barriers.len() as u32;
-            let raw_buffer_memory_barriers = new_ptr_vk_array(buffer_memory_barriers);
+            let raw_buffer_memory_barriers = new_ptr_vk_array(&buffer_memory_barriers);
             let raw_image_memory_barrier_count = image_memory_barriers.len() as u32;
-            let raw_image_memory_barriers = new_ptr_vk_array(image_memory_barriers);
+            let raw_image_memory_barriers = new_ptr_vk_array(&image_memory_barriers);
             ((&*self._fn_table).vkCmdPipelineBarrier)(self._handle, raw_src_stage_mask, raw_dst_stage_mask, raw_dependency_flags, raw_memory_barrier_count, raw_memory_barriers, raw_buffer_memory_barrier_count, raw_buffer_memory_barriers, raw_image_memory_barrier_count, raw_image_memory_barriers);
             free_vk_ptr_array(raw_memory_barrier_count as usize, raw_memory_barriers);
             free_vk_ptr_array(raw_buffer_memory_barrier_count as usize, raw_buffer_memory_barriers);
@@ -492,9 +492,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBeginQuery](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginQuery.html).
-    pub fn cmd_begin_query(&self, query_pool: &VkQueryPool, query: usize, flags: VkQueryControlFlags) {
+    pub fn cmd_begin_query(&self, query_pool: VkQueryPool, query: usize, flags: VkQueryControlFlags) {
         unsafe {
-            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_query = vk_to_raw_value(&query);
             let raw_flags = vk_to_raw_value(&flags);
             ((&*self._fn_table).vkCmdBeginQuery)(self._handle, raw_query_pool, raw_query, raw_flags);
@@ -502,18 +502,18 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdEndQuery](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdEndQuery.html).
-    pub fn cmd_end_query(&self, query_pool: &VkQueryPool, query: usize) {
+    pub fn cmd_end_query(&self, query_pool: VkQueryPool, query: usize) {
         unsafe {
-            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_query = vk_to_raw_value(&query);
             ((&*self._fn_table).vkCmdEndQuery)(self._handle, raw_query_pool, raw_query);
         }
     }
     
     /// Wrapper for [vkCmdResetQueryPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdResetQueryPool.html).
-    pub fn cmd_reset_query_pool(&self, query_pool: &VkQueryPool, first_query: usize, query_count: usize) {
+    pub fn cmd_reset_query_pool(&self, query_pool: VkQueryPool, first_query: usize, query_count: usize) {
         unsafe {
-            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_first_query = vk_to_raw_value(&first_query);
             let raw_query_count = vk_to_raw_value(&query_count);
             ((&*self._fn_table).vkCmdResetQueryPool)(self._handle, raw_query_pool, raw_first_query, raw_query_count);
@@ -521,22 +521,22 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdWriteTimestamp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdWriteTimestamp.html).
-    pub fn cmd_write_timestamp(&self, pipeline_stage: VkPipelineStageFlags, query_pool: &VkQueryPool, query: usize) {
+    pub fn cmd_write_timestamp(&self, pipeline_stage: VkPipelineStageFlags, query_pool: VkQueryPool, query: usize) {
         unsafe {
             let raw_pipeline_stage = vk_to_raw_value(&pipeline_stage);
-            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_query = vk_to_raw_value(&query);
             ((&*self._fn_table).vkCmdWriteTimestamp)(self._handle, raw_pipeline_stage, raw_query_pool, raw_query);
         }
     }
     
     /// Wrapper for [vkCmdCopyQueryPoolResults](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyQueryPoolResults.html).
-    pub fn cmd_copy_query_pool_results(&self, query_pool: &VkQueryPool, first_query: usize, query_count: usize, dst_buffer: &VkBuffer, dst_offset: usize, stride: usize, flags: VkQueryResultFlags) {
+    pub fn cmd_copy_query_pool_results(&self, query_pool: VkQueryPool, first_query: usize, query_count: usize, dst_buffer: VkBuffer, dst_offset: usize, stride: usize, flags: VkQueryResultFlags) {
         unsafe {
-            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_first_query = vk_to_raw_value(&first_query);
             let raw_query_count = vk_to_raw_value(&query_count);
-            let raw_dst_buffer = vk_to_raw_value(dst_buffer);
+            let raw_dst_buffer = vk_to_raw_value(&dst_buffer);
             let raw_dst_offset = vk_to_raw_value(&dst_offset);
             let raw_stride = vk_to_raw_value(&stride);
             let raw_flags = vk_to_raw_value(&flags);
@@ -545,21 +545,21 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdPushConstants](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdPushConstants.html).
-    pub fn cmd_push_constants(&self, layout: &VkPipelineLayout, stage_flags: VkShaderStageFlags, offset: usize, values: &[c_void]) {
+    pub fn cmd_push_constants(&self, layout: VkPipelineLayout, stage_flags: VkShaderStageFlags, offset: usize, values: &[c_void]) {
         unsafe {
-            let raw_layout = vk_to_raw_value(layout);
+            let raw_layout = vk_to_raw_value(&layout);
             let raw_stage_flags = vk_to_raw_value(&stage_flags);
             let raw_offset = vk_to_raw_value(&offset);
             let raw_size = values.len() as u32;
-            let raw_values = values.as_ptr();
+            let raw_values = get_vec_ptr(values);
             ((&*self._fn_table).vkCmdPushConstants)(self._handle, raw_layout, raw_stage_flags, raw_offset, raw_size, raw_values);
         }
     }
     
     /// Wrapper for [vkCmdBeginRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginRenderPass.html).
-    pub fn cmd_begin_render_pass(&self, render_pass_begin: &VkRenderPassBeginInfo, contents: VkSubpassContents) {
+    pub fn cmd_begin_render_pass(&self, render_pass_begin: VkRenderPassBeginInfo, contents: VkSubpassContents) {
         unsafe {
-            let raw_render_pass_begin = new_ptr_vk_value(render_pass_begin);
+            let raw_render_pass_begin = new_ptr_vk_value(&render_pass_begin);
             let raw_contents = vk_to_raw_value(&contents);
             ((&*self._fn_table).vkCmdBeginRenderPass)(self._handle, raw_render_pass_begin, raw_contents);
             free_vk_ptr(raw_render_pass_begin);
@@ -582,10 +582,10 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdExecuteCommands](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdExecuteCommands.html).
-    pub fn cmd_execute_commands(&self, command_buffers: &[&VkCommandBuffer]) {
+    pub fn cmd_execute_commands(&self, command_buffers: Vec<VkCommandBuffer>) {
         unsafe {
             let raw_command_buffer_count = command_buffers.len() as u32;
-            let raw_command_buffers = new_ptr_vk_array_from_ref(command_buffers);
+            let raw_command_buffers = new_ptr_vk_array(&command_buffers);
             ((&*self._fn_table).vkCmdExecuteCommands)(self._handle, raw_command_buffer_count, raw_command_buffers);
             free_ptr(raw_command_buffers);
         }
@@ -613,34 +613,34 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdPushDescriptorSetKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdPushDescriptorSetKHR.html).
-    pub fn cmd_push_descriptor_set(&self, pipeline_bind_point: VkPipelineBindPoint, layout: &VkPipelineLayout, set: usize, descriptor_writes: &[VkWriteDescriptorSet]) {
+    pub fn cmd_push_descriptor_set(&self, pipeline_bind_point: VkPipelineBindPoint, layout: VkPipelineLayout, set: usize, descriptor_writes: Vec<VkWriteDescriptorSet>) {
         unsafe {
             let raw_pipeline_bind_point = vk_to_raw_value(&pipeline_bind_point);
-            let raw_layout = vk_to_raw_value(layout);
+            let raw_layout = vk_to_raw_value(&layout);
             let raw_set = vk_to_raw_value(&set);
             let raw_descriptor_write_count = descriptor_writes.len() as u32;
-            let raw_descriptor_writes = new_ptr_vk_array(descriptor_writes);
+            let raw_descriptor_writes = new_ptr_vk_array(&descriptor_writes);
             ((&*self._fn_table).vkCmdPushDescriptorSetKHR)(self._handle, raw_pipeline_bind_point, raw_layout, raw_set, raw_descriptor_write_count, raw_descriptor_writes);
             free_vk_ptr_array(raw_descriptor_write_count as usize, raw_descriptor_writes);
         }
     }
     
     /// Wrapper for [vkCmdPushDescriptorSetWithTemplateKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdPushDescriptorSetWithTemplateKHR.html).
-    pub fn cmd_push_descriptor_set_with_template(&self, descriptor_update_template: &VkDescriptorUpdateTemplate, layout: &VkPipelineLayout, set: usize, data: &c_void) {
+    pub fn cmd_push_descriptor_set_with_template(&self, descriptor_update_template: VkDescriptorUpdateTemplate, layout: VkPipelineLayout, set: usize, data: *mut c_void) {
         unsafe {
-            let raw_descriptor_update_template = vk_to_raw_value(descriptor_update_template);
-            let raw_layout = vk_to_raw_value(layout);
+            let raw_descriptor_update_template = vk_to_raw_value(&descriptor_update_template);
+            let raw_layout = vk_to_raw_value(&layout);
             let raw_set = vk_to_raw_value(&set);
-            let raw_data = data as *const c_void;
+            let raw_data = data;
             ((&*self._fn_table).vkCmdPushDescriptorSetWithTemplateKHR)(self._handle, raw_descriptor_update_template, raw_layout, raw_set, raw_data);
         }
     }
     
     /// Wrapper for [vkCmdBeginRenderPass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginRenderPass2KHR.html).
-    pub fn cmd_begin_render_pass_2(&self, render_pass_begin: &VkRenderPassBeginInfo, subpass_begin_info: &khr::VkSubpassBeginInfo) {
+    pub fn cmd_begin_render_pass_2(&self, render_pass_begin: VkRenderPassBeginInfo, subpass_begin_info: khr::VkSubpassBeginInfo) {
         unsafe {
-            let raw_render_pass_begin = new_ptr_vk_value(render_pass_begin);
-            let raw_subpass_begin_info = new_ptr_vk_value(subpass_begin_info);
+            let raw_render_pass_begin = new_ptr_vk_value(&render_pass_begin);
+            let raw_subpass_begin_info = new_ptr_vk_value(&subpass_begin_info);
             ((&*self._fn_table).vkCmdBeginRenderPass2KHR)(self._handle, raw_render_pass_begin, raw_subpass_begin_info);
             free_vk_ptr(raw_render_pass_begin);
             free_vk_ptr(raw_subpass_begin_info);
@@ -648,10 +648,10 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdNextSubpass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdNextSubpass2KHR.html).
-    pub fn cmd_next_subpass_2(&self, subpass_begin_info: &khr::VkSubpassBeginInfo, subpass_end_info: &khr::VkSubpassEndInfo) {
+    pub fn cmd_next_subpass_2(&self, subpass_begin_info: khr::VkSubpassBeginInfo, subpass_end_info: khr::VkSubpassEndInfo) {
         unsafe {
-            let raw_subpass_begin_info = new_ptr_vk_value(subpass_begin_info);
-            let raw_subpass_end_info = new_ptr_vk_value(subpass_end_info);
+            let raw_subpass_begin_info = new_ptr_vk_value(&subpass_begin_info);
+            let raw_subpass_end_info = new_ptr_vk_value(&subpass_end_info);
             ((&*self._fn_table).vkCmdNextSubpass2KHR)(self._handle, raw_subpass_begin_info, raw_subpass_end_info);
             free_vk_ptr(raw_subpass_begin_info);
             free_vk_ptr(raw_subpass_end_info);
@@ -659,20 +659,20 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdEndRenderPass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdEndRenderPass2KHR.html).
-    pub fn cmd_end_render_pass_2(&self, subpass_end_info: &khr::VkSubpassEndInfo) {
+    pub fn cmd_end_render_pass_2(&self, subpass_end_info: khr::VkSubpassEndInfo) {
         unsafe {
-            let raw_subpass_end_info = new_ptr_vk_value(subpass_end_info);
+            let raw_subpass_end_info = new_ptr_vk_value(&subpass_end_info);
             ((&*self._fn_table).vkCmdEndRenderPass2KHR)(self._handle, raw_subpass_end_info);
             free_vk_ptr(raw_subpass_end_info);
         }
     }
     
     /// Wrapper for [vkCmdDrawIndirectCountKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndirectCountKHR.html).
-    pub fn cmd_draw_indirect_count(&self, buffer: &VkBuffer, offset: usize, count_buffer: &VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+    pub fn cmd_draw_indirect_count(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(count_buffer);
+            let raw_count_buffer = vk_to_raw_value(&count_buffer);
             let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
             let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
             let raw_stride = vk_to_raw_value(&stride);
@@ -681,11 +681,11 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDrawIndexedIndirectCountKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndexedIndirectCountKHR.html).
-    pub fn cmd_draw_indexed_indirect_count(&self, buffer: &VkBuffer, offset: usize, count_buffer: &VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+    pub fn cmd_draw_indexed_indirect_count(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(count_buffer);
+            let raw_count_buffer = vk_to_raw_value(&count_buffer);
             let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
             let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
             let raw_stride = vk_to_raw_value(&stride);
@@ -694,9 +694,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDebugMarkerBeginEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDebugMarkerBeginEXT.html).
-    pub fn cmd_debug_marker_begin(&self, marker_info: &ext::VkDebugMarkerMarkerInfo) {
+    pub fn cmd_debug_marker_begin(&self, marker_info: ext::VkDebugMarkerMarkerInfo) {
         unsafe {
-            let raw_marker_info = new_ptr_vk_value(marker_info);
+            let raw_marker_info = new_ptr_vk_value(&marker_info);
             ((&*self._fn_table).vkCmdDebugMarkerBeginEXT)(self._handle, raw_marker_info);
             free_vk_ptr(raw_marker_info);
         }
@@ -710,22 +710,22 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDebugMarkerInsertEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDebugMarkerInsertEXT.html).
-    pub fn cmd_debug_marker_insert(&self, marker_info: &ext::VkDebugMarkerMarkerInfo) {
+    pub fn cmd_debug_marker_insert(&self, marker_info: ext::VkDebugMarkerMarkerInfo) {
         unsafe {
-            let raw_marker_info = new_ptr_vk_value(marker_info);
+            let raw_marker_info = new_ptr_vk_value(&marker_info);
             ((&*self._fn_table).vkCmdDebugMarkerInsertEXT)(self._handle, raw_marker_info);
             free_vk_ptr(raw_marker_info);
         }
     }
     
     /// Wrapper for [vkCmdBindTransformFeedbackBuffersEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindTransformFeedbackBuffersEXT.html).
-    pub fn cmd_bind_transform_feedback_buffers(&self, first_binding: usize, buffers: &[&VkBuffer], offsets: &[usize], sizes: Option<&[usize]>) {
+    pub fn cmd_bind_transform_feedback_buffers(&self, first_binding: usize, buffers: Vec<VkBuffer>, offsets: Vec<usize>, sizes: Option<Vec<usize>>) {
         unsafe {
             let raw_first_binding = vk_to_raw_value(&first_binding);
-            let raw_binding_count = cmp::max(cmp::max(buffers.len(), offsets.len()), get_array_option_len(sizes)) as u32;
-            let raw_buffers = new_ptr_vk_array_from_ref(buffers);
-            let raw_offsets = new_ptr_vk_array(offsets);
-            let raw_sizes = new_ptr_vk_array_checked(sizes);
+            let raw_binding_count = cmp::max(cmp::max(buffers.len(), offsets.len()), get_array_option_len(&sizes)) as u32;
+            let raw_buffers = new_ptr_vk_array(&buffers);
+            let raw_offsets = new_ptr_vk_array(&offsets);
+            let raw_sizes = new_ptr_vk_array_checked(&sizes);
             ((&*self._fn_table).vkCmdBindTransformFeedbackBuffersEXT)(self._handle, raw_first_binding, raw_binding_count, raw_buffers, raw_offsets, raw_sizes);
             free_ptr(raw_buffers);
             free_ptr(raw_offsets);
@@ -734,12 +734,12 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBeginTransformFeedbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginTransformFeedbackEXT.html).
-    pub fn cmd_begin_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: &[&VkBuffer], counter_buffer_offsets: Option<&[usize]>) {
+    pub fn cmd_begin_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: Vec<VkBuffer>, counter_buffer_offsets: Option<Vec<usize>>) {
         unsafe {
             let raw_first_counter_buffer = vk_to_raw_value(&first_counter_buffer);
-            let raw_counter_buffer_count = cmp::max(counter_buffers.len(), get_array_option_len(counter_buffer_offsets)) as u32;
-            let raw_counter_buffers = new_ptr_vk_array_from_ref(counter_buffers);
-            let raw_counter_buffer_offsets = new_ptr_vk_array_checked(counter_buffer_offsets);
+            let raw_counter_buffer_count = cmp::max(counter_buffers.len(), get_array_option_len(&counter_buffer_offsets)) as u32;
+            let raw_counter_buffers = new_ptr_vk_array(&counter_buffers);
+            let raw_counter_buffer_offsets = new_ptr_vk_array_checked(&counter_buffer_offsets);
             ((&*self._fn_table).vkCmdBeginTransformFeedbackEXT)(self._handle, raw_first_counter_buffer, raw_counter_buffer_count, raw_counter_buffers, raw_counter_buffer_offsets);
             free_ptr(raw_counter_buffers);
             free_ptr(raw_counter_buffer_offsets);
@@ -747,12 +747,12 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdEndTransformFeedbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdEndTransformFeedbackEXT.html).
-    pub fn cmd_end_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: &[&VkBuffer], counter_buffer_offsets: Option<&[usize]>) {
+    pub fn cmd_end_transform_feedback(&self, first_counter_buffer: usize, counter_buffers: Vec<VkBuffer>, counter_buffer_offsets: Option<Vec<usize>>) {
         unsafe {
             let raw_first_counter_buffer = vk_to_raw_value(&first_counter_buffer);
-            let raw_counter_buffer_count = cmp::max(counter_buffers.len(), get_array_option_len(counter_buffer_offsets)) as u32;
-            let raw_counter_buffers = new_ptr_vk_array_from_ref(counter_buffers);
-            let raw_counter_buffer_offsets = new_ptr_vk_array_checked(counter_buffer_offsets);
+            let raw_counter_buffer_count = cmp::max(counter_buffers.len(), get_array_option_len(&counter_buffer_offsets)) as u32;
+            let raw_counter_buffers = new_ptr_vk_array(&counter_buffers);
+            let raw_counter_buffer_offsets = new_ptr_vk_array_checked(&counter_buffer_offsets);
             ((&*self._fn_table).vkCmdEndTransformFeedbackEXT)(self._handle, raw_first_counter_buffer, raw_counter_buffer_count, raw_counter_buffers, raw_counter_buffer_offsets);
             free_ptr(raw_counter_buffers);
             free_ptr(raw_counter_buffer_offsets);
@@ -760,9 +760,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBeginQueryIndexedEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginQueryIndexedEXT.html).
-    pub fn cmd_begin_query_indexed(&self, query_pool: &VkQueryPool, query: usize, flags: VkQueryControlFlags, index: usize) {
+    pub fn cmd_begin_query_indexed(&self, query_pool: VkQueryPool, query: usize, flags: VkQueryControlFlags, index: usize) {
         unsafe {
-            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_query = vk_to_raw_value(&query);
             let raw_flags = vk_to_raw_value(&flags);
             let raw_index = vk_to_raw_value(&index);
@@ -771,9 +771,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdEndQueryIndexedEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdEndQueryIndexedEXT.html).
-    pub fn cmd_end_query_indexed(&self, query_pool: &VkQueryPool, query: usize, index: usize) {
+    pub fn cmd_end_query_indexed(&self, query_pool: VkQueryPool, query: usize, index: usize) {
         unsafe {
-            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_query = vk_to_raw_value(&query);
             let raw_index = vk_to_raw_value(&index);
             ((&*self._fn_table).vkCmdEndQueryIndexedEXT)(self._handle, raw_query_pool, raw_query, raw_index);
@@ -781,11 +781,11 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDrawIndirectByteCountEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndirectByteCountEXT.html).
-    pub fn cmd_draw_indirect_byte_count(&self, instance_count: usize, first_instance: usize, counter_buffer: &VkBuffer, counter_buffer_offset: usize, counter_offset: usize, vertex_stride: usize) {
+    pub fn cmd_draw_indirect_byte_count(&self, instance_count: usize, first_instance: usize, counter_buffer: VkBuffer, counter_buffer_offset: usize, counter_offset: usize, vertex_stride: usize) {
         unsafe {
             let raw_instance_count = vk_to_raw_value(&instance_count);
             let raw_first_instance = vk_to_raw_value(&first_instance);
-            let raw_counter_buffer = vk_to_raw_value(counter_buffer);
+            let raw_counter_buffer = vk_to_raw_value(&counter_buffer);
             let raw_counter_buffer_offset = vk_to_raw_value(&counter_buffer_offset);
             let raw_counter_offset = vk_to_raw_value(&counter_offset);
             let raw_vertex_stride = vk_to_raw_value(&vertex_stride);
@@ -794,11 +794,11 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDrawIndirectCountAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndirectCountAMD.html).
-    pub fn cmd_draw_indirect_count_amd(&self, buffer: &VkBuffer, offset: usize, count_buffer: &VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+    pub fn cmd_draw_indirect_count_amd(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(count_buffer);
+            let raw_count_buffer = vk_to_raw_value(&count_buffer);
             let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
             let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
             let raw_stride = vk_to_raw_value(&stride);
@@ -807,11 +807,11 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDrawIndexedIndirectCountAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndexedIndirectCountAMD.html).
-    pub fn cmd_draw_indexed_indirect_count_amd(&self, buffer: &VkBuffer, offset: usize, count_buffer: &VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+    pub fn cmd_draw_indexed_indirect_count_amd(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(count_buffer);
+            let raw_count_buffer = vk_to_raw_value(&count_buffer);
             let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
             let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
             let raw_stride = vk_to_raw_value(&stride);
@@ -820,9 +820,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBeginConditionalRenderingEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginConditionalRenderingEXT.html).
-    pub fn cmd_begin_conditional_rendering(&self, conditional_rendering_begin: &ext::VkConditionalRenderingBeginInfo) {
+    pub fn cmd_begin_conditional_rendering(&self, conditional_rendering_begin: ext::VkConditionalRenderingBeginInfo) {
         unsafe {
-            let raw_conditional_rendering_begin = new_ptr_vk_value(conditional_rendering_begin);
+            let raw_conditional_rendering_begin = new_ptr_vk_value(&conditional_rendering_begin);
             ((&*self._fn_table).vkCmdBeginConditionalRenderingEXT)(self._handle, raw_conditional_rendering_begin);
             free_vk_ptr(raw_conditional_rendering_begin);
         }
@@ -836,49 +836,49 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdProcessCommandsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdProcessCommandsNVX.html).
-    pub fn cmd_process_commands(&self, process_commands_info: &nvx::VkCmdProcessCommandsInfo) {
+    pub fn cmd_process_commands(&self, process_commands_info: nvx::VkCmdProcessCommandsInfo) {
         unsafe {
-            let raw_process_commands_info = new_ptr_vk_value(process_commands_info);
+            let raw_process_commands_info = new_ptr_vk_value(&process_commands_info);
             ((&*self._fn_table).vkCmdProcessCommandsNVX)(self._handle, raw_process_commands_info);
             free_vk_ptr(raw_process_commands_info);
         }
     }
     
     /// Wrapper for [vkCmdReserveSpaceForCommandsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdReserveSpaceForCommandsNVX.html).
-    pub fn cmd_reserve_space_for_commands(&self, reserve_space_info: &nvx::VkCmdReserveSpaceForCommandsInfo) {
+    pub fn cmd_reserve_space_for_commands(&self, reserve_space_info: nvx::VkCmdReserveSpaceForCommandsInfo) {
         unsafe {
-            let raw_reserve_space_info = new_ptr_vk_value(reserve_space_info);
+            let raw_reserve_space_info = new_ptr_vk_value(&reserve_space_info);
             ((&*self._fn_table).vkCmdReserveSpaceForCommandsNVX)(self._handle, raw_reserve_space_info);
             free_vk_ptr(raw_reserve_space_info);
         }
     }
     
     /// Wrapper for [vkCmdSetViewportWScalingNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetViewportWScalingNV.html).
-    pub fn cmd_set_viewport_wscaling(&self, first_viewport: usize, viewport_wscalings: &[nv::VkViewportWScaling]) {
+    pub fn cmd_set_viewport_wscaling(&self, first_viewport: usize, viewport_wscalings: Vec<nv::VkViewportWScaling>) {
         unsafe {
             let raw_first_viewport = vk_to_raw_value(&first_viewport);
             let raw_viewport_count = viewport_wscalings.len() as u32;
-            let raw_viewport_wscalings = new_ptr_vk_array(viewport_wscalings);
+            let raw_viewport_wscalings = new_ptr_vk_array(&viewport_wscalings);
             ((&*self._fn_table).vkCmdSetViewportWScalingNV)(self._handle, raw_first_viewport, raw_viewport_count, raw_viewport_wscalings);
             free_vk_ptr_array(raw_viewport_count as usize, raw_viewport_wscalings);
         }
     }
     
     /// Wrapper for [vkCmdSetDiscardRectangleEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetDiscardRectangleEXT.html).
-    pub fn cmd_set_discard_rectangle(&self, first_discard_rectangle: usize, discard_rectangles: &[VkRect2D]) {
+    pub fn cmd_set_discard_rectangle(&self, first_discard_rectangle: usize, discard_rectangles: Vec<VkRect2D>) {
         unsafe {
             let raw_first_discard_rectangle = vk_to_raw_value(&first_discard_rectangle);
             let raw_discard_rectangle_count = discard_rectangles.len() as u32;
-            let raw_discard_rectangles = new_ptr_vk_array(discard_rectangles);
+            let raw_discard_rectangles = new_ptr_vk_array(&discard_rectangles);
             ((&*self._fn_table).vkCmdSetDiscardRectangleEXT)(self._handle, raw_first_discard_rectangle, raw_discard_rectangle_count, raw_discard_rectangles);
             free_vk_ptr_array(raw_discard_rectangle_count as usize, raw_discard_rectangles);
         }
     }
     
     /// Wrapper for [vkCmdBeginDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginDebugUtilsLabelEXT.html).
-    pub fn cmd_begin_debug_utils_label(&self, label_info: &ext::VkDebugUtilsLabel) {
+    pub fn cmd_begin_debug_utils_label(&self, label_info: ext::VkDebugUtilsLabel) {
         unsafe {
-            let raw_label_info = new_ptr_vk_value(label_info);
+            let raw_label_info = new_ptr_vk_value(&label_info);
             ((&*self._fn_table).vkCmdBeginDebugUtilsLabelEXT)(self._handle, raw_label_info);
             free_vk_ptr(raw_label_info);
         }
@@ -892,64 +892,64 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdInsertDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdInsertDebugUtilsLabelEXT.html).
-    pub fn cmd_insert_debug_utils_label(&self, label_info: &ext::VkDebugUtilsLabel) {
+    pub fn cmd_insert_debug_utils_label(&self, label_info: ext::VkDebugUtilsLabel) {
         unsafe {
-            let raw_label_info = new_ptr_vk_value(label_info);
+            let raw_label_info = new_ptr_vk_value(&label_info);
             ((&*self._fn_table).vkCmdInsertDebugUtilsLabelEXT)(self._handle, raw_label_info);
             free_vk_ptr(raw_label_info);
         }
     }
     
     /// Wrapper for [vkCmdSetSampleLocationsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetSampleLocationsEXT.html).
-    pub fn cmd_set_sample_locations(&self, sample_locations_info: &ext::VkSampleLocationsInfo) {
+    pub fn cmd_set_sample_locations(&self, sample_locations_info: ext::VkSampleLocationsInfo) {
         unsafe {
-            let raw_sample_locations_info = new_ptr_vk_value(sample_locations_info);
+            let raw_sample_locations_info = new_ptr_vk_value(&sample_locations_info);
             ((&*self._fn_table).vkCmdSetSampleLocationsEXT)(self._handle, raw_sample_locations_info);
             free_vk_ptr(raw_sample_locations_info);
         }
     }
     
     /// Wrapper for [vkCmdBindShadingRateImageNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindShadingRateImageNV.html).
-    pub fn cmd_bind_shading_rate_image(&self, image_view: &VkImageView, image_layout: VkImageLayout) {
+    pub fn cmd_bind_shading_rate_image(&self, image_view: VkImageView, image_layout: VkImageLayout) {
         unsafe {
-            let raw_image_view = vk_to_raw_value(image_view);
+            let raw_image_view = vk_to_raw_value(&image_view);
             let raw_image_layout = vk_to_raw_value(&image_layout);
             ((&*self._fn_table).vkCmdBindShadingRateImageNV)(self._handle, raw_image_view, raw_image_layout);
         }
     }
     
     /// Wrapper for [vkCmdSetViewportShadingRatePaletteNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetViewportShadingRatePaletteNV.html).
-    pub fn cmd_set_viewport_shading_rate_palette(&self, first_viewport: usize, shading_rate_palettes: &[nv::VkShadingRatePalette]) {
+    pub fn cmd_set_viewport_shading_rate_palette(&self, first_viewport: usize, shading_rate_palettes: Vec<nv::VkShadingRatePalette>) {
         unsafe {
             let raw_first_viewport = vk_to_raw_value(&first_viewport);
             let raw_viewport_count = shading_rate_palettes.len() as u32;
-            let raw_shading_rate_palettes = new_ptr_vk_array(shading_rate_palettes);
+            let raw_shading_rate_palettes = new_ptr_vk_array(&shading_rate_palettes);
             ((&*self._fn_table).vkCmdSetViewportShadingRatePaletteNV)(self._handle, raw_first_viewport, raw_viewport_count, raw_shading_rate_palettes);
             free_vk_ptr_array(raw_viewport_count as usize, raw_shading_rate_palettes);
         }
     }
     
     /// Wrapper for [vkCmdSetCoarseSampleOrderNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetCoarseSampleOrderNV.html).
-    pub fn cmd_set_coarse_sample_order(&self, sample_order_type: nv::VkCoarseSampleOrderType, custom_sample_orders: &[nv::VkCoarseSampleOrderCustom]) {
+    pub fn cmd_set_coarse_sample_order(&self, sample_order_type: nv::VkCoarseSampleOrderType, custom_sample_orders: Vec<nv::VkCoarseSampleOrderCustom>) {
         unsafe {
             let raw_sample_order_type = vk_to_raw_value(&sample_order_type);
             let raw_custom_sample_order_count = custom_sample_orders.len() as u32;
-            let raw_custom_sample_orders = new_ptr_vk_array(custom_sample_orders);
+            let raw_custom_sample_orders = new_ptr_vk_array(&custom_sample_orders);
             ((&*self._fn_table).vkCmdSetCoarseSampleOrderNV)(self._handle, raw_sample_order_type, raw_custom_sample_order_count, raw_custom_sample_orders);
             free_vk_ptr_array(raw_custom_sample_order_count as usize, raw_custom_sample_orders);
         }
     }
     
     /// Wrapper for [vkCmdBuildAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBuildAccelerationStructureNV.html).
-    pub fn cmd_build_acceleration_structure(&self, info: &nv::VkAccelerationStructureInfo, instance_data: Option<&VkBuffer>, instance_offset: usize, update: bool, dst: &nv::VkAccelerationStructure, src: Option<&nv::VkAccelerationStructure>, scratch: &VkBuffer, scratch_offset: usize) {
+    pub fn cmd_build_acceleration_structure(&self, info: nv::VkAccelerationStructureInfo, instance_data: Option<VkBuffer>, instance_offset: usize, update: bool, dst: nv::VkAccelerationStructure, src: Option<nv::VkAccelerationStructure>, scratch: VkBuffer, scratch_offset: usize) {
         unsafe {
-            let raw_info = new_ptr_vk_value(info);
-            let raw_instance_data = if instance_data.is_some() { vk_to_raw_value(instance_data.unwrap()) } else { 0 };
+            let raw_info = new_ptr_vk_value(&info);
+            let raw_instance_data = vk_to_raw_value_checked(&instance_data);
             let raw_instance_offset = vk_to_raw_value(&instance_offset);
             let raw_update = vk_to_raw_value(&update);
-            let raw_dst = vk_to_raw_value(dst);
-            let raw_src = if src.is_some() { vk_to_raw_value(src.unwrap()) } else { 0 };
-            let raw_scratch = vk_to_raw_value(scratch);
+            let raw_dst = vk_to_raw_value(&dst);
+            let raw_src = vk_to_raw_value_checked(&src);
+            let raw_scratch = vk_to_raw_value(&scratch);
             let raw_scratch_offset = vk_to_raw_value(&scratch_offset);
             ((&*self._fn_table).vkCmdBuildAccelerationStructureNV)(self._handle, raw_info, raw_instance_data, raw_instance_offset, raw_update, raw_dst, raw_src, raw_scratch, raw_scratch_offset);
             free_vk_ptr(raw_info);
@@ -957,27 +957,27 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdCopyAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyAccelerationStructureNV.html).
-    pub fn cmd_copy_acceleration_structure(&self, dst: &nv::VkAccelerationStructure, src: &nv::VkAccelerationStructure, mode: nv::VkCopyAccelerationStructureMode) {
+    pub fn cmd_copy_acceleration_structure(&self, dst: nv::VkAccelerationStructure, src: nv::VkAccelerationStructure, mode: nv::VkCopyAccelerationStructureMode) {
         unsafe {
-            let raw_dst = vk_to_raw_value(dst);
-            let raw_src = vk_to_raw_value(src);
+            let raw_dst = vk_to_raw_value(&dst);
+            let raw_src = vk_to_raw_value(&src);
             let raw_mode = vk_to_raw_value(&mode);
             ((&*self._fn_table).vkCmdCopyAccelerationStructureNV)(self._handle, raw_dst, raw_src, raw_mode);
         }
     }
     
     /// Wrapper for [vkCmdTraceRaysNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdTraceRaysNV.html).
-    pub fn cmd_trace_rays(&self, raygen_shader_binding_table_buffer: &VkBuffer, raygen_shader_binding_offset: usize, miss_shader_binding_table_buffer: Option<&VkBuffer>, miss_shader_binding_offset: usize, miss_shader_binding_stride: usize, hit_shader_binding_table_buffer: Option<&VkBuffer>, hit_shader_binding_offset: usize, hit_shader_binding_stride: usize, callable_shader_binding_table_buffer: Option<&VkBuffer>, callable_shader_binding_offset: usize, callable_shader_binding_stride: usize, width: u32, height: u32, depth: usize) {
+    pub fn cmd_trace_rays(&self, raygen_shader_binding_table_buffer: VkBuffer, raygen_shader_binding_offset: usize, miss_shader_binding_table_buffer: Option<VkBuffer>, miss_shader_binding_offset: usize, miss_shader_binding_stride: usize, hit_shader_binding_table_buffer: Option<VkBuffer>, hit_shader_binding_offset: usize, hit_shader_binding_stride: usize, callable_shader_binding_table_buffer: Option<VkBuffer>, callable_shader_binding_offset: usize, callable_shader_binding_stride: usize, width: u32, height: u32, depth: usize) {
         unsafe {
-            let raw_raygen_shader_binding_table_buffer = vk_to_raw_value(raygen_shader_binding_table_buffer);
+            let raw_raygen_shader_binding_table_buffer = vk_to_raw_value(&raygen_shader_binding_table_buffer);
             let raw_raygen_shader_binding_offset = vk_to_raw_value(&raygen_shader_binding_offset);
-            let raw_miss_shader_binding_table_buffer = if miss_shader_binding_table_buffer.is_some() { vk_to_raw_value(miss_shader_binding_table_buffer.unwrap()) } else { 0 };
+            let raw_miss_shader_binding_table_buffer = vk_to_raw_value_checked(&miss_shader_binding_table_buffer);
             let raw_miss_shader_binding_offset = vk_to_raw_value(&miss_shader_binding_offset);
             let raw_miss_shader_binding_stride = vk_to_raw_value(&miss_shader_binding_stride);
-            let raw_hit_shader_binding_table_buffer = if hit_shader_binding_table_buffer.is_some() { vk_to_raw_value(hit_shader_binding_table_buffer.unwrap()) } else { 0 };
+            let raw_hit_shader_binding_table_buffer = vk_to_raw_value_checked(&hit_shader_binding_table_buffer);
             let raw_hit_shader_binding_offset = vk_to_raw_value(&hit_shader_binding_offset);
             let raw_hit_shader_binding_stride = vk_to_raw_value(&hit_shader_binding_stride);
-            let raw_callable_shader_binding_table_buffer = if callable_shader_binding_table_buffer.is_some() { vk_to_raw_value(callable_shader_binding_table_buffer.unwrap()) } else { 0 };
+            let raw_callable_shader_binding_table_buffer = vk_to_raw_value_checked(&callable_shader_binding_table_buffer);
             let raw_callable_shader_binding_offset = vk_to_raw_value(&callable_shader_binding_offset);
             let raw_callable_shader_binding_stride = vk_to_raw_value(&callable_shader_binding_stride);
             let raw_width = width;
@@ -988,12 +988,12 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdWriteAccelerationStructuresPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdWriteAccelerationStructuresPropertiesNV.html).
-    pub fn cmd_write_acceleration_structures_properties(&self, acceleration_structures: &[&nv::VkAccelerationStructure], query_type: VkQueryType, query_pool: &VkQueryPool, first_query: usize) {
+    pub fn cmd_write_acceleration_structures_properties(&self, acceleration_structures: Vec<nv::VkAccelerationStructure>, query_type: VkQueryType, query_pool: VkQueryPool, first_query: usize) {
         unsafe {
             let raw_acceleration_structure_count = acceleration_structures.len() as u32;
-            let raw_acceleration_structures = new_ptr_vk_array_from_ref(acceleration_structures);
+            let raw_acceleration_structures = new_ptr_vk_array(&acceleration_structures);
             let raw_query_type = vk_to_raw_value(&query_type);
-            let raw_query_pool = vk_to_raw_value(query_pool);
+            let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_first_query = vk_to_raw_value(&first_query);
             ((&*self._fn_table).vkCmdWriteAccelerationStructuresPropertiesNV)(self._handle, raw_acceleration_structure_count, raw_acceleration_structures, raw_query_type, raw_query_pool, raw_first_query);
             free_ptr(raw_acceleration_structures);
@@ -1001,10 +1001,10 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdWriteBufferMarkerAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdWriteBufferMarkerAMD.html).
-    pub fn cmd_write_buffer_marker(&self, pipeline_stage: VkPipelineStageFlags, dst_buffer: &VkBuffer, dst_offset: usize, marker: usize) {
+    pub fn cmd_write_buffer_marker(&self, pipeline_stage: VkPipelineStageFlags, dst_buffer: VkBuffer, dst_offset: usize, marker: usize) {
         unsafe {
             let raw_pipeline_stage = vk_to_raw_value(&pipeline_stage);
-            let raw_dst_buffer = vk_to_raw_value(dst_buffer);
+            let raw_dst_buffer = vk_to_raw_value(&dst_buffer);
             let raw_dst_offset = vk_to_raw_value(&dst_offset);
             let raw_marker = vk_to_raw_value(&marker);
             ((&*self._fn_table).vkCmdWriteBufferMarkerAMD)(self._handle, raw_pipeline_stage, raw_dst_buffer, raw_dst_offset, raw_marker);
@@ -1021,9 +1021,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDrawMeshTasksIndirectNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawMeshTasksIndirectNV.html).
-    pub fn cmd_draw_mesh_tasks_indirect(&self, buffer: &VkBuffer, offset: usize, draw_count: usize, stride: usize) {
+    pub fn cmd_draw_mesh_tasks_indirect(&self, buffer: VkBuffer, offset: usize, draw_count: usize, stride: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
             let raw_draw_count = vk_to_raw_value(&draw_count);
             let raw_stride = vk_to_raw_value(&stride);
@@ -1032,11 +1032,11 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdDrawMeshTasksIndirectCountNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawMeshTasksIndirectCountNV.html).
-    pub fn cmd_draw_mesh_tasks_indirect_count(&self, buffer: &VkBuffer, offset: usize, count_buffer: &VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+    pub fn cmd_draw_mesh_tasks_indirect_count(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
         unsafe {
-            let raw_buffer = vk_to_raw_value(buffer);
+            let raw_buffer = vk_to_raw_value(&buffer);
             let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(count_buffer);
+            let raw_count_buffer = vk_to_raw_value(&count_buffer);
             let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
             let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
             let raw_stride = vk_to_raw_value(&stride);
@@ -1045,20 +1045,20 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdSetExclusiveScissorNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetExclusiveScissorNV.html).
-    pub fn cmd_set_exclusive_scissor(&self, first_exclusive_scissor: usize, exclusive_scissors: &[VkRect2D]) {
+    pub fn cmd_set_exclusive_scissor(&self, first_exclusive_scissor: usize, exclusive_scissors: Vec<VkRect2D>) {
         unsafe {
             let raw_first_exclusive_scissor = vk_to_raw_value(&first_exclusive_scissor);
             let raw_exclusive_scissor_count = exclusive_scissors.len() as u32;
-            let raw_exclusive_scissors = new_ptr_vk_array(exclusive_scissors);
+            let raw_exclusive_scissors = new_ptr_vk_array(&exclusive_scissors);
             ((&*self._fn_table).vkCmdSetExclusiveScissorNV)(self._handle, raw_first_exclusive_scissor, raw_exclusive_scissor_count, raw_exclusive_scissors);
             free_vk_ptr_array(raw_exclusive_scissor_count as usize, raw_exclusive_scissors);
         }
     }
     
     /// Wrapper for [vkCmdSetCheckpointNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetCheckpointNV.html).
-    pub fn cmd_set_checkpoint(&self, checkpoint_marker: &c_void) {
+    pub fn cmd_set_checkpoint(&self, checkpoint_marker: *mut c_void) {
         unsafe {
-            let raw_checkpoint_marker = checkpoint_marker as *const c_void;
+            let raw_checkpoint_marker = checkpoint_marker;
             ((&*self._fn_table).vkCmdSetCheckpointNV)(self._handle, raw_checkpoint_marker);
         }
     }

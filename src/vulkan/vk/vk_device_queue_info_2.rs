@@ -27,7 +27,7 @@ pub struct VkDeviceQueueInfo2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceQueueInfo2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkDeviceQueueCreateFlags,
     pub queue_family_index: u32,
     pub queue_index: u32,
@@ -36,7 +36,7 @@ pub struct RawVkDeviceQueueInfo2 {
 impl VkWrappedType<RawVkDeviceQueueInfo2> for VkDeviceQueueInfo2 {
     fn vk_to_raw(src: &VkDeviceQueueInfo2, dst: &mut RawVkDeviceQueueInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceQueueInfo2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.queue_family_index = vk_to_raw_value(&src.queue_family_index);
         dst.queue_index = vk_to_raw_value(&src.queue_index);
@@ -56,7 +56,7 @@ impl VkRawType<VkDeviceQueueInfo2> for RawVkDeviceQueueInfo2 {
 impl Default for VkDeviceQueueInfo2 {
     fn default() -> VkDeviceQueueInfo2 {
         VkDeviceQueueInfo2 {
-            flags: VkDeviceQueueCreateFlags::default(),
+            flags: Default::default(),
             queue_family_index: 0,
             queue_index: 0,
         }
@@ -70,7 +70,7 @@ impl VkSetup for VkDeviceQueueInfo2 {
 }
 
 impl VkFree for RawVkDeviceQueueInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

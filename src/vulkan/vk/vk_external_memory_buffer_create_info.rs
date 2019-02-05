@@ -25,14 +25,14 @@ pub struct VkExternalMemoryBufferCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalMemoryBufferCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_types: RawVkExternalMemoryHandleTypeFlags,
 }
 
 impl VkWrappedType<RawVkExternalMemoryBufferCreateInfo> for VkExternalMemoryBufferCreateInfo {
     fn vk_to_raw(src: &VkExternalMemoryBufferCreateInfo, dst: &mut RawVkExternalMemoryBufferCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ExternalMemoryBufferCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkExternalMemoryBufferCreateInfo> for RawVkExternalMemoryBufferCr
 impl Default for VkExternalMemoryBufferCreateInfo {
     fn default() -> VkExternalMemoryBufferCreateInfo {
         VkExternalMemoryBufferCreateInfo {
-            handle_types: VkExternalMemoryHandleTypeFlags::default(),
+            handle_types: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExternalMemoryBufferCreateInfo {
 }
 
 impl VkFree for RawVkExternalMemoryBufferCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

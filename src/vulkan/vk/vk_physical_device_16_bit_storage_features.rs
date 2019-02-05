@@ -27,7 +27,7 @@ pub struct VkPhysicalDevice16BitStorageFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDevice16BitStorageFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub storage_buffer_16_bit_access: u32,
     pub uniform_and_storage_buffer_16_bit_access: u32,
     pub storage_push_constant_16: u32,
@@ -37,7 +37,7 @@ pub struct RawVkPhysicalDevice16BitStorageFeatures {
 impl VkWrappedType<RawVkPhysicalDevice16BitStorageFeatures> for VkPhysicalDevice16BitStorageFeatures {
     fn vk_to_raw(src: &VkPhysicalDevice16BitStorageFeatures, dst: &mut RawVkPhysicalDevice16BitStorageFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDevice16bitStorageFeatures);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.storage_buffer_16_bit_access = vk_to_raw_value(&src.storage_buffer_16_bit_access);
         dst.uniform_and_storage_buffer_16_bit_access = vk_to_raw_value(&src.uniform_and_storage_buffer_16_bit_access);
         dst.storage_push_constant_16 = vk_to_raw_value(&src.storage_push_constant_16);
@@ -74,7 +74,7 @@ impl VkSetup for VkPhysicalDevice16BitStorageFeatures {
 }
 
 impl VkFree for RawVkPhysicalDevice16BitStorageFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

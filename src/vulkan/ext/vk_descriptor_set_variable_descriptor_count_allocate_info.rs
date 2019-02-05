@@ -15,8 +15,8 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 
 /// Wrapper for [VkDescriptorSetVariableDescriptorCountAllocateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetVariableDescriptorCountAllocateInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {
-    pub descriptor_counts: &'a [usize],
+pub struct VkDescriptorSetVariableDescriptorCountAllocateInfo {
+    pub descriptor_counts: Vec<usize>,
 }
 
 #[doc(hidden)]
@@ -24,36 +24,44 @@ pub struct VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDescriptorSetVariableDescriptorCountAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub descriptor_set_count: u32,
     pub descriptor_counts: *mut u32,
 }
 
-impl<'a> VkWrappedType<RawVkDescriptorSetVariableDescriptorCountAllocateInfo> for VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {
+impl VkWrappedType<RawVkDescriptorSetVariableDescriptorCountAllocateInfo> for VkDescriptorSetVariableDescriptorCountAllocateInfo {
     fn vk_to_raw(src: &VkDescriptorSetVariableDescriptorCountAllocateInfo, dst: &mut RawVkDescriptorSetVariableDescriptorCountAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DescriptorSetVariableDescriptorCountAllocateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.descriptor_set_count = src.descriptor_counts.len() as u32;
-        dst.descriptor_counts = new_ptr_vk_array(src.descriptor_counts);
+        dst.descriptor_counts = new_ptr_vk_array(&src.descriptor_counts);
     }
 }
 
-impl Default for VkDescriptorSetVariableDescriptorCountAllocateInfo<'static> {
-    fn default() -> VkDescriptorSetVariableDescriptorCountAllocateInfo<'static> {
+impl VkRawType<VkDescriptorSetVariableDescriptorCountAllocateInfo> for RawVkDescriptorSetVariableDescriptorCountAllocateInfo {
+    fn vk_to_wrapped(src: &RawVkDescriptorSetVariableDescriptorCountAllocateInfo) -> VkDescriptorSetVariableDescriptorCountAllocateInfo {
         VkDescriptorSetVariableDescriptorCountAllocateInfo {
-            descriptor_counts: &[],
+            descriptor_counts: new_vk_array(src.descriptor_set_count, src.descriptor_counts),
         }
     }
 }
 
-impl<'a> VkSetup for VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {
+impl Default for VkDescriptorSetVariableDescriptorCountAllocateInfo {
+    fn default() -> VkDescriptorSetVariableDescriptorCountAllocateInfo {
+        VkDescriptorSetVariableDescriptorCountAllocateInfo {
+            descriptor_counts: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkDescriptorSetVariableDescriptorCountAllocateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkDescriptorSetVariableDescriptorCountAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.descriptor_counts);
     }
 }

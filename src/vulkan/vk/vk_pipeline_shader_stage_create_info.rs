@@ -19,16 +19,12 @@ use vulkan::vk::{VkSpecializationInfo,RawVkSpecializationInfo};
 
 /// Wrapper for [VkPipelineShaderStageCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineShaderStageCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'd: 'c,
-        'e: 'c,
-{
+pub struct VkPipelineShaderStageCreateInfo<'a, 'b> {
     pub flags: VkPipelineShaderStageCreateFlags,
     pub stage: VkShaderStageFlags,
-    pub module: &'a VkShaderModule,
-    pub name: &'b str,
-    pub specialization_info: Option<&'c VkSpecializationInfo<'d, 'e>>,
+    pub module: VkShaderModule,
+    pub name: &'a str,
+    pub specialization_info: Option<VkSpecializationInfo<'b>>,
 }
 
 #[doc(hidden)]
@@ -36,7 +32,7 @@ pub struct VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineShaderStageCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineShaderStageCreateFlags,
     pub stage: RawVkShaderStageFlags,
     pub module: RawVkShaderModule,
@@ -44,46 +40,50 @@ pub struct RawVkPipelineShaderStageCreateInfo {
     pub specialization_info: *mut RawVkSpecializationInfo,
 }
 
-impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkPipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'd: 'c,
-        'e: 'c,
-{
+impl<'a, 'b> VkWrappedType<RawVkPipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfo<'a, 'b> {
     fn vk_to_raw(src: &VkPipelineShaderStageCreateInfo, dst: &mut RawVkPipelineShaderStageCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineShaderStageCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage = vk_to_raw_value(&src.stage);
-        dst.module = vk_to_raw_value(src.module);
+        dst.module = vk_to_raw_value(&src.module);
         dst.name = new_ptr_string(src.name);
-        dst.specialization_info = new_ptr_vk_value_checked(src.specialization_info);
+        dst.specialization_info = new_ptr_vk_value_checked(&src.specialization_info);
     }
 }
 
-impl Default for VkPipelineShaderStageCreateInfo<'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkPipelineShaderStageCreateInfo<'static, 'static, 'static, 'static, 'static> {
+impl<'a, 'b> VkRawType<VkPipelineShaderStageCreateInfo<'a, 'b>> for RawVkPipelineShaderStageCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineShaderStageCreateInfo) -> VkPipelineShaderStageCreateInfo<'a, 'b> {
         VkPipelineShaderStageCreateInfo {
-            flags: VkPipelineShaderStageCreateFlags::default(),
-            stage: VkShaderStageFlags::default(),
-            module: vk_null_ref(),
+            flags: RawVkPipelineShaderStageCreateFlags::vk_to_wrapped(&src.flags),
+            stage: RawVkShaderStageFlags::vk_to_wrapped(&src.stage),
+            module: RawVkShaderModule::vk_to_wrapped(&src.module),
+            name: new_string_ref(src.name),
+            specialization_info: new_vk_value_checked(src.specialization_info),
+        }
+    }
+}
+
+impl Default for VkPipelineShaderStageCreateInfo<'static, 'static> {
+    fn default() -> VkPipelineShaderStageCreateInfo<'static, 'static> {
+        VkPipelineShaderStageCreateInfo {
+            flags: Default::default(),
+            stage: Default::default(),
+            module: Default::default(),
             name: "",
             specialization_info: None,
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e> VkSetup for VkPipelineShaderStageCreateInfo<'a, 'b, 'c, 'd, 'e>
-    where
-        'd: 'c,
-        'e: 'c,
-{
+impl<'a, 'b> VkSetup for VkPipelineShaderStageCreateInfo<'a, 'b> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.module, fn_table);
     }
 }
 
 impl VkFree for RawVkPipelineShaderStageCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.name);
         free_vk_ptr(self.specialization_info);
     }

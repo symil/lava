@@ -17,9 +17,9 @@ use vulkan::nv::{VkViewportSwizzle,RawVkViewportSwizzle};
 
 /// Wrapper for [VkPipelineViewportSwizzleStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportSwizzleStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineViewportSwizzleStateCreateInfo<'a> {
+pub struct VkPipelineViewportSwizzleStateCreateInfo {
     pub flags: VkPipelineViewportSwizzleStateCreateFlags,
-    pub viewport_swizzles: &'a [VkViewportSwizzle],
+    pub viewport_swizzles: Vec<VkViewportSwizzle>,
 }
 
 #[doc(hidden)]
@@ -27,39 +27,48 @@ pub struct VkPipelineViewportSwizzleStateCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportSwizzleStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineViewportSwizzleStateCreateFlags,
     pub viewport_count: u32,
     pub viewport_swizzles: *mut RawVkViewportSwizzle,
 }
 
-impl<'a> VkWrappedType<RawVkPipelineViewportSwizzleStateCreateInfo> for VkPipelineViewportSwizzleStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineViewportSwizzleStateCreateInfo> for VkPipelineViewportSwizzleStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportSwizzleStateCreateInfo, dst: &mut RawVkPipelineViewportSwizzleStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportSwizzleStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.viewport_count = src.viewport_swizzles.len() as u32;
-        dst.viewport_swizzles = new_ptr_vk_array(src.viewport_swizzles);
+        dst.viewport_swizzles = new_ptr_vk_array(&src.viewport_swizzles);
     }
 }
 
-impl Default for VkPipelineViewportSwizzleStateCreateInfo<'static> {
-    fn default() -> VkPipelineViewportSwizzleStateCreateInfo<'static> {
+impl VkRawType<VkPipelineViewportSwizzleStateCreateInfo> for RawVkPipelineViewportSwizzleStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineViewportSwizzleStateCreateInfo) -> VkPipelineViewportSwizzleStateCreateInfo {
         VkPipelineViewportSwizzleStateCreateInfo {
-            flags: VkPipelineViewportSwizzleStateCreateFlags::default(),
-            viewport_swizzles: &[],
+            flags: RawVkPipelineViewportSwizzleStateCreateFlags::vk_to_wrapped(&src.flags),
+            viewport_swizzles: new_vk_array(src.viewport_count, src.viewport_swizzles),
         }
     }
 }
 
-impl<'a> VkSetup for VkPipelineViewportSwizzleStateCreateInfo<'a> {
+impl Default for VkPipelineViewportSwizzleStateCreateInfo {
+    fn default() -> VkPipelineViewportSwizzleStateCreateInfo {
+        VkPipelineViewportSwizzleStateCreateInfo {
+            flags: Default::default(),
+            viewport_swizzles: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkPipelineViewportSwizzleStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineViewportSwizzleStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.viewport_count as usize, self.viewport_swizzles);
     }
 }

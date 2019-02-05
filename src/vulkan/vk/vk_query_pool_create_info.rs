@@ -30,7 +30,7 @@ pub struct VkQueryPoolCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkQueryPoolCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkQueryPoolCreateFlags,
     pub query_type: RawVkQueryType,
     pub query_count: u32,
@@ -40,7 +40,7 @@ pub struct RawVkQueryPoolCreateInfo {
 impl VkWrappedType<RawVkQueryPoolCreateInfo> for VkQueryPoolCreateInfo {
     fn vk_to_raw(src: &VkQueryPoolCreateInfo, dst: &mut RawVkQueryPoolCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::QueryPoolCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.query_type = vk_to_raw_value(&src.query_type);
         dst.query_count = vk_to_raw_value(&src.query_count);
@@ -62,10 +62,10 @@ impl VkRawType<VkQueryPoolCreateInfo> for RawVkQueryPoolCreateInfo {
 impl Default for VkQueryPoolCreateInfo {
     fn default() -> VkQueryPoolCreateInfo {
         VkQueryPoolCreateInfo {
-            flags: VkQueryPoolCreateFlags::default(),
-            query_type: VkQueryType::default(),
+            flags: Default::default(),
+            query_type: Default::default(),
             query_count: 0,
-            pipeline_statistics: VkQueryPipelineStatisticFlags::default(),
+            pipeline_statistics: Default::default(),
         }
     }
 }
@@ -77,7 +77,7 @@ impl VkSetup for VkQueryPoolCreateInfo {
 }
 
 impl VkFree for RawVkQueryPoolCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

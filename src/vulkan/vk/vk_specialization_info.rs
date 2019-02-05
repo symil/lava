@@ -15,10 +15,9 @@ use vulkan::vk::{VkSpecializationMapEntry,RawVkSpecializationMapEntry};
 
 /// Wrapper for [VkSpecializationInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSpecializationInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkSpecializationInfo<'a, 'b> {
-    pub map_entries: &'a [VkSpecializationMapEntry],
-    pub data_size: usize,
-    pub data: &'b c_void,
+pub struct VkSpecializationInfo<'a> {
+    pub map_entries: Vec<VkSpecializationMapEntry>,
+    pub data: &'a [c_void],
 }
 
 #[doc(hidden)]
@@ -28,36 +27,44 @@ pub struct RawVkSpecializationInfo {
     pub map_entry_count: u32,
     pub map_entries: *mut RawVkSpecializationMapEntry,
     pub data_size: usize,
-    pub data: *const c_void,
+    pub data: *mut c_void,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkSpecializationInfo> for VkSpecializationInfo<'a, 'b> {
+impl<'a> VkWrappedType<RawVkSpecializationInfo> for VkSpecializationInfo<'a> {
     fn vk_to_raw(src: &VkSpecializationInfo, dst: &mut RawVkSpecializationInfo) {
         dst.map_entry_count = src.map_entries.len() as u32;
-        dst.map_entries = new_ptr_vk_array(src.map_entries);
-        dst.data_size = src.data_size;
-        dst.data = src.data as *const c_void;
+        dst.map_entries = new_ptr_vk_array(&src.map_entries);
+        dst.data_size = src.data.len();
+        dst.data = get_vec_ptr(src.data);
     }
 }
 
-impl Default for VkSpecializationInfo<'static, 'static> {
-    fn default() -> VkSpecializationInfo<'static, 'static> {
+impl<'a> VkRawType<VkSpecializationInfo<'a>> for RawVkSpecializationInfo {
+    fn vk_to_wrapped(src: &RawVkSpecializationInfo) -> VkSpecializationInfo<'a> {
         VkSpecializationInfo {
-            map_entries: &[],
-            data_size: 0,
-            data: &0,
+            map_entries: new_vk_array(src.map_entry_count, src.map_entries),
+            data: slice_from_ptr(src.data_size as usize, src.data),
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkSpecializationInfo<'a, 'b> {
+impl Default for VkSpecializationInfo<'static> {
+    fn default() -> VkSpecializationInfo<'static> {
+        VkSpecializationInfo {
+            map_entries: Vec::new(),
+            data: &[],
+        }
+    }
+}
+
+impl<'a> VkSetup for VkSpecializationInfo<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkSpecializationInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.map_entry_count as usize, self.map_entries);
     }
 }

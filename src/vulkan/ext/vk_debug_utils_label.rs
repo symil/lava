@@ -25,7 +25,7 @@ pub struct VkDebugUtilsLabel<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsLabel {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub label_name: *mut c_char,
     pub color: [f32; 4],
 }
@@ -33,9 +33,18 @@ pub struct RawVkDebugUtilsLabel {
 impl<'a> VkWrappedType<RawVkDebugUtilsLabel> for VkDebugUtilsLabel<'a> {
     fn vk_to_raw(src: &VkDebugUtilsLabel, dst: &mut RawVkDebugUtilsLabel) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsLabelExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.label_name = new_ptr_string(src.label_name);
         dst.color = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array };
+    }
+}
+
+impl<'a> VkRawType<VkDebugUtilsLabel<'a>> for RawVkDebugUtilsLabel {
+    fn vk_to_wrapped(src: &RawVkDebugUtilsLabel) -> VkDebugUtilsLabel<'a> {
+        VkDebugUtilsLabel {
+            label_name: new_string_ref(src.label_name),
+            color: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array },
+        }
     }
 }
 
@@ -55,7 +64,7 @@ impl<'a> VkSetup for VkDebugUtilsLabel<'a> {
 }
 
 impl VkFree for RawVkDebugUtilsLabel {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.label_name);
     }
 }

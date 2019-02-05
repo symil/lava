@@ -25,14 +25,14 @@ pub struct VkSharedPresentSurfaceCapabilities {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSharedPresentSurfaceCapabilities {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shared_present_supported_usage_flags: RawVkImageUsageFlags,
 }
 
 impl VkWrappedType<RawVkSharedPresentSurfaceCapabilities> for VkSharedPresentSurfaceCapabilities {
     fn vk_to_raw(src: &VkSharedPresentSurfaceCapabilities, dst: &mut RawVkSharedPresentSurfaceCapabilities) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SharedPresentSurfaceCapabilitiesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shared_present_supported_usage_flags = vk_to_raw_value(&src.shared_present_supported_usage_flags);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkSharedPresentSurfaceCapabilities> for RawVkSharedPresentSurface
 impl Default for VkSharedPresentSurfaceCapabilities {
     fn default() -> VkSharedPresentSurfaceCapabilities {
         VkSharedPresentSurfaceCapabilities {
-            shared_present_supported_usage_flags: VkImageUsageFlags::default(),
+            shared_present_supported_usage_flags: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSharedPresentSurfaceCapabilities {
 }
 
 impl VkFree for RawVkSharedPresentSurfaceCapabilities {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

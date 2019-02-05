@@ -25,14 +25,14 @@ pub struct VkDeviceMemoryOverallocationCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceMemoryOverallocationCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub overallocation_behavior: RawVkMemoryOverallocationBehavior,
 }
 
 impl VkWrappedType<RawVkDeviceMemoryOverallocationCreateInfo> for VkDeviceMemoryOverallocationCreateInfo {
     fn vk_to_raw(src: &VkDeviceMemoryOverallocationCreateInfo, dst: &mut RawVkDeviceMemoryOverallocationCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceMemoryOverallocationCreateInfoAmd);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.overallocation_behavior = vk_to_raw_value(&src.overallocation_behavior);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkDeviceMemoryOverallocationCreateInfo> for RawVkDeviceMemoryOver
 impl Default for VkDeviceMemoryOverallocationCreateInfo {
     fn default() -> VkDeviceMemoryOverallocationCreateInfo {
         VkDeviceMemoryOverallocationCreateInfo {
-            overallocation_behavior: VkMemoryOverallocationBehavior::default(),
+            overallocation_behavior: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkDeviceMemoryOverallocationCreateInfo {
 }
 
 impl VkFree for RawVkDeviceMemoryOverallocationCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

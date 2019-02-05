@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkBuffer = u64;
 
 /// Wrapper for [VkBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuffer.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkBuffer {
     _handle: RawVkBuffer,
     _fn_table: *mut VkFunctionTable
@@ -67,9 +67,9 @@ impl VkBuffer {
     }
     
     /// Wrapper for [vkBindBufferMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindBufferMemory.html).
-    pub fn bind_memory(&self, memory: &VkDeviceMemory, memory_offset: usize) -> Result<(), VkResult> {
+    pub fn bind_memory(&self, memory: VkDeviceMemory, memory_offset: usize) -> Result<(), VkResult> {
         unsafe {
-            let raw_memory = vk_to_raw_value(memory);
+            let raw_memory = vk_to_raw_value(&memory);
             let raw_memory_offset = vk_to_raw_value(&memory_offset);
             let vk_result = ((&*self._fn_table).vkBindBufferMemory)((*self._fn_table).device, self._handle, raw_memory, raw_memory_offset);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
@@ -86,7 +86,6 @@ impl VkBuffer {
             let mut memory_requirements = new_vk_value(raw_memory_requirements);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut memory_requirements, fn_table);
-            RawVkMemoryRequirements::vk_free(raw_memory_requirements.as_mut().unwrap());
             memory_requirements
         }
     }

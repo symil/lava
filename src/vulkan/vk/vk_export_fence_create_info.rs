@@ -25,14 +25,14 @@ pub struct VkExportFenceCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExportFenceCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub handle_types: RawVkExternalFenceHandleTypeFlags,
 }
 
 impl VkWrappedType<RawVkExportFenceCreateInfo> for VkExportFenceCreateInfo {
     fn vk_to_raw(src: &VkExportFenceCreateInfo, dst: &mut RawVkExportFenceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ExportFenceCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.handle_types = vk_to_raw_value(&src.handle_types);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkExportFenceCreateInfo> for RawVkExportFenceCreateInfo {
 impl Default for VkExportFenceCreateInfo {
     fn default() -> VkExportFenceCreateInfo {
         VkExportFenceCreateInfo {
-            handle_types: VkExternalFenceHandleTypeFlags::default(),
+            handle_types: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkExportFenceCreateInfo {
 }
 
 impl VkFree for RawVkExportFenceCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

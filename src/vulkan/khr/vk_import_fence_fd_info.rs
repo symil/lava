@@ -18,8 +18,8 @@ use vulkan::vk::{VkExternalFenceHandleTypeFlags,RawVkExternalFenceHandleTypeFlag
 
 /// Wrapper for [VkImportFenceFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImportFenceFdInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkImportFenceFdInfo<'a> {
-    pub fence: &'a VkFence,
+pub struct VkImportFenceFdInfo {
+    pub fence: VkFence,
     pub flags: VkFenceImportFlags,
     pub handle_type: VkExternalFenceHandleTypeFlags,
     pub fd: i32,
@@ -30,43 +30,54 @@ pub struct VkImportFenceFdInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImportFenceFdInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub fence: RawVkFence,
     pub flags: RawVkFenceImportFlags,
     pub handle_type: RawVkExternalFenceHandleTypeFlags,
     pub fd: i32,
 }
 
-impl<'a> VkWrappedType<RawVkImportFenceFdInfo> for VkImportFenceFdInfo<'a> {
+impl VkWrappedType<RawVkImportFenceFdInfo> for VkImportFenceFdInfo {
     fn vk_to_raw(src: &VkImportFenceFdInfo, dst: &mut RawVkImportFenceFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImportFenceFdInfoKhr);
-        dst.next = ptr::null();
-        dst.fence = vk_to_raw_value(src.fence);
+        dst.next = ptr::null_mut();
+        dst.fence = vk_to_raw_value(&src.fence);
         dst.flags = vk_to_raw_value(&src.flags);
         dst.handle_type = vk_to_raw_value(&src.handle_type);
         dst.fd = src.fd;
     }
 }
 
-impl Default for VkImportFenceFdInfo<'static> {
-    fn default() -> VkImportFenceFdInfo<'static> {
+impl VkRawType<VkImportFenceFdInfo> for RawVkImportFenceFdInfo {
+    fn vk_to_wrapped(src: &RawVkImportFenceFdInfo) -> VkImportFenceFdInfo {
         VkImportFenceFdInfo {
-            fence: vk_null_ref(),
-            flags: VkFenceImportFlags::default(),
-            handle_type: VkExternalFenceHandleTypeFlags::default(),
+            fence: RawVkFence::vk_to_wrapped(&src.fence),
+            flags: RawVkFenceImportFlags::vk_to_wrapped(&src.flags),
+            handle_type: RawVkExternalFenceHandleTypeFlags::vk_to_wrapped(&src.handle_type),
+            fd: src.fd,
+        }
+    }
+}
+
+impl Default for VkImportFenceFdInfo {
+    fn default() -> VkImportFenceFdInfo {
+        VkImportFenceFdInfo {
+            fence: Default::default(),
+            flags: Default::default(),
+            handle_type: Default::default(),
             fd: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkImportFenceFdInfo<'a> {
+impl VkSetup for VkImportFenceFdInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.fence, fn_table);
     }
 }
 
 impl VkFree for RawVkImportFenceFdInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

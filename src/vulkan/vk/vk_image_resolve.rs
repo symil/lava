@@ -61,11 +61,11 @@ impl VkRawType<VkImageResolve> for RawVkImageResolve {
 impl Default for VkImageResolve {
     fn default() -> VkImageResolve {
         VkImageResolve {
-            src_subresource: VkImageSubresourceLayers::default(),
-            src_offset: VkOffset3D::default(),
-            dst_subresource: VkImageSubresourceLayers::default(),
-            dst_offset: VkOffset3D::default(),
-            extent: VkExtent3D::default(),
+            src_subresource: Default::default(),
+            src_offset: Default::default(),
+            dst_subresource: Default::default(),
+            dst_offset: Default::default(),
+            extent: Default::default(),
         }
     }
 }
@@ -81,11 +81,7 @@ impl VkSetup for VkImageResolve {
 }
 
 impl VkFree for RawVkImageResolve {
-    fn vk_free(&mut self) {
-        RawVkImageSubresourceLayers::vk_free(&mut self.src_subresource);
-        RawVkOffset3D::vk_free(&mut self.src_offset);
-        RawVkImageSubresourceLayers::vk_free(&mut self.dst_subresource);
-        RawVkOffset3D::vk_free(&mut self.dst_offset);
-        RawVkExtent3D::vk_free(&mut self.extent);
+    fn vk_free(&self) {
+        
     }
 }

@@ -16,9 +16,9 @@ use vulkan::nv::{VkViewportWScaling,RawVkViewportWScaling};
 
 /// Wrapper for [VkPipelineViewportWScalingStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportWScalingStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineViewportWScalingStateCreateInfo<'a> {
+pub struct VkPipelineViewportWScalingStateCreateInfo {
     pub viewport_wscaling_enable: bool,
-    pub viewport_wscalings: Option<&'a [VkViewportWScaling]>,
+    pub viewport_wscalings: Option<Vec<VkViewportWScaling>>,
 }
 
 #[doc(hidden)]
@@ -26,24 +26,33 @@ pub struct VkPipelineViewportWScalingStateCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineViewportWScalingStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub viewport_wscaling_enable: u32,
     pub viewport_count: u32,
     pub viewport_wscalings: *mut RawVkViewportWScaling,
 }
 
-impl<'a> VkWrappedType<RawVkPipelineViewportWScalingStateCreateInfo> for VkPipelineViewportWScalingStateCreateInfo<'a> {
+impl VkWrappedType<RawVkPipelineViewportWScalingStateCreateInfo> for VkPipelineViewportWScalingStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineViewportWScalingStateCreateInfo, dst: &mut RawVkPipelineViewportWScalingStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineViewportWScalingStateCreateInfoNv);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.viewport_wscaling_enable = vk_to_raw_value(&src.viewport_wscaling_enable);
-        dst.viewport_count = get_array_option_len(src.viewport_wscalings) as u32;
-        dst.viewport_wscalings = new_ptr_vk_array_checked(src.viewport_wscalings);
+        dst.viewport_count = get_array_option_len(&src.viewport_wscalings) as u32;
+        dst.viewport_wscalings = new_ptr_vk_array_checked(&src.viewport_wscalings);
     }
 }
 
-impl Default for VkPipelineViewportWScalingStateCreateInfo<'static> {
-    fn default() -> VkPipelineViewportWScalingStateCreateInfo<'static> {
+impl VkRawType<VkPipelineViewportWScalingStateCreateInfo> for RawVkPipelineViewportWScalingStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineViewportWScalingStateCreateInfo) -> VkPipelineViewportWScalingStateCreateInfo {
+        VkPipelineViewportWScalingStateCreateInfo {
+            viewport_wscaling_enable: u32::vk_to_wrapped(&src.viewport_wscaling_enable),
+            viewport_wscalings: new_vk_array_checked(src.viewport_count, src.viewport_wscalings),
+        }
+    }
+}
+
+impl Default for VkPipelineViewportWScalingStateCreateInfo {
+    fn default() -> VkPipelineViewportWScalingStateCreateInfo {
         VkPipelineViewportWScalingStateCreateInfo {
             viewport_wscaling_enable: false,
             viewport_wscalings: None,
@@ -51,14 +60,14 @@ impl Default for VkPipelineViewportWScalingStateCreateInfo<'static> {
     }
 }
 
-impl<'a> VkSetup for VkPipelineViewportWScalingStateCreateInfo<'a> {
+impl VkSetup for VkPipelineViewportWScalingStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineViewportWScalingStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.viewport_count as usize, self.viewport_wscalings);
     }
 }

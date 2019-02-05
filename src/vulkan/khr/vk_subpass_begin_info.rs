@@ -25,14 +25,14 @@ pub struct VkSubpassBeginInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub contents: RawVkSubpassContents,
 }
 
 impl VkWrappedType<RawVkSubpassBeginInfo> for VkSubpassBeginInfo {
     fn vk_to_raw(src: &VkSubpassBeginInfo, dst: &mut RawVkSubpassBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SubpassBeginInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.contents = vk_to_raw_value(&src.contents);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkSubpassBeginInfo> for RawVkSubpassBeginInfo {
 impl Default for VkSubpassBeginInfo {
     fn default() -> VkSubpassBeginInfo {
         VkSubpassBeginInfo {
-            contents: VkSubpassContents::default(),
+            contents: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkSubpassBeginInfo {
 }
 
 impl VkFree for RawVkSubpassBeginInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -25,7 +25,7 @@ pub struct VkDebugMarkerMarkerInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugMarkerMarkerInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub marker_name: *mut c_char,
     pub color: [f32; 4],
 }
@@ -33,9 +33,18 @@ pub struct RawVkDebugMarkerMarkerInfo {
 impl<'a> VkWrappedType<RawVkDebugMarkerMarkerInfo> for VkDebugMarkerMarkerInfo<'a> {
     fn vk_to_raw(src: &VkDebugMarkerMarkerInfo, dst: &mut RawVkDebugMarkerMarkerInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugMarkerMarkerInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.marker_name = new_ptr_string(src.marker_name);
         dst.color = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array };
+    }
+}
+
+impl<'a> VkRawType<VkDebugMarkerMarkerInfo<'a>> for RawVkDebugMarkerMarkerInfo {
+    fn vk_to_wrapped(src: &RawVkDebugMarkerMarkerInfo) -> VkDebugMarkerMarkerInfo<'a> {
+        VkDebugMarkerMarkerInfo {
+            marker_name: new_string_ref(src.marker_name),
+            color: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array },
+        }
     }
 }
 
@@ -55,7 +64,7 @@ impl<'a> VkSetup for VkDebugMarkerMarkerInfo<'a> {
 }
 
 impl VkFree for RawVkDebugMarkerMarkerInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.marker_name);
     }
 }

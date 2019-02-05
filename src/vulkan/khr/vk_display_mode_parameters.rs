@@ -47,7 +47,7 @@ impl VkRawType<VkDisplayModeParameters> for RawVkDisplayModeParameters {
 impl Default for VkDisplayModeParameters {
     fn default() -> VkDisplayModeParameters {
         VkDisplayModeParameters {
-            visible_region: VkExtent2D::default(),
+            visible_region: Default::default(),
             refresh_rate: 0,
         }
     }
@@ -60,7 +60,7 @@ impl VkSetup for VkDisplayModeParameters {
 }
 
 impl VkFree for RawVkDisplayModeParameters {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.visible_region);
+    fn vk_free(&self) {
+        
     }
 }

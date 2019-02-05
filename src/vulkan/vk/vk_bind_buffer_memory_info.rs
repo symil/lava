@@ -17,9 +17,9 @@ use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 
 /// Wrapper for [VkBindBufferMemoryInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindBufferMemoryInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkBindBufferMemoryInfo<'a, 'b> {
-    pub buffer: &'a VkBuffer,
-    pub memory: &'b VkDeviceMemory,
+pub struct VkBindBufferMemoryInfo {
+    pub buffer: VkBuffer,
+    pub memory: VkDeviceMemory,
     pub memory_offset: usize,
 }
 
@@ -28,40 +28,51 @@ pub struct VkBindBufferMemoryInfo<'a, 'b> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindBufferMemoryInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub buffer: RawVkBuffer,
     pub memory: RawVkDeviceMemory,
     pub memory_offset: u64,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkBindBufferMemoryInfo> for VkBindBufferMemoryInfo<'a, 'b> {
+impl VkWrappedType<RawVkBindBufferMemoryInfo> for VkBindBufferMemoryInfo {
     fn vk_to_raw(src: &VkBindBufferMemoryInfo, dst: &mut RawVkBindBufferMemoryInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindBufferMemoryInfo);
-        dst.next = ptr::null();
-        dst.buffer = vk_to_raw_value(src.buffer);
-        dst.memory = vk_to_raw_value(src.memory);
+        dst.next = ptr::null_mut();
+        dst.buffer = vk_to_raw_value(&src.buffer);
+        dst.memory = vk_to_raw_value(&src.memory);
         dst.memory_offset = vk_to_raw_value(&src.memory_offset);
     }
 }
 
-impl Default for VkBindBufferMemoryInfo<'static, 'static> {
-    fn default() -> VkBindBufferMemoryInfo<'static, 'static> {
+impl VkRawType<VkBindBufferMemoryInfo> for RawVkBindBufferMemoryInfo {
+    fn vk_to_wrapped(src: &RawVkBindBufferMemoryInfo) -> VkBindBufferMemoryInfo {
         VkBindBufferMemoryInfo {
-            buffer: vk_null_ref(),
-            memory: vk_null_ref(),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
+            memory: RawVkDeviceMemory::vk_to_wrapped(&src.memory),
+            memory_offset: u64::vk_to_wrapped(&src.memory_offset),
+        }
+    }
+}
+
+impl Default for VkBindBufferMemoryInfo {
+    fn default() -> VkBindBufferMemoryInfo {
+        VkBindBufferMemoryInfo {
+            buffer: Default::default(),
+            memory: Default::default(),
             memory_offset: 0,
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkBindBufferMemoryInfo<'a, 'b> {
+impl VkSetup for VkBindBufferMemoryInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
+        VkSetup::vk_setup(&mut self.memory, fn_table);
     }
 }
 
 impl VkFree for RawVkBindBufferMemoryInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

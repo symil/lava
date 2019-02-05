@@ -25,14 +25,14 @@ pub struct VkImageFormatProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageFormatProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub image_format_properties: RawVkImageFormatProperties,
 }
 
 impl VkWrappedType<RawVkImageFormatProperties2> for VkImageFormatProperties2 {
     fn vk_to_raw(src: &VkImageFormatProperties2, dst: &mut RawVkImageFormatProperties2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageFormatProperties2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.image_format_properties = vk_to_raw_value(&src.image_format_properties);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkImageFormatProperties2> for RawVkImageFormatProperties2 {
 impl Default for VkImageFormatProperties2 {
     fn default() -> VkImageFormatProperties2 {
         VkImageFormatProperties2 {
-            image_format_properties: VkImageFormatProperties::default(),
+            image_format_properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkImageFormatProperties2 {
 }
 
 impl VkFree for RawVkImageFormatProperties2 {
-    fn vk_free(&mut self) {
-        RawVkImageFormatProperties::vk_free(&mut self.image_format_properties);
+    fn vk_free(&self) {
+        
     }
 }

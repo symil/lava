@@ -42,7 +42,7 @@ impl VkSetup for VkExtensionProperties {
 }
 
 impl VkFree for RawVkExtensionProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

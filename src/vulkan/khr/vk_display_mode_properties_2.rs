@@ -25,7 +25,7 @@ pub struct VkDisplayModeProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayModeProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub display_mode_properties: RawVkDisplayModeProperties,
 }
 
@@ -44,7 +44,7 @@ impl VkSetup for VkDisplayModeProperties2 {
 }
 
 impl VkFree for RawVkDisplayModeProperties2 {
-    fn vk_free(&mut self) {
-        RawVkDisplayModeProperties::vk_free(&mut self.display_mode_properties);
+    fn vk_free(&self) {
+        
     }
 }

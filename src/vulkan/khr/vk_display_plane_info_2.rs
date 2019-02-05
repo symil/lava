@@ -16,8 +16,8 @@ use vulkan::khr::{VkDisplayMode,RawVkDisplayMode};
 
 /// Wrapper for [VkDisplayPlaneInfo2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneInfo2KHR.html).
 #[derive(Debug, Clone)]
-pub struct VkDisplayPlaneInfo2<'a> {
-    pub mode: &'a VkDisplayMode,
+pub struct VkDisplayPlaneInfo2 {
+    pub mode: VkDisplayMode,
     pub plane_index: usize,
 }
 
@@ -26,37 +26,46 @@ pub struct VkDisplayPlaneInfo2<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayPlaneInfo2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub mode: RawVkDisplayMode,
     pub plane_index: u32,
 }
 
-impl<'a> VkWrappedType<RawVkDisplayPlaneInfo2> for VkDisplayPlaneInfo2<'a> {
+impl VkWrappedType<RawVkDisplayPlaneInfo2> for VkDisplayPlaneInfo2 {
     fn vk_to_raw(src: &VkDisplayPlaneInfo2, dst: &mut RawVkDisplayPlaneInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DisplayPlaneInfo2Khr);
-        dst.next = ptr::null();
-        dst.mode = vk_to_raw_value(src.mode);
+        dst.next = ptr::null_mut();
+        dst.mode = vk_to_raw_value(&src.mode);
         dst.plane_index = vk_to_raw_value(&src.plane_index);
     }
 }
 
-impl Default for VkDisplayPlaneInfo2<'static> {
-    fn default() -> VkDisplayPlaneInfo2<'static> {
+impl VkRawType<VkDisplayPlaneInfo2> for RawVkDisplayPlaneInfo2 {
+    fn vk_to_wrapped(src: &RawVkDisplayPlaneInfo2) -> VkDisplayPlaneInfo2 {
         VkDisplayPlaneInfo2 {
-            mode: vk_null_ref(),
+            mode: RawVkDisplayMode::vk_to_wrapped(&src.mode),
+            plane_index: u32::vk_to_wrapped(&src.plane_index),
+        }
+    }
+}
+
+impl Default for VkDisplayPlaneInfo2 {
+    fn default() -> VkDisplayPlaneInfo2 {
+        VkDisplayPlaneInfo2 {
+            mode: Default::default(),
             plane_index: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkDisplayPlaneInfo2<'a> {
+impl VkSetup for VkDisplayPlaneInfo2 {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.mode, fn_table);
     }
 }
 
 impl VkFree for RawVkDisplayPlaneInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

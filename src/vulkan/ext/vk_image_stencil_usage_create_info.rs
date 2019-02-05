@@ -25,14 +25,14 @@ pub struct VkImageStencilUsageCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkImageStencilUsageCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub stencil_usage: RawVkImageUsageFlags,
 }
 
 impl VkWrappedType<RawVkImageStencilUsageCreateInfo> for VkImageStencilUsageCreateInfo {
     fn vk_to_raw(src: &VkImageStencilUsageCreateInfo, dst: &mut RawVkImageStencilUsageCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageStencilUsageCreateInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.stencil_usage = vk_to_raw_value(&src.stencil_usage);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkImageStencilUsageCreateInfo> for RawVkImageStencilUsageCreateIn
 impl Default for VkImageStencilUsageCreateInfo {
     fn default() -> VkImageStencilUsageCreateInfo {
         VkImageStencilUsageCreateInfo {
-            stencil_usage: VkImageUsageFlags::default(),
+            stencil_usage: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkImageStencilUsageCreateInfo {
 }
 
 impl VkFree for RawVkImageStencilUsageCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

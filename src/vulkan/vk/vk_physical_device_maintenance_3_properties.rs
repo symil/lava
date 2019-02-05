@@ -25,7 +25,7 @@ pub struct VkPhysicalDeviceMaintenance3Properties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMaintenance3Properties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_per_set_descriptors: u32,
     pub max_memory_allocation_size: u64,
 }
@@ -33,7 +33,7 @@ pub struct RawVkPhysicalDeviceMaintenance3Properties {
 impl VkWrappedType<RawVkPhysicalDeviceMaintenance3Properties> for VkPhysicalDeviceMaintenance3Properties {
     fn vk_to_raw(src: &VkPhysicalDeviceMaintenance3Properties, dst: &mut RawVkPhysicalDeviceMaintenance3Properties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMaintenance3Properties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_per_set_descriptors = vk_to_raw_value(&src.max_per_set_descriptors);
         dst.max_memory_allocation_size = vk_to_raw_value(&src.max_memory_allocation_size);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkPhysicalDeviceMaintenance3Properties {
 }
 
 impl VkFree for RawVkPhysicalDeviceMaintenance3Properties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

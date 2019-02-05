@@ -37,7 +37,7 @@ pub struct VkPhysicalDeviceShaderCoreProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceShaderCoreProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub shader_engine_count: u32,
     pub shader_arrays_per_engine_count: u32,
     pub compute_units_per_shader_array: u32,
@@ -57,7 +57,7 @@ pub struct RawVkPhysicalDeviceShaderCoreProperties {
 impl VkWrappedType<RawVkPhysicalDeviceShaderCoreProperties> for VkPhysicalDeviceShaderCoreProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceShaderCoreProperties, dst: &mut RawVkPhysicalDeviceShaderCoreProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceShaderCorePropertiesAmd);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.shader_engine_count = vk_to_raw_value(&src.shader_engine_count);
         dst.shader_arrays_per_engine_count = vk_to_raw_value(&src.shader_arrays_per_engine_count);
         dst.compute_units_per_shader_array = vk_to_raw_value(&src.compute_units_per_shader_array);
@@ -124,7 +124,7 @@ impl VkSetup for VkPhysicalDeviceShaderCoreProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceShaderCoreProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

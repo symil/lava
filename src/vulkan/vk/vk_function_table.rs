@@ -125,7 +125,7 @@ pub struct VkFunctionTable {
     pub vkCmdBlitImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkImage, RawVkImageLayout, u32, *mut RawVkImageBlit, RawVkFilter),
     pub vkCmdCopyBufferToImage: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, RawVkImage, RawVkImageLayout, u32, *mut RawVkBufferImageCopy),
     pub vkCmdCopyImageToBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, RawVkBuffer, u32, *mut RawVkBufferImageCopy),
-    pub vkCmdUpdateBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u64, *const c_void),
+    pub vkCmdUpdateBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u64, *mut c_void),
     pub vkCmdFillBuffer: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u64, u32),
     pub vkCmdClearColorImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, *mut RawVkClearColorValue, u32, *mut RawVkImageSubresourceRange),
     pub vkCmdClearDepthStencilImage: unsafe extern fn(RawVkCommandBuffer, RawVkImage, RawVkImageLayout, *mut RawVkClearDepthStencilValue, u32, *mut RawVkImageSubresourceRange),
@@ -140,7 +140,7 @@ pub struct VkFunctionTable {
     pub vkCmdResetQueryPool: unsafe extern fn(RawVkCommandBuffer, RawVkQueryPool, u32, u32),
     pub vkCmdWriteTimestamp: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineStageFlags, RawVkQueryPool, u32),
     pub vkCmdCopyQueryPoolResults: unsafe extern fn(RawVkCommandBuffer, RawVkQueryPool, u32, u32, RawVkBuffer, u64, u64, RawVkQueryResultFlags),
-    pub vkCmdPushConstants: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineLayout, RawVkShaderStageFlags, u32, u32, *const c_void),
+    pub vkCmdPushConstants: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineLayout, RawVkShaderStageFlags, u32, u32, *mut c_void),
     pub vkCmdBeginRenderPass: unsafe extern fn(RawVkCommandBuffer, *mut RawVkRenderPassBeginInfo, RawVkSubpassContents),
     pub vkCmdNextSubpass: unsafe extern fn(RawVkCommandBuffer, RawVkSubpassContents),
     pub vkCmdEndRenderPass: unsafe extern fn(RawVkCommandBuffer),
@@ -167,7 +167,7 @@ pub struct VkFunctionTable {
     pub vkDestroySamplerYcbcrConversion: unsafe extern fn(RawVkDevice, RawVkSamplerYcbcrConversion, *const c_void),
     pub vkCreateDescriptorUpdateTemplate: unsafe extern fn(RawVkDevice, *mut RawVkDescriptorUpdateTemplateCreateInfo, *const c_void, *mut RawVkDescriptorUpdateTemplate) -> RawVkResult,
     pub vkDestroyDescriptorUpdateTemplate: unsafe extern fn(RawVkDevice, RawVkDescriptorUpdateTemplate, *const c_void),
-    pub vkUpdateDescriptorSetWithTemplate: unsafe extern fn(RawVkDevice, RawVkDescriptorSet, RawVkDescriptorUpdateTemplate, *const c_void),
+    pub vkUpdateDescriptorSetWithTemplate: unsafe extern fn(RawVkDevice, RawVkDescriptorSet, RawVkDescriptorUpdateTemplate, *mut c_void),
     pub vkGetPhysicalDeviceExternalBufferProperties: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceExternalBufferInfo, *mut RawVkExternalBufferProperties),
     pub vkGetPhysicalDeviceExternalFenceProperties: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceExternalFenceInfo, *mut RawVkExternalFenceProperties),
     pub vkGetPhysicalDeviceExternalSemaphoreProperties: unsafe extern fn(RawVkPhysicalDevice, *mut RawVkPhysicalDeviceExternalSemaphoreInfo, *mut RawVkExternalSemaphoreProperties),
@@ -199,7 +199,7 @@ pub struct VkFunctionTable {
     pub vkImportSemaphoreFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkImportSemaphoreFdInfo) -> RawVkResult,
     pub vkGetSemaphoreFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkSemaphoreGetFdInfo, *mut i32) -> RawVkResult,
     pub vkCmdPushDescriptorSetKHR: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineBindPoint, RawVkPipelineLayout, u32, u32, *mut RawVkWriteDescriptorSet),
-    pub vkCmdPushDescriptorSetWithTemplateKHR: unsafe extern fn(RawVkCommandBuffer, RawVkDescriptorUpdateTemplate, RawVkPipelineLayout, u32, *const c_void),
+    pub vkCmdPushDescriptorSetWithTemplateKHR: unsafe extern fn(RawVkCommandBuffer, RawVkDescriptorUpdateTemplate, RawVkPipelineLayout, u32, *mut c_void),
     pub vkCreateRenderPass2KHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkRenderPassCreateInfo2, *const c_void, *mut RawVkRenderPass) -> RawVkResult,
     pub vkCmdBeginRenderPass2KHR: unsafe extern fn(RawVkCommandBuffer, *mut RawVkRenderPassBeginInfo, *mut khr::RawVkSubpassBeginInfo),
     pub vkCmdNextSubpass2KHR: unsafe extern fn(RawVkCommandBuffer, *mut khr::RawVkSubpassBeginInfo, *mut khr::RawVkSubpassEndInfo),
@@ -288,7 +288,7 @@ pub struct VkFunctionTable {
     pub vkGetAccelerationStructureHandleNV: unsafe extern fn(RawVkDevice, nv::RawVkAccelerationStructure, usize, *mut c_void) -> RawVkResult,
     pub vkCmdWriteAccelerationStructuresPropertiesNV: unsafe extern fn(RawVkCommandBuffer, u32, *mut nv::RawVkAccelerationStructure, RawVkQueryType, RawVkQueryPool, u32),
     pub vkCompileDeferredNV: unsafe extern fn(RawVkDevice, RawVkPipeline, u32) -> RawVkResult,
-    pub vkGetMemoryHostPointerPropertiesEXT: unsafe extern fn(RawVkDevice, RawVkExternalMemoryHandleTypeFlags, *const c_void, *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult,
+    pub vkGetMemoryHostPointerPropertiesEXT: unsafe extern fn(RawVkDevice, RawVkExternalMemoryHandleTypeFlags, *mut c_void, *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult,
     pub vkCmdWriteBufferMarkerAMD: unsafe extern fn(RawVkCommandBuffer, RawVkPipelineStageFlags, RawVkBuffer, u64, u32),
     pub vkGetPhysicalDeviceCalibrateableTimeDomainsEXT: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut ext::RawVkTimeDomain) -> RawVkResult,
     pub vkGetCalibratedTimestampsEXT: unsafe extern fn(RawVkDevice, u32, *mut ext::RawVkCalibratedTimestampInfo, *mut u64, *mut u64) -> RawVkResult,
@@ -296,7 +296,7 @@ pub struct VkFunctionTable {
     pub vkCmdDrawMeshTasksIndirectNV: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, u32, u32),
     pub vkCmdDrawMeshTasksIndirectCountNV: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u32, u32),
     pub vkCmdSetExclusiveScissorNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkRect2D),
-    pub vkCmdSetCheckpointNV: unsafe extern fn(RawVkCommandBuffer, *const c_void),
+    pub vkCmdSetCheckpointNV: unsafe extern fn(RawVkCommandBuffer, *mut c_void),
     pub vkGetQueueCheckpointDataNV: unsafe extern fn(RawVkQueue, *mut u32, *mut nv::RawVkCheckpointData),
 }
 
@@ -1225,7 +1225,7 @@ unsafe extern fn null_instance_vkCmdCopyBufferToImage(command_buffer: RawVkComma
 unsafe extern fn null_instance_vkCmdCopyImageToBuffer(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_buffer: RawVkBuffer, region_count: u32, regions: *mut RawVkBufferImageCopy) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdCopyImageToBuffer\"");
 }
-unsafe extern fn null_instance_vkCmdUpdateBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, data_size: u64, data: *const c_void) {
+unsafe extern fn null_instance_vkCmdUpdateBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, data_size: u64, data: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdUpdateBuffer\"");
 }
 unsafe extern fn null_instance_vkCmdFillBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, size: u64, data: u32) {
@@ -1270,7 +1270,7 @@ unsafe extern fn null_instance_vkCmdWriteTimestamp(command_buffer: RawVkCommandB
 unsafe extern fn null_instance_vkCmdCopyQueryPoolResults(command_buffer: RawVkCommandBuffer, query_pool: RawVkQueryPool, first_query: u32, query_count: u32, dst_buffer: RawVkBuffer, dst_offset: u64, stride: u64, flags: RawVkQueryResultFlags) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdCopyQueryPoolResults\"");
 }
-unsafe extern fn null_instance_vkCmdPushConstants(command_buffer: RawVkCommandBuffer, layout: RawVkPipelineLayout, stage_flags: RawVkShaderStageFlags, offset: u32, size: u32, values: *const c_void) {
+unsafe extern fn null_instance_vkCmdPushConstants(command_buffer: RawVkCommandBuffer, layout: RawVkPipelineLayout, stage_flags: RawVkShaderStageFlags, offset: u32, size: u32, values: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdPushConstants\"");
 }
 unsafe extern fn null_instance_vkCmdBeginRenderPass(command_buffer: RawVkCommandBuffer, render_pass_begin: *mut RawVkRenderPassBeginInfo, contents: RawVkSubpassContents) {
@@ -1351,7 +1351,7 @@ unsafe extern fn null_instance_vkCreateDescriptorUpdateTemplate(device: RawVkDev
 unsafe extern fn null_instance_vkDestroyDescriptorUpdateTemplate(device: RawVkDevice, descriptor_update_template: RawVkDescriptorUpdateTemplate, allocator: *const c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkDestroyDescriptorUpdateTemplate\"");
 }
-unsafe extern fn null_instance_vkUpdateDescriptorSetWithTemplate(device: RawVkDevice, descriptor_set: RawVkDescriptorSet, descriptor_update_template: RawVkDescriptorUpdateTemplate, data: *const c_void) {
+unsafe extern fn null_instance_vkUpdateDescriptorSetWithTemplate(device: RawVkDevice, descriptor_set: RawVkDescriptorSet, descriptor_update_template: RawVkDescriptorUpdateTemplate, data: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkUpdateDescriptorSetWithTemplate\"");
 }
 unsafe extern fn null_instance_vkGetPhysicalDeviceExternalBufferProperties(physical_device: RawVkPhysicalDevice, external_buffer_info: *mut RawVkPhysicalDeviceExternalBufferInfo, external_buffer_properties: *mut RawVkExternalBufferProperties) {
@@ -1447,7 +1447,7 @@ unsafe extern fn null_instance_vkGetSemaphoreFdKHR(device: RawVkDevice, get_fd_i
 unsafe extern fn null_instance_vkCmdPushDescriptorSetKHR(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, set: u32, descriptor_write_count: u32, descriptor_writes: *mut RawVkWriteDescriptorSet) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdPushDescriptorSetKHR\"");
 }
-unsafe extern fn null_instance_vkCmdPushDescriptorSetWithTemplateKHR(command_buffer: RawVkCommandBuffer, descriptor_update_template: RawVkDescriptorUpdateTemplate, layout: RawVkPipelineLayout, set: u32, data: *const c_void) {
+unsafe extern fn null_instance_vkCmdPushDescriptorSetWithTemplateKHR(command_buffer: RawVkCommandBuffer, descriptor_update_template: RawVkDescriptorUpdateTemplate, layout: RawVkPipelineLayout, set: u32, data: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdPushDescriptorSetWithTemplateKHR\"");
 }
 unsafe extern fn null_instance_vkCreateRenderPass2KHR(device: RawVkDevice, create_info: *mut khr::RawVkRenderPassCreateInfo2, allocator: *const c_void, render_pass: *mut RawVkRenderPass) -> RawVkResult {
@@ -1714,7 +1714,7 @@ unsafe extern fn null_instance_vkCmdWriteAccelerationStructuresPropertiesNV(comm
 unsafe extern fn null_instance_vkCompileDeferredNV(device: RawVkDevice, pipeline: RawVkPipeline, shader: u32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCompileDeferredNV\"");
 }
-unsafe extern fn null_instance_vkGetMemoryHostPointerPropertiesEXT(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, host_pointer: *const c_void, memory_host_pointer_properties: *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult {
+unsafe extern fn null_instance_vkGetMemoryHostPointerPropertiesEXT(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, host_pointer: *mut c_void, memory_host_pointer_properties: *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetMemoryHostPointerPropertiesEXT\"");
 }
 unsafe extern fn null_instance_vkCmdWriteBufferMarkerAMD(command_buffer: RawVkCommandBuffer, pipeline_stage: RawVkPipelineStageFlags, dst_buffer: RawVkBuffer, dst_offset: u64, marker: u32) {
@@ -1738,7 +1738,7 @@ unsafe extern fn null_instance_vkCmdDrawMeshTasksIndirectCountNV(command_buffer:
 unsafe extern fn null_instance_vkCmdSetExclusiveScissorNV(command_buffer: RawVkCommandBuffer, first_exclusive_scissor: u32, exclusive_scissor_count: u32, exclusive_scissors: *mut RawVkRect2D) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetExclusiveScissorNV\"");
 }
-unsafe extern fn null_instance_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBuffer, checkpoint_marker: *const c_void) {
+unsafe extern fn null_instance_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBuffer, checkpoint_marker: *mut c_void) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetCheckpointNV\"");
 }
 unsafe extern fn null_instance_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *mut u32, checkpoint_data: *mut nv::RawVkCheckpointData) {
@@ -2080,7 +2080,7 @@ unsafe extern fn null_device_vkCmdCopyBufferToImage(command_buffer: RawVkCommand
 unsafe extern fn null_device_vkCmdCopyImageToBuffer(command_buffer: RawVkCommandBuffer, src_image: RawVkImage, src_image_layout: RawVkImageLayout, dst_buffer: RawVkBuffer, region_count: u32, regions: *mut RawVkBufferImageCopy) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdCopyImageToBuffer\"");
 }
-unsafe extern fn null_device_vkCmdUpdateBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, data_size: u64, data: *const c_void) {
+unsafe extern fn null_device_vkCmdUpdateBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, data_size: u64, data: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdUpdateBuffer\"");
 }
 unsafe extern fn null_device_vkCmdFillBuffer(command_buffer: RawVkCommandBuffer, dst_buffer: RawVkBuffer, dst_offset: u64, size: u64, data: u32) {
@@ -2125,7 +2125,7 @@ unsafe extern fn null_device_vkCmdWriteTimestamp(command_buffer: RawVkCommandBuf
 unsafe extern fn null_device_vkCmdCopyQueryPoolResults(command_buffer: RawVkCommandBuffer, query_pool: RawVkQueryPool, first_query: u32, query_count: u32, dst_buffer: RawVkBuffer, dst_offset: u64, stride: u64, flags: RawVkQueryResultFlags) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdCopyQueryPoolResults\"");
 }
-unsafe extern fn null_device_vkCmdPushConstants(command_buffer: RawVkCommandBuffer, layout: RawVkPipelineLayout, stage_flags: RawVkShaderStageFlags, offset: u32, size: u32, values: *const c_void) {
+unsafe extern fn null_device_vkCmdPushConstants(command_buffer: RawVkCommandBuffer, layout: RawVkPipelineLayout, stage_flags: RawVkShaderStageFlags, offset: u32, size: u32, values: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdPushConstants\"");
 }
 unsafe extern fn null_device_vkCmdBeginRenderPass(command_buffer: RawVkCommandBuffer, render_pass_begin: *mut RawVkRenderPassBeginInfo, contents: RawVkSubpassContents) {
@@ -2206,7 +2206,7 @@ unsafe extern fn null_device_vkCreateDescriptorUpdateTemplate(device: RawVkDevic
 unsafe extern fn null_device_vkDestroyDescriptorUpdateTemplate(device: RawVkDevice, descriptor_update_template: RawVkDescriptorUpdateTemplate, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyDescriptorUpdateTemplate\"");
 }
-unsafe extern fn null_device_vkUpdateDescriptorSetWithTemplate(device: RawVkDevice, descriptor_set: RawVkDescriptorSet, descriptor_update_template: RawVkDescriptorUpdateTemplate, data: *const c_void) {
+unsafe extern fn null_device_vkUpdateDescriptorSetWithTemplate(device: RawVkDevice, descriptor_set: RawVkDescriptorSet, descriptor_update_template: RawVkDescriptorUpdateTemplate, data: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkUpdateDescriptorSetWithTemplate\"");
 }
 unsafe extern fn null_device_vkGetPhysicalDeviceExternalBufferProperties(physical_device: RawVkPhysicalDevice, external_buffer_info: *mut RawVkPhysicalDeviceExternalBufferInfo, external_buffer_properties: *mut RawVkExternalBufferProperties) {
@@ -2302,7 +2302,7 @@ unsafe extern fn null_device_vkGetSemaphoreFdKHR(device: RawVkDevice, get_fd_inf
 unsafe extern fn null_device_vkCmdPushDescriptorSetKHR(command_buffer: RawVkCommandBuffer, pipeline_bind_point: RawVkPipelineBindPoint, layout: RawVkPipelineLayout, set: u32, descriptor_write_count: u32, descriptor_writes: *mut RawVkWriteDescriptorSet) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdPushDescriptorSetKHR\"");
 }
-unsafe extern fn null_device_vkCmdPushDescriptorSetWithTemplateKHR(command_buffer: RawVkCommandBuffer, descriptor_update_template: RawVkDescriptorUpdateTemplate, layout: RawVkPipelineLayout, set: u32, data: *const c_void) {
+unsafe extern fn null_device_vkCmdPushDescriptorSetWithTemplateKHR(command_buffer: RawVkCommandBuffer, descriptor_update_template: RawVkDescriptorUpdateTemplate, layout: RawVkPipelineLayout, set: u32, data: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdPushDescriptorSetWithTemplateKHR\"");
 }
 unsafe extern fn null_device_vkCreateRenderPass2KHR(device: RawVkDevice, create_info: *mut khr::RawVkRenderPassCreateInfo2, allocator: *const c_void, render_pass: *mut RawVkRenderPass) -> RawVkResult {
@@ -2569,7 +2569,7 @@ unsafe extern fn null_device_vkCmdWriteAccelerationStructuresPropertiesNV(comman
 unsafe extern fn null_device_vkCompileDeferredNV(device: RawVkDevice, pipeline: RawVkPipeline, shader: u32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCompileDeferredNV\"");
 }
-unsafe extern fn null_device_vkGetMemoryHostPointerPropertiesEXT(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, host_pointer: *const c_void, memory_host_pointer_properties: *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult {
+unsafe extern fn null_device_vkGetMemoryHostPointerPropertiesEXT(device: RawVkDevice, handle_type: RawVkExternalMemoryHandleTypeFlags, host_pointer: *mut c_void, memory_host_pointer_properties: *mut ext::RawVkMemoryHostPointerProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetMemoryHostPointerPropertiesEXT\"");
 }
 unsafe extern fn null_device_vkCmdWriteBufferMarkerAMD(command_buffer: RawVkCommandBuffer, pipeline_stage: RawVkPipelineStageFlags, dst_buffer: RawVkBuffer, dst_offset: u64, marker: u32) {
@@ -2593,7 +2593,7 @@ unsafe extern fn null_device_vkCmdDrawMeshTasksIndirectCountNV(command_buffer: R
 unsafe extern fn null_device_vkCmdSetExclusiveScissorNV(command_buffer: RawVkCommandBuffer, first_exclusive_scissor: u32, exclusive_scissor_count: u32, exclusive_scissors: *mut RawVkRect2D) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetExclusiveScissorNV\"");
 }
-unsafe extern fn null_device_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBuffer, checkpoint_marker: *const c_void) {
+unsafe extern fn null_device_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBuffer, checkpoint_marker: *mut c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetCheckpointNV\"");
 }
 unsafe extern fn null_device_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *mut u32, checkpoint_data: *mut nv::RawVkCheckpointData) {

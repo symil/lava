@@ -57,10 +57,10 @@ impl VkRawType<VkExternalImageFormatProperties> for RawVkExternalImageFormatProp
 impl Default for VkExternalImageFormatProperties {
     fn default() -> VkExternalImageFormatProperties {
         VkExternalImageFormatProperties {
-            image_format_properties: VkImageFormatProperties::default(),
-            external_memory_features: VkExternalMemoryFeatureFlags::default(),
-            export_from_imported_handle_types: VkExternalMemoryHandleTypeFlags::default(),
-            compatible_handle_types: VkExternalMemoryHandleTypeFlags::default(),
+            image_format_properties: Default::default(),
+            external_memory_features: Default::default(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
         }
     }
 }
@@ -72,7 +72,7 @@ impl VkSetup for VkExternalImageFormatProperties {
 }
 
 impl VkFree for RawVkExternalImageFormatProperties {
-    fn vk_free(&mut self) {
-        RawVkImageFormatProperties::vk_free(&mut self.image_format_properties);
+    fn vk_free(&self) {
+        
     }
 }

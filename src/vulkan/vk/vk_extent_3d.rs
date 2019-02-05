@@ -64,7 +64,7 @@ impl VkSetup for VkExtent3D {
 }
 
 impl VkFree for RawVkExtent3D {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

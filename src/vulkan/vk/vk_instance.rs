@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkInstance = u64;
 
 /// Wrapper for [VkInstance](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInstance.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkInstance {
     _handle: RawVkInstance,
     _fn_table: *mut VkFunctionTable
@@ -102,7 +102,7 @@ impl VkInstance {
             if vk_result == 0 {
                 for elt in &mut physical_devices { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_ptr(raw_physical_devices);
+            free(raw_physical_devices as *mut u8);
             if vk_result == 0 { Ok(physical_devices) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), physical_devices)) }
         }
     }
@@ -122,15 +122,15 @@ impl VkInstance {
             if vk_result == 0 {
                 for elt in &mut physical_device_group_properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_physical_device_group_count as usize, raw_physical_device_group_properties);
+            free(raw_physical_device_group_properties as *mut u8);
             if vk_result == 0 { Ok(physical_device_group_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), physical_device_group_properties)) }
         }
     }
     
     /// Wrapper for [vkCreateDisplayPlaneSurfaceKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDisplayPlaneSurfaceKHR.html).
-    pub fn create_display_plane_surface(&self, create_info: &khr::VkDisplaySurfaceCreateInfo) -> Result<khr::VkSurface, (VkResult, khr::VkSurface)> {
+    pub fn create_display_plane_surface(&self, create_info: khr::VkDisplaySurfaceCreateInfo) -> Result<khr::VkSurface, (VkResult, khr::VkSurface)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_surface = &mut mem::zeroed() as *mut khr::RawVkSurface;
             
@@ -147,9 +147,9 @@ impl VkInstance {
     }
     
     /// Wrapper for [vkCreateDebugReportCallbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDebugReportCallbackEXT.html).
-    pub fn create_debug_report_callback(&self, create_info: &ext::VkDebugReportCallbackCreateInfo) -> Result<ext::VkDebugReportCallback, (VkResult, ext::VkDebugReportCallback)> {
+    pub fn create_debug_report_callback(&self, create_info: ext::VkDebugReportCallbackCreateInfo) -> Result<ext::VkDebugReportCallback, (VkResult, ext::VkDebugReportCallback)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_callback = &mut mem::zeroed() as *mut ext::RawVkDebugReportCallback;
             
@@ -182,9 +182,9 @@ impl VkInstance {
     }
     
     /// Wrapper for [vkCreateDebugUtilsMessengerEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDebugUtilsMessengerEXT.html).
-    pub fn create_debug_utils_messenger(&self, create_info: &ext::VkDebugUtilsMessengerCreateInfo) -> Result<ext::VkDebugUtilsMessenger, (VkResult, ext::VkDebugUtilsMessenger)> {
+    pub fn create_debug_utils_messenger(&self, create_info: ext::VkDebugUtilsMessengerCreateInfo) -> Result<ext::VkDebugUtilsMessenger, (VkResult, ext::VkDebugUtilsMessenger)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_messenger = &mut mem::zeroed() as *mut ext::RawVkDebugUtilsMessenger;
             
@@ -201,11 +201,11 @@ impl VkInstance {
     }
     
     /// Wrapper for [vkSubmitDebugUtilsMessageEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSubmitDebugUtilsMessageEXT.html).
-    pub fn submit_debug_utils_message(&self, message_severity: ext::VkDebugUtilsMessageSeverityFlags, message_types: ext::VkDebugUtilsMessageTypeFlags, callback_data: &ext::VkDebugUtilsMessengerCallbackData) {
+    pub fn submit_debug_utils_message(&self, message_severity: ext::VkDebugUtilsMessageSeverityFlags, message_types: ext::VkDebugUtilsMessageTypeFlags, callback_data: ext::VkDebugUtilsMessengerCallbackData) {
         unsafe {
             let raw_message_severity = vk_to_raw_value(&message_severity);
             let raw_message_types = vk_to_raw_value(&message_types);
-            let raw_callback_data = new_ptr_vk_value(callback_data);
+            let raw_callback_data = new_ptr_vk_value(&callback_data);
             ((&*self._fn_table).vkSubmitDebugUtilsMessageEXT)(self._handle, raw_message_severity, raw_message_types, raw_callback_data);
             free_vk_ptr(raw_callback_data);
         }

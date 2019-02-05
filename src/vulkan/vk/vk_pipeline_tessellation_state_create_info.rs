@@ -26,7 +26,7 @@ pub struct VkPipelineTessellationStateCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineTessellationStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineTessellationStateCreateFlags,
     pub patch_control_points: u32,
 }
@@ -34,7 +34,7 @@ pub struct RawVkPipelineTessellationStateCreateInfo {
 impl VkWrappedType<RawVkPipelineTessellationStateCreateInfo> for VkPipelineTessellationStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineTessellationStateCreateInfo, dst: &mut RawVkPipelineTessellationStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineTessellationStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.patch_control_points = vk_to_raw_value(&src.patch_control_points);
     }
@@ -52,7 +52,7 @@ impl VkRawType<VkPipelineTessellationStateCreateInfo> for RawVkPipelineTessellat
 impl Default for VkPipelineTessellationStateCreateInfo {
     fn default() -> VkPipelineTessellationStateCreateInfo {
         VkPipelineTessellationStateCreateInfo {
-            flags: VkPipelineTessellationStateCreateFlags::default(),
+            flags: Default::default(),
             patch_control_points: 0,
         }
     }
@@ -65,7 +65,7 @@ impl VkSetup for VkPipelineTessellationStateCreateInfo {
 }
 
 impl VkFree for RawVkPipelineTessellationStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

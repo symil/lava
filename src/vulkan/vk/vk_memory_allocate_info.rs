@@ -25,7 +25,7 @@ pub struct VkMemoryAllocateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryAllocateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub allocation_size: u64,
     pub memory_type_index: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkMemoryAllocateInfo {
 impl VkWrappedType<RawVkMemoryAllocateInfo> for VkMemoryAllocateInfo {
     fn vk_to_raw(src: &VkMemoryAllocateInfo, dst: &mut RawVkMemoryAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryAllocateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.allocation_size = vk_to_raw_value(&src.allocation_size);
         dst.memory_type_index = vk_to_raw_value(&src.memory_type_index);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkMemoryAllocateInfo {
 }
 
 impl VkFree for RawVkMemoryAllocateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

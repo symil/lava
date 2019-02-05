@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkIndirectCommandsLayout = u64;
 
 /// Wrapper for [VkIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutNVX.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkIndirectCommandsLayout {
     _handle: RawVkIndirectCommandsLayout,
     _fn_table: *mut VkFunctionTable

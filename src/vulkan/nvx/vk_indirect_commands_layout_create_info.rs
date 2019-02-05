@@ -18,10 +18,10 @@ use vulkan::nvx::{VkIndirectCommandsLayoutToken,RawVkIndirectCommandsLayoutToken
 
 /// Wrapper for [VkIndirectCommandsLayoutCreateInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutCreateInfoNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkIndirectCommandsLayoutCreateInfo<'a> {
+pub struct VkIndirectCommandsLayoutCreateInfo {
     pub pipeline_bind_point: VkPipelineBindPoint,
     pub flags: VkIndirectCommandsLayoutUsageFlags,
-    pub tokens: &'a [VkIndirectCommandsLayoutToken],
+    pub tokens: Vec<VkIndirectCommandsLayoutToken>,
 }
 
 #[doc(hidden)]
@@ -29,42 +29,52 @@ pub struct VkIndirectCommandsLayoutCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkIndirectCommandsLayoutCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub pipeline_bind_point: RawVkPipelineBindPoint,
     pub flags: RawVkIndirectCommandsLayoutUsageFlags,
     pub token_count: u32,
     pub tokens: *mut RawVkIndirectCommandsLayoutToken,
 }
 
-impl<'a> VkWrappedType<RawVkIndirectCommandsLayoutCreateInfo> for VkIndirectCommandsLayoutCreateInfo<'a> {
+impl VkWrappedType<RawVkIndirectCommandsLayoutCreateInfo> for VkIndirectCommandsLayoutCreateInfo {
     fn vk_to_raw(src: &VkIndirectCommandsLayoutCreateInfo, dst: &mut RawVkIndirectCommandsLayoutCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::IndirectCommandsLayoutCreateInfoNvx);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.pipeline_bind_point = vk_to_raw_value(&src.pipeline_bind_point);
         dst.flags = vk_to_raw_value(&src.flags);
         dst.token_count = src.tokens.len() as u32;
-        dst.tokens = new_ptr_vk_array(src.tokens);
+        dst.tokens = new_ptr_vk_array(&src.tokens);
     }
 }
 
-impl Default for VkIndirectCommandsLayoutCreateInfo<'static> {
-    fn default() -> VkIndirectCommandsLayoutCreateInfo<'static> {
+impl VkRawType<VkIndirectCommandsLayoutCreateInfo> for RawVkIndirectCommandsLayoutCreateInfo {
+    fn vk_to_wrapped(src: &RawVkIndirectCommandsLayoutCreateInfo) -> VkIndirectCommandsLayoutCreateInfo {
         VkIndirectCommandsLayoutCreateInfo {
-            pipeline_bind_point: VkPipelineBindPoint::default(),
-            flags: VkIndirectCommandsLayoutUsageFlags::default(),
-            tokens: &[],
+            pipeline_bind_point: RawVkPipelineBindPoint::vk_to_wrapped(&src.pipeline_bind_point),
+            flags: RawVkIndirectCommandsLayoutUsageFlags::vk_to_wrapped(&src.flags),
+            tokens: new_vk_array(src.token_count, src.tokens),
         }
     }
 }
 
-impl<'a> VkSetup for VkIndirectCommandsLayoutCreateInfo<'a> {
+impl Default for VkIndirectCommandsLayoutCreateInfo {
+    fn default() -> VkIndirectCommandsLayoutCreateInfo {
+        VkIndirectCommandsLayoutCreateInfo {
+            pipeline_bind_point: Default::default(),
+            flags: Default::default(),
+            tokens: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkIndirectCommandsLayoutCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkIndirectCommandsLayoutCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.token_count as usize, self.tokens);
     }
 }

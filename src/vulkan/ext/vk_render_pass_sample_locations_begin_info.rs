@@ -17,13 +17,9 @@ use vulkan::ext::{VkSubpassSampleLocations,RawVkSubpassSampleLocations};
 
 /// Wrapper for [VkRenderPassSampleLocationsBeginInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassSampleLocationsBeginInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkRenderPassSampleLocationsBeginInfo<'a, 'b, 'c, 'd>
-    where
-        'b: 'a,
-        'd: 'c,
-{
-    pub attachment_initial_sample_locations: &'a [VkAttachmentSampleLocations<'b>],
-    pub post_subpass_sample_locations: &'c [VkSubpassSampleLocations<'d>],
+pub struct VkRenderPassSampleLocationsBeginInfo {
+    pub attachment_initial_sample_locations: Vec<VkAttachmentSampleLocations>,
+    pub post_subpass_sample_locations: Vec<VkSubpassSampleLocations>,
 }
 
 #[doc(hidden)]
@@ -31,49 +27,50 @@ pub struct VkRenderPassSampleLocationsBeginInfo<'a, 'b, 'c, 'd>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkRenderPassSampleLocationsBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub attachment_initial_sample_locations_count: u32,
     pub attachment_initial_sample_locations: *mut RawVkAttachmentSampleLocations,
     pub post_subpass_sample_locations_count: u32,
     pub post_subpass_sample_locations: *mut RawVkSubpassSampleLocations,
 }
 
-impl<'a, 'b, 'c, 'd> VkWrappedType<RawVkRenderPassSampleLocationsBeginInfo> for VkRenderPassSampleLocationsBeginInfo<'a, 'b, 'c, 'd>
-    where
-        'b: 'a,
-        'd: 'c,
-{
+impl VkWrappedType<RawVkRenderPassSampleLocationsBeginInfo> for VkRenderPassSampleLocationsBeginInfo {
     fn vk_to_raw(src: &VkRenderPassSampleLocationsBeginInfo, dst: &mut RawVkRenderPassSampleLocationsBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RenderPassSampleLocationsBeginInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.attachment_initial_sample_locations_count = src.attachment_initial_sample_locations.len() as u32;
-        dst.attachment_initial_sample_locations = new_ptr_vk_array(src.attachment_initial_sample_locations);
+        dst.attachment_initial_sample_locations = new_ptr_vk_array(&src.attachment_initial_sample_locations);
         dst.post_subpass_sample_locations_count = src.post_subpass_sample_locations.len() as u32;
-        dst.post_subpass_sample_locations = new_ptr_vk_array(src.post_subpass_sample_locations);
+        dst.post_subpass_sample_locations = new_ptr_vk_array(&src.post_subpass_sample_locations);
     }
 }
 
-impl Default for VkRenderPassSampleLocationsBeginInfo<'static, 'static, 'static, 'static> {
-    fn default() -> VkRenderPassSampleLocationsBeginInfo<'static, 'static, 'static, 'static> {
+impl VkRawType<VkRenderPassSampleLocationsBeginInfo> for RawVkRenderPassSampleLocationsBeginInfo {
+    fn vk_to_wrapped(src: &RawVkRenderPassSampleLocationsBeginInfo) -> VkRenderPassSampleLocationsBeginInfo {
         VkRenderPassSampleLocationsBeginInfo {
-            attachment_initial_sample_locations: &[],
-            post_subpass_sample_locations: &[],
+            attachment_initial_sample_locations: new_vk_array(src.attachment_initial_sample_locations_count, src.attachment_initial_sample_locations),
+            post_subpass_sample_locations: new_vk_array(src.post_subpass_sample_locations_count, src.post_subpass_sample_locations),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd> VkSetup for VkRenderPassSampleLocationsBeginInfo<'a, 'b, 'c, 'd>
-    where
-        'b: 'a,
-        'd: 'c,
-{
+impl Default for VkRenderPassSampleLocationsBeginInfo {
+    fn default() -> VkRenderPassSampleLocationsBeginInfo {
+        VkRenderPassSampleLocationsBeginInfo {
+            attachment_initial_sample_locations: Vec::new(),
+            post_subpass_sample_locations: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkRenderPassSampleLocationsBeginInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkRenderPassSampleLocationsBeginInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.attachment_initial_sample_locations_count as usize, self.attachment_initial_sample_locations);
         free_vk_ptr_array(self.post_subpass_sample_locations_count as usize, self.post_subpass_sample_locations);
     }

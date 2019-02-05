@@ -74,7 +74,7 @@ impl VkSetup for VkSubresourceLayout {
 }
 
 impl VkFree for RawVkSubresourceLayout {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

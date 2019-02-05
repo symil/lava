@@ -25,14 +25,14 @@ pub struct VkPhysicalDeviceImageViewImageFormatInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceImageViewImageFormatInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub image_view_type: RawVkImageViewType,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceImageViewImageFormatInfo> for VkPhysicalDeviceImageViewImageFormatInfo {
     fn vk_to_raw(src: &VkPhysicalDeviceImageViewImageFormatInfo, dst: &mut RawVkPhysicalDeviceImageViewImageFormatInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceImageViewImageFormatInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.image_view_type = vk_to_raw_value(&src.image_view_type);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDeviceImageViewImageFormatInfo> for RawVkPhysicalDevice
 impl Default for VkPhysicalDeviceImageViewImageFormatInfo {
     fn default() -> VkPhysicalDeviceImageViewImageFormatInfo {
         VkPhysicalDeviceImageViewImageFormatInfo {
-            image_view_type: VkImageViewType::default(),
+            image_view_type: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDeviceImageViewImageFormatInfo {
 }
 
 impl VkFree for RawVkPhysicalDeviceImageViewImageFormatInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

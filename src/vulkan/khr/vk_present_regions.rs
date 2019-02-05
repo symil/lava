@@ -16,11 +16,8 @@ use vulkan::khr::{VkPresentRegion,RawVkPresentRegion};
 
 /// Wrapper for [VkPresentRegionsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentRegionsKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkPresentRegions<'a, 'b>
-    where
-        'b: 'a,
-{
-    pub regions: Option<&'a [VkPresentRegion<'b>]>,
+pub struct VkPresentRegions {
+    pub regions: Option<Vec<VkPresentRegion>>,
 }
 
 #[doc(hidden)]
@@ -28,42 +25,44 @@ pub struct VkPresentRegions<'a, 'b>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPresentRegions {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub swapchain_count: u32,
     pub regions: *mut RawVkPresentRegion,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkPresentRegions> for VkPresentRegions<'a, 'b>
-    where
-        'b: 'a,
-{
+impl VkWrappedType<RawVkPresentRegions> for VkPresentRegions {
     fn vk_to_raw(src: &VkPresentRegions, dst: &mut RawVkPresentRegions) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PresentRegionsKhr);
-        dst.next = ptr::null();
-        dst.swapchain_count = get_array_option_len(src.regions) as u32;
-        dst.regions = new_ptr_vk_array_checked(src.regions);
+        dst.next = ptr::null_mut();
+        dst.swapchain_count = get_array_option_len(&src.regions) as u32;
+        dst.regions = new_ptr_vk_array_checked(&src.regions);
     }
 }
 
-impl Default for VkPresentRegions<'static, 'static> {
-    fn default() -> VkPresentRegions<'static, 'static> {
+impl VkRawType<VkPresentRegions> for RawVkPresentRegions {
+    fn vk_to_wrapped(src: &RawVkPresentRegions) -> VkPresentRegions {
+        VkPresentRegions {
+            regions: new_vk_array_checked(src.swapchain_count, src.regions),
+        }
+    }
+}
+
+impl Default for VkPresentRegions {
+    fn default() -> VkPresentRegions {
         VkPresentRegions {
             regions: None,
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkPresentRegions<'a, 'b>
-    where
-        'b: 'a,
-{
+impl VkSetup for VkPresentRegions {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPresentRegions {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.swapchain_count as usize, self.regions);
     }
 }

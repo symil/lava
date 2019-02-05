@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkImageView = u64;
 
 /// Wrapper for [VkImageView](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageView.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkImageView {
     _handle: RawVkImageView,
     _fn_table: *mut VkFunctionTable

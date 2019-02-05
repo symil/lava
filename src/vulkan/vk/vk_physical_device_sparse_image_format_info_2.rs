@@ -33,7 +33,7 @@ pub struct VkPhysicalDeviceSparseImageFormatInfo2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceSparseImageFormatInfo2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub format: RawVkFormat,
     pub type_: RawVkImageType,
     pub samples: RawVkSampleCountFlags,
@@ -44,7 +44,7 @@ pub struct RawVkPhysicalDeviceSparseImageFormatInfo2 {
 impl VkWrappedType<RawVkPhysicalDeviceSparseImageFormatInfo2> for VkPhysicalDeviceSparseImageFormatInfo2 {
     fn vk_to_raw(src: &VkPhysicalDeviceSparseImageFormatInfo2, dst: &mut RawVkPhysicalDeviceSparseImageFormatInfo2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceSparseImageFormatInfo2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.format = vk_to_raw_value(&src.format);
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.samples = vk_to_raw_value(&src.samples);
@@ -68,11 +68,11 @@ impl VkRawType<VkPhysicalDeviceSparseImageFormatInfo2> for RawVkPhysicalDeviceSp
 impl Default for VkPhysicalDeviceSparseImageFormatInfo2 {
     fn default() -> VkPhysicalDeviceSparseImageFormatInfo2 {
         VkPhysicalDeviceSparseImageFormatInfo2 {
-            format: VkFormat::default(),
-            type_: VkImageType::default(),
-            samples: VkSampleCountFlags::default(),
-            usage: VkImageUsageFlags::default(),
-            tiling: VkImageTiling::default(),
+            format: Default::default(),
+            type_: Default::default(),
+            samples: Default::default(),
+            usage: Default::default(),
+            tiling: Default::default(),
         }
     }
 }
@@ -84,7 +84,7 @@ impl VkSetup for VkPhysicalDeviceSparseImageFormatInfo2 {
 }
 
 impl VkFree for RawVkPhysicalDeviceSparseImageFormatInfo2 {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

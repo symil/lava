@@ -15,8 +15,8 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkDescriptorBufferInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBufferInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDescriptorBufferInfo<'a> {
-    pub buffer: &'a VkBuffer,
+pub struct VkDescriptorBufferInfo {
+    pub buffer: VkBuffer,
     pub offset: usize,
     pub range: usize,
 }
@@ -30,32 +30,42 @@ pub struct RawVkDescriptorBufferInfo {
     pub range: u64,
 }
 
-impl<'a> VkWrappedType<RawVkDescriptorBufferInfo> for VkDescriptorBufferInfo<'a> {
+impl VkWrappedType<RawVkDescriptorBufferInfo> for VkDescriptorBufferInfo {
     fn vk_to_raw(src: &VkDescriptorBufferInfo, dst: &mut RawVkDescriptorBufferInfo) {
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.buffer = vk_to_raw_value(&src.buffer);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.range = vk_to_raw_value(&src.range);
     }
 }
 
-impl Default for VkDescriptorBufferInfo<'static> {
-    fn default() -> VkDescriptorBufferInfo<'static> {
+impl VkRawType<VkDescriptorBufferInfo> for RawVkDescriptorBufferInfo {
+    fn vk_to_wrapped(src: &RawVkDescriptorBufferInfo) -> VkDescriptorBufferInfo {
         VkDescriptorBufferInfo {
-            buffer: vk_null_ref(),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
+            offset: u64::vk_to_wrapped(&src.offset),
+            range: u64::vk_to_wrapped(&src.range),
+        }
+    }
+}
+
+impl Default for VkDescriptorBufferInfo {
+    fn default() -> VkDescriptorBufferInfo {
+        VkDescriptorBufferInfo {
+            buffer: Default::default(),
             offset: 0,
             range: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkDescriptorBufferInfo<'a> {
+impl VkSetup for VkDescriptorBufferInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkDescriptorBufferInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

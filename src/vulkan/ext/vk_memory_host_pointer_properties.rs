@@ -24,14 +24,14 @@ pub struct VkMemoryHostPointerProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryHostPointerProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub memory_type_bits: u32,
 }
 
 impl VkWrappedType<RawVkMemoryHostPointerProperties> for VkMemoryHostPointerProperties {
     fn vk_to_raw(src: &VkMemoryHostPointerProperties, dst: &mut RawVkMemoryHostPointerProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryHostPointerPropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.memory_type_bits = src.memory_type_bits;
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkMemoryHostPointerProperties {
 }
 
 impl VkFree for RawVkMemoryHostPointerProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

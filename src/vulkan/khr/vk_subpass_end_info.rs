@@ -24,13 +24,13 @@ pub struct VkSubpassEndInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSubpassEndInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
 }
 
 impl VkWrappedType<RawVkSubpassEndInfo> for VkSubpassEndInfo {
     fn vk_to_raw(src: &VkSubpassEndInfo, dst: &mut RawVkSubpassEndInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SubpassEndInfoKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
     }
 }
 
@@ -57,7 +57,7 @@ impl VkSetup for VkSubpassEndInfo {
 }
 
 impl VkFree for RawVkSubpassEndInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

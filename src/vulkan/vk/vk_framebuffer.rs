@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkFramebuffer = u64;
 
 /// Wrapper for [VkFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebuffer.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkFramebuffer {
     _handle: RawVkFramebuffer,
     _fn_table: *mut VkFunctionTable

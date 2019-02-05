@@ -16,8 +16,8 @@ use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 
 /// Wrapper for [VkMappedMemoryRange](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMappedMemoryRange.html).
 #[derive(Debug, Clone)]
-pub struct VkMappedMemoryRange<'a> {
-    pub memory: &'a VkDeviceMemory,
+pub struct VkMappedMemoryRange {
+    pub memory: VkDeviceMemory,
     pub offset: usize,
     pub size: usize,
 }
@@ -27,40 +27,50 @@ pub struct VkMappedMemoryRange<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMappedMemoryRange {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub memory: RawVkDeviceMemory,
     pub offset: u64,
     pub size: u64,
 }
 
-impl<'a> VkWrappedType<RawVkMappedMemoryRange> for VkMappedMemoryRange<'a> {
+impl VkWrappedType<RawVkMappedMemoryRange> for VkMappedMemoryRange {
     fn vk_to_raw(src: &VkMappedMemoryRange, dst: &mut RawVkMappedMemoryRange) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MappedMemoryRange);
-        dst.next = ptr::null();
-        dst.memory = vk_to_raw_value(src.memory);
+        dst.next = ptr::null_mut();
+        dst.memory = vk_to_raw_value(&src.memory);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.size = vk_to_raw_value(&src.size);
     }
 }
 
-impl Default for VkMappedMemoryRange<'static> {
-    fn default() -> VkMappedMemoryRange<'static> {
+impl VkRawType<VkMappedMemoryRange> for RawVkMappedMemoryRange {
+    fn vk_to_wrapped(src: &RawVkMappedMemoryRange) -> VkMappedMemoryRange {
         VkMappedMemoryRange {
-            memory: vk_null_ref(),
+            memory: RawVkDeviceMemory::vk_to_wrapped(&src.memory),
+            offset: u64::vk_to_wrapped(&src.offset),
+            size: u64::vk_to_wrapped(&src.size),
+        }
+    }
+}
+
+impl Default for VkMappedMemoryRange {
+    fn default() -> VkMappedMemoryRange {
+        VkMappedMemoryRange {
+            memory: Default::default(),
             offset: 0,
             size: 0,
         }
     }
 }
 
-impl<'a> VkSetup for VkMappedMemoryRange<'a> {
+impl VkSetup for VkMappedMemoryRange {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.memory, fn_table);
     }
 }
 
 impl VkFree for RawVkMappedMemoryRange {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

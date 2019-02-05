@@ -28,7 +28,7 @@ pub struct VkExternalSemaphoreProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalSemaphoreProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub export_from_imported_handle_types: RawVkExternalSemaphoreHandleTypeFlags,
     pub compatible_handle_types: RawVkExternalSemaphoreHandleTypeFlags,
     pub external_semaphore_features: RawVkExternalSemaphoreFeatureFlags,
@@ -37,7 +37,7 @@ pub struct RawVkExternalSemaphoreProperties {
 impl VkWrappedType<RawVkExternalSemaphoreProperties> for VkExternalSemaphoreProperties {
     fn vk_to_raw(src: &VkExternalSemaphoreProperties, dst: &mut RawVkExternalSemaphoreProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ExternalSemaphoreProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
         dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
         dst.external_semaphore_features = vk_to_raw_value(&src.external_semaphore_features);
@@ -57,9 +57,9 @@ impl VkRawType<VkExternalSemaphoreProperties> for RawVkExternalSemaphoreProperti
 impl Default for VkExternalSemaphoreProperties {
     fn default() -> VkExternalSemaphoreProperties {
         VkExternalSemaphoreProperties {
-            export_from_imported_handle_types: VkExternalSemaphoreHandleTypeFlags::default(),
-            compatible_handle_types: VkExternalSemaphoreHandleTypeFlags::default(),
-            external_semaphore_features: VkExternalSemaphoreFeatureFlags::default(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
+            external_semaphore_features: Default::default(),
         }
     }
 }
@@ -71,7 +71,7 @@ impl VkSetup for VkExternalSemaphoreProperties {
 }
 
 impl VkFree for RawVkExternalSemaphoreProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

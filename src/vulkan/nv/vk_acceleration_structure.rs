@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkAccelerationStructure = u64;
 
 /// Wrapper for [VkAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureNV.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkAccelerationStructure {
     _handle: RawVkAccelerationStructure,
     _fn_table: *mut VkFunctionTable
@@ -74,10 +74,10 @@ impl VkAccelerationStructure {
     }
     
     /// Wrapper for [vkGetAccelerationStructureHandleNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetAccelerationStructureHandleNV.html).
-    pub fn get_handle(&self, data: &mut [c_void]) -> Result<(), VkResult> {
+    pub fn get_handle(&self, data: &[c_void]) -> Result<(), VkResult> {
         unsafe {
             let raw_data_size = data.len();
-            let raw_data = data.as_mut_ptr();
+            let raw_data = get_vec_ptr(data);
             let vk_result = ((&*self._fn_table).vkGetAccelerationStructureHandleNV)((*self._fn_table).device, self._handle, raw_data_size, raw_data);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }

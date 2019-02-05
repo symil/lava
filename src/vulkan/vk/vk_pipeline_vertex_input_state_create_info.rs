@@ -18,10 +18,10 @@ use vulkan::vk::{VkVertexInputAttributeDescription,RawVkVertexInputAttributeDesc
 
 /// Wrapper for [VkPipelineVertexInputStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineVertexInputStateCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineVertexInputStateCreateInfo<'a, 'b> {
+pub struct VkPipelineVertexInputStateCreateInfo {
     pub flags: VkPipelineVertexInputStateCreateFlags,
-    pub vertex_binding_descriptions: &'a [VkVertexInputBindingDescription],
-    pub vertex_attribute_descriptions: &'b [VkVertexInputAttributeDescription],
+    pub vertex_binding_descriptions: Vec<VkVertexInputBindingDescription>,
+    pub vertex_attribute_descriptions: Vec<VkVertexInputAttributeDescription>,
 }
 
 #[doc(hidden)]
@@ -29,7 +29,7 @@ pub struct VkPipelineVertexInputStateCreateInfo<'a, 'b> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineVertexInputStateCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineVertexInputStateCreateFlags,
     pub vertex_binding_description_count: u32,
     pub vertex_binding_descriptions: *mut RawVkVertexInputBindingDescription,
@@ -37,36 +37,46 @@ pub struct RawVkPipelineVertexInputStateCreateInfo {
     pub vertex_attribute_descriptions: *mut RawVkVertexInputAttributeDescription,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkPipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfo<'a, 'b> {
+impl VkWrappedType<RawVkPipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfo {
     fn vk_to_raw(src: &VkPipelineVertexInputStateCreateInfo, dst: &mut RawVkPipelineVertexInputStateCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineVertexInputStateCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.vertex_binding_description_count = src.vertex_binding_descriptions.len() as u32;
-        dst.vertex_binding_descriptions = new_ptr_vk_array(src.vertex_binding_descriptions);
+        dst.vertex_binding_descriptions = new_ptr_vk_array(&src.vertex_binding_descriptions);
         dst.vertex_attribute_description_count = src.vertex_attribute_descriptions.len() as u32;
-        dst.vertex_attribute_descriptions = new_ptr_vk_array(src.vertex_attribute_descriptions);
+        dst.vertex_attribute_descriptions = new_ptr_vk_array(&src.vertex_attribute_descriptions);
     }
 }
 
-impl Default for VkPipelineVertexInputStateCreateInfo<'static, 'static> {
-    fn default() -> VkPipelineVertexInputStateCreateInfo<'static, 'static> {
+impl VkRawType<VkPipelineVertexInputStateCreateInfo> for RawVkPipelineVertexInputStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineVertexInputStateCreateInfo) -> VkPipelineVertexInputStateCreateInfo {
         VkPipelineVertexInputStateCreateInfo {
-            flags: VkPipelineVertexInputStateCreateFlags::default(),
-            vertex_binding_descriptions: &[],
-            vertex_attribute_descriptions: &[],
+            flags: RawVkPipelineVertexInputStateCreateFlags::vk_to_wrapped(&src.flags),
+            vertex_binding_descriptions: new_vk_array(src.vertex_binding_description_count, src.vertex_binding_descriptions),
+            vertex_attribute_descriptions: new_vk_array(src.vertex_attribute_description_count, src.vertex_attribute_descriptions),
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkPipelineVertexInputStateCreateInfo<'a, 'b> {
+impl Default for VkPipelineVertexInputStateCreateInfo {
+    fn default() -> VkPipelineVertexInputStateCreateInfo {
+        VkPipelineVertexInputStateCreateInfo {
+            flags: Default::default(),
+            vertex_binding_descriptions: Vec::new(),
+            vertex_attribute_descriptions: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkPipelineVertexInputStateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineVertexInputStateCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.vertex_binding_description_count as usize, self.vertex_binding_descriptions);
         free_vk_ptr_array(self.vertex_attribute_description_count as usize, self.vertex_attribute_descriptions);
     }

@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkImage = u64;
 
 /// Wrapper for [VkImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImage.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkImage {
     _handle: RawVkImage,
     _fn_table: *mut VkFunctionTable
@@ -67,9 +67,9 @@ impl VkImage {
     }
     
     /// Wrapper for [vkBindImageMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindImageMemory.html).
-    pub fn bind_memory(&self, memory: &VkDeviceMemory, memory_offset: usize) -> Result<(), VkResult> {
+    pub fn bind_memory(&self, memory: VkDeviceMemory, memory_offset: usize) -> Result<(), VkResult> {
         unsafe {
-            let raw_memory = vk_to_raw_value(memory);
+            let raw_memory = vk_to_raw_value(&memory);
             let raw_memory_offset = vk_to_raw_value(&memory_offset);
             let vk_result = ((&*self._fn_table).vkBindImageMemory)((*self._fn_table).device, self._handle, raw_memory, raw_memory_offset);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
@@ -86,7 +86,6 @@ impl VkImage {
             let mut memory_requirements = new_vk_value(raw_memory_requirements);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut memory_requirements, fn_table);
-            RawVkMemoryRequirements::vk_free(raw_memory_requirements.as_mut().unwrap());
             memory_requirements
         }
     }
@@ -103,7 +102,7 @@ impl VkImage {
             
             let mut sparse_memory_requirements = new_vk_array(*raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
             for elt in &mut sparse_memory_requirements { VkSetup::vk_setup(elt, self._fn_table); }
-            free_vk_ptr_array(*raw_sparse_memory_requirement_count as usize, raw_sparse_memory_requirements);
+            free(raw_sparse_memory_requirements as *mut u8);
             sparse_memory_requirements
         }
     }
@@ -116,9 +115,9 @@ impl VkImage {
     }
     
     /// Wrapper for [vkGetImageSubresourceLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageSubresourceLayout.html).
-    pub fn get_subresource_layout(&self, subresource: &VkImageSubresource) -> VkSubresourceLayout {
+    pub fn get_subresource_layout(&self, subresource: VkImageSubresource) -> VkSubresourceLayout {
         unsafe {
-            let raw_subresource = new_ptr_vk_value(subresource);
+            let raw_subresource = new_ptr_vk_value(&subresource);
             let raw_layout = &mut mem::zeroed() as *mut RawVkSubresourceLayout;
             
             ((&*self._fn_table).vkGetImageSubresourceLayout)((*self._fn_table).device, self._handle, raw_subresource, raw_layout);
@@ -127,7 +126,6 @@ impl VkImage {
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut layout, fn_table);
             free_vk_ptr(raw_subresource);
-            RawVkSubresourceLayout::vk_free(raw_layout.as_mut().unwrap());
             layout
         }
     }
@@ -145,7 +143,6 @@ impl VkImage {
                 let fn_table = self._fn_table;
                 VkSetup::vk_setup(&mut properties, fn_table);
             }
-            ext::RawVkImageDrmFormatModifierProperties::vk_free(raw_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }

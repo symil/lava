@@ -17,13 +17,9 @@ use vulkan::vk::{VkCommandBufferInheritanceInfo,RawVkCommandBufferInheritanceInf
 
 /// Wrapper for [VkCommandBufferBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferBeginInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkCommandBufferBeginInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-        'c: 'a,
-{
+pub struct VkCommandBufferBeginInfo {
     pub flags: VkCommandBufferUsageFlags,
-    pub inheritance_info: Option<&'a VkCommandBufferInheritanceInfo<'b, 'c>>,
+    pub inheritance_info: Option<VkCommandBufferInheritanceInfo>,
 }
 
 #[doc(hidden)]
@@ -31,45 +27,46 @@ pub struct VkCommandBufferBeginInfo<'a, 'b, 'c>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCommandBufferBeginInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkCommandBufferUsageFlags,
     pub inheritance_info: *mut RawVkCommandBufferInheritanceInfo,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkCommandBufferBeginInfo> for VkCommandBufferBeginInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-        'c: 'a,
-{
+impl VkWrappedType<RawVkCommandBufferBeginInfo> for VkCommandBufferBeginInfo {
     fn vk_to_raw(src: &VkCommandBufferBeginInfo, dst: &mut RawVkCommandBufferBeginInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CommandBufferBeginInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.inheritance_info = new_ptr_vk_value_checked(src.inheritance_info);
+        dst.inheritance_info = new_ptr_vk_value_checked(&src.inheritance_info);
     }
 }
 
-impl Default for VkCommandBufferBeginInfo<'static, 'static, 'static> {
-    fn default() -> VkCommandBufferBeginInfo<'static, 'static, 'static> {
+impl VkRawType<VkCommandBufferBeginInfo> for RawVkCommandBufferBeginInfo {
+    fn vk_to_wrapped(src: &RawVkCommandBufferBeginInfo) -> VkCommandBufferBeginInfo {
         VkCommandBufferBeginInfo {
-            flags: VkCommandBufferUsageFlags::default(),
+            flags: RawVkCommandBufferUsageFlags::vk_to_wrapped(&src.flags),
+            inheritance_info: new_vk_value_checked(src.inheritance_info),
+        }
+    }
+}
+
+impl Default for VkCommandBufferBeginInfo {
+    fn default() -> VkCommandBufferBeginInfo {
+        VkCommandBufferBeginInfo {
+            flags: Default::default(),
             inheritance_info: None,
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkCommandBufferBeginInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-        'c: 'a,
-{
+impl VkSetup for VkCommandBufferBeginInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkCommandBufferBeginInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr(self.inheritance_info);
     }
 }

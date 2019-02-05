@@ -17,9 +17,9 @@ use vulkan::khr::{VkSurfaceTransformFlags,RawVkSurfaceTransformFlags};
 
 /// Wrapper for [VkDisplayPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPropertiesKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkDisplayProperties {
+pub struct VkDisplayProperties<'a> {
     pub display: VkDisplay,
-    pub display_name: Option<String>,
+    pub display_name: &'a str,
     pub physical_dimensions: VkExtent2D,
     pub physical_resolution: VkExtent2D,
     pub supported_transforms: VkSurfaceTransformFlags,
@@ -32,7 +32,7 @@ pub struct VkDisplayProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDisplayProperties {
     pub display: RawVkDisplay,
-    pub display_name: *const c_char,
+    pub display_name: *mut c_char,
     pub physical_dimensions: RawVkExtent2D,
     pub physical_resolution: RawVkExtent2D,
     pub supported_transforms: RawVkSurfaceTransformFlags,
@@ -40,11 +40,11 @@ pub struct RawVkDisplayProperties {
     pub persistent_content: u32,
 }
 
-impl VkRawType<VkDisplayProperties> for RawVkDisplayProperties {
-    fn vk_to_wrapped(src: &RawVkDisplayProperties) -> VkDisplayProperties {
+impl<'a> VkRawType<VkDisplayProperties<'a>> for RawVkDisplayProperties {
+    fn vk_to_wrapped(src: &RawVkDisplayProperties) -> VkDisplayProperties<'a> {
         VkDisplayProperties {
             display: RawVkDisplay::vk_to_wrapped(&src.display),
-            display_name: new_string_checked(src.display_name),
+            display_name: new_string_ref(src.display_name),
             physical_dimensions: RawVkExtent2D::vk_to_wrapped(&src.physical_dimensions),
             physical_resolution: RawVkExtent2D::vk_to_wrapped(&src.physical_resolution),
             supported_transforms: RawVkSurfaceTransformFlags::vk_to_wrapped(&src.supported_transforms),
@@ -54,7 +54,7 @@ impl VkRawType<VkDisplayProperties> for RawVkDisplayProperties {
     }
 }
 
-impl VkSetup for VkDisplayProperties {
+impl<'a> VkSetup for VkDisplayProperties<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.display, fn_table);
         VkSetup::vk_setup(&mut self.physical_dimensions, fn_table);
@@ -63,8 +63,7 @@ impl VkSetup for VkDisplayProperties {
 }
 
 impl VkFree for RawVkDisplayProperties {
-    fn vk_free(&mut self) {
-        RawVkExtent2D::vk_free(&mut self.physical_dimensions);
-        RawVkExtent2D::vk_free(&mut self.physical_resolution);
+    fn vk_free(&self) {
+        free_ptr(self.display_name);
     }
 }

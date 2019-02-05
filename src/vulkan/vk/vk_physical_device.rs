@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkPhysicalDevice = u64;
 
 /// Wrapper for [VkPhysicalDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkPhysicalDevice {
     _handle: RawVkPhysicalDevice,
     _fn_table: *mut VkFunctionTable
@@ -76,7 +76,6 @@ impl VkPhysicalDevice {
             let mut features = new_vk_value(raw_features);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut features, fn_table);
-            RawVkPhysicalDeviceFeatures::vk_free(raw_features.as_mut().unwrap());
             features
         }
     }
@@ -92,7 +91,6 @@ impl VkPhysicalDevice {
             let mut format_properties = new_vk_value(raw_format_properties);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut format_properties, fn_table);
-            RawVkFormatProperties::vk_free(raw_format_properties.as_mut().unwrap());
             format_properties
         }
     }
@@ -115,7 +113,6 @@ impl VkPhysicalDevice {
                 let fn_table = self._fn_table;
                 VkSetup::vk_setup(&mut image_format_properties, fn_table);
             }
-            RawVkImageFormatProperties::vk_free(raw_image_format_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image_format_properties)) }
         }
     }
@@ -130,7 +127,6 @@ impl VkPhysicalDevice {
             let mut properties = new_vk_value(raw_properties);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut properties, fn_table);
-            RawVkPhysicalDeviceProperties::vk_free(raw_properties.as_mut().unwrap());
             properties
         }
     }
@@ -147,7 +143,7 @@ impl VkPhysicalDevice {
             
             let mut queue_family_properties = new_vk_array(*raw_queue_family_property_count, raw_queue_family_properties);
             for elt in &mut queue_family_properties { VkSetup::vk_setup(elt, self._fn_table); }
-            free_vk_ptr_array(*raw_queue_family_property_count as usize, raw_queue_family_properties);
+            free(raw_queue_family_properties as *mut u8);
             queue_family_properties
         }
     }
@@ -162,15 +158,14 @@ impl VkPhysicalDevice {
             let mut memory_properties = new_vk_value(raw_memory_properties);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut memory_properties, fn_table);
-            RawVkPhysicalDeviceMemoryProperties::vk_free(raw_memory_properties.as_mut().unwrap());
             memory_properties
         }
     }
     
     /// Wrapper for [vkCreateDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDevice.html).
-    pub fn create_device(&self, create_info: &VkDeviceCreateInfo) -> Result<VkDevice, (VkResult, VkDevice)> {
+    pub fn create_device(&self, create_info: VkDeviceCreateInfo) -> Result<VkDevice, (VkResult, VkDevice)> {
         unsafe {
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_device = &mut mem::zeroed() as *mut RawVkDevice;
             
@@ -189,7 +184,7 @@ impl VkPhysicalDevice {
     /// Wrapper for [vkEnumerateDeviceExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateDeviceExtensionProperties.html).
     pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
         unsafe {
-            let raw_layer_name = new_ptr_string_checked(layer_name);
+            let raw_layer_name = new_ptr_string_checked(&layer_name);
             let mut vk_result = 0;
             let mut raw_properties : *mut RawVkExtensionProperties = ptr::null_mut();
             let raw_property_count = &mut mem::zeroed() as *mut u32;
@@ -203,7 +198,7 @@ impl VkPhysicalDevice {
                 for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_ptr(raw_layer_name);
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
@@ -223,7 +218,7 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
@@ -245,7 +240,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             properties
         }
     }
@@ -260,7 +255,6 @@ impl VkPhysicalDevice {
             let mut features = new_vk_value(raw_features);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut features, fn_table);
-            RawVkPhysicalDeviceFeatures2::vk_free(raw_features.as_mut().unwrap());
             features
         }
     }
@@ -275,7 +269,6 @@ impl VkPhysicalDevice {
             let mut properties = new_vk_value(raw_properties);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut properties, fn_table);
-            RawVkPhysicalDeviceProperties2::vk_free(raw_properties.as_mut().unwrap());
             properties
         }
     }
@@ -291,15 +284,14 @@ impl VkPhysicalDevice {
             let mut format_properties = new_vk_value(raw_format_properties);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut format_properties, fn_table);
-            RawVkFormatProperties2::vk_free(raw_format_properties.as_mut().unwrap());
             format_properties
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceImageFormatProperties2.html).
-    pub fn get_image_format_properties_2(&self, image_format_info: &VkPhysicalDeviceImageFormatInfo2) -> Result<VkImageFormatProperties2, (VkResult, VkImageFormatProperties2)> {
+    pub fn get_image_format_properties_2(&self, image_format_info: VkPhysicalDeviceImageFormatInfo2) -> Result<VkImageFormatProperties2, (VkResult, VkImageFormatProperties2)> {
         unsafe {
-            let raw_image_format_info = new_ptr_vk_value(image_format_info);
+            let raw_image_format_info = new_ptr_vk_value(&image_format_info);
             let mut vk_result = 0;
             let raw_image_format_properties = &mut mem::zeroed() as *mut RawVkImageFormatProperties2;
             
@@ -311,7 +303,6 @@ impl VkPhysicalDevice {
                 VkSetup::vk_setup(&mut image_format_properties, fn_table);
             }
             free_vk_ptr(raw_image_format_info);
-            RawVkImageFormatProperties2::vk_free(raw_image_format_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image_format_properties)) }
         }
     }
@@ -328,7 +319,7 @@ impl VkPhysicalDevice {
             
             let mut queue_family_properties = new_vk_array(*raw_queue_family_property_count, raw_queue_family_properties);
             for elt in &mut queue_family_properties { VkSetup::vk_setup(elt, self._fn_table); }
-            free_vk_ptr_array(*raw_queue_family_property_count as usize, raw_queue_family_properties);
+            free(raw_queue_family_properties as *mut u8);
             queue_family_properties
         }
     }
@@ -343,15 +334,14 @@ impl VkPhysicalDevice {
             let mut memory_properties = new_vk_value(raw_memory_properties);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut memory_properties, fn_table);
-            RawVkPhysicalDeviceMemoryProperties2::vk_free(raw_memory_properties.as_mut().unwrap());
             memory_properties
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceSparseImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSparseImageFormatProperties2.html).
-    pub fn get_sparse_image_format_properties_2(&self, format_info: &VkPhysicalDeviceSparseImageFormatInfo2) -> Vec<VkSparseImageFormatProperties2> {
+    pub fn get_sparse_image_format_properties_2(&self, format_info: VkPhysicalDeviceSparseImageFormatInfo2) -> Vec<VkSparseImageFormatProperties2> {
         unsafe {
-            let raw_format_info = new_ptr_vk_value(format_info);
+            let raw_format_info = new_ptr_vk_value(&format_info);
             let mut raw_properties : *mut RawVkSparseImageFormatProperties2 = ptr::null_mut();
             let raw_property_count = &mut mem::zeroed() as *mut u32;
             ((&*self._fn_table).vkGetPhysicalDeviceSparseImageFormatProperties2)(self._handle, raw_format_info, raw_property_count, raw_properties);
@@ -362,15 +352,15 @@ impl VkPhysicalDevice {
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             free_vk_ptr(raw_format_info);
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             properties
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceExternalBufferProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalBufferProperties.html).
-    pub fn get_external_buffer_properties(&self, external_buffer_info: &VkPhysicalDeviceExternalBufferInfo) -> VkExternalBufferProperties {
+    pub fn get_external_buffer_properties(&self, external_buffer_info: VkPhysicalDeviceExternalBufferInfo) -> VkExternalBufferProperties {
         unsafe {
-            let raw_external_buffer_info = new_ptr_vk_value(external_buffer_info);
+            let raw_external_buffer_info = new_ptr_vk_value(&external_buffer_info);
             let raw_external_buffer_properties = &mut mem::zeroed() as *mut RawVkExternalBufferProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceExternalBufferProperties)(self._handle, raw_external_buffer_info, raw_external_buffer_properties);
@@ -379,15 +369,14 @@ impl VkPhysicalDevice {
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut external_buffer_properties, fn_table);
             free_vk_ptr(raw_external_buffer_info);
-            RawVkExternalBufferProperties::vk_free(raw_external_buffer_properties.as_mut().unwrap());
             external_buffer_properties
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceExternalFenceProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalFenceProperties.html).
-    pub fn get_external_fence_properties(&self, external_fence_info: &VkPhysicalDeviceExternalFenceInfo) -> VkExternalFenceProperties {
+    pub fn get_external_fence_properties(&self, external_fence_info: VkPhysicalDeviceExternalFenceInfo) -> VkExternalFenceProperties {
         unsafe {
-            let raw_external_fence_info = new_ptr_vk_value(external_fence_info);
+            let raw_external_fence_info = new_ptr_vk_value(&external_fence_info);
             let raw_external_fence_properties = &mut mem::zeroed() as *mut RawVkExternalFenceProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceExternalFenceProperties)(self._handle, raw_external_fence_info, raw_external_fence_properties);
@@ -396,15 +385,14 @@ impl VkPhysicalDevice {
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut external_fence_properties, fn_table);
             free_vk_ptr(raw_external_fence_info);
-            RawVkExternalFenceProperties::vk_free(raw_external_fence_properties.as_mut().unwrap());
             external_fence_properties
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceExternalSemaphoreProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceExternalSemaphoreProperties.html).
-    pub fn get_external_semaphore_properties(&self, external_semaphore_info: &VkPhysicalDeviceExternalSemaphoreInfo) -> VkExternalSemaphoreProperties {
+    pub fn get_external_semaphore_properties(&self, external_semaphore_info: VkPhysicalDeviceExternalSemaphoreInfo) -> VkExternalSemaphoreProperties {
         unsafe {
-            let raw_external_semaphore_info = new_ptr_vk_value(external_semaphore_info);
+            let raw_external_semaphore_info = new_ptr_vk_value(&external_semaphore_info);
             let raw_external_semaphore_properties = &mut mem::zeroed() as *mut RawVkExternalSemaphoreProperties;
             
             ((&*self._fn_table).vkGetPhysicalDeviceExternalSemaphoreProperties)(self._handle, raw_external_semaphore_info, raw_external_semaphore_properties);
@@ -413,16 +401,15 @@ impl VkPhysicalDevice {
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut external_semaphore_properties, fn_table);
             free_vk_ptr(raw_external_semaphore_info);
-            RawVkExternalSemaphoreProperties::vk_free(raw_external_semaphore_properties.as_mut().unwrap());
             external_semaphore_properties
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceSurfaceSupportKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceSupportKHR.html).
-    pub fn get_surface_support(&self, queue_family_index: usize, surface: &khr::VkSurface) -> Result<bool, (VkResult, bool)> {
+    pub fn get_surface_support(&self, queue_family_index: usize, surface: khr::VkSurface) -> Result<bool, (VkResult, bool)> {
         unsafe {
             let raw_queue_family_index = vk_to_raw_value(&queue_family_index);
-            let raw_surface = vk_to_raw_value(surface);
+            let raw_surface = vk_to_raw_value(&surface);
             let mut vk_result = 0;
             let raw_supported = &mut mem::zeroed() as *mut u32;
             
@@ -434,9 +421,9 @@ impl VkPhysicalDevice {
     }
     
     /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilitiesKHR.html).
-    pub fn get_surface_capabilities(&self, surface: &khr::VkSurface) -> Result<khr::VkSurfaceCapabilities, (VkResult, khr::VkSurfaceCapabilities)> {
+    pub fn get_surface_capabilities(&self, surface: khr::VkSurface) -> Result<khr::VkSurfaceCapabilities, (VkResult, khr::VkSurfaceCapabilities)> {
         unsafe {
-            let raw_surface = vk_to_raw_value(surface);
+            let raw_surface = vk_to_raw_value(&surface);
             let mut vk_result = 0;
             let raw_surface_capabilities = &mut mem::zeroed() as *mut khr::RawVkSurfaceCapabilities;
             
@@ -447,15 +434,14 @@ impl VkPhysicalDevice {
                 let fn_table = self._fn_table;
                 VkSetup::vk_setup(&mut surface_capabilities, fn_table);
             }
-            khr::RawVkSurfaceCapabilities::vk_free(raw_surface_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(surface_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_capabilities)) }
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceSurfaceFormatsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceFormatsKHR.html).
-    pub fn get_surface_formats(&self, surface: &khr::VkSurface) -> Result<Vec<khr::VkSurfaceFormat>, (VkResult, Vec<khr::VkSurfaceFormat>)> {
+    pub fn get_surface_formats(&self, surface: khr::VkSurface) -> Result<Vec<khr::VkSurfaceFormat>, (VkResult, Vec<khr::VkSurfaceFormat>)> {
         unsafe {
-            let raw_surface = vk_to_raw_value(surface);
+            let raw_surface = vk_to_raw_value(&surface);
             let mut vk_result = 0;
             let mut raw_surface_formats : *mut khr::RawVkSurfaceFormat = ptr::null_mut();
             let raw_surface_format_count = &mut mem::zeroed() as *mut u32;
@@ -468,15 +454,15 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_surface_format_count as usize, raw_surface_formats);
+            free(raw_surface_formats as *mut u8);
             if vk_result == 0 { Ok(surface_formats) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_formats)) }
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceSurfacePresentModesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfacePresentModesKHR.html).
-    pub fn get_surface_present_modes(&self, surface: &khr::VkSurface) -> Result<Vec<khr::VkPresentMode>, (VkResult, Vec<khr::VkPresentMode>)> {
+    pub fn get_surface_present_modes(&self, surface: khr::VkSurface) -> Result<Vec<khr::VkPresentMode>, (VkResult, Vec<khr::VkPresentMode>)> {
         unsafe {
-            let raw_surface = vk_to_raw_value(surface);
+            let raw_surface = vk_to_raw_value(&surface);
             let mut vk_result = 0;
             let mut raw_present_modes : *mut khr::RawVkPresentMode = ptr::null_mut();
             let raw_present_mode_count = &mut mem::zeroed() as *mut u32;
@@ -486,15 +472,15 @@ impl VkPhysicalDevice {
             vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSurfacePresentModesKHR)(self._handle, raw_surface, raw_present_mode_count, raw_present_modes);
             
             let present_modes = new_vk_array(*raw_present_mode_count, raw_present_modes);
-            free_ptr(raw_present_modes);
+            free(raw_present_modes as *mut u8);
             if vk_result == 0 { Ok(present_modes) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), present_modes)) }
         }
     }
     
     /// Wrapper for [vkGetPhysicalDevicePresentRectanglesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDevicePresentRectanglesKHR.html).
-    pub fn get_present_rectangles(&self, surface: &khr::VkSurface) -> Result<Vec<VkRect2D>, (VkResult, Vec<VkRect2D>)> {
+    pub fn get_present_rectangles(&self, surface: khr::VkSurface) -> Result<Vec<VkRect2D>, (VkResult, Vec<VkRect2D>)> {
         unsafe {
-            let raw_surface = vk_to_raw_value(surface);
+            let raw_surface = vk_to_raw_value(&surface);
             let mut vk_result = 0;
             let mut raw_rects : *mut RawVkRect2D = ptr::null_mut();
             let raw_rect_count = &mut mem::zeroed() as *mut u32;
@@ -507,7 +493,7 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut rects { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_rect_count as usize, raw_rects);
+            free(raw_rects as *mut u8);
             if vk_result == 0 { Ok(rects) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), rects)) }
         }
     }
@@ -527,7 +513,7 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
@@ -547,7 +533,7 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
@@ -568,15 +554,15 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut displays { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_ptr(raw_displays);
+            free(raw_displays as *mut u8);
             if vk_result == 0 { Ok(displays) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), displays)) }
         }
     }
     
     /// Wrapper for [vkGetDisplayModePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayModePropertiesKHR.html).
-    pub fn get_display_mode_properties(&self, display: &khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties>, (VkResult, Vec<khr::VkDisplayModeProperties>)> {
+    pub fn get_display_mode_properties(&self, display: khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties>, (VkResult, Vec<khr::VkDisplayModeProperties>)> {
         unsafe {
-            let raw_display = vk_to_raw_value(display);
+            let raw_display = vk_to_raw_value(&display);
             let mut vk_result = 0;
             let mut raw_properties : *mut khr::RawVkDisplayModeProperties = ptr::null_mut();
             let raw_property_count = &mut mem::zeroed() as *mut u32;
@@ -589,16 +575,16 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
     /// Wrapper for [vkCreateDisplayModeKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDisplayModeKHR.html).
-    pub fn create_display_mode(&self, display: &khr::VkDisplay, create_info: &khr::VkDisplayModeCreateInfo) -> Result<khr::VkDisplayMode, (VkResult, khr::VkDisplayMode)> {
+    pub fn create_display_mode(&self, display: khr::VkDisplay, create_info: khr::VkDisplayModeCreateInfo) -> Result<khr::VkDisplayMode, (VkResult, khr::VkDisplayMode)> {
         unsafe {
-            let raw_display = vk_to_raw_value(display);
-            let raw_create_info = new_ptr_vk_value(create_info);
+            let raw_display = vk_to_raw_value(&display);
+            let raw_create_info = new_ptr_vk_value(&create_info);
             let mut vk_result = 0;
             let raw_mode = &mut mem::zeroed() as *mut khr::RawVkDisplayMode;
             
@@ -615,9 +601,9 @@ impl VkPhysicalDevice {
     }
     
     /// Wrapper for [vkGetDisplayPlaneCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayPlaneCapabilitiesKHR.html).
-    pub fn get_display_plane_capabilities(&self, mode: &khr::VkDisplayMode, plane_index: usize) -> Result<khr::VkDisplayPlaneCapabilities, (VkResult, khr::VkDisplayPlaneCapabilities)> {
+    pub fn get_display_plane_capabilities(&self, mode: khr::VkDisplayMode, plane_index: usize) -> Result<khr::VkDisplayPlaneCapabilities, (VkResult, khr::VkDisplayPlaneCapabilities)> {
         unsafe {
-            let raw_mode = vk_to_raw_value(mode);
+            let raw_mode = vk_to_raw_value(&mode);
             let raw_plane_index = vk_to_raw_value(&plane_index);
             let mut vk_result = 0;
             let raw_capabilities = &mut mem::zeroed() as *mut khr::RawVkDisplayPlaneCapabilities;
@@ -629,15 +615,14 @@ impl VkPhysicalDevice {
                 let fn_table = self._fn_table;
                 VkSetup::vk_setup(&mut capabilities, fn_table);
             }
-            khr::RawVkDisplayPlaneCapabilities::vk_free(raw_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), capabilities)) }
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilities2KHR.html).
-    pub fn get_surface_capabilities_2(&self, surface_info: &khr::VkPhysicalDeviceSurfaceInfo2) -> Result<khr::VkSurfaceCapabilities2, (VkResult, khr::VkSurfaceCapabilities2)> {
+    pub fn get_surface_capabilities_2(&self, surface_info: khr::VkPhysicalDeviceSurfaceInfo2) -> Result<khr::VkSurfaceCapabilities2, (VkResult, khr::VkSurfaceCapabilities2)> {
         unsafe {
-            let raw_surface_info = new_ptr_vk_value(surface_info);
+            let raw_surface_info = new_ptr_vk_value(&surface_info);
             let mut vk_result = 0;
             let raw_surface_capabilities = &mut mem::zeroed() as *mut khr::RawVkSurfaceCapabilities2;
             
@@ -649,15 +634,14 @@ impl VkPhysicalDevice {
                 VkSetup::vk_setup(&mut surface_capabilities, fn_table);
             }
             free_vk_ptr(raw_surface_info);
-            khr::RawVkSurfaceCapabilities2::vk_free(raw_surface_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(surface_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_capabilities)) }
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceSurfaceFormats2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceFormats2KHR.html).
-    pub fn get_surface_formats_2(&self, surface_info: &khr::VkPhysicalDeviceSurfaceInfo2) -> Result<Vec<khr::VkSurfaceFormat2>, (VkResult, Vec<khr::VkSurfaceFormat2>)> {
+    pub fn get_surface_formats_2(&self, surface_info: khr::VkPhysicalDeviceSurfaceInfo2) -> Result<Vec<khr::VkSurfaceFormat2>, (VkResult, Vec<khr::VkSurfaceFormat2>)> {
         unsafe {
-            let raw_surface_info = new_ptr_vk_value(surface_info);
+            let raw_surface_info = new_ptr_vk_value(&surface_info);
             let mut vk_result = 0;
             let mut raw_surface_formats : *mut khr::RawVkSurfaceFormat2 = ptr::null_mut();
             let raw_surface_format_count = &mut mem::zeroed() as *mut u32;
@@ -671,7 +655,7 @@ impl VkPhysicalDevice {
                 for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr(raw_surface_info);
-            free_vk_ptr_array(*raw_surface_format_count as usize, raw_surface_formats);
+            free(raw_surface_formats as *mut u8);
             if vk_result == 0 { Ok(surface_formats) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_formats)) }
         }
     }
@@ -691,7 +675,7 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
@@ -711,15 +695,15 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
     /// Wrapper for [vkGetDisplayModeProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayModeProperties2KHR.html).
-    pub fn get_display_mode_properties_2(&self, display: &khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties2>, (VkResult, Vec<khr::VkDisplayModeProperties2>)> {
+    pub fn get_display_mode_properties_2(&self, display: khr::VkDisplay) -> Result<Vec<khr::VkDisplayModeProperties2>, (VkResult, Vec<khr::VkDisplayModeProperties2>)> {
         unsafe {
-            let raw_display = vk_to_raw_value(display);
+            let raw_display = vk_to_raw_value(&display);
             let mut vk_result = 0;
             let mut raw_properties : *mut khr::RawVkDisplayModeProperties2 = ptr::null_mut();
             let raw_property_count = &mut mem::zeroed() as *mut u32;
@@ -732,15 +716,15 @@ impl VkPhysicalDevice {
             if vk_result == 0 {
                 for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
-            free_vk_ptr_array(*raw_property_count as usize, raw_properties);
+            free(raw_properties as *mut u8);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
     
     /// Wrapper for [vkGetDisplayPlaneCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDisplayPlaneCapabilities2KHR.html).
-    pub fn get_display_plane_capabilities_2(&self, display_plane_info: &khr::VkDisplayPlaneInfo2) -> Result<khr::VkDisplayPlaneCapabilities2, (VkResult, khr::VkDisplayPlaneCapabilities2)> {
+    pub fn get_display_plane_capabilities_2(&self, display_plane_info: khr::VkDisplayPlaneInfo2) -> Result<khr::VkDisplayPlaneCapabilities2, (VkResult, khr::VkDisplayPlaneCapabilities2)> {
         unsafe {
-            let raw_display_plane_info = new_ptr_vk_value(display_plane_info);
+            let raw_display_plane_info = new_ptr_vk_value(&display_plane_info);
             let mut vk_result = 0;
             let raw_capabilities = &mut mem::zeroed() as *mut khr::RawVkDisplayPlaneCapabilities2;
             
@@ -752,7 +736,6 @@ impl VkPhysicalDevice {
                 VkSetup::vk_setup(&mut capabilities, fn_table);
             }
             free_vk_ptr(raw_display_plane_info);
-            khr::RawVkDisplayPlaneCapabilities2::vk_free(raw_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), capabilities)) }
         }
     }
@@ -776,15 +759,14 @@ impl VkPhysicalDevice {
                 let fn_table = self._fn_table;
                 VkSetup::vk_setup(&mut external_image_format_properties, fn_table);
             }
-            nv::RawVkExternalImageFormatProperties::vk_free(raw_external_image_format_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(external_image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), external_image_format_properties)) }
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX.html).
-    pub fn get_generated_commands_properties(&self, features: &nvx::VkDeviceGeneratedCommandsFeatures) -> nvx::VkDeviceGeneratedCommandsLimits {
+    pub fn get_generated_commands_properties(&self, features: nvx::VkDeviceGeneratedCommandsFeatures) -> nvx::VkDeviceGeneratedCommandsLimits {
         unsafe {
-            let raw_features = new_ptr_vk_value(features);
+            let raw_features = new_ptr_vk_value(&features);
             let raw_limits = &mut mem::zeroed() as *mut nvx::RawVkDeviceGeneratedCommandsLimits;
             
             ((&*self._fn_table).vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX)(self._handle, raw_features, raw_limits);
@@ -793,24 +775,23 @@ impl VkPhysicalDevice {
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut limits, fn_table);
             free_vk_ptr(raw_features);
-            nvx::RawVkDeviceGeneratedCommandsLimits::vk_free(raw_limits.as_mut().unwrap());
             limits
         }
     }
     
     /// Wrapper for [vkReleaseDisplayEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkReleaseDisplayEXT.html).
-    pub fn release_display(&self, display: &khr::VkDisplay) -> Result<(), VkResult> {
+    pub fn release_display(&self, display: khr::VkDisplay) -> Result<(), VkResult> {
         unsafe {
-            let raw_display = vk_to_raw_value(display);
+            let raw_display = vk_to_raw_value(&display);
             let vk_result = ((&*self._fn_table).vkReleaseDisplayEXT)(self._handle, raw_display);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
     
     /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilities2EXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilities2EXT.html).
-    pub fn get_surface_capabilities_2_ext(&self, surface: &khr::VkSurface) -> Result<ext::VkSurfaceCapabilities2, (VkResult, ext::VkSurfaceCapabilities2)> {
+    pub fn get_surface_capabilities_2_ext(&self, surface: khr::VkSurface) -> Result<ext::VkSurfaceCapabilities2, (VkResult, ext::VkSurfaceCapabilities2)> {
         unsafe {
-            let raw_surface = vk_to_raw_value(surface);
+            let raw_surface = vk_to_raw_value(&surface);
             let mut vk_result = 0;
             let raw_surface_capabilities = &mut mem::zeroed() as *mut ext::RawVkSurfaceCapabilities2;
             
@@ -821,7 +802,6 @@ impl VkPhysicalDevice {
                 let fn_table = self._fn_table;
                 VkSetup::vk_setup(&mut surface_capabilities, fn_table);
             }
-            ext::RawVkSurfaceCapabilities2::vk_free(raw_surface_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(surface_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_capabilities)) }
         }
     }
@@ -837,7 +817,6 @@ impl VkPhysicalDevice {
             let mut multisample_properties = new_vk_value(raw_multisample_properties);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut multisample_properties, fn_table);
-            ext::RawVkMultisampleProperties::vk_free(raw_multisample_properties.as_mut().unwrap());
             multisample_properties
         }
     }
@@ -854,7 +833,7 @@ impl VkPhysicalDevice {
             vk_result = ((&*self._fn_table).vkGetPhysicalDeviceCalibrateableTimeDomainsEXT)(self._handle, raw_time_domain_count, raw_time_domains);
             
             let time_domains = new_vk_array(*raw_time_domain_count, raw_time_domains);
-            free_ptr(raw_time_domains);
+            free(raw_time_domains as *mut u8);
             if vk_result == 0 { Ok(time_domains) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), time_domains)) }
         }
     }

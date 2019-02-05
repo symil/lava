@@ -26,26 +26,35 @@ pub struct VkShaderModuleCreateInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkShaderModuleCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkShaderModuleCreateFlags,
     pub code_size: usize,
-    pub code: *const u8,
+    pub code: *mut u8,
 }
 
 impl<'a> VkWrappedType<RawVkShaderModuleCreateInfo> for VkShaderModuleCreateInfo<'a> {
     fn vk_to_raw(src: &VkShaderModuleCreateInfo, dst: &mut RawVkShaderModuleCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ShaderModuleCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.code_size = src.code.len();
-        dst.code = src.code.as_ptr();
+        dst.code = get_vec_ptr(src.code);
+    }
+}
+
+impl<'a> VkRawType<VkShaderModuleCreateInfo<'a>> for RawVkShaderModuleCreateInfo {
+    fn vk_to_wrapped(src: &RawVkShaderModuleCreateInfo) -> VkShaderModuleCreateInfo<'a> {
+        VkShaderModuleCreateInfo {
+            flags: RawVkShaderModuleCreateFlags::vk_to_wrapped(&src.flags),
+            code: &[],
+        }
     }
 }
 
 impl Default for VkShaderModuleCreateInfo<'static> {
     fn default() -> VkShaderModuleCreateInfo<'static> {
         VkShaderModuleCreateInfo {
-            flags: VkShaderModuleCreateFlags::default(),
+            flags: Default::default(),
             code: &[],
         }
     }
@@ -58,7 +67,7 @@ impl<'a> VkSetup for VkShaderModuleCreateInfo<'a> {
 }
 
 impl VkFree for RawVkShaderModuleCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -27,7 +27,7 @@ pub struct VkDebugMarkerObjectNameInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugMarkerObjectNameInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_type: RawVkDebugReportObjectType,
     pub object: u64,
     pub object_name: *mut c_char,
@@ -36,17 +36,27 @@ pub struct RawVkDebugMarkerObjectNameInfo {
 impl<'a> VkWrappedType<RawVkDebugMarkerObjectNameInfo> for VkDebugMarkerObjectNameInfo<'a> {
     fn vk_to_raw(src: &VkDebugMarkerObjectNameInfo, dst: &mut RawVkDebugMarkerObjectNameInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugMarkerObjectNameInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.object_type = vk_to_raw_value(&src.object_type);
         dst.object = vk_to_raw_value(&src.object);
         dst.object_name = new_ptr_string(src.object_name);
     }
 }
 
+impl<'a> VkRawType<VkDebugMarkerObjectNameInfo<'a>> for RawVkDebugMarkerObjectNameInfo {
+    fn vk_to_wrapped(src: &RawVkDebugMarkerObjectNameInfo) -> VkDebugMarkerObjectNameInfo<'a> {
+        VkDebugMarkerObjectNameInfo {
+            object_type: RawVkDebugReportObjectType::vk_to_wrapped(&src.object_type),
+            object: u64::vk_to_wrapped(&src.object),
+            object_name: new_string_ref(src.object_name),
+        }
+    }
+}
+
 impl Default for VkDebugMarkerObjectNameInfo<'static> {
     fn default() -> VkDebugMarkerObjectNameInfo<'static> {
         VkDebugMarkerObjectNameInfo {
-            object_type: VkDebugReportObjectType::default(),
+            object_type: Default::default(),
             object: 0,
             object_name: "",
         }
@@ -60,7 +70,7 @@ impl<'a> VkSetup for VkDebugMarkerObjectNameInfo<'a> {
 }
 
 impl VkFree for RawVkDebugMarkerObjectNameInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.object_name);
     }
 }

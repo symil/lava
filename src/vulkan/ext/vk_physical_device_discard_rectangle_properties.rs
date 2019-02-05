@@ -24,14 +24,14 @@ pub struct VkPhysicalDeviceDiscardRectangleProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceDiscardRectangleProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub max_discard_rectangles: u32,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceDiscardRectangleProperties> for VkPhysicalDeviceDiscardRectangleProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceDiscardRectangleProperties, dst: &mut RawVkPhysicalDeviceDiscardRectangleProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceDiscardRectanglePropertiesExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.max_discard_rectangles = vk_to_raw_value(&src.max_discard_rectangles);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkPhysicalDeviceDiscardRectangleProperties {
 }
 
 impl VkFree for RawVkPhysicalDeviceDiscardRectangleProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

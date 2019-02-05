@@ -19,25 +19,12 @@ use vulkan::vk::{VkSparseImageMemoryBindInfo,RawVkSparseImageMemoryBindInfo};
 
 /// Wrapper for [VkBindSparseInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindSparseInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>
-    where
-        'b: 'a,
-        'd: 'c,
-        'e: 'c,
-        'f: 'e,
-        'h: 'g,
-        'i: 'g,
-        'j: 'i,
-        'l: 'k,
-        'm: 'k,
-        'n: 'm,
-        'p: 'o,
-{
-    pub wait_semaphores: &'a [&'b VkSemaphore],
-    pub buffer_binds: &'c [VkSparseBufferMemoryBindInfo<'d, 'e, 'f>],
-    pub image_opaque_binds: &'g [VkSparseImageOpaqueMemoryBindInfo<'h, 'i, 'j>],
-    pub image_binds: &'k [VkSparseImageMemoryBindInfo<'l, 'm, 'n>],
-    pub signal_semaphores: &'o [&'p VkSemaphore],
+pub struct VkBindSparseInfo {
+    pub wait_semaphores: Vec<VkSemaphore>,
+    pub buffer_binds: Vec<VkSparseBufferMemoryBindInfo>,
+    pub image_opaque_binds: Vec<VkSparseImageOpaqueMemoryBindInfo>,
+    pub image_binds: Vec<VkSparseImageMemoryBindInfo>,
+    pub signal_semaphores: Vec<VkSemaphore>,
 }
 
 #[doc(hidden)]
@@ -45,7 +32,7 @@ pub struct VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindSparseInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub wait_semaphore_count: u32,
     pub wait_semaphores: *mut RawVkSemaphore,
     pub buffer_bind_count: u32,
@@ -58,69 +45,55 @@ pub struct RawVkBindSparseInfo {
     pub signal_semaphores: *mut RawVkSemaphore,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p> VkWrappedType<RawVkBindSparseInfo> for VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>
-    where
-        'b: 'a,
-        'd: 'c,
-        'e: 'c,
-        'f: 'e,
-        'h: 'g,
-        'i: 'g,
-        'j: 'i,
-        'l: 'k,
-        'm: 'k,
-        'n: 'm,
-        'p: 'o,
-{
+impl VkWrappedType<RawVkBindSparseInfo> for VkBindSparseInfo {
     fn vk_to_raw(src: &VkBindSparseInfo, dst: &mut RawVkBindSparseInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindSparseInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.wait_semaphore_count = src.wait_semaphores.len() as u32;
-        dst.wait_semaphores = new_ptr_vk_array_from_ref(src.wait_semaphores);
+        dst.wait_semaphores = new_ptr_vk_array(&src.wait_semaphores);
         dst.buffer_bind_count = src.buffer_binds.len() as u32;
-        dst.buffer_binds = new_ptr_vk_array(src.buffer_binds);
+        dst.buffer_binds = new_ptr_vk_array(&src.buffer_binds);
         dst.image_opaque_bind_count = src.image_opaque_binds.len() as u32;
-        dst.image_opaque_binds = new_ptr_vk_array(src.image_opaque_binds);
+        dst.image_opaque_binds = new_ptr_vk_array(&src.image_opaque_binds);
         dst.image_bind_count = src.image_binds.len() as u32;
-        dst.image_binds = new_ptr_vk_array(src.image_binds);
+        dst.image_binds = new_ptr_vk_array(&src.image_binds);
         dst.signal_semaphore_count = src.signal_semaphores.len() as u32;
-        dst.signal_semaphores = new_ptr_vk_array_from_ref(src.signal_semaphores);
+        dst.signal_semaphores = new_ptr_vk_array(&src.signal_semaphores);
     }
 }
 
-impl Default for VkBindSparseInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkBindSparseInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl VkRawType<VkBindSparseInfo> for RawVkBindSparseInfo {
+    fn vk_to_wrapped(src: &RawVkBindSparseInfo) -> VkBindSparseInfo {
         VkBindSparseInfo {
-            wait_semaphores: &[],
-            buffer_binds: &[],
-            image_opaque_binds: &[],
-            image_binds: &[],
-            signal_semaphores: &[],
+            wait_semaphores: new_vk_array(src.wait_semaphore_count, src.wait_semaphores),
+            buffer_binds: new_vk_array(src.buffer_bind_count, src.buffer_binds),
+            image_opaque_binds: new_vk_array(src.image_opaque_bind_count, src.image_opaque_binds),
+            image_binds: new_vk_array(src.image_bind_count, src.image_binds),
+            signal_semaphores: new_vk_array(src.signal_semaphore_count, src.signal_semaphores),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p> VkSetup for VkBindSparseInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm, 'n, 'o, 'p>
-    where
-        'b: 'a,
-        'd: 'c,
-        'e: 'c,
-        'f: 'e,
-        'h: 'g,
-        'i: 'g,
-        'j: 'i,
-        'l: 'k,
-        'm: 'k,
-        'n: 'm,
-        'p: 'o,
-{
+impl Default for VkBindSparseInfo {
+    fn default() -> VkBindSparseInfo {
+        VkBindSparseInfo {
+            wait_semaphores: Vec::new(),
+            buffer_binds: Vec::new(),
+            image_opaque_binds: Vec::new(),
+            image_binds: Vec::new(),
+            signal_semaphores: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkBindSparseInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkBindSparseInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.wait_semaphores);
         free_vk_ptr_array(self.buffer_bind_count as usize, self.buffer_binds);
         free_vk_ptr_array(self.image_opaque_bind_count as usize, self.image_opaque_binds);

@@ -25,14 +25,14 @@ pub struct VkCalibratedTimestampInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCalibratedTimestampInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub time_domain: RawVkTimeDomain,
 }
 
 impl VkWrappedType<RawVkCalibratedTimestampInfo> for VkCalibratedTimestampInfo {
     fn vk_to_raw(src: &VkCalibratedTimestampInfo, dst: &mut RawVkCalibratedTimestampInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CalibratedTimestampInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.time_domain = vk_to_raw_value(&src.time_domain);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkCalibratedTimestampInfo> for RawVkCalibratedTimestampInfo {
 impl Default for VkCalibratedTimestampInfo {
     fn default() -> VkCalibratedTimestampInfo {
         VkCalibratedTimestampInfo {
-            time_domain: VkTimeDomain::default(),
+            time_domain: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkCalibratedTimestampInfo {
 }
 
 impl VkFree for RawVkCalibratedTimestampInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

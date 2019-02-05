@@ -17,9 +17,9 @@ use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 
 /// Wrapper for [VkBindImageMemoryInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindImageMemoryInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkBindImageMemoryInfo<'a, 'b> {
-    pub image: &'a VkImage,
-    pub memory: &'b VkDeviceMemory,
+pub struct VkBindImageMemoryInfo {
+    pub image: VkImage,
+    pub memory: VkDeviceMemory,
     pub memory_offset: usize,
 }
 
@@ -28,40 +28,51 @@ pub struct VkBindImageMemoryInfo<'a, 'b> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemoryInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub image: RawVkImage,
     pub memory: RawVkDeviceMemory,
     pub memory_offset: u64,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkBindImageMemoryInfo> for VkBindImageMemoryInfo<'a, 'b> {
+impl VkWrappedType<RawVkBindImageMemoryInfo> for VkBindImageMemoryInfo {
     fn vk_to_raw(src: &VkBindImageMemoryInfo, dst: &mut RawVkBindImageMemoryInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindImageMemoryInfo);
-        dst.next = ptr::null();
-        dst.image = vk_to_raw_value(src.image);
-        dst.memory = vk_to_raw_value(src.memory);
+        dst.next = ptr::null_mut();
+        dst.image = vk_to_raw_value(&src.image);
+        dst.memory = vk_to_raw_value(&src.memory);
         dst.memory_offset = vk_to_raw_value(&src.memory_offset);
     }
 }
 
-impl Default for VkBindImageMemoryInfo<'static, 'static> {
-    fn default() -> VkBindImageMemoryInfo<'static, 'static> {
+impl VkRawType<VkBindImageMemoryInfo> for RawVkBindImageMemoryInfo {
+    fn vk_to_wrapped(src: &RawVkBindImageMemoryInfo) -> VkBindImageMemoryInfo {
         VkBindImageMemoryInfo {
-            image: vk_null_ref(),
-            memory: vk_null_ref(),
+            image: RawVkImage::vk_to_wrapped(&src.image),
+            memory: RawVkDeviceMemory::vk_to_wrapped(&src.memory),
+            memory_offset: u64::vk_to_wrapped(&src.memory_offset),
+        }
+    }
+}
+
+impl Default for VkBindImageMemoryInfo {
+    fn default() -> VkBindImageMemoryInfo {
+        VkBindImageMemoryInfo {
+            image: Default::default(),
+            memory: Default::default(),
             memory_offset: 0,
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkBindImageMemoryInfo<'a, 'b> {
+impl VkSetup for VkBindImageMemoryInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.image, fn_table);
+        VkSetup::vk_setup(&mut self.memory, fn_table);
     }
 }
 
 impl VkFree for RawVkBindImageMemoryInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

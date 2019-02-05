@@ -25,14 +25,14 @@ pub struct VkPhysicalDeviceMemoryProperties2 {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceMemoryProperties2 {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub memory_properties: RawVkPhysicalDeviceMemoryProperties,
 }
 
 impl VkWrappedType<RawVkPhysicalDeviceMemoryProperties2> for VkPhysicalDeviceMemoryProperties2 {
     fn vk_to_raw(src: &VkPhysicalDeviceMemoryProperties2, dst: &mut RawVkPhysicalDeviceMemoryProperties2) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryProperties2);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.memory_properties = vk_to_raw_value(&src.memory_properties);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkPhysicalDeviceMemoryProperties2> for RawVkPhysicalDeviceMemoryP
 impl Default for VkPhysicalDeviceMemoryProperties2 {
     fn default() -> VkPhysicalDeviceMemoryProperties2 {
         VkPhysicalDeviceMemoryProperties2 {
-            memory_properties: VkPhysicalDeviceMemoryProperties::default(),
+            memory_properties: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkPhysicalDeviceMemoryProperties2 {
 }
 
 impl VkFree for RawVkPhysicalDeviceMemoryProperties2 {
-    fn vk_free(&mut self) {
-        RawVkPhysicalDeviceMemoryProperties::vk_free(&mut self.memory_properties);
+    fn vk_free(&self) {
+        
     }
 }

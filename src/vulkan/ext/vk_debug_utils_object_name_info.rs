@@ -27,7 +27,7 @@ pub struct VkDebugUtilsObjectNameInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDebugUtilsObjectNameInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_type: RawVkObjectType,
     pub object_handle: u64,
     pub object_name: *mut c_char,
@@ -36,17 +36,27 @@ pub struct RawVkDebugUtilsObjectNameInfo {
 impl<'a> VkWrappedType<RawVkDebugUtilsObjectNameInfo> for VkDebugUtilsObjectNameInfo<'a> {
     fn vk_to_raw(src: &VkDebugUtilsObjectNameInfo, dst: &mut RawVkDebugUtilsObjectNameInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsObjectNameInfoExt);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.object_type = vk_to_raw_value(&src.object_type);
         dst.object_handle = vk_to_raw_value(&src.object_handle);
-        dst.object_name = new_ptr_string_checked(src.object_name);
+        dst.object_name = new_ptr_string_checked(&src.object_name);
+    }
+}
+
+impl<'a> VkRawType<VkDebugUtilsObjectNameInfo<'a>> for RawVkDebugUtilsObjectNameInfo {
+    fn vk_to_wrapped(src: &RawVkDebugUtilsObjectNameInfo) -> VkDebugUtilsObjectNameInfo<'a> {
+        VkDebugUtilsObjectNameInfo {
+            object_type: RawVkObjectType::vk_to_wrapped(&src.object_type),
+            object_handle: u64::vk_to_wrapped(&src.object_handle),
+            object_name: new_string_ref_checked(src.object_name),
+        }
     }
 }
 
 impl Default for VkDebugUtilsObjectNameInfo<'static> {
     fn default() -> VkDebugUtilsObjectNameInfo<'static> {
         VkDebugUtilsObjectNameInfo {
-            object_type: VkObjectType::default(),
+            object_type: Default::default(),
             object_handle: 0,
             object_name: None,
         }
@@ -60,7 +70,7 @@ impl<'a> VkSetup for VkDebugUtilsObjectNameInfo<'a> {
 }
 
 impl VkFree for RawVkDebugUtilsObjectNameInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.object_name);
     }
 }

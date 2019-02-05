@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkValidationCache = u64;
 
 /// Wrapper for [VkValidationCacheEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationCacheEXT.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkValidationCache {
     _handle: RawVkValidationCache,
     _fn_table: *mut VkFunctionTable
@@ -74,10 +74,10 @@ impl VkValidationCache {
     }
     
     /// Wrapper for [vkMergeValidationCachesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMergeValidationCachesEXT.html).
-    pub fn merge(&self, src_caches: &[&ext::VkValidationCache]) -> Result<(), VkResult> {
+    pub fn merge(&self, src_caches: Vec<ext::VkValidationCache>) -> Result<(), VkResult> {
         unsafe {
             let raw_src_cache_count = src_caches.len() as u32;
-            let raw_src_caches = new_ptr_vk_array_from_ref(src_caches);
+            let raw_src_caches = new_ptr_vk_array(&src_caches);
             let vk_result = ((&*self._fn_table).vkMergeValidationCachesEXT)((*self._fn_table).device, self._handle, raw_src_cache_count, raw_src_caches);
             free_ptr(raw_src_caches);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }

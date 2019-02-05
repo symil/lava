@@ -17,8 +17,8 @@ use vulkan::vk::{VkExternalSemaphoreHandleTypeFlags,RawVkExternalSemaphoreHandle
 
 /// Wrapper for [VkSemaphoreGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreGetFdInfoKHR.html).
 #[derive(Debug, Clone)]
-pub struct VkSemaphoreGetFdInfo<'a> {
-    pub semaphore: &'a VkSemaphore,
+pub struct VkSemaphoreGetFdInfo {
+    pub semaphore: VkSemaphore,
     pub handle_type: VkExternalSemaphoreHandleTypeFlags,
 }
 
@@ -27,37 +27,46 @@ pub struct VkSemaphoreGetFdInfo<'a> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkSemaphoreGetFdInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub semaphore: RawVkSemaphore,
     pub handle_type: RawVkExternalSemaphoreHandleTypeFlags,
 }
 
-impl<'a> VkWrappedType<RawVkSemaphoreGetFdInfo> for VkSemaphoreGetFdInfo<'a> {
+impl VkWrappedType<RawVkSemaphoreGetFdInfo> for VkSemaphoreGetFdInfo {
     fn vk_to_raw(src: &VkSemaphoreGetFdInfo, dst: &mut RawVkSemaphoreGetFdInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::SemaphoreGetFdInfoKhr);
-        dst.next = ptr::null();
-        dst.semaphore = vk_to_raw_value(src.semaphore);
+        dst.next = ptr::null_mut();
+        dst.semaphore = vk_to_raw_value(&src.semaphore);
         dst.handle_type = vk_to_raw_value(&src.handle_type);
     }
 }
 
-impl Default for VkSemaphoreGetFdInfo<'static> {
-    fn default() -> VkSemaphoreGetFdInfo<'static> {
+impl VkRawType<VkSemaphoreGetFdInfo> for RawVkSemaphoreGetFdInfo {
+    fn vk_to_wrapped(src: &RawVkSemaphoreGetFdInfo) -> VkSemaphoreGetFdInfo {
         VkSemaphoreGetFdInfo {
-            semaphore: vk_null_ref(),
-            handle_type: VkExternalSemaphoreHandleTypeFlags::default(),
+            semaphore: RawVkSemaphore::vk_to_wrapped(&src.semaphore),
+            handle_type: RawVkExternalSemaphoreHandleTypeFlags::vk_to_wrapped(&src.handle_type),
         }
     }
 }
 
-impl<'a> VkSetup for VkSemaphoreGetFdInfo<'a> {
+impl Default for VkSemaphoreGetFdInfo {
+    fn default() -> VkSemaphoreGetFdInfo {
+        VkSemaphoreGetFdInfo {
+            semaphore: Default::default(),
+            handle_type: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkSemaphoreGetFdInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.semaphore, fn_table);
     }
 }
 
 impl VkFree for RawVkSemaphoreGetFdInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

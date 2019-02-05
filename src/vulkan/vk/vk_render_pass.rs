@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkRenderPass = u64;
 
 /// Wrapper for [VkRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPass.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkRenderPass {
     _handle: RawVkRenderPass,
     _fn_table: *mut VkFunctionTable
@@ -83,7 +83,6 @@ impl VkRenderPass {
             let mut granularity = new_vk_value(raw_granularity);
             let fn_table = self._fn_table;
             VkSetup::vk_setup(&mut granularity, fn_table);
-            RawVkExtent2D::vk_free(raw_granularity.as_mut().unwrap());
             granularity
         }
     }

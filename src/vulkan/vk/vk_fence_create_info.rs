@@ -25,14 +25,14 @@ pub struct VkFenceCreateInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkFenceCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkFenceCreateFlags,
 }
 
 impl VkWrappedType<RawVkFenceCreateInfo> for VkFenceCreateInfo {
     fn vk_to_raw(src: &VkFenceCreateInfo, dst: &mut RawVkFenceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::FenceCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
     }
 }
@@ -48,7 +48,7 @@ impl VkRawType<VkFenceCreateInfo> for RawVkFenceCreateInfo {
 impl Default for VkFenceCreateInfo {
     fn default() -> VkFenceCreateInfo {
         VkFenceCreateInfo {
-            flags: VkFenceCreateFlags::default(),
+            flags: Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl VkSetup for VkFenceCreateInfo {
 }
 
 impl VkFree for RawVkFenceCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

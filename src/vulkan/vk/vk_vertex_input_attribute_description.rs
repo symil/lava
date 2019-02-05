@@ -57,7 +57,7 @@ impl Default for VkVertexInputAttributeDescription {
         VkVertexInputAttributeDescription {
             location: 0,
             binding: 0,
-            format: VkFormat::default(),
+            format: Default::default(),
             offset: 0,
         }
     }
@@ -70,7 +70,7 @@ impl VkSetup for VkVertexInputAttributeDescription {
 }
 
 impl VkFree for RawVkVertexInputAttributeDescription {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

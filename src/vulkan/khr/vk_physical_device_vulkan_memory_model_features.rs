@@ -26,7 +26,7 @@ pub struct VkPhysicalDeviceVulkanMemoryModelFeatures {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPhysicalDeviceVulkanMemoryModelFeatures {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub vulkan_memory_model: u32,
     pub vulkan_memory_model_device_scope: u32,
     pub vulkan_memory_model_availability_visibility_chains: u32,
@@ -35,7 +35,7 @@ pub struct RawVkPhysicalDeviceVulkanMemoryModelFeatures {
 impl VkWrappedType<RawVkPhysicalDeviceVulkanMemoryModelFeatures> for VkPhysicalDeviceVulkanMemoryModelFeatures {
     fn vk_to_raw(src: &VkPhysicalDeviceVulkanMemoryModelFeatures, dst: &mut RawVkPhysicalDeviceVulkanMemoryModelFeatures) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceVulkanMemoryModelFeaturesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.vulkan_memory_model = vk_to_raw_value(&src.vulkan_memory_model);
         dst.vulkan_memory_model_device_scope = vk_to_raw_value(&src.vulkan_memory_model_device_scope);
         dst.vulkan_memory_model_availability_visibility_chains = vk_to_raw_value(&src.vulkan_memory_model_availability_visibility_chains);
@@ -69,7 +69,7 @@ impl VkSetup for VkPhysicalDeviceVulkanMemoryModelFeatures {
 }
 
 impl VkFree for RawVkPhysicalDeviceVulkanMemoryModelFeatures {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

@@ -17,10 +17,10 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkObjectTableVertexBufferEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableVertexBufferEntryNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkObjectTableVertexBufferEntry<'a> {
+pub struct VkObjectTableVertexBufferEntry {
     pub type_: VkObjectEntryType,
     pub flags: VkObjectEntryUsageFlags,
-    pub buffer: &'a VkBuffer,
+    pub buffer: VkBuffer,
 }
 
 #[doc(hidden)]
@@ -32,32 +32,42 @@ pub struct RawVkObjectTableVertexBufferEntry {
     pub buffer: RawVkBuffer,
 }
 
-impl<'a> VkWrappedType<RawVkObjectTableVertexBufferEntry> for VkObjectTableVertexBufferEntry<'a> {
+impl VkWrappedType<RawVkObjectTableVertexBufferEntry> for VkObjectTableVertexBufferEntry {
     fn vk_to_raw(src: &VkObjectTableVertexBufferEntry, dst: &mut RawVkObjectTableVertexBufferEntry) {
         dst.type_ = vk_to_raw_value(&src.type_);
         dst.flags = vk_to_raw_value(&src.flags);
-        dst.buffer = vk_to_raw_value(src.buffer);
+        dst.buffer = vk_to_raw_value(&src.buffer);
     }
 }
 
-impl Default for VkObjectTableVertexBufferEntry<'static> {
-    fn default() -> VkObjectTableVertexBufferEntry<'static> {
+impl VkRawType<VkObjectTableVertexBufferEntry> for RawVkObjectTableVertexBufferEntry {
+    fn vk_to_wrapped(src: &RawVkObjectTableVertexBufferEntry) -> VkObjectTableVertexBufferEntry {
         VkObjectTableVertexBufferEntry {
-            type_: VkObjectEntryType::default(),
-            flags: VkObjectEntryUsageFlags::default(),
-            buffer: vk_null_ref(),
+            type_: RawVkObjectEntryType::vk_to_wrapped(&src.type_),
+            flags: RawVkObjectEntryUsageFlags::vk_to_wrapped(&src.flags),
+            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
         }
     }
 }
 
-impl<'a> VkSetup for VkObjectTableVertexBufferEntry<'a> {
+impl Default for VkObjectTableVertexBufferEntry {
+    fn default() -> VkObjectTableVertexBufferEntry {
+        VkObjectTableVertexBufferEntry {
+            type_: Default::default(),
+            flags: Default::default(),
+            buffer: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkObjectTableVertexBufferEntry {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.buffer, fn_table);
     }
 }
 
 impl VkFree for RawVkObjectTableVertexBufferEntry {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

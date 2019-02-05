@@ -25,7 +25,7 @@ pub struct VkMemoryDedicatedRequirements {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkMemoryDedicatedRequirements {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub prefers_dedicated_allocation: u32,
     pub requires_dedicated_allocation: u32,
 }
@@ -33,7 +33,7 @@ pub struct RawVkMemoryDedicatedRequirements {
 impl VkWrappedType<RawVkMemoryDedicatedRequirements> for VkMemoryDedicatedRequirements {
     fn vk_to_raw(src: &VkMemoryDedicatedRequirements, dst: &mut RawVkMemoryDedicatedRequirements) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryDedicatedRequirements);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.prefers_dedicated_allocation = vk_to_raw_value(&src.prefers_dedicated_allocation);
         dst.requires_dedicated_allocation = vk_to_raw_value(&src.requires_dedicated_allocation);
     }
@@ -64,7 +64,7 @@ impl VkSetup for VkMemoryDedicatedRequirements {
 }
 
 impl VkFree for RawVkMemoryDedicatedRequirements {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

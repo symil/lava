@@ -16,9 +16,9 @@ use vulkan::vk::{VkRect2D,RawVkRect2D};
 
 /// Wrapper for [VkBindImageMemoryDeviceGroupInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindImageMemoryDeviceGroupInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkBindImageMemoryDeviceGroupInfo<'a, 'b> {
-    pub device_indices: &'a [usize],
-    pub split_instance_bind_regions: &'b [VkRect2D],
+pub struct VkBindImageMemoryDeviceGroupInfo {
+    pub device_indices: Vec<usize>,
+    pub split_instance_bind_regions: Vec<VkRect2D>,
 }
 
 #[doc(hidden)]
@@ -26,41 +26,50 @@ pub struct VkBindImageMemoryDeviceGroupInfo<'a, 'b> {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkBindImageMemoryDeviceGroupInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub device_index_count: u32,
     pub device_indices: *mut u32,
     pub split_instance_bind_region_count: u32,
     pub split_instance_bind_regions: *mut RawVkRect2D,
 }
 
-impl<'a, 'b> VkWrappedType<RawVkBindImageMemoryDeviceGroupInfo> for VkBindImageMemoryDeviceGroupInfo<'a, 'b> {
+impl VkWrappedType<RawVkBindImageMemoryDeviceGroupInfo> for VkBindImageMemoryDeviceGroupInfo {
     fn vk_to_raw(src: &VkBindImageMemoryDeviceGroupInfo, dst: &mut RawVkBindImageMemoryDeviceGroupInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BindImageMemoryDeviceGroupInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.device_index_count = src.device_indices.len() as u32;
-        dst.device_indices = new_ptr_vk_array(src.device_indices);
+        dst.device_indices = new_ptr_vk_array(&src.device_indices);
         dst.split_instance_bind_region_count = src.split_instance_bind_regions.len() as u32;
-        dst.split_instance_bind_regions = new_ptr_vk_array(src.split_instance_bind_regions);
+        dst.split_instance_bind_regions = new_ptr_vk_array(&src.split_instance_bind_regions);
     }
 }
 
-impl Default for VkBindImageMemoryDeviceGroupInfo<'static, 'static> {
-    fn default() -> VkBindImageMemoryDeviceGroupInfo<'static, 'static> {
+impl VkRawType<VkBindImageMemoryDeviceGroupInfo> for RawVkBindImageMemoryDeviceGroupInfo {
+    fn vk_to_wrapped(src: &RawVkBindImageMemoryDeviceGroupInfo) -> VkBindImageMemoryDeviceGroupInfo {
         VkBindImageMemoryDeviceGroupInfo {
-            device_indices: &[],
-            split_instance_bind_regions: &[],
+            device_indices: new_vk_array(src.device_index_count, src.device_indices),
+            split_instance_bind_regions: new_vk_array(src.split_instance_bind_region_count, src.split_instance_bind_regions),
         }
     }
 }
 
-impl<'a, 'b> VkSetup for VkBindImageMemoryDeviceGroupInfo<'a, 'b> {
+impl Default for VkBindImageMemoryDeviceGroupInfo {
+    fn default() -> VkBindImageMemoryDeviceGroupInfo {
+        VkBindImageMemoryDeviceGroupInfo {
+            device_indices: Vec::new(),
+            split_instance_bind_regions: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkBindImageMemoryDeviceGroupInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkBindImageMemoryDeviceGroupInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.device_indices);
         free_vk_ptr_array(self.split_instance_bind_region_count as usize, self.split_instance_bind_regions);
     }

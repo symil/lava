@@ -16,9 +16,9 @@ use vulkan::nv::{VkGeometryAABB,RawVkGeometryAABB};
 
 /// Wrapper for [VkGeometryDataNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryDataNV.html).
 #[derive(Debug, Clone)]
-pub struct VkGeometryData<'a, 'b, 'c, 'd> {
-    pub triangles: VkGeometryTriangles<'a, 'b, 'c>,
-    pub aabbs: VkGeometryAABB<'d>,
+pub struct VkGeometryData {
+    pub triangles: VkGeometryTriangles,
+    pub aabbs: VkGeometryAABB,
 }
 
 #[doc(hidden)]
@@ -29,31 +29,40 @@ pub struct RawVkGeometryData {
     pub aabbs: RawVkGeometryAABB,
 }
 
-impl<'a, 'b, 'c, 'd> VkWrappedType<RawVkGeometryData> for VkGeometryData<'a, 'b, 'c, 'd> {
+impl VkWrappedType<RawVkGeometryData> for VkGeometryData {
     fn vk_to_raw(src: &VkGeometryData, dst: &mut RawVkGeometryData) {
         dst.triangles = vk_to_raw_value(&src.triangles);
         dst.aabbs = vk_to_raw_value(&src.aabbs);
     }
 }
 
-impl Default for VkGeometryData<'static, 'static, 'static, 'static> {
-    fn default() -> VkGeometryData<'static, 'static, 'static, 'static> {
+impl VkRawType<VkGeometryData> for RawVkGeometryData {
+    fn vk_to_wrapped(src: &RawVkGeometryData) -> VkGeometryData {
         VkGeometryData {
-            triangles: VkGeometryTriangles::default(),
-            aabbs: VkGeometryAABB::default(),
+            triangles: RawVkGeometryTriangles::vk_to_wrapped(&src.triangles),
+            aabbs: RawVkGeometryAABB::vk_to_wrapped(&src.aabbs),
         }
     }
 }
 
-impl<'a, 'b, 'c, 'd> VkSetup for VkGeometryData<'a, 'b, 'c, 'd> {
+impl Default for VkGeometryData {
+    fn default() -> VkGeometryData {
+        VkGeometryData {
+            triangles: Default::default(),
+            aabbs: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkGeometryData {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.triangles, fn_table);
+        VkSetup::vk_setup(&mut self.aabbs, fn_table);
     }
 }
 
 impl VkFree for RawVkGeometryData {
-    fn vk_free(&mut self) {
-        RawVkGeometryTriangles::vk_free(&mut self.triangles);
-        RawVkGeometryAABB::vk_free(&mut self.aabbs);
+    fn vk_free(&self) {
+        
     }
 }

@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkDebugUtilsMessenger = u64;
 
 /// Wrapper for [VkDebugUtilsMessengerEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerEXT.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkDebugUtilsMessenger {
     _handle: RawVkDebugUtilsMessenger,
     _fn_table: *mut VkFunctionTable

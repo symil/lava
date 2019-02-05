@@ -24,14 +24,14 @@ pub struct VkProtectedSubmitInfo {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkProtectedSubmitInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub protected_submit: u32,
 }
 
 impl VkWrappedType<RawVkProtectedSubmitInfo> for VkProtectedSubmitInfo {
     fn vk_to_raw(src: &VkProtectedSubmitInfo, dst: &mut RawVkProtectedSubmitInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ProtectedSubmitInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.protected_submit = vk_to_raw_value(&src.protected_submit);
     }
 }
@@ -59,7 +59,7 @@ impl VkSetup for VkProtectedSubmitInfo {
 }
 
 impl VkFree for RawVkProtectedSubmitInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

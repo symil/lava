@@ -20,18 +20,15 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 
 /// Wrapper for [VkCmdProcessCommandsInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCmdProcessCommandsInfoNVX.html).
 #[derive(Debug, Clone)]
-pub struct VkCmdProcessCommandsInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'd: 'c,
-{
-    pub object_table: &'a VkObjectTable,
-    pub indirect_commands_layout: &'b VkIndirectCommandsLayout,
-    pub indirect_commands_tokens: &'c [VkIndirectCommandsToken<'d>],
+pub struct VkCmdProcessCommandsInfo {
+    pub object_table: VkObjectTable,
+    pub indirect_commands_layout: VkIndirectCommandsLayout,
+    pub indirect_commands_tokens: Vec<VkIndirectCommandsToken>,
     pub max_sequences_count: usize,
-    pub target_command_buffer: Option<&'e VkCommandBuffer>,
-    pub sequences_count_buffer: Option<&'f VkBuffer>,
+    pub target_command_buffer: Option<VkCommandBuffer>,
+    pub sequences_count_buffer: Option<VkBuffer>,
     pub sequences_count_offset: usize,
-    pub sequences_index_buffer: Option<&'g VkBuffer>,
+    pub sequences_index_buffer: Option<VkBuffer>,
     pub sequences_index_offset: usize,
 }
 
@@ -40,7 +37,7 @@ pub struct VkCmdProcessCommandsInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkCmdProcessCommandsInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub object_table: RawVkObjectTable,
     pub indirect_commands_layout: RawVkIndirectCommandsLayout,
     pub indirect_commands_token_count: u32,
@@ -53,32 +50,45 @@ pub struct RawVkCmdProcessCommandsInfo {
     pub sequences_index_offset: u64,
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkWrappedType<RawVkCmdProcessCommandsInfo> for VkCmdProcessCommandsInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'd: 'c,
-{
+impl VkWrappedType<RawVkCmdProcessCommandsInfo> for VkCmdProcessCommandsInfo {
     fn vk_to_raw(src: &VkCmdProcessCommandsInfo, dst: &mut RawVkCmdProcessCommandsInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::CmdProcessCommandsInfoNvx);
-        dst.next = ptr::null();
-        dst.object_table = vk_to_raw_value(src.object_table);
-        dst.indirect_commands_layout = vk_to_raw_value(src.indirect_commands_layout);
+        dst.next = ptr::null_mut();
+        dst.object_table = vk_to_raw_value(&src.object_table);
+        dst.indirect_commands_layout = vk_to_raw_value(&src.indirect_commands_layout);
         dst.indirect_commands_token_count = src.indirect_commands_tokens.len() as u32;
-        dst.indirect_commands_tokens = new_ptr_vk_array(src.indirect_commands_tokens);
+        dst.indirect_commands_tokens = new_ptr_vk_array(&src.indirect_commands_tokens);
         dst.max_sequences_count = vk_to_raw_value(&src.max_sequences_count);
-        dst.target_command_buffer = if src.target_command_buffer.is_some() { vk_to_raw_value(src.target_command_buffer.unwrap()) } else { 0 };
-        dst.sequences_count_buffer = if src.sequences_count_buffer.is_some() { vk_to_raw_value(src.sequences_count_buffer.unwrap()) } else { 0 };
+        dst.target_command_buffer = vk_to_raw_value_checked(&src.target_command_buffer);
+        dst.sequences_count_buffer = vk_to_raw_value_checked(&src.sequences_count_buffer);
         dst.sequences_count_offset = vk_to_raw_value(&src.sequences_count_offset);
-        dst.sequences_index_buffer = if src.sequences_index_buffer.is_some() { vk_to_raw_value(src.sequences_index_buffer.unwrap()) } else { 0 };
+        dst.sequences_index_buffer = vk_to_raw_value_checked(&src.sequences_index_buffer);
         dst.sequences_index_offset = vk_to_raw_value(&src.sequences_index_offset);
     }
 }
 
-impl Default for VkCmdProcessCommandsInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static> {
-    fn default() -> VkCmdProcessCommandsInfo<'static, 'static, 'static, 'static, 'static, 'static, 'static> {
+impl VkRawType<VkCmdProcessCommandsInfo> for RawVkCmdProcessCommandsInfo {
+    fn vk_to_wrapped(src: &RawVkCmdProcessCommandsInfo) -> VkCmdProcessCommandsInfo {
         VkCmdProcessCommandsInfo {
-            object_table: vk_null_ref(),
-            indirect_commands_layout: vk_null_ref(),
-            indirect_commands_tokens: &[],
+            object_table: RawVkObjectTable::vk_to_wrapped(&src.object_table),
+            indirect_commands_layout: RawVkIndirectCommandsLayout::vk_to_wrapped(&src.indirect_commands_layout),
+            indirect_commands_tokens: new_vk_array(src.indirect_commands_token_count, src.indirect_commands_tokens),
+            max_sequences_count: u32::vk_to_wrapped(&src.max_sequences_count),
+            target_command_buffer: Some(RawVkCommandBuffer::vk_to_wrapped(&src.target_command_buffer)),
+            sequences_count_buffer: Some(RawVkBuffer::vk_to_wrapped(&src.sequences_count_buffer)),
+            sequences_count_offset: u64::vk_to_wrapped(&src.sequences_count_offset),
+            sequences_index_buffer: Some(RawVkBuffer::vk_to_wrapped(&src.sequences_index_buffer)),
+            sequences_index_offset: u64::vk_to_wrapped(&src.sequences_index_offset),
+        }
+    }
+}
+
+impl Default for VkCmdProcessCommandsInfo {
+    fn default() -> VkCmdProcessCommandsInfo {
+        VkCmdProcessCommandsInfo {
+            object_table: Default::default(),
+            indirect_commands_layout: Default::default(),
+            indirect_commands_tokens: Vec::new(),
             max_sequences_count: 0,
             target_command_buffer: None,
             sequences_count_buffer: None,
@@ -89,17 +99,15 @@ impl Default for VkCmdProcessCommandsInfo<'static, 'static, 'static, 'static, 's
     }
 }
 
-impl<'a, 'b, 'c, 'd, 'e, 'f, 'g> VkSetup for VkCmdProcessCommandsInfo<'a, 'b, 'c, 'd, 'e, 'f, 'g>
-    where
-        'd: 'c,
-{
+impl VkSetup for VkCmdProcessCommandsInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        
+        VkSetup::vk_setup(&mut self.object_table, fn_table);
+        VkSetup::vk_setup(&mut self.indirect_commands_layout, fn_table);
     }
 }
 
 impl VkFree for RawVkCmdProcessCommandsInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_vk_ptr_array(self.indirect_commands_token_count as usize, self.indirect_commands_tokens);
     }
 }

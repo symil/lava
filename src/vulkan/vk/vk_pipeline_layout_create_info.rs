@@ -18,13 +18,10 @@ use vulkan::vk::{VkPushConstantRange,RawVkPushConstantRange};
 
 /// Wrapper for [VkPipelineLayoutCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineLayoutCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkPipelineLayoutCreateInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-{
+pub struct VkPipelineLayoutCreateInfo {
     pub flags: VkPipelineLayoutCreateFlags,
-    pub set_layouts: &'a [&'b VkDescriptorSetLayout],
-    pub push_constant_ranges: &'c [VkPushConstantRange],
+    pub set_layouts: Vec<VkDescriptorSetLayout>,
+    pub push_constant_ranges: Vec<VkPushConstantRange>,
 }
 
 #[doc(hidden)]
@@ -32,7 +29,7 @@ pub struct VkPipelineLayoutCreateInfo<'a, 'b, 'c>
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkPipelineLayoutCreateInfo {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub flags: RawVkPipelineLayoutCreateFlags,
     pub set_layout_count: u32,
     pub set_layouts: *mut RawVkDescriptorSetLayout,
@@ -40,42 +37,46 @@ pub struct RawVkPipelineLayoutCreateInfo {
     pub push_constant_ranges: *mut RawVkPushConstantRange,
 }
 
-impl<'a, 'b, 'c> VkWrappedType<RawVkPipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-{
+impl VkWrappedType<RawVkPipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfo {
     fn vk_to_raw(src: &VkPipelineLayoutCreateInfo, dst: &mut RawVkPipelineLayoutCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PipelineLayoutCreateInfo);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.set_layout_count = src.set_layouts.len() as u32;
-        dst.set_layouts = new_ptr_vk_array_from_ref(src.set_layouts);
+        dst.set_layouts = new_ptr_vk_array(&src.set_layouts);
         dst.push_constant_range_count = src.push_constant_ranges.len() as u32;
-        dst.push_constant_ranges = new_ptr_vk_array(src.push_constant_ranges);
+        dst.push_constant_ranges = new_ptr_vk_array(&src.push_constant_ranges);
     }
 }
 
-impl Default for VkPipelineLayoutCreateInfo<'static, 'static, 'static> {
-    fn default() -> VkPipelineLayoutCreateInfo<'static, 'static, 'static> {
+impl VkRawType<VkPipelineLayoutCreateInfo> for RawVkPipelineLayoutCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineLayoutCreateInfo) -> VkPipelineLayoutCreateInfo {
         VkPipelineLayoutCreateInfo {
-            flags: VkPipelineLayoutCreateFlags::default(),
-            set_layouts: &[],
-            push_constant_ranges: &[],
+            flags: RawVkPipelineLayoutCreateFlags::vk_to_wrapped(&src.flags),
+            set_layouts: new_vk_array(src.set_layout_count, src.set_layouts),
+            push_constant_ranges: new_vk_array(src.push_constant_range_count, src.push_constant_ranges),
         }
     }
 }
 
-impl<'a, 'b, 'c> VkSetup for VkPipelineLayoutCreateInfo<'a, 'b, 'c>
-    where
-        'b: 'a,
-{
+impl Default for VkPipelineLayoutCreateInfo {
+    fn default() -> VkPipelineLayoutCreateInfo {
+        VkPipelineLayoutCreateInfo {
+            flags: Default::default(),
+            set_layouts: Vec::new(),
+            push_constant_ranges: Vec::new(),
+        }
+    }
+}
+
+impl VkSetup for VkPipelineLayoutCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
 
 impl VkFree for RawVkPipelineLayoutCreateInfo {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         free_ptr(self.set_layouts);
         free_vk_ptr_array(self.push_constant_range_count as usize, self.push_constant_ranges);
     }

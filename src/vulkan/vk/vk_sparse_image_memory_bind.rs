@@ -19,11 +19,11 @@ use vulkan::vk::{VkSparseMemoryBindFlags,RawVkSparseMemoryBindFlags};
 
 /// Wrapper for [VkSparseImageMemoryBind](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryBind.html).
 #[derive(Debug, Clone)]
-pub struct VkSparseImageMemoryBind<'a> {
+pub struct VkSparseImageMemoryBind {
     pub subresource: VkImageSubresource,
     pub offset: VkOffset3D,
     pub extent: VkExtent3D,
-    pub memory: Option<&'a VkDeviceMemory>,
+    pub memory: Option<VkDeviceMemory>,
     pub memory_offset: usize,
     pub flags: VkSparseMemoryBindFlags,
 }
@@ -40,31 +40,44 @@ pub struct RawVkSparseImageMemoryBind {
     pub flags: RawVkSparseMemoryBindFlags,
 }
 
-impl<'a> VkWrappedType<RawVkSparseImageMemoryBind> for VkSparseImageMemoryBind<'a> {
+impl VkWrappedType<RawVkSparseImageMemoryBind> for VkSparseImageMemoryBind {
     fn vk_to_raw(src: &VkSparseImageMemoryBind, dst: &mut RawVkSparseImageMemoryBind) {
         dst.subresource = vk_to_raw_value(&src.subresource);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.extent = vk_to_raw_value(&src.extent);
-        dst.memory = if src.memory.is_some() { vk_to_raw_value(src.memory.unwrap()) } else { 0 };
+        dst.memory = vk_to_raw_value_checked(&src.memory);
         dst.memory_offset = vk_to_raw_value(&src.memory_offset);
         dst.flags = vk_to_raw_value(&src.flags);
     }
 }
 
-impl Default for VkSparseImageMemoryBind<'static> {
-    fn default() -> VkSparseImageMemoryBind<'static> {
+impl VkRawType<VkSparseImageMemoryBind> for RawVkSparseImageMemoryBind {
+    fn vk_to_wrapped(src: &RawVkSparseImageMemoryBind) -> VkSparseImageMemoryBind {
         VkSparseImageMemoryBind {
-            subresource: VkImageSubresource::default(),
-            offset: VkOffset3D::default(),
-            extent: VkExtent3D::default(),
-            memory: None,
-            memory_offset: 0,
-            flags: VkSparseMemoryBindFlags::default(),
+            subresource: RawVkImageSubresource::vk_to_wrapped(&src.subresource),
+            offset: RawVkOffset3D::vk_to_wrapped(&src.offset),
+            extent: RawVkExtent3D::vk_to_wrapped(&src.extent),
+            memory: Some(RawVkDeviceMemory::vk_to_wrapped(&src.memory)),
+            memory_offset: u64::vk_to_wrapped(&src.memory_offset),
+            flags: RawVkSparseMemoryBindFlags::vk_to_wrapped(&src.flags),
         }
     }
 }
 
-impl<'a> VkSetup for VkSparseImageMemoryBind<'a> {
+impl Default for VkSparseImageMemoryBind {
+    fn default() -> VkSparseImageMemoryBind {
+        VkSparseImageMemoryBind {
+            subresource: Default::default(),
+            offset: Default::default(),
+            extent: Default::default(),
+            memory: None,
+            memory_offset: 0,
+            flags: Default::default(),
+        }
+    }
+}
+
+impl VkSetup for VkSparseImageMemoryBind {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.subresource, fn_table);
         VkSetup::vk_setup(&mut self.offset, fn_table);
@@ -73,9 +86,7 @@ impl<'a> VkSetup for VkSparseImageMemoryBind<'a> {
 }
 
 impl VkFree for RawVkSparseImageMemoryBind {
-    fn vk_free(&mut self) {
-        RawVkImageSubresource::vk_free(&mut self.subresource);
-        RawVkOffset3D::vk_free(&mut self.offset);
-        RawVkExtent3D::vk_free(&mut self.extent);
+    fn vk_free(&self) {
+        
     }
 }

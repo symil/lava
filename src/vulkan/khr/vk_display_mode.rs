@@ -17,7 +17,7 @@ use vulkan::vk::*;
 pub type RawVkDisplayMode = u64;
 
 /// Wrapper for [VkDisplayModeKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayModeKHR.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct VkDisplayMode {
     _handle: RawVkDisplayMode,
     _fn_table: *mut VkFunctionTable

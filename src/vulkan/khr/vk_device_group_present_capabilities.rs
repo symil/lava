@@ -26,7 +26,7 @@ pub struct VkDeviceGroupPresentCapabilities {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkDeviceGroupPresentCapabilities {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub present_mask: [u32; 32],
     pub modes: RawVkDeviceGroupPresentModeFlags,
 }
@@ -34,7 +34,7 @@ pub struct RawVkDeviceGroupPresentCapabilities {
 impl VkWrappedType<RawVkDeviceGroupPresentCapabilities> for VkDeviceGroupPresentCapabilities {
     fn vk_to_raw(src: &VkDeviceGroupPresentCapabilities, dst: &mut RawVkDeviceGroupPresentCapabilities) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupPresentCapabilitiesKhr);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.present_mask = unsafe { let mut dst_array : [u32; 32] = mem::uninitialized(); to_array(&src.present_mask, &mut dst_array); dst_array };
         dst.modes = vk_to_raw_value(&src.modes);
     }
@@ -53,7 +53,7 @@ impl Default for VkDeviceGroupPresentCapabilities {
     fn default() -> VkDeviceGroupPresentCapabilities {
         VkDeviceGroupPresentCapabilities {
             present_mask: [0; 32],
-            modes: VkDeviceGroupPresentModeFlags::default(),
+            modes: Default::default(),
         }
     }
 }
@@ -65,7 +65,7 @@ impl VkSetup for VkDeviceGroupPresentCapabilities {
 }
 
 impl VkFree for RawVkDeviceGroupPresentCapabilities {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }

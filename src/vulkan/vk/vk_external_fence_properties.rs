@@ -28,7 +28,7 @@ pub struct VkExternalFenceProperties {
 #[derive(Debug, Copy, Clone)]
 pub struct RawVkExternalFenceProperties {
     pub s_type: RawVkStructureType,
-    pub next: *const c_void,
+    pub next: *mut c_void,
     pub export_from_imported_handle_types: RawVkExternalFenceHandleTypeFlags,
     pub compatible_handle_types: RawVkExternalFenceHandleTypeFlags,
     pub external_fence_features: RawVkExternalFenceFeatureFlags,
@@ -37,7 +37,7 @@ pub struct RawVkExternalFenceProperties {
 impl VkWrappedType<RawVkExternalFenceProperties> for VkExternalFenceProperties {
     fn vk_to_raw(src: &VkExternalFenceProperties, dst: &mut RawVkExternalFenceProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ExternalFenceProperties);
-        dst.next = ptr::null();
+        dst.next = ptr::null_mut();
         dst.export_from_imported_handle_types = vk_to_raw_value(&src.export_from_imported_handle_types);
         dst.compatible_handle_types = vk_to_raw_value(&src.compatible_handle_types);
         dst.external_fence_features = vk_to_raw_value(&src.external_fence_features);
@@ -57,9 +57,9 @@ impl VkRawType<VkExternalFenceProperties> for RawVkExternalFenceProperties {
 impl Default for VkExternalFenceProperties {
     fn default() -> VkExternalFenceProperties {
         VkExternalFenceProperties {
-            export_from_imported_handle_types: VkExternalFenceHandleTypeFlags::default(),
-            compatible_handle_types: VkExternalFenceHandleTypeFlags::default(),
-            external_fence_features: VkExternalFenceFeatureFlags::default(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
+            external_fence_features: Default::default(),
         }
     }
 }
@@ -71,7 +71,7 @@ impl VkSetup for VkExternalFenceProperties {
 }
 
 impl VkFree for RawVkExternalFenceProperties {
-    fn vk_free(&mut self) {
+    fn vk_free(&self) {
         
     }
 }
