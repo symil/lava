@@ -41,7 +41,7 @@ use lava::*;
 
 fn main() {
     let instance = vk_create_instance(VkInstanceCreateInfo {
-        flags: VkInstanceCreateFlags::none(),
+        flags: VkInstanceCreateFlags!(),
         application_info: Some(VkApplicationInfo {
             application_name: Some(String::from("lava-example")),
             application_version: 1,
@@ -54,7 +54,7 @@ fn main() {
     }).expect("Failed to create instance");
 
     let debug_report_callback = instance.create_debug_report_callback(VkDebugReportCallbackCreateInfo {
-        flags: VkDebugReportFlags!(warning, error),
+        flags: VkDebugReportFlags!(error, warning),
         callback: |data: VkDebugReportCallbackData| {
             println!("{}", data.message);
         }

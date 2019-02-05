@@ -10,7 +10,7 @@ use utils::vk_ptr::*;
 use vulkan::vk::*;
 use vulkan::ext::*;
 
-type VkDebugUtilsMessengerCallback = fn(VkDebugUtilsMessageSeverityFlags, VkDebugUtilsMessageTypeFlags, *const c_void);
+type VkDebugUtilsMessengerCallback = fn(VkDebugUtilsMessageSeverityFlags, VkDebugUtilsMessageTypeFlags, VkDebugUtilsMessengerCallbackData);
 
 #[doc(hidden)]
 #[repr(C)]
@@ -40,7 +40,7 @@ unsafe extern fn raw_callback(message_severity: RawVkDebugUtilsMessageSeverityFl
     func(
         RawVkDebugUtilsMessageSeverityFlags::vk_to_wrapped(&message_severity),
         RawVkDebugUtilsMessageSeverityFlags::vk_to_wrapped(&message_types),
-        callback_data as *const c_void
+        RawVkDebugUtilsMessengerCallbackData::vk_to_wrapped(&*callback_data)
     );
 
     0
