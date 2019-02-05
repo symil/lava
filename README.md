@@ -48,8 +48,8 @@ fn main() {
             engine_version: 1,
             api_version: VkVersion(1, 0, 0),
         }),
-        enabled_layer_names: vec![String::from(VK_LAYER_LUNARG_STANDARD_VALIDATION_NAME)],
-        enabled_extension_names: vec![String::from(VK_EXT_DEBUG_REPORT_EXTENSION_NAME)]
+        enabled_layer_names: vec![VK_LAYER_LUNARG_STANDARD_VALIDATION_NAME],
+        enabled_extension_names: vec![VK_EXT_DEBUG_REPORT_EXTENSION_NAME]
     }).expect("Failed to create instance");
 
     let debug_report_callback = instance.create_debug_report_callback(VkDebugReportCallbackCreateInfo {
@@ -91,7 +91,7 @@ Data-structures are separated in multiple modules, according to their extension 
 
 Constants (e.g validation layer names) are located in the `lava::constants` module.
 
-Lava re-exports all the members of `lava::vk`, `lava::constants`, `lava::ext` and `lava::khr` (`use lava::*` makes all data-structures contained in these modules available without needing to prefix them). This choice was made because Vulkan is a very verbose API, so prefixing everything with a module becomes very tedious very quickly. To avoid conflicts with external data-structures, data-structures are prefixed with `Vk` instead.
+Lava re-exports all the members of `lava::vk`, `lava::constants`, `lava::ext` and `lava::khr` ("`use lava::*`" makes all data-structures contained in these modules available without needing to prefix them).
 
 ### Bit flags
 
