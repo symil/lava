@@ -290,6 +290,7 @@ function getFieldsInformation(fields, structName) {
             rawType = '*mut u8';
             wrappedType = '&[u8]';
             toRaw = `get_vec_ptr(${varName})`;
+            toWrapped = `&[]`;
             defValue = '&[]';
         } else if (field.fullType === 'void**') {
             rawType = `*mut *mut c_void`;
@@ -308,7 +309,7 @@ function getFieldsInformation(fields, structName) {
                     defValue = 'Vec::new()';
                 } else {
                     wrappedType = `&[c_void]`;
-                    toWrapped = `slice::from_raw_parts(${varName}, ${countVarName})`;
+                    toWrapped = `slice_from_ptr(${countVarName} as usize, ${varName})`;
                     defValue = '&[]';
                 }
             } else {
@@ -348,24 +349,24 @@ function getFieldsInformation(fields, structName) {
         } else if (field.fullType === 'const char* const*') {
             rawType = `*mut *mut c_char`;
             freeRaw = `free_ptr(${varName})`;
-            wrappedType = `Vec<String>`;
+            wrappedType = `Vec<&str>`;
             toRaw = `new_ptr_string_array(&${varName})`;
-            toWrapped = `new_string_vec(${countVarName}, ${varName} as *const *const c_char)`;
+            toWrapped = `new_string_ref_vec(${countVarName}, ${varName} as *const *const c_char)`;
             defValue = `Vec::new()`;
         } else if (field.fullType === 'const char*') {
             rawType = `*mut c_char`;
             freeRaw = `free_ptr(${varName})`;
 
             if (isOptional) {
-                wrappedType =`Option<String>`;
+                wrappedType =`Option<&str>`;
                 toRaw = `new_ptr_string_checked(&${varName})`;
-                toWrapped = `new_string_checked(${varName})`;
+                toWrapped = `new_string_ref_checked(${varName})`;
                 defValue = `None`;
             } else {
-                wrappedType =`String`;
-                toRaw = `new_ptr_string(&${varName})`;
-                toWrapped = `new_string(${varName})`;
-                defValue = `String::new()`;
+                wrappedType =`&str`;
+                toRaw = `new_ptr_string(${varName})`;
+                toWrapped = `new_string_ref(${varName})`;
+                defValue = `""`;
             }
         } else if (field.fullType === 'char' && field.arraySize) {
             rawType = `[c_char; ${arraySize}]`;
@@ -388,19 +389,19 @@ function getFieldsInformation(fields, structName) {
                 if (isOptional) {
                     wrappedType = `Option<Vec<${wrappedTypeName}>>`;
                     toRaw = `get_vec_ptr_checked(&${varName})`;
+                    toWrapped = `vec_from_ptr_checked(${vecLength}, ${varName})`;
                     defValue = `None`;
-
-                    if (field.countField) {
-                        toWrapped = `vec_from_ptr_checked(${vecLength}, ${varName})`;
-                    }
                 } else {
                     wrappedType = `Vec<${wrappedTypeName}>`;
                     toRaw = `get_vec_ptr(&${varName})`;
+                    toWrapped = `vec_from_ptr(${vecLength}, ${varName})`;
                     defValue = `Vec::new()`;
+                }
 
-                    if (field.countField) {
-                        toWrapped = `vec_from_ptr(${vecLength}, ${varName})`;
-                    }
+                if (!field.countField) {
+                    // This line is specifically for the field `pSampleMask` of `VkPipelineMultisampleStateCreateInfo`
+                    // Might need to change it
+                    toWrapped = isOptional ? `None` : `vec![]`;
                 }
             } else if (isPointerValue) {
                 rawType = `*mut ${rawTypeName}`;

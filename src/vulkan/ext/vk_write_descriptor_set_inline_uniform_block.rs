@@ -38,6 +38,14 @@ impl<'a> VkWrappedType<RawVkWriteDescriptorSetInlineUniformBlock> for VkWriteDes
     }
 }
 
+impl<'a> VkRawType<VkWriteDescriptorSetInlineUniformBlock<'a>> for RawVkWriteDescriptorSetInlineUniformBlock {
+    fn vk_to_wrapped(src: &RawVkWriteDescriptorSetInlineUniformBlock) -> VkWriteDescriptorSetInlineUniformBlock<'a> {
+        VkWriteDescriptorSetInlineUniformBlock {
+            data: slice_from_ptr(src.data_size as usize, src.data),
+        }
+    }
+}
+
 impl Default for VkWriteDescriptorSetInlineUniformBlock<'static> {
     fn default() -> VkWriteDescriptorSetInlineUniformBlock<'static> {
         VkWriteDescriptorSetInlineUniformBlock {

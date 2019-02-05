@@ -42,6 +42,15 @@ impl<'a> VkWrappedType<RawVkValidationCacheCreateInfo> for VkValidationCacheCrea
     }
 }
 
+impl<'a> VkRawType<VkValidationCacheCreateInfo<'a>> for RawVkValidationCacheCreateInfo {
+    fn vk_to_wrapped(src: &RawVkValidationCacheCreateInfo) -> VkValidationCacheCreateInfo<'a> {
+        VkValidationCacheCreateInfo {
+            flags: RawVkValidationCacheCreateFlags::vk_to_wrapped(&src.flags),
+            initial_data: slice_from_ptr(src.initial_data_size as usize, src.initial_data),
+        }
+    }
+}
+
 impl Default for VkValidationCacheCreateInfo<'static> {
     fn default() -> VkValidationCacheCreateInfo<'static> {
         VkValidationCacheCreateInfo {

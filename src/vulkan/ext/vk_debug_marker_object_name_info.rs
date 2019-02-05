@@ -16,10 +16,10 @@ use vulkan::ext::{VkDebugReportObjectType,RawVkDebugReportObjectType};
 
 /// Wrapper for [VkDebugMarkerObjectNameInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugMarkerObjectNameInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDebugMarkerObjectNameInfo {
+pub struct VkDebugMarkerObjectNameInfo<'a> {
     pub object_type: VkDebugReportObjectType,
     pub object: usize,
-    pub object_name: String,
+    pub object_name: &'a str,
 }
 
 #[doc(hidden)]
@@ -33,37 +33,37 @@ pub struct RawVkDebugMarkerObjectNameInfo {
     pub object_name: *mut c_char,
 }
 
-impl VkWrappedType<RawVkDebugMarkerObjectNameInfo> for VkDebugMarkerObjectNameInfo {
+impl<'a> VkWrappedType<RawVkDebugMarkerObjectNameInfo> for VkDebugMarkerObjectNameInfo<'a> {
     fn vk_to_raw(src: &VkDebugMarkerObjectNameInfo, dst: &mut RawVkDebugMarkerObjectNameInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugMarkerObjectNameInfoExt);
         dst.next = ptr::null_mut();
         dst.object_type = vk_to_raw_value(&src.object_type);
         dst.object = vk_to_raw_value(&src.object);
-        dst.object_name = new_ptr_string(&src.object_name);
+        dst.object_name = new_ptr_string(src.object_name);
     }
 }
 
-impl VkRawType<VkDebugMarkerObjectNameInfo> for RawVkDebugMarkerObjectNameInfo {
-    fn vk_to_wrapped(src: &RawVkDebugMarkerObjectNameInfo) -> VkDebugMarkerObjectNameInfo {
+impl<'a> VkRawType<VkDebugMarkerObjectNameInfo<'a>> for RawVkDebugMarkerObjectNameInfo {
+    fn vk_to_wrapped(src: &RawVkDebugMarkerObjectNameInfo) -> VkDebugMarkerObjectNameInfo<'a> {
         VkDebugMarkerObjectNameInfo {
             object_type: RawVkDebugReportObjectType::vk_to_wrapped(&src.object_type),
             object: u64::vk_to_wrapped(&src.object),
-            object_name: new_string(src.object_name),
+            object_name: new_string_ref(src.object_name),
         }
     }
 }
 
-impl Default for VkDebugMarkerObjectNameInfo {
-    fn default() -> VkDebugMarkerObjectNameInfo {
+impl Default for VkDebugMarkerObjectNameInfo<'static> {
+    fn default() -> VkDebugMarkerObjectNameInfo<'static> {
         VkDebugMarkerObjectNameInfo {
             object_type: Default::default(),
             object: 0,
-            object_name: String::new(),
+            object_name: "",
         }
     }
 }
 
-impl VkSetup for VkDebugMarkerObjectNameInfo {
+impl<'a> VkSetup for VkDebugMarkerObjectNameInfo<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }

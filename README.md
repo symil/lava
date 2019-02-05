@@ -21,7 +21,6 @@ It comes with the following restrictions (that should be lifted in the future):
 
 - no way to provide allocator callbacks
 - no way to set the `pNext` field of structures (always set to `NULL`)
-- the wrapper for `VkDebugUtilsMessengerCreateInfoEXT` is not implemented
 
 ## Usage
 
@@ -43,7 +42,7 @@ fn main() {
     let instance = vk_create_instance(VkInstanceCreateInfo {
         flags: VkInstanceCreateFlags!(),
         application_info: Some(VkApplicationInfo {
-            application_name: Some(String::from("lava-example")),
+            application_name: Some("lava-example"),
             application_version: 1,
             engine_name: None,
             engine_version: 1,

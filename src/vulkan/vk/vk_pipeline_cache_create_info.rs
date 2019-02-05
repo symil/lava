@@ -42,6 +42,15 @@ impl<'a> VkWrappedType<RawVkPipelineCacheCreateInfo> for VkPipelineCacheCreateIn
     }
 }
 
+impl<'a> VkRawType<VkPipelineCacheCreateInfo<'a>> for RawVkPipelineCacheCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineCacheCreateInfo) -> VkPipelineCacheCreateInfo<'a> {
+        VkPipelineCacheCreateInfo {
+            flags: RawVkPipelineCacheCreateFlags::vk_to_wrapped(&src.flags),
+            initial_data: slice_from_ptr(src.initial_data_size as usize, src.initial_data),
+        }
+    }
+}
+
 impl Default for VkPipelineCacheCreateInfo<'static> {
     fn default() -> VkPipelineCacheCreateInfo<'static> {
         VkPipelineCacheCreateInfo {

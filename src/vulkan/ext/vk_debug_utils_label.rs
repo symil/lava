@@ -15,8 +15,8 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 
 /// Wrapper for [VkDebugUtilsLabelEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsLabelEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDebugUtilsLabel {
-    pub label_name: String,
+pub struct VkDebugUtilsLabel<'a> {
+    pub label_name: &'a str,
     pub color: [f32; 4],
 }
 
@@ -30,34 +30,34 @@ pub struct RawVkDebugUtilsLabel {
     pub color: [f32; 4],
 }
 
-impl VkWrappedType<RawVkDebugUtilsLabel> for VkDebugUtilsLabel {
+impl<'a> VkWrappedType<RawVkDebugUtilsLabel> for VkDebugUtilsLabel<'a> {
     fn vk_to_raw(src: &VkDebugUtilsLabel, dst: &mut RawVkDebugUtilsLabel) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsLabelExt);
         dst.next = ptr::null_mut();
-        dst.label_name = new_ptr_string(&src.label_name);
+        dst.label_name = new_ptr_string(src.label_name);
         dst.color = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array };
     }
 }
 
-impl VkRawType<VkDebugUtilsLabel> for RawVkDebugUtilsLabel {
-    fn vk_to_wrapped(src: &RawVkDebugUtilsLabel) -> VkDebugUtilsLabel {
+impl<'a> VkRawType<VkDebugUtilsLabel<'a>> for RawVkDebugUtilsLabel {
+    fn vk_to_wrapped(src: &RawVkDebugUtilsLabel) -> VkDebugUtilsLabel<'a> {
         VkDebugUtilsLabel {
-            label_name: new_string(src.label_name),
+            label_name: new_string_ref(src.label_name),
             color: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array },
         }
     }
 }
 
-impl Default for VkDebugUtilsLabel {
-    fn default() -> VkDebugUtilsLabel {
+impl Default for VkDebugUtilsLabel<'static> {
+    fn default() -> VkDebugUtilsLabel<'static> {
         VkDebugUtilsLabel {
-            label_name: String::new(),
+            label_name: "",
             color: [0.0; 4],
         }
     }
 }
 
-impl VkSetup for VkDebugUtilsLabel {
+impl<'a> VkSetup for VkDebugUtilsLabel<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }

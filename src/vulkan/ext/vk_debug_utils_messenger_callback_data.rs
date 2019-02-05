@@ -18,14 +18,14 @@ use vulkan::ext::{VkDebugUtilsObjectNameInfo,RawVkDebugUtilsObjectNameInfo};
 
 /// Wrapper for [VkDebugUtilsMessengerCallbackDataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCallbackDataEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDebugUtilsMessengerCallbackData {
+pub struct VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e> {
     pub flags: VkDebugUtilsMessengerCallbackDataFlags,
-    pub message_id_name: Option<String>,
+    pub message_id_name: Option<&'a str>,
     pub message_id_number: isize,
-    pub message: String,
-    pub queue_labels: Vec<VkDebugUtilsLabel>,
-    pub cmd_buf_labels: Vec<VkDebugUtilsLabel>,
-    pub objects: Vec<VkDebugUtilsObjectNameInfo>,
+    pub message: &'b str,
+    pub queue_labels: Vec<VkDebugUtilsLabel<'c>>,
+    pub cmd_buf_labels: Vec<VkDebugUtilsLabel<'d>>,
+    pub objects: Vec<VkDebugUtilsObjectNameInfo<'e>>,
 }
 
 #[doc(hidden)]
@@ -46,14 +46,14 @@ pub struct RawVkDebugUtilsMessengerCallbackData {
     pub objects: *mut RawVkDebugUtilsObjectNameInfo,
 }
 
-impl VkWrappedType<RawVkDebugUtilsMessengerCallbackData> for VkDebugUtilsMessengerCallbackData {
+impl<'a, 'b, 'c, 'd, 'e> VkWrappedType<RawVkDebugUtilsMessengerCallbackData> for VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e> {
     fn vk_to_raw(src: &VkDebugUtilsMessengerCallbackData, dst: &mut RawVkDebugUtilsMessengerCallbackData) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsMessengerCallbackDataExt);
         dst.next = ptr::null_mut();
         dst.flags = vk_to_raw_value(&src.flags);
         dst.message_id_name = new_ptr_string_checked(&src.message_id_name);
         dst.message_id_number = vk_to_raw_value(&src.message_id_number);
-        dst.message = new_ptr_string(&src.message);
+        dst.message = new_ptr_string(src.message);
         dst.queue_label_count = src.queue_labels.len() as u32;
         dst.queue_labels = new_ptr_vk_array(&src.queue_labels);
         dst.cmd_buf_label_count = src.cmd_buf_labels.len() as u32;
@@ -63,13 +63,13 @@ impl VkWrappedType<RawVkDebugUtilsMessengerCallbackData> for VkDebugUtilsMesseng
     }
 }
 
-impl VkRawType<VkDebugUtilsMessengerCallbackData> for RawVkDebugUtilsMessengerCallbackData {
-    fn vk_to_wrapped(src: &RawVkDebugUtilsMessengerCallbackData) -> VkDebugUtilsMessengerCallbackData {
+impl<'a, 'b, 'c, 'd, 'e> VkRawType<VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e>> for RawVkDebugUtilsMessengerCallbackData {
+    fn vk_to_wrapped(src: &RawVkDebugUtilsMessengerCallbackData) -> VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e> {
         VkDebugUtilsMessengerCallbackData {
             flags: RawVkDebugUtilsMessengerCallbackDataFlags::vk_to_wrapped(&src.flags),
-            message_id_name: new_string_checked(src.message_id_name),
+            message_id_name: new_string_ref_checked(src.message_id_name),
             message_id_number: i32::vk_to_wrapped(&src.message_id_number),
-            message: new_string(src.message),
+            message: new_string_ref(src.message),
             queue_labels: new_vk_array(src.queue_label_count, src.queue_labels),
             cmd_buf_labels: new_vk_array(src.cmd_buf_label_count, src.cmd_buf_labels),
             objects: new_vk_array(src.object_count, src.objects),
@@ -77,13 +77,13 @@ impl VkRawType<VkDebugUtilsMessengerCallbackData> for RawVkDebugUtilsMessengerCa
     }
 }
 
-impl Default for VkDebugUtilsMessengerCallbackData {
-    fn default() -> VkDebugUtilsMessengerCallbackData {
+impl Default for VkDebugUtilsMessengerCallbackData<'static, 'static, 'static, 'static, 'static> {
+    fn default() -> VkDebugUtilsMessengerCallbackData<'static, 'static, 'static, 'static, 'static> {
         VkDebugUtilsMessengerCallbackData {
             flags: Default::default(),
             message_id_name: None,
             message_id_number: 0,
-            message: String::new(),
+            message: "",
             queue_labels: Vec::new(),
             cmd_buf_labels: Vec::new(),
             objects: Vec::new(),
@@ -91,7 +91,7 @@ impl Default for VkDebugUtilsMessengerCallbackData {
     }
 }
 
-impl VkSetup for VkDebugUtilsMessengerCallbackData {
+impl<'a, 'b, 'c, 'd, 'e> VkSetup for VkDebugUtilsMessengerCallbackData<'a, 'b, 'c, 'd, 'e> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }

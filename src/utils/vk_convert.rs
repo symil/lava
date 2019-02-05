@@ -144,6 +144,38 @@ pub fn new_string_vec(length: u32, ptr: *const *const c_char) -> Vec<String> {
     result
 }
 
+pub fn new_string_ref<'a>(ptr: *const c_char) -> &'a str {
+    unsafe {
+        if ptr.is_null() {
+                ""
+        } else {
+            let len = std::ffi::CStr::from_ptr(ptr).to_bytes().len();
+            let slice = std::slice::from_raw_parts(ptr as *const u8, len);
+
+            std::str::from_utf8_unchecked(slice)
+        }
+    }
+}
+
+pub fn new_string_ref_checked<'a>(ptr: *const c_char) -> Option<&'a str> {
+    if ptr.is_null() {
+        None
+    } else {
+        Some(new_string_ref(ptr))
+    }
+}
+
+pub fn new_string_ref_vec<'a>(length: u32, ptr: *const *const c_char) -> Vec<&'a str> {
+    let len = length as usize;
+    let mut result : Vec<&'a str> = Vec::with_capacity(len);
+
+    for i in 0..len {
+        result.push(new_string_ref(unsafe { *ptr.add(i) }));
+    }
+
+    result
+}
+
 pub fn vec_from_ptr<T>(length: usize, ptr: *const T) -> Vec<T> {
     unsafe {
         Vec::from_raw_parts(mem::transmute(ptr), length, length)
@@ -155,6 +187,12 @@ pub fn vec_from_ptr_checked<T>(length: usize, ptr: *const T) -> Option<Vec<T>> {
         None
     } else {
         Some(vec_from_ptr(length, ptr))
+    }
+}
+
+pub fn slice_from_ptr<'a, T>(length: usize, ptr: *const T) -> &'a [T] {
+    unsafe {
+        std::slice::from_raw_parts(ptr, length)
     }
 }
 

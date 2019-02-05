@@ -17,11 +17,11 @@ use vulkan::vk::{VkApplicationInfo,RawVkApplicationInfo};
 
 /// Wrapper for [VkInstanceCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInstanceCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkInstanceCreateInfo {
+pub struct VkInstanceCreateInfo<'a, 'b, 'c, 'd> {
     pub flags: VkInstanceCreateFlags,
-    pub application_info: Option<VkApplicationInfo>,
-    pub enabled_layer_names: Vec<String>,
-    pub enabled_extension_names: Vec<String>,
+    pub application_info: Option<VkApplicationInfo<'a, 'b>>,
+    pub enabled_layer_names: Vec<&'c str>,
+    pub enabled_extension_names: Vec<&'d str>,
 }
 
 #[doc(hidden)]
@@ -38,7 +38,7 @@ pub struct RawVkInstanceCreateInfo {
     pub enabled_extension_names: *mut *mut c_char,
 }
 
-impl VkWrappedType<RawVkInstanceCreateInfo> for VkInstanceCreateInfo {
+impl<'a, 'b, 'c, 'd> VkWrappedType<RawVkInstanceCreateInfo> for VkInstanceCreateInfo<'a, 'b, 'c, 'd> {
     fn vk_to_raw(src: &VkInstanceCreateInfo, dst: &mut RawVkInstanceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::InstanceCreateInfo);
         dst.next = ptr::null_mut();
@@ -51,19 +51,19 @@ impl VkWrappedType<RawVkInstanceCreateInfo> for VkInstanceCreateInfo {
     }
 }
 
-impl VkRawType<VkInstanceCreateInfo> for RawVkInstanceCreateInfo {
-    fn vk_to_wrapped(src: &RawVkInstanceCreateInfo) -> VkInstanceCreateInfo {
+impl<'a, 'b, 'c, 'd> VkRawType<VkInstanceCreateInfo<'a, 'b, 'c, 'd>> for RawVkInstanceCreateInfo {
+    fn vk_to_wrapped(src: &RawVkInstanceCreateInfo) -> VkInstanceCreateInfo<'a, 'b, 'c, 'd> {
         VkInstanceCreateInfo {
             flags: RawVkInstanceCreateFlags::vk_to_wrapped(&src.flags),
             application_info: new_vk_value_checked(src.application_info),
-            enabled_layer_names: new_string_vec(src.enabled_layer_count, src.enabled_layer_names as *const *const c_char),
-            enabled_extension_names: new_string_vec(src.enabled_extension_count, src.enabled_extension_names as *const *const c_char),
+            enabled_layer_names: new_string_ref_vec(src.enabled_layer_count, src.enabled_layer_names as *const *const c_char),
+            enabled_extension_names: new_string_ref_vec(src.enabled_extension_count, src.enabled_extension_names as *const *const c_char),
         }
     }
 }
 
-impl Default for VkInstanceCreateInfo {
-    fn default() -> VkInstanceCreateInfo {
+impl Default for VkInstanceCreateInfo<'static, 'static, 'static, 'static> {
+    fn default() -> VkInstanceCreateInfo<'static, 'static, 'static, 'static> {
         VkInstanceCreateInfo {
             flags: Default::default(),
             application_info: None,
@@ -73,7 +73,7 @@ impl Default for VkInstanceCreateInfo {
     }
 }
 
-impl VkSetup for VkInstanceCreateInfo {
+impl<'a, 'b, 'c, 'd> VkSetup for VkInstanceCreateInfo<'a, 'b, 'c, 'd> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }

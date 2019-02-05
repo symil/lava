@@ -166,15 +166,15 @@ impl VkInstance {
     }
     
     /// Wrapper for [vkDebugReportMessageEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDebugReportMessageEXT.html).
-    pub fn debug_report_message(&self, flags: ext::VkDebugReportFlags, object_type: ext::VkDebugReportObjectType, object: usize, location: usize, message_code: isize, layer_prefix: String, message: String) {
+    pub fn debug_report_message(&self, flags: ext::VkDebugReportFlags, object_type: ext::VkDebugReportObjectType, object: usize, location: usize, message_code: isize, layer_prefix: &str, message: &str) {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
             let raw_object_type = vk_to_raw_value(&object_type);
             let raw_object = vk_to_raw_value(&object);
             let raw_location = location;
             let raw_message_code = vk_to_raw_value(&message_code);
-            let raw_layer_prefix = new_ptr_string(&layer_prefix);
-            let raw_message = new_ptr_string(&message);
+            let raw_layer_prefix = new_ptr_string(layer_prefix);
+            let raw_message = new_ptr_string(message);
             ((&*self._fn_table).vkDebugReportMessageEXT)(self._handle, raw_flags, raw_object_type, raw_object, raw_location, raw_message_code, raw_layer_prefix, raw_message);
             free_ptr(raw_layer_prefix);
             free_ptr(raw_message);

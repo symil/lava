@@ -25,8 +25,6 @@ pub struct RawVkDebugUtilsMessengerCreateInfo {
 }
 
 /// Wrapper for [VkDebugUtilsMessengerCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCreateInfo.html).
-/// 
-/// NOT IMPLEMENTED YET
 pub struct VkDebugUtilsMessengerCreateInfo {
     pub flags: VkDebugUtilsMessengerCreateFlags,
     pub message_severity: VkDebugUtilsMessageSeverityFlags,

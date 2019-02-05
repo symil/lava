@@ -16,8 +16,8 @@ use vulkan::khr::{VkDisplayProperties,RawVkDisplayProperties};
 
 /// Wrapper for [VkDisplayProperties2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayProperties2KHR.html).
 #[derive(Debug, Clone)]
-pub struct VkDisplayProperties2 {
-    pub display_properties: VkDisplayProperties,
+pub struct VkDisplayProperties2<'a> {
+    pub display_properties: VkDisplayProperties<'a>,
 }
 
 #[doc(hidden)]
@@ -29,17 +29,17 @@ pub struct RawVkDisplayProperties2 {
     pub display_properties: RawVkDisplayProperties,
 }
 
-impl VkRawType<VkDisplayProperties2> for RawVkDisplayProperties2 {
-    fn vk_to_wrapped(src: &RawVkDisplayProperties2) -> VkDisplayProperties2 {
+impl<'a> VkRawType<VkDisplayProperties2<'a>> for RawVkDisplayProperties2 {
+    fn vk_to_wrapped(src: &RawVkDisplayProperties2) -> VkDisplayProperties2<'a> {
         VkDisplayProperties2 {
             display_properties: RawVkDisplayProperties::vk_to_wrapped(&src.display_properties),
         }
     }
 }
 
-impl VkSetup for VkDisplayProperties2 {
+impl<'a> VkSetup for VkDisplayProperties2<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        VkSetup::vk_setup(&mut self.display_properties, fn_table);
+        
     }
 }
 

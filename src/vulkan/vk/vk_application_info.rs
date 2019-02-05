@@ -16,10 +16,10 @@ use vulkan::vk::{VkVersion};
 
 /// Wrapper for [VkApplicationInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkApplicationInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkApplicationInfo {
-    pub application_name: Option<String>,
+pub struct VkApplicationInfo<'a, 'b> {
+    pub application_name: Option<&'a str>,
     pub application_version: u32,
-    pub engine_name: Option<String>,
+    pub engine_name: Option<&'b str>,
     pub engine_version: u32,
     pub api_version: VkVersion,
 }
@@ -37,7 +37,7 @@ pub struct RawVkApplicationInfo {
     pub api_version: u32,
 }
 
-impl VkWrappedType<RawVkApplicationInfo> for VkApplicationInfo {
+impl<'a, 'b> VkWrappedType<RawVkApplicationInfo> for VkApplicationInfo<'a, 'b> {
     fn vk_to_raw(src: &VkApplicationInfo, dst: &mut RawVkApplicationInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ApplicationInfo);
         dst.next = ptr::null_mut();
@@ -49,20 +49,20 @@ impl VkWrappedType<RawVkApplicationInfo> for VkApplicationInfo {
     }
 }
 
-impl VkRawType<VkApplicationInfo> for RawVkApplicationInfo {
-    fn vk_to_wrapped(src: &RawVkApplicationInfo) -> VkApplicationInfo {
+impl<'a, 'b> VkRawType<VkApplicationInfo<'a, 'b>> for RawVkApplicationInfo {
+    fn vk_to_wrapped(src: &RawVkApplicationInfo) -> VkApplicationInfo<'a, 'b> {
         VkApplicationInfo {
-            application_name: new_string_checked(src.application_name),
+            application_name: new_string_ref_checked(src.application_name),
             application_version: src.application_version,
-            engine_name: new_string_checked(src.engine_name),
+            engine_name: new_string_ref_checked(src.engine_name),
             engine_version: src.engine_version,
             api_version: u32::vk_to_wrapped(&src.api_version),
         }
     }
 }
 
-impl Default for VkApplicationInfo {
-    fn default() -> VkApplicationInfo {
+impl Default for VkApplicationInfo<'static, 'static> {
+    fn default() -> VkApplicationInfo<'static, 'static> {
         VkApplicationInfo {
             application_name: None,
             application_version: 0,
@@ -73,7 +73,7 @@ impl Default for VkApplicationInfo {
     }
 }
 
-impl VkSetup for VkApplicationInfo {
+impl<'a, 'b> VkSetup for VkApplicationInfo<'a, 'b> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }

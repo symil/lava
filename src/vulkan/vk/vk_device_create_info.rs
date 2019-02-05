@@ -18,11 +18,11 @@ use vulkan::vk::{VkPhysicalDeviceFeatures,RawVkPhysicalDeviceFeatures};
 
 /// Wrapper for [VkDeviceCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkDeviceCreateInfo {
+pub struct VkDeviceCreateInfo<'a, 'b> {
     pub flags: VkDeviceCreateFlags,
     pub queue_create_infos: Vec<VkDeviceQueueCreateInfo>,
-    pub enabled_layer_names: Vec<String>,
-    pub enabled_extension_names: Vec<String>,
+    pub enabled_layer_names: Vec<&'a str>,
+    pub enabled_extension_names: Vec<&'b str>,
     pub enabled_features: Option<VkPhysicalDeviceFeatures>,
 }
 
@@ -42,7 +42,7 @@ pub struct RawVkDeviceCreateInfo {
     pub enabled_features: *mut RawVkPhysicalDeviceFeatures,
 }
 
-impl VkWrappedType<RawVkDeviceCreateInfo> for VkDeviceCreateInfo {
+impl<'a, 'b> VkWrappedType<RawVkDeviceCreateInfo> for VkDeviceCreateInfo<'a, 'b> {
     fn vk_to_raw(src: &VkDeviceCreateInfo, dst: &mut RawVkDeviceCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceCreateInfo);
         dst.next = ptr::null_mut();
@@ -57,20 +57,20 @@ impl VkWrappedType<RawVkDeviceCreateInfo> for VkDeviceCreateInfo {
     }
 }
 
-impl VkRawType<VkDeviceCreateInfo> for RawVkDeviceCreateInfo {
-    fn vk_to_wrapped(src: &RawVkDeviceCreateInfo) -> VkDeviceCreateInfo {
+impl<'a, 'b> VkRawType<VkDeviceCreateInfo<'a, 'b>> for RawVkDeviceCreateInfo {
+    fn vk_to_wrapped(src: &RawVkDeviceCreateInfo) -> VkDeviceCreateInfo<'a, 'b> {
         VkDeviceCreateInfo {
             flags: RawVkDeviceCreateFlags::vk_to_wrapped(&src.flags),
             queue_create_infos: new_vk_array(src.queue_create_info_count, src.queue_create_infos),
-            enabled_layer_names: new_string_vec(src.enabled_layer_count, src.enabled_layer_names as *const *const c_char),
-            enabled_extension_names: new_string_vec(src.enabled_extension_count, src.enabled_extension_names as *const *const c_char),
+            enabled_layer_names: new_string_ref_vec(src.enabled_layer_count, src.enabled_layer_names as *const *const c_char),
+            enabled_extension_names: new_string_ref_vec(src.enabled_extension_count, src.enabled_extension_names as *const *const c_char),
             enabled_features: new_vk_value_checked(src.enabled_features),
         }
     }
 }
 
-impl Default for VkDeviceCreateInfo {
-    fn default() -> VkDeviceCreateInfo {
+impl Default for VkDeviceCreateInfo<'static, 'static> {
+    fn default() -> VkDeviceCreateInfo<'static, 'static> {
         VkDeviceCreateInfo {
             flags: Default::default(),
             queue_create_infos: Vec::new(),
@@ -81,7 +81,7 @@ impl Default for VkDeviceCreateInfo {
     }
 }
 
-impl VkSetup for VkDeviceCreateInfo {
+impl<'a, 'b> VkSetup for VkDeviceCreateInfo<'a, 'b> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }

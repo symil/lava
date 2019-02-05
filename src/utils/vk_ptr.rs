@@ -130,14 +130,14 @@ pub fn new_ptr_string(string: &str) -> *mut c_char {
     }
 }
 
-pub fn new_ptr_string_checked(string: &Option<String>) -> *mut c_char {
+pub fn new_ptr_string_checked(string: &Option<&str>) -> *mut c_char {
     match string {
-        Some(value) => new_ptr_string(&value),
+        Some(value) => new_ptr_string(value),
         None => ptr::null_mut()
     }
 }
 
-pub fn new_ptr_string_array(array: &[String]) -> *mut *mut c_char {
+pub fn new_ptr_string_array(array: &[&str]) -> *mut *mut c_char {
     unsafe {
         let nb_strings = array.len();
         let mut total_strings_len : usize = 0;

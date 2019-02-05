@@ -39,6 +39,15 @@ impl<'a> VkWrappedType<RawVkSpecializationInfo> for VkSpecializationInfo<'a> {
     }
 }
 
+impl<'a> VkRawType<VkSpecializationInfo<'a>> for RawVkSpecializationInfo {
+    fn vk_to_wrapped(src: &RawVkSpecializationInfo) -> VkSpecializationInfo<'a> {
+        VkSpecializationInfo {
+            map_entries: new_vk_array(src.map_entry_count, src.map_entries),
+            data: slice_from_ptr(src.data_size as usize, src.data),
+        }
+    }
+}
+
 impl Default for VkSpecializationInfo<'static> {
     fn default() -> VkSpecializationInfo<'static> {
         VkSpecializationInfo {

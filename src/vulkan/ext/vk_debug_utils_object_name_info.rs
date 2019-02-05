@@ -16,10 +16,10 @@ use vulkan::vk::{VkObjectType,RawVkObjectType};
 
 /// Wrapper for [VkDebugUtilsObjectNameInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsObjectNameInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDebugUtilsObjectNameInfo {
+pub struct VkDebugUtilsObjectNameInfo<'a> {
     pub object_type: VkObjectType,
     pub object_handle: usize,
-    pub object_name: Option<String>,
+    pub object_name: Option<&'a str>,
 }
 
 #[doc(hidden)]
@@ -33,7 +33,7 @@ pub struct RawVkDebugUtilsObjectNameInfo {
     pub object_name: *mut c_char,
 }
 
-impl VkWrappedType<RawVkDebugUtilsObjectNameInfo> for VkDebugUtilsObjectNameInfo {
+impl<'a> VkWrappedType<RawVkDebugUtilsObjectNameInfo> for VkDebugUtilsObjectNameInfo<'a> {
     fn vk_to_raw(src: &VkDebugUtilsObjectNameInfo, dst: &mut RawVkDebugUtilsObjectNameInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsObjectNameInfoExt);
         dst.next = ptr::null_mut();
@@ -43,18 +43,18 @@ impl VkWrappedType<RawVkDebugUtilsObjectNameInfo> for VkDebugUtilsObjectNameInfo
     }
 }
 
-impl VkRawType<VkDebugUtilsObjectNameInfo> for RawVkDebugUtilsObjectNameInfo {
-    fn vk_to_wrapped(src: &RawVkDebugUtilsObjectNameInfo) -> VkDebugUtilsObjectNameInfo {
+impl<'a> VkRawType<VkDebugUtilsObjectNameInfo<'a>> for RawVkDebugUtilsObjectNameInfo {
+    fn vk_to_wrapped(src: &RawVkDebugUtilsObjectNameInfo) -> VkDebugUtilsObjectNameInfo<'a> {
         VkDebugUtilsObjectNameInfo {
             object_type: RawVkObjectType::vk_to_wrapped(&src.object_type),
             object_handle: u64::vk_to_wrapped(&src.object_handle),
-            object_name: new_string_checked(src.object_name),
+            object_name: new_string_ref_checked(src.object_name),
         }
     }
 }
 
-impl Default for VkDebugUtilsObjectNameInfo {
-    fn default() -> VkDebugUtilsObjectNameInfo {
+impl Default for VkDebugUtilsObjectNameInfo<'static> {
+    fn default() -> VkDebugUtilsObjectNameInfo<'static> {
         VkDebugUtilsObjectNameInfo {
             object_type: Default::default(),
             object_handle: 0,
@@ -63,7 +63,7 @@ impl Default for VkDebugUtilsObjectNameInfo {
     }
 }
 
-impl VkSetup for VkDebugUtilsObjectNameInfo {
+impl<'a> VkSetup for VkDebugUtilsObjectNameInfo<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }

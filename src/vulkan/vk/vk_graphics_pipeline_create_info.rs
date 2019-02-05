@@ -29,9 +29,9 @@ use vulkan::vk::{VkPipeline,RawVkPipeline};
 
 /// Wrapper for [VkGraphicsPipelineCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGraphicsPipelineCreateInfo.html).
 #[derive(Debug, Clone)]
-pub struct VkGraphicsPipelineCreateInfo<'a> {
+pub struct VkGraphicsPipelineCreateInfo<'a, 'b> {
     pub flags: VkPipelineCreateFlags,
-    pub stages: Vec<VkPipelineShaderStageCreateInfo<'a>>,
+    pub stages: Vec<VkPipelineShaderStageCreateInfo<'a, 'b>>,
     pub vertex_input_state: Option<VkPipelineVertexInputStateCreateInfo>,
     pub input_assembly_state: Option<VkPipelineInputAssemblyStateCreateInfo>,
     pub tessellation_state: Option<VkPipelineTessellationStateCreateInfo>,
@@ -73,7 +73,7 @@ pub struct RawVkGraphicsPipelineCreateInfo {
     pub base_pipeline_index: i32,
 }
 
-impl<'a> VkWrappedType<RawVkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfo<'a> {
+impl<'a, 'b> VkWrappedType<RawVkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfo<'a, 'b> {
     fn vk_to_raw(src: &VkGraphicsPipelineCreateInfo, dst: &mut RawVkGraphicsPipelineCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::GraphicsPipelineCreateInfo);
         dst.next = ptr::null_mut();
@@ -97,8 +97,31 @@ impl<'a> VkWrappedType<RawVkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCr
     }
 }
 
-impl Default for VkGraphicsPipelineCreateInfo<'static> {
-    fn default() -> VkGraphicsPipelineCreateInfo<'static> {
+impl<'a, 'b> VkRawType<VkGraphicsPipelineCreateInfo<'a, 'b>> for RawVkGraphicsPipelineCreateInfo {
+    fn vk_to_wrapped(src: &RawVkGraphicsPipelineCreateInfo) -> VkGraphicsPipelineCreateInfo<'a, 'b> {
+        VkGraphicsPipelineCreateInfo {
+            flags: RawVkPipelineCreateFlags::vk_to_wrapped(&src.flags),
+            stages: new_vk_array(src.stage_count, src.stages),
+            vertex_input_state: new_vk_value_checked(src.vertex_input_state),
+            input_assembly_state: new_vk_value_checked(src.input_assembly_state),
+            tessellation_state: new_vk_value_checked(src.tessellation_state),
+            viewport_state: new_vk_value_checked(src.viewport_state),
+            rasterization_state: new_vk_value(src.rasterization_state),
+            multisample_state: new_vk_value_checked(src.multisample_state),
+            depth_stencil_state: new_vk_value_checked(src.depth_stencil_state),
+            color_blend_state: new_vk_value_checked(src.color_blend_state),
+            dynamic_state: new_vk_value_checked(src.dynamic_state),
+            layout: RawVkPipelineLayout::vk_to_wrapped(&src.layout),
+            render_pass: RawVkRenderPass::vk_to_wrapped(&src.render_pass),
+            subpass: u32::vk_to_wrapped(&src.subpass),
+            base_pipeline_handle: Some(RawVkPipeline::vk_to_wrapped(&src.base_pipeline_handle)),
+            base_pipeline_index: i32::vk_to_wrapped(&src.base_pipeline_index),
+        }
+    }
+}
+
+impl Default for VkGraphicsPipelineCreateInfo<'static, 'static> {
+    fn default() -> VkGraphicsPipelineCreateInfo<'static, 'static> {
         VkGraphicsPipelineCreateInfo {
             flags: Default::default(),
             stages: Vec::new(),
@@ -120,7 +143,7 @@ impl Default for VkGraphicsPipelineCreateInfo<'static> {
     }
 }
 
-impl<'a> VkSetup for VkGraphicsPipelineCreateInfo<'a> {
+impl<'a, 'b> VkSetup for VkGraphicsPipelineCreateInfo<'a, 'b> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.rasterization_state, fn_table);
         VkSetup::vk_setup(&mut self.layout, fn_table);

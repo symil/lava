@@ -182,7 +182,7 @@ impl VkPhysicalDevice {
     }
     
     /// Wrapper for [vkEnumerateDeviceExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateDeviceExtensionProperties.html).
-    pub fn enumerate_device_extension_properties(&self, layer_name: Option<String>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
+    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
         unsafe {
             let raw_layer_name = new_ptr_string_checked(&layer_name);
             let mut vk_result = 0;

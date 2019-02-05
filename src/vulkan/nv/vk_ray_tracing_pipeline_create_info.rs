@@ -20,9 +20,9 @@ use vulkan::vk::{VkPipeline,RawVkPipeline};
 
 /// Wrapper for [VkRayTracingPipelineCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingPipelineCreateInfoNV.html).
 #[derive(Debug, Clone)]
-pub struct VkRayTracingPipelineCreateInfo<'a> {
+pub struct VkRayTracingPipelineCreateInfo<'a, 'b> {
     pub flags: VkPipelineCreateFlags,
-    pub stages: Vec<VkPipelineShaderStageCreateInfo<'a>>,
+    pub stages: Vec<VkPipelineShaderStageCreateInfo<'a, 'b>>,
     pub groups: Vec<VkRayTracingShaderGroupCreateInfo>,
     pub max_recursion_depth: usize,
     pub layout: VkPipelineLayout,
@@ -47,7 +47,7 @@ pub struct RawVkRayTracingPipelineCreateInfo {
     pub base_pipeline_index: i32,
 }
 
-impl<'a> VkWrappedType<RawVkRayTracingPipelineCreateInfo> for VkRayTracingPipelineCreateInfo<'a> {
+impl<'a, 'b> VkWrappedType<RawVkRayTracingPipelineCreateInfo> for VkRayTracingPipelineCreateInfo<'a, 'b> {
     fn vk_to_raw(src: &VkRayTracingPipelineCreateInfo, dst: &mut RawVkRayTracingPipelineCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::RayTracingPipelineCreateInfoNv);
         dst.next = ptr::null_mut();
@@ -63,8 +63,22 @@ impl<'a> VkWrappedType<RawVkRayTracingPipelineCreateInfo> for VkRayTracingPipeli
     }
 }
 
-impl Default for VkRayTracingPipelineCreateInfo<'static> {
-    fn default() -> VkRayTracingPipelineCreateInfo<'static> {
+impl<'a, 'b> VkRawType<VkRayTracingPipelineCreateInfo<'a, 'b>> for RawVkRayTracingPipelineCreateInfo {
+    fn vk_to_wrapped(src: &RawVkRayTracingPipelineCreateInfo) -> VkRayTracingPipelineCreateInfo<'a, 'b> {
+        VkRayTracingPipelineCreateInfo {
+            flags: RawVkPipelineCreateFlags::vk_to_wrapped(&src.flags),
+            stages: new_vk_array(src.stage_count, src.stages),
+            groups: new_vk_array(src.group_count, src.groups),
+            max_recursion_depth: u32::vk_to_wrapped(&src.max_recursion_depth),
+            layout: RawVkPipelineLayout::vk_to_wrapped(&src.layout),
+            base_pipeline_handle: Some(RawVkPipeline::vk_to_wrapped(&src.base_pipeline_handle)),
+            base_pipeline_index: i32::vk_to_wrapped(&src.base_pipeline_index),
+        }
+    }
+}
+
+impl Default for VkRayTracingPipelineCreateInfo<'static, 'static> {
+    fn default() -> VkRayTracingPipelineCreateInfo<'static, 'static> {
         VkRayTracingPipelineCreateInfo {
             flags: Default::default(),
             stages: Vec::new(),
@@ -77,7 +91,7 @@ impl Default for VkRayTracingPipelineCreateInfo<'static> {
     }
 }
 
-impl<'a> VkSetup for VkRayTracingPipelineCreateInfo<'a> {
+impl<'a, 'b> VkSetup for VkRayTracingPipelineCreateInfo<'a, 'b> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.layout, fn_table);
     }

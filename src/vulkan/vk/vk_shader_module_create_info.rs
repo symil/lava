@@ -42,6 +42,15 @@ impl<'a> VkWrappedType<RawVkShaderModuleCreateInfo> for VkShaderModuleCreateInfo
     }
 }
 
+impl<'a> VkRawType<VkShaderModuleCreateInfo<'a>> for RawVkShaderModuleCreateInfo {
+    fn vk_to_wrapped(src: &RawVkShaderModuleCreateInfo) -> VkShaderModuleCreateInfo<'a> {
+        VkShaderModuleCreateInfo {
+            flags: RawVkShaderModuleCreateFlags::vk_to_wrapped(&src.flags),
+            code: &[],
+        }
+    }
+}
+
 impl Default for VkShaderModuleCreateInfo<'static> {
     fn default() -> VkShaderModuleCreateInfo<'static> {
         VkShaderModuleCreateInfo {

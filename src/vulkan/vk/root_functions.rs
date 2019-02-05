@@ -30,7 +30,7 @@ pub fn vk_create_instance(create_info: VkInstanceCreateInfo) -> Result<VkInstanc
 }
 
 /// Wrapper for [vkEnumerateInstanceExtensionProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumerateInstanceExtensionProperties.html).
-pub fn vk_enumerate_instance_extension_properties(layer_name: Option<String>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
+pub fn vk_enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<VkExtensionProperties>, (VkResult, Vec<VkExtensionProperties>)> {
     unsafe {
         let raw_layer_name = new_ptr_string_checked(&layer_name);
         let mut vk_result = 0;

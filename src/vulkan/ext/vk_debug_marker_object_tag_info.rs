@@ -48,6 +48,17 @@ impl<'a> VkWrappedType<RawVkDebugMarkerObjectTagInfo> for VkDebugMarkerObjectTag
     }
 }
 
+impl<'a> VkRawType<VkDebugMarkerObjectTagInfo<'a>> for RawVkDebugMarkerObjectTagInfo {
+    fn vk_to_wrapped(src: &RawVkDebugMarkerObjectTagInfo) -> VkDebugMarkerObjectTagInfo<'a> {
+        VkDebugMarkerObjectTagInfo {
+            object_type: RawVkDebugReportObjectType::vk_to_wrapped(&src.object_type),
+            object: u64::vk_to_wrapped(&src.object),
+            tag_name: u64::vk_to_wrapped(&src.tag_name),
+            tag: slice_from_ptr(src.tag_size as usize, src.tag),
+        }
+    }
+}
+
 impl Default for VkDebugMarkerObjectTagInfo<'static> {
     fn default() -> VkDebugMarkerObjectTagInfo<'static> {
         VkDebugMarkerObjectTagInfo {

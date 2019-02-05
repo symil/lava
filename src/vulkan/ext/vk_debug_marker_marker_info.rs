@@ -15,8 +15,8 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 
 /// Wrapper for [VkDebugMarkerMarkerInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugMarkerMarkerInfoEXT.html).
 #[derive(Debug, Clone)]
-pub struct VkDebugMarkerMarkerInfo {
-    pub marker_name: String,
+pub struct VkDebugMarkerMarkerInfo<'a> {
+    pub marker_name: &'a str,
     pub color: [f32; 4],
 }
 
@@ -30,34 +30,34 @@ pub struct RawVkDebugMarkerMarkerInfo {
     pub color: [f32; 4],
 }
 
-impl VkWrappedType<RawVkDebugMarkerMarkerInfo> for VkDebugMarkerMarkerInfo {
+impl<'a> VkWrappedType<RawVkDebugMarkerMarkerInfo> for VkDebugMarkerMarkerInfo<'a> {
     fn vk_to_raw(src: &VkDebugMarkerMarkerInfo, dst: &mut RawVkDebugMarkerMarkerInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugMarkerMarkerInfoExt);
         dst.next = ptr::null_mut();
-        dst.marker_name = new_ptr_string(&src.marker_name);
+        dst.marker_name = new_ptr_string(src.marker_name);
         dst.color = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array };
     }
 }
 
-impl VkRawType<VkDebugMarkerMarkerInfo> for RawVkDebugMarkerMarkerInfo {
-    fn vk_to_wrapped(src: &RawVkDebugMarkerMarkerInfo) -> VkDebugMarkerMarkerInfo {
+impl<'a> VkRawType<VkDebugMarkerMarkerInfo<'a>> for RawVkDebugMarkerMarkerInfo {
+    fn vk_to_wrapped(src: &RawVkDebugMarkerMarkerInfo) -> VkDebugMarkerMarkerInfo<'a> {
         VkDebugMarkerMarkerInfo {
-            marker_name: new_string(src.marker_name),
+            marker_name: new_string_ref(src.marker_name),
             color: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array },
         }
     }
 }
 
-impl Default for VkDebugMarkerMarkerInfo {
-    fn default() -> VkDebugMarkerMarkerInfo {
+impl Default for VkDebugMarkerMarkerInfo<'static> {
+    fn default() -> VkDebugMarkerMarkerInfo<'static> {
         VkDebugMarkerMarkerInfo {
-            marker_name: String::new(),
+            marker_name: "",
             color: [0.0; 4],
         }
     }
 }
 
-impl VkSetup for VkDebugMarkerMarkerInfo {
+impl<'a> VkSetup for VkDebugMarkerMarkerInfo<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }

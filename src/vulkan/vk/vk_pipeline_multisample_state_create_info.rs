@@ -56,6 +56,20 @@ impl VkWrappedType<RawVkPipelineMultisampleStateCreateInfo> for VkPipelineMultis
     }
 }
 
+impl VkRawType<VkPipelineMultisampleStateCreateInfo> for RawVkPipelineMultisampleStateCreateInfo {
+    fn vk_to_wrapped(src: &RawVkPipelineMultisampleStateCreateInfo) -> VkPipelineMultisampleStateCreateInfo {
+        VkPipelineMultisampleStateCreateInfo {
+            flags: RawVkPipelineMultisampleStateCreateFlags::vk_to_wrapped(&src.flags),
+            rasterization_samples: RawVkSampleCountFlags::vk_to_wrapped(&src.rasterization_samples),
+            sample_shading_enable: u32::vk_to_wrapped(&src.sample_shading_enable),
+            min_sample_shading: src.min_sample_shading,
+            sample_mask: None,
+            alpha_to_coverage_enable: u32::vk_to_wrapped(&src.alpha_to_coverage_enable),
+            alpha_to_one_enable: u32::vk_to_wrapped(&src.alpha_to_one_enable),
+        }
+    }
+}
+
 impl Default for VkPipelineMultisampleStateCreateInfo {
     fn default() -> VkPipelineMultisampleStateCreateInfo {
         VkPipelineMultisampleStateCreateInfo {
