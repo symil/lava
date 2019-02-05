@@ -58,7 +58,7 @@ impl Default for VkPhysicalDeviceFloat16Int8Features {
 }
 
 impl VkSetup for VkPhysicalDeviceFloat16Int8Features {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

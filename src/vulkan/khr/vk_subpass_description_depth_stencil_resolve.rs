@@ -55,7 +55,7 @@ impl Default for VkSubpassDescriptionDepthStencilResolve<'static> {
 }
 
 impl<'a> VkSetup for VkSubpassDescriptionDepthStencilResolve<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

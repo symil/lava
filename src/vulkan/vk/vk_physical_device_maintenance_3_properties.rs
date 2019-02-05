@@ -58,7 +58,7 @@ impl Default for VkPhysicalDeviceMaintenance3Properties {
 }
 
 impl VkSetup for VkPhysicalDeviceMaintenance3Properties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

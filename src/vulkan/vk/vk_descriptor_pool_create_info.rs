@@ -57,7 +57,7 @@ impl Default for VkDescriptorPoolCreateInfo<'static> {
 }
 
 impl<'a> VkSetup for VkDescriptorPoolCreateInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

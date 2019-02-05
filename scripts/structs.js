@@ -157,10 +157,10 @@ function genImplDefault(def) {
 function genImplVkSetup(def) {
     return [
         `impl${def.lifetimes} VkSetup for ${def.wrappedTypeName}${def.lifetimes}${def.lifetimesRestrictions}`, [
-            `fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice)`,
+            `fn vk_setup(&mut self, fn_table: *mut VkFunctionTable)`,
             def.fields.map(field => {
                 if (isStructOrHandle(field) && field.wrappedType === field.wrappedTypeName) {
-                    return `VkSetup::vk_setup(&mut self.${field.varName}, fn_table, instance, device);`
+                    return `VkSetup::vk_setup(&mut self.${field.varName}, fn_table);`
                 }
             }).filter(x => x)
         ]

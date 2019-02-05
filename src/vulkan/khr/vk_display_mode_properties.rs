@@ -39,9 +39,9 @@ impl VkRawType<VkDisplayModeProperties> for RawVkDisplayModeProperties {
 }
 
 impl VkSetup for VkDisplayModeProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.display_mode, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.parameters, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.display_mode, fn_table);
+        VkSetup::vk_setup(&mut self.parameters, fn_table);
     }
 }
 

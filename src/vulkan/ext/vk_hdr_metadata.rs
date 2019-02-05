@@ -89,11 +89,11 @@ impl Default for VkHdrMetadata {
 }
 
 impl VkSetup for VkHdrMetadata {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.display_primary_red, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.display_primary_green, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.display_primary_blue, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.white_point, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.display_primary_red, fn_table);
+        VkSetup::vk_setup(&mut self.display_primary_green, fn_table);
+        VkSetup::vk_setup(&mut self.display_primary_blue, fn_table);
+        VkSetup::vk_setup(&mut self.white_point, fn_table);
     }
 }
 

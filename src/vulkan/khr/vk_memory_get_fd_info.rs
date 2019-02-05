@@ -51,7 +51,7 @@ impl Default for VkMemoryGetFdInfo<'static> {
 }
 
 impl<'a> VkSetup for VkMemoryGetFdInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

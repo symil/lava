@@ -20,17 +20,13 @@ pub type RawVkAccelerationStructure = u64;
 #[derive(Debug, Clone)]
 pub struct VkAccelerationStructure {
     _handle: RawVkAccelerationStructure,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkAccelerationStructure> for RawVkAccelerationStructure {
     fn vk_to_wrapped(src: &RawVkAccelerationStructure) -> VkAccelerationStructure {
         VkAccelerationStructure {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkAccelerationStructure {
     fn default() -> VkAccelerationStructure {
         VkAccelerationStructure {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkAccelerationStructure {
 }
 
 impl VkSetup for VkAccelerationStructure {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,7 +69,7 @@ impl VkAccelerationStructure {
     /// Wrapper for [vkDestroyAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyAccelerationStructureNV.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyAccelerationStructureNV)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyAccelerationStructureNV)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
@@ -86,7 +78,7 @@ impl VkAccelerationStructure {
         unsafe {
             let raw_data_size = data.len();
             let raw_data = data.as_mut_ptr();
-            let vk_result = ((&*self._fn_table).vkGetAccelerationStructureHandleNV)(self._parent_device, self._handle, raw_data_size, raw_data);
+            let vk_result = ((&*self._fn_table).vkGetAccelerationStructureHandleNV)((*self._fn_table).device, self._handle, raw_data_size, raw_data);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }

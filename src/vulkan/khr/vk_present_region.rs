@@ -43,7 +43,7 @@ impl Default for VkPresentRegion<'static> {
 }
 
 impl<'a> VkSetup for VkPresentRegion<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

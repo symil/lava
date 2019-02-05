@@ -37,8 +37,8 @@ impl VkRawType<VkPhysicalDeviceProperties2> for RawVkPhysicalDeviceProperties2 {
 }
 
 impl VkSetup for VkPhysicalDeviceProperties2 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.properties, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.properties, fn_table);
     }
 }
 

@@ -54,8 +54,8 @@ impl Default for VkRenderPassFragmentDensityMapCreateInfo {
 }
 
 impl VkSetup for VkRenderPassFragmentDensityMapCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.fragment_density_map_attachment, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.fragment_density_map_attachment, fn_table);
     }
 }
 

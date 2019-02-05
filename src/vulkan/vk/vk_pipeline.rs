@@ -20,17 +20,13 @@ pub type RawVkPipeline = u64;
 #[derive(Debug, Clone)]
 pub struct VkPipeline {
     _handle: RawVkPipeline,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkPipeline> for RawVkPipeline {
     fn vk_to_wrapped(src: &RawVkPipeline) -> VkPipeline {
         VkPipeline {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkPipeline {
     fn default() -> VkPipeline {
         VkPipeline {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkPipeline {
 }
 
 impl VkSetup for VkPipeline {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,7 +69,7 @@ impl VkPipeline {
     /// Wrapper for [vkDestroyPipeline](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyPipeline.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyPipeline)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyPipeline)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
@@ -89,10 +81,10 @@ impl VkPipeline {
             let mut vk_result = 0;
             let mut raw_info : *mut c_void = ptr::null_mut();
             let raw_info_size = &mut mem::zeroed() as *mut usize;
-            vk_result = ((&*self._fn_table).vkGetShaderInfoAMD)(self._parent_device, self._handle, raw_shader_stage, raw_info_type, raw_info_size, raw_info);
+            vk_result = ((&*self._fn_table).vkGetShaderInfoAMD)((*self._fn_table).device, self._handle, raw_shader_stage, raw_info_type, raw_info_size, raw_info);
             raw_info = calloc(*raw_info_size as usize, mem::size_of::<c_void>()) as *mut c_void;
             
-            vk_result = ((&*self._fn_table).vkGetShaderInfoAMD)(self._parent_device, self._handle, raw_shader_stage, raw_info_type, raw_info_size, raw_info);
+            vk_result = ((&*self._fn_table).vkGetShaderInfoAMD)((*self._fn_table).device, self._handle, raw_shader_stage, raw_info_type, raw_info_size, raw_info);
             
             let info = Vec::from_raw_parts(raw_info, *raw_info_size, *raw_info_size);
             if vk_result == 0 { Ok(info) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), info)) }
@@ -106,7 +98,7 @@ impl VkPipeline {
             let raw_group_count = vk_to_raw_value(&group_count);
             let raw_data_size = data.len();
             let raw_data = data.as_mut_ptr();
-            let vk_result = ((&*self._fn_table).vkGetRayTracingShaderGroupHandlesNV)(self._parent_device, self._handle, raw_first_group, raw_group_count, raw_data_size, raw_data);
+            let vk_result = ((&*self._fn_table).vkGetRayTracingShaderGroupHandlesNV)((*self._fn_table).device, self._handle, raw_first_group, raw_group_count, raw_data_size, raw_data);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
@@ -115,7 +107,7 @@ impl VkPipeline {
     pub fn compile_deferred(&self, shader: usize) -> Result<(), VkResult> {
         unsafe {
             let raw_shader = vk_to_raw_value(&shader);
-            let vk_result = ((&*self._fn_table).vkCompileDeferredNV)(self._parent_device, self._handle, raw_shader);
+            let vk_result = ((&*self._fn_table).vkCompileDeferredNV)((*self._fn_table).device, self._handle, raw_shader);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }

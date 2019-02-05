@@ -47,7 +47,7 @@ impl Default for VkDescriptorSetVariableDescriptorCountAllocateInfo<'static> {
 }
 
 impl<'a> VkSetup for VkDescriptorSetVariableDescriptorCountAllocateInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

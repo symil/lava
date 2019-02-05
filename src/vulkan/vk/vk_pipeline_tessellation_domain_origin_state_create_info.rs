@@ -54,7 +54,7 @@ impl Default for VkPipelineTessellationDomainOriginStateCreateInfo {
 }
 
 impl VkSetup for VkPipelineTessellationDomainOriginStateCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

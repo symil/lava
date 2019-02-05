@@ -69,8 +69,8 @@ impl Default for VkSparseImageMemoryRequirements {
 }
 
 impl VkSetup for VkSparseImageMemoryRequirements {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.format_properties, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.format_properties, fn_table);
     }
 }
 

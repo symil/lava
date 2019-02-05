@@ -101,9 +101,9 @@ impl Default for VkPipelineDepthStencilStateCreateInfo {
 }
 
 impl VkSetup for VkPipelineDepthStencilStateCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.front, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.back, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.front, fn_table);
+        VkSetup::vk_setup(&mut self.back, fn_table);
     }
 }
 

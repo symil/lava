@@ -21,10 +21,8 @@ pub fn vk_create_instance(create_info: &VkInstanceCreateInfo) -> Result<VkInstan
         
         let mut instance = new_vk_value(raw_instance);
         if vk_result == 0 {
-            let fn_table = Box::into_raw(Box::new(VkInstanceFunctionTable::new(*raw_instance)));
-            let parent_instance = *raw_instance;
-            let parent_device = 0;
-            VkSetup::vk_setup(&mut instance, fn_table, parent_instance, parent_device);
+            let fn_table = Box::into_raw(Box::new(VkFunctionTable::from_instance(*raw_instance)));
+            VkSetup::vk_setup(&mut instance, fn_table);
         }
         free_vk_ptr(raw_create_info);
         if vk_result == 0 { Ok(instance) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), instance)) }

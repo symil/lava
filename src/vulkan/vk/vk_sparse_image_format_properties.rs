@@ -61,8 +61,8 @@ impl Default for VkSparseImageFormatProperties {
 }
 
 impl VkSetup for VkSparseImageFormatProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.image_granularity, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.image_granularity, fn_table);
     }
 }
 

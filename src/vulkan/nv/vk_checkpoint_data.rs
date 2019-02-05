@@ -59,7 +59,7 @@ impl Default for VkCheckpointData {
 }
 
 impl VkSetup for VkCheckpointData {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

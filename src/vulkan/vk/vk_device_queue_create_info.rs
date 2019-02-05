@@ -56,7 +56,7 @@ impl Default for VkDeviceQueueCreateInfo<'static> {
 }
 
 impl<'a> VkSetup for VkDeviceQueueCreateInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

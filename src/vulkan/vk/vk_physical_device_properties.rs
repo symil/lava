@@ -61,9 +61,9 @@ impl VkRawType<VkPhysicalDeviceProperties> for RawVkPhysicalDeviceProperties {
 }
 
 impl VkSetup for VkPhysicalDeviceProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.limits, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.sparse_properties, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.limits, fn_table);
+        VkSetup::vk_setup(&mut self.sparse_properties, fn_table);
     }
 }
 

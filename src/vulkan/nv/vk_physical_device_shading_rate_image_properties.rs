@@ -64,8 +64,8 @@ impl Default for VkPhysicalDeviceShadingRateImageProperties {
 }
 
 impl VkSetup for VkPhysicalDeviceShadingRateImageProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.shading_rate_texel_size, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.shading_rate_texel_size, fn_table);
     }
 }
 

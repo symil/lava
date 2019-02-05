@@ -123,6 +123,13 @@ pub unsafe fn get_vk_instance_function_pointer(instance: RawVkInstance, name: &s
     vkGetInstanceProcAddr(instance, c_string.as_c_str().as_ptr())
 }
 
+pub unsafe fn get_vk_device_function_pointer(device: RawVkDevice, name: &str) -> *mut c_void {
+    let c_string = CString::new(name).unwrap();
+
+    vkGetDeviceProcAddr(device, c_string.as_c_str().as_ptr())
+}
+
 extern {
     fn vkGetInstanceProcAddr(instance: RawVkInstance, name: *const c_char) -> *mut c_void;
+    fn vkGetDeviceProcAddr(device: RawVkDevice, name: *const c_char) -> *mut c_void;
 }

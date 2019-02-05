@@ -54,7 +54,7 @@ impl Default for VkExternalMemoryImageCreateInfo {
 }
 
 impl VkSetup for VkExternalMemoryImageCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -51,7 +51,7 @@ impl Default for VkBaseOutStructure {
 }
 
 impl VkSetup for VkBaseOutStructure {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -60,8 +60,8 @@ impl Default for VkDisplayModeCreateInfo {
 }
 
 impl VkSetup for VkDisplayModeCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.parameters, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.parameters, fn_table);
     }
 }
 

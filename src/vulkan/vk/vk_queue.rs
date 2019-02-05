@@ -20,17 +20,13 @@ pub type RawVkQueue = u64;
 #[derive(Debug, Clone)]
 pub struct VkQueue {
     _handle: RawVkQueue,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkQueue> for RawVkQueue {
     fn vk_to_wrapped(src: &RawVkQueue) -> VkQueue {
         VkQueue {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkQueue {
     fn default() -> VkQueue {
         VkQueue {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkQueue {
 }
 
 impl VkSetup for VkQueue {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -152,7 +144,7 @@ impl VkQueue {
             ((&*self._fn_table).vkGetQueueCheckpointDataNV)(self._handle, raw_checkpoint_data_count, raw_checkpoint_data);
             
             let mut checkpoint_data = new_vk_array(*raw_checkpoint_data_count, raw_checkpoint_data);
-            for elt in &mut checkpoint_data { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            for elt in &mut checkpoint_data { VkSetup::vk_setup(elt, self._fn_table); }
             free_vk_ptr_array(*raw_checkpoint_data_count as usize, raw_checkpoint_data);
             checkpoint_data
         }

@@ -77,7 +77,7 @@ impl<'a, 'b, 'c, 'd, 'e> VkSetup for VkPipelineShaderStageCreateInfo<'a, 'b, 'c,
         'd: 'c,
         'e: 'c,
 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

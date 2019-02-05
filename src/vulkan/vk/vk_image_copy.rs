@@ -71,12 +71,12 @@ impl Default for VkImageCopy {
 }
 
 impl VkSetup for VkImageCopy {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.src_subresource, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.src_offset, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.dst_subresource, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.dst_offset, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.extent, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.src_subresource, fn_table);
+        VkSetup::vk_setup(&mut self.src_offset, fn_table);
+        VkSetup::vk_setup(&mut self.dst_subresource, fn_table);
+        VkSetup::vk_setup(&mut self.dst_offset, fn_table);
+        VkSetup::vk_setup(&mut self.extent, fn_table);
     }
 }
 

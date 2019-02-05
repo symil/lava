@@ -80,7 +80,7 @@ impl<'a, 'b, 'c, 'd, 'e> VkSetup for VkAccelerationStructureInfo<'a, 'b, 'c, 'd,
         'd: 'a,
         'e: 'a,
 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

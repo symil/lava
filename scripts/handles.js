@@ -55,26 +55,6 @@ function genUses() {
         `vulkan::vk::*`,
     ]);
 
-    // if (def.name !== 'VkInstance') {
-    //     uses.add('vk::vk_instance::*');
-    // }
-
-    // if (def.name !== 'VkDevice') {
-    //     uses.add('vk::vk_device::*');
-    // }
-
-    // if (def.parent && def.name !== 'VkInstance') {
-    //     let use = `vk::`;
-    //     if (def.parent.extension) use += `::${def.parent.extension}`;
-    //     use += `${toSnakeCase(def.parent.name)}::*`;
-
-    //     uses.add(use);
-    // }
-
-    // for (let func of def.functions) {
-    //     addUsesToSet(uses, def, func.argsInfo);
-    // }
-
     return Array.from(uses.values()).map(str => `use ${str};`);
 }
 
@@ -120,12 +100,10 @@ function genRawType(def) {
 function genWrappedType(def) {
     return [
         documentType(def),
-        `#[derive(Debug, Clone)]`,
+        `#[derive(Debug, Clone, Copy)]`,
         `pub struct ${def.wrappedTypeName}`, [
             `_handle: ${def.rawTypeName},`,
-            `_parent_instance: RawVkInstance,`,
-            `_parent_device: RawVkDevice,`,
-            `_fn_table: *mut VkInstanceFunctionTable`
+            `_fn_table: *mut VkFunctionTable`
         ]
     ];
 }
@@ -136,8 +114,6 @@ function genVkRawTypeTrait(def) {
             `fn vk_to_wrapped(src: &${def.rawTypeName}) -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName, [
                     `_handle: *src,`,
-                    `_parent_instance: ${VK_NULL_HANDLE},`,
-                    `_parent_device: ${VK_NULL_HANDLE},`,
                     `_fn_table: ptr::null_mut()`
                 ]
             ],
@@ -161,8 +137,6 @@ function genDefaultTrait(def) {
             `fn default() -> ${def.wrappedTypeName}`, [
                 def.wrappedTypeName, [
                     `_handle: ${VK_NULL_HANDLE},`,
-                    `_parent_instance: ${VK_NULL_HANDLE},`,
-                    `_parent_device: ${VK_NULL_HANDLE},`,
                     `_fn_table: ptr::null_mut()`
                 ]
             ]
@@ -183,9 +157,7 @@ function genPartialEqTrait(def) {
 function genVkSetupTrait(def) {
     return [
         `impl VkSetup for ${def.wrappedTypeName}`, [
-            `fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice)`, [
-                `self._parent_instance = instance;`,
-                `self._parent_device = device;`,
+            `fn vk_setup(&mut self, fn_table: *mut VkFunctionTable)`, [
                 `self._fn_table = fn_table;`
             ]
         ]
@@ -202,10 +174,7 @@ function genSpecialMethods(def) {
                         `let vk_result = create_fn(self._handle, ptr::null(), raw_surface);`,
                         `if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }`,
                         `let mut surface = new_vk_value(raw_surface);`,
-                        `let fn_table = self._fn_table;`,
-                        `let parent_instance = self._parent_instance;`,
-                        `let parent_device = self._parent_device;`,
-                        `VkSetup::vk_setup(&mut surface, fn_table, parent_instance, parent_device);`,
+                        `VkSetup::vk_setup(&mut surface, self._fn_table);`,
                         `Ok(surface)`
                     ]
                 ]
@@ -214,10 +183,11 @@ function genSpecialMethods(def) {
     }
 }
 
+const VK_HANDLE_DOC = '/// Returns the internal Vulkan handle for the object.';
+
 function genMethods(def) {
-    const doc = '/// Returns the internal Vulkan handle for the object.'
     const handleMethod = [
-        `\n${doc}\npub fn vk_handle(&self) -> u64`, [
+        `\n${VK_HANDLE_DOC}\npub fn vk_handle(&self) -> u64`, [
             `self._handle`
         ],
     ];
@@ -268,7 +238,7 @@ function functionToMethod(handle, func) {
         } else if (handle && index <= 1 && arg.typeName === handle.name) {
             return `self._handle`;
         } else if (handle && handle.parent && index === 0 && arg.typeName === handle.parent.name) {
-            return handle.parent.name === 'VkInstance' ? `self._parent_instance` : `self._parent_device`;
+            return handle.parent.name === 'VkInstance' ? `(*self._fn_table).instance` : `(*self._fn_table).device`;
         } else {
             const methodArgName = arg.varName;
             const functionArgName = getRawVarName(methodArgName);
@@ -343,15 +313,17 @@ function functionToMethod(handle, func) {
                 const isInstance = createdType.typeName === 'VkInstance';
                 const isDevice = createdType.typeName === 'VkDevice';
 
-                const functionTable = isInstance ? `Box::into_raw(Box::new(VkInstanceFunctionTable::new(*${rawResultName})))` : `self._fn_table`;
-                const parentInstance = isInstance ? `*${rawResultName}` : `self._parent_instance`;
-                const parentDevice = isDevice ? `*${rawResultName}` : (isInstance ? VK_NULL_HANDLE : `self._parent_device`);
+                let functionTable = `self._fn_table`;
+
+                if (isInstance) {
+                    functionTable = `Box::into_raw(Box::new(VkFunctionTable::from_instance(*${rawResultName})))`;
+                } else if (isDevice) {
+                    functionTable = `Box::into_raw(Box::new(VkFunctionTable::from_device(*${rawResultName})))`;
+                }
 
                 const setupStatements = [
                     `let fn_table = ${functionTable};`,
-                    `let parent_instance = ${parentInstance};`,
-                    `let parent_device = ${parentDevice};`,
-                    `VkSetup::vk_setup(&mut ${wrappedResultVarName}, fn_table, parent_instance, parent_device);`
+                    `VkSetup::vk_setup(&mut ${wrappedResultVarName}, fn_table);`
                 ];
 
                 if (returnVkResult) {
@@ -388,7 +360,7 @@ function functionToMethod(handle, func) {
             );
 
             if (setupResult) {
-                const setupStatement = `for elt in &mut ${wrappedResultVarName} { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }`;
+                const setupStatement = `for elt in &mut ${wrappedResultVarName} { VkSetup::vk_setup(elt, self._fn_table); }`;
 
                 if (returnVkResult) {
                     statements.push(`if vk_result == ${VK_SUCCESS}`, [ setupStatement ]);
@@ -428,7 +400,7 @@ function functionToMethod(handle, func) {
         statements.push(`${functionCall};`);
     }
 
-    if (func.name === 'vkDestroyInstance') {
+    if (func.name === 'vkDestroyInstance' || func.name === 'vkDestroyDevice') {
         freeStataments.push(`Box::from_raw(self._fn_table);`);
     }
 

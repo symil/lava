@@ -20,17 +20,13 @@ pub type RawVkInstance = u64;
 #[derive(Debug, Clone)]
 pub struct VkInstance {
     _handle: RawVkInstance,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkInstance> for RawVkInstance {
     fn vk_to_wrapped(src: &RawVkInstance) -> VkInstance {
         VkInstance {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkInstance {
     fn default() -> VkInstance {
         VkInstance {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkInstance {
 }
 
 impl VkSetup for VkInstance {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -74,10 +66,7 @@ impl VkInstance {
             let vk_result = create_fn(self._handle, ptr::null(), raw_surface);
             if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }
             let mut surface = new_vk_value(raw_surface);
-            let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut surface, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut surface, self._fn_table);
             Ok(surface)
         }
     }
@@ -111,7 +100,7 @@ impl VkInstance {
             
             let mut physical_devices = new_vk_array(*raw_physical_device_count, raw_physical_devices);
             if vk_result == 0 {
-                for elt in &mut physical_devices { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut physical_devices { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_ptr(raw_physical_devices);
             if vk_result == 0 { Ok(physical_devices) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), physical_devices)) }
@@ -131,7 +120,7 @@ impl VkInstance {
             
             let mut physical_device_group_properties = new_vk_array(*raw_physical_device_group_count, raw_physical_device_group_properties);
             if vk_result == 0 {
-                for elt in &mut physical_device_group_properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut physical_device_group_properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_physical_device_group_count as usize, raw_physical_device_group_properties);
             if vk_result == 0 { Ok(physical_device_group_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), physical_device_group_properties)) }
@@ -150,9 +139,7 @@ impl VkInstance {
             let mut surface = new_vk_value(raw_surface);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut surface, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut surface, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(surface) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface)) }
@@ -171,9 +158,7 @@ impl VkInstance {
             let mut callback = new_vk_value(raw_callback);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut callback, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut callback, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(callback) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), callback)) }
@@ -208,9 +193,7 @@ impl VkInstance {
             let mut messenger = new_vk_value(raw_messenger);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut messenger, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut messenger, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(messenger) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), messenger)) }

@@ -58,7 +58,7 @@ impl Default for VkPhysicalDeviceConditionalRenderingFeatures {
 }
 
 impl VkSetup for VkPhysicalDeviceConditionalRenderingFeatures {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

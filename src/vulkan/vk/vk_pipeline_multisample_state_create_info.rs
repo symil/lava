@@ -71,7 +71,7 @@ impl Default for VkPipelineMultisampleStateCreateInfo<'static> {
 }
 
 impl<'a> VkSetup for VkPipelineMultisampleStateCreateInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

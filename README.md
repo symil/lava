@@ -119,6 +119,13 @@ VkShaderStageFlags!(vertex, fragment)
 When possible, functions return a `Result<T, (VkResult, T)>`. The return value is `Ok(T)` if the `VkResult` returned by the Vulkan function is 0.
 Otherwise it's `Err((VkResult, T))`. The first element of the tuple is the error code returned by the Vulkan function. The second element is, in the specific case where the `VkResult` is not 0 but is not an error either (e.g when calling `swapchain.acquire_next_image()`), the value produced by the function. Otherwise it's a zeroed value that will most likely crash when being used.
 
+### Objects destruction and drop
+
+Users are required to manually destroy their objects themselves, instead of Rust doing it automatically when the object is dropped. There are two reasons for that:
+
+- The user is not always expected to destroy the objects themselves. For example, they are not expected to destroy the `VkImage` objects bound to a swapchain; Vulkan will destroy them itself when the swapchain is destroyed. However, the user is still expected to destroy the `VkImage` objects that they create manually. That would make an automatic destruction very tedious to implement.
+- The order in which objects are dropped has a good chance of not matching the oder in which the objects must be destroyed, especially in structures. 
+
 ## Manual build
 
 The content of the `src/vulkan/` folder is generated from the `vulkan_core.h` and `vk.xml` files of the

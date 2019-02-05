@@ -55,10 +55,10 @@ impl VkRawType<VkDisplayProperties> for RawVkDisplayProperties {
 }
 
 impl VkSetup for VkDisplayProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.display, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.physical_dimensions, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.physical_resolution, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.display, fn_table);
+        VkSetup::vk_setup(&mut self.physical_dimensions, fn_table);
+        VkSetup::vk_setup(&mut self.physical_resolution, fn_table);
     }
 }
 

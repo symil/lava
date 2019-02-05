@@ -65,8 +65,8 @@ impl Default for VkQueueFamilyProperties {
 }
 
 impl VkSetup for VkQueueFamilyProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.min_image_transfer_granularity, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.min_image_transfer_granularity, fn_table);
     }
 }
 

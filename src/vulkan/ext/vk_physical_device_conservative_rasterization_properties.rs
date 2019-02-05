@@ -93,7 +93,7 @@ impl Default for VkPhysicalDeviceConservativeRasterizationProperties {
 }
 
 impl VkSetup for VkPhysicalDeviceConservativeRasterizationProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

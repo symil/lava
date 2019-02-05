@@ -54,7 +54,7 @@ impl Default for VkImageViewUsageCreateInfo {
 }
 
 impl VkSetup for VkImageViewUsageCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

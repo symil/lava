@@ -20,17 +20,13 @@ pub type RawVkFence = u64;
 #[derive(Debug, Clone)]
 pub struct VkFence {
     _handle: RawVkFence,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkFence> for RawVkFence {
     fn vk_to_wrapped(src: &RawVkFence) -> VkFence {
         VkFence {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkFence {
     fn default() -> VkFence {
         VkFence {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkFence {
 }
 
 impl VkSetup for VkFence {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,14 +69,14 @@ impl VkFence {
     /// Wrapper for [vkDestroyFence](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyFence.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyFence)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyFence)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
     /// Wrapper for [vkGetFenceStatus](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetFenceStatus.html).
     pub fn get_status(&self) -> VkResult {
         unsafe {
-            let vk_result = ((&*self._fn_table).vkGetFenceStatus)(self._parent_device, self._handle);
+            let vk_result = ((&*self._fn_table).vkGetFenceStatus)((*self._fn_table).device, self._handle);
             RawVkResult::vk_to_wrapped(&vk_result)
         }
     }

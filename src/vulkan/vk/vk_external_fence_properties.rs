@@ -65,7 +65,7 @@ impl Default for VkExternalFenceProperties {
 }
 
 impl VkSetup for VkExternalFenceProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

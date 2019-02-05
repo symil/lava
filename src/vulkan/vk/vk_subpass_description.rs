@@ -73,7 +73,7 @@ impl Default for VkSubpassDescription<'static, 'static, 'static, 'static, 'stati
 }
 
 impl<'a, 'b, 'c, 'd, 'e> VkSetup for VkSubpassDescription<'a, 'b, 'c, 'd, 'e> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

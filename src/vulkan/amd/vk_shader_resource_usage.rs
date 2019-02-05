@@ -68,7 +68,7 @@ impl Default for VkShaderResourceUsage {
 }
 
 impl VkSetup for VkShaderResourceUsage {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

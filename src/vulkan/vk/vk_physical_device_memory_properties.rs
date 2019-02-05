@@ -59,7 +59,7 @@ impl Default for VkPhysicalDeviceMemoryProperties {
 }
 
 impl VkSetup for VkPhysicalDeviceMemoryProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

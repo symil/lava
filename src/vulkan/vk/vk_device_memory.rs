@@ -20,17 +20,13 @@ pub type RawVkDeviceMemory = u64;
 #[derive(Debug, Clone)]
 pub struct VkDeviceMemory {
     _handle: RawVkDeviceMemory,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkDeviceMemory> for RawVkDeviceMemory {
     fn vk_to_wrapped(src: &RawVkDeviceMemory) -> VkDeviceMemory {
         VkDeviceMemory {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkDeviceMemory {
     fn default() -> VkDeviceMemory {
         VkDeviceMemory {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkDeviceMemory {
 }
 
 impl VkSetup for VkDeviceMemory {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,7 +69,7 @@ impl VkDeviceMemory {
     /// Wrapper for [vkFreeMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeMemory.html).
     pub fn free(&self) {
         unsafe {
-            ((&*self._fn_table).vkFreeMemory)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkFreeMemory)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
@@ -90,7 +82,7 @@ impl VkDeviceMemory {
             let mut vk_result = 0;
             let raw_data = &mut mem::zeroed() as *mut *mut c_void;
             
-            vk_result = ((&*self._fn_table).vkMapMemory)(self._parent_device, self._handle, raw_offset, raw_size, raw_flags, raw_data);
+            vk_result = ((&*self._fn_table).vkMapMemory)((*self._fn_table).device, self._handle, raw_offset, raw_size, raw_flags, raw_data);
             
             let data = slice::from_raw_parts_mut(*raw_data, size);
             if vk_result == 0 { Ok(data) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), data)) }
@@ -100,7 +92,7 @@ impl VkDeviceMemory {
     /// Wrapper for [vkUnmapMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUnmapMemory.html).
     pub fn unmap(&self) {
         unsafe {
-            ((&*self._fn_table).vkUnmapMemory)(self._parent_device, self._handle);
+            ((&*self._fn_table).vkUnmapMemory)((*self._fn_table).device, self._handle);
         }
     }
     
@@ -109,7 +101,7 @@ impl VkDeviceMemory {
         unsafe {
             let raw_committed_memory_in_bytes = &mut mem::zeroed() as *mut u64;
             
-            ((&*self._fn_table).vkGetDeviceMemoryCommitment)(self._parent_device, self._handle, raw_committed_memory_in_bytes);
+            ((&*self._fn_table).vkGetDeviceMemoryCommitment)((*self._fn_table).device, self._handle, raw_committed_memory_in_bytes);
             
             let committed_memory_in_bytes = new_vk_value(raw_committed_memory_in_bytes);
             committed_memory_in_bytes

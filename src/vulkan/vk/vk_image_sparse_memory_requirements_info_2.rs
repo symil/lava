@@ -46,7 +46,7 @@ impl Default for VkImageSparseMemoryRequirementsInfo2<'static> {
 }
 
 impl<'a> VkSetup for VkImageSparseMemoryRequirementsInfo2<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

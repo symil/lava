@@ -78,7 +78,7 @@ impl Default for VkPhysicalDeviceSparseImageFormatInfo2 {
 }
 
 impl VkSetup for VkPhysicalDeviceSparseImageFormatInfo2 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

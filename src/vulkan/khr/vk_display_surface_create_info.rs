@@ -78,8 +78,8 @@ impl Default for VkDisplaySurfaceCreateInfo<'static> {
 }
 
 impl<'a> VkSetup for VkDisplaySurfaceCreateInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.image_extent, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.image_extent, fn_table);
     }
 }
 

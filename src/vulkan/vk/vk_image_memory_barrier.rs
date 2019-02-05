@@ -77,8 +77,8 @@ impl Default for VkImageMemoryBarrier<'static> {
 }
 
 impl<'a> VkSetup for VkImageMemoryBarrier<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.subresource_range, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.subresource_range, fn_table);
     }
 }
 

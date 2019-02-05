@@ -107,7 +107,7 @@ impl Default for VkPipelineRasterizationStateCreateInfo {
 }
 
 impl VkSetup for VkPipelineRasterizationStateCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

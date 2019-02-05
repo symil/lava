@@ -20,17 +20,13 @@ pub type RawVkRenderPass = u64;
 #[derive(Debug, Clone)]
 pub struct VkRenderPass {
     _handle: RawVkRenderPass,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkRenderPass> for RawVkRenderPass {
     fn vk_to_wrapped(src: &RawVkRenderPass) -> VkRenderPass {
         VkRenderPass {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkRenderPass {
     fn default() -> VkRenderPass {
         VkRenderPass {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkRenderPass {
 }
 
 impl VkSetup for VkRenderPass {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,7 +69,7 @@ impl VkRenderPass {
     /// Wrapper for [vkDestroyRenderPass](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyRenderPass.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyRenderPass)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyRenderPass)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
@@ -86,13 +78,11 @@ impl VkRenderPass {
         unsafe {
             let raw_granularity = &mut mem::zeroed() as *mut RawVkExtent2D;
             
-            ((&*self._fn_table).vkGetRenderAreaGranularity)(self._parent_device, self._handle, raw_granularity);
+            ((&*self._fn_table).vkGetRenderAreaGranularity)((*self._fn_table).device, self._handle, raw_granularity);
             
             let mut granularity = new_vk_value(raw_granularity);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut granularity, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut granularity, fn_table);
             RawVkExtent2D::vk_free(raw_granularity.as_mut().unwrap());
             granularity
         }

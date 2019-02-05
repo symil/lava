@@ -80,8 +80,8 @@ impl Default for VkShaderStatisticsInfo {
 }
 
 impl VkSetup for VkShaderStatisticsInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.resource_usage, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.resource_usage, fn_table);
     }
 }
 

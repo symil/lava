@@ -88,7 +88,7 @@ impl<'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h> VkSetup for VkRenderPassCreateInfo<'a, 'b, 
         'f: 'b,
         'g: 'b,
 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

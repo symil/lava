@@ -69,7 +69,7 @@ impl Default for VkCommandBufferInheritanceInfo<'static, 'static> {
 }
 
 impl<'a, 'b> VkSetup for VkCommandBufferInheritanceInfo<'a, 'b> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -94,7 +94,7 @@ impl Default for VkAttachmentDescription {
 }
 
 impl VkSetup for VkAttachmentDescription {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

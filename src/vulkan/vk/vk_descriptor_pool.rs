@@ -20,17 +20,13 @@ pub type RawVkDescriptorPool = u64;
 #[derive(Debug, Clone)]
 pub struct VkDescriptorPool {
     _handle: RawVkDescriptorPool,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkDescriptorPool> for RawVkDescriptorPool {
     fn vk_to_wrapped(src: &RawVkDescriptorPool) -> VkDescriptorPool {
         VkDescriptorPool {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkDescriptorPool {
     fn default() -> VkDescriptorPool {
         VkDescriptorPool {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkDescriptorPool {
 }
 
 impl VkSetup for VkDescriptorPool {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,7 +69,7 @@ impl VkDescriptorPool {
     /// Wrapper for [vkDestroyDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDescriptorPool.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyDescriptorPool)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyDescriptorPool)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
@@ -85,7 +77,7 @@ impl VkDescriptorPool {
     pub fn reset(&self, flags: VkDescriptorPoolResetFlags) -> Result<(), VkResult> {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
-            let vk_result = ((&*self._fn_table).vkResetDescriptorPool)(self._parent_device, self._handle, raw_flags);
+            let vk_result = ((&*self._fn_table).vkResetDescriptorPool)((*self._fn_table).device, self._handle, raw_flags);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
@@ -95,7 +87,7 @@ impl VkDescriptorPool {
         unsafe {
             let raw_descriptor_set_count = descriptor_sets.len() as u32;
             let raw_descriptor_sets = new_ptr_vk_array_from_ref(descriptor_sets);
-            let vk_result = ((&*self._fn_table).vkFreeDescriptorSets)(self._parent_device, self._handle, raw_descriptor_set_count, raw_descriptor_sets);
+            let vk_result = ((&*self._fn_table).vkFreeDescriptorSets)((*self._fn_table).device, self._handle, raw_descriptor_set_count, raw_descriptor_sets);
             free_ptr(raw_descriptor_sets);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }

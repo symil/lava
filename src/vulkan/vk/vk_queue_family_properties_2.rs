@@ -54,8 +54,8 @@ impl Default for VkQueueFamilyProperties2 {
 }
 
 impl VkSetup for VkQueueFamilyProperties2 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.queue_family_properties, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.queue_family_properties, fn_table);
     }
 }
 

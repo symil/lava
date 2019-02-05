@@ -20,17 +20,13 @@ pub type RawVkCommandPool = u64;
 #[derive(Debug, Clone)]
 pub struct VkCommandPool {
     _handle: RawVkCommandPool,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkCommandPool> for RawVkCommandPool {
     fn vk_to_wrapped(src: &RawVkCommandPool) -> VkCommandPool {
         VkCommandPool {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkCommandPool {
     fn default() -> VkCommandPool {
         VkCommandPool {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkCommandPool {
 }
 
 impl VkSetup for VkCommandPool {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,7 +69,7 @@ impl VkCommandPool {
     /// Wrapper for [vkDestroyCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyCommandPool.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyCommandPool)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyCommandPool)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
@@ -85,7 +77,7 @@ impl VkCommandPool {
     pub fn reset(&self, flags: VkCommandPoolResetFlags) -> Result<(), VkResult> {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
-            let vk_result = ((&*self._fn_table).vkResetCommandPool)(self._parent_device, self._handle, raw_flags);
+            let vk_result = ((&*self._fn_table).vkResetCommandPool)((*self._fn_table).device, self._handle, raw_flags);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
@@ -95,7 +87,7 @@ impl VkCommandPool {
         unsafe {
             let raw_command_buffer_count = command_buffers.len() as u32;
             let raw_command_buffers = new_ptr_vk_array_from_ref(command_buffers);
-            ((&*self._fn_table).vkFreeCommandBuffers)(self._parent_device, self._handle, raw_command_buffer_count, raw_command_buffers);
+            ((&*self._fn_table).vkFreeCommandBuffers)((*self._fn_table).device, self._handle, raw_command_buffer_count, raw_command_buffers);
             free_ptr(raw_command_buffers);
         }
     }
@@ -104,7 +96,7 @@ impl VkCommandPool {
     pub fn trim(&self, flags: VkCommandPoolTrimFlags) {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
-            ((&*self._fn_table).vkTrimCommandPool)(self._parent_device, self._handle, raw_flags);
+            ((&*self._fn_table).vkTrimCommandPool)((*self._fn_table).device, self._handle, raw_flags);
         }
     }
 }

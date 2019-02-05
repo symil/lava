@@ -58,7 +58,7 @@ impl Default for VkExtent3D {
 }
 
 impl VkSetup for VkExtent3D {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

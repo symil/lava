@@ -91,15 +91,15 @@ impl Default for VkDisplayPlaneCapabilities {
 }
 
 impl VkSetup for VkDisplayPlaneCapabilities {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.min_src_position, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.max_src_position, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.min_src_extent, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.max_src_extent, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.min_dst_position, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.max_dst_position, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.min_dst_extent, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.max_dst_extent, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.min_src_position, fn_table);
+        VkSetup::vk_setup(&mut self.max_src_position, fn_table);
+        VkSetup::vk_setup(&mut self.min_src_extent, fn_table);
+        VkSetup::vk_setup(&mut self.max_src_extent, fn_table);
+        VkSetup::vk_setup(&mut self.min_dst_position, fn_table);
+        VkSetup::vk_setup(&mut self.max_dst_position, fn_table);
+        VkSetup::vk_setup(&mut self.min_dst_extent, fn_table);
+        VkSetup::vk_setup(&mut self.max_dst_extent, fn_table);
     }
 }
 

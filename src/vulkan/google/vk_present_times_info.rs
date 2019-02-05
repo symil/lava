@@ -48,7 +48,7 @@ impl Default for VkPresentTimesInfo<'static> {
 }
 
 impl<'a> VkSetup for VkPresentTimesInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -57,7 +57,7 @@ impl<'a, 'b> VkSetup for VkWriteDescriptorSetAccelerationStructure<'a, 'b>
     where
         'b: 'a,
 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

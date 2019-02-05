@@ -54,7 +54,7 @@ impl Default for VkSamplerReductionModeCreateInfo {
 }
 
 impl VkSetup for VkSamplerReductionModeCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

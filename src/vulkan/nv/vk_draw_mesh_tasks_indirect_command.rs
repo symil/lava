@@ -53,7 +53,7 @@ impl Default for VkDrawMeshTasksIndirectCommand {
 }
 
 impl VkSetup for VkDrawMeshTasksIndirectCommand {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -20,17 +20,13 @@ pub type RawVkObjectTable = u64;
 #[derive(Debug, Clone)]
 pub struct VkObjectTable {
     _handle: RawVkObjectTable,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkObjectTable> for RawVkObjectTable {
     fn vk_to_wrapped(src: &RawVkObjectTable) -> VkObjectTable {
         VkObjectTable {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkObjectTable {
     fn default() -> VkObjectTable {
         VkObjectTable {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkObjectTable {
 }
 
 impl VkSetup for VkObjectTable {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,7 +69,7 @@ impl VkObjectTable {
     /// Wrapper for [vkDestroyObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyObjectTableNVX.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyObjectTableNVX)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyObjectTableNVX)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
@@ -87,7 +79,7 @@ impl VkObjectTable {
             let raw_object_count = cmp::max(object_table_entries.len(), object_indices.len()) as u32;
             let raw_object_table_entries = new_ptr_vk_array_array(object_table_entries);
             let raw_object_indices = new_ptr_vk_array(object_indices);
-            let vk_result = ((&*self._fn_table).vkRegisterObjectsNVX)(self._parent_device, self._handle, raw_object_count, raw_object_table_entries, raw_object_indices);
+            let vk_result = ((&*self._fn_table).vkRegisterObjectsNVX)((*self._fn_table).device, self._handle, raw_object_count, raw_object_table_entries, raw_object_indices);
             free_vk_ptr_array_array(raw_object_count as usize, raw_object_table_entries);
             free_ptr(raw_object_indices);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
@@ -100,7 +92,7 @@ impl VkObjectTable {
             let raw_object_count = cmp::max(object_entry_types.len(), object_indices.len()) as u32;
             let raw_object_entry_types = new_ptr_vk_array(object_entry_types);
             let raw_object_indices = new_ptr_vk_array(object_indices);
-            let vk_result = ((&*self._fn_table).vkUnregisterObjectsNVX)(self._parent_device, self._handle, raw_object_count, raw_object_entry_types, raw_object_indices);
+            let vk_result = ((&*self._fn_table).vkUnregisterObjectsNVX)((*self._fn_table).device, self._handle, raw_object_count, raw_object_entry_types, raw_object_indices);
             free_ptr(raw_object_entry_types);
             free_ptr(raw_object_indices);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }

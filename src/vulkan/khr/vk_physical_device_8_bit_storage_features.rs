@@ -63,7 +63,7 @@ impl Default for VkPhysicalDevice8BitStorageFeatures {
 }
 
 impl VkSetup for VkPhysicalDevice8BitStorageFeatures {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

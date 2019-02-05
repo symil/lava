@@ -54,7 +54,7 @@ impl Default for VkBindImageMemoryDeviceGroupInfo<'static, 'static> {
 }
 
 impl<'a, 'b> VkSetup for VkBindImageMemoryDeviceGroupInfo<'a, 'b> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

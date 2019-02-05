@@ -66,7 +66,7 @@ impl Default for VkPhysicalDeviceExternalBufferInfo {
 }
 
 impl VkSetup for VkPhysicalDeviceExternalBufferInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

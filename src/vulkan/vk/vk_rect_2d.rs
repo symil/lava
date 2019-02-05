@@ -55,9 +55,9 @@ impl Default for VkRect2D {
 }
 
 impl VkSetup for VkRect2D {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.offset, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.extent, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.offset, fn_table);
+        VkSetup::vk_setup(&mut self.extent, fn_table);
     }
 }
 

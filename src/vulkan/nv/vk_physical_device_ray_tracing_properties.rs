@@ -88,7 +88,7 @@ impl Default for VkPhysicalDeviceRayTracingProperties {
 }
 
 impl VkSetup for VkPhysicalDeviceRayTracingProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -54,7 +54,7 @@ impl Default for VkQueueFamilyCheckpointProperties {
 }
 
 impl VkSetup for VkQueueFamilyCheckpointProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

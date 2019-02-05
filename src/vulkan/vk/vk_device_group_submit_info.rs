@@ -59,7 +59,7 @@ impl Default for VkDeviceGroupSubmitInfo<'static, 'static, 'static> {
 }
 
 impl<'a, 'b, 'c> VkSetup for VkDeviceGroupSubmitInfo<'a, 'b, 'c> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

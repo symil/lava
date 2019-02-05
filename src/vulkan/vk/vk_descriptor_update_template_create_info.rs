@@ -77,7 +77,7 @@ impl Default for VkDescriptorUpdateTemplateCreateInfo<'static, 'static, 'static>
 }
 
 impl<'a, 'b, 'c> VkSetup for VkDescriptorUpdateTemplateCreateInfo<'a, 'b, 'c> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

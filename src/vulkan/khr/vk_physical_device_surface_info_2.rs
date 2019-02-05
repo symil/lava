@@ -46,7 +46,7 @@ impl Default for VkPhysicalDeviceSurfaceInfo2<'static> {
 }
 
 impl<'a> VkSetup for VkPhysicalDeviceSurfaceInfo2<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

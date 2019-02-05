@@ -20,17 +20,13 @@ pub type RawVkEvent = u64;
 #[derive(Debug, Clone)]
 pub struct VkEvent {
     _handle: RawVkEvent,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkEvent> for RawVkEvent {
     fn vk_to_wrapped(src: &RawVkEvent) -> VkEvent {
         VkEvent {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkEvent {
     fn default() -> VkEvent {
         VkEvent {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkEvent {
 }
 
 impl VkSetup for VkEvent {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -77,14 +69,14 @@ impl VkEvent {
     /// Wrapper for [vkDestroyEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyEvent.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyEvent)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyEvent)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
     /// Wrapper for [vkGetEventStatus](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetEventStatus.html).
     pub fn get_status(&self) -> VkResult {
         unsafe {
-            let vk_result = ((&*self._fn_table).vkGetEventStatus)(self._parent_device, self._handle);
+            let vk_result = ((&*self._fn_table).vkGetEventStatus)((*self._fn_table).device, self._handle);
             RawVkResult::vk_to_wrapped(&vk_result)
         }
     }
@@ -92,7 +84,7 @@ impl VkEvent {
     /// Wrapper for [vkSetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetEvent.html).
     pub fn set(&self) -> Result<(), VkResult> {
         unsafe {
-            let vk_result = ((&*self._fn_table).vkSetEvent)(self._parent_device, self._handle);
+            let vk_result = ((&*self._fn_table).vkSetEvent)((*self._fn_table).device, self._handle);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
@@ -100,7 +92,7 @@ impl VkEvent {
     /// Wrapper for [vkResetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetEvent.html).
     pub fn reset(&self) -> Result<(), VkResult> {
         unsafe {
-            let vk_result = ((&*self._fn_table).vkResetEvent)(self._parent_device, self._handle);
+            let vk_result = ((&*self._fn_table).vkResetEvent)((*self._fn_table).device, self._handle);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }

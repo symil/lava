@@ -20,17 +20,13 @@ pub type RawVkDisplay = u64;
 #[derive(Debug, Clone)]
 pub struct VkDisplay {
     _handle: RawVkDisplay,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkDisplay> for RawVkDisplay {
     fn vk_to_wrapped(src: &RawVkDisplay) -> VkDisplay {
         VkDisplay {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkDisplay {
     fn default() -> VkDisplay {
         VkDisplay {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkDisplay {
 }
 
 impl VkSetup for VkDisplay {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }

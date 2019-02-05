@@ -61,7 +61,7 @@ impl Default for VkBindAccelerationStructureMemoryInfo<'static, 'static, 'static
 }
 
 impl<'a, 'b, 'c> VkSetup for VkBindAccelerationStructureMemoryInfo<'a, 'b, 'c> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

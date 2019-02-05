@@ -64,7 +64,7 @@ impl Default for VkImageSubresourceLayers {
 }
 
 impl VkSetup for VkImageSubresourceLayers {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

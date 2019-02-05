@@ -52,7 +52,7 @@ impl Default for VkDeviceGroupRenderPassBeginInfo<'static> {
 }
 
 impl<'a> VkSetup for VkDeviceGroupRenderPassBeginInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -574,7 +574,7 @@ impl Default for VkPhysicalDeviceLimits {
 }
 
 impl VkSetup for VkPhysicalDeviceLimits {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

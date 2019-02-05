@@ -52,7 +52,7 @@ impl Default for VkShaderModuleCreateInfo<'static> {
 }
 
 impl<'a> VkSetup for VkShaderModuleCreateInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

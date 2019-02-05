@@ -63,7 +63,7 @@ impl Default for VkConformanceVersion {
 }
 
 impl VkSetup for VkConformanceVersion {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

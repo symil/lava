@@ -20,17 +20,13 @@ pub type RawVkImage = u64;
 #[derive(Debug, Clone)]
 pub struct VkImage {
     _handle: RawVkImage,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkImage> for RawVkImage {
     fn vk_to_wrapped(src: &RawVkImage) -> VkImage {
         VkImage {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkImage {
     fn default() -> VkImage {
         VkImage {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkImage {
 }
 
 impl VkSetup for VkImage {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -79,7 +71,7 @@ impl VkImage {
         unsafe {
             let raw_memory = vk_to_raw_value(memory);
             let raw_memory_offset = vk_to_raw_value(&memory_offset);
-            let vk_result = ((&*self._fn_table).vkBindImageMemory)(self._parent_device, self._handle, raw_memory, raw_memory_offset);
+            let vk_result = ((&*self._fn_table).vkBindImageMemory)((*self._fn_table).device, self._handle, raw_memory, raw_memory_offset);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
@@ -89,13 +81,11 @@ impl VkImage {
         unsafe {
             let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements;
             
-            ((&*self._fn_table).vkGetImageMemoryRequirements)(self._parent_device, self._handle, raw_memory_requirements);
+            ((&*self._fn_table).vkGetImageMemoryRequirements)((*self._fn_table).device, self._handle, raw_memory_requirements);
             
             let mut memory_requirements = new_vk_value(raw_memory_requirements);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut memory_requirements, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut memory_requirements, fn_table);
             RawVkMemoryRequirements::vk_free(raw_memory_requirements.as_mut().unwrap());
             memory_requirements
         }
@@ -106,13 +96,13 @@ impl VkImage {
         unsafe {
             let mut raw_sparse_memory_requirements : *mut RawVkSparseImageMemoryRequirements = ptr::null_mut();
             let raw_sparse_memory_requirement_count = &mut mem::zeroed() as *mut u32;
-            ((&*self._fn_table).vkGetImageSparseMemoryRequirements)(self._parent_device, self._handle, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
+            ((&*self._fn_table).vkGetImageSparseMemoryRequirements)((*self._fn_table).device, self._handle, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
             raw_sparse_memory_requirements = calloc(*raw_sparse_memory_requirement_count as usize, mem::size_of::<RawVkSparseImageMemoryRequirements>()) as *mut RawVkSparseImageMemoryRequirements;
             
-            ((&*self._fn_table).vkGetImageSparseMemoryRequirements)(self._parent_device, self._handle, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
+            ((&*self._fn_table).vkGetImageSparseMemoryRequirements)((*self._fn_table).device, self._handle, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
             
             let mut sparse_memory_requirements = new_vk_array(*raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
-            for elt in &mut sparse_memory_requirements { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            for elt in &mut sparse_memory_requirements { VkSetup::vk_setup(elt, self._fn_table); }
             free_vk_ptr_array(*raw_sparse_memory_requirement_count as usize, raw_sparse_memory_requirements);
             sparse_memory_requirements
         }
@@ -121,7 +111,7 @@ impl VkImage {
     /// Wrapper for [vkDestroyImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyImage.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyImage)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyImage)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
@@ -131,13 +121,11 @@ impl VkImage {
             let raw_subresource = new_ptr_vk_value(subresource);
             let raw_layout = &mut mem::zeroed() as *mut RawVkSubresourceLayout;
             
-            ((&*self._fn_table).vkGetImageSubresourceLayout)(self._parent_device, self._handle, raw_subresource, raw_layout);
+            ((&*self._fn_table).vkGetImageSubresourceLayout)((*self._fn_table).device, self._handle, raw_subresource, raw_layout);
             
             let mut layout = new_vk_value(raw_layout);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut layout, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut layout, fn_table);
             free_vk_ptr(raw_subresource);
             RawVkSubresourceLayout::vk_free(raw_layout.as_mut().unwrap());
             layout
@@ -150,14 +138,12 @@ impl VkImage {
             let mut vk_result = 0;
             let raw_properties = &mut mem::zeroed() as *mut ext::RawVkImageDrmFormatModifierProperties;
             
-            vk_result = ((&*self._fn_table).vkGetImageDrmFormatModifierPropertiesEXT)(self._parent_device, self._handle, raw_properties);
+            vk_result = ((&*self._fn_table).vkGetImageDrmFormatModifierPropertiesEXT)((*self._fn_table).device, self._handle, raw_properties);
             
             let mut properties = new_vk_value(raw_properties);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut properties, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut properties, fn_table);
             }
             ext::RawVkImageDrmFormatModifierProperties::vk_free(raw_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }

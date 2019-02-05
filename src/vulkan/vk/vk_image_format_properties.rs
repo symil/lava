@@ -70,8 +70,8 @@ impl Default for VkImageFormatProperties {
 }
 
 impl VkSetup for VkImageFormatProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.max_extent, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.max_extent, fn_table);
     }
 }
 

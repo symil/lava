@@ -63,8 +63,8 @@ impl Default for VkRenderPassBeginInfo<'static, 'static, 'static> {
 }
 
 impl<'a, 'b, 'c> VkSetup for VkRenderPassBeginInfo<'a, 'b, 'c> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.render_area, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.render_area, fn_table);
     }
 }
 

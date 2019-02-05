@@ -172,7 +172,7 @@ function generateRootFunctions() {
 
 function generateFunctionTable() {
     return {
-        name: 'VkInstanceFunctionTable',
+        name: 'VkFunctionTable',
         extension: '',
         definition: generateFunctionTableDefinition(getAllFunctions().filter(func => !STATIC_VK_FUNCTIONS.includes(func.name)))
     };

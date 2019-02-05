@@ -74,7 +74,7 @@ impl Default for VkDescriptorUpdateTemplateEntry {
 }
 
 impl VkSetup for VkDescriptorUpdateTemplateEntry {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

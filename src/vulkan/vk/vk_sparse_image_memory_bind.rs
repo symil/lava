@@ -65,10 +65,10 @@ impl Default for VkSparseImageMemoryBind<'static> {
 }
 
 impl<'a> VkSetup for VkSparseImageMemoryBind<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.subresource, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.offset, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.extent, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.subresource, fn_table);
+        VkSetup::vk_setup(&mut self.offset, fn_table);
+        VkSetup::vk_setup(&mut self.extent, fn_table);
     }
 }
 

@@ -38,8 +38,8 @@ impl VkRawType<VkDisplayPlaneProperties2> for RawVkDisplayPlaneProperties2 {
 }
 
 impl VkSetup for VkDisplayPlaneProperties2 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.display_plane_properties, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.display_plane_properties, fn_table);
     }
 }
 

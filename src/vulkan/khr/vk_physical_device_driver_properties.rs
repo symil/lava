@@ -47,8 +47,8 @@ impl VkRawType<VkPhysicalDeviceDriverProperties> for RawVkPhysicalDeviceDriverPr
 }
 
 impl VkSetup for VkPhysicalDeviceDriverProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.conformance_version, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.conformance_version, fn_table);
     }
 }
 

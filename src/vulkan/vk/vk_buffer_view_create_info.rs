@@ -64,7 +64,7 @@ impl Default for VkBufferViewCreateInfo<'static> {
 }
 
 impl<'a> VkSetup for VkBufferViewCreateInfo<'a> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

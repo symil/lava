@@ -58,7 +58,7 @@ impl Default for VkPhysicalDeviceSamplerFilterMinmaxProperties {
 }
 
 impl VkSetup for VkPhysicalDeviceSamplerFilterMinmaxProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -20,17 +20,13 @@ pub type RawVkDevice = u64;
 #[derive(Debug, Clone)]
 pub struct VkDevice {
     _handle: RawVkDevice,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkDevice> for RawVkDevice {
     fn vk_to_wrapped(src: &RawVkDevice) -> VkDevice {
         VkDevice {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkDevice {
     fn default() -> VkDevice {
         VkDevice {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkDevice {
 }
 
 impl VkSetup for VkDevice {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -78,6 +70,7 @@ impl VkDevice {
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyDevice)(self._handle, ptr::null());
+            Box::from_raw(self._fn_table);
         }
     }
     
@@ -92,9 +85,7 @@ impl VkDevice {
             
             let mut queue = new_vk_value(raw_queue);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut queue, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut queue, fn_table);
             queue
         }
     }
@@ -119,9 +110,7 @@ impl VkDevice {
             let mut memory = new_vk_value(raw_memory);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut memory, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut memory, fn_table);
             }
             free_vk_ptr(raw_allocate_info);
             if vk_result == 0 { Ok(memory) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), memory)) }
@@ -162,9 +151,7 @@ impl VkDevice {
             let mut fence = new_vk_value(raw_fence);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut fence, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut fence, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(fence) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fence)) }
@@ -207,9 +194,7 @@ impl VkDevice {
             let mut semaphore = new_vk_value(raw_semaphore);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut semaphore, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut semaphore, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(semaphore) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), semaphore)) }
@@ -228,9 +213,7 @@ impl VkDevice {
             let mut event = new_vk_value(raw_event);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut event, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut event, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(event) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), event)) }
@@ -249,9 +232,7 @@ impl VkDevice {
             let mut query_pool = new_vk_value(raw_query_pool);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut query_pool, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut query_pool, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(query_pool) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), query_pool)) }
@@ -270,9 +251,7 @@ impl VkDevice {
             let mut buffer = new_vk_value(raw_buffer);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut buffer, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut buffer, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(buffer) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), buffer)) }
@@ -291,9 +270,7 @@ impl VkDevice {
             let mut view = new_vk_value(raw_view);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut view, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut view, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(view) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), view)) }
@@ -312,9 +289,7 @@ impl VkDevice {
             let mut image = new_vk_value(raw_image);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut image, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut image, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(image) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image)) }
@@ -333,9 +308,7 @@ impl VkDevice {
             let mut view = new_vk_value(raw_view);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut view, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut view, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(view) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), view)) }
@@ -354,9 +327,7 @@ impl VkDevice {
             let mut shader_module = new_vk_value(raw_shader_module);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut shader_module, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut shader_module, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(shader_module) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), shader_module)) }
@@ -375,9 +346,7 @@ impl VkDevice {
             let mut pipeline_cache = new_vk_value(raw_pipeline_cache);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut pipeline_cache, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut pipeline_cache, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(pipeline_cache) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), pipeline_cache)) }
@@ -397,7 +366,7 @@ impl VkDevice {
             
             let mut pipelines = new_vk_array(raw_create_info_count, raw_pipelines);
             if vk_result == 0 {
-                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(raw_create_info_count as usize, raw_create_infos);
             free_ptr(raw_pipelines);
@@ -418,7 +387,7 @@ impl VkDevice {
             
             let mut pipelines = new_vk_array(raw_create_info_count, raw_pipelines);
             if vk_result == 0 {
-                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(raw_create_info_count as usize, raw_create_infos);
             free_ptr(raw_pipelines);
@@ -438,9 +407,7 @@ impl VkDevice {
             let mut pipeline_layout = new_vk_value(raw_pipeline_layout);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut pipeline_layout, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut pipeline_layout, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(pipeline_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), pipeline_layout)) }
@@ -459,9 +426,7 @@ impl VkDevice {
             let mut sampler = new_vk_value(raw_sampler);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut sampler, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut sampler, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(sampler) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), sampler)) }
@@ -480,9 +445,7 @@ impl VkDevice {
             let mut set_layout = new_vk_value(raw_set_layout);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut set_layout, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut set_layout, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(set_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), set_layout)) }
@@ -501,9 +464,7 @@ impl VkDevice {
             let mut descriptor_pool = new_vk_value(raw_descriptor_pool);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut descriptor_pool, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut descriptor_pool, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(descriptor_pool) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), descriptor_pool)) }
@@ -521,7 +482,7 @@ impl VkDevice {
             
             let mut descriptor_sets = new_vk_array((&*raw_allocate_info).descriptor_set_count, raw_descriptor_sets);
             if vk_result == 0 {
-                for elt in &mut descriptor_sets { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut descriptor_sets { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr(raw_allocate_info);
             free_ptr(raw_descriptor_sets);
@@ -554,9 +515,7 @@ impl VkDevice {
             let mut framebuffer = new_vk_value(raw_framebuffer);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut framebuffer, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut framebuffer, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(framebuffer) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), framebuffer)) }
@@ -575,9 +534,7 @@ impl VkDevice {
             let mut render_pass = new_vk_value(raw_render_pass);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut render_pass, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut render_pass, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(render_pass) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), render_pass)) }
@@ -596,9 +553,7 @@ impl VkDevice {
             let mut command_pool = new_vk_value(raw_command_pool);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut command_pool, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut command_pool, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(command_pool) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), command_pool)) }
@@ -616,7 +571,7 @@ impl VkDevice {
             
             let mut command_buffers = new_vk_array((&*raw_allocate_info).command_buffer_count, raw_command_buffers);
             if vk_result == 0 {
-                for elt in &mut command_buffers { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut command_buffers { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr(raw_allocate_info);
             free_ptr(raw_command_buffers);
@@ -671,9 +626,7 @@ impl VkDevice {
             
             let mut memory_requirements = new_vk_value(raw_memory_requirements);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut memory_requirements, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut memory_requirements, fn_table);
             free_vk_ptr(raw_info);
             RawVkMemoryRequirements2::vk_free(raw_memory_requirements.as_mut().unwrap());
             memory_requirements
@@ -690,9 +643,7 @@ impl VkDevice {
             
             let mut memory_requirements = new_vk_value(raw_memory_requirements);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut memory_requirements, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut memory_requirements, fn_table);
             free_vk_ptr(raw_info);
             RawVkMemoryRequirements2::vk_free(raw_memory_requirements.as_mut().unwrap());
             memory_requirements
@@ -711,7 +662,7 @@ impl VkDevice {
             ((&*self._fn_table).vkGetImageSparseMemoryRequirements2)(self._handle, raw_info, raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
             
             let mut sparse_memory_requirements = new_vk_array(*raw_sparse_memory_requirement_count, raw_sparse_memory_requirements);
-            for elt in &mut sparse_memory_requirements { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            for elt in &mut sparse_memory_requirements { VkSetup::vk_setup(elt, self._fn_table); }
             free_vk_ptr(raw_info);
             free_vk_ptr_array(*raw_sparse_memory_requirement_count as usize, raw_sparse_memory_requirements);
             sparse_memory_requirements
@@ -728,9 +679,7 @@ impl VkDevice {
             
             let mut queue = new_vk_value(raw_queue);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut queue, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut queue, fn_table);
             free_vk_ptr(raw_queue_info);
             queue
         }
@@ -748,9 +697,7 @@ impl VkDevice {
             let mut ycbcr_conversion = new_vk_value(raw_ycbcr_conversion);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut ycbcr_conversion, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut ycbcr_conversion, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(ycbcr_conversion) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ycbcr_conversion)) }
@@ -769,9 +716,7 @@ impl VkDevice {
             let mut descriptor_update_template = new_vk_value(raw_descriptor_update_template);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut descriptor_update_template, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut descriptor_update_template, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(descriptor_update_template) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), descriptor_update_template)) }
@@ -798,9 +743,7 @@ impl VkDevice {
             
             let mut support = new_vk_value(raw_support);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut support, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut support, fn_table);
             free_vk_ptr(raw_create_info);
             RawVkDescriptorSetLayoutSupport::vk_free(raw_support.as_mut().unwrap());
             support
@@ -819,9 +762,7 @@ impl VkDevice {
             let mut swapchain = new_vk_value(raw_swapchain);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut swapchain, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut swapchain, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(swapchain) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), swapchain)) }
@@ -839,9 +780,7 @@ impl VkDevice {
             let mut device_group_present_capabilities = new_vk_value(raw_device_group_present_capabilities);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut device_group_present_capabilities, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut device_group_present_capabilities, fn_table);
             }
             khr::RawVkDeviceGroupPresentCapabilities::vk_free(raw_device_group_present_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(device_group_present_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), device_group_present_capabilities)) }
@@ -889,7 +828,7 @@ impl VkDevice {
             
             let mut swapchains = new_vk_array(raw_swapchain_count, raw_swapchains);
             if vk_result == 0 {
-                for elt in &mut swapchains { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut swapchains { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(raw_swapchain_count as usize, raw_create_infos);
             free_ptr(raw_swapchains);
@@ -925,9 +864,7 @@ impl VkDevice {
             let mut memory_fd_properties = new_vk_value(raw_memory_fd_properties);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut memory_fd_properties, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut memory_fd_properties, fn_table);
             }
             khr::RawVkMemoryFdProperties::vk_free(raw_memory_fd_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(memory_fd_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), memory_fd_properties)) }
@@ -971,9 +908,7 @@ impl VkDevice {
             let mut render_pass = new_vk_value(raw_render_pass);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut render_pass, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut render_pass, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(render_pass) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), render_pass)) }
@@ -1037,9 +972,7 @@ impl VkDevice {
             let mut indirect_commands_layout = new_vk_value(raw_indirect_commands_layout);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut indirect_commands_layout, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut indirect_commands_layout, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(indirect_commands_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), indirect_commands_layout)) }
@@ -1058,9 +991,7 @@ impl VkDevice {
             let mut object_table = new_vk_value(raw_object_table);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut object_table, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut object_table, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(object_table) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), object_table)) }
@@ -1090,9 +1021,7 @@ impl VkDevice {
             let mut fence = new_vk_value(raw_fence);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut fence, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut fence, fn_table);
             }
             free_vk_ptr(raw_device_event_info);
             if vk_result == 0 { Ok(fence) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fence)) }
@@ -1112,9 +1041,7 @@ impl VkDevice {
             let mut fence = new_vk_value(raw_fence);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut fence, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut fence, fn_table);
             }
             free_vk_ptr(raw_display_event_info);
             if vk_result == 0 { Ok(fence) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fence)) }
@@ -1165,9 +1092,7 @@ impl VkDevice {
             let mut validation_cache = new_vk_value(raw_validation_cache);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut validation_cache, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut validation_cache, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(validation_cache) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), validation_cache)) }
@@ -1186,9 +1111,7 @@ impl VkDevice {
             let mut acceleration_structure = new_vk_value(raw_acceleration_structure);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut acceleration_structure, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut acceleration_structure, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(acceleration_structure) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), acceleration_structure)) }
@@ -1233,7 +1156,7 @@ impl VkDevice {
             
             let mut pipelines = new_vk_array(raw_create_info_count, raw_pipelines);
             if vk_result == 0 {
-                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut pipelines { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(raw_create_info_count as usize, raw_create_infos);
             free_ptr(raw_pipelines);
@@ -1254,9 +1177,7 @@ impl VkDevice {
             let mut memory_host_pointer_properties = new_vk_value(raw_memory_host_pointer_properties);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut memory_host_pointer_properties, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut memory_host_pointer_properties, fn_table);
             }
             ext::RawVkMemoryHostPointerProperties::vk_free(raw_memory_host_pointer_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(memory_host_pointer_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), memory_host_pointer_properties)) }

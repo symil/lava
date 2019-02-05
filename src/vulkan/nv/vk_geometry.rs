@@ -56,7 +56,7 @@ impl Default for VkGeometry<'static, 'static, 'static, 'static> {
 }
 
 impl<'a, 'b, 'c, 'd> VkSetup for VkGeometry<'a, 'b, 'c, 'd> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

@@ -58,7 +58,7 @@ impl Default for VkPhysicalDeviceShaderAtomicInt64Features {
 }
 
 impl VkSetup for VkPhysicalDeviceShaderAtomicInt64Features {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

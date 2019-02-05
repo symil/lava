@@ -20,17 +20,13 @@ pub type RawVkPhysicalDevice = u64;
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDevice {
     _handle: RawVkPhysicalDevice,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkPhysicalDevice> for RawVkPhysicalDevice {
     fn vk_to_wrapped(src: &RawVkPhysicalDevice) -> VkPhysicalDevice {
         VkPhysicalDevice {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkPhysicalDevice {
     fn default() -> VkPhysicalDevice {
         VkPhysicalDevice {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkPhysicalDevice {
 }
 
 impl VkSetup for VkPhysicalDevice {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -83,9 +75,7 @@ impl VkPhysicalDevice {
             
             let mut features = new_vk_value(raw_features);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut features, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut features, fn_table);
             RawVkPhysicalDeviceFeatures::vk_free(raw_features.as_mut().unwrap());
             features
         }
@@ -101,9 +91,7 @@ impl VkPhysicalDevice {
             
             let mut format_properties = new_vk_value(raw_format_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut format_properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut format_properties, fn_table);
             RawVkFormatProperties::vk_free(raw_format_properties.as_mut().unwrap());
             format_properties
         }
@@ -125,9 +113,7 @@ impl VkPhysicalDevice {
             let mut image_format_properties = new_vk_value(raw_image_format_properties);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut image_format_properties, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut image_format_properties, fn_table);
             }
             RawVkImageFormatProperties::vk_free(raw_image_format_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), image_format_properties)) }
@@ -143,9 +129,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_value(raw_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut properties, fn_table);
             RawVkPhysicalDeviceProperties::vk_free(raw_properties.as_mut().unwrap());
             properties
         }
@@ -162,7 +146,7 @@ impl VkPhysicalDevice {
             ((&*self._fn_table).vkGetPhysicalDeviceQueueFamilyProperties)(self._handle, raw_queue_family_property_count, raw_queue_family_properties);
             
             let mut queue_family_properties = new_vk_array(*raw_queue_family_property_count, raw_queue_family_properties);
-            for elt in &mut queue_family_properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            for elt in &mut queue_family_properties { VkSetup::vk_setup(elt, self._fn_table); }
             free_vk_ptr_array(*raw_queue_family_property_count as usize, raw_queue_family_properties);
             queue_family_properties
         }
@@ -177,9 +161,7 @@ impl VkPhysicalDevice {
             
             let mut memory_properties = new_vk_value(raw_memory_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut memory_properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut memory_properties, fn_table);
             RawVkPhysicalDeviceMemoryProperties::vk_free(raw_memory_properties.as_mut().unwrap());
             memory_properties
         }
@@ -196,10 +178,8 @@ impl VkPhysicalDevice {
             
             let mut device = new_vk_value(raw_device);
             if vk_result == 0 {
-                let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = *raw_device;
-                VkSetup::vk_setup(&mut device, fn_table, parent_instance, parent_device);
+                let fn_table = Box::into_raw(Box::new(VkFunctionTable::from_device(*raw_device)));
+                VkSetup::vk_setup(&mut device, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(device) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), device)) }
@@ -220,7 +200,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             if vk_result == 0 {
-                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_ptr(raw_layer_name);
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
@@ -241,7 +221,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             if vk_result == 0 {
-                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
@@ -264,7 +244,7 @@ impl VkPhysicalDevice {
             ((&*self._fn_table).vkGetPhysicalDeviceSparseImageFormatProperties)(self._handle, raw_format, raw_type_, raw_samples, raw_usage, raw_tiling, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             properties
         }
@@ -279,9 +259,7 @@ impl VkPhysicalDevice {
             
             let mut features = new_vk_value(raw_features);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut features, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut features, fn_table);
             RawVkPhysicalDeviceFeatures2::vk_free(raw_features.as_mut().unwrap());
             features
         }
@@ -296,9 +274,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_value(raw_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut properties, fn_table);
             RawVkPhysicalDeviceProperties2::vk_free(raw_properties.as_mut().unwrap());
             properties
         }
@@ -314,9 +290,7 @@ impl VkPhysicalDevice {
             
             let mut format_properties = new_vk_value(raw_format_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut format_properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut format_properties, fn_table);
             RawVkFormatProperties2::vk_free(raw_format_properties.as_mut().unwrap());
             format_properties
         }
@@ -334,9 +308,7 @@ impl VkPhysicalDevice {
             let mut image_format_properties = new_vk_value(raw_image_format_properties);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut image_format_properties, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut image_format_properties, fn_table);
             }
             free_vk_ptr(raw_image_format_info);
             RawVkImageFormatProperties2::vk_free(raw_image_format_properties.as_mut().unwrap());
@@ -355,7 +327,7 @@ impl VkPhysicalDevice {
             ((&*self._fn_table).vkGetPhysicalDeviceQueueFamilyProperties2)(self._handle, raw_queue_family_property_count, raw_queue_family_properties);
             
             let mut queue_family_properties = new_vk_array(*raw_queue_family_property_count, raw_queue_family_properties);
-            for elt in &mut queue_family_properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            for elt in &mut queue_family_properties { VkSetup::vk_setup(elt, self._fn_table); }
             free_vk_ptr_array(*raw_queue_family_property_count as usize, raw_queue_family_properties);
             queue_family_properties
         }
@@ -370,9 +342,7 @@ impl VkPhysicalDevice {
             
             let mut memory_properties = new_vk_value(raw_memory_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut memory_properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut memory_properties, fn_table);
             RawVkPhysicalDeviceMemoryProperties2::vk_free(raw_memory_properties.as_mut().unwrap());
             memory_properties
         }
@@ -390,7 +360,7 @@ impl VkPhysicalDevice {
             ((&*self._fn_table).vkGetPhysicalDeviceSparseImageFormatProperties2)(self._handle, raw_format_info, raw_property_count, raw_properties);
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
-            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+            for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             free_vk_ptr(raw_format_info);
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             properties
@@ -407,9 +377,7 @@ impl VkPhysicalDevice {
             
             let mut external_buffer_properties = new_vk_value(raw_external_buffer_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut external_buffer_properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut external_buffer_properties, fn_table);
             free_vk_ptr(raw_external_buffer_info);
             RawVkExternalBufferProperties::vk_free(raw_external_buffer_properties.as_mut().unwrap());
             external_buffer_properties
@@ -426,9 +394,7 @@ impl VkPhysicalDevice {
             
             let mut external_fence_properties = new_vk_value(raw_external_fence_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut external_fence_properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut external_fence_properties, fn_table);
             free_vk_ptr(raw_external_fence_info);
             RawVkExternalFenceProperties::vk_free(raw_external_fence_properties.as_mut().unwrap());
             external_fence_properties
@@ -445,9 +411,7 @@ impl VkPhysicalDevice {
             
             let mut external_semaphore_properties = new_vk_value(raw_external_semaphore_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut external_semaphore_properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut external_semaphore_properties, fn_table);
             free_vk_ptr(raw_external_semaphore_info);
             RawVkExternalSemaphoreProperties::vk_free(raw_external_semaphore_properties.as_mut().unwrap());
             external_semaphore_properties
@@ -481,9 +445,7 @@ impl VkPhysicalDevice {
             let mut surface_capabilities = new_vk_value(raw_surface_capabilities);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut surface_capabilities, fn_table);
             }
             khr::RawVkSurfaceCapabilities::vk_free(raw_surface_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(surface_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_capabilities)) }
@@ -504,7 +466,7 @@ impl VkPhysicalDevice {
             
             let mut surface_formats = new_vk_array(*raw_surface_format_count, raw_surface_formats);
             if vk_result == 0 {
-                for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_surface_format_count as usize, raw_surface_formats);
             if vk_result == 0 { Ok(surface_formats) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_formats)) }
@@ -543,7 +505,7 @@ impl VkPhysicalDevice {
             
             let mut rects = new_vk_array(*raw_rect_count, raw_rects);
             if vk_result == 0 {
-                for elt in &mut rects { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut rects { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_rect_count as usize, raw_rects);
             if vk_result == 0 { Ok(rects) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), rects)) }
@@ -563,7 +525,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             if vk_result == 0 {
-                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
@@ -583,7 +545,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             if vk_result == 0 {
-                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
@@ -604,7 +566,7 @@ impl VkPhysicalDevice {
             
             let mut displays = new_vk_array(*raw_display_count, raw_displays);
             if vk_result == 0 {
-                for elt in &mut displays { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut displays { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_ptr(raw_displays);
             if vk_result == 0 { Ok(displays) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), displays)) }
@@ -625,7 +587,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             if vk_result == 0 {
-                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
@@ -645,9 +607,7 @@ impl VkPhysicalDevice {
             let mut mode = new_vk_value(raw_mode);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut mode, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut mode, fn_table);
             }
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(mode) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), mode)) }
@@ -667,9 +627,7 @@ impl VkPhysicalDevice {
             let mut capabilities = new_vk_value(raw_capabilities);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut capabilities, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut capabilities, fn_table);
             }
             khr::RawVkDisplayPlaneCapabilities::vk_free(raw_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), capabilities)) }
@@ -688,9 +646,7 @@ impl VkPhysicalDevice {
             let mut surface_capabilities = new_vk_value(raw_surface_capabilities);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut surface_capabilities, fn_table);
             }
             free_vk_ptr(raw_surface_info);
             khr::RawVkSurfaceCapabilities2::vk_free(raw_surface_capabilities.as_mut().unwrap());
@@ -712,7 +668,7 @@ impl VkPhysicalDevice {
             
             let mut surface_formats = new_vk_array(*raw_surface_format_count, raw_surface_formats);
             if vk_result == 0 {
-                for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut surface_formats { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr(raw_surface_info);
             free_vk_ptr_array(*raw_surface_format_count as usize, raw_surface_formats);
@@ -733,7 +689,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             if vk_result == 0 {
-                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
@@ -753,7 +709,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             if vk_result == 0 {
-                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
@@ -774,7 +730,7 @@ impl VkPhysicalDevice {
             
             let mut properties = new_vk_array(*raw_property_count, raw_properties);
             if vk_result == 0 {
-                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table, self._parent_instance, self._parent_device); }
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr_array(*raw_property_count as usize, raw_properties);
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
@@ -793,9 +749,7 @@ impl VkPhysicalDevice {
             let mut capabilities = new_vk_value(raw_capabilities);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut capabilities, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut capabilities, fn_table);
             }
             free_vk_ptr(raw_display_plane_info);
             khr::RawVkDisplayPlaneCapabilities2::vk_free(raw_capabilities.as_mut().unwrap());
@@ -820,9 +774,7 @@ impl VkPhysicalDevice {
             let mut external_image_format_properties = new_vk_value(raw_external_image_format_properties);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut external_image_format_properties, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut external_image_format_properties, fn_table);
             }
             nv::RawVkExternalImageFormatProperties::vk_free(raw_external_image_format_properties.as_mut().unwrap());
             if vk_result == 0 { Ok(external_image_format_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), external_image_format_properties)) }
@@ -839,9 +791,7 @@ impl VkPhysicalDevice {
             
             let mut limits = new_vk_value(raw_limits);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut limits, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut limits, fn_table);
             free_vk_ptr(raw_features);
             nvx::RawVkDeviceGeneratedCommandsLimits::vk_free(raw_limits.as_mut().unwrap());
             limits
@@ -869,9 +819,7 @@ impl VkPhysicalDevice {
             let mut surface_capabilities = new_vk_value(raw_surface_capabilities);
             if vk_result == 0 {
                 let fn_table = self._fn_table;
-                let parent_instance = self._parent_instance;
-                let parent_device = self._parent_device;
-                VkSetup::vk_setup(&mut surface_capabilities, fn_table, parent_instance, parent_device);
+                VkSetup::vk_setup(&mut surface_capabilities, fn_table);
             }
             ext::RawVkSurfaceCapabilities2::vk_free(raw_surface_capabilities.as_mut().unwrap());
             if vk_result == 0 { Ok(surface_capabilities) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface_capabilities)) }
@@ -888,9 +836,7 @@ impl VkPhysicalDevice {
             
             let mut multisample_properties = new_vk_value(raw_multisample_properties);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut multisample_properties, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut multisample_properties, fn_table);
             ext::RawVkMultisampleProperties::vk_free(raw_multisample_properties.as_mut().unwrap());
             multisample_properties
         }

@@ -51,7 +51,7 @@ impl Default for VkMemoryDedicatedAllocateInfo<'static, 'static> {
 }
 
 impl<'a, 'b> VkSetup for VkMemoryDedicatedAllocateInfo<'a, 'b> {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

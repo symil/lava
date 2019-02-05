@@ -75,8 +75,8 @@ impl Default for VkPhysicalDeviceSampleLocationsProperties {
 }
 
 impl VkSetup for VkPhysicalDeviceSampleLocationsProperties {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.max_sample_location_grid_size, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.max_sample_location_grid_size, fn_table);
     }
 }
 

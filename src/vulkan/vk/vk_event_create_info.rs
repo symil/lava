@@ -54,7 +54,7 @@ impl Default for VkEventCreateInfo {
 }
 
 impl VkSetup for VkEventCreateInfo {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }

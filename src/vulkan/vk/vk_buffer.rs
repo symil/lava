@@ -20,17 +20,13 @@ pub type RawVkBuffer = u64;
 #[derive(Debug, Clone)]
 pub struct VkBuffer {
     _handle: RawVkBuffer,
-    _parent_instance: RawVkInstance,
-    _parent_device: RawVkDevice,
-    _fn_table: *mut VkInstanceFunctionTable
+    _fn_table: *mut VkFunctionTable
 }
 
 impl VkRawType<VkBuffer> for RawVkBuffer {
     fn vk_to_wrapped(src: &RawVkBuffer) -> VkBuffer {
         VkBuffer {
             _handle: *src,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -46,8 +42,6 @@ impl Default for VkBuffer {
     fn default() -> VkBuffer {
         VkBuffer {
             _handle: 0,
-            _parent_instance: 0,
-            _parent_device: 0,
             _fn_table: ptr::null_mut()
         }
     }
@@ -60,9 +54,7 @@ impl PartialEq for VkBuffer {
 }
 
 impl VkSetup for VkBuffer {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        self._parent_instance = instance;
-        self._parent_device = device;
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         self._fn_table = fn_table;
     }
 }
@@ -79,7 +71,7 @@ impl VkBuffer {
         unsafe {
             let raw_memory = vk_to_raw_value(memory);
             let raw_memory_offset = vk_to_raw_value(&memory_offset);
-            let vk_result = ((&*self._fn_table).vkBindBufferMemory)(self._parent_device, self._handle, raw_memory, raw_memory_offset);
+            let vk_result = ((&*self._fn_table).vkBindBufferMemory)((*self._fn_table).device, self._handle, raw_memory, raw_memory_offset);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
         }
     }
@@ -89,13 +81,11 @@ impl VkBuffer {
         unsafe {
             let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements;
             
-            ((&*self._fn_table).vkGetBufferMemoryRequirements)(self._parent_device, self._handle, raw_memory_requirements);
+            ((&*self._fn_table).vkGetBufferMemoryRequirements)((*self._fn_table).device, self._handle, raw_memory_requirements);
             
             let mut memory_requirements = new_vk_value(raw_memory_requirements);
             let fn_table = self._fn_table;
-            let parent_instance = self._parent_instance;
-            let parent_device = self._parent_device;
-            VkSetup::vk_setup(&mut memory_requirements, fn_table, parent_instance, parent_device);
+            VkSetup::vk_setup(&mut memory_requirements, fn_table);
             RawVkMemoryRequirements::vk_free(raw_memory_requirements.as_mut().unwrap());
             memory_requirements
         }
@@ -104,7 +94,7 @@ impl VkBuffer {
     /// Wrapper for [vkDestroyBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyBuffer.html).
     pub fn destroy(&self) {
         unsafe {
-            ((&*self._fn_table).vkDestroyBuffer)(self._parent_device, self._handle, ptr::null());
+            ((&*self._fn_table).vkDestroyBuffer)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
 }

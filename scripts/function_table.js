@@ -13,18 +13,20 @@ function generateFunctionTableDefinition(functions) {
         `#![allow(non_snake_case)]`,
         genUses(functions),
         genDefinition(functions),
-        genNewMethod(functions),
+        genFromMethods(functions),
         genNullFunctions(functions),
         genExterns(functions)
     ];
 }
+
+const FUNCTION_TABLE_NAME = 'VkFunctionTable';
 
 function genUses() {
     return [
         `std::os::raw::c_char`,
         `std::mem`,
         `utils::c_bindings::*`,
-        `utils::vk_convert::get_vk_instance_function_pointer`,
+        `utils::vk_convert::{get_vk_instance_function_pointer, get_vk_device_function_pointer}`,
         'vulkan::vk::*',
         'vulkan::{ext,khr,amd,nv,nvx,google}'
     ].map(x => `use ${x};`);
@@ -33,8 +35,11 @@ function genUses() {
 function genDefinition(functions) {
     return [
         `#[doc(hidden)]`,
-        `pub struct VkInstanceFunctionTable`,
-        functions.map(func => `pub ${func.name}: ${functionToDeclaration(func)},`)
+        `pub struct ${FUNCTION_TABLE_NAME}`, [
+            `pub instance: RawVkInstance,`,
+            `pub device: RawVkDevice,`,
+            ...functions.map(func => `pub ${func.name}: ${functionToDeclaration(func)},`)
+        ]
     ];
 }
 
@@ -63,32 +68,48 @@ function getVkFunctionPrototype(func) {
 }
 
 function genNullFunctions(functions) {
+    return genNullFunctionsForParent(functions, 'instance').concat(genNullFunctionsForParent(functions, 'device'));
+}
+
+function genNullFunctionsForParent(functions, parent) {
     return functions.filter(func => func.name.startsWith('vk')).map(func => {
-        const funcName = `null_${func.name}`;
+        const funcName = `null_${parent}_${func.name}`;
 
         return [
             `unsafe extern fn ${funcName}${getVkFunctionPrototype(func)}`, [
-                `panic!("\\"vkGetInstanceProcAddr\\" returned NULL for \\"${func.name}\\"");`
+                `panic!("\\"vkGet${parent.capitalize()}ProcAddr\\" returned NULL for \\"${func.name}\\"");`
             ]
         ];
     }).reduce((acc, value) => acc.concat(value), []);
 }
 
-function getFunctionPointer(func) {
+function getFunctionPointer(func, parent) {
     if (func.name.startsWith('vk')) {
-        return `{ let fn_ptr = get_vk_instance_function_pointer(instance, "${func.name}"); if fn_ptr.is_null() { null_${func.name} } else { mem::transmute(fn_ptr) } }`;
+        return `{ let fn_ptr = get_vk_${parent}_function_pointer(${parent}, "${func.name}"); if fn_ptr.is_null() { null_${parent}_${func.name} } else { mem::transmute(fn_ptr) } }`;
     } else {
         return func.name;
     }
 }
 
-function genNewMethod(functions) {
+function genFromMethods(functions) {
     return [
-        `impl VkInstanceFunctionTable`, [
-            `pub fn new(instance: RawVkInstance) -> Self`, [
+        `impl ${FUNCTION_TABLE_NAME}`, [
+            `pub fn from_instance(instance: RawVkInstance) -> Self`, [
                 `unsafe`, [
-                    `Self`,
-                    functions.map(func => `${func.name}: ${getFunctionPointer(func)},`)
+                    `Self`, [
+                        `instance: instance,`,
+                        `device: 0,`,
+                        ...functions.map(func => `${func.name}: ${getFunctionPointer(func, 'instance')},`)
+                    ]
+                ]
+            ],
+            `pub fn from_device(device: RawVkDevice) -> Self`, [
+                `unsafe`, [
+                    `Self`, [
+                        `instance: 0,`,
+                        `device: device,`,
+                        ...functions.map(func => `${func.name}: ${getFunctionPointer(func, 'device')},`)
+                    ]
                 ]
             ]
         ]

@@ -76,10 +76,10 @@ impl Default for VkBufferImageCopy {
 }
 
 impl VkSetup for VkBufferImageCopy {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
-        VkSetup::vk_setup(&mut self.image_subresource, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.image_offset, fn_table, instance, device);
-        VkSetup::vk_setup(&mut self.image_extent, fn_table, instance, device);
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
+        VkSetup::vk_setup(&mut self.image_subresource, fn_table);
+        VkSetup::vk_setup(&mut self.image_offset, fn_table);
+        VkSetup::vk_setup(&mut self.image_extent, fn_table);
     }
 }
 

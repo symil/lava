@@ -76,7 +76,7 @@ impl<'a, 'b, 'c, 'd, 'e, 'f> VkSetup for VkPresentInfo<'a, 'b, 'c, 'd, 'e, 'f>
         'b: 'a,
         'd: 'c,
 {
-    fn vk_setup(&mut self, fn_table: *mut VkInstanceFunctionTable, instance: RawVkInstance, device: RawVkDevice) {
+    fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         
     }
 }
