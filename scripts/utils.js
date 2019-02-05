@@ -255,7 +255,7 @@ function getFieldsInformation(fields, structName) {
         const isPointerValue = field.isPointer && !isPointerArray;
         const isStaticArray = !field.isPointer && !!arraySize;
         const isPrimitiveType = rawTypeName === wrappedTypeName;
-        const isOptional = field.isOptional && (structName || field.isConst || field !== fields.last());
+        const isOptional = field.isOptional && !!(structName || !field.isPointer || field.isConst || field !== fields.last());
 
         const varName = '[VarName]';
         const countVarName = '[CountVarName]';
@@ -383,7 +383,7 @@ function getFieldsInformation(fields, structName) {
                 }
 
                 rawType = `*mut ${rawTypeName}`;
-                freeRaw = `free_ptr(${varName})`;
+                // freeRaw = `free_ptr(${varName})`;
 
                 if (isOptional) {
                     wrappedType = `Option<Vec<${wrappedTypeName}>>`;
@@ -506,10 +506,18 @@ function getFieldsInformation(fields, structName) {
                 }
             } else {
                 rawType = rawTypeName;
-                wrappedType = wrappedTypeName;
-                toRaw = `vk_to_raw_value(&${varName})`;
-                toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
-                defValue = getPrimitiveDefaultValue(wrappedTypeName) || `Default::default()`;
+
+                if (isOptional && !wrappedTypeName.endsWith('Flags') && wrappedTypeName.startsWith('Vk')) {
+                    wrappedType = `Option<${wrappedTypeName}>`;
+                    toRaw = `vk_to_raw_value_checked(&${varName})`;
+                    toWrapped = `Some(${rawTypeName}::vk_to_wrapped(&${varName}))`;
+                    defValue = `None`;
+                } else {
+                    wrappedType = wrappedTypeName;
+                    toRaw = `vk_to_raw_value(&${varName})`;
+                    toWrapped = `${rawTypeName}::vk_to_wrapped(&${varName})`;
+                    defValue = getPrimitiveDefaultValue(wrappedTypeName) || `Default::default()`;
+                }
             }
         }
 

@@ -78,6 +78,6 @@ impl VkSetup for VkPipelineMultisampleStateCreateInfo {
 
 impl VkFree for RawVkPipelineMultisampleStateCreateInfo {
     fn vk_free(&self) {
-        free_ptr(self.sample_mask);
+        
     }
 }

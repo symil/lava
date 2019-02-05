@@ -21,8 +21,8 @@ use vulkan::vk::{VkFence,RawVkFence};
 pub struct VkAcquireNextImageInfo {
     pub swapchain: VkSwapchain,
     pub timeout: u64,
-    pub semaphore: VkSemaphore,
-    pub fence: VkFence,
+    pub semaphore: Option<VkSemaphore>,
+    pub fence: Option<VkFence>,
     pub device_mask: u32,
 }
 
@@ -45,8 +45,8 @@ impl VkWrappedType<RawVkAcquireNextImageInfo> for VkAcquireNextImageInfo {
         dst.next = ptr::null_mut();
         dst.swapchain = vk_to_raw_value(&src.swapchain);
         dst.timeout = src.timeout;
-        dst.semaphore = vk_to_raw_value(&src.semaphore);
-        dst.fence = vk_to_raw_value(&src.fence);
+        dst.semaphore = vk_to_raw_value_checked(&src.semaphore);
+        dst.fence = vk_to_raw_value_checked(&src.fence);
         dst.device_mask = src.device_mask;
     }
 }
@@ -56,8 +56,8 @@ impl VkRawType<VkAcquireNextImageInfo> for RawVkAcquireNextImageInfo {
         VkAcquireNextImageInfo {
             swapchain: RawVkSwapchain::vk_to_wrapped(&src.swapchain),
             timeout: src.timeout,
-            semaphore: RawVkSemaphore::vk_to_wrapped(&src.semaphore),
-            fence: RawVkFence::vk_to_wrapped(&src.fence),
+            semaphore: Some(RawVkSemaphore::vk_to_wrapped(&src.semaphore)),
+            fence: Some(RawVkFence::vk_to_wrapped(&src.fence)),
             device_mask: src.device_mask,
         }
     }
@@ -68,8 +68,8 @@ impl Default for VkAcquireNextImageInfo {
         VkAcquireNextImageInfo {
             swapchain: Default::default(),
             timeout: 0,
-            semaphore: Default::default(),
-            fence: Default::default(),
+            semaphore: None,
+            fence: None,
             device_mask: 0,
         }
     }
@@ -78,8 +78,6 @@ impl Default for VkAcquireNextImageInfo {
 impl VkSetup for VkAcquireNextImageInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.swapchain, fn_table);
-        VkSetup::vk_setup(&mut self.semaphore, fn_table);
-        VkSetup::vk_setup(&mut self.fence, fn_table);
     }
 }
 

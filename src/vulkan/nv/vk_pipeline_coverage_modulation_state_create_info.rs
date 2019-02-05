@@ -79,6 +79,6 @@ impl VkSetup for VkPipelineCoverageModulationStateCreateInfo {
 
 impl VkFree for RawVkPipelineCoverageModulationStateCreateInfo {
     fn vk_free(&self) {
-        free_ptr(self.coverage_modulation_table);
+        
     }
 }

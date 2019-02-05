@@ -941,14 +941,14 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBuildAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBuildAccelerationStructureNV.html).
-    pub fn cmd_build_acceleration_structure(&self, info: nv::VkAccelerationStructureInfo, instance_data: VkBuffer, instance_offset: usize, update: bool, dst: nv::VkAccelerationStructure, src: nv::VkAccelerationStructure, scratch: VkBuffer, scratch_offset: usize) {
+    pub fn cmd_build_acceleration_structure(&self, info: nv::VkAccelerationStructureInfo, instance_data: Option<VkBuffer>, instance_offset: usize, update: bool, dst: nv::VkAccelerationStructure, src: Option<nv::VkAccelerationStructure>, scratch: VkBuffer, scratch_offset: usize) {
         unsafe {
             let raw_info = new_ptr_vk_value(&info);
-            let raw_instance_data = vk_to_raw_value(&instance_data);
+            let raw_instance_data = vk_to_raw_value_checked(&instance_data);
             let raw_instance_offset = vk_to_raw_value(&instance_offset);
             let raw_update = vk_to_raw_value(&update);
             let raw_dst = vk_to_raw_value(&dst);
-            let raw_src = vk_to_raw_value(&src);
+            let raw_src = vk_to_raw_value_checked(&src);
             let raw_scratch = vk_to_raw_value(&scratch);
             let raw_scratch_offset = vk_to_raw_value(&scratch_offset);
             ((&*self._fn_table).vkCmdBuildAccelerationStructureNV)(self._handle, raw_info, raw_instance_data, raw_instance_offset, raw_update, raw_dst, raw_src, raw_scratch, raw_scratch_offset);
@@ -967,17 +967,17 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdTraceRaysNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdTraceRaysNV.html).
-    pub fn cmd_trace_rays(&self, raygen_shader_binding_table_buffer: VkBuffer, raygen_shader_binding_offset: usize, miss_shader_binding_table_buffer: VkBuffer, miss_shader_binding_offset: usize, miss_shader_binding_stride: usize, hit_shader_binding_table_buffer: VkBuffer, hit_shader_binding_offset: usize, hit_shader_binding_stride: usize, callable_shader_binding_table_buffer: VkBuffer, callable_shader_binding_offset: usize, callable_shader_binding_stride: usize, width: u32, height: u32, depth: usize) {
+    pub fn cmd_trace_rays(&self, raygen_shader_binding_table_buffer: VkBuffer, raygen_shader_binding_offset: usize, miss_shader_binding_table_buffer: Option<VkBuffer>, miss_shader_binding_offset: usize, miss_shader_binding_stride: usize, hit_shader_binding_table_buffer: Option<VkBuffer>, hit_shader_binding_offset: usize, hit_shader_binding_stride: usize, callable_shader_binding_table_buffer: Option<VkBuffer>, callable_shader_binding_offset: usize, callable_shader_binding_stride: usize, width: u32, height: u32, depth: usize) {
         unsafe {
             let raw_raygen_shader_binding_table_buffer = vk_to_raw_value(&raygen_shader_binding_table_buffer);
             let raw_raygen_shader_binding_offset = vk_to_raw_value(&raygen_shader_binding_offset);
-            let raw_miss_shader_binding_table_buffer = vk_to_raw_value(&miss_shader_binding_table_buffer);
+            let raw_miss_shader_binding_table_buffer = vk_to_raw_value_checked(&miss_shader_binding_table_buffer);
             let raw_miss_shader_binding_offset = vk_to_raw_value(&miss_shader_binding_offset);
             let raw_miss_shader_binding_stride = vk_to_raw_value(&miss_shader_binding_stride);
-            let raw_hit_shader_binding_table_buffer = vk_to_raw_value(&hit_shader_binding_table_buffer);
+            let raw_hit_shader_binding_table_buffer = vk_to_raw_value_checked(&hit_shader_binding_table_buffer);
             let raw_hit_shader_binding_offset = vk_to_raw_value(&hit_shader_binding_offset);
             let raw_hit_shader_binding_stride = vk_to_raw_value(&hit_shader_binding_stride);
-            let raw_callable_shader_binding_table_buffer = vk_to_raw_value(&callable_shader_binding_table_buffer);
+            let raw_callable_shader_binding_table_buffer = vk_to_raw_value_checked(&callable_shader_binding_table_buffer);
             let raw_callable_shader_binding_offset = vk_to_raw_value(&callable_shader_binding_offset);
             let raw_callable_shader_binding_stride = vk_to_raw_value(&callable_shader_binding_stride);
             let raw_width = width;

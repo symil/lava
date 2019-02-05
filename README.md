@@ -40,20 +40,20 @@ extern crate lava;
 use lava::*;
 
 fn main() {
-    let instance = vk_create_instance(&VkInstanceCreateInfo {
+    let instance = vk_create_instance(VkInstanceCreateInfo {
         flags: VkInstanceCreateFlags::none(),
-        application_info: Some(&VkApplicationInfo {
-            application_name: Some("lava-example"),
+        application_info: Some(VkApplicationInfo {
+            application_name: Some(String::from("lava-example")),
             application_version: 1,
             engine_name: None,
             engine_version: 1,
             api_version: VkVersion(1, 0, 0),
         }),
-        enabled_layer_names: &[VK_LAYER_LUNARG_STANDARD_VALIDATION_NAME],
-        enabled_extension_names: &[VK_EXT_DEBUG_REPORT_EXTENSION_NAME]
+        enabled_layer_names: vec![String::from(VK_LAYER_LUNARG_STANDARD_VALIDATION_NAME)],
+        enabled_extension_names: vec![String::from(VK_EXT_DEBUG_REPORT_EXTENSION_NAME)]
     }).expect("Failed to create instance");
 
-    let debug_report_callback = instance.create_debug_report_callback(&VkDebugReportCallbackCreateInfo {
+    let debug_report_callback = instance.create_debug_report_callback(VkDebugReportCallbackCreateInfo {
         flags: VkDebugReportFlags!(warning, error),
         callback: |data: VkDebugReportCallbackData| {
             println!("{}", data.message);

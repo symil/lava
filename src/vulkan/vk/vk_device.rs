@@ -354,9 +354,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateGraphicsPipelines](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateGraphicsPipelines.html).
-    pub fn create_graphics_pipelines(&self, pipeline_cache: VkPipelineCache, create_infos: Vec<VkGraphicsPipelineCreateInfo>) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
+    pub fn create_graphics_pipelines(&self, pipeline_cache: Option<VkPipelineCache>, create_infos: Vec<VkGraphicsPipelineCreateInfo>) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
         unsafe {
-            let raw_pipeline_cache = vk_to_raw_value(&pipeline_cache);
+            let raw_pipeline_cache = vk_to_raw_value_checked(&pipeline_cache);
             let raw_create_info_count = create_infos.len() as u32;
             let raw_create_infos = new_ptr_vk_array(&create_infos);
             let mut vk_result = 0;
@@ -375,9 +375,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateComputePipelines](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html).
-    pub fn create_compute_pipelines(&self, pipeline_cache: VkPipelineCache, create_infos: Vec<VkComputePipelineCreateInfo>) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
+    pub fn create_compute_pipelines(&self, pipeline_cache: Option<VkPipelineCache>, create_infos: Vec<VkComputePipelineCreateInfo>) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
         unsafe {
-            let raw_pipeline_cache = vk_to_raw_value(&pipeline_cache);
+            let raw_pipeline_cache = vk_to_raw_value_checked(&pipeline_cache);
             let raw_create_info_count = create_infos.len() as u32;
             let raw_create_infos = new_ptr_vk_array(&create_infos);
             let mut vk_result = 0;
@@ -1139,9 +1139,9 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkCreateRayTracingPipelinesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRayTracingPipelinesNV.html).
-    pub fn create_ray_tracing_pipelines(&self, pipeline_cache: VkPipelineCache, create_infos: Vec<nv::VkRayTracingPipelineCreateInfo>) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
+    pub fn create_ray_tracing_pipelines(&self, pipeline_cache: Option<VkPipelineCache>, create_infos: Vec<nv::VkRayTracingPipelineCreateInfo>) -> Result<Vec<VkPipeline>, (VkResult, Vec<VkPipeline>)> {
         unsafe {
-            let raw_pipeline_cache = vk_to_raw_value(&pipeline_cache);
+            let raw_pipeline_cache = vk_to_raw_value_checked(&pipeline_cache);
             let raw_create_info_count = create_infos.len() as u32;
             let raw_create_infos = new_ptr_vk_array(&create_infos);
             let mut vk_result = 0;

@@ -23,7 +23,7 @@ pub struct VkSparseImageMemoryBind {
     pub subresource: VkImageSubresource,
     pub offset: VkOffset3D,
     pub extent: VkExtent3D,
-    pub memory: VkDeviceMemory,
+    pub memory: Option<VkDeviceMemory>,
     pub memory_offset: usize,
     pub flags: VkSparseMemoryBindFlags,
 }
@@ -45,7 +45,7 @@ impl VkWrappedType<RawVkSparseImageMemoryBind> for VkSparseImageMemoryBind {
         dst.subresource = vk_to_raw_value(&src.subresource);
         dst.offset = vk_to_raw_value(&src.offset);
         dst.extent = vk_to_raw_value(&src.extent);
-        dst.memory = vk_to_raw_value(&src.memory);
+        dst.memory = vk_to_raw_value_checked(&src.memory);
         dst.memory_offset = vk_to_raw_value(&src.memory_offset);
         dst.flags = vk_to_raw_value(&src.flags);
     }
@@ -57,7 +57,7 @@ impl VkRawType<VkSparseImageMemoryBind> for RawVkSparseImageMemoryBind {
             subresource: RawVkImageSubresource::vk_to_wrapped(&src.subresource),
             offset: RawVkOffset3D::vk_to_wrapped(&src.offset),
             extent: RawVkExtent3D::vk_to_wrapped(&src.extent),
-            memory: RawVkDeviceMemory::vk_to_wrapped(&src.memory),
+            memory: Some(RawVkDeviceMemory::vk_to_wrapped(&src.memory)),
             memory_offset: u64::vk_to_wrapped(&src.memory_offset),
             flags: RawVkSparseMemoryBindFlags::vk_to_wrapped(&src.flags),
         }
@@ -70,7 +70,7 @@ impl Default for VkSparseImageMemoryBind {
             subresource: Default::default(),
             offset: Default::default(),
             extent: Default::default(),
-            memory: Default::default(),
+            memory: None,
             memory_offset: 0,
             flags: Default::default(),
         }
@@ -82,7 +82,6 @@ impl VkSetup for VkSparseImageMemoryBind {
         VkSetup::vk_setup(&mut self.subresource, fn_table);
         VkSetup::vk_setup(&mut self.offset, fn_table);
         VkSetup::vk_setup(&mut self.extent, fn_table);
-        VkSetup::vk_setup(&mut self.memory, fn_table);
     }
 }
 

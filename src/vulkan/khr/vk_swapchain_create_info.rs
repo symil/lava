@@ -41,7 +41,7 @@ pub struct VkSwapchainCreateInfo {
     pub composite_alpha: VkCompositeAlphaFlags,
     pub present_mode: VkPresentMode,
     pub clipped: bool,
-    pub old_swapchain: VkSwapchain,
+    pub old_swapchain: Option<VkSwapchain>,
 }
 
 #[doc(hidden)]
@@ -87,7 +87,7 @@ impl VkWrappedType<RawVkSwapchainCreateInfo> for VkSwapchainCreateInfo {
         dst.composite_alpha = vk_to_raw_value(&src.composite_alpha);
         dst.present_mode = vk_to_raw_value(&src.present_mode);
         dst.clipped = vk_to_raw_value(&src.clipped);
-        dst.old_swapchain = vk_to_raw_value(&src.old_swapchain);
+        dst.old_swapchain = vk_to_raw_value_checked(&src.old_swapchain);
     }
 }
 
@@ -108,7 +108,7 @@ impl VkRawType<VkSwapchainCreateInfo> for RawVkSwapchainCreateInfo {
             composite_alpha: RawVkCompositeAlphaFlags::vk_to_wrapped(&src.composite_alpha),
             present_mode: RawVkPresentMode::vk_to_wrapped(&src.present_mode),
             clipped: u32::vk_to_wrapped(&src.clipped),
-            old_swapchain: RawVkSwapchain::vk_to_wrapped(&src.old_swapchain),
+            old_swapchain: Some(RawVkSwapchain::vk_to_wrapped(&src.old_swapchain)),
         }
     }
 }
@@ -130,7 +130,7 @@ impl Default for VkSwapchainCreateInfo {
             composite_alpha: Default::default(),
             present_mode: Default::default(),
             clipped: false,
-            old_swapchain: Default::default(),
+            old_swapchain: None,
         }
     }
 }
@@ -139,7 +139,6 @@ impl VkSetup for VkSwapchainCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.surface, fn_table);
         VkSetup::vk_setup(&mut self.image_extent, fn_table);
-        VkSetup::vk_setup(&mut self.old_swapchain, fn_table);
     }
 }
 

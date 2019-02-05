@@ -17,7 +17,7 @@ use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 /// Wrapper for [VkImageSwapchainCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSwapchainCreateInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkImageSwapchainCreateInfo {
-    pub swapchain: VkSwapchain,
+    pub swapchain: Option<VkSwapchain>,
 }
 
 #[doc(hidden)]
@@ -33,14 +33,14 @@ impl VkWrappedType<RawVkImageSwapchainCreateInfo> for VkImageSwapchainCreateInfo
     fn vk_to_raw(src: &VkImageSwapchainCreateInfo, dst: &mut RawVkImageSwapchainCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::ImageSwapchainCreateInfoKhr);
         dst.next = ptr::null_mut();
-        dst.swapchain = vk_to_raw_value(&src.swapchain);
+        dst.swapchain = vk_to_raw_value_checked(&src.swapchain);
     }
 }
 
 impl VkRawType<VkImageSwapchainCreateInfo> for RawVkImageSwapchainCreateInfo {
     fn vk_to_wrapped(src: &RawVkImageSwapchainCreateInfo) -> VkImageSwapchainCreateInfo {
         VkImageSwapchainCreateInfo {
-            swapchain: RawVkSwapchain::vk_to_wrapped(&src.swapchain),
+            swapchain: Some(RawVkSwapchain::vk_to_wrapped(&src.swapchain)),
         }
     }
 }
@@ -48,14 +48,14 @@ impl VkRawType<VkImageSwapchainCreateInfo> for RawVkImageSwapchainCreateInfo {
 impl Default for VkImageSwapchainCreateInfo {
     fn default() -> VkImageSwapchainCreateInfo {
         VkImageSwapchainCreateInfo {
-            swapchain: Default::default(),
+            swapchain: None,
         }
     }
 }
 
 impl VkSetup for VkImageSwapchainCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        VkSetup::vk_setup(&mut self.swapchain, fn_table);
+        
     }
 }
 

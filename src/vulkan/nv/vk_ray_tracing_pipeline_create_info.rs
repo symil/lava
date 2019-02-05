@@ -26,7 +26,7 @@ pub struct VkRayTracingPipelineCreateInfo<'a> {
     pub groups: Vec<VkRayTracingShaderGroupCreateInfo>,
     pub max_recursion_depth: usize,
     pub layout: VkPipelineLayout,
-    pub base_pipeline_handle: VkPipeline,
+    pub base_pipeline_handle: Option<VkPipeline>,
     pub base_pipeline_index: isize,
 }
 
@@ -58,7 +58,7 @@ impl<'a> VkWrappedType<RawVkRayTracingPipelineCreateInfo> for VkRayTracingPipeli
         dst.groups = new_ptr_vk_array(&src.groups);
         dst.max_recursion_depth = vk_to_raw_value(&src.max_recursion_depth);
         dst.layout = vk_to_raw_value(&src.layout);
-        dst.base_pipeline_handle = vk_to_raw_value(&src.base_pipeline_handle);
+        dst.base_pipeline_handle = vk_to_raw_value_checked(&src.base_pipeline_handle);
         dst.base_pipeline_index = vk_to_raw_value(&src.base_pipeline_index);
     }
 }
@@ -71,7 +71,7 @@ impl Default for VkRayTracingPipelineCreateInfo<'static> {
             groups: Vec::new(),
             max_recursion_depth: 0,
             layout: Default::default(),
-            base_pipeline_handle: Default::default(),
+            base_pipeline_handle: None,
             base_pipeline_index: 0,
         }
     }
@@ -80,7 +80,6 @@ impl Default for VkRayTracingPipelineCreateInfo<'static> {
 impl<'a> VkSetup for VkRayTracingPipelineCreateInfo<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.layout, fn_table);
-        VkSetup::vk_setup(&mut self.base_pipeline_handle, fn_table);
     }
 }
 

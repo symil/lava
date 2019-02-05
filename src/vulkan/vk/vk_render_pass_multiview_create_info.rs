@@ -76,8 +76,6 @@ impl VkSetup for VkRenderPassMultiviewCreateInfo {
 
 impl VkFree for RawVkRenderPassMultiviewCreateInfo {
     fn vk_free(&self) {
-        free_ptr(self.view_masks);
         free_ptr(self.view_offsets);
-        free_ptr(self.correlation_masks);
     }
 }

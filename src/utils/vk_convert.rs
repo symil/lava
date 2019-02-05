@@ -16,6 +16,13 @@ pub fn vk_to_raw_value<W : VkWrappedType<R>, R>(value: &W) -> R {
     }
 }
 
+pub fn vk_to_raw_value_checked<W : VkWrappedType<R>, R : Default>(value: &Option<W>) -> R {
+    match value {
+        Some(v) => vk_to_raw_value(v),
+        None => Default::default()
+    }
+}
+
 pub fn vk_to_raw_array<W : VkWrappedType<R>, R>(array: &[W], dst: &mut[R]) {
     let len = cmp::min(array.len(), dst.len());
 

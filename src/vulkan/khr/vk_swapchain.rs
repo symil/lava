@@ -94,11 +94,11 @@ impl VkSwapchain {
     }
     
     /// Wrapper for [vkAcquireNextImageKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireNextImageKHR.html).
-    pub fn acquire_next_image(&self, timeout: u64, semaphore: VkSemaphore, fence: VkFence) -> Result<usize, (VkResult, usize)> {
+    pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<VkSemaphore>, fence: Option<VkFence>) -> Result<usize, (VkResult, usize)> {
         unsafe {
             let raw_timeout = timeout;
-            let raw_semaphore = vk_to_raw_value(&semaphore);
-            let raw_fence = vk_to_raw_value(&fence);
+            let raw_semaphore = vk_to_raw_value_checked(&semaphore);
+            let raw_fence = vk_to_raw_value_checked(&fence);
             let mut vk_result = 0;
             let raw_image_index = &mut mem::zeroed() as *mut u32;
             

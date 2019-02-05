@@ -25,7 +25,7 @@ pub struct VkDescriptorUpdateTemplateCreateInfo {
     pub flags: VkDescriptorUpdateTemplateCreateFlags,
     pub descriptor_update_entries: Vec<VkDescriptorUpdateTemplateEntry>,
     pub template_type: VkDescriptorUpdateTemplateType,
-    pub descriptor_set_layout: VkDescriptorSetLayout,
+    pub descriptor_set_layout: Option<VkDescriptorSetLayout>,
     pub pipeline_bind_point: VkPipelineBindPoint,
     pub pipeline_layout: VkPipelineLayout,
     pub set: usize,
@@ -55,7 +55,7 @@ impl VkWrappedType<RawVkDescriptorUpdateTemplateCreateInfo> for VkDescriptorUpda
         dst.descriptor_update_entry_count = src.descriptor_update_entries.len() as u32;
         dst.descriptor_update_entries = new_ptr_vk_array(&src.descriptor_update_entries);
         dst.template_type = vk_to_raw_value(&src.template_type);
-        dst.descriptor_set_layout = vk_to_raw_value(&src.descriptor_set_layout);
+        dst.descriptor_set_layout = vk_to_raw_value_checked(&src.descriptor_set_layout);
         dst.pipeline_bind_point = vk_to_raw_value(&src.pipeline_bind_point);
         dst.pipeline_layout = vk_to_raw_value(&src.pipeline_layout);
         dst.set = vk_to_raw_value(&src.set);
@@ -68,7 +68,7 @@ impl VkRawType<VkDescriptorUpdateTemplateCreateInfo> for RawVkDescriptorUpdateTe
             flags: RawVkDescriptorUpdateTemplateCreateFlags::vk_to_wrapped(&src.flags),
             descriptor_update_entries: new_vk_array(src.descriptor_update_entry_count, src.descriptor_update_entries),
             template_type: RawVkDescriptorUpdateTemplateType::vk_to_wrapped(&src.template_type),
-            descriptor_set_layout: RawVkDescriptorSetLayout::vk_to_wrapped(&src.descriptor_set_layout),
+            descriptor_set_layout: Some(RawVkDescriptorSetLayout::vk_to_wrapped(&src.descriptor_set_layout)),
             pipeline_bind_point: RawVkPipelineBindPoint::vk_to_wrapped(&src.pipeline_bind_point),
             pipeline_layout: RawVkPipelineLayout::vk_to_wrapped(&src.pipeline_layout),
             set: u32::vk_to_wrapped(&src.set),
@@ -82,7 +82,7 @@ impl Default for VkDescriptorUpdateTemplateCreateInfo {
             flags: Default::default(),
             descriptor_update_entries: Vec::new(),
             template_type: Default::default(),
-            descriptor_set_layout: Default::default(),
+            descriptor_set_layout: None,
             pipeline_bind_point: Default::default(),
             pipeline_layout: Default::default(),
             set: 0,
@@ -92,7 +92,6 @@ impl Default for VkDescriptorUpdateTemplateCreateInfo {
 
 impl VkSetup for VkDescriptorUpdateTemplateCreateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        VkSetup::vk_setup(&mut self.descriptor_set_layout, fn_table);
         VkSetup::vk_setup(&mut self.pipeline_layout, fn_table);
     }
 }

@@ -68,6 +68,6 @@ impl VkSetup for VkDeviceGroupPresentInfo {
 
 impl VkFree for RawVkDeviceGroupPresentInfo {
     fn vk_free(&self) {
-        free_ptr(self.device_masks);
+        
     }
 }

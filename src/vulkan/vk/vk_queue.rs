@@ -67,11 +67,11 @@ impl VkQueue {
     }
     
     /// Wrapper for [vkQueueSubmit](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueSubmit.html).
-    pub fn submit(&self, submits: Vec<VkSubmitInfo>, fence: VkFence) -> Result<(), VkResult> {
+    pub fn submit(&self, submits: Vec<VkSubmitInfo>, fence: Option<VkFence>) -> Result<(), VkResult> {
         unsafe {
             let raw_submit_count = submits.len() as u32;
             let raw_submits = new_ptr_vk_array(&submits);
-            let raw_fence = vk_to_raw_value(&fence);
+            let raw_fence = vk_to_raw_value_checked(&fence);
             let vk_result = ((&*self._fn_table).vkQueueSubmit)(self._handle, raw_submit_count, raw_submits, raw_fence);
             free_vk_ptr_array(raw_submit_count as usize, raw_submits);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
@@ -87,11 +87,11 @@ impl VkQueue {
     }
     
     /// Wrapper for [vkQueueBindSparse](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueBindSparse.html).
-    pub fn bind_sparse(&self, bind_info: Vec<VkBindSparseInfo>, fence: VkFence) -> Result<(), VkResult> {
+    pub fn bind_sparse(&self, bind_info: Vec<VkBindSparseInfo>, fence: Option<VkFence>) -> Result<(), VkResult> {
         unsafe {
             let raw_bind_info_count = bind_info.len() as u32;
             let raw_bind_info = new_ptr_vk_array(&bind_info);
-            let raw_fence = vk_to_raw_value(&fence);
+            let raw_fence = vk_to_raw_value_checked(&fence);
             let vk_result = ((&*self._fn_table).vkQueueBindSparse)(self._handle, raw_bind_info_count, raw_bind_info, raw_fence);
             free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_info);
             if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }

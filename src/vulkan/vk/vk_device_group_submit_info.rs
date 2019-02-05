@@ -77,7 +77,6 @@ impl VkSetup for VkDeviceGroupSubmitInfo {
 impl VkFree for RawVkDeviceGroupSubmitInfo {
     fn vk_free(&self) {
         free_ptr(self.wait_semaphore_device_indices);
-        free_ptr(self.command_buffer_device_masks);
         free_ptr(self.signal_semaphore_device_indices);
     }
 }

@@ -95,6 +95,5 @@ impl VkFree for RawVkRenderPassCreateInfo2 {
         free_vk_ptr_array(self.attachment_count as usize, self.attachments);
         free_vk_ptr_array(self.subpass_count as usize, self.subpasses);
         free_vk_ptr_array(self.dependency_count as usize, self.dependencies);
-        free_ptr(self.correlated_view_masks);
     }
 }

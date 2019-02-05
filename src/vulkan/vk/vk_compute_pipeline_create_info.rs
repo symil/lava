@@ -23,7 +23,7 @@ pub struct VkComputePipelineCreateInfo<'a> {
     pub flags: VkPipelineCreateFlags,
     pub stage: VkPipelineShaderStageCreateInfo<'a>,
     pub layout: VkPipelineLayout,
-    pub base_pipeline_handle: VkPipeline,
+    pub base_pipeline_handle: Option<VkPipeline>,
     pub base_pipeline_index: isize,
 }
 
@@ -47,7 +47,7 @@ impl<'a> VkWrappedType<RawVkComputePipelineCreateInfo> for VkComputePipelineCrea
         dst.flags = vk_to_raw_value(&src.flags);
         dst.stage = vk_to_raw_value(&src.stage);
         dst.layout = vk_to_raw_value(&src.layout);
-        dst.base_pipeline_handle = vk_to_raw_value(&src.base_pipeline_handle);
+        dst.base_pipeline_handle = vk_to_raw_value_checked(&src.base_pipeline_handle);
         dst.base_pipeline_index = vk_to_raw_value(&src.base_pipeline_index);
     }
 }
@@ -58,7 +58,7 @@ impl Default for VkComputePipelineCreateInfo<'static> {
             flags: Default::default(),
             stage: Default::default(),
             layout: Default::default(),
-            base_pipeline_handle: Default::default(),
+            base_pipeline_handle: None,
             base_pipeline_index: 0,
         }
     }
@@ -67,7 +67,6 @@ impl Default for VkComputePipelineCreateInfo<'static> {
 impl<'a> VkSetup for VkComputePipelineCreateInfo<'a> {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.layout, fn_table);
-        VkSetup::vk_setup(&mut self.base_pipeline_handle, fn_table);
     }
 }
 

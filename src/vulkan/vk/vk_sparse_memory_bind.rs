@@ -19,7 +19,7 @@ use vulkan::vk::{VkSparseMemoryBindFlags,RawVkSparseMemoryBindFlags};
 pub struct VkSparseMemoryBind {
     pub resource_offset: usize,
     pub size: usize,
-    pub memory: VkDeviceMemory,
+    pub memory: Option<VkDeviceMemory>,
     pub memory_offset: usize,
     pub flags: VkSparseMemoryBindFlags,
 }
@@ -39,7 +39,7 @@ impl VkWrappedType<RawVkSparseMemoryBind> for VkSparseMemoryBind {
     fn vk_to_raw(src: &VkSparseMemoryBind, dst: &mut RawVkSparseMemoryBind) {
         dst.resource_offset = vk_to_raw_value(&src.resource_offset);
         dst.size = vk_to_raw_value(&src.size);
-        dst.memory = vk_to_raw_value(&src.memory);
+        dst.memory = vk_to_raw_value_checked(&src.memory);
         dst.memory_offset = vk_to_raw_value(&src.memory_offset);
         dst.flags = vk_to_raw_value(&src.flags);
     }
@@ -50,7 +50,7 @@ impl VkRawType<VkSparseMemoryBind> for RawVkSparseMemoryBind {
         VkSparseMemoryBind {
             resource_offset: u64::vk_to_wrapped(&src.resource_offset),
             size: u64::vk_to_wrapped(&src.size),
-            memory: RawVkDeviceMemory::vk_to_wrapped(&src.memory),
+            memory: Some(RawVkDeviceMemory::vk_to_wrapped(&src.memory)),
             memory_offset: u64::vk_to_wrapped(&src.memory_offset),
             flags: RawVkSparseMemoryBindFlags::vk_to_wrapped(&src.flags),
         }
@@ -62,7 +62,7 @@ impl Default for VkSparseMemoryBind {
         VkSparseMemoryBind {
             resource_offset: 0,
             size: 0,
-            memory: Default::default(),
+            memory: None,
             memory_offset: 0,
             flags: Default::default(),
         }
@@ -71,7 +71,7 @@ impl Default for VkSparseMemoryBind {
 
 impl VkSetup for VkSparseMemoryBind {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        VkSetup::vk_setup(&mut self.memory, fn_table);
+        
     }
 }
 

@@ -44,7 +44,7 @@ pub struct VkGraphicsPipelineCreateInfo<'a> {
     pub layout: VkPipelineLayout,
     pub render_pass: VkRenderPass,
     pub subpass: usize,
-    pub base_pipeline_handle: VkPipeline,
+    pub base_pipeline_handle: Option<VkPipeline>,
     pub base_pipeline_index: isize,
 }
 
@@ -92,7 +92,7 @@ impl<'a> VkWrappedType<RawVkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCr
         dst.layout = vk_to_raw_value(&src.layout);
         dst.render_pass = vk_to_raw_value(&src.render_pass);
         dst.subpass = vk_to_raw_value(&src.subpass);
-        dst.base_pipeline_handle = vk_to_raw_value(&src.base_pipeline_handle);
+        dst.base_pipeline_handle = vk_to_raw_value_checked(&src.base_pipeline_handle);
         dst.base_pipeline_index = vk_to_raw_value(&src.base_pipeline_index);
     }
 }
@@ -114,7 +114,7 @@ impl Default for VkGraphicsPipelineCreateInfo<'static> {
             layout: Default::default(),
             render_pass: Default::default(),
             subpass: 0,
-            base_pipeline_handle: Default::default(),
+            base_pipeline_handle: None,
             base_pipeline_index: 0,
         }
     }
@@ -125,7 +125,6 @@ impl<'a> VkSetup for VkGraphicsPipelineCreateInfo<'a> {
         VkSetup::vk_setup(&mut self.rasterization_state, fn_table);
         VkSetup::vk_setup(&mut self.layout, fn_table);
         VkSetup::vk_setup(&mut self.render_pass, fn_table);
-        VkSetup::vk_setup(&mut self.base_pipeline_handle, fn_table);
     }
 }
 

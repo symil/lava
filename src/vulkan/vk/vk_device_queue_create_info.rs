@@ -73,6 +73,6 @@ impl VkSetup for VkDeviceQueueCreateInfo {
 
 impl VkFree for RawVkDeviceQueueCreateInfo {
     fn vk_free(&self) {
-        free_ptr(self.queue_priorities);
+        
     }
 }

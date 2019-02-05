@@ -18,8 +18,8 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 /// Wrapper for [VkMemoryDedicatedAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryDedicatedAllocateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkMemoryDedicatedAllocateInfo {
-    pub image: VkImage,
-    pub buffer: VkBuffer,
+    pub image: Option<VkImage>,
+    pub buffer: Option<VkBuffer>,
 }
 
 #[doc(hidden)]
@@ -36,16 +36,16 @@ impl VkWrappedType<RawVkMemoryDedicatedAllocateInfo> for VkMemoryDedicatedAlloca
     fn vk_to_raw(src: &VkMemoryDedicatedAllocateInfo, dst: &mut RawVkMemoryDedicatedAllocateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::MemoryDedicatedAllocateInfo);
         dst.next = ptr::null_mut();
-        dst.image = vk_to_raw_value(&src.image);
-        dst.buffer = vk_to_raw_value(&src.buffer);
+        dst.image = vk_to_raw_value_checked(&src.image);
+        dst.buffer = vk_to_raw_value_checked(&src.buffer);
     }
 }
 
 impl VkRawType<VkMemoryDedicatedAllocateInfo> for RawVkMemoryDedicatedAllocateInfo {
     fn vk_to_wrapped(src: &RawVkMemoryDedicatedAllocateInfo) -> VkMemoryDedicatedAllocateInfo {
         VkMemoryDedicatedAllocateInfo {
-            image: RawVkImage::vk_to_wrapped(&src.image),
-            buffer: RawVkBuffer::vk_to_wrapped(&src.buffer),
+            image: Some(RawVkImage::vk_to_wrapped(&src.image)),
+            buffer: Some(RawVkBuffer::vk_to_wrapped(&src.buffer)),
         }
     }
 }
@@ -53,16 +53,15 @@ impl VkRawType<VkMemoryDedicatedAllocateInfo> for RawVkMemoryDedicatedAllocateIn
 impl Default for VkMemoryDedicatedAllocateInfo {
     fn default() -> VkMemoryDedicatedAllocateInfo {
         VkMemoryDedicatedAllocateInfo {
-            image: Default::default(),
-            buffer: Default::default(),
+            image: None,
+            buffer: None,
         }
     }
 }
 
 impl VkSetup for VkMemoryDedicatedAllocateInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        VkSetup::vk_setup(&mut self.image, fn_table);
-        VkSetup::vk_setup(&mut self.buffer, fn_table);
+        
     }
 }
 

@@ -25,10 +25,10 @@ pub struct VkCmdProcessCommandsInfo {
     pub indirect_commands_layout: VkIndirectCommandsLayout,
     pub indirect_commands_tokens: Vec<VkIndirectCommandsToken>,
     pub max_sequences_count: usize,
-    pub target_command_buffer: VkCommandBuffer,
-    pub sequences_count_buffer: VkBuffer,
+    pub target_command_buffer: Option<VkCommandBuffer>,
+    pub sequences_count_buffer: Option<VkBuffer>,
     pub sequences_count_offset: usize,
-    pub sequences_index_buffer: VkBuffer,
+    pub sequences_index_buffer: Option<VkBuffer>,
     pub sequences_index_offset: usize,
 }
 
@@ -59,10 +59,10 @@ impl VkWrappedType<RawVkCmdProcessCommandsInfo> for VkCmdProcessCommandsInfo {
         dst.indirect_commands_token_count = src.indirect_commands_tokens.len() as u32;
         dst.indirect_commands_tokens = new_ptr_vk_array(&src.indirect_commands_tokens);
         dst.max_sequences_count = vk_to_raw_value(&src.max_sequences_count);
-        dst.target_command_buffer = vk_to_raw_value(&src.target_command_buffer);
-        dst.sequences_count_buffer = vk_to_raw_value(&src.sequences_count_buffer);
+        dst.target_command_buffer = vk_to_raw_value_checked(&src.target_command_buffer);
+        dst.sequences_count_buffer = vk_to_raw_value_checked(&src.sequences_count_buffer);
         dst.sequences_count_offset = vk_to_raw_value(&src.sequences_count_offset);
-        dst.sequences_index_buffer = vk_to_raw_value(&src.sequences_index_buffer);
+        dst.sequences_index_buffer = vk_to_raw_value_checked(&src.sequences_index_buffer);
         dst.sequences_index_offset = vk_to_raw_value(&src.sequences_index_offset);
     }
 }
@@ -74,10 +74,10 @@ impl VkRawType<VkCmdProcessCommandsInfo> for RawVkCmdProcessCommandsInfo {
             indirect_commands_layout: RawVkIndirectCommandsLayout::vk_to_wrapped(&src.indirect_commands_layout),
             indirect_commands_tokens: new_vk_array(src.indirect_commands_token_count, src.indirect_commands_tokens),
             max_sequences_count: u32::vk_to_wrapped(&src.max_sequences_count),
-            target_command_buffer: RawVkCommandBuffer::vk_to_wrapped(&src.target_command_buffer),
-            sequences_count_buffer: RawVkBuffer::vk_to_wrapped(&src.sequences_count_buffer),
+            target_command_buffer: Some(RawVkCommandBuffer::vk_to_wrapped(&src.target_command_buffer)),
+            sequences_count_buffer: Some(RawVkBuffer::vk_to_wrapped(&src.sequences_count_buffer)),
             sequences_count_offset: u64::vk_to_wrapped(&src.sequences_count_offset),
-            sequences_index_buffer: RawVkBuffer::vk_to_wrapped(&src.sequences_index_buffer),
+            sequences_index_buffer: Some(RawVkBuffer::vk_to_wrapped(&src.sequences_index_buffer)),
             sequences_index_offset: u64::vk_to_wrapped(&src.sequences_index_offset),
         }
     }
@@ -90,10 +90,10 @@ impl Default for VkCmdProcessCommandsInfo {
             indirect_commands_layout: Default::default(),
             indirect_commands_tokens: Vec::new(),
             max_sequences_count: 0,
-            target_command_buffer: Default::default(),
-            sequences_count_buffer: Default::default(),
+            target_command_buffer: None,
+            sequences_count_buffer: None,
             sequences_count_offset: 0,
-            sequences_index_buffer: Default::default(),
+            sequences_index_buffer: None,
             sequences_index_offset: 0,
         }
     }
@@ -103,9 +103,6 @@ impl VkSetup for VkCmdProcessCommandsInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
         VkSetup::vk_setup(&mut self.object_table, fn_table);
         VkSetup::vk_setup(&mut self.indirect_commands_layout, fn_table);
-        VkSetup::vk_setup(&mut self.target_command_buffer, fn_table);
-        VkSetup::vk_setup(&mut self.sequences_count_buffer, fn_table);
-        VkSetup::vk_setup(&mut self.sequences_index_buffer, fn_table);
     }
 }
 
