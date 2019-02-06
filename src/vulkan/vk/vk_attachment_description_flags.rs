@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     may_alias: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkAttachmentDescriptionFlags {
     pub may_alias: bool,
 }

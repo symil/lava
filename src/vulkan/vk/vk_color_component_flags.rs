@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkColorComponentFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkColorComponentFlags {
     pub r: bool,
     pub g: bool,

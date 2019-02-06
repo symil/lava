@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkSwapchainCreateFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSwapchainCreateFlags {
     pub split_instance_bind_regions: bool,
     pub protected: bool,

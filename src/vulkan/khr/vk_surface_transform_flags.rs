@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkSurfaceTransformFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSurfaceTransformFlags {
     pub identity: bool,
     pub rotate_90: bool,

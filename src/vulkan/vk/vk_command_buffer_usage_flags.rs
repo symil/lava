@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkCommandBufferUsageFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkCommandBufferUsageFlags {
     pub one_time_submit: bool,
     pub render_pass_continue: bool,

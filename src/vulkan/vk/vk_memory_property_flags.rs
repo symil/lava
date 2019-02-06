@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkMemoryPropertyFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkMemoryPropertyFlags {
     pub device_local: bool,
     pub host_visible: bool,

@@ -14,7 +14,7 @@ use utils::vk_traits::*;
 ///     compute: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkObjectEntryUsageFlags {
     pub graphics: bool,
     pub compute: bool,

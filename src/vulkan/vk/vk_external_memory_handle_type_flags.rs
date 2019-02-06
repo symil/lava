@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkExternalMemoryHandleTypeFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkExternalMemoryHandleTypeFlags {
     pub opaque_fd: bool,
     pub opaque_win_32: bool,

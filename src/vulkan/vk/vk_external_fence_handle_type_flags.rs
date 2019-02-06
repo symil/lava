@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkExternalFenceHandleTypeFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkExternalFenceHandleTypeFlags {
     pub opaque_fd: bool,
     pub opaque_win_32: bool,

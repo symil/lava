@@ -12,7 +12,7 @@ use utils::vk_traits::*;
 /// VkPipelineShaderStageCreateFlags {
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkPipelineShaderStageCreateFlags {
     
 }

@@ -12,7 +12,7 @@ use utils::vk_traits::*;
 /// VkInstanceCreateFlags {
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkInstanceCreateFlags {
     
 }

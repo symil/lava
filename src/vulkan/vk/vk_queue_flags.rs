@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkQueueFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkQueueFlags {
     pub graphics: bool,
     pub compute: bool,

@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     vblank: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSurfaceCounterFlags {
     pub vblank: bool,
 }

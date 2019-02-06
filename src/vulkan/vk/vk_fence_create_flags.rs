@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     signaled: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkFenceCreateFlags {
     pub signaled: bool,
 }

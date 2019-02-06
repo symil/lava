@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkDebugReportFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDebugReportFlags {
     pub information: bool,
     pub warning: bool,

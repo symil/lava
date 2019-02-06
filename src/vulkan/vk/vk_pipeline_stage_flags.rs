@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkPipelineStageFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkPipelineStageFlags {
     pub top_of_pipe: bool,
     pub draw_indirect: bool,

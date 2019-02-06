@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkImageCreateFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkImageCreateFlags {
     pub sparse_binding: bool,
     pub sparse_residency: bool,

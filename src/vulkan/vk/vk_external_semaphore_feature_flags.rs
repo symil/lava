@@ -14,7 +14,7 @@ use utils::vk_traits::*;
 ///     importable: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkExternalSemaphoreFeatureFlags {
     pub exportable: bool,
     pub importable: bool,

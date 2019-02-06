@@ -14,7 +14,7 @@ use utils::vk_traits::*;
 ///     update_after_bind_ext: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDescriptorPoolCreateFlags {
     pub free_descriptor_set: bool,
     pub update_after_bind_ext: bool,

@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkSparseImageFormatFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSparseImageFormatFlags {
     pub single_miptail: bool,
     pub aligned_mip_size: bool,

@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkShaderStageFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkShaderStageFlags {
     pub vertex: bool,
     pub tessellation_control: bool,

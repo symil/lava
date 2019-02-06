@@ -76,7 +76,7 @@ function genFlagBitsDoc(def) {
 function genWrappedType(def) {
     return [
         documentType(def, genFlagBitsDoc(def)),
-        `#[derive(Debug, Clone, Copy)]`,
+        `#[derive(Debug, Clone)]`,
         `pub struct ${def.wrappedTypeName}`,
         def.fields.map(field => `pub ${field.varName}: bool,`)
     ];

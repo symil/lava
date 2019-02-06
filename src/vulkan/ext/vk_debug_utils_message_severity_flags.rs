@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkDebugUtilsMessageSeverityFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDebugUtilsMessageSeverityFlags {
     pub verbose: bool,
     pub info: bool,

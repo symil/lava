@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkSampleCountFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSampleCountFlags {
     pub _1: bool,
     pub _2: bool,

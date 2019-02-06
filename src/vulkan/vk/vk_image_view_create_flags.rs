@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     fragment_density_map_dynamic_ext: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkImageViewCreateFlags {
     pub fragment_density_map_dynamic_ext: bool,
 }

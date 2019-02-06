@@ -14,7 +14,7 @@ use utils::vk_traits::*;
 ///     multi_instance: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkMemoryHeapFlags {
     pub device_local: bool,
     pub multi_instance: bool,

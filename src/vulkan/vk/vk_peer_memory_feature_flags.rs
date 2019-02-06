@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkPeerMemoryFeatureFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkPeerMemoryFeatureFlags {
     pub copy_src: bool,
     pub copy_dst: bool,

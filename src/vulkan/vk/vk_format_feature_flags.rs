@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkFormatFeatureFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkFormatFeatureFlags {
     pub sampled_image: bool,
     pub storage_image: bool,

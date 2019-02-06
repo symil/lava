@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkResolveModeFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkResolveModeFlags {
     pub sample_zero: bool,
     pub average: bool,

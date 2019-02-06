@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkDisplayPlaneAlphaFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDisplayPlaneAlphaFlags {
     pub opaque: bool,
     pub global: bool,

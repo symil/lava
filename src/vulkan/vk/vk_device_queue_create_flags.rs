@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     protected: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDeviceQueueCreateFlags {
     pub protected: bool,
 }

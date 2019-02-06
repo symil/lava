@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkBuildAccelerationStructureFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkBuildAccelerationStructureFlags {
     pub allow_update: bool,
     pub allow_compaction: bool,

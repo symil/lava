@@ -12,7 +12,7 @@ use utils::vk_traits::*;
 /// VkPipelineLayoutCreateFlags {
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkPipelineLayoutCreateFlags {
     
 }

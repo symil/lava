@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkExternalMemoryFeatureFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkExternalMemoryFeatureFlags {
     pub dedicated_only: bool,
     pub exportable: bool,

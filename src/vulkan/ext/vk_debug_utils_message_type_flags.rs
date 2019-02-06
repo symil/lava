@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkDebugUtilsMessageTypeFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDebugUtilsMessageTypeFlags {
     pub general: bool,
     pub validation: bool,

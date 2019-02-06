@@ -12,7 +12,7 @@ use utils::vk_traits::*;
 /// VkMemoryMapFlags {
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkMemoryMapFlags {
     
 }

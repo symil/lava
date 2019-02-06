@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkIndirectCommandsLayoutUsageFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkIndirectCommandsLayoutUsageFlags {
     pub unordered_sequences: bool,
     pub sparse_sequences: bool,

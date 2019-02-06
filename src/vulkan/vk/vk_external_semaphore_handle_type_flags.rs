@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkExternalSemaphoreHandleTypeFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkExternalSemaphoreHandleTypeFlags {
     pub opaque_fd: bool,
     pub opaque_win_32: bool,

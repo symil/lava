@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkDeviceGroupPresentModeFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDeviceGroupPresentModeFlags {
     pub local: bool,
     pub remote: bool,

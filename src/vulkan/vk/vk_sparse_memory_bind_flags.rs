@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     metadata: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSparseMemoryBindFlags {
     pub metadata: bool,
 }

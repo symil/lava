@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkQueryPipelineStatisticFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkQueryPipelineStatisticFlags {
     pub input_assembly_vertices: bool,
     pub input_assembly_primitives: bool,

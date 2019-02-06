@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkSubgroupFeatureFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSubgroupFeatureFlags {
     pub basic: bool,
     pub vote: bool,

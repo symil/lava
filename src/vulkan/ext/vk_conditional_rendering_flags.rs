@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     inverted: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkConditionalRenderingFlags {
     pub inverted: bool,
 }

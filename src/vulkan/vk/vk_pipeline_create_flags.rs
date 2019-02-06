@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkPipelineCreateFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkPipelineCreateFlags {
     pub disable_optimization: bool,
     pub allow_derivatives: bool,

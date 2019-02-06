@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkDependencyFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDependencyFlags {
     pub by_region: bool,
     pub device_group: bool,

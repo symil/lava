@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkDescriptorBindingFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDescriptorBindingFlags {
     pub update_after_bind: bool,
     pub update_unused_while_pending: bool,

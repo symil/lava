@@ -12,7 +12,7 @@ use utils::vk_traits::*;
 /// VkDisplayModeCreateFlags {
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkDisplayModeCreateFlags {
     
 }

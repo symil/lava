@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkCullModeFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkCullModeFlags {
     pub front: bool,
     pub back: bool,

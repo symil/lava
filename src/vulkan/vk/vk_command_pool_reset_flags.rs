@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     release_resources: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkCommandPoolResetFlags {
     pub release_resources: bool,
 }

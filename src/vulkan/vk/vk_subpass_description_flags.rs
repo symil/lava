@@ -14,7 +14,7 @@ use utils::vk_traits::*;
 ///     per_view_position_x_only_nvx: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSubpassDescriptionFlags {
     pub per_view_attributes_nvx: bool,
     pub per_view_position_x_only_nvx: bool,

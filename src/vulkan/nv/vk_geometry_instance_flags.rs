@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkGeometryInstanceFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkGeometryInstanceFlags {
     pub triangle_cull_disable: bool,
     pub triangle_front_counterclockwise: bool,

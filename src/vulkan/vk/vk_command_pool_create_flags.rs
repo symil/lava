@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkCommandPoolCreateFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkCommandPoolCreateFlags {
     pub transient: bool,
     pub reset_command_buffer: bool,

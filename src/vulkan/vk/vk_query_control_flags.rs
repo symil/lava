@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     precise: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkQueryControlFlags {
     pub precise: bool,
 }

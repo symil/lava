@@ -12,7 +12,7 @@ use utils::vk_traits::*;
 /// VkCommandPoolTrimFlags {
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkCommandPoolTrimFlags {
     
 }

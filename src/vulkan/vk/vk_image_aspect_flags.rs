@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkImageAspectFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkImageAspectFlags {
     pub color: bool,
     pub depth: bool,

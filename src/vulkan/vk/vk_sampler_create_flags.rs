@@ -14,7 +14,7 @@ use utils::vk_traits::*;
 ///     subsampled_coarse_reconstruction_ext: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkSamplerCreateFlags {
     pub subsampled_ext: bool,
     pub subsampled_coarse_reconstruction_ext: bool,

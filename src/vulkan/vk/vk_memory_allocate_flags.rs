@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 ///     device_mask: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkMemoryAllocateFlags {
     pub device_mask: bool,
 }

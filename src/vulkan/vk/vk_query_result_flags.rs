@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkQueryResultFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkQueryResultFlags {
     pub _64: bool,
     pub wait: bool,

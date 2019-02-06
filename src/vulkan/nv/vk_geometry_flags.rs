@@ -14,7 +14,7 @@ use utils::vk_traits::*;
 ///     no_duplicate_any_hit_invocation: true,
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkGeometryFlags {
     pub opaque: bool,
     pub no_duplicate_any_hit_invocation: bool,

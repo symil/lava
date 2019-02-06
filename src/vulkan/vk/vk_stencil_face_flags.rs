@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkStencilFaceFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkStencilFaceFlags {
     pub front: bool,
     pub back: bool,

@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkAccessFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkAccessFlags {
     pub indirect_command_read: bool,
     pub index_read: bool,

@@ -12,7 +12,7 @@ use utils::vk_traits::*;
 /// VkValidationCacheCreateFlags {
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkValidationCacheCreateFlags {
     
 }

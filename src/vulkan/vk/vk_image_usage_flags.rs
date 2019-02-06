@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkImageUsageFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkImageUsageFlags {
     pub transfer_src: bool,
     pub transfer_dst: bool,

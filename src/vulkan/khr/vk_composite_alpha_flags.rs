@@ -15,7 +15,7 @@ use utils::vk_traits::*;
 ///     ..VkCompositeAlphaFlags::none()
 /// }
 /// ```
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct VkCompositeAlphaFlags {
     pub opaque: bool,
     pub pre_multiplied: bool,
