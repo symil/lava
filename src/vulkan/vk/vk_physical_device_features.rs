@@ -464,6 +464,125 @@ impl VkPhysicalDeviceFeatures {
             inherited_queries: true,
         }
     }
+    
+    pub fn to_u64(&self) -> u64 {
+        0
+        + if self.robust_buffer_access { 1 } else { 0 }
+        + if self.full_draw_index_uint_32 { 2 } else { 0 }
+        + if self.image_cube_array { 4 } else { 0 }
+        + if self.independent_blend { 8 } else { 0 }
+        + if self.geometry_shader { 16 } else { 0 }
+        + if self.tessellation_shader { 32 } else { 0 }
+        + if self.sample_rate_shading { 64 } else { 0 }
+        + if self.dual_src_blend { 128 } else { 0 }
+        + if self.logic_op { 256 } else { 0 }
+        + if self.multi_draw_indirect { 512 } else { 0 }
+        + if self.draw_indirect_first_instance { 1024 } else { 0 }
+        + if self.depth_clamp { 2048 } else { 0 }
+        + if self.depth_bias_clamp { 4096 } else { 0 }
+        + if self.fill_mode_non_solid { 8192 } else { 0 }
+        + if self.depth_bounds { 16384 } else { 0 }
+        + if self.wide_lines { 32768 } else { 0 }
+        + if self.large_points { 65536 } else { 0 }
+        + if self.alpha_to_one { 131072 } else { 0 }
+        + if self.multi_viewport { 262144 } else { 0 }
+        + if self.sampler_anisotropy { 524288 } else { 0 }
+        + if self.texture_compression_etc_2 { 1048576 } else { 0 }
+        + if self.texture_compression_astc_ldr { 2097152 } else { 0 }
+        + if self.texture_compression_bc { 4194304 } else { 0 }
+        + if self.occlusion_query_precise { 8388608 } else { 0 }
+        + if self.pipeline_statistics_query { 16777216 } else { 0 }
+        + if self.vertex_pipeline_stores_and_atomics { 33554432 } else { 0 }
+        + if self.fragment_stores_and_atomics { 67108864 } else { 0 }
+        + if self.shader_tessellation_and_geometry_point_size { 134217728 } else { 0 }
+        + if self.shader_image_gather_extended { 268435456 } else { 0 }
+        + if self.shader_storage_image_extended_formats { 536870912 } else { 0 }
+        + if self.shader_storage_image_multisample { 1073741824 } else { 0 }
+        + if self.shader_storage_image_read_without_format { 2147483648 } else { 0 }
+        + if self.shader_storage_image_write_without_format { 4294967296 } else { 0 }
+        + if self.shader_uniform_buffer_array_dynamic_indexing { 8589934592 } else { 0 }
+        + if self.shader_sampled_image_array_dynamic_indexing { 17179869184 } else { 0 }
+        + if self.shader_storage_buffer_array_dynamic_indexing { 34359738368 } else { 0 }
+        + if self.shader_storage_image_array_dynamic_indexing { 68719476736 } else { 0 }
+        + if self.shader_clip_distance { 137438953472 } else { 0 }
+        + if self.shader_cull_distance { 274877906944 } else { 0 }
+        + if self.shader_float_64 { 549755813888 } else { 0 }
+        + if self.shader_int_64 { 1099511627776 } else { 0 }
+        + if self.shader_int_16 { 2199023255552 } else { 0 }
+        + if self.shader_resource_residency { 4398046511104 } else { 0 }
+        + if self.shader_resource_min_lod { 8796093022208 } else { 0 }
+        + if self.sparse_binding { 17592186044416 } else { 0 }
+        + if self.sparse_residency_buffer { 35184372088832 } else { 0 }
+        + if self.sparse_residency_image_2d { 70368744177664 } else { 0 }
+        + if self.sparse_residency_image_3d { 140737488355328 } else { 0 }
+        + if self.sparse_residency_2_samples { 281474976710656 } else { 0 }
+        + if self.sparse_residency_4_samples { 562949953421312 } else { 0 }
+        + if self.sparse_residency_8_samples { 1125899906842624 } else { 0 }
+        + if self.sparse_residency_16_samples { 2251799813685248 } else { 0 }
+        + if self.sparse_residency_aliased { 4503599627370496 } else { 0 }
+        + if self.variable_multisample_rate { 9007199254740992 } else { 0 }
+        + if self.inherited_queries { 18014398509481984 } else { 0 }
+    }
+    
+    pub fn from_u64(value: u64) -> Self {
+        VkPhysicalDeviceFeatures {
+            robust_buffer_access: value & 1 > 0,
+            full_draw_index_uint_32: value & 2 > 0,
+            image_cube_array: value & 4 > 0,
+            independent_blend: value & 8 > 0,
+            geometry_shader: value & 16 > 0,
+            tessellation_shader: value & 32 > 0,
+            sample_rate_shading: value & 64 > 0,
+            dual_src_blend: value & 128 > 0,
+            logic_op: value & 256 > 0,
+            multi_draw_indirect: value & 512 > 0,
+            draw_indirect_first_instance: value & 1024 > 0,
+            depth_clamp: value & 2048 > 0,
+            depth_bias_clamp: value & 4096 > 0,
+            fill_mode_non_solid: value & 8192 > 0,
+            depth_bounds: value & 16384 > 0,
+            wide_lines: value & 32768 > 0,
+            large_points: value & 65536 > 0,
+            alpha_to_one: value & 131072 > 0,
+            multi_viewport: value & 262144 > 0,
+            sampler_anisotropy: value & 524288 > 0,
+            texture_compression_etc_2: value & 1048576 > 0,
+            texture_compression_astc_ldr: value & 2097152 > 0,
+            texture_compression_bc: value & 4194304 > 0,
+            occlusion_query_precise: value & 8388608 > 0,
+            pipeline_statistics_query: value & 16777216 > 0,
+            vertex_pipeline_stores_and_atomics: value & 33554432 > 0,
+            fragment_stores_and_atomics: value & 67108864 > 0,
+            shader_tessellation_and_geometry_point_size: value & 134217728 > 0,
+            shader_image_gather_extended: value & 268435456 > 0,
+            shader_storage_image_extended_formats: value & 536870912 > 0,
+            shader_storage_image_multisample: value & 1073741824 > 0,
+            shader_storage_image_read_without_format: value & 2147483648 > 0,
+            shader_storage_image_write_without_format: value & 4294967296 > 0,
+            shader_uniform_buffer_array_dynamic_indexing: value & 8589934592 > 0,
+            shader_sampled_image_array_dynamic_indexing: value & 17179869184 > 0,
+            shader_storage_buffer_array_dynamic_indexing: value & 34359738368 > 0,
+            shader_storage_image_array_dynamic_indexing: value & 68719476736 > 0,
+            shader_clip_distance: value & 137438953472 > 0,
+            shader_cull_distance: value & 274877906944 > 0,
+            shader_float_64: value & 549755813888 > 0,
+            shader_int_64: value & 1099511627776 > 0,
+            shader_int_16: value & 2199023255552 > 0,
+            shader_resource_residency: value & 4398046511104 > 0,
+            shader_resource_min_lod: value & 8796093022208 > 0,
+            sparse_binding: value & 17592186044416 > 0,
+            sparse_residency_buffer: value & 35184372088832 > 0,
+            sparse_residency_image_2d: value & 70368744177664 > 0,
+            sparse_residency_image_3d: value & 140737488355328 > 0,
+            sparse_residency_2_samples: value & 281474976710656 > 0,
+            sparse_residency_4_samples: value & 562949953421312 > 0,
+            sparse_residency_8_samples: value & 1125899906842624 > 0,
+            sparse_residency_16_samples: value & 2251799813685248 > 0,
+            sparse_residency_aliased: value & 4503599627370496 > 0,
+            variable_multisample_rate: value & 9007199254740992 > 0,
+            inherited_queries: value & 18014398509481984 > 0,
+        }
+    }
 }
 
 #[doc(hidden)]

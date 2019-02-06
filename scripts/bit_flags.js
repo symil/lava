@@ -39,7 +39,7 @@ function generateVkBitFlagsDefinition(cDef) {
         genImplVkWrappedType(cDef),
         genImplVkRawType(cDef),
         genImplDefault(cDef),
-        genImplFlags(cDef)
+        genImplFlags(cDef, 'u32')
     ];
 }
 
@@ -125,7 +125,7 @@ const ALL_DOC = '/// Return a structure with all flags to `true`.\n'
 const TO_U32_DOC = '/// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).\n';
 const FROM_U32_DOC = '/// Create a structure corresponding to the specified numerical bit flags.\n';
 
-function genImplFlags(def, isU32 = true) {
+function genImplFlags(def, intType) {
     let macroSuffix = '';
 
     // Manually solve conflicts for now
@@ -133,32 +133,27 @@ function genImplFlags(def, isU32 = true) {
         macroSuffix = def.extension.capitalize();
     }
 
-    const impl = [
-        `\n${NONE_DOC}pub fn none() -> Self`, [
-            def.wrappedTypeName,
-            def.fields.map(field => `${field.varName}: false,`)
-        ],
-        `\n${ALL_DOC}pub fn all() -> Self`, [
-            def.wrappedTypeName,
-            def.fields.map(field => `${field.varName}: true,`)
-        ]
-    ];
+    const toIntDoc = intType === 'u32' ? TO_U32_DOC : '';
+    const fromIntDoc = intType === 'u32' ? FROM_U32_DOC : '';
 
-    if (isU32) {
-        impl.push(
-            `\n${TO_U32_DOC}pub fn to_u32(&self) -> u32`, [
+    return [
+        `impl ${def.wrappedTypeName}`, [
+            `\n${NONE_DOC}pub fn none() -> Self`, [
+                def.wrappedTypeName,
+                def.fields.map(field => `${field.varName}: false,`)
+            ],
+            `\n${ALL_DOC}pub fn all() -> Self`, [
+                def.wrappedTypeName,
+                def.fields.map(field => `${field.varName}: true,`)
+            ],
+            `\n${toIntDoc}pub fn to_${intType}(&self) -> ${intType}`, [
                 `0${def.fields.map(field => `\n+ if self.${field.varName} { ${field.value} } else { 0 }`).join('')}`
             ],
-            `\n${FROM_U32_DOC}pub fn from_u32(value: u32) -> Self`, [
+            `\n${fromIntDoc}pub fn from_${intType}(value: ${intType}) -> Self`, [
                 def.wrappedTypeName,
                 def.fields.map(field => `${field.varName}: value & ${field.value} > 0,`)
             ]
-        );
-    }
-
-    return [
-        `impl ${def.wrappedTypeName}`,
-        impl,
+        ],
         ``,
         `#[doc(hidden)]`,
         `#[macro_export]`,

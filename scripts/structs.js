@@ -31,6 +31,12 @@ function generateVkStructDefinition(cDef) {
 
     const isFlags = cDef.name === 'VkPhysicalDeviceFeatures';
 
+    if (isFlags) {
+        for (let i = 0; i < def.fields.length; ++i) {
+            def.fields[i].value = Math.pow(2, i) + '';
+        }
+    }
+
     return [
         genUses(def),
         getWrappedStructDeclaration(def, isFlags),
@@ -40,7 +46,7 @@ function generateVkStructDefinition(cDef) {
         genImplDefault(def),
         genImplVkSetup(def),
         genImplVkFree(def),
-        isFlags ? genImplFlags(def, false) : null
+        isFlags ? genImplFlags(def, 'u64') : null
     ];
 }
 
