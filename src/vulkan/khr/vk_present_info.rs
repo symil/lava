@@ -22,7 +22,7 @@ pub struct VkPresentInfo {
     pub wait_semaphores: Vec<VkSemaphore>,
     pub swapchains: Vec<VkSwapchain>,
     pub image_indices: Vec<usize>,
-    pub results: Option<Vec<VkResult>>,
+    pub results: bool,
 }
 
 #[doc(hidden)]
@@ -48,7 +48,7 @@ impl VkWrappedType<RawVkPresentInfo> for VkPresentInfo {
         dst.swapchain_count = cmp::max(src.swapchains.len(), src.image_indices.len()) as u32;
         dst.swapchains = new_ptr_vk_array(&src.swapchains);
         dst.image_indices = new_ptr_vk_array(&src.image_indices);
-        dst.results = new_ptr_vk_array_checked(&src.results);
+        dst.results = if src.results { unsafe { calloc(src.swapchains.len(), mem::size_of::<RawVkResult>()) as *mut RawVkResult } } else { ptr::null_mut() };
     }
 }
 
@@ -58,7 +58,7 @@ impl VkRawType<VkPresentInfo> for RawVkPresentInfo {
             wait_semaphores: new_vk_array(src.wait_semaphore_count, src.wait_semaphores),
             swapchains: new_vk_array(src.swapchain_count, src.swapchains),
             image_indices: new_vk_array(src.swapchain_count, src.image_indices),
-            results: new_vk_array_checked(src.swapchain_count, src.results),
+            results: !src.results.is_null(),
         }
     }
 }
@@ -69,7 +69,7 @@ impl Default for VkPresentInfo {
             wait_semaphores: Vec::new(),
             swapchains: Vec::new(),
             image_indices: Vec::new(),
-            results: None,
+            results: false,
         }
     }
 }

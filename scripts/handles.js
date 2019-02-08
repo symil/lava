@@ -220,6 +220,8 @@ function functionToMethod(handle, func) {
     // const DEBUG = func.name === 'vkGetAccelerationStructureHandleNV';
     // if (DEBUG) console.log(func.args);
 
+    const isVkQueuePresentKHR = func.name === 'vkQueuePresentKHR';
+
     const lastArg = func.args.last();
     const beforeLastArg = func.args.beforeLast();
     const createSomething = lastArg.isPointer && !lastArg.isConst && (lastArg.name !== 'pData' || beforeLastArg.name !== 'dataSize');
@@ -402,12 +404,16 @@ function functionToMethod(handle, func) {
     } else if (returnVkResult) {
         statements.push(`let vk_result = ${functionCall};`);
 
-        if (methodName === 'get_status') {
+        if (isVkQueuePresentKHR) {
+            returnType = `Result<Vec<VkResult>, (VkResult, Vec<VkResult>)>`;
+            statements.push(`let vk_results : Vec<VkResult> = if (*raw_present_info).results.is_null() { Vec::new() } else { new_vk_array((*raw_present_info).swapchain_count, (*raw_present_info).results) };`);
+            returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(vk_results) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), vk_results)) }`;
+        } else if (methodName === 'get_status') {
             returnType = `VkResult`;
             returnStatement = `RawVkResult::vk_to_wrapped(&vk_result)`;
         } else {
             returnType = 'Result<(), VkResult>';
-            returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }`
+            returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }`;
         }
     } else {
         statements.push(`${functionCall};`);
@@ -426,8 +432,17 @@ function functionToMethod(handle, func) {
         allStatements.push(returnStatement);
     }
 
+    const doc = [documentType(func)];
+
+    if (isVkQueuePresentKHR) {
+        doc.push(
+            '///',
+            '/// If `present_info.results` is true, then the method returns a vector of `VkResult` with each value indicating the individual result for the swapchain with the corresponding index. If it is false, then the vector is always empty.'
+        );
+    }
+
     return [
-        `\n${documentType(func)}\npub fn ${methodName}${generics}(${argList})${returnInfo}`,
+        `\n${doc.join('\n')}\npub fn ${methodName}${generics}(${argList})${returnInfo}`,
         [`unsafe`, allStatements]
     ];
 }

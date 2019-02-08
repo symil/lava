@@ -114,12 +114,15 @@ impl VkQueue {
     }
     
     /// Wrapper for [vkQueuePresentKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueuePresentKHR.html).
-    pub fn present(&self, present_info: khr::VkPresentInfo) -> Result<(), VkResult> {
+    ///
+    /// If `present_info.results` is true, then the method returns a vector of `VkResult` with each value indicating the individual result for the swapchain with the corresponding index. If it is false, then the vector is always empty.
+    pub fn present(&self, present_info: khr::VkPresentInfo) -> Result<Vec<VkResult>, (VkResult, Vec<VkResult>)> {
         unsafe {
             let raw_present_info = new_ptr_vk_value(&present_info);
             let vk_result = ((&*self._fn_table).vkQueuePresentKHR)(self._handle, raw_present_info);
+            let vk_results : Vec<VkResult> = if (*raw_present_info).results.is_null() { Vec::new() } else { new_vk_array((*raw_present_info).swapchain_count, (*raw_present_info).results) };
             free_vk_ptr(raw_present_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(vk_results) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), vk_results)) }
         }
     }
     

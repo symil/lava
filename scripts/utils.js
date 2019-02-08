@@ -275,7 +275,14 @@ function getFieldsInformation(fields, structName) {
         let defValue = null;
         let freeRaw = null;
 
-        if (field.name === 'pAllocator') {
+        if (field.name === 'pResults' && structName === 'VkPresentInfo') {
+            rawType = '*mut RawVkResult';
+            wrappedType = 'bool';
+            toRaw = getVarName => `if ${getVarName(varNameValue)} { unsafe { calloc(${getVarName(`swapchains`)}.len(), mem::size_of::<RawVkResult>()) as *mut RawVkResult } } else { ptr::null_mut() }`;
+            toWrapped = `!${varName}.is_null()`;
+            defValue = `false`;
+            freeRaw = `free_ptr(${varName})`;
+        } else if (field.name === 'pAllocator') {
             rawType = '*const c_void';
             wrappedType = '*const c_void';
             toRaw = varName;
