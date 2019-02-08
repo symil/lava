@@ -10,14 +10,12 @@ Wrapper to manipulate the Vulkan API in Rust more conveniently than with binding
 - removes the extension suffix from function and data-structure names (modules are used instead)
 - exposes bit flags as structures instead of integers
 - provides a default value for all structures, allowing to "auto-complete" structure with optional fields using `..Default::default()`
-- manages the calls to `vkGetInstanceProcAddr` to manipulate functions that are not exposed statically
+- manages the calls to `vkGetInstanceProcAddr` and `vkGetDeviceProcAddr` to manipulate functions that are not exposed statically
 - provides a generic `create_surface` method to create surfaces
 
 Lava is entirely generated from the C header files of Vulkan.
 
-### Restrictions
-
-It comes with the following restrictions (that should be lifted in the future):
+### Current restrictions
 
 - no way to provide allocator callbacks
 - no way to set the `pNext` field of structures (always set to `NULL`)
@@ -27,7 +25,7 @@ It comes with the following restrictions (that should be lifted in the future):
 Add this dependency to your `Cargo.toml` file:
 ```
 [dependencies]
-lava = "0.3.2"
+lava = "0.4"
 ```
 
 ## Examples
