@@ -15,8 +15,8 @@ use vulkan::vk::*;
 /// Wrapper for [VkExtent2D](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtent2D.html).
 #[derive(Debug, Clone)]
 pub struct VkExtent2D {
-    pub width: u32,
-    pub height: u32,
+    pub width: usize,
+    pub height: usize,
 }
 
 #[doc(hidden)]
@@ -29,16 +29,16 @@ pub struct RawVkExtent2D {
 
 impl VkWrappedType<RawVkExtent2D> for VkExtent2D {
     fn vk_to_raw(src: &VkExtent2D, dst: &mut RawVkExtent2D) {
-        dst.width = src.width;
-        dst.height = src.height;
+        dst.width = vk_to_raw_value(&src.width);
+        dst.height = vk_to_raw_value(&src.height);
     }
 }
 
 impl VkRawType<VkExtent2D> for RawVkExtent2D {
     fn vk_to_wrapped(src: &RawVkExtent2D) -> VkExtent2D {
         VkExtent2D {
-            width: src.width,
-            height: src.height,
+            width: u32::vk_to_wrapped(&src.width),
+            height: u32::vk_to_wrapped(&src.height),
         }
     }
 }

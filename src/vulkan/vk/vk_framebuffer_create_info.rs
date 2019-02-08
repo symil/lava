@@ -22,8 +22,8 @@ pub struct VkFramebufferCreateInfo {
     pub flags: VkFramebufferCreateFlags,
     pub render_pass: VkRenderPass,
     pub attachments: Vec<VkImageView>,
-    pub width: u32,
-    pub height: u32,
+    pub width: usize,
+    pub height: usize,
     pub layers: u32,
 }
 
@@ -50,8 +50,8 @@ impl VkWrappedType<RawVkFramebufferCreateInfo> for VkFramebufferCreateInfo {
         dst.render_pass = vk_to_raw_value(&src.render_pass);
         dst.attachment_count = src.attachments.len() as u32;
         dst.attachments = new_ptr_vk_array(&src.attachments);
-        dst.width = src.width;
-        dst.height = src.height;
+        dst.width = vk_to_raw_value(&src.width);
+        dst.height = vk_to_raw_value(&src.height);
         dst.layers = src.layers;
     }
 }
@@ -62,8 +62,8 @@ impl VkRawType<VkFramebufferCreateInfo> for RawVkFramebufferCreateInfo {
             flags: RawVkFramebufferCreateFlags::vk_to_wrapped(&src.flags),
             render_pass: RawVkRenderPass::vk_to_wrapped(&src.render_pass),
             attachments: new_vk_array(src.attachment_count, src.attachments),
-            width: src.width,
-            height: src.height,
+            width: u32::vk_to_wrapped(&src.width),
+            height: u32::vk_to_wrapped(&src.height),
             layers: src.layers,
         }
     }

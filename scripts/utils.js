@@ -185,7 +185,8 @@ function getFieldRawTypeName(field) {
 
 const INT_TYPES = ['uint32_t', 'uint64_t', 'int32_t', 'int64_t', 'VkDeviceSize']
 
-const INT_FIELD_NAMES = ['x', 'y', 'z', 'width', 'height', 'layers', 'timeout'];
+// const INT_FIELD_NAMES = ['x', 'y', 'z', 'width', 'height', 'layers', 'timeout'];
+const INT_FIELD_NAMES = ['layers', 'timeout'];
 
 function fieldNameIsInt(field) {
     return INT_FIELD_NAMES.includes(field.name) ||

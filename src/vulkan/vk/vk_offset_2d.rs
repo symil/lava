@@ -15,8 +15,8 @@ use vulkan::vk::*;
 /// Wrapper for [VkOffset2D](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkOffset2D.html).
 #[derive(Debug, Clone)]
 pub struct VkOffset2D {
-    pub x: i32,
-    pub y: i32,
+    pub x: isize,
+    pub y: isize,
 }
 
 #[doc(hidden)]
@@ -29,16 +29,16 @@ pub struct RawVkOffset2D {
 
 impl VkWrappedType<RawVkOffset2D> for VkOffset2D {
     fn vk_to_raw(src: &VkOffset2D, dst: &mut RawVkOffset2D) {
-        dst.x = src.x;
-        dst.y = src.y;
+        dst.x = vk_to_raw_value(&src.x);
+        dst.y = vk_to_raw_value(&src.y);
     }
 }
 
 impl VkRawType<VkOffset2D> for RawVkOffset2D {
     fn vk_to_wrapped(src: &RawVkOffset2D) -> VkOffset2D {
         VkOffset2D {
-            x: src.x,
-            y: src.y,
+            x: i32::vk_to_wrapped(&src.x),
+            y: i32::vk_to_wrapped(&src.y),
         }
     }
 }

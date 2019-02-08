@@ -15,9 +15,9 @@ use vulkan::vk::*;
 /// Wrapper for [VkDispatchIndirectCommand](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDispatchIndirectCommand.html).
 #[derive(Debug, Clone)]
 pub struct VkDispatchIndirectCommand {
-    pub x: u32,
-    pub y: u32,
-    pub z: u32,
+    pub x: usize,
+    pub y: usize,
+    pub z: usize,
 }
 
 #[doc(hidden)]
@@ -31,18 +31,18 @@ pub struct RawVkDispatchIndirectCommand {
 
 impl VkWrappedType<RawVkDispatchIndirectCommand> for VkDispatchIndirectCommand {
     fn vk_to_raw(src: &VkDispatchIndirectCommand, dst: &mut RawVkDispatchIndirectCommand) {
-        dst.x = src.x;
-        dst.y = src.y;
-        dst.z = src.z;
+        dst.x = vk_to_raw_value(&src.x);
+        dst.y = vk_to_raw_value(&src.y);
+        dst.z = vk_to_raw_value(&src.z);
     }
 }
 
 impl VkRawType<VkDispatchIndirectCommand> for RawVkDispatchIndirectCommand {
     fn vk_to_wrapped(src: &RawVkDispatchIndirectCommand) -> VkDispatchIndirectCommand {
         VkDispatchIndirectCommand {
-            x: src.x,
-            y: src.y,
-            z: src.z,
+            x: u32::vk_to_wrapped(&src.x),
+            y: u32::vk_to_wrapped(&src.y),
+            z: u32::vk_to_wrapped(&src.z),
         }
     }
 }

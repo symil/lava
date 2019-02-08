@@ -982,7 +982,7 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdTraceRaysNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdTraceRaysNV.html).
-    pub fn cmd_trace_rays(&self, raygen_shader_binding_table_buffer: VkBuffer, raygen_shader_binding_offset: usize, miss_shader_binding_table_buffer: Option<VkBuffer>, miss_shader_binding_offset: usize, miss_shader_binding_stride: usize, hit_shader_binding_table_buffer: Option<VkBuffer>, hit_shader_binding_offset: usize, hit_shader_binding_stride: usize, callable_shader_binding_table_buffer: Option<VkBuffer>, callable_shader_binding_offset: usize, callable_shader_binding_stride: usize, width: u32, height: u32, depth: usize) {
+    pub fn cmd_trace_rays(&self, raygen_shader_binding_table_buffer: VkBuffer, raygen_shader_binding_offset: usize, miss_shader_binding_table_buffer: Option<VkBuffer>, miss_shader_binding_offset: usize, miss_shader_binding_stride: usize, hit_shader_binding_table_buffer: Option<VkBuffer>, hit_shader_binding_offset: usize, hit_shader_binding_stride: usize, callable_shader_binding_table_buffer: Option<VkBuffer>, callable_shader_binding_offset: usize, callable_shader_binding_stride: usize, width: usize, height: usize, depth: usize) {
         unsafe {
             let raw_raygen_shader_binding_table_buffer = vk_to_raw_value(&raygen_shader_binding_table_buffer);
             let raw_raygen_shader_binding_offset = vk_to_raw_value(&raygen_shader_binding_offset);
@@ -995,8 +995,8 @@ impl VkCommandBuffer {
             let raw_callable_shader_binding_table_buffer = vk_to_raw_value_checked(&callable_shader_binding_table_buffer);
             let raw_callable_shader_binding_offset = vk_to_raw_value(&callable_shader_binding_offset);
             let raw_callable_shader_binding_stride = vk_to_raw_value(&callable_shader_binding_stride);
-            let raw_width = width;
-            let raw_height = height;
+            let raw_width = vk_to_raw_value(&width);
+            let raw_height = vk_to_raw_value(&height);
             let raw_depth = vk_to_raw_value(&depth);
             ((&*self._fn_table).vkCmdTraceRaysNV)(self._handle, raw_raygen_shader_binding_table_buffer, raw_raygen_shader_binding_offset, raw_miss_shader_binding_table_buffer, raw_miss_shader_binding_offset, raw_miss_shader_binding_stride, raw_hit_shader_binding_table_buffer, raw_hit_shader_binding_offset, raw_hit_shader_binding_stride, raw_callable_shader_binding_table_buffer, raw_callable_shader_binding_offset, raw_callable_shader_binding_stride, raw_width, raw_height, raw_depth);
         }
