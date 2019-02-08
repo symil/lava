@@ -66,11 +66,26 @@ impl VkDevice {
         self._handle
     }
     
+    /// Indicates if the Vulkan internal handle for this object is 0.
+    pub fn is_null(&self) -> bool {
+        self._handle == 0
+    }
+    
+    /// Creates an object with a null Vulkan internal handle.
+    ///
+    /// Calling a method with a null handle will most likely result in a crash.
+    pub fn null() -> Self {
+        Self {
+            _handle: 0,
+            _fn_table: ptr::null_mut()
+        }
+    }
+    
     /// Wrapper for [vkDestroyDevice](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDevice.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyDevice)(self._handle, ptr::null());
-            Box::from_raw(self._fn_table);
+            if !self._fn_table.is_null() { Box::from_raw(self._fn_table); }
         }
     }
     

@@ -184,11 +184,22 @@ function genSpecialMethods(def) {
 }
 
 const VK_HANDLE_DOC = '/// Returns the internal Vulkan handle for the object.';
+const IS_NULL_DOC = '/// Indicates if the Vulkan internal handle for this object is 0.';
+const NULL_DOC = '/// Creates an object with a null Vulkan internal handle.\n///\n/// Calling a method with a null handle will most likely result in a crash.';
 
 function genMethods(def) {
     const handleMethod = [
         `\n${VK_HANDLE_DOC}\npub fn vk_handle(&self) -> u64`, [
             `self._handle`
+        ],
+        `\n${IS_NULL_DOC}\npub fn is_null(&self) -> bool`, [
+            `self._handle == 0`
+        ],
+        `\n${NULL_DOC}\npub fn null() -> Self`, [
+            `Self`, [
+                `_handle: 0,`,
+                `_fn_table: ptr::null_mut()`
+            ]
         ],
     ];
     return [
@@ -403,7 +414,7 @@ function functionToMethod(handle, func) {
     }
 
     if (func.name === 'vkDestroyInstance' || func.name === 'vkDestroyDevice') {
-        freeStataments.push(`Box::from_raw(self._fn_table);`);
+        freeStataments.push(`if !self._fn_table.is_null() { Box::from_raw(self._fn_table); }`);
     }
 
     const argList = methodArgs.map(argToString).join(', ');

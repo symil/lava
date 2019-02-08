@@ -12,3 +12,6 @@ pub const VK_ATTACHMENT_UNUSED : usize = <u32>::max_value() as usize;
 pub const VK_SUBPASS_EXTERNAL : usize = <u32>::max_value() as usize;
 /// `<u32>::max_value()`
 pub const VK_QUEUE_FAMILY_IGNORED : usize = <u32>::max_value() as usize;
+
+/// `<u64>::max_value()`
+pub const VK_NO_TIMEOUT : u64 = <u64>::max_value();
