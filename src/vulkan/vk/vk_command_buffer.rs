@@ -383,12 +383,12 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdFillBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdFillBuffer.html).
-    pub fn cmd_fill_buffer(&self, dst_buffer: VkBuffer, dst_offset: usize, size: usize, data: usize) {
+    pub fn cmd_fill_buffer(&self, dst_buffer: VkBuffer, dst_offset: usize, size: usize, data: u32) {
         unsafe {
             let raw_dst_buffer = vk_to_raw_value(&dst_buffer);
             let raw_dst_offset = vk_to_raw_value(&dst_offset);
             let raw_size = vk_to_raw_value(&size);
-            let raw_data = vk_to_raw_value(&data);
+            let raw_data = data;
             ((&*self._fn_table).vkCmdFillBuffer)(self._handle, raw_dst_buffer, raw_dst_offset, raw_size, raw_data);
         }
     }
