@@ -55,7 +55,7 @@ fn main() {
         callback: |data: VkDebugReportCallbackData| {
             println!("{}", data.message);
         }
-    }).expect("Faield to create debug callback");
+    }).expect("Failed to create debug callback");
 
     let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
 
