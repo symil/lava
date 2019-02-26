@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkCompositeAlphaFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCompositeAlphaFlagBitsKHR.html).
+/// Wrapper for [VkCompositeAlphaFlagsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCompositeAlphaFlagsKHR.html).
 ///
 /// Use the macro `VkCompositeAlphaFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

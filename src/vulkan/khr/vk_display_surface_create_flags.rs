@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkDisplaySurfaceCreateFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplaySurfaceCreateFlagBitsKHR.html).
+/// Wrapper for [VkDisplaySurfaceCreateFlagsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplaySurfaceCreateFlagsKHR.html).
 ///
 /// Use the macro `VkDisplaySurfaceCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

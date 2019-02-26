@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkConditionalRenderingFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConditionalRenderingFlagBitsEXT.html).
+/// Wrapper for [VkConditionalRenderingFlagsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConditionalRenderingFlagsEXT.html).
 ///
 /// Use the macro `VkConditionalRenderingFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

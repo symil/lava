@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkExternalSemaphoreFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalSemaphoreFeatureFlagBits.html).
+/// Wrapper for [VkExternalSemaphoreFeatureFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalSemaphoreFeatureFlags.html).
 ///
 /// Use the macro `VkExternalSemaphoreFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

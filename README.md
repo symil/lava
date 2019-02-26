@@ -3,9 +3,9 @@
 Wrapper to manipulate the Vulkan API in Rust more conveniently than with bindings:
 
 - removes the need to specify the structure type when sending structures to Vulkan
-- takes care of making double Vulkan calls when necessary (e.g when retrieving a list of Vulkan objects)
-- returns objects retrieved by Vulkan in a `Result` instead of writing them to a user-provided pointer
-- allows to manipulate references, slices and options instead of pointers (in particular, allows to provide slice instead of length + pointer)
+- takes care of making double Vulkan calls when necessary (when retrieving a list of Vulkan objects)
+- returns objects retrieved by Vulkan in a `Result` instead of requiring a user-provided pointer
+- allows to manipulate references, slices and options instead of pointers (in particular, allows to provide slice instead of pointer + length)
 - exposes the API in an object-oriented way (e.g `instance.enumerate_physical_devices()` instead of `enumerate_physical_devices(&instance)`)
 - removes the extension suffix from function and data-structure names (modules are used instead)
 - exposes bit flags as structures instead of integers
@@ -33,7 +33,7 @@ lava = "0.4"
 This code creates a Vulkan instance, adds a debug report callback and displays the name of each GPU of the machine:
 
 ```rust
-extern crate lava;
+#[macro_use] extern crate lava;
 use lava::*;
 
 fn main() {
@@ -57,7 +57,8 @@ fn main() {
         }
     }).expect("Failed to create debug callback");
 
-    let physical_devices = instance.enumerate_physical_devices().expect("Failed to retrieve physical devices");
+    let physical_devices = instance.enumerate_physical_devices()
+        .expect("Failed to retrieve physical devices");
 
     for physical_device in &physical_devices {
         let properties = physical_device.get_properties();
@@ -87,7 +88,7 @@ let surface = instance.create_surface(
 
 Data-structures are separated in multiple modules, according to their extension (KHR, EXT, etc). Data-structures that have no extension are in the `lava::vk` module.
 
-Constants (e.g validation layer names) are located in the `lava::constants` module.
+Some constants (e.g validation layer names) are located in the `lava::constants` module.
 
 Lava re-exports all the members of `lava::vk`, `lava::constants`, `lava::ext` and `lava::khr` ("`use lava::*`" makes all data-structures contained in these modules available without needing to prefix them).
 
@@ -104,39 +105,47 @@ VkShaderStageFlags {
 }
 ```
 
-Since it can be tedious to write, all bit flags structures have a macro shortcut (don't forget `#[macro_use]`!):
+Since it can be tedious to write, all bit flags structures have a macro shortcut:
 
 ```rust
 // Same effect as previous snippet
 VkShaderStageFlags!(vertex, fragment)
 ```
 
+Additionally, all bit flags structures have the following methods:
+
+```rust
+let no_stages = VkShaderStageFlags::none();
+let all_stages = VkShaderStageFlags::all();
+let stage_flags = VkShaderStageFlags::from_u32(17);
+let stage_flags_int = stage_flags.to_u32();
+```
+
 ### Results
 
 When possible, functions return a `Result<T, (VkResult, T)>`. The return value is `Ok(T)` if the `VkResult` returned by the Vulkan function is 0.
-Otherwise it's `Err((VkResult, T))`. The first element of the tuple is the error code returned by the Vulkan function. The second element is, in the specific case where the `VkResult` is not 0 but is not an error either (e.g when calling `swapchain.acquire_next_image()`), the value produced by the function. Otherwise it's a zeroed value that will most likely crash when being used.
+Otherwise it's `Err((VkResult, T))`. The first element of the tuple is the error code returned by the Vulkan function. The second element is, in the specific case where the `VkResult` is not 0 but is not an error either (e.g when calling `swapchain.acquire_next_image()`), the value produced by the function. Otherwise it's a zeroed value that will most likely crash when used.
 
 ### Objects destruction and drop
 
 Users are required to manually destroy their objects themselves, instead of Rust doing it automatically when the object is dropped. There are two reasons for that:
 
-- The user is not always expected to destroy the objects themselves. For example, they are not expected to destroy the `VkImage` objects bound to a swapchain; Vulkan will destroy them itself when the swapchain is destroyed. However, the user is still expected to destroy the `VkImage` objects that they create manually. That would make an automatic destruction very tedious to implement.
-- The order in which objects are dropped has a good chance of not matching the oder in which the objects must be destroyed, especially in structures. 
+- In the C API some objects must not be destroyed by the user. For example, the `VkImage` objects of a swapchain are automatically destroyed when the swapchain is destroyed, and attempting to destroy them manually will produce an error. But the user is still expected to destroy the `VkImage` objects that they create manually. An automatic destruction mechanism would require some context on where the object comes from, and this is out of scope.
+- The order in which objects are dropped has a good chance to not match the oder in which they must be destroyed, especially when structures are dropped. 
 
 ## Manual build
 
 The content of the `src/vulkan/` folder is generated from the `vulkan_core.h` and `vk.xml` files of the
 [Vulkan documentation repository](https://github.com/KhronosGroup/Vulkan-Docs).
-This repository is up to date with the `master` branch.
 
-If you wish to generate the wrapper for a specific version, you can do (requires Node.js):
+If you wish to re-generate it manually, you can do (requires Node.js):
 
 - `npm install`
-- `node generate.js --tag <version>`
+- `node generate.js [ --tag <version> ]`
 
 Where `<version>` is a branch or tag name of the Vulkan-Docs repository (for example "v1.1.80").
-The script will download the corresponding files in the `download/` folder and generate the
-new source files in `src/vulkan/`.
+If omitted, it defaults to "master".
+The script will download the corresponding files in the `download/` folder and generate the new source files.
 
 ## License
 

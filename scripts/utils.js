@@ -608,7 +608,7 @@ function stringToFunction(statement, varName, countVarName, arrayVarName, varNam
 }
 
 function documentType(def, precision) {
-    const typeName = (def.typeName || def.name).replace(/Flags$/, 'FlagBits') + (def.extension || '').toUpperCase();
+    const typeName = (def.typeName || def.name) + (def.extension || '').toUpperCase();
     let str = `/// Wrapper for [${typeName}](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/${typeName}.html).`;
 
     if (precision) {

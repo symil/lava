@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkFormatFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatFeatureFlagBits.html).
+/// Wrapper for [VkFormatFeatureFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatFeatureFlags.html).
 ///
 /// Use the macro `VkFormatFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

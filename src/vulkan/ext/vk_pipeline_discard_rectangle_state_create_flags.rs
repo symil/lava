@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkPipelineDiscardRectangleStateCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDiscardRectangleStateCreateFlagBitsEXT.html).
+/// Wrapper for [VkPipelineDiscardRectangleStateCreateFlagsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDiscardRectangleStateCreateFlagsEXT.html).
 ///
 /// Use the macro `VkPipelineDiscardRectangleStateCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

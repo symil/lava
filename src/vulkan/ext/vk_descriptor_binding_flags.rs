@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkDescriptorBindingFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBindingFlagBitsEXT.html).
+/// Wrapper for [VkDescriptorBindingFlagsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBindingFlagsEXT.html).
 ///
 /// Use the macro `VkDescriptorBindingFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

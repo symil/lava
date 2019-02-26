@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkDeviceGroupPresentModeFlagBitsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupPresentModeFlagBitsKHR.html).
+/// Wrapper for [VkDeviceGroupPresentModeFlagsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGroupPresentModeFlagsKHR.html).
 ///
 /// Use the macro `VkDeviceGroupPresentModeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

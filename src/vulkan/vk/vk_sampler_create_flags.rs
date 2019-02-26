@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkSamplerCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerCreateFlagBits.html).
+/// Wrapper for [VkSamplerCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerCreateFlags.html).
 ///
 /// Use the macro `VkSamplerCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

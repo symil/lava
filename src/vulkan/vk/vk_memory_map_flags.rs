@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkMemoryMapFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryMapFlagBits.html).
+/// Wrapper for [VkMemoryMapFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryMapFlags.html).
 ///
 /// Use the macro `VkMemoryMapFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkExternalMemoryFeatureFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryFeatureFlagBits.html).
+/// Wrapper for [VkExternalMemoryFeatureFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryFeatureFlags.html).
 ///
 /// Use the macro `VkExternalMemoryFeatureFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

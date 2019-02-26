@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkDescriptorUpdateTemplateCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorUpdateTemplateCreateFlagBits.html).
+/// Wrapper for [VkDescriptorUpdateTemplateCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorUpdateTemplateCreateFlags.html).
 ///
 /// Use the macro `VkDescriptorUpdateTemplateCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

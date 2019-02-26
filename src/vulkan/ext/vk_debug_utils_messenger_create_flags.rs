@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkDebugUtilsMessengerCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCreateFlagBitsEXT.html).
+/// Wrapper for [VkDebugUtilsMessengerCreateFlagsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCreateFlagsEXT.html).
 ///
 /// Use the macro `VkDebugUtilsMessengerCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkCommandBufferResetFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferResetFlagBits.html).
+/// Wrapper for [VkCommandBufferResetFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferResetFlags.html).
 ///
 /// Use the macro `VkCommandBufferResetFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

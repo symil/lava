@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkValidationCacheCreateFlagBitsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationCacheCreateFlagBitsEXT.html).
+/// Wrapper for [VkValidationCacheCreateFlagsEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkValidationCacheCreateFlagsEXT.html).
 ///
 /// Use the macro `VkValidationCacheCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkShaderStageFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderStageFlagBits.html).
+/// Wrapper for [VkShaderStageFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderStageFlags.html).
 ///
 /// Use the macro `VkShaderStageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

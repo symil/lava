@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkEventCreateFlagBits](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkEventCreateFlagBits.html).
+/// Wrapper for [VkEventCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkEventCreateFlags.html).
 ///
 /// Use the macro `VkEventCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
