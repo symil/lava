@@ -22,7 +22,6 @@ Lava is entirely generated from the C header files of Vulkan.
 
 ## Usage
 
-Add this dependency to your `Cargo.toml` file:
 ```
 [dependencies]
 lava = "0.4"
@@ -143,8 +142,8 @@ If you wish to re-generate it manually, you can do (requires Node.js):
 - `npm install`
 - `node generate.js [ --tag <version> ]`
 
-Where `<version>` is a branch or tag name of the Vulkan-Docs repository (for example "v1.1.80").
-If omitted, it defaults to "master".
+Where `<version>` is a branch or tag name of the Vulkan-Docs repository (for example `v1.1.80`).
+If omitted, it defaults to `master`.
 The script will download the corresponding files in the `download/` folder and generate the new source files.
 
 ## License
