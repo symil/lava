@@ -115,15 +115,15 @@ VkShaderStageFlags!(vertex, fragment)
 Additionally, all bit flags structures have the following methods:
 
 ```rust
-let no_stages = VkShaderStageFlags::none();
-let all_stages = VkShaderStageFlags::all();
-let stage_flags = VkShaderStageFlags::from_u32(17);
-let stage_flags_int = stage_flags.to_u32();
+let no_shader_stage = VkShaderStageFlags::none();
+let all_shader_stages = VkShaderStageFlags::all();
+let shader_stages = VkShaderStageFlags::from_u32(17);
+let shader_stages_int = shader_stages.to_u32();
 ```
 
 ### Results
 
-When possible, functions return a `Result<T, (VkResult, T)>`. The return value is `Ok(T)` if the `VkResult` returned by the Vulkan function is 0.
+When relevant, functions return a `Result<T, (VkResult, T)>`. The return value is `Ok(T)` if the `VkResult` returned by the Vulkan function is 0.
 Otherwise it's `Err((VkResult, T))`. The first element of the tuple is the error code returned by the Vulkan function. The second element is, in the specific case where the `VkResult` is not 0 but is not an error either (e.g when calling `swapchain.acquire_next_image()`), the value produced by the function. Otherwise it's a zeroed value that will most likely crash when used.
 
 ### Objects destruction and drop
