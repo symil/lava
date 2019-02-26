@@ -8,7 +8,7 @@ use utils::vk_traits::*;
 pub enum VkFilter {
     Nearest = 0,
     Linear = 1,
-    CubicExt = 1000015000,
+    CubicImg = 1000015000,
 }
 
 #[doc(hidden)]

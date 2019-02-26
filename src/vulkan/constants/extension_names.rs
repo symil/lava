@@ -261,6 +261,9 @@ pub const VK_EXT_DISCARD_RECTANGLES_EXTENSION_NAME : &str = "VK_EXT_discard_rect
 /// `"VK_EXT_conservative_rasterization"`
 pub const VK_EXT_CONSERVATIVE_RASTERIZATION_EXTENSION_NAME : &str = "VK_EXT_conservative_rasterization";
 
+/// `"VK_EXT_depth_clip_enable"`
+pub const VK_EXT_DEPTH_CLIP_ENABLE_EXTENSION_NAME : &str = "VK_EXT_depth_clip_enable";
+
 /// `"VK_EXT_swapchain_colorspace"`
 pub const VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME : &str = "VK_EXT_swapchain_colorspace";
 
@@ -410,3 +413,6 @@ pub const VK_EXT_SEPARATE_STENCIL_USAGE_EXTENSION_NAME : &str = "VK_EXT_separate
 
 /// `"VK_EXT_validation_features"`
 pub const VK_EXT_VALIDATION_FEATURES_EXTENSION_NAME : &str = "VK_EXT_validation_features";
+
+/// `"VK_NV_cooperative_matrix"`
+pub const VK_NV_COOPERATIVE_MATRIX_EXTENSION_NAME : &str = "VK_NV_cooperative_matrix";

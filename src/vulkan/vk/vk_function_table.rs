@@ -298,6 +298,7 @@ pub struct VkFunctionTable {
     pub vkCmdSetExclusiveScissorNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkRect2D),
     pub vkCmdSetCheckpointNV: unsafe extern fn(RawVkCommandBuffer, *mut c_void),
     pub vkGetQueueCheckpointDataNV: unsafe extern fn(RawVkQueue, *mut u32, *mut nv::RawVkCheckpointData),
+    pub vkGetPhysicalDeviceCooperativeMatrixPropertiesNV: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut nv::RawVkCooperativeMatrixProperties) -> RawVkResult,
 }
 
 impl VkFunctionTable {
@@ -591,6 +592,7 @@ impl VkFunctionTable {
                 vkCmdSetExclusiveScissorNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdSetExclusiveScissorNV"); if fn_ptr.is_null() { null_instance_vkCmdSetExclusiveScissorNV } else { mem::transmute(fn_ptr) } },
                 vkCmdSetCheckpointNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdSetCheckpointNV"); if fn_ptr.is_null() { null_instance_vkCmdSetCheckpointNV } else { mem::transmute(fn_ptr) } },
                 vkGetQueueCheckpointDataNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetQueueCheckpointDataNV"); if fn_ptr.is_null() { null_instance_vkGetQueueCheckpointDataNV } else { mem::transmute(fn_ptr) } },
+                vkGetPhysicalDeviceCooperativeMatrixPropertiesNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetPhysicalDeviceCooperativeMatrixPropertiesNV"); if fn_ptr.is_null() { null_instance_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV } else { mem::transmute(fn_ptr) } },
             }
         }
     }
@@ -884,6 +886,7 @@ impl VkFunctionTable {
                 vkCmdSetExclusiveScissorNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdSetExclusiveScissorNV"); if fn_ptr.is_null() { null_device_vkCmdSetExclusiveScissorNV } else { mem::transmute(fn_ptr) } },
                 vkCmdSetCheckpointNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdSetCheckpointNV"); if fn_ptr.is_null() { null_device_vkCmdSetCheckpointNV } else { mem::transmute(fn_ptr) } },
                 vkGetQueueCheckpointDataNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetQueueCheckpointDataNV"); if fn_ptr.is_null() { null_device_vkGetQueueCheckpointDataNV } else { mem::transmute(fn_ptr) } },
+                vkGetPhysicalDeviceCooperativeMatrixPropertiesNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetPhysicalDeviceCooperativeMatrixPropertiesNV"); if fn_ptr.is_null() { null_device_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV } else { mem::transmute(fn_ptr) } },
             }
         }
     }
@@ -1744,6 +1747,9 @@ unsafe extern fn null_instance_vkCmdSetCheckpointNV(command_buffer: RawVkCommand
 unsafe extern fn null_instance_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *mut u32, checkpoint_data: *mut nv::RawVkCheckpointData) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetQueueCheckpointDataNV\"");
 }
+unsafe extern fn null_instance_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut nv::RawVkCooperativeMatrixProperties) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceCooperativeMatrixPropertiesNV\"");
+}
 unsafe extern fn null_device_vkDestroyInstance(instance: RawVkInstance, allocator: *const c_void) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkDestroyInstance\"");
 }
@@ -2598,4 +2604,7 @@ unsafe extern fn null_device_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBu
 }
 unsafe extern fn null_device_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *mut u32, checkpoint_data: *mut nv::RawVkCheckpointData) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetQueueCheckpointDataNV\"");
+}
+unsafe extern fn null_device_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut nv::RawVkCooperativeMatrixProperties) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceCooperativeMatrixPropertiesNV\"");
 }

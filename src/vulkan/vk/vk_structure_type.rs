@@ -197,6 +197,8 @@ pub enum VkStructureType {
     PipelineDiscardRectangleStateCreateInfoExt = 1000099001,
     PhysicalDeviceConservativeRasterizationPropertiesExt = 1000101000,
     PipelineRasterizationConservativeStateCreateInfoExt = 1000101001,
+    PhysicalDeviceDepthClipEnableFeaturesExt = 1000102000,
+    PipelineRasterizationDepthClipStateCreateInfoExt = 1000102001,
     HdrMetadataExt = 1000105000,
     AttachmentDescription2Khr = 1000109000,
     AttachmentReference2Khr = 1000109001,
@@ -322,6 +324,9 @@ pub enum VkStructureType {
     BufferDeviceAddressCreateInfoExt = 1000244002,
     ImageStencilUsageCreateInfoExt = 1000246000,
     ValidationFeaturesExt = 1000247000,
+    PhysicalDeviceCooperativeMatrixFeaturesNv = 1000249000,
+    CooperativeMatrixPropertiesNv = 1000249001,
+    PhysicalDeviceCooperativeMatrixPropertiesNv = 1000249002,
 }
 
 #[doc(hidden)]

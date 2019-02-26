@@ -852,4 +852,24 @@ impl VkPhysicalDevice {
             if vk_result == 0 { Ok(time_domains) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), time_domains)) }
         }
     }
+    
+    /// Wrapper for [vkGetPhysicalDeviceCooperativeMatrixPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceCooperativeMatrixPropertiesNV.html).
+    pub fn get_cooperative_matrix_properties(&self) -> LavaResult<Vec<nv::VkCooperativeMatrixProperties>> {
+        unsafe {
+            let mut vk_result = 0;
+            let mut raw_properties : *mut nv::RawVkCooperativeMatrixProperties = ptr::null_mut();
+            let raw_property_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceCooperativeMatrixPropertiesNV)(self._handle, raw_property_count, raw_properties);
+            raw_properties = calloc(*raw_property_count as usize, mem::size_of::<nv::RawVkCooperativeMatrixProperties>()) as *mut nv::RawVkCooperativeMatrixProperties;
+            
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceCooperativeMatrixPropertiesNV)(self._handle, raw_property_count, raw_properties);
+            
+            let mut properties = new_vk_array(*raw_property_count, raw_properties);
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
+            }
+            free(raw_properties as *mut u8);
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
+        }
+    }
 }
