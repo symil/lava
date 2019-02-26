@@ -28,6 +28,7 @@ function genUses() {
         'std::os::raw::c_char',
         'std::ptr',
         'std::mem',
+        `vulkan::LavaResult`,
         `vulkan::vk::*`
     ].map(x => `use ${x};`);
 }

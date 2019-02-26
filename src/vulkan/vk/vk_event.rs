@@ -97,18 +97,18 @@ impl VkEvent {
     }
     
     /// Wrapper for [vkSetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetEvent.html).
-    pub fn set(&self) -> Result<(), VkResult> {
+    pub fn set(&self) -> LavaResult<()> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkSetEvent)((*self._fn_table).device, self._handle);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     
     /// Wrapper for [vkResetEvent](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetEvent.html).
-    pub fn reset(&self) -> Result<(), VkResult> {
+    pub fn reset(&self) -> LavaResult<()> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkResetEvent)((*self._fn_table).device, self._handle);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
 }

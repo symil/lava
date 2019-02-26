@@ -89,7 +89,7 @@ impl VkSwapchain {
     }
     
     /// Wrapper for [vkGetSwapchainImagesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSwapchainImagesKHR.html).
-    pub fn get_images(&self) -> Result<Vec<VkImage>, (VkResult, Vec<VkImage>)> {
+    pub fn get_images(&self) -> LavaResult<Vec<VkImage>> {
         unsafe {
             let mut vk_result = 0;
             let mut raw_swapchain_images : *mut RawVkImage = ptr::null_mut();
@@ -109,7 +109,7 @@ impl VkSwapchain {
     }
     
     /// Wrapper for [vkAcquireNextImageKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireNextImageKHR.html).
-    pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<VkSemaphore>, fence: Option<VkFence>) -> Result<usize, (VkResult, usize)> {
+    pub fn acquire_next_image(&self, timeout: u64, semaphore: Option<VkSemaphore>, fence: Option<VkFence>) -> LavaResult<usize> {
         unsafe {
             let raw_timeout = timeout;
             let raw_semaphore = vk_to_raw_value_checked(&semaphore);
@@ -133,7 +133,7 @@ impl VkSwapchain {
     }
     
     /// Wrapper for [vkGetSwapchainCounterEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSwapchainCounterEXT.html).
-    pub fn get_counter(&self, counter: ext::VkSurfaceCounterFlags) -> Result<usize, (VkResult, usize)> {
+    pub fn get_counter(&self, counter: ext::VkSurfaceCounterFlags) -> LavaResult<usize> {
         unsafe {
             let raw_counter = vk_to_raw_value(&counter);
             let mut vk_result = 0;
@@ -147,7 +147,7 @@ impl VkSwapchain {
     }
     
     /// Wrapper for [vkGetRefreshCycleDurationGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRefreshCycleDurationGOOGLE.html).
-    pub fn get_refresh_cycle_duration(&self) -> Result<google::VkRefreshCycleDuration, (VkResult, google::VkRefreshCycleDuration)> {
+    pub fn get_refresh_cycle_duration(&self) -> LavaResult<google::VkRefreshCycleDuration> {
         unsafe {
             let mut vk_result = 0;
             let raw_display_timing_properties = &mut mem::zeroed() as *mut google::RawVkRefreshCycleDuration;
@@ -164,7 +164,7 @@ impl VkSwapchain {
     }
     
     /// Wrapper for [vkGetPastPresentationTimingGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPastPresentationTimingGOOGLE.html).
-    pub fn get_past_presentation_timing(&self) -> Result<Vec<google::VkPastPresentationTiming>, (VkResult, Vec<google::VkPastPresentationTiming>)> {
+    pub fn get_past_presentation_timing(&self) -> LavaResult<Vec<google::VkPastPresentationTiming>> {
         unsafe {
             let mut vk_result = 0;
             let mut raw_presentation_timings : *mut google::RawVkPastPresentationTiming = ptr::null_mut();

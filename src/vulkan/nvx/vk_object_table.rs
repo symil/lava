@@ -89,7 +89,7 @@ impl VkObjectTable {
     }
     
     /// Wrapper for [vkRegisterObjectsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterObjectsNVX.html).
-    pub fn register_objects(&self, object_table_entries: Vec<nvx::VkObjectTableEntry>, object_indices: Vec<usize>) -> Result<(), VkResult> {
+    pub fn register_objects(&self, object_table_entries: Vec<nvx::VkObjectTableEntry>, object_indices: Vec<usize>) -> LavaResult<()> {
         unsafe {
             let raw_object_count = cmp::max(object_table_entries.len(), object_indices.len()) as u32;
             let raw_object_table_entries = new_ptr_vk_array_array(&object_table_entries);
@@ -97,12 +97,12 @@ impl VkObjectTable {
             let vk_result = ((&*self._fn_table).vkRegisterObjectsNVX)((*self._fn_table).device, self._handle, raw_object_count, raw_object_table_entries, raw_object_indices);
             free_vk_ptr_array_array(raw_object_count as usize, raw_object_table_entries);
             free_ptr(raw_object_indices);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     
     /// Wrapper for [vkUnregisterObjectsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUnregisterObjectsNVX.html).
-    pub fn unregister_objects(&self, object_entry_types: Vec<nvx::VkObjectEntryType>, object_indices: Vec<usize>) -> Result<(), VkResult> {
+    pub fn unregister_objects(&self, object_entry_types: Vec<nvx::VkObjectEntryType>, object_indices: Vec<usize>) -> LavaResult<()> {
         unsafe {
             let raw_object_count = cmp::max(object_entry_types.len(), object_indices.len()) as u32;
             let raw_object_entry_types = new_ptr_vk_array(&object_entry_types);
@@ -110,7 +110,7 @@ impl VkObjectTable {
             let vk_result = ((&*self._fn_table).vkUnregisterObjectsNVX)((*self._fn_table).device, self._handle, raw_object_count, raw_object_entry_types, raw_object_indices);
             free_ptr(raw_object_entry_types);
             free_ptr(raw_object_indices);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
 }

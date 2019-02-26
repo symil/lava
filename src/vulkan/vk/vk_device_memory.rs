@@ -89,7 +89,7 @@ impl VkDeviceMemory {
     }
     
     /// Wrapper for [vkMapMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMapMemory.html).
-    pub fn map<'a>(&self, offset: usize, size: usize, flags: VkMemoryMapFlags) -> Result<&'a mut [c_void], (VkResult, &'a mut [c_void])> {
+    pub fn map<'a>(&self, offset: usize, size: usize, flags: VkMemoryMapFlags) -> LavaResult<&'a mut [c_void]> {
         unsafe {
             let raw_offset = vk_to_raw_value(&offset);
             let raw_size = vk_to_raw_value(&size);

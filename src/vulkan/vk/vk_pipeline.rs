@@ -89,7 +89,7 @@ impl VkPipeline {
     }
     
     /// Wrapper for [vkGetShaderInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetShaderInfoAMD.html).
-    pub fn get_shader_info(&self, shader_stage: VkShaderStageFlags, info_type: amd::VkShaderInfoType) -> Result<Vec<c_void>, (VkResult, Vec<c_void>)> {
+    pub fn get_shader_info(&self, shader_stage: VkShaderStageFlags, info_type: amd::VkShaderInfoType) -> LavaResult<Vec<c_void>> {
         unsafe {
             let raw_shader_stage = vk_to_raw_value(&shader_stage);
             let raw_info_type = vk_to_raw_value(&info_type);
@@ -107,23 +107,23 @@ impl VkPipeline {
     }
     
     /// Wrapper for [vkGetRayTracingShaderGroupHandlesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRayTracingShaderGroupHandlesNV.html).
-    pub fn get_ray_tracing_shader_group_handles(&self, first_group: usize, group_count: usize, data: &[c_void]) -> Result<(), VkResult> {
+    pub fn get_ray_tracing_shader_group_handles(&self, first_group: usize, group_count: usize, data: &[c_void]) -> LavaResult<()> {
         unsafe {
             let raw_first_group = vk_to_raw_value(&first_group);
             let raw_group_count = vk_to_raw_value(&group_count);
             let raw_data_size = data.len();
             let raw_data = get_vec_ptr(data);
             let vk_result = ((&*self._fn_table).vkGetRayTracingShaderGroupHandlesNV)((*self._fn_table).device, self._handle, raw_first_group, raw_group_count, raw_data_size, raw_data);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     
     /// Wrapper for [vkCompileDeferredNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCompileDeferredNV.html).
-    pub fn compile_deferred(&self, shader: usize) -> Result<(), VkResult> {
+    pub fn compile_deferred(&self, shader: usize) -> LavaResult<()> {
         unsafe {
             let raw_shader = vk_to_raw_value(&shader);
             let vk_result = ((&*self._fn_table).vkCompileDeferredNV)((*self._fn_table).device, self._handle, raw_shader);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
 }

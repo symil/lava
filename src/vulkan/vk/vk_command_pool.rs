@@ -89,11 +89,11 @@ impl VkCommandPool {
     }
     
     /// Wrapper for [vkResetCommandPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetCommandPool.html).
-    pub fn reset(&self, flags: VkCommandPoolResetFlags) -> Result<(), VkResult> {
+    pub fn reset(&self, flags: VkCommandPoolResetFlags) -> LavaResult<()> {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
             let vk_result = ((&*self._fn_table).vkResetCommandPool)((*self._fn_table).device, self._handle, raw_flags);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     

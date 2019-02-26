@@ -82,29 +82,29 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkBeginCommandBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBeginCommandBuffer.html).
-    pub fn begin(&self, begin_info: VkCommandBufferBeginInfo) -> Result<(), VkResult> {
+    pub fn begin(&self, begin_info: VkCommandBufferBeginInfo) -> LavaResult<()> {
         unsafe {
             let raw_begin_info = new_ptr_vk_value(&begin_info);
             let vk_result = ((&*self._fn_table).vkBeginCommandBuffer)(self._handle, raw_begin_info);
             free_vk_ptr(raw_begin_info);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     
     /// Wrapper for [vkEndCommandBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEndCommandBuffer.html).
-    pub fn end(&self) -> Result<(), VkResult> {
+    pub fn end(&self) -> LavaResult<()> {
         unsafe {
             let vk_result = ((&*self._fn_table).vkEndCommandBuffer)(self._handle);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     
     /// Wrapper for [vkResetCommandBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetCommandBuffer.html).
-    pub fn reset(&self, flags: VkCommandBufferResetFlags) -> Result<(), VkResult> {
+    pub fn reset(&self, flags: VkCommandBufferResetFlags) -> LavaResult<()> {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
             let vk_result = ((&*self._fn_table).vkResetCommandBuffer)(self._handle, raw_flags);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     

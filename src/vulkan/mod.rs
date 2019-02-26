@@ -8,3 +8,7 @@ pub mod khr;
 pub mod nv;
 pub mod nvx;
 pub mod vk;
+
+mod lava_result;
+
+pub use self::lava_result::*;

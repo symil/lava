@@ -168,13 +168,13 @@ function genSpecialMethods(def) {
     if (def.name === 'VkInstance') {
         return [
             `impl ${def.wrappedTypeName}`, [
-                `pub fn create_surface<F : Fn(u64, *const c_void, *mut u64) -> i32>(&self, create_fn: F) -> Result<khr::VkSurface, VkResult>`, [
+                `pub fn create_surface<F : Fn(u64, *const c_void, *mut u64) -> i32>(&self, create_fn: F) -> LavaResult<khr::VkSurface>`, [
                     `unsafe`, [
-                        `let raw_surface = &mut mem::uninitialized() as *mut khr::RawVkSurface;`,
+                        `let raw_surface = &mut mem::zeroed() as *mut khr::RawVkSurface;`,
                         `let vk_result = create_fn(self._handle, ptr::null(), raw_surface);`,
-                        `if vk_result != 0 { return Err(RawVkResult::vk_to_wrapped(&vk_result)) }`,
                         `let mut surface = new_vk_value(raw_surface);`,
                         `VkSetup::vk_setup(&mut surface, self._fn_table);`,
+                        `if vk_result != 0 { return Err((RawVkResult::vk_to_wrapped(&vk_result), surface)) }`,
                         `Ok(surface)`
                     ]
                 ]
@@ -396,7 +396,7 @@ function functionToMethod(handle, func) {
         }
 
         if (returnVkResult) {
-            returnType = `Result<${returnType}, (VkResult, ${returnType})>`;
+            returnType = `LavaResult<${returnType}>`;
             returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(${wrappedResultVarName}) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ${wrappedResultVarName})) }`
         } else {
             returnStatement = wrappedResultVarName;
@@ -405,15 +405,15 @@ function functionToMethod(handle, func) {
         statements.push(`let vk_result = ${functionCall};`);
 
         if (isVkQueuePresentKHR) {
-            returnType = `Result<Vec<VkResult>, (VkResult, Vec<VkResult>)>`;
+            returnType = `LavaResult<Vec<VkResult>>`;
             statements.push(`let vk_results : Vec<VkResult> = if (*raw_present_info).results.is_null() { Vec::new() } else { new_vk_array((*raw_present_info).swapchain_count, (*raw_present_info).results) };`);
             returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(vk_results) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), vk_results)) }`;
         } else if (methodName === 'get_status') {
             returnType = `VkResult`;
             returnStatement = `RawVkResult::vk_to_wrapped(&vk_result)`;
         } else {
-            returnType = 'Result<(), VkResult>';
-            returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }`;
+            returnType = 'LavaResult<()>';
+            returnStatement = `if vk_result == ${VK_SUCCESS} { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }`;
         }
     } else {
         statements.push(`${functionCall};`);

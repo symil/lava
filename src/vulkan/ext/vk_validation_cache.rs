@@ -89,18 +89,18 @@ impl VkValidationCache {
     }
     
     /// Wrapper for [vkMergeValidationCachesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkMergeValidationCachesEXT.html).
-    pub fn merge(&self, src_caches: Vec<ext::VkValidationCache>) -> Result<(), VkResult> {
+    pub fn merge(&self, src_caches: Vec<ext::VkValidationCache>) -> LavaResult<()> {
         unsafe {
             let raw_src_cache_count = src_caches.len() as u32;
             let raw_src_caches = new_ptr_vk_array(&src_caches);
             let vk_result = ((&*self._fn_table).vkMergeValidationCachesEXT)((*self._fn_table).device, self._handle, raw_src_cache_count, raw_src_caches);
             free_ptr(raw_src_caches);
-            if vk_result == 0 { Ok(()) } else { Err(RawVkResult::vk_to_wrapped(&vk_result)) }
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     
     /// Wrapper for [vkGetValidationCacheDataEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetValidationCacheDataEXT.html).
-    pub fn get_data(&self) -> Result<Vec<c_void>, (VkResult, Vec<c_void>)> {
+    pub fn get_data(&self) -> LavaResult<Vec<c_void>> {
         unsafe {
             let mut vk_result = 0;
             let mut raw_data : *mut c_void = ptr::null_mut();
