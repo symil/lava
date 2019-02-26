@@ -18,7 +18,7 @@ Lava is entirely generated from the C header files of Vulkan.
 ### Current restrictions
 
 - no way to provide allocator callbacks
-- no way to set the `pNext` field of structures (always set to `NULL`)
+- no way to set the `pNext` field of structures
 
 ## Usage
 
