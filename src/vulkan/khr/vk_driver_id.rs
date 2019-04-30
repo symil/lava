@@ -16,6 +16,7 @@ pub enum VkDriverId {
     QualcommProprietary = 8,
     ArmProprietary = 9,
     GooglePastel = 10,
+    GgpProprietary = 11,
 }
 
 #[doc(hidden)]

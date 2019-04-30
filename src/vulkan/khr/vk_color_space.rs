@@ -21,6 +21,7 @@ pub enum VkColorSpace {
     AdobergbNonlinearExt = 1000104012,
     PassThroughExt = 1000104013,
     ExtendedSrgbNonlinearExt = 1000104014,
+    DisplayNativeAmd = 1000213000,
 }
 
 #[doc(hidden)]

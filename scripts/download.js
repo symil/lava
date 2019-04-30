@@ -4,7 +4,7 @@ const https = require('https');
 
 const TARGET_DIR        = path.join(__dirname, '..', 'download');
 const VK_XML_URL        = `https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/{TAG}/xml/vk.xml`;
-const VULKAN_CORE_H_URL = `https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/{TAG}/include/vulkan/vulkan_core.h`;
+const VULKAN_CORE_H_URL = `https://raw.githubusercontent.com/KhronosGroup/Vulkan-Headers/{TAG}/include/vulkan/vulkan_core.h`;
 
 async function getFile(url) {
     return new Promise((resolve, reject) => {

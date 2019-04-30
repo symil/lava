@@ -141,6 +141,9 @@ pub const VK_KHR_SWAPCHAIN_MUTABLE_FORMAT_EXTENSION_NAME : &str = "VK_KHR_swapch
 /// `"VK_KHR_vulkan_memory_model"`
 pub const VK_KHR_VULKAN_MEMORY_MODEL_EXTENSION_NAME : &str = "VK_KHR_vulkan_memory_model";
 
+/// `"VK_KHR_surface_protected_capabilities"`
+pub const VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME : &str = "VK_KHR_surface_protected_capabilities";
+
 /// `"VK_EXT_debug_report"`
 pub const VK_EXT_DEBUG_REPORT_EXTENSION_NAME : &str = "VK_EXT_debug_report";
 
@@ -173,6 +176,9 @@ pub const VK_NV_DEDICATED_ALLOCATION_EXTENSION_NAME : &str = "VK_NV_dedicated_al
 
 /// `"VK_EXT_transform_feedback"`
 pub const VK_EXT_TRANSFORM_FEEDBACK_EXTENSION_NAME : &str = "VK_EXT_transform_feedback";
+
+/// `"VK_NVX_image_view_handle"`
+pub const VK_NVX_IMAGE_VIEW_HANDLE_EXTENSION_NAME : &str = "VK_NVX_image_view_handle";
 
 /// `"VK_AMD_draw_indirect_count"`
 pub const VK_AMD_DRAW_INDIRECT_COUNT_EXTENSION_NAME : &str = "VK_AMD_draw_indirect_count";
@@ -360,6 +366,9 @@ pub const VK_AMD_MEMORY_OVERALLOCATION_BEHAVIOR_EXTENSION_NAME : &str = "VK_AMD_
 /// `"VK_EXT_vertex_attribute_divisor"`
 pub const VK_EXT_VERTEX_ATTRIBUTE_DIVISOR_EXTENSION_NAME : &str = "VK_EXT_vertex_attribute_divisor";
 
+/// `"VK_EXT_pipeline_creation_feedback"`
+pub const VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME : &str = "VK_EXT_pipeline_creation_feedback";
+
 /// `"VK_NV_shader_subgroup_partitioned"`
 pub const VK_NV_SHADER_SUBGROUP_PARTITIONED_EXTENSION_NAME : &str = "VK_NV_shader_subgroup_partitioned";
 
@@ -383,6 +392,9 @@ pub const VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME : &str = "VK_NV_dev
 
 /// `"VK_EXT_pci_bus_info"`
 pub const VK_EXT_PCI_BUS_INFO_EXTENSION_NAME : &str = "VK_EXT_pci_bus_info";
+
+/// `"VK_AMD_display_native_hdr"`
+pub const VK_AMD_DISPLAY_NATIVE_HDR_EXTENSION_NAME : &str = "VK_AMD_display_native_hdr";
 
 /// `"VK_EXT_fragment_density_map"`
 pub const VK_EXT_FRAGMENT_DENSITY_MAP_EXTENSION_NAME : &str = "VK_EXT_fragment_density_map";
@@ -416,3 +428,12 @@ pub const VK_EXT_VALIDATION_FEATURES_EXTENSION_NAME : &str = "VK_EXT_validation_
 
 /// `"VK_NV_cooperative_matrix"`
 pub const VK_NV_COOPERATIVE_MATRIX_EXTENSION_NAME : &str = "VK_NV_cooperative_matrix";
+
+/// `"VK_EXT_ycbcr_image_arrays"`
+pub const VK_EXT_YCBCR_IMAGE_ARRAYS_EXTENSION_NAME : &str = "VK_EXT_ycbcr_image_arrays";
+
+/// `"VK_EXT_headless_surface"`
+pub const VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME : &str = "VK_EXT_headless_surface";
+
+/// `"VK_EXT_host_query_reset"`
+pub const VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME : &str = "VK_EXT_host_query_reset";

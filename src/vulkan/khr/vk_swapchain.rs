@@ -182,4 +182,12 @@ impl VkSwapchain {
             if vk_result == 0 { Ok(presentation_timings) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), presentation_timings)) }
         }
     }
+    
+    /// Wrapper for [vkSetLocalDimmingAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetLocalDimmingAMD.html).
+    pub fn set_local_dimming(&self, local_dimming_enable: bool) {
+        unsafe {
+            let raw_local_dimming_enable = vk_to_raw_value(&local_dimming_enable);
+            ((&*self._fn_table).vkSetLocalDimmingAMD)((*self._fn_table).device, self._handle, raw_local_dimming_enable);
+        }
+    }
 }

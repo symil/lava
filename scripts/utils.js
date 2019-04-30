@@ -19,6 +19,7 @@ const PRIMITIVE_TYPES = {
     void: 'c_void',
     VkAllocationCallbacks: 'c_void',
     VkDeviceSize: 'u64',
+    VkDeviceAddress: 'u64',
     VkSampleMask: 'u32'
 };
 

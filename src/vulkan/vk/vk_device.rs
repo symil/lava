@@ -847,6 +847,21 @@ impl VkDevice {
         }
     }
     
+    /// Wrapper for [vkGetDeviceGroupSurfacePresentModes2EXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupSurfacePresentModes2EXT.html).
+    pub fn get_group_surface_present_modes_2(&self, surface_info: khr::VkPhysicalDeviceSurfaceInfo2) -> LavaResult<khr::VkDeviceGroupPresentModeFlags> {
+        unsafe {
+            let raw_surface_info = new_ptr_vk_value(&surface_info);
+            let mut vk_result = 0;
+            let raw_modes = &mut mem::zeroed() as *mut khr::RawVkDeviceGroupPresentModeFlags;
+            
+            vk_result = ((&*self._fn_table).vkGetDeviceGroupSurfacePresentModes2EXT)(self._handle, raw_surface_info, raw_modes);
+            
+            let modes = new_vk_value(raw_modes);
+            free_vk_ptr(raw_surface_info);
+            if vk_result == 0 { Ok(modes) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), modes)) }
+        }
+    }
+    
     /// Wrapper for [vkGetMemoryFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryFdKHR.html).
     pub fn get_memory_fd(&self, get_fd_info: khr::VkMemoryGetFdInfo) -> LavaResult<i32> {
         unsafe {

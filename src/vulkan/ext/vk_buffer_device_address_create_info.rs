@@ -16,7 +16,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 /// Wrapper for [VkBufferDeviceAddressCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferDeviceAddressCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkBufferDeviceAddressCreateInfo {
-    pub device_address: usize,
+    pub device_address: u64,
 }
 
 #[doc(hidden)]
@@ -32,14 +32,14 @@ impl VkWrappedType<RawVkBufferDeviceAddressCreateInfo> for VkBufferDeviceAddress
     fn vk_to_raw(src: &VkBufferDeviceAddressCreateInfo, dst: &mut RawVkBufferDeviceAddressCreateInfo) {
         dst.s_type = vk_to_raw_value(&VkStructureType::BufferDeviceAddressCreateInfoExt);
         dst.next = ptr::null_mut();
-        dst.device_address = vk_to_raw_value(&src.device_address);
+        dst.device_address = src.device_address;
     }
 }
 
 impl VkRawType<VkBufferDeviceAddressCreateInfo> for RawVkBufferDeviceAddressCreateInfo {
     fn vk_to_wrapped(src: &RawVkBufferDeviceAddressCreateInfo) -> VkBufferDeviceAddressCreateInfo {
         VkBufferDeviceAddressCreateInfo {
-            device_address: u64::vk_to_wrapped(&src.device_address),
+            device_address: src.device_address,
         }
     }
 }

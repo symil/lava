@@ -101,4 +101,13 @@ impl VkQueryPool {
             if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
+    
+    /// Wrapper for [vkResetQueryPoolEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetQueryPoolEXT.html).
+    pub fn reset(&self, first_query: usize, query_count: usize) {
+        unsafe {
+            let raw_first_query = vk_to_raw_value(&first_query);
+            let raw_query_count = vk_to_raw_value(&query_count);
+            ((&*self._fn_table).vkResetQueryPoolEXT)((*self._fn_table).device, self._handle, raw_first_query, raw_query_count);
+        }
+    }
 }

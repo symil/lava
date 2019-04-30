@@ -225,4 +225,23 @@ impl VkInstance {
             free_vk_ptr(raw_callback_data);
         }
     }
+    
+    /// Wrapper for [vkCreateHeadlessSurfaceEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateHeadlessSurfaceEXT.html).
+    pub fn create_headless_surface(&self, create_info: ext::VkHeadlessSurfaceCreateInfo) -> LavaResult<khr::VkSurface> {
+        unsafe {
+            let raw_create_info = new_ptr_vk_value(&create_info);
+            let mut vk_result = 0;
+            let raw_surface = &mut mem::zeroed() as *mut khr::RawVkSurface;
+            
+            vk_result = ((&*self._fn_table).vkCreateHeadlessSurfaceEXT)(self._handle, raw_create_info, ptr::null(), raw_surface);
+            
+            let mut surface = new_vk_value(raw_surface);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                VkSetup::vk_setup(&mut surface, fn_table);
+            }
+            free_vk_ptr(raw_create_info);
+            if vk_result == 0 { Ok(surface) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), surface)) }
+        }
+    }
 }

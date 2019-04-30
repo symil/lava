@@ -808,32 +808,6 @@ impl VkCommandBuffer {
         }
     }
     
-    /// Wrapper for [vkCmdDrawIndirectCountAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndirectCountAMD.html).
-    pub fn cmd_draw_indirect_count_amd(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
-        unsafe {
-            let raw_buffer = vk_to_raw_value(&buffer);
-            let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(&count_buffer);
-            let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
-            let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
-            let raw_stride = vk_to_raw_value(&stride);
-            ((&*self._fn_table).vkCmdDrawIndirectCountAMD)(self._handle, raw_buffer, raw_offset, raw_count_buffer, raw_count_buffer_offset, raw_max_draw_count, raw_stride);
-        }
-    }
-    
-    /// Wrapper for [vkCmdDrawIndexedIndirectCountAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndexedIndirectCountAMD.html).
-    pub fn cmd_draw_indexed_indirect_count_amd(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
-        unsafe {
-            let raw_buffer = vk_to_raw_value(&buffer);
-            let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(&count_buffer);
-            let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
-            let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
-            let raw_stride = vk_to_raw_value(&stride);
-            ((&*self._fn_table).vkCmdDrawIndexedIndirectCountAMD)(self._handle, raw_buffer, raw_offset, raw_count_buffer, raw_count_buffer_offset, raw_max_draw_count, raw_stride);
-        }
-    }
-    
     /// Wrapper for [vkCmdBeginConditionalRenderingEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginConditionalRenderingEXT.html).
     pub fn cmd_begin_conditional_rendering(&self, conditional_rendering_begin: ext::VkConditionalRenderingBeginInfo) {
         unsafe {

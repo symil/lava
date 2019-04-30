@@ -134,17 +134,18 @@ function generateExtensionNames() {
 
 function generateTypedefs() {
     return getAllTypedefs().map(({baseType, newType}) => {
-        const prefix = baseType.extension ? `${baseType.extension}::` : '';
         const baseTypeDef = STRUCTS.find(struct => struct.name === baseType.name && struct.extension === baseType.extension);
         const lifetimes = baseTypeDef ? baseTypeDef.lifetimes : '';
         const baseTypeExt = baseType.extension || 'vk';
+
+        // const wrappedTypeName = getWrappedVkTypeName(newType.name);
 
         return {
             name: newType.name,
             extension: newType.extension,
             definition: [
-                `pub type ${getWrappedVkTypeName(newType.name)}${lifetimes} = super::super::${baseTypeExt}::${prefix}${getWrappedVkTypeName(baseType.name)}${lifetimes};`,
-                `#[doc(hidden)]\npub type ${getRawVkTypeName(newType.name)} = super::super::${baseTypeExt}::${prefix}${getRawVkTypeName(baseType.name)};`
+                `pub type ${getWrappedVkTypeName(newType.name)}${lifetimes} = super::super::${baseTypeExt}::${getWrappedVkTypeName(baseType.name)}${lifetimes};`,
+                `#[doc(hidden)]\npub type ${getRawVkTypeName(newType.name)} = super::super::${baseTypeExt}::${getRawVkTypeName(baseType.name)};`
             ]
         };
     });
