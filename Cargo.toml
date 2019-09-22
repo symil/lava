@@ -1,6 +1,6 @@
 [package]
 name = "lava"
-version = "0.4.4"
+version = "0.4.5"
 build = "build.rs"
 authors = ["Anovs <milan.sylvain@gmail.com>"]
 description = "Wrapper to manipulate Vulkan more conveniently than with bindings."
