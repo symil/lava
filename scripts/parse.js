@@ -1,12 +1,11 @@
 const path = require('path');
 const fs = require('fs');
 const XML = require('pixl-xml')
+const { EXTENSIONS } = require('./data');
 
 const DOWNLOAD_DIR_PATH = path.join(__dirname, '..', 'download');
 const VULKAN_CORE_H_PATH = path.join(DOWNLOAD_DIR_PATH, `vulkan_core.h`);
 const VK_XML_PATH = path.join(DOWNLOAD_DIR_PATH, `vk.xml`);
-
-const EXTENSIONS = ['KHR', 'EXT', 'GOOGLE', 'NV', 'NVX', 'AMD'];
 
 let VULKAN_H = null;
 let VK_XML_STR = null;

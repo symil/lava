@@ -847,21 +847,6 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkGetDeviceGroupSurfacePresentModes2EXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceGroupSurfacePresentModes2EXT.html).
-    pub fn get_group_surface_present_modes_2(&self, surface_info: khr::VkPhysicalDeviceSurfaceInfo2) -> LavaResult<khr::VkDeviceGroupPresentModeFlags> {
-        unsafe {
-            let raw_surface_info = new_ptr_vk_value(&surface_info);
-            let mut vk_result = 0;
-            let raw_modes = &mut mem::zeroed() as *mut khr::RawVkDeviceGroupPresentModeFlags;
-            
-            vk_result = ((&*self._fn_table).vkGetDeviceGroupSurfacePresentModes2EXT)(self._handle, raw_surface_info, raw_modes);
-            
-            let modes = new_vk_value(raw_modes);
-            free_vk_ptr(raw_surface_info);
-            if vk_result == 0 { Ok(modes) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), modes)) }
-        }
-    }
-    
     /// Wrapper for [vkGetMemoryFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetMemoryFdKHR.html).
     pub fn get_memory_fd(&self, get_fd_info: khr::VkMemoryGetFdInfo) -> LavaResult<i32> {
         unsafe {
@@ -962,6 +947,72 @@ impl VkDevice {
             let fd = *raw_fd;
             free_vk_ptr(raw_get_fd_info);
             if vk_result == 0 { Ok(fd) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), fd)) }
+        }
+    }
+    
+    /// Wrapper for [vkGetPipelineExecutablePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPipelineExecutablePropertiesKHR.html).
+    pub fn get_pipeline_executable_properties(&self, pipeline_info: khr::VkPipelineInfo) -> LavaResult<Vec<khr::VkPipelineExecutableProperties>> {
+        unsafe {
+            let raw_pipeline_info = new_ptr_vk_value(&pipeline_info);
+            let mut vk_result = 0;
+            let mut raw_properties : *mut khr::RawVkPipelineExecutableProperties = ptr::null_mut();
+            let raw_executable_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPipelineExecutablePropertiesKHR)(self._handle, raw_pipeline_info, raw_executable_count, raw_properties);
+            raw_properties = calloc(*raw_executable_count as usize, mem::size_of::<khr::RawVkPipelineExecutableProperties>()) as *mut khr::RawVkPipelineExecutableProperties;
+            
+            vk_result = ((&*self._fn_table).vkGetPipelineExecutablePropertiesKHR)(self._handle, raw_pipeline_info, raw_executable_count, raw_properties);
+            
+            let mut properties = new_vk_array(*raw_executable_count, raw_properties);
+            if vk_result == 0 {
+                for elt in &mut properties { VkSetup::vk_setup(elt, self._fn_table); }
+            }
+            free_vk_ptr(raw_pipeline_info);
+            free(raw_properties as *mut u8);
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
+        }
+    }
+    
+    /// Wrapper for [vkGetPipelineExecutableStatisticsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPipelineExecutableStatisticsKHR.html).
+    pub fn get_pipeline_executable_statistics(&self, executable_info: khr::VkPipelineExecutableInfo) -> LavaResult<Vec<khr::VkPipelineExecutableStatistic>> {
+        unsafe {
+            let raw_executable_info = new_ptr_vk_value(&executable_info);
+            let mut vk_result = 0;
+            let mut raw_statistics : *mut khr::RawVkPipelineExecutableStatistic = ptr::null_mut();
+            let raw_statistic_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPipelineExecutableStatisticsKHR)(self._handle, raw_executable_info, raw_statistic_count, raw_statistics);
+            raw_statistics = calloc(*raw_statistic_count as usize, mem::size_of::<khr::RawVkPipelineExecutableStatistic>()) as *mut khr::RawVkPipelineExecutableStatistic;
+            
+            vk_result = ((&*self._fn_table).vkGetPipelineExecutableStatisticsKHR)(self._handle, raw_executable_info, raw_statistic_count, raw_statistics);
+            
+            let mut statistics = new_vk_array(*raw_statistic_count, raw_statistics);
+            if vk_result == 0 {
+                for elt in &mut statistics { VkSetup::vk_setup(elt, self._fn_table); }
+            }
+            free_vk_ptr(raw_executable_info);
+            free(raw_statistics as *mut u8);
+            if vk_result == 0 { Ok(statistics) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), statistics)) }
+        }
+    }
+    
+    /// Wrapper for [vkGetPipelineExecutableInternalRepresentationsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPipelineExecutableInternalRepresentationsKHR.html).
+    pub fn get_pipeline_executable_internal_representations(&self, executable_info: khr::VkPipelineExecutableInfo) -> LavaResult<Vec<khr::VkPipelineExecutableInternalRepresentation>> {
+        unsafe {
+            let raw_executable_info = new_ptr_vk_value(&executable_info);
+            let mut vk_result = 0;
+            let mut raw_internal_representations : *mut khr::RawVkPipelineExecutableInternalRepresentation = ptr::null_mut();
+            let raw_internal_representation_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPipelineExecutableInternalRepresentationsKHR)(self._handle, raw_executable_info, raw_internal_representation_count, raw_internal_representations);
+            raw_internal_representations = calloc(*raw_internal_representation_count as usize, mem::size_of::<khr::RawVkPipelineExecutableInternalRepresentation>()) as *mut khr::RawVkPipelineExecutableInternalRepresentation;
+            
+            vk_result = ((&*self._fn_table).vkGetPipelineExecutableInternalRepresentationsKHR)(self._handle, raw_executable_info, raw_internal_representation_count, raw_internal_representations);
+            
+            let mut internal_representations = new_vk_array(*raw_internal_representation_count, raw_internal_representations);
+            if vk_result == 0 {
+                for elt in &mut internal_representations { VkSetup::vk_setup(elt, self._fn_table); }
+            }
+            free_vk_ptr(raw_executable_info);
+            free(raw_internal_representations as *mut u8);
+            if vk_result == 0 { Ok(internal_representations) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), internal_representations)) }
         }
     }
     
@@ -1223,6 +1274,69 @@ impl VkDevice {
             free_vk_ptr_array(raw_timestamp_count as usize, raw_timestamp_infos);
             free_ptr(raw_timestamps);
             if vk_result == 0 { Ok(max_deviation) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), max_deviation)) }
+        }
+    }
+    
+    /// Wrapper for [vkInitializePerformanceApiINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkInitializePerformanceApiINTEL.html).
+    pub fn initialize_performance_api(&self, initialize_info: intel::VkInitializePerformanceApiInfo) -> LavaResult<()> {
+        unsafe {
+            let raw_initialize_info = new_ptr_vk_value(&initialize_info);
+            let vk_result = ((&*self._fn_table).vkInitializePerformanceApiINTEL)(self._handle, raw_initialize_info);
+            free_vk_ptr(raw_initialize_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
+    /// Wrapper for [vkUninitializePerformanceApiINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUninitializePerformanceApiINTEL.html).
+    pub fn uninitialize_performance_api(&self) {
+        unsafe {
+            ((&*self._fn_table).vkUninitializePerformanceApiINTEL)(self._handle);
+        }
+    }
+    
+    /// Wrapper for [vkAcquirePerformanceConfigurationINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquirePerformanceConfigurationINTEL.html).
+    pub fn acquire_performance_configuration(&self, acquire_info: intel::VkPerformanceConfigurationAcquireInfo) -> LavaResult<intel::VkPerformanceConfiguration> {
+        unsafe {
+            let raw_acquire_info = new_ptr_vk_value(&acquire_info);
+            let mut vk_result = 0;
+            let raw_configuration = &mut mem::zeroed() as *mut intel::RawVkPerformanceConfiguration;
+            
+            vk_result = ((&*self._fn_table).vkAcquirePerformanceConfigurationINTEL)(self._handle, raw_acquire_info, raw_configuration);
+            
+            let mut configuration = new_vk_value(raw_configuration);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                VkSetup::vk_setup(&mut configuration, fn_table);
+            }
+            free_vk_ptr(raw_acquire_info);
+            if vk_result == 0 { Ok(configuration) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), configuration)) }
+        }
+    }
+    
+    /// Wrapper for [vkReleasePerformanceConfigurationINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkReleasePerformanceConfigurationINTEL.html).
+    pub fn release_performance_configuration(&self, configuration: intel::VkPerformanceConfiguration) -> LavaResult<()> {
+        unsafe {
+            let raw_configuration = vk_to_raw_value(&configuration);
+            let vk_result = ((&*self._fn_table).vkReleasePerformanceConfigurationINTEL)(self._handle, raw_configuration);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
+    /// Wrapper for [vkGetPerformanceParameterINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPerformanceParameterINTEL.html).
+    pub fn get_performance_parameter(&self, parameter: intel::VkPerformanceParameterType) -> LavaResult<intel::VkPerformanceValue> {
+        unsafe {
+            let raw_parameter = vk_to_raw_value(&parameter);
+            let mut vk_result = 0;
+            let raw_value = &mut mem::zeroed() as *mut intel::RawVkPerformanceValue;
+            
+            vk_result = ((&*self._fn_table).vkGetPerformanceParameterINTEL)(self._handle, raw_parameter, raw_value);
+            
+            let mut value = new_vk_value(raw_value);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                VkSetup::vk_setup(&mut value, fn_table);
+            }
+            if vk_result == 0 { Ok(value) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), value)) }
         }
     }
 }

@@ -66,6 +66,9 @@ pub const VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME : &str = "VK_KHR_incremental
 /// `"VK_KHR_descriptor_update_template"`
 pub const VK_KHR_DESCRIPTOR_UPDATE_TEMPLATE_EXTENSION_NAME : &str = "VK_KHR_descriptor_update_template";
 
+/// `"VK_KHR_imageless_framebuffer"`
+pub const VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME : &str = "VK_KHR_imageless_framebuffer";
+
 /// `"VK_KHR_create_renderpass2"`
 pub const VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME : &str = "VK_KHR_create_renderpass2";
 
@@ -120,6 +123,9 @@ pub const VK_KHR_MAINTENANCE3_EXTENSION_NAME : &str = "VK_KHR_maintenance3";
 /// `"VK_KHR_draw_indirect_count"`
 pub const VK_KHR_DRAW_INDIRECT_COUNT_EXTENSION_NAME : &str = "VK_KHR_draw_indirect_count";
 
+/// `"VK_KHR_shader_subgroup_extended_types"`
+pub const VK_KHR_SHADER_SUBGROUP_EXTENDED_TYPES_EXTENSION_NAME : &str = "VK_KHR_shader_subgroup_extended_types";
+
 /// `"VK_KHR_8bit_storage"`
 pub const VK_KHR_8BIT_STORAGE_EXTENSION_NAME : &str = "VK_KHR_8bit_storage";
 
@@ -143,6 +149,12 @@ pub const VK_KHR_VULKAN_MEMORY_MODEL_EXTENSION_NAME : &str = "VK_KHR_vulkan_memo
 
 /// `"VK_KHR_surface_protected_capabilities"`
 pub const VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME : &str = "VK_KHR_surface_protected_capabilities";
+
+/// `"VK_KHR_uniform_buffer_standard_layout"`
+pub const VK_KHR_UNIFORM_BUFFER_STANDARD_LAYOUT_EXTENSION_NAME : &str = "VK_KHR_uniform_buffer_standard_layout";
+
+/// `"VK_KHR_pipeline_executable_properties"`
+pub const VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME : &str = "VK_KHR_pipeline_executable_properties";
 
 /// `"VK_EXT_debug_report"`
 pub const VK_EXT_DEBUG_REPORT_EXTENSION_NAME : &str = "VK_EXT_debug_report";
@@ -221,6 +233,9 @@ pub const VK_EXT_SHADER_SUBGROUP_BALLOT_EXTENSION_NAME : &str = "VK_EXT_shader_s
 
 /// `"VK_EXT_shader_subgroup_vote"`
 pub const VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME : &str = "VK_EXT_shader_subgroup_vote";
+
+/// `"VK_EXT_texture_compression_astc_hdr"`
+pub const VK_EXT_TEXTURE_COMPRESSION_ASTC_HDR_EXTENSION_NAME : &str = "VK_EXT_texture_compression_astc_hdr";
 
 /// `"VK_EXT_astc_decode_mode"`
 pub const VK_EXT_ASTC_DECODE_MODE_EXTENSION_NAME : &str = "VK_EXT_astc_decode_mode";
@@ -318,6 +333,9 @@ pub const VK_NV_FRAMEBUFFER_MIXED_SAMPLES_EXTENSION_NAME : &str = "VK_NV_framebu
 /// `"VK_NV_fill_rectangle"`
 pub const VK_NV_FILL_RECTANGLE_EXTENSION_NAME : &str = "VK_NV_fill_rectangle";
 
+/// `"VK_NV_shader_sm_builtins"`
+pub const VK_NV_SHADER_SM_BUILTINS_EXTENSION_NAME : &str = "VK_NV_shader_sm_builtins";
+
 /// `"VK_EXT_post_depth_coverage"`
 pub const VK_EXT_POST_DEPTH_COVERAGE_EXTENSION_NAME : &str = "VK_EXT_post_depth_coverage";
 
@@ -353,6 +371,9 @@ pub const VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME : &str = "VK_EXT_external_m
 
 /// `"VK_AMD_buffer_marker"`
 pub const VK_AMD_BUFFER_MARKER_EXTENSION_NAME : &str = "VK_AMD_buffer_marker";
+
+/// `"VK_AMD_pipeline_compiler_control"`
+pub const VK_AMD_PIPELINE_COMPILER_CONTROL_EXTENSION_NAME : &str = "VK_AMD_pipeline_compiler_control";
 
 /// `"VK_EXT_calibrated_timestamps"`
 pub const VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME : &str = "VK_EXT_calibrated_timestamps";
@@ -390,6 +411,12 @@ pub const VK_NV_SCISSOR_EXCLUSIVE_EXTENSION_NAME : &str = "VK_NV_scissor_exclusi
 /// `"VK_NV_device_diagnostic_checkpoints"`
 pub const VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME : &str = "VK_NV_device_diagnostic_checkpoints";
 
+/// `"VK_INTEL_shader_integer_functions2"`
+pub const VK_INTEL_SHADER_INTEGER_FUNCTIONS_2_EXTENSION_NAME : &str = "VK_INTEL_shader_integer_functions2";
+
+/// `"VK_INTEL_performance_query"`
+pub const VK_INTEL_PERFORMANCE_QUERY_EXTENSION_NAME : &str = "VK_INTEL_performance_query";
+
 /// `"VK_EXT_pci_bus_info"`
 pub const VK_EXT_PCI_BUS_INFO_EXTENSION_NAME : &str = "VK_EXT_pci_bus_info";
 
@@ -407,6 +434,15 @@ pub const VK_GOOGLE_HLSL_FUNCTIONALITY1_EXTENSION_NAME : &str = "VK_GOOGLE_hlsl_
 
 /// `"VK_GOOGLE_decorate_string"`
 pub const VK_GOOGLE_DECORATE_STRING_EXTENSION_NAME : &str = "VK_GOOGLE_decorate_string";
+
+/// `"VK_EXT_subgroup_size_control"`
+pub const VK_EXT_SUBGROUP_SIZE_CONTROL_EXTENSION_NAME : &str = "VK_EXT_subgroup_size_control";
+
+/// `"VK_AMD_shader_core_properties2"`
+pub const VK_AMD_SHADER_CORE_PROPERTIES_2_EXTENSION_NAME : &str = "VK_AMD_shader_core_properties2";
+
+/// `"VK_AMD_device_coherent_memory"`
+pub const VK_AMD_DEVICE_COHERENT_MEMORY_EXTENSION_NAME : &str = "VK_AMD_device_coherent_memory";
 
 /// `"VK_EXT_memory_budget"`
 pub const VK_EXT_MEMORY_BUDGET_EXTENSION_NAME : &str = "VK_EXT_memory_budget";
@@ -429,11 +465,32 @@ pub const VK_EXT_VALIDATION_FEATURES_EXTENSION_NAME : &str = "VK_EXT_validation_
 /// `"VK_NV_cooperative_matrix"`
 pub const VK_NV_COOPERATIVE_MATRIX_EXTENSION_NAME : &str = "VK_NV_cooperative_matrix";
 
+/// `"VK_NV_coverage_reduction_mode"`
+pub const VK_NV_COVERAGE_REDUCTION_MODE_EXTENSION_NAME : &str = "VK_NV_coverage_reduction_mode";
+
+/// `"VK_EXT_fragment_shader_interlock"`
+pub const VK_EXT_FRAGMENT_SHADER_INTERLOCK_EXTENSION_NAME : &str = "VK_EXT_fragment_shader_interlock";
+
 /// `"VK_EXT_ycbcr_image_arrays"`
 pub const VK_EXT_YCBCR_IMAGE_ARRAYS_EXTENSION_NAME : &str = "VK_EXT_ycbcr_image_arrays";
 
 /// `"VK_EXT_headless_surface"`
 pub const VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME : &str = "VK_EXT_headless_surface";
 
+/// `"VK_EXT_line_rasterization"`
+pub const VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME : &str = "VK_EXT_line_rasterization";
+
 /// `"VK_EXT_host_query_reset"`
 pub const VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME : &str = "VK_EXT_host_query_reset";
+
+/// `"VK_EXT_index_type_uint8"`
+pub const VK_EXT_INDEX_TYPE_UINT8_EXTENSION_NAME : &str = "VK_EXT_index_type_uint8";
+
+/// `"VK_EXT_shader_demote_to_helper_invocation"`
+pub const VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME : &str = "VK_EXT_shader_demote_to_helper_invocation";
+
+/// `"VK_EXT_texel_buffer_alignment"`
+pub const VK_EXT_TEXEL_BUFFER_ALIGNMENT_EXTENSION_NAME : &str = "VK_EXT_texel_buffer_alignment";
+
+/// `"VK_GOOGLE_user_type"`
+pub const VK_GOOGLE_USER_TYPE_EXTENSION_NAME : &str = "VK_GOOGLE_user_type";

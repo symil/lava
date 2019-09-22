@@ -44,6 +44,7 @@ pub enum VkObjectType {
     DebugUtilsMessengerExt = 1000128000,
     ValidationCacheExt = 1000160000,
     AccelerationStructureNv = 1000165000,
+    PerformanceConfigurationIntel = 1000210000,
 }
 
 #[doc(hidden)]

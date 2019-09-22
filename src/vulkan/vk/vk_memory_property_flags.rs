@@ -23,6 +23,8 @@ pub struct VkMemoryPropertyFlags {
     pub host_cached: bool,
     pub lazily_allocated: bool,
     pub protected: bool,
+    pub device_coherent_amd: bool,
+    pub device_uncached_amd: bool,
 }
 
 #[doc(hidden)]
@@ -37,6 +39,8 @@ impl VkWrappedType<RawVkMemoryPropertyFlags> for VkMemoryPropertyFlags {
         if src.host_cached { *dst |= 0x00000008; }
         if src.lazily_allocated { *dst |= 0x00000010; }
         if src.protected { *dst |= 0x00000020; }
+        if src.device_coherent_amd { *dst |= 0x00000040; }
+        if src.device_uncached_amd { *dst |= 0x00000080; }
     }
 }
 
@@ -49,6 +53,8 @@ impl VkRawType<VkMemoryPropertyFlags> for RawVkMemoryPropertyFlags {
             host_cached: (src & 0x00000008) != 0,
             lazily_allocated: (src & 0x00000010) != 0,
             protected: (src & 0x00000020) != 0,
+            device_coherent_amd: (src & 0x00000040) != 0,
+            device_uncached_amd: (src & 0x00000080) != 0,
         }
     }
 }
@@ -62,6 +68,8 @@ impl Default for VkMemoryPropertyFlags {
             host_cached: false,
             lazily_allocated: false,
             protected: false,
+            device_coherent_amd: false,
+            device_uncached_amd: false,
         }
     }
 }
@@ -77,6 +85,8 @@ impl VkMemoryPropertyFlags {
             host_cached: false,
             lazily_allocated: false,
             protected: false,
+            device_coherent_amd: false,
+            device_uncached_amd: false,
         }
     }
     
@@ -89,6 +99,8 @@ impl VkMemoryPropertyFlags {
             host_cached: true,
             lazily_allocated: true,
             protected: true,
+            device_coherent_amd: true,
+            device_uncached_amd: true,
         }
     }
     
@@ -101,6 +113,8 @@ impl VkMemoryPropertyFlags {
         + if self.host_cached { 0x00000008 } else { 0 }
         + if self.lazily_allocated { 0x00000010 } else { 0 }
         + if self.protected { 0x00000020 } else { 0 }
+        + if self.device_coherent_amd { 0x00000040 } else { 0 }
+        + if self.device_uncached_amd { 0x00000080 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
@@ -112,6 +126,8 @@ impl VkMemoryPropertyFlags {
             host_cached: value & 0x00000008 > 0,
             lazily_allocated: value & 0x00000010 > 0,
             protected: value & 0x00000020 > 0,
+            device_coherent_amd: value & 0x00000040 > 0,
+            device_uncached_amd: value & 0x00000080 > 0,
         }
     }
 }

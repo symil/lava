@@ -6,15 +6,16 @@ use utils::vk_traits::*;
 ///
 /// Use the macro `VkFramebufferCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
-/// VkFramebufferCreateFlags!()
+/// VkFramebufferCreateFlags!(imageless_khr)
 /// ```
 /// ```
 /// VkFramebufferCreateFlags {
+///     imageless_khr: true,
 /// }
 /// ```
 #[derive(Debug, Clone)]
 pub struct VkFramebufferCreateFlags {
-    
+    pub imageless_khr: bool,
 }
 
 #[doc(hidden)]
@@ -23,13 +24,14 @@ pub type RawVkFramebufferCreateFlags = u32;
 impl VkWrappedType<RawVkFramebufferCreateFlags> for VkFramebufferCreateFlags {
     fn vk_to_raw(src: &VkFramebufferCreateFlags, dst: &mut RawVkFramebufferCreateFlags) {
         *dst = 0;
+        if src.imageless_khr { *dst |= 0x00000001; }
     }
 }
 
 impl VkRawType<VkFramebufferCreateFlags> for RawVkFramebufferCreateFlags {
     fn vk_to_wrapped(src: &RawVkFramebufferCreateFlags) -> VkFramebufferCreateFlags {
         VkFramebufferCreateFlags {
-            
+            imageless_khr: (src & 0x00000001) != 0,
         }
     }
 }
@@ -37,7 +39,7 @@ impl VkRawType<VkFramebufferCreateFlags> for RawVkFramebufferCreateFlags {
 impl Default for VkFramebufferCreateFlags {
     fn default() -> VkFramebufferCreateFlags {
         VkFramebufferCreateFlags {
-            
+            imageless_khr: false,
         }
     }
 }
@@ -47,26 +49,27 @@ impl VkFramebufferCreateFlags {
     /// Return a structure with all flags to `false`.
     pub fn none() -> Self {
         VkFramebufferCreateFlags {
-            
+            imageless_khr: false,
         }
     }
     
     /// Return a structure with all flags to `true`.
     pub fn all() -> Self {
         VkFramebufferCreateFlags {
-            
+            imageless_khr: true,
         }
     }
     
     /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
+        + if self.imageless_khr { 0x00000001 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
     pub fn from_u32(value: u32) -> Self {
         VkFramebufferCreateFlags {
-            
+            imageless_khr: value & 0x00000001 > 0,
         }
     }
 }

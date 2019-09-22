@@ -9,7 +9,7 @@ pub enum VkColorSpace {
     SrgbNonlinear = 0,
     DisplayP3NonlinearExt = 1000104001,
     ExtendedSrgbLinearExt = 1000104002,
-    DciP3LinearExt = 1000104003,
+    DisplayP3LinearExt = 1000104003,
     DciP3NonlinearExt = 1000104004,
     Bt709LinearExt = 1000104005,
     Bt709NonlinearExt = 1000104006,

@@ -12,12 +12,13 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
+use vulkan::khr::{VkShaderFloatControlsIndependence,RawVkShaderFloatControlsIndependence};
 
 /// Wrapper for [VkPhysicalDeviceFloatControlsPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFloatControlsPropertiesKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFloatControlsProperties {
-    pub separate_denorm_settings: bool,
-    pub separate_rounding_mode_settings: bool,
+    pub denorm_behavior_independence: VkShaderFloatControlsIndependence,
+    pub rounding_mode_independence: VkShaderFloatControlsIndependence,
     pub shader_signed_zero_inf_nan_preserve_float_16: bool,
     pub shader_signed_zero_inf_nan_preserve_float_32: bool,
     pub shader_signed_zero_inf_nan_preserve_float_64: bool,
@@ -41,8 +42,8 @@ pub struct VkPhysicalDeviceFloatControlsProperties {
 pub struct RawVkPhysicalDeviceFloatControlsProperties {
     pub s_type: RawVkStructureType,
     pub next: *mut c_void,
-    pub separate_denorm_settings: u32,
-    pub separate_rounding_mode_settings: u32,
+    pub denorm_behavior_independence: RawVkShaderFloatControlsIndependence,
+    pub rounding_mode_independence: RawVkShaderFloatControlsIndependence,
     pub shader_signed_zero_inf_nan_preserve_float_16: u32,
     pub shader_signed_zero_inf_nan_preserve_float_32: u32,
     pub shader_signed_zero_inf_nan_preserve_float_64: u32,
@@ -64,8 +65,8 @@ impl VkWrappedType<RawVkPhysicalDeviceFloatControlsProperties> for VkPhysicalDev
     fn vk_to_raw(src: &VkPhysicalDeviceFloatControlsProperties, dst: &mut RawVkPhysicalDeviceFloatControlsProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceFloatControlsPropertiesKhr);
         dst.next = ptr::null_mut();
-        dst.separate_denorm_settings = vk_to_raw_value(&src.separate_denorm_settings);
-        dst.separate_rounding_mode_settings = vk_to_raw_value(&src.separate_rounding_mode_settings);
+        dst.denorm_behavior_independence = vk_to_raw_value(&src.denorm_behavior_independence);
+        dst.rounding_mode_independence = vk_to_raw_value(&src.rounding_mode_independence);
         dst.shader_signed_zero_inf_nan_preserve_float_16 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_16);
         dst.shader_signed_zero_inf_nan_preserve_float_32 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_32);
         dst.shader_signed_zero_inf_nan_preserve_float_64 = vk_to_raw_value(&src.shader_signed_zero_inf_nan_preserve_float_64);
@@ -87,8 +88,8 @@ impl VkWrappedType<RawVkPhysicalDeviceFloatControlsProperties> for VkPhysicalDev
 impl VkRawType<VkPhysicalDeviceFloatControlsProperties> for RawVkPhysicalDeviceFloatControlsProperties {
     fn vk_to_wrapped(src: &RawVkPhysicalDeviceFloatControlsProperties) -> VkPhysicalDeviceFloatControlsProperties {
         VkPhysicalDeviceFloatControlsProperties {
-            separate_denorm_settings: u32::vk_to_wrapped(&src.separate_denorm_settings),
-            separate_rounding_mode_settings: u32::vk_to_wrapped(&src.separate_rounding_mode_settings),
+            denorm_behavior_independence: RawVkShaderFloatControlsIndependence::vk_to_wrapped(&src.denorm_behavior_independence),
+            rounding_mode_independence: RawVkShaderFloatControlsIndependence::vk_to_wrapped(&src.rounding_mode_independence),
             shader_signed_zero_inf_nan_preserve_float_16: u32::vk_to_wrapped(&src.shader_signed_zero_inf_nan_preserve_float_16),
             shader_signed_zero_inf_nan_preserve_float_32: u32::vk_to_wrapped(&src.shader_signed_zero_inf_nan_preserve_float_32),
             shader_signed_zero_inf_nan_preserve_float_64: u32::vk_to_wrapped(&src.shader_signed_zero_inf_nan_preserve_float_64),
@@ -111,8 +112,8 @@ impl VkRawType<VkPhysicalDeviceFloatControlsProperties> for RawVkPhysicalDeviceF
 impl Default for VkPhysicalDeviceFloatControlsProperties {
     fn default() -> VkPhysicalDeviceFloatControlsProperties {
         VkPhysicalDeviceFloatControlsProperties {
-            separate_denorm_settings: false,
-            separate_rounding_mode_settings: false,
+            denorm_behavior_independence: Default::default(),
+            rounding_mode_independence: Default::default(),
             shader_signed_zero_inf_nan_preserve_float_16: false,
             shader_signed_zero_inf_nan_preserve_float_32: false,
             shader_signed_zero_inf_nan_preserve_float_64: false,

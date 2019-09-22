@@ -2,6 +2,8 @@ const {
     getFieldsInformation
 } = require('./utils');
 
+const { EXTENSIONS } = require('./data');
+
 function generateFunctionTableDefinition(functions) {
     for (let func of functions) {
         if (!func.argsInfo) {
@@ -28,7 +30,7 @@ function genUses() {
         `utils::c_bindings::*`,
         `utils::vk_convert::{get_vk_instance_function_pointer, get_vk_device_function_pointer}`,
         'vulkan::vk::*',
-        'vulkan::{ext,khr,amd,nv,nvx,google}'
+        `vulkan::{${EXTENSIONS.map(str => str.toLowerCase()).join(',')}}`
     ].map(x => `use ${x};`);
 }
 

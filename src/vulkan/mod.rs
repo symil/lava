@@ -4,6 +4,7 @@ pub mod amd;
 pub mod constants;
 pub mod ext;
 pub mod google;
+pub mod intel;
 pub mod khr;
 pub mod nv;
 pub mod nvx;

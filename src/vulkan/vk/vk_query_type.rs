@@ -11,6 +11,7 @@ pub enum VkQueryType {
     Timestamp = 2,
     TransformFeedbackStreamExt = 1000028004,
     AccelerationStructureCompactedSizeNv = 1000165000,
+    PerformanceQueryIntel = 1000210000,
 }
 
 #[doc(hidden)]

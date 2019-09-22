@@ -899,9 +899,9 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBindShadingRateImageNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindShadingRateImageNV.html).
-    pub fn cmd_bind_shading_rate_image(&self, image_view: VkImageView, image_layout: VkImageLayout) {
+    pub fn cmd_bind_shading_rate_image(&self, image_view: Option<VkImageView>, image_layout: VkImageLayout) {
         unsafe {
-            let raw_image_view = vk_to_raw_value(&image_view);
+            let raw_image_view = vk_to_raw_value_checked(&image_view);
             let raw_image_layout = vk_to_raw_value(&image_layout);
             ((&*self._fn_table).vkCmdBindShadingRateImageNV)(self._handle, raw_image_view, raw_image_layout);
         }
@@ -1049,6 +1049,45 @@ impl VkCommandBuffer {
         unsafe {
             let raw_checkpoint_marker = checkpoint_marker;
             ((&*self._fn_table).vkCmdSetCheckpointNV)(self._handle, raw_checkpoint_marker);
+        }
+    }
+    
+    /// Wrapper for [vkCmdSetPerformanceMarkerINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetPerformanceMarkerINTEL.html).
+    pub fn cmd_set_performance_marker(&self, marker_info: intel::VkPerformanceMarkerInfo) -> LavaResult<()> {
+        unsafe {
+            let raw_marker_info = new_ptr_vk_value(&marker_info);
+            let vk_result = ((&*self._fn_table).vkCmdSetPerformanceMarkerINTEL)(self._handle, raw_marker_info);
+            free_vk_ptr(raw_marker_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
+    /// Wrapper for [vkCmdSetPerformanceStreamMarkerINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetPerformanceStreamMarkerINTEL.html).
+    pub fn cmd_set_performance_stream_marker(&self, marker_info: intel::VkPerformanceStreamMarkerInfo) -> LavaResult<()> {
+        unsafe {
+            let raw_marker_info = new_ptr_vk_value(&marker_info);
+            let vk_result = ((&*self._fn_table).vkCmdSetPerformanceStreamMarkerINTEL)(self._handle, raw_marker_info);
+            free_vk_ptr(raw_marker_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
+    /// Wrapper for [vkCmdSetPerformanceOverrideINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetPerformanceOverrideINTEL.html).
+    pub fn cmd_set_performance_override(&self, override_info: intel::VkPerformanceOverrideInfo) -> LavaResult<()> {
+        unsafe {
+            let raw_override_info = new_ptr_vk_value(&override_info);
+            let vk_result = ((&*self._fn_table).vkCmdSetPerformanceOverrideINTEL)(self._handle, raw_override_info);
+            free_vk_ptr(raw_override_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
+    /// Wrapper for [vkCmdSetLineStippleEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetLineStippleEXT.html).
+    pub fn cmd_set_line_stipple(&self, line_stipple_factor: usize, line_stipple_pattern: u16) {
+        unsafe {
+            let raw_line_stipple_factor = vk_to_raw_value(&line_stipple_factor);
+            let raw_line_stipple_pattern = line_stipple_pattern;
+            ((&*self._fn_table).vkCmdSetLineStippleEXT)(self._handle, raw_line_stipple_factor, raw_line_stipple_pattern);
         }
     }
 }

@@ -872,4 +872,24 @@ impl VkPhysicalDevice {
             if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
         }
     }
+    
+    /// Wrapper for [vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV.html).
+    pub fn get_supported_framebuffer_mixed_samples_combinations(&self) -> LavaResult<Vec<nv::VkFramebufferMixedSamplesCombination>> {
+        unsafe {
+            let mut vk_result = 0;
+            let mut raw_combinations : *mut nv::RawVkFramebufferMixedSamplesCombination = ptr::null_mut();
+            let raw_combination_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV)(self._handle, raw_combination_count, raw_combinations);
+            raw_combinations = calloc(*raw_combination_count as usize, mem::size_of::<nv::RawVkFramebufferMixedSamplesCombination>()) as *mut nv::RawVkFramebufferMixedSamplesCombination;
+            
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV)(self._handle, raw_combination_count, raw_combinations);
+            
+            let mut combinations = new_vk_array(*raw_combination_count, raw_combinations);
+            if vk_result == 0 {
+                for elt in &mut combinations { VkSetup::vk_setup(elt, self._fn_table); }
+            }
+            free(raw_combinations as *mut u8);
+            if vk_result == 0 { Ok(combinations) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), combinations)) }
+        }
+    }
 }

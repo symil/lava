@@ -7,7 +7,7 @@ use std::mem;
 use utils::c_bindings::*;
 use utils::vk_convert::{get_vk_instance_function_pointer, get_vk_device_function_pointer};
 use vulkan::vk::*;
-use vulkan::{ext,khr,amd,nv,nvx,google};
+use vulkan::{khr,ext,google,nv,nvx,amd,intel};
 
 #[doc(hidden)]
 pub struct VkFunctionTable {
@@ -194,7 +194,6 @@ pub struct VkFunctionTable {
     pub vkGetDisplayPlaneCapabilitiesKHR: unsafe extern fn(RawVkPhysicalDevice, khr::RawVkDisplayMode, u32, *mut khr::RawVkDisplayPlaneCapabilities) -> RawVkResult,
     pub vkCreateDisplayPlaneSurfaceKHR: unsafe extern fn(RawVkInstance, *mut khr::RawVkDisplaySurfaceCreateInfo, *const c_void, *mut khr::RawVkSurface) -> RawVkResult,
     pub vkCreateSharedSwapchainsKHR: unsafe extern fn(RawVkDevice, u32, *mut khr::RawVkSwapchainCreateInfo, *const c_void, *mut khr::RawVkSwapchain) -> RawVkResult,
-    pub vkGetDeviceGroupSurfacePresentModes2EXT: unsafe extern fn(RawVkDevice, *mut khr::RawVkPhysicalDeviceSurfaceInfo2, *mut khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult,
     pub vkGetMemoryFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkMemoryGetFdInfo, *mut i32) -> RawVkResult,
     pub vkGetMemoryFdPropertiesKHR: unsafe extern fn(RawVkDevice, RawVkExternalMemoryHandleTypeFlags, i32, *mut khr::RawVkMemoryFdProperties) -> RawVkResult,
     pub vkImportSemaphoreFdKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkImportSemaphoreFdInfo) -> RawVkResult,
@@ -216,6 +215,9 @@ pub struct VkFunctionTable {
     pub vkGetDisplayPlaneCapabilities2KHR: unsafe extern fn(RawVkPhysicalDevice, *mut khr::RawVkDisplayPlaneInfo2, *mut khr::RawVkDisplayPlaneCapabilities2) -> RawVkResult,
     pub vkCmdDrawIndirectCountKHR: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u32, u32),
     pub vkCmdDrawIndexedIndirectCountKHR: unsafe extern fn(RawVkCommandBuffer, RawVkBuffer, u64, RawVkBuffer, u64, u32, u32),
+    pub vkGetPipelineExecutablePropertiesKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkPipelineInfo, *mut u32, *mut khr::RawVkPipelineExecutableProperties) -> RawVkResult,
+    pub vkGetPipelineExecutableStatisticsKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkPipelineExecutableInfo, *mut u32, *mut khr::RawVkPipelineExecutableStatistic) -> RawVkResult,
+    pub vkGetPipelineExecutableInternalRepresentationsKHR: unsafe extern fn(RawVkDevice, *mut khr::RawVkPipelineExecutableInfo, *mut u32, *mut khr::RawVkPipelineExecutableInternalRepresentation) -> RawVkResult,
     pub vkCreateDebugReportCallbackEXT: unsafe extern fn(RawVkInstance, *mut ext::RawVkDebugReportCallbackCreateInfo, *const c_void, *mut ext::RawVkDebugReportCallback) -> RawVkResult,
     pub vkDestroyDebugReportCallbackEXT: unsafe extern fn(RawVkInstance, ext::RawVkDebugReportCallback, *const c_void),
     pub vkDebugReportMessageEXT: unsafe extern fn(RawVkInstance, ext::RawVkDebugReportFlags, ext::RawVkDebugReportObjectType, u64, usize, i32, *mut c_char, *mut c_char),
@@ -297,9 +299,20 @@ pub struct VkFunctionTable {
     pub vkCmdSetExclusiveScissorNV: unsafe extern fn(RawVkCommandBuffer, u32, u32, *mut RawVkRect2D),
     pub vkCmdSetCheckpointNV: unsafe extern fn(RawVkCommandBuffer, *mut c_void),
     pub vkGetQueueCheckpointDataNV: unsafe extern fn(RawVkQueue, *mut u32, *mut nv::RawVkCheckpointData),
+    pub vkInitializePerformanceApiINTEL: unsafe extern fn(RawVkDevice, *mut intel::RawVkInitializePerformanceApiInfo) -> RawVkResult,
+    pub vkUninitializePerformanceApiINTEL: unsafe extern fn(RawVkDevice),
+    pub vkCmdSetPerformanceMarkerINTEL: unsafe extern fn(RawVkCommandBuffer, *mut intel::RawVkPerformanceMarkerInfo) -> RawVkResult,
+    pub vkCmdSetPerformanceStreamMarkerINTEL: unsafe extern fn(RawVkCommandBuffer, *mut intel::RawVkPerformanceStreamMarkerInfo) -> RawVkResult,
+    pub vkCmdSetPerformanceOverrideINTEL: unsafe extern fn(RawVkCommandBuffer, *mut intel::RawVkPerformanceOverrideInfo) -> RawVkResult,
+    pub vkAcquirePerformanceConfigurationINTEL: unsafe extern fn(RawVkDevice, *mut intel::RawVkPerformanceConfigurationAcquireInfo, *mut intel::RawVkPerformanceConfiguration) -> RawVkResult,
+    pub vkReleasePerformanceConfigurationINTEL: unsafe extern fn(RawVkDevice, intel::RawVkPerformanceConfiguration) -> RawVkResult,
+    pub vkQueueSetPerformanceConfigurationINTEL: unsafe extern fn(RawVkQueue, intel::RawVkPerformanceConfiguration) -> RawVkResult,
+    pub vkGetPerformanceParameterINTEL: unsafe extern fn(RawVkDevice, intel::RawVkPerformanceParameterType, *mut intel::RawVkPerformanceValue) -> RawVkResult,
     pub vkSetLocalDimmingAMD: unsafe extern fn(RawVkDevice, khr::RawVkSwapchain, u32),
     pub vkGetPhysicalDeviceCooperativeMatrixPropertiesNV: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut nv::RawVkCooperativeMatrixProperties) -> RawVkResult,
+    pub vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV: unsafe extern fn(RawVkPhysicalDevice, *mut u32, *mut nv::RawVkFramebufferMixedSamplesCombination) -> RawVkResult,
     pub vkCreateHeadlessSurfaceEXT: unsafe extern fn(RawVkInstance, *mut ext::RawVkHeadlessSurfaceCreateInfo, *const c_void, *mut khr::RawVkSurface) -> RawVkResult,
+    pub vkCmdSetLineStippleEXT: unsafe extern fn(RawVkCommandBuffer, u32, u16),
     pub vkResetQueryPoolEXT: unsafe extern fn(RawVkDevice, RawVkQueryPool, u32, u32),
 }
 
@@ -490,7 +503,6 @@ impl VkFunctionTable {
                 vkGetDisplayPlaneCapabilitiesKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetDisplayPlaneCapabilitiesKHR"); if fn_ptr.is_null() { null_instance_vkGetDisplayPlaneCapabilitiesKHR } else { mem::transmute(fn_ptr) } },
                 vkCreateDisplayPlaneSurfaceKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCreateDisplayPlaneSurfaceKHR"); if fn_ptr.is_null() { null_instance_vkCreateDisplayPlaneSurfaceKHR } else { mem::transmute(fn_ptr) } },
                 vkCreateSharedSwapchainsKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCreateSharedSwapchainsKHR"); if fn_ptr.is_null() { null_instance_vkCreateSharedSwapchainsKHR } else { mem::transmute(fn_ptr) } },
-                vkGetDeviceGroupSurfacePresentModes2EXT: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetDeviceGroupSurfacePresentModes2EXT"); if fn_ptr.is_null() { null_instance_vkGetDeviceGroupSurfacePresentModes2EXT } else { mem::transmute(fn_ptr) } },
                 vkGetMemoryFdKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetMemoryFdKHR"); if fn_ptr.is_null() { null_instance_vkGetMemoryFdKHR } else { mem::transmute(fn_ptr) } },
                 vkGetMemoryFdPropertiesKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetMemoryFdPropertiesKHR"); if fn_ptr.is_null() { null_instance_vkGetMemoryFdPropertiesKHR } else { mem::transmute(fn_ptr) } },
                 vkImportSemaphoreFdKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkImportSemaphoreFdKHR"); if fn_ptr.is_null() { null_instance_vkImportSemaphoreFdKHR } else { mem::transmute(fn_ptr) } },
@@ -512,6 +524,9 @@ impl VkFunctionTable {
                 vkGetDisplayPlaneCapabilities2KHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetDisplayPlaneCapabilities2KHR"); if fn_ptr.is_null() { null_instance_vkGetDisplayPlaneCapabilities2KHR } else { mem::transmute(fn_ptr) } },
                 vkCmdDrawIndirectCountKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdDrawIndirectCountKHR"); if fn_ptr.is_null() { null_instance_vkCmdDrawIndirectCountKHR } else { mem::transmute(fn_ptr) } },
                 vkCmdDrawIndexedIndirectCountKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdDrawIndexedIndirectCountKHR"); if fn_ptr.is_null() { null_instance_vkCmdDrawIndexedIndirectCountKHR } else { mem::transmute(fn_ptr) } },
+                vkGetPipelineExecutablePropertiesKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetPipelineExecutablePropertiesKHR"); if fn_ptr.is_null() { null_instance_vkGetPipelineExecutablePropertiesKHR } else { mem::transmute(fn_ptr) } },
+                vkGetPipelineExecutableStatisticsKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetPipelineExecutableStatisticsKHR"); if fn_ptr.is_null() { null_instance_vkGetPipelineExecutableStatisticsKHR } else { mem::transmute(fn_ptr) } },
+                vkGetPipelineExecutableInternalRepresentationsKHR: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetPipelineExecutableInternalRepresentationsKHR"); if fn_ptr.is_null() { null_instance_vkGetPipelineExecutableInternalRepresentationsKHR } else { mem::transmute(fn_ptr) } },
                 vkCreateDebugReportCallbackEXT: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCreateDebugReportCallbackEXT"); if fn_ptr.is_null() { null_instance_vkCreateDebugReportCallbackEXT } else { mem::transmute(fn_ptr) } },
                 vkDestroyDebugReportCallbackEXT: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkDestroyDebugReportCallbackEXT"); if fn_ptr.is_null() { null_instance_vkDestroyDebugReportCallbackEXT } else { mem::transmute(fn_ptr) } },
                 vkDebugReportMessageEXT: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkDebugReportMessageEXT"); if fn_ptr.is_null() { null_instance_vkDebugReportMessageEXT } else { mem::transmute(fn_ptr) } },
@@ -593,9 +608,20 @@ impl VkFunctionTable {
                 vkCmdSetExclusiveScissorNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdSetExclusiveScissorNV"); if fn_ptr.is_null() { null_instance_vkCmdSetExclusiveScissorNV } else { mem::transmute(fn_ptr) } },
                 vkCmdSetCheckpointNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdSetCheckpointNV"); if fn_ptr.is_null() { null_instance_vkCmdSetCheckpointNV } else { mem::transmute(fn_ptr) } },
                 vkGetQueueCheckpointDataNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetQueueCheckpointDataNV"); if fn_ptr.is_null() { null_instance_vkGetQueueCheckpointDataNV } else { mem::transmute(fn_ptr) } },
+                vkInitializePerformanceApiINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkInitializePerformanceApiINTEL"); if fn_ptr.is_null() { null_instance_vkInitializePerformanceApiINTEL } else { mem::transmute(fn_ptr) } },
+                vkUninitializePerformanceApiINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkUninitializePerformanceApiINTEL"); if fn_ptr.is_null() { null_instance_vkUninitializePerformanceApiINTEL } else { mem::transmute(fn_ptr) } },
+                vkCmdSetPerformanceMarkerINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdSetPerformanceMarkerINTEL"); if fn_ptr.is_null() { null_instance_vkCmdSetPerformanceMarkerINTEL } else { mem::transmute(fn_ptr) } },
+                vkCmdSetPerformanceStreamMarkerINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdSetPerformanceStreamMarkerINTEL"); if fn_ptr.is_null() { null_instance_vkCmdSetPerformanceStreamMarkerINTEL } else { mem::transmute(fn_ptr) } },
+                vkCmdSetPerformanceOverrideINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdSetPerformanceOverrideINTEL"); if fn_ptr.is_null() { null_instance_vkCmdSetPerformanceOverrideINTEL } else { mem::transmute(fn_ptr) } },
+                vkAcquirePerformanceConfigurationINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkAcquirePerformanceConfigurationINTEL"); if fn_ptr.is_null() { null_instance_vkAcquirePerformanceConfigurationINTEL } else { mem::transmute(fn_ptr) } },
+                vkReleasePerformanceConfigurationINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkReleasePerformanceConfigurationINTEL"); if fn_ptr.is_null() { null_instance_vkReleasePerformanceConfigurationINTEL } else { mem::transmute(fn_ptr) } },
+                vkQueueSetPerformanceConfigurationINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkQueueSetPerformanceConfigurationINTEL"); if fn_ptr.is_null() { null_instance_vkQueueSetPerformanceConfigurationINTEL } else { mem::transmute(fn_ptr) } },
+                vkGetPerformanceParameterINTEL: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetPerformanceParameterINTEL"); if fn_ptr.is_null() { null_instance_vkGetPerformanceParameterINTEL } else { mem::transmute(fn_ptr) } },
                 vkSetLocalDimmingAMD: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkSetLocalDimmingAMD"); if fn_ptr.is_null() { null_instance_vkSetLocalDimmingAMD } else { mem::transmute(fn_ptr) } },
                 vkGetPhysicalDeviceCooperativeMatrixPropertiesNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetPhysicalDeviceCooperativeMatrixPropertiesNV"); if fn_ptr.is_null() { null_instance_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV } else { mem::transmute(fn_ptr) } },
+                vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV"); if fn_ptr.is_null() { null_instance_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV } else { mem::transmute(fn_ptr) } },
                 vkCreateHeadlessSurfaceEXT: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCreateHeadlessSurfaceEXT"); if fn_ptr.is_null() { null_instance_vkCreateHeadlessSurfaceEXT } else { mem::transmute(fn_ptr) } },
+                vkCmdSetLineStippleEXT: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkCmdSetLineStippleEXT"); if fn_ptr.is_null() { null_instance_vkCmdSetLineStippleEXT } else { mem::transmute(fn_ptr) } },
                 vkResetQueryPoolEXT: { let fn_ptr = get_vk_instance_function_pointer(instance, "vkResetQueryPoolEXT"); if fn_ptr.is_null() { null_instance_vkResetQueryPoolEXT } else { mem::transmute(fn_ptr) } },
             }
         }
@@ -786,7 +812,6 @@ impl VkFunctionTable {
                 vkGetDisplayPlaneCapabilitiesKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetDisplayPlaneCapabilitiesKHR"); if fn_ptr.is_null() { null_device_vkGetDisplayPlaneCapabilitiesKHR } else { mem::transmute(fn_ptr) } },
                 vkCreateDisplayPlaneSurfaceKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkCreateDisplayPlaneSurfaceKHR"); if fn_ptr.is_null() { null_device_vkCreateDisplayPlaneSurfaceKHR } else { mem::transmute(fn_ptr) } },
                 vkCreateSharedSwapchainsKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkCreateSharedSwapchainsKHR"); if fn_ptr.is_null() { null_device_vkCreateSharedSwapchainsKHR } else { mem::transmute(fn_ptr) } },
-                vkGetDeviceGroupSurfacePresentModes2EXT: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetDeviceGroupSurfacePresentModes2EXT"); if fn_ptr.is_null() { null_device_vkGetDeviceGroupSurfacePresentModes2EXT } else { mem::transmute(fn_ptr) } },
                 vkGetMemoryFdKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetMemoryFdKHR"); if fn_ptr.is_null() { null_device_vkGetMemoryFdKHR } else { mem::transmute(fn_ptr) } },
                 vkGetMemoryFdPropertiesKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetMemoryFdPropertiesKHR"); if fn_ptr.is_null() { null_device_vkGetMemoryFdPropertiesKHR } else { mem::transmute(fn_ptr) } },
                 vkImportSemaphoreFdKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkImportSemaphoreFdKHR"); if fn_ptr.is_null() { null_device_vkImportSemaphoreFdKHR } else { mem::transmute(fn_ptr) } },
@@ -808,6 +833,9 @@ impl VkFunctionTable {
                 vkGetDisplayPlaneCapabilities2KHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetDisplayPlaneCapabilities2KHR"); if fn_ptr.is_null() { null_device_vkGetDisplayPlaneCapabilities2KHR } else { mem::transmute(fn_ptr) } },
                 vkCmdDrawIndirectCountKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdDrawIndirectCountKHR"); if fn_ptr.is_null() { null_device_vkCmdDrawIndirectCountKHR } else { mem::transmute(fn_ptr) } },
                 vkCmdDrawIndexedIndirectCountKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdDrawIndexedIndirectCountKHR"); if fn_ptr.is_null() { null_device_vkCmdDrawIndexedIndirectCountKHR } else { mem::transmute(fn_ptr) } },
+                vkGetPipelineExecutablePropertiesKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetPipelineExecutablePropertiesKHR"); if fn_ptr.is_null() { null_device_vkGetPipelineExecutablePropertiesKHR } else { mem::transmute(fn_ptr) } },
+                vkGetPipelineExecutableStatisticsKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetPipelineExecutableStatisticsKHR"); if fn_ptr.is_null() { null_device_vkGetPipelineExecutableStatisticsKHR } else { mem::transmute(fn_ptr) } },
+                vkGetPipelineExecutableInternalRepresentationsKHR: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetPipelineExecutableInternalRepresentationsKHR"); if fn_ptr.is_null() { null_device_vkGetPipelineExecutableInternalRepresentationsKHR } else { mem::transmute(fn_ptr) } },
                 vkCreateDebugReportCallbackEXT: { let fn_ptr = get_vk_device_function_pointer(device, "vkCreateDebugReportCallbackEXT"); if fn_ptr.is_null() { null_device_vkCreateDebugReportCallbackEXT } else { mem::transmute(fn_ptr) } },
                 vkDestroyDebugReportCallbackEXT: { let fn_ptr = get_vk_device_function_pointer(device, "vkDestroyDebugReportCallbackEXT"); if fn_ptr.is_null() { null_device_vkDestroyDebugReportCallbackEXT } else { mem::transmute(fn_ptr) } },
                 vkDebugReportMessageEXT: { let fn_ptr = get_vk_device_function_pointer(device, "vkDebugReportMessageEXT"); if fn_ptr.is_null() { null_device_vkDebugReportMessageEXT } else { mem::transmute(fn_ptr) } },
@@ -889,9 +917,20 @@ impl VkFunctionTable {
                 vkCmdSetExclusiveScissorNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdSetExclusiveScissorNV"); if fn_ptr.is_null() { null_device_vkCmdSetExclusiveScissorNV } else { mem::transmute(fn_ptr) } },
                 vkCmdSetCheckpointNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdSetCheckpointNV"); if fn_ptr.is_null() { null_device_vkCmdSetCheckpointNV } else { mem::transmute(fn_ptr) } },
                 vkGetQueueCheckpointDataNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetQueueCheckpointDataNV"); if fn_ptr.is_null() { null_device_vkGetQueueCheckpointDataNV } else { mem::transmute(fn_ptr) } },
+                vkInitializePerformanceApiINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkInitializePerformanceApiINTEL"); if fn_ptr.is_null() { null_device_vkInitializePerformanceApiINTEL } else { mem::transmute(fn_ptr) } },
+                vkUninitializePerformanceApiINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkUninitializePerformanceApiINTEL"); if fn_ptr.is_null() { null_device_vkUninitializePerformanceApiINTEL } else { mem::transmute(fn_ptr) } },
+                vkCmdSetPerformanceMarkerINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdSetPerformanceMarkerINTEL"); if fn_ptr.is_null() { null_device_vkCmdSetPerformanceMarkerINTEL } else { mem::transmute(fn_ptr) } },
+                vkCmdSetPerformanceStreamMarkerINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdSetPerformanceStreamMarkerINTEL"); if fn_ptr.is_null() { null_device_vkCmdSetPerformanceStreamMarkerINTEL } else { mem::transmute(fn_ptr) } },
+                vkCmdSetPerformanceOverrideINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdSetPerformanceOverrideINTEL"); if fn_ptr.is_null() { null_device_vkCmdSetPerformanceOverrideINTEL } else { mem::transmute(fn_ptr) } },
+                vkAcquirePerformanceConfigurationINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkAcquirePerformanceConfigurationINTEL"); if fn_ptr.is_null() { null_device_vkAcquirePerformanceConfigurationINTEL } else { mem::transmute(fn_ptr) } },
+                vkReleasePerformanceConfigurationINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkReleasePerformanceConfigurationINTEL"); if fn_ptr.is_null() { null_device_vkReleasePerformanceConfigurationINTEL } else { mem::transmute(fn_ptr) } },
+                vkQueueSetPerformanceConfigurationINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkQueueSetPerformanceConfigurationINTEL"); if fn_ptr.is_null() { null_device_vkQueueSetPerformanceConfigurationINTEL } else { mem::transmute(fn_ptr) } },
+                vkGetPerformanceParameterINTEL: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetPerformanceParameterINTEL"); if fn_ptr.is_null() { null_device_vkGetPerformanceParameterINTEL } else { mem::transmute(fn_ptr) } },
                 vkSetLocalDimmingAMD: { let fn_ptr = get_vk_device_function_pointer(device, "vkSetLocalDimmingAMD"); if fn_ptr.is_null() { null_device_vkSetLocalDimmingAMD } else { mem::transmute(fn_ptr) } },
                 vkGetPhysicalDeviceCooperativeMatrixPropertiesNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetPhysicalDeviceCooperativeMatrixPropertiesNV"); if fn_ptr.is_null() { null_device_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV } else { mem::transmute(fn_ptr) } },
+                vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV: { let fn_ptr = get_vk_device_function_pointer(device, "vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV"); if fn_ptr.is_null() { null_device_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV } else { mem::transmute(fn_ptr) } },
                 vkCreateHeadlessSurfaceEXT: { let fn_ptr = get_vk_device_function_pointer(device, "vkCreateHeadlessSurfaceEXT"); if fn_ptr.is_null() { null_device_vkCreateHeadlessSurfaceEXT } else { mem::transmute(fn_ptr) } },
+                vkCmdSetLineStippleEXT: { let fn_ptr = get_vk_device_function_pointer(device, "vkCmdSetLineStippleEXT"); if fn_ptr.is_null() { null_device_vkCmdSetLineStippleEXT } else { mem::transmute(fn_ptr) } },
                 vkResetQueryPoolEXT: { let fn_ptr = get_vk_device_function_pointer(device, "vkResetQueryPoolEXT"); if fn_ptr.is_null() { null_device_vkResetQueryPoolEXT } else { mem::transmute(fn_ptr) } },
             }
         }
@@ -1441,9 +1480,6 @@ unsafe extern fn null_instance_vkCreateDisplayPlaneSurfaceKHR(instance: RawVkIns
 unsafe extern fn null_instance_vkCreateSharedSwapchainsKHR(device: RawVkDevice, swapchain_count: u32, create_infos: *mut khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchains: *mut khr::RawVkSwapchain) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateSharedSwapchainsKHR\"");
 }
-unsafe extern fn null_instance_vkGetDeviceGroupSurfacePresentModes2EXT(device: RawVkDevice, surface_info: *mut khr::RawVkPhysicalDeviceSurfaceInfo2, modes: *mut khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult {
-    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetDeviceGroupSurfacePresentModes2EXT\"");
-}
 unsafe extern fn null_instance_vkGetMemoryFdKHR(device: RawVkDevice, get_fd_info: *mut khr::RawVkMemoryGetFdInfo, fd: *mut i32) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetMemoryFdKHR\"");
 }
@@ -1506,6 +1542,15 @@ unsafe extern fn null_instance_vkCmdDrawIndirectCountKHR(command_buffer: RawVkCo
 }
 unsafe extern fn null_instance_vkCmdDrawIndexedIndirectCountKHR(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdDrawIndexedIndirectCountKHR\"");
+}
+unsafe extern fn null_instance_vkGetPipelineExecutablePropertiesKHR(device: RawVkDevice, pipeline_info: *mut khr::RawVkPipelineInfo, executable_count: *mut u32, properties: *mut khr::RawVkPipelineExecutableProperties) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPipelineExecutablePropertiesKHR\"");
+}
+unsafe extern fn null_instance_vkGetPipelineExecutableStatisticsKHR(device: RawVkDevice, executable_info: *mut khr::RawVkPipelineExecutableInfo, statistic_count: *mut u32, statistics: *mut khr::RawVkPipelineExecutableStatistic) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPipelineExecutableStatisticsKHR\"");
+}
+unsafe extern fn null_instance_vkGetPipelineExecutableInternalRepresentationsKHR(device: RawVkDevice, executable_info: *mut khr::RawVkPipelineExecutableInfo, internal_representation_count: *mut u32, internal_representations: *mut khr::RawVkPipelineExecutableInternalRepresentation) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPipelineExecutableInternalRepresentationsKHR\"");
 }
 unsafe extern fn null_instance_vkCreateDebugReportCallbackEXT(instance: RawVkInstance, create_info: *mut ext::RawVkDebugReportCallbackCreateInfo, allocator: *const c_void, callback: *mut ext::RawVkDebugReportCallback) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateDebugReportCallbackEXT\"");
@@ -1750,14 +1795,47 @@ unsafe extern fn null_instance_vkCmdSetCheckpointNV(command_buffer: RawVkCommand
 unsafe extern fn null_instance_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *mut u32, checkpoint_data: *mut nv::RawVkCheckpointData) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetQueueCheckpointDataNV\"");
 }
+unsafe extern fn null_instance_vkInitializePerformanceApiINTEL(device: RawVkDevice, initialize_info: *mut intel::RawVkInitializePerformanceApiInfo) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkInitializePerformanceApiINTEL\"");
+}
+unsafe extern fn null_instance_vkUninitializePerformanceApiINTEL(device: RawVkDevice) {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkUninitializePerformanceApiINTEL\"");
+}
+unsafe extern fn null_instance_vkCmdSetPerformanceMarkerINTEL(command_buffer: RawVkCommandBuffer, marker_info: *mut intel::RawVkPerformanceMarkerInfo) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetPerformanceMarkerINTEL\"");
+}
+unsafe extern fn null_instance_vkCmdSetPerformanceStreamMarkerINTEL(command_buffer: RawVkCommandBuffer, marker_info: *mut intel::RawVkPerformanceStreamMarkerInfo) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetPerformanceStreamMarkerINTEL\"");
+}
+unsafe extern fn null_instance_vkCmdSetPerformanceOverrideINTEL(command_buffer: RawVkCommandBuffer, override_info: *mut intel::RawVkPerformanceOverrideInfo) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetPerformanceOverrideINTEL\"");
+}
+unsafe extern fn null_instance_vkAcquirePerformanceConfigurationINTEL(device: RawVkDevice, acquire_info: *mut intel::RawVkPerformanceConfigurationAcquireInfo, configuration: *mut intel::RawVkPerformanceConfiguration) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkAcquirePerformanceConfigurationINTEL\"");
+}
+unsafe extern fn null_instance_vkReleasePerformanceConfigurationINTEL(device: RawVkDevice, configuration: intel::RawVkPerformanceConfiguration) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkReleasePerformanceConfigurationINTEL\"");
+}
+unsafe extern fn null_instance_vkQueueSetPerformanceConfigurationINTEL(queue: RawVkQueue, configuration: intel::RawVkPerformanceConfiguration) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkQueueSetPerformanceConfigurationINTEL\"");
+}
+unsafe extern fn null_instance_vkGetPerformanceParameterINTEL(device: RawVkDevice, parameter: intel::RawVkPerformanceParameterType, value: *mut intel::RawVkPerformanceValue) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPerformanceParameterINTEL\"");
+}
 unsafe extern fn null_instance_vkSetLocalDimmingAMD(device: RawVkDevice, swap_chain: khr::RawVkSwapchain, local_dimming_enable: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkSetLocalDimmingAMD\"");
 }
 unsafe extern fn null_instance_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut nv::RawVkCooperativeMatrixProperties) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceCooperativeMatrixPropertiesNV\"");
 }
+unsafe extern fn null_instance_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV(physical_device: RawVkPhysicalDevice, combination_count: *mut u32, combinations: *mut nv::RawVkFramebufferMixedSamplesCombination) -> RawVkResult {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV\"");
+}
 unsafe extern fn null_instance_vkCreateHeadlessSurfaceEXT(instance: RawVkInstance, create_info: *mut ext::RawVkHeadlessSurfaceCreateInfo, allocator: *const c_void, surface: *mut khr::RawVkSurface) -> RawVkResult {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCreateHeadlessSurfaceEXT\"");
+}
+unsafe extern fn null_instance_vkCmdSetLineStippleEXT(command_buffer: RawVkCommandBuffer, line_stipple_factor: u32, line_stipple_pattern: u16) {
+    panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkCmdSetLineStippleEXT\"");
 }
 unsafe extern fn null_instance_vkResetQueryPoolEXT(device: RawVkDevice, query_pool: RawVkQueryPool, first_query: u32, query_count: u32) {
     panic!("\"vkGetInstanceProcAddr\" returned NULL for \"vkResetQueryPoolEXT\"");
@@ -2305,9 +2383,6 @@ unsafe extern fn null_device_vkCreateDisplayPlaneSurfaceKHR(instance: RawVkInsta
 unsafe extern fn null_device_vkCreateSharedSwapchainsKHR(device: RawVkDevice, swapchain_count: u32, create_infos: *mut khr::RawVkSwapchainCreateInfo, allocator: *const c_void, swapchains: *mut khr::RawVkSwapchain) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateSharedSwapchainsKHR\"");
 }
-unsafe extern fn null_device_vkGetDeviceGroupSurfacePresentModes2EXT(device: RawVkDevice, surface_info: *mut khr::RawVkPhysicalDeviceSurfaceInfo2, modes: *mut khr::RawVkDeviceGroupPresentModeFlags) -> RawVkResult {
-    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetDeviceGroupSurfacePresentModes2EXT\"");
-}
 unsafe extern fn null_device_vkGetMemoryFdKHR(device: RawVkDevice, get_fd_info: *mut khr::RawVkMemoryGetFdInfo, fd: *mut i32) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetMemoryFdKHR\"");
 }
@@ -2370,6 +2445,15 @@ unsafe extern fn null_device_vkCmdDrawIndirectCountKHR(command_buffer: RawVkComm
 }
 unsafe extern fn null_device_vkCmdDrawIndexedIndirectCountKHR(command_buffer: RawVkCommandBuffer, buffer: RawVkBuffer, offset: u64, count_buffer: RawVkBuffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdDrawIndexedIndirectCountKHR\"");
+}
+unsafe extern fn null_device_vkGetPipelineExecutablePropertiesKHR(device: RawVkDevice, pipeline_info: *mut khr::RawVkPipelineInfo, executable_count: *mut u32, properties: *mut khr::RawVkPipelineExecutableProperties) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPipelineExecutablePropertiesKHR\"");
+}
+unsafe extern fn null_device_vkGetPipelineExecutableStatisticsKHR(device: RawVkDevice, executable_info: *mut khr::RawVkPipelineExecutableInfo, statistic_count: *mut u32, statistics: *mut khr::RawVkPipelineExecutableStatistic) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPipelineExecutableStatisticsKHR\"");
+}
+unsafe extern fn null_device_vkGetPipelineExecutableInternalRepresentationsKHR(device: RawVkDevice, executable_info: *mut khr::RawVkPipelineExecutableInfo, internal_representation_count: *mut u32, internal_representations: *mut khr::RawVkPipelineExecutableInternalRepresentation) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPipelineExecutableInternalRepresentationsKHR\"");
 }
 unsafe extern fn null_device_vkCreateDebugReportCallbackEXT(instance: RawVkInstance, create_info: *mut ext::RawVkDebugReportCallbackCreateInfo, allocator: *const c_void, callback: *mut ext::RawVkDebugReportCallback) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateDebugReportCallbackEXT\"");
@@ -2614,14 +2698,47 @@ unsafe extern fn null_device_vkCmdSetCheckpointNV(command_buffer: RawVkCommandBu
 unsafe extern fn null_device_vkGetQueueCheckpointDataNV(queue: RawVkQueue, checkpoint_data_count: *mut u32, checkpoint_data: *mut nv::RawVkCheckpointData) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetQueueCheckpointDataNV\"");
 }
+unsafe extern fn null_device_vkInitializePerformanceApiINTEL(device: RawVkDevice, initialize_info: *mut intel::RawVkInitializePerformanceApiInfo) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkInitializePerformanceApiINTEL\"");
+}
+unsafe extern fn null_device_vkUninitializePerformanceApiINTEL(device: RawVkDevice) {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkUninitializePerformanceApiINTEL\"");
+}
+unsafe extern fn null_device_vkCmdSetPerformanceMarkerINTEL(command_buffer: RawVkCommandBuffer, marker_info: *mut intel::RawVkPerformanceMarkerInfo) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetPerformanceMarkerINTEL\"");
+}
+unsafe extern fn null_device_vkCmdSetPerformanceStreamMarkerINTEL(command_buffer: RawVkCommandBuffer, marker_info: *mut intel::RawVkPerformanceStreamMarkerInfo) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetPerformanceStreamMarkerINTEL\"");
+}
+unsafe extern fn null_device_vkCmdSetPerformanceOverrideINTEL(command_buffer: RawVkCommandBuffer, override_info: *mut intel::RawVkPerformanceOverrideInfo) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetPerformanceOverrideINTEL\"");
+}
+unsafe extern fn null_device_vkAcquirePerformanceConfigurationINTEL(device: RawVkDevice, acquire_info: *mut intel::RawVkPerformanceConfigurationAcquireInfo, configuration: *mut intel::RawVkPerformanceConfiguration) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkAcquirePerformanceConfigurationINTEL\"");
+}
+unsafe extern fn null_device_vkReleasePerformanceConfigurationINTEL(device: RawVkDevice, configuration: intel::RawVkPerformanceConfiguration) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkReleasePerformanceConfigurationINTEL\"");
+}
+unsafe extern fn null_device_vkQueueSetPerformanceConfigurationINTEL(queue: RawVkQueue, configuration: intel::RawVkPerformanceConfiguration) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkQueueSetPerformanceConfigurationINTEL\"");
+}
+unsafe extern fn null_device_vkGetPerformanceParameterINTEL(device: RawVkDevice, parameter: intel::RawVkPerformanceParameterType, value: *mut intel::RawVkPerformanceValue) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPerformanceParameterINTEL\"");
+}
 unsafe extern fn null_device_vkSetLocalDimmingAMD(device: RawVkDevice, swap_chain: khr::RawVkSwapchain, local_dimming_enable: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkSetLocalDimmingAMD\"");
 }
 unsafe extern fn null_device_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV(physical_device: RawVkPhysicalDevice, property_count: *mut u32, properties: *mut nv::RawVkCooperativeMatrixProperties) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceCooperativeMatrixPropertiesNV\"");
 }
+unsafe extern fn null_device_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV(physical_device: RawVkPhysicalDevice, combination_count: *mut u32, combinations: *mut nv::RawVkFramebufferMixedSamplesCombination) -> RawVkResult {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV\"");
+}
 unsafe extern fn null_device_vkCreateHeadlessSurfaceEXT(instance: RawVkInstance, create_info: *mut ext::RawVkHeadlessSurfaceCreateInfo, allocator: *const c_void, surface: *mut khr::RawVkSurface) -> RawVkResult {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCreateHeadlessSurfaceEXT\"");
+}
+unsafe extern fn null_device_vkCmdSetLineStippleEXT(command_buffer: RawVkCommandBuffer, line_stipple_factor: u32, line_stipple_pattern: u16) {
+    panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkCmdSetLineStippleEXT\"");
 }
 unsafe extern fn null_device_vkResetQueryPoolEXT(device: RawVkDevice, query_pool: RawVkQueryPool, first_query: u32, query_count: u32) {
     panic!("\"vkGetDeviceProcAddr\" returned NULL for \"vkResetQueryPoolEXT\"");

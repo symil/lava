@@ -23,6 +23,8 @@ pub struct VkPipelineCreateFlags {
     pub view_index_from_device_index: bool,
     pub dispatch_base: bool,
     pub defer_compile_nv: bool,
+    pub capture_statistics_khr: bool,
+    pub capture_internal_representations_khr: bool,
 }
 
 #[doc(hidden)]
@@ -37,6 +39,8 @@ impl VkWrappedType<RawVkPipelineCreateFlags> for VkPipelineCreateFlags {
         if src.view_index_from_device_index { *dst |= 0x00000008; }
         if src.dispatch_base { *dst |= 0x00000010; }
         if src.defer_compile_nv { *dst |= 0x00000020; }
+        if src.capture_statistics_khr { *dst |= 0x00000040; }
+        if src.capture_internal_representations_khr { *dst |= 0x00000080; }
     }
 }
 
@@ -49,6 +53,8 @@ impl VkRawType<VkPipelineCreateFlags> for RawVkPipelineCreateFlags {
             view_index_from_device_index: (src & 0x00000008) != 0,
             dispatch_base: (src & 0x00000010) != 0,
             defer_compile_nv: (src & 0x00000020) != 0,
+            capture_statistics_khr: (src & 0x00000040) != 0,
+            capture_internal_representations_khr: (src & 0x00000080) != 0,
         }
     }
 }
@@ -62,6 +68,8 @@ impl Default for VkPipelineCreateFlags {
             view_index_from_device_index: false,
             dispatch_base: false,
             defer_compile_nv: false,
+            capture_statistics_khr: false,
+            capture_internal_representations_khr: false,
         }
     }
 }
@@ -77,6 +85,8 @@ impl VkPipelineCreateFlags {
             view_index_from_device_index: false,
             dispatch_base: false,
             defer_compile_nv: false,
+            capture_statistics_khr: false,
+            capture_internal_representations_khr: false,
         }
     }
     
@@ -89,6 +99,8 @@ impl VkPipelineCreateFlags {
             view_index_from_device_index: true,
             dispatch_base: true,
             defer_compile_nv: true,
+            capture_statistics_khr: true,
+            capture_internal_representations_khr: true,
         }
     }
     
@@ -101,6 +113,8 @@ impl VkPipelineCreateFlags {
         + if self.view_index_from_device_index { 0x00000008 } else { 0 }
         + if self.dispatch_base { 0x00000010 } else { 0 }
         + if self.defer_compile_nv { 0x00000020 } else { 0 }
+        + if self.capture_statistics_khr { 0x00000040 } else { 0 }
+        + if self.capture_internal_representations_khr { 0x00000080 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
@@ -112,6 +126,8 @@ impl VkPipelineCreateFlags {
             view_index_from_device_index: value & 0x00000008 > 0,
             dispatch_base: value & 0x00000010 > 0,
             defer_compile_nv: value & 0x00000020 > 0,
+            capture_statistics_khr: value & 0x00000040 > 0,
+            capture_internal_representations_khr: value & 0x00000080 > 0,
         }
     }
 }

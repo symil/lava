@@ -6,15 +6,18 @@ use utils::vk_traits::*;
 ///
 /// Use the macro `VkPipelineShaderStageCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
-/// VkPipelineShaderStageCreateFlags!()
+/// VkPipelineShaderStageCreateFlags!(allow_varying_subgroup_size_ext, require_full_subgroups_ext)
 /// ```
 /// ```
 /// VkPipelineShaderStageCreateFlags {
+///     allow_varying_subgroup_size_ext: true,
+///     require_full_subgroups_ext: true,
 /// }
 /// ```
 #[derive(Debug, Clone)]
 pub struct VkPipelineShaderStageCreateFlags {
-    
+    pub allow_varying_subgroup_size_ext: bool,
+    pub require_full_subgroups_ext: bool,
 }
 
 #[doc(hidden)]
@@ -23,13 +26,16 @@ pub type RawVkPipelineShaderStageCreateFlags = u32;
 impl VkWrappedType<RawVkPipelineShaderStageCreateFlags> for VkPipelineShaderStageCreateFlags {
     fn vk_to_raw(src: &VkPipelineShaderStageCreateFlags, dst: &mut RawVkPipelineShaderStageCreateFlags) {
         *dst = 0;
+        if src.allow_varying_subgroup_size_ext { *dst |= 0x00000001; }
+        if src.require_full_subgroups_ext { *dst |= 0x00000002; }
     }
 }
 
 impl VkRawType<VkPipelineShaderStageCreateFlags> for RawVkPipelineShaderStageCreateFlags {
     fn vk_to_wrapped(src: &RawVkPipelineShaderStageCreateFlags) -> VkPipelineShaderStageCreateFlags {
         VkPipelineShaderStageCreateFlags {
-            
+            allow_varying_subgroup_size_ext: (src & 0x00000001) != 0,
+            require_full_subgroups_ext: (src & 0x00000002) != 0,
         }
     }
 }
@@ -37,7 +43,8 @@ impl VkRawType<VkPipelineShaderStageCreateFlags> for RawVkPipelineShaderStageCre
 impl Default for VkPipelineShaderStageCreateFlags {
     fn default() -> VkPipelineShaderStageCreateFlags {
         VkPipelineShaderStageCreateFlags {
-            
+            allow_varying_subgroup_size_ext: false,
+            require_full_subgroups_ext: false,
         }
     }
 }
@@ -47,26 +54,31 @@ impl VkPipelineShaderStageCreateFlags {
     /// Return a structure with all flags to `false`.
     pub fn none() -> Self {
         VkPipelineShaderStageCreateFlags {
-            
+            allow_varying_subgroup_size_ext: false,
+            require_full_subgroups_ext: false,
         }
     }
     
     /// Return a structure with all flags to `true`.
     pub fn all() -> Self {
         VkPipelineShaderStageCreateFlags {
-            
+            allow_varying_subgroup_size_ext: true,
+            require_full_subgroups_ext: true,
         }
     }
     
     /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
+        + if self.allow_varying_subgroup_size_ext { 0x00000001 } else { 0 }
+        + if self.require_full_subgroups_ext { 0x00000002 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
     pub fn from_u32(value: u32) -> Self {
         VkPipelineShaderStageCreateFlags {
-            
+            allow_varying_subgroup_size_ext: value & 0x00000001 > 0,
+            require_full_subgroups_ext: value & 0x00000002 > 0,
         }
     }
 }

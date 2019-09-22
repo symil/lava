@@ -21,6 +21,7 @@ pub enum VkDynamicState {
     ViewportShadingRatePaletteNv = 1000164004,
     ViewportCoarseSampleOrderNv = 1000164006,
     ExclusiveScissorNv = 1000205001,
+    LineStippleExt = 1000259000,
 }
 
 #[doc(hidden)]

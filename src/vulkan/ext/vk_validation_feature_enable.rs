@@ -8,6 +8,7 @@ use utils::vk_traits::*;
 pub enum VkValidationFeatureEnable {
     GpuAssisted = 0,
     GpuAssistedReserveBindingSlot = 1,
+    BestPractices = 2,
 }
 
 #[doc(hidden)]

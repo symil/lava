@@ -167,4 +167,13 @@ impl VkQueue {
             checkpoint_data
         }
     }
+    
+    /// Wrapper for [vkQueueSetPerformanceConfigurationINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueSetPerformanceConfigurationINTEL.html).
+    pub fn set_performance_configuration(&self, configuration: intel::VkPerformanceConfiguration) -> LavaResult<()> {
+        unsafe {
+            let raw_configuration = vk_to_raw_value(&configuration);
+            let vk_result = ((&*self._fn_table).vkQueueSetPerformanceConfigurationINTEL)(self._handle, raw_configuration);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
 }

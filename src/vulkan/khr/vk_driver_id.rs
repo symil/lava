@@ -15,8 +15,9 @@ pub enum VkDriverId {
     ImaginationProprietary = 7,
     QualcommProprietary = 8,
     ArmProprietary = 9,
-    GooglePastel = 10,
+    GoogleSwiftshader = 10,
     GgpProprietary = 11,
+    BroadcomProprietary = 12,
 }
 
 #[doc(hidden)]

@@ -19,7 +19,7 @@ use utils::vk_traits::*;
 pub struct VkStencilFaceFlags {
     pub front: bool,
     pub back: bool,
-    pub _and_back: bool,
+    pub front_and_back: bool,
 }
 
 #[doc(hidden)]
@@ -30,7 +30,7 @@ impl VkWrappedType<RawVkStencilFaceFlags> for VkStencilFaceFlags {
         *dst = 0;
         if src.front { *dst |= 0x00000001; }
         if src.back { *dst |= 0x00000002; }
-        if src._and_back { *dst |= 0x00000003; }
+        if src.front_and_back { *dst |= 0x00000003; }
     }
 }
 
@@ -39,7 +39,7 @@ impl VkRawType<VkStencilFaceFlags> for RawVkStencilFaceFlags {
         VkStencilFaceFlags {
             front: (src & 0x00000001) != 0,
             back: (src & 0x00000002) != 0,
-            _and_back: (src & 0x00000003) != 0,
+            front_and_back: (src & 0x00000003) != 0,
         }
     }
 }
@@ -49,7 +49,7 @@ impl Default for VkStencilFaceFlags {
         VkStencilFaceFlags {
             front: false,
             back: false,
-            _and_back: false,
+            front_and_back: false,
         }
     }
 }
@@ -61,7 +61,7 @@ impl VkStencilFaceFlags {
         VkStencilFaceFlags {
             front: false,
             back: false,
-            _and_back: false,
+            front_and_back: false,
         }
     }
     
@@ -70,7 +70,7 @@ impl VkStencilFaceFlags {
         VkStencilFaceFlags {
             front: true,
             back: true,
-            _and_back: true,
+            front_and_back: true,
         }
     }
     
@@ -79,7 +79,7 @@ impl VkStencilFaceFlags {
         0
         + if self.front { 0x00000001 } else { 0 }
         + if self.back { 0x00000002 } else { 0 }
-        + if self._and_back { 0x00000003 } else { 0 }
+        + if self.front_and_back { 0x00000003 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
@@ -87,7 +87,7 @@ impl VkStencilFaceFlags {
         VkStencilFaceFlags {
             front: value & 0x00000001 > 0,
             back: value & 0x00000002 > 0,
-            _and_back: value & 0x00000003 > 0,
+            front_and_back: value & 0x00000003 > 0,
         }
     }
 }
