@@ -160,7 +160,7 @@ impl VkCommandBuffer {
     /// Wrapper for [vkCmdSetBlendConstants](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetBlendConstants.html).
     pub fn cmd_set_blend_constants(&self, blend_constants: [f32; 4]) {
         unsafe {
-            let raw_blend_constants = { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&blend_constants, &mut dst_array); dst_array };
+            let raw_blend_constants = { let mut dst_array : [f32; 4] = mem::MaybeUninit::uninit().assume_init(); to_array(&blend_constants, &mut dst_array); dst_array };
             ((&*self._fn_table).vkCmdSetBlendConstants)(self._handle, raw_blend_constants);
         }
     }

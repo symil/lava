@@ -30,7 +30,7 @@ pub struct VkBufferUsageFlags {
     pub transform_feedback_counter_buffer_ext: bool,
     pub conditional_rendering_ext: bool,
     pub ray_tracing_nv: bool,
-    pub shader_device_address_ext: bool,
+    pub shader_device_address_khr: bool,
 }
 
 #[doc(hidden)]
@@ -52,7 +52,7 @@ impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
         if src.transform_feedback_counter_buffer_ext { *dst |= 0x00001000; }
         if src.conditional_rendering_ext { *dst |= 0x00000200; }
         if src.ray_tracing_nv { *dst |= 0x00000400; }
-        if src.shader_device_address_ext { *dst |= 0x00020000; }
+        if src.shader_device_address_khr { *dst |= 0x00020000; }
     }
 }
 
@@ -72,7 +72,7 @@ impl VkRawType<VkBufferUsageFlags> for RawVkBufferUsageFlags {
             transform_feedback_counter_buffer_ext: (src & 0x00001000) != 0,
             conditional_rendering_ext: (src & 0x00000200) != 0,
             ray_tracing_nv: (src & 0x00000400) != 0,
-            shader_device_address_ext: (src & 0x00020000) != 0,
+            shader_device_address_khr: (src & 0x00020000) != 0,
         }
     }
 }
@@ -93,7 +93,7 @@ impl Default for VkBufferUsageFlags {
             transform_feedback_counter_buffer_ext: false,
             conditional_rendering_ext: false,
             ray_tracing_nv: false,
-            shader_device_address_ext: false,
+            shader_device_address_khr: false,
         }
     }
 }
@@ -116,7 +116,7 @@ impl VkBufferUsageFlags {
             transform_feedback_counter_buffer_ext: false,
             conditional_rendering_ext: false,
             ray_tracing_nv: false,
-            shader_device_address_ext: false,
+            shader_device_address_khr: false,
         }
     }
     
@@ -136,7 +136,7 @@ impl VkBufferUsageFlags {
             transform_feedback_counter_buffer_ext: true,
             conditional_rendering_ext: true,
             ray_tracing_nv: true,
-            shader_device_address_ext: true,
+            shader_device_address_khr: true,
         }
     }
     
@@ -156,7 +156,7 @@ impl VkBufferUsageFlags {
         + if self.transform_feedback_counter_buffer_ext { 0x00001000 } else { 0 }
         + if self.conditional_rendering_ext { 0x00000200 } else { 0 }
         + if self.ray_tracing_nv { 0x00000400 } else { 0 }
-        + if self.shader_device_address_ext { 0x00020000 } else { 0 }
+        + if self.shader_device_address_khr { 0x00020000 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
@@ -175,7 +175,7 @@ impl VkBufferUsageFlags {
             transform_feedback_counter_buffer_ext: value & 0x00001000 > 0,
             conditional_rendering_ext: value & 0x00000200 > 0,
             ray_tracing_nv: value & 0x00000400 > 0,
-            shader_device_address_ext: value & 0x00020000 > 0,
+            shader_device_address_khr: value & 0x00020000 > 0,
         }
     }
 }

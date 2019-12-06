@@ -35,7 +35,7 @@ impl<'a> VkWrappedType<RawVkDebugUtilsLabel> for VkDebugUtilsLabel<'a> {
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugUtilsLabelExt);
         dst.next = ptr::null_mut();
         dst.label_name = new_ptr_string(src.label_name);
-        dst.color = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array };
+        dst.color = unsafe { let mut dst_array : [f32; 4] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.color, &mut dst_array); dst_array };
     }
 }
 
@@ -43,7 +43,7 @@ impl<'a> VkRawType<VkDebugUtilsLabel<'a>> for RawVkDebugUtilsLabel {
     fn vk_to_wrapped(src: &RawVkDebugUtilsLabel) -> VkDebugUtilsLabel<'a> {
         VkDebugUtilsLabel {
             label_name: new_string_ref(src.label_name),
-            color: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array },
+            color: unsafe { let mut dst_array : [f32; 4] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.color, &mut dst_array); dst_array },
         }
     }
 }

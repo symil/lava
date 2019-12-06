@@ -34,9 +34,9 @@ pub struct RawVkPhysicalDeviceMemoryProperties {
 impl VkWrappedType<RawVkPhysicalDeviceMemoryProperties> for VkPhysicalDeviceMemoryProperties {
     fn vk_to_raw(src: &VkPhysicalDeviceMemoryProperties, dst: &mut RawVkPhysicalDeviceMemoryProperties) {
         dst.memory_type_count = src.memory_types.len() as u32;
-        dst.memory_types = unsafe { let mut dst_array : [RawVkMemoryType; 32] = mem::uninitialized(); vk_to_raw_array(&src.memory_types, &mut dst_array); dst_array };
+        dst.memory_types = unsafe { let mut dst_array : [RawVkMemoryType; 32] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.memory_types, &mut dst_array); dst_array };
         dst.memory_heap_count = src.memory_heaps.len() as u32;
-        dst.memory_heaps = unsafe { let mut dst_array : [RawVkMemoryHeap; 16] = mem::uninitialized(); vk_to_raw_array(&src.memory_heaps, &mut dst_array); dst_array };
+        dst.memory_heaps = unsafe { let mut dst_array : [RawVkMemoryHeap; 16] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.memory_heaps, &mut dst_array); dst_array };
     }
 }
 

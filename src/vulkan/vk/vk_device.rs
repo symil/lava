@@ -950,6 +950,44 @@ impl VkDevice {
         }
     }
     
+    /// Wrapper for [vkAcquireProfilingLockKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireProfilingLockKHR.html).
+    pub fn acquire_profiling_lock(&self, info: khr::VkAcquireProfilingLockInfo) -> LavaResult<()> {
+        unsafe {
+            let raw_info = new_ptr_vk_value(&info);
+            let vk_result = ((&*self._fn_table).vkAcquireProfilingLockKHR)(self._handle, raw_info);
+            free_vk_ptr(raw_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
+    /// Wrapper for [vkReleaseProfilingLockKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkReleaseProfilingLockKHR.html).
+    pub fn release_profiling_lock(&self) {
+        unsafe {
+            ((&*self._fn_table).vkReleaseProfilingLockKHR)(self._handle);
+        }
+    }
+    
+    /// Wrapper for [vkWaitSemaphoresKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWaitSemaphoresKHR.html).
+    pub fn wait_semaphores(&self, wait_info: khr::VkSemaphoreWaitInfo, timeout: u64) -> LavaResult<()> {
+        unsafe {
+            let raw_wait_info = new_ptr_vk_value(&wait_info);
+            let raw_timeout = timeout;
+            let vk_result = ((&*self._fn_table).vkWaitSemaphoresKHR)(self._handle, raw_wait_info, raw_timeout);
+            free_vk_ptr(raw_wait_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
+    /// Wrapper for [vkSignalSemaphoreKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSignalSemaphoreKHR.html).
+    pub fn signal_semaphore(&self, signal_info: khr::VkSemaphoreSignalInfo) -> LavaResult<()> {
+        unsafe {
+            let raw_signal_info = new_ptr_vk_value(&signal_info);
+            let vk_result = ((&*self._fn_table).vkSignalSemaphoreKHR)(self._handle, raw_signal_info);
+            free_vk_ptr(raw_signal_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
     /// Wrapper for [vkGetPipelineExecutablePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPipelineExecutablePropertiesKHR.html).
     pub fn get_pipeline_executable_properties(&self, pipeline_info: khr::VkPipelineInfo) -> LavaResult<Vec<khr::VkPipelineExecutableProperties>> {
         unsafe {

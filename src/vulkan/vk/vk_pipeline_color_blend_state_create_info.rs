@@ -49,7 +49,7 @@ impl VkWrappedType<RawVkPipelineColorBlendStateCreateInfo> for VkPipelineColorBl
         dst.logic_op = vk_to_raw_value(&src.logic_op);
         dst.attachment_count = src.attachments.len() as u32;
         dst.attachments = new_ptr_vk_array(&src.attachments);
-        dst.blend_constants = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.blend_constants, &mut dst_array); dst_array };
+        dst.blend_constants = unsafe { let mut dst_array : [f32; 4] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.blend_constants, &mut dst_array); dst_array };
     }
 }
 
@@ -60,7 +60,7 @@ impl VkRawType<VkPipelineColorBlendStateCreateInfo> for RawVkPipelineColorBlendS
             logic_op_enable: u32::vk_to_wrapped(&src.logic_op_enable),
             logic_op: RawVkLogicOp::vk_to_wrapped(&src.logic_op),
             attachments: new_vk_array(src.attachment_count, src.attachments),
-            blend_constants: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.blend_constants, &mut dst_array); dst_array },
+            blend_constants: unsafe { let mut dst_array : [f32; 4] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.blend_constants, &mut dst_array); dst_array },
         }
     }
 }

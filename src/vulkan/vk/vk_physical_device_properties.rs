@@ -53,7 +53,7 @@ impl VkRawType<VkPhysicalDeviceProperties> for RawVkPhysicalDeviceProperties {
             device_id: u32::vk_to_wrapped(&src.device_id),
             device_type: RawVkPhysicalDeviceType::vk_to_wrapped(&src.device_type),
             device_name: new_string(&src.device_name[0] as *const c_char),
-            pipeline_cache_uuid: unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.pipeline_cache_uuid, &mut dst_array); dst_array },
+            pipeline_cache_uuid: unsafe { let mut dst_array : [u8; 16] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.pipeline_cache_uuid, &mut dst_array); dst_array },
             limits: RawVkPhysicalDeviceLimits::vk_to_wrapped(&src.limits),
             sparse_properties: RawVkPhysicalDeviceSparseProperties::vk_to_wrapped(&src.sparse_properties),
         }

@@ -40,9 +40,9 @@ impl VkWrappedType<RawVkPhysicalDeviceIDProperties> for VkPhysicalDeviceIDProper
     fn vk_to_raw(src: &VkPhysicalDeviceIDProperties, dst: &mut RawVkPhysicalDeviceIDProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceIdProperties);
         dst.next = ptr::null_mut();
-        dst.device_uuid = unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.device_uuid, &mut dst_array); dst_array };
-        dst.driver_uuid = unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.driver_uuid, &mut dst_array); dst_array };
-        dst.device_luid = unsafe { let mut dst_array : [u8; 8] = mem::uninitialized(); to_array(&src.device_luid, &mut dst_array); dst_array };
+        dst.device_uuid = unsafe { let mut dst_array : [u8; 16] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.device_uuid, &mut dst_array); dst_array };
+        dst.driver_uuid = unsafe { let mut dst_array : [u8; 16] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.driver_uuid, &mut dst_array); dst_array };
+        dst.device_luid = unsafe { let mut dst_array : [u8; 8] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.device_luid, &mut dst_array); dst_array };
         dst.device_node_mask = src.device_node_mask;
         dst.device_luidvalid = vk_to_raw_value(&src.device_luidvalid);
     }
@@ -51,9 +51,9 @@ impl VkWrappedType<RawVkPhysicalDeviceIDProperties> for VkPhysicalDeviceIDProper
 impl VkRawType<VkPhysicalDeviceIDProperties> for RawVkPhysicalDeviceIDProperties {
     fn vk_to_wrapped(src: &RawVkPhysicalDeviceIDProperties) -> VkPhysicalDeviceIDProperties {
         VkPhysicalDeviceIDProperties {
-            device_uuid: unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.device_uuid, &mut dst_array); dst_array },
-            driver_uuid: unsafe { let mut dst_array : [u8; 16] = mem::uninitialized(); to_array(&src.driver_uuid, &mut dst_array); dst_array },
-            device_luid: unsafe { let mut dst_array : [u8; 8] = mem::uninitialized(); to_array(&src.device_luid, &mut dst_array); dst_array },
+            device_uuid: unsafe { let mut dst_array : [u8; 16] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.device_uuid, &mut dst_array); dst_array },
+            driver_uuid: unsafe { let mut dst_array : [u8; 16] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.driver_uuid, &mut dst_array); dst_array },
+            device_luid: unsafe { let mut dst_array : [u8; 8] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.device_luid, &mut dst_array); dst_array },
             device_node_mask: src.device_node_mask,
             device_luidvalid: u32::vk_to_wrapped(&src.device_luidvalid),
         }

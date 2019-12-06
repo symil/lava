@@ -84,6 +84,9 @@ pub const VK_KHR_EXTERNAL_FENCE_EXTENSION_NAME : &str = "VK_KHR_external_fence";
 /// `"VK_KHR_external_fence_fd"`
 pub const VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME : &str = "VK_KHR_external_fence_fd";
 
+/// `"VK_KHR_performance_query"`
+pub const VK_KHR_PERFORMANCE_QUERY_EXTENSION_NAME : &str = "VK_KHR_performance_query";
+
 /// `"VK_KHR_maintenance2"`
 pub const VK_KHR_MAINTENANCE2_EXTENSION_NAME : &str = "VK_KHR_maintenance2";
 
@@ -132,6 +135,9 @@ pub const VK_KHR_8BIT_STORAGE_EXTENSION_NAME : &str = "VK_KHR_8bit_storage";
 /// `"VK_KHR_shader_atomic_int64"`
 pub const VK_KHR_SHADER_ATOMIC_INT64_EXTENSION_NAME : &str = "VK_KHR_shader_atomic_int64";
 
+/// `"VK_KHR_shader_clock"`
+pub const VK_KHR_SHADER_CLOCK_EXTENSION_NAME : &str = "VK_KHR_shader_clock";
+
 /// `"VK_KHR_driver_properties"`
 pub const VK_KHR_DRIVER_PROPERTIES_EXTENSION_NAME : &str = "VK_KHR_driver_properties";
 
@@ -144,14 +150,26 @@ pub const VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME : &str = "VK_KHR_depth_ste
 /// `"VK_KHR_swapchain_mutable_format"`
 pub const VK_KHR_SWAPCHAIN_MUTABLE_FORMAT_EXTENSION_NAME : &str = "VK_KHR_swapchain_mutable_format";
 
+/// `"VK_KHR_timeline_semaphore"`
+pub const VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME : &str = "VK_KHR_timeline_semaphore";
+
 /// `"VK_KHR_vulkan_memory_model"`
 pub const VK_KHR_VULKAN_MEMORY_MODEL_EXTENSION_NAME : &str = "VK_KHR_vulkan_memory_model";
+
+/// `"VK_KHR_spirv_1_4"`
+pub const VK_KHR_SPIRV_1_4_EXTENSION_NAME : &str = "VK_KHR_spirv_1_4";
 
 /// `"VK_KHR_surface_protected_capabilities"`
 pub const VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME : &str = "VK_KHR_surface_protected_capabilities";
 
+/// `"VK_KHR_separate_depth_stencil_layouts"`
+pub const VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME : &str = "VK_KHR_separate_depth_stencil_layouts";
+
 /// `"VK_KHR_uniform_buffer_standard_layout"`
 pub const VK_KHR_UNIFORM_BUFFER_STANDARD_LAYOUT_EXTENSION_NAME : &str = "VK_KHR_uniform_buffer_standard_layout";
+
+/// `"VK_KHR_buffer_device_address"`
+pub const VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME : &str = "VK_KHR_buffer_device_address";
 
 /// `"VK_KHR_pipeline_executable_properties"`
 pub const VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME : &str = "VK_KHR_pipeline_executable_properties";

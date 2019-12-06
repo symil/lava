@@ -216,7 +216,17 @@ function idFunction(name) {
     return name;
 }
 
+
+const FORBIDDEN_FUNCTION_LIST = [
+    // This function returns two arrays. The current system cannot properly generate a wrapper for it.
+    'vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR'
+];
+
 function functionToMethod(handle, func) {
+    if (FORBIDDEN_FUNCTION_LIST.includes(func.name)) {
+        return null;
+    }
+
     // const DEBUG = func.name === 'vkGetAccelerationStructureHandleNV';
     // if (DEBUG) console.log(func.args);
 

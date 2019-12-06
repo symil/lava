@@ -290,9 +290,9 @@ impl VkWrappedType<RawVkPhysicalDeviceLimits> for VkPhysicalDeviceLimits {
         dst.max_fragment_dual_src_attachments = vk_to_raw_value(&src.max_fragment_dual_src_attachments);
         dst.max_fragment_combined_output_resources = vk_to_raw_value(&src.max_fragment_combined_output_resources);
         dst.max_compute_shared_memory_size = vk_to_raw_value(&src.max_compute_shared_memory_size);
-        dst.max_compute_work_group_count = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_compute_work_group_count, &mut dst_array); dst_array };
+        dst.max_compute_work_group_count = unsafe { let mut dst_array : [u32; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.max_compute_work_group_count, &mut dst_array); dst_array };
         dst.max_compute_work_group_invocations = vk_to_raw_value(&src.max_compute_work_group_invocations);
-        dst.max_compute_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_compute_work_group_size, &mut dst_array); dst_array };
+        dst.max_compute_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.max_compute_work_group_size, &mut dst_array); dst_array };
         dst.sub_pixel_precision_bits = src.sub_pixel_precision_bits;
         dst.sub_texel_precision_bits = src.sub_texel_precision_bits;
         dst.mipmap_precision_bits = src.mipmap_precision_bits;
@@ -301,8 +301,8 @@ impl VkWrappedType<RawVkPhysicalDeviceLimits> for VkPhysicalDeviceLimits {
         dst.max_sampler_lod_bias = src.max_sampler_lod_bias;
         dst.max_sampler_anisotropy = src.max_sampler_anisotropy;
         dst.max_viewports = vk_to_raw_value(&src.max_viewports);
-        dst.max_viewport_dimensions = unsafe { let mut dst_array : [u32; 2] = mem::uninitialized(); vk_to_raw_array(&src.max_viewport_dimensions, &mut dst_array); dst_array };
-        dst.viewport_bounds_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.viewport_bounds_range, &mut dst_array); dst_array };
+        dst.max_viewport_dimensions = unsafe { let mut dst_array : [u32; 2] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.max_viewport_dimensions, &mut dst_array); dst_array };
+        dst.viewport_bounds_range = unsafe { let mut dst_array : [f32; 2] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.viewport_bounds_range, &mut dst_array); dst_array };
         dst.viewport_sub_pixel_bits = src.viewport_sub_pixel_bits;
         dst.min_memory_map_alignment = src.min_memory_map_alignment;
         dst.min_texel_buffer_offset_alignment = vk_to_raw_value(&src.min_texel_buffer_offset_alignment);
@@ -335,8 +335,8 @@ impl VkWrappedType<RawVkPhysicalDeviceLimits> for VkPhysicalDeviceLimits {
         dst.max_cull_distances = vk_to_raw_value(&src.max_cull_distances);
         dst.max_combined_clip_and_cull_distances = vk_to_raw_value(&src.max_combined_clip_and_cull_distances);
         dst.discrete_queue_priorities = vk_to_raw_value(&src.discrete_queue_priorities);
-        dst.point_size_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.point_size_range, &mut dst_array); dst_array };
-        dst.line_width_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.line_width_range, &mut dst_array); dst_array };
+        dst.point_size_range = unsafe { let mut dst_array : [f32; 2] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.point_size_range, &mut dst_array); dst_array };
+        dst.line_width_range = unsafe { let mut dst_array : [f32; 2] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.line_width_range, &mut dst_array); dst_array };
         dst.point_size_granularity = src.point_size_granularity;
         dst.line_width_granularity = src.line_width_granularity;
         dst.strict_lines = vk_to_raw_value(&src.strict_lines);
@@ -402,9 +402,9 @@ impl VkRawType<VkPhysicalDeviceLimits> for RawVkPhysicalDeviceLimits {
             max_fragment_dual_src_attachments: u32::vk_to_wrapped(&src.max_fragment_dual_src_attachments),
             max_fragment_combined_output_resources: u32::vk_to_wrapped(&src.max_fragment_combined_output_resources),
             max_compute_shared_memory_size: u32::vk_to_wrapped(&src.max_compute_shared_memory_size),
-            max_compute_work_group_count: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); vk_to_wrapped_array(&src.max_compute_work_group_count, &mut dst_array); dst_array },
+            max_compute_work_group_count: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.max_compute_work_group_count, &mut dst_array); dst_array },
             max_compute_work_group_invocations: u32::vk_to_wrapped(&src.max_compute_work_group_invocations),
-            max_compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); vk_to_wrapped_array(&src.max_compute_work_group_size, &mut dst_array); dst_array },
+            max_compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.max_compute_work_group_size, &mut dst_array); dst_array },
             sub_pixel_precision_bits: src.sub_pixel_precision_bits,
             sub_texel_precision_bits: src.sub_texel_precision_bits,
             mipmap_precision_bits: src.mipmap_precision_bits,
@@ -413,8 +413,8 @@ impl VkRawType<VkPhysicalDeviceLimits> for RawVkPhysicalDeviceLimits {
             max_sampler_lod_bias: src.max_sampler_lod_bias,
             max_sampler_anisotropy: src.max_sampler_anisotropy,
             max_viewports: u32::vk_to_wrapped(&src.max_viewports),
-            max_viewport_dimensions: unsafe { let mut dst_array : [usize; 2] = mem::uninitialized(); vk_to_wrapped_array(&src.max_viewport_dimensions, &mut dst_array); dst_array },
-            viewport_bounds_range: unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.viewport_bounds_range, &mut dst_array); dst_array },
+            max_viewport_dimensions: unsafe { let mut dst_array : [usize; 2] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.max_viewport_dimensions, &mut dst_array); dst_array },
+            viewport_bounds_range: unsafe { let mut dst_array : [f32; 2] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.viewport_bounds_range, &mut dst_array); dst_array },
             viewport_sub_pixel_bits: src.viewport_sub_pixel_bits,
             min_memory_map_alignment: src.min_memory_map_alignment,
             min_texel_buffer_offset_alignment: u64::vk_to_wrapped(&src.min_texel_buffer_offset_alignment),
@@ -447,8 +447,8 @@ impl VkRawType<VkPhysicalDeviceLimits> for RawVkPhysicalDeviceLimits {
             max_cull_distances: u32::vk_to_wrapped(&src.max_cull_distances),
             max_combined_clip_and_cull_distances: u32::vk_to_wrapped(&src.max_combined_clip_and_cull_distances),
             discrete_queue_priorities: u32::vk_to_wrapped(&src.discrete_queue_priorities),
-            point_size_range: unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.point_size_range, &mut dst_array); dst_array },
-            line_width_range: unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.line_width_range, &mut dst_array); dst_array },
+            point_size_range: unsafe { let mut dst_array : [f32; 2] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.point_size_range, &mut dst_array); dst_array },
+            line_width_range: unsafe { let mut dst_array : [f32; 2] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.line_width_range, &mut dst_array); dst_array },
             point_size_granularity: src.point_size_granularity,
             line_width_granularity: src.line_width_granularity,
             strict_lines: u32::vk_to_wrapped(&src.strict_lines),
@@ -515,9 +515,9 @@ impl Default for VkPhysicalDeviceLimits {
             max_fragment_dual_src_attachments: 0,
             max_fragment_combined_output_resources: 0,
             max_compute_shared_memory_size: 0,
-            max_compute_work_group_count: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            max_compute_work_group_count: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
             max_compute_work_group_invocations: 0,
-            max_compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            max_compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
             sub_pixel_precision_bits: 0,
             sub_texel_precision_bits: 0,
             mipmap_precision_bits: 0,
@@ -526,7 +526,7 @@ impl Default for VkPhysicalDeviceLimits {
             max_sampler_lod_bias: 0.0,
             max_sampler_anisotropy: 0.0,
             max_viewports: 0,
-            max_viewport_dimensions: unsafe { let mut dst_array : [usize; 2] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            max_viewport_dimensions: unsafe { let mut dst_array : [usize; 2] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
             viewport_bounds_range: [0.0; 2],
             viewport_sub_pixel_bits: 0,
             min_memory_map_alignment: 0,

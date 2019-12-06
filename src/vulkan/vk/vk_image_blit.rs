@@ -36,9 +36,9 @@ pub struct RawVkImageBlit {
 impl VkWrappedType<RawVkImageBlit> for VkImageBlit {
     fn vk_to_raw(src: &VkImageBlit, dst: &mut RawVkImageBlit) {
         dst.src_subresource = vk_to_raw_value(&src.src_subresource);
-        dst.src_offsets = unsafe { let mut dst_array : [RawVkOffset3D; 2] = mem::uninitialized(); vk_to_raw_array(&src.src_offsets, &mut dst_array); dst_array };
+        dst.src_offsets = unsafe { let mut dst_array : [RawVkOffset3D; 2] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.src_offsets, &mut dst_array); dst_array };
         dst.dst_subresource = vk_to_raw_value(&src.dst_subresource);
-        dst.dst_offsets = unsafe { let mut dst_array : [RawVkOffset3D; 2] = mem::uninitialized(); vk_to_raw_array(&src.dst_offsets, &mut dst_array); dst_array };
+        dst.dst_offsets = unsafe { let mut dst_array : [RawVkOffset3D; 2] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.dst_offsets, &mut dst_array); dst_array };
     }
 }
 
@@ -46,9 +46,9 @@ impl VkRawType<VkImageBlit> for RawVkImageBlit {
     fn vk_to_wrapped(src: &RawVkImageBlit) -> VkImageBlit {
         VkImageBlit {
             src_subresource: RawVkImageSubresourceLayers::vk_to_wrapped(&src.src_subresource),
-            src_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::uninitialized(); vk_to_wrapped_array(&src.src_offsets, &mut dst_array); dst_array },
+            src_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.src_offsets, &mut dst_array); dst_array },
             dst_subresource: RawVkImageSubresourceLayers::vk_to_wrapped(&src.dst_subresource),
-            dst_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::uninitialized(); vk_to_wrapped_array(&src.dst_offsets, &mut dst_array); dst_array },
+            dst_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.dst_offsets, &mut dst_array); dst_array },
         }
     }
 }
@@ -57,9 +57,9 @@ impl Default for VkImageBlit {
     fn default() -> VkImageBlit {
         VkImageBlit {
             src_subresource: Default::default(),
-            src_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            src_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
             dst_subresource: Default::default(),
-            dst_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            dst_offsets: unsafe { let mut dst_array : [VkOffset3D; 2] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
         }
     }
 }

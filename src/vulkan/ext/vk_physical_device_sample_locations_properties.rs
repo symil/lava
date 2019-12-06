@@ -44,7 +44,7 @@ impl VkWrappedType<RawVkPhysicalDeviceSampleLocationsProperties> for VkPhysicalD
         dst.next = ptr::null_mut();
         dst.sample_location_sample_counts = vk_to_raw_value(&src.sample_location_sample_counts);
         dst.max_sample_location_grid_size = vk_to_raw_value(&src.max_sample_location_grid_size);
-        dst.sample_location_coordinate_range = unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.sample_location_coordinate_range, &mut dst_array); dst_array };
+        dst.sample_location_coordinate_range = unsafe { let mut dst_array : [f32; 2] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.sample_location_coordinate_range, &mut dst_array); dst_array };
         dst.sample_location_sub_pixel_bits = src.sample_location_sub_pixel_bits;
         dst.variable_sample_locations = vk_to_raw_value(&src.variable_sample_locations);
     }
@@ -55,7 +55,7 @@ impl VkRawType<VkPhysicalDeviceSampleLocationsProperties> for RawVkPhysicalDevic
         VkPhysicalDeviceSampleLocationsProperties {
             sample_location_sample_counts: RawVkSampleCountFlags::vk_to_wrapped(&src.sample_location_sample_counts),
             max_sample_location_grid_size: RawVkExtent2D::vk_to_wrapped(&src.max_sample_location_grid_size),
-            sample_location_coordinate_range: unsafe { let mut dst_array : [f32; 2] = mem::uninitialized(); to_array(&src.sample_location_coordinate_range, &mut dst_array); dst_array },
+            sample_location_coordinate_range: unsafe { let mut dst_array : [f32; 2] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.sample_location_coordinate_range, &mut dst_array); dst_array },
             sample_location_sub_pixel_bits: src.sample_location_sub_pixel_bits,
             variable_sample_locations: u32::vk_to_wrapped(&src.variable_sample_locations),
         }

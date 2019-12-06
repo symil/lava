@@ -36,8 +36,8 @@ pub enum VkResult {
     ErrorInvalidDrmFormatModifierPlaneLayoutExt = -1000158000,
     ErrorFragmentationExt = -1000161000,
     ErrorNotPermittedExt = -1000174001,
-    ErrorInvalidDeviceAddressExt = -1000244000,
     ErrorFullScreenExclusiveModeLostExt = -1000255000,
+    ErrorInvalidOpaqueCaptureAddressKhr = -1000244000,
 }
 
 #[doc(hidden)]

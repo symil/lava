@@ -34,16 +34,16 @@ impl VkWrappedType<RawVkPhysicalDeviceMemoryBudgetProperties> for VkPhysicalDevi
     fn vk_to_raw(src: &VkPhysicalDeviceMemoryBudgetProperties, dst: &mut RawVkPhysicalDeviceMemoryBudgetProperties) {
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceMemoryBudgetPropertiesExt);
         dst.next = ptr::null_mut();
-        dst.heap_budget = unsafe { let mut dst_array : [u64; 16] = mem::uninitialized(); vk_to_raw_array(&src.heap_budget, &mut dst_array); dst_array };
-        dst.heap_usage = unsafe { let mut dst_array : [u64; 16] = mem::uninitialized(); vk_to_raw_array(&src.heap_usage, &mut dst_array); dst_array };
+        dst.heap_budget = unsafe { let mut dst_array : [u64; 16] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.heap_budget, &mut dst_array); dst_array };
+        dst.heap_usage = unsafe { let mut dst_array : [u64; 16] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.heap_usage, &mut dst_array); dst_array };
     }
 }
 
 impl VkRawType<VkPhysicalDeviceMemoryBudgetProperties> for RawVkPhysicalDeviceMemoryBudgetProperties {
     fn vk_to_wrapped(src: &RawVkPhysicalDeviceMemoryBudgetProperties) -> VkPhysicalDeviceMemoryBudgetProperties {
         VkPhysicalDeviceMemoryBudgetProperties {
-            heap_budget: unsafe { let mut dst_array : [usize; 16] = mem::uninitialized(); vk_to_wrapped_array(&src.heap_budget, &mut dst_array); dst_array },
-            heap_usage: unsafe { let mut dst_array : [usize; 16] = mem::uninitialized(); vk_to_wrapped_array(&src.heap_usage, &mut dst_array); dst_array },
+            heap_budget: unsafe { let mut dst_array : [usize; 16] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.heap_budget, &mut dst_array); dst_array },
+            heap_usage: unsafe { let mut dst_array : [usize; 16] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.heap_usage, &mut dst_array); dst_array },
         }
     }
 }
@@ -51,8 +51,8 @@ impl VkRawType<VkPhysicalDeviceMemoryBudgetProperties> for RawVkPhysicalDeviceMe
 impl Default for VkPhysicalDeviceMemoryBudgetProperties {
     fn default() -> VkPhysicalDeviceMemoryBudgetProperties {
         VkPhysicalDeviceMemoryBudgetProperties {
-            heap_budget: unsafe { let mut dst_array : [usize; 16] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
-            heap_usage: unsafe { let mut dst_array : [usize; 16] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            heap_budget: unsafe { let mut dst_array : [usize; 16] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
+            heap_usage: unsafe { let mut dst_array : [usize; 16] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
         }
     }
 }

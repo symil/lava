@@ -47,7 +47,7 @@ impl VkWrappedType<RawVkShaderStatisticsInfo> for VkShaderStatisticsInfo {
         dst.num_physical_sgprs = vk_to_raw_value(&src.num_physical_sgprs);
         dst.num_available_vgprs = vk_to_raw_value(&src.num_available_vgprs);
         dst.num_available_sgprs = vk_to_raw_value(&src.num_available_sgprs);
-        dst.compute_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.compute_work_group_size, &mut dst_array); dst_array };
+        dst.compute_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.compute_work_group_size, &mut dst_array); dst_array };
     }
 }
 
@@ -60,7 +60,7 @@ impl VkRawType<VkShaderStatisticsInfo> for RawVkShaderStatisticsInfo {
             num_physical_sgprs: u32::vk_to_wrapped(&src.num_physical_sgprs),
             num_available_vgprs: u32::vk_to_wrapped(&src.num_available_vgprs),
             num_available_sgprs: u32::vk_to_wrapped(&src.num_available_sgprs),
-            compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); vk_to_wrapped_array(&src.compute_work_group_size, &mut dst_array); dst_array },
+            compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.compute_work_group_size, &mut dst_array); dst_array },
         }
     }
 }
@@ -74,7 +74,7 @@ impl Default for VkShaderStatisticsInfo {
             num_physical_sgprs: 0,
             num_available_vgprs: 0,
             num_available_sgprs: 0,
-            compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            compute_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
         }
     }
 }

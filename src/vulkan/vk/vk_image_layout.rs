@@ -21,6 +21,10 @@ pub enum VkImageLayout {
     SharedPresentKhr = 1000111000,
     ShadingRateOptimalNv = 1000164003,
     FragmentDensityMapOptimalExt = 1000218000,
+    DepthAttachmentOptimalKhr = 1000241000,
+    DepthReadOnlyOptimalKhr = 1000241001,
+    StencilAttachmentOptimalKhr = 1000241002,
+    StencilReadOnlyOptimalKhr = 1000241003,
 }
 
 #[doc(hidden)]

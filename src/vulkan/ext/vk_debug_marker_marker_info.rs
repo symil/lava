@@ -35,7 +35,7 @@ impl<'a> VkWrappedType<RawVkDebugMarkerMarkerInfo> for VkDebugMarkerMarkerInfo<'
         dst.s_type = vk_to_raw_value(&VkStructureType::DebugMarkerMarkerInfoExt);
         dst.next = ptr::null_mut();
         dst.marker_name = new_ptr_string(src.marker_name);
-        dst.color = unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array };
+        dst.color = unsafe { let mut dst_array : [f32; 4] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.color, &mut dst_array); dst_array };
     }
 }
 
@@ -43,7 +43,7 @@ impl<'a> VkRawType<VkDebugMarkerMarkerInfo<'a>> for RawVkDebugMarkerMarkerInfo {
     fn vk_to_wrapped(src: &RawVkDebugMarkerMarkerInfo) -> VkDebugMarkerMarkerInfo<'a> {
         VkDebugMarkerMarkerInfo {
             marker_name: new_string_ref(src.marker_name),
-            color: unsafe { let mut dst_array : [f32; 4] = mem::uninitialized(); to_array(&src.color, &mut dst_array); dst_array },
+            color: unsafe { let mut dst_array : [f32; 4] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.color, &mut dst_array); dst_array },
         }
     }
 }

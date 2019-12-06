@@ -10,7 +10,7 @@ use vulkan::vk::*;
 
 pub fn vk_to_raw_value<W : VkWrappedType<R>, R>(value: &W) -> R {
     unsafe {
-        let mut dst = mem::uninitialized();
+        let mut dst = mem::MaybeUninit::uninit().assume_init();
         W::vk_to_raw(value, &mut dst);
         dst
     }

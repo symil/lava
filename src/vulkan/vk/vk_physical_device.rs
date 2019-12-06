@@ -634,6 +634,20 @@ impl VkPhysicalDevice {
         }
     }
     
+    /// Wrapper for [vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR.html).
+    pub fn get_queue_family_performance_query_passes(&self, performance_query_create_info: khr::VkQueryPoolPerformanceCreateInfo) -> usize {
+        unsafe {
+            let raw_performance_query_create_info = new_ptr_vk_value(&performance_query_create_info);
+            let raw_num_passes = &mut mem::zeroed() as *mut u32;
+            
+            ((&*self._fn_table).vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR)(self._handle, raw_performance_query_create_info, raw_num_passes);
+            
+            let num_passes = new_vk_value(raw_num_passes);
+            free_vk_ptr(raw_performance_query_create_info);
+            num_passes
+        }
+    }
+    
     /// Wrapper for [vkGetPhysicalDeviceSurfaceCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceSurfaceCapabilities2KHR.html).
     pub fn get_surface_capabilities_2(&self, surface_info: khr::VkPhysicalDeviceSurfaceInfo2) -> LavaResult<khr::VkSurfaceCapabilities2> {
         unsafe {

@@ -159,11 +159,11 @@ function doesFieldRepresentVersion(field) {
 }
 
 function createStaticArray(typeName, arraySize, varName, functionName) {
-    return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::uninitialized(); ${functionName}(&${varName}, &mut dst_array); dst_array }`;
+    return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::MaybeUninit::uninit().assume_init(); ${functionName}(&${varName}, &mut dst_array); dst_array }`;
 }
 
 function fillStaticArray(typeName, arraySize) {
-    return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array }`;
+    return `unsafe { let mut dst_array : [${typeName}; ${arraySize}] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array }`;
 }
 
 function getRawVkTypeName(cTypeName) {

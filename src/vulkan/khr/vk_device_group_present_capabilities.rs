@@ -35,7 +35,7 @@ impl VkWrappedType<RawVkDeviceGroupPresentCapabilities> for VkDeviceGroupPresent
     fn vk_to_raw(src: &VkDeviceGroupPresentCapabilities, dst: &mut RawVkDeviceGroupPresentCapabilities) {
         dst.s_type = vk_to_raw_value(&VkStructureType::DeviceGroupPresentCapabilitiesKhr);
         dst.next = ptr::null_mut();
-        dst.present_mask = unsafe { let mut dst_array : [u32; 32] = mem::uninitialized(); to_array(&src.present_mask, &mut dst_array); dst_array };
+        dst.present_mask = unsafe { let mut dst_array : [u32; 32] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.present_mask, &mut dst_array); dst_array };
         dst.modes = vk_to_raw_value(&src.modes);
     }
 }
@@ -43,7 +43,7 @@ impl VkWrappedType<RawVkDeviceGroupPresentCapabilities> for VkDeviceGroupPresent
 impl VkRawType<VkDeviceGroupPresentCapabilities> for RawVkDeviceGroupPresentCapabilities {
     fn vk_to_wrapped(src: &RawVkDeviceGroupPresentCapabilities) -> VkDeviceGroupPresentCapabilities {
         VkDeviceGroupPresentCapabilities {
-            present_mask: unsafe { let mut dst_array : [u32; 32] = mem::uninitialized(); to_array(&src.present_mask, &mut dst_array); dst_array },
+            present_mask: unsafe { let mut dst_array : [u32; 32] = mem::MaybeUninit::uninit().assume_init(); to_array(&src.present_mask, &mut dst_array); dst_array },
             modes: RawVkDeviceGroupPresentModeFlags::vk_to_wrapped(&src.modes),
         }
     }

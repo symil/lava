@@ -37,7 +37,7 @@ impl VkWrappedType<RawVkPhysicalDeviceGroupProperties> for VkPhysicalDeviceGroup
         dst.s_type = vk_to_raw_value(&VkStructureType::PhysicalDeviceGroupProperties);
         dst.next = ptr::null_mut();
         dst.physical_device_count = src.physical_devices.len() as u32;
-        dst.physical_devices = unsafe { let mut dst_array : [RawVkPhysicalDevice; 32] = mem::uninitialized(); vk_to_raw_array(&src.physical_devices, &mut dst_array); dst_array };
+        dst.physical_devices = unsafe { let mut dst_array : [RawVkPhysicalDevice; 32] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.physical_devices, &mut dst_array); dst_array };
         dst.subset_allocation = vk_to_raw_value(&src.subset_allocation);
     }
 }

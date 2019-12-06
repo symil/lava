@@ -58,11 +58,11 @@ impl VkWrappedType<RawVkPhysicalDeviceMeshShaderProperties> for VkPhysicalDevice
         dst.next = ptr::null_mut();
         dst.max_draw_mesh_tasks_count = vk_to_raw_value(&src.max_draw_mesh_tasks_count);
         dst.max_task_work_group_invocations = vk_to_raw_value(&src.max_task_work_group_invocations);
-        dst.max_task_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_task_work_group_size, &mut dst_array); dst_array };
+        dst.max_task_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.max_task_work_group_size, &mut dst_array); dst_array };
         dst.max_task_total_memory_size = vk_to_raw_value(&src.max_task_total_memory_size);
         dst.max_task_output_count = vk_to_raw_value(&src.max_task_output_count);
         dst.max_mesh_work_group_invocations = vk_to_raw_value(&src.max_mesh_work_group_invocations);
-        dst.max_mesh_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::uninitialized(); vk_to_raw_array(&src.max_mesh_work_group_size, &mut dst_array); dst_array };
+        dst.max_mesh_work_group_size = unsafe { let mut dst_array : [u32; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_raw_array(&src.max_mesh_work_group_size, &mut dst_array); dst_array };
         dst.max_mesh_total_memory_size = vk_to_raw_value(&src.max_mesh_total_memory_size);
         dst.max_mesh_output_vertices = vk_to_raw_value(&src.max_mesh_output_vertices);
         dst.max_mesh_output_primitives = vk_to_raw_value(&src.max_mesh_output_primitives);
@@ -77,11 +77,11 @@ impl VkRawType<VkPhysicalDeviceMeshShaderProperties> for RawVkPhysicalDeviceMesh
         VkPhysicalDeviceMeshShaderProperties {
             max_draw_mesh_tasks_count: u32::vk_to_wrapped(&src.max_draw_mesh_tasks_count),
             max_task_work_group_invocations: u32::vk_to_wrapped(&src.max_task_work_group_invocations),
-            max_task_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); vk_to_wrapped_array(&src.max_task_work_group_size, &mut dst_array); dst_array },
+            max_task_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.max_task_work_group_size, &mut dst_array); dst_array },
             max_task_total_memory_size: u32::vk_to_wrapped(&src.max_task_total_memory_size),
             max_task_output_count: u32::vk_to_wrapped(&src.max_task_output_count),
             max_mesh_work_group_invocations: u32::vk_to_wrapped(&src.max_mesh_work_group_invocations),
-            max_mesh_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); vk_to_wrapped_array(&src.max_mesh_work_group_size, &mut dst_array); dst_array },
+            max_mesh_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); vk_to_wrapped_array(&src.max_mesh_work_group_size, &mut dst_array); dst_array },
             max_mesh_total_memory_size: u32::vk_to_wrapped(&src.max_mesh_total_memory_size),
             max_mesh_output_vertices: u32::vk_to_wrapped(&src.max_mesh_output_vertices),
             max_mesh_output_primitives: u32::vk_to_wrapped(&src.max_mesh_output_primitives),
@@ -97,11 +97,11 @@ impl Default for VkPhysicalDeviceMeshShaderProperties {
         VkPhysicalDeviceMeshShaderProperties {
             max_draw_mesh_tasks_count: 0,
             max_task_work_group_invocations: 0,
-            max_task_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            max_task_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
             max_task_total_memory_size: 0,
             max_task_output_count: 0,
             max_mesh_work_group_invocations: 0,
-            max_mesh_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::uninitialized(); fill_vk_array(&mut dst_array); dst_array },
+            max_mesh_work_group_size: unsafe { let mut dst_array : [usize; 3] = mem::MaybeUninit::uninit().assume_init(); fill_vk_array(&mut dst_array); dst_array },
             max_mesh_total_memory_size: 0,
             max_mesh_output_vertices: 0,
             max_mesh_output_primitives: 0,
