@@ -867,6 +867,26 @@ impl VkPhysicalDevice {
         }
     }
     
+    /// Wrapper for [vkGetPhysicalDeviceToolPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceToolPropertiesEXT.html).
+    pub fn get_tool_properties(&self) -> LavaResult<Vec<ext::VkPhysicalDeviceToolProperties>> {
+        unsafe {
+            let mut vk_result = 0;
+            let mut raw_tool_properties : *mut ext::RawVkPhysicalDeviceToolProperties = ptr::null_mut();
+            let raw_tool_count = &mut mem::zeroed() as *mut u32;
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceToolPropertiesEXT)(self._handle, raw_tool_count, raw_tool_properties);
+            raw_tool_properties = calloc(*raw_tool_count as usize, mem::size_of::<ext::RawVkPhysicalDeviceToolProperties>()) as *mut ext::RawVkPhysicalDeviceToolProperties;
+            
+            vk_result = ((&*self._fn_table).vkGetPhysicalDeviceToolPropertiesEXT)(self._handle, raw_tool_count, raw_tool_properties);
+            
+            let mut tool_properties = new_vk_array(*raw_tool_count, raw_tool_properties);
+            if vk_result == 0 {
+                for elt in &mut tool_properties { VkSetup::vk_setup(elt, self._fn_table); }
+            }
+            free(raw_tool_properties as *mut u8);
+            if vk_result == 0 { Ok(tool_properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), tool_properties)) }
+        }
+    }
+    
     /// Wrapper for [vkGetPhysicalDeviceCooperativeMatrixPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceCooperativeMatrixPropertiesNV.html).
     pub fn get_cooperative_matrix_properties(&self) -> LavaResult<Vec<nv::VkCooperativeMatrixProperties>> {
         unsafe {

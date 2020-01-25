@@ -474,6 +474,9 @@ pub const VK_NV_DEDICATED_ALLOCATION_IMAGE_ALIASING_EXTENSION_NAME : &str = "VK_
 /// `"VK_EXT_buffer_device_address"`
 pub const VK_EXT_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME : &str = "VK_EXT_buffer_device_address";
 
+/// `"VK_EXT_tooling_info"`
+pub const VK_EXT_TOOLING_INFO_EXTENSION_NAME : &str = "VK_EXT_tooling_info";
+
 /// `"VK_EXT_separate_stencil_usage"`
 pub const VK_EXT_SEPARATE_STENCIL_USAGE_EXTENSION_NAME : &str = "VK_EXT_separate_stencil_usage";
 

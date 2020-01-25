@@ -6,18 +6,18 @@ use utils::vk_traits::*;
 ///
 /// Use the macro `VkDescriptorPoolCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
-/// VkDescriptorPoolCreateFlags!(free_descriptor_set, update_after_bind_ext)
+/// VkDescriptorPoolCreateFlags!(free_descriptor_set, update_after_bind)
 /// ```
 /// ```
 /// VkDescriptorPoolCreateFlags {
 ///     free_descriptor_set: true,
-///     update_after_bind_ext: true,
+///     update_after_bind: true,
 /// }
 /// ```
 #[derive(Debug, Clone)]
 pub struct VkDescriptorPoolCreateFlags {
     pub free_descriptor_set: bool,
-    pub update_after_bind_ext: bool,
+    pub update_after_bind: bool,
 }
 
 #[doc(hidden)]
@@ -27,7 +27,7 @@ impl VkWrappedType<RawVkDescriptorPoolCreateFlags> for VkDescriptorPoolCreateFla
     fn vk_to_raw(src: &VkDescriptorPoolCreateFlags, dst: &mut RawVkDescriptorPoolCreateFlags) {
         *dst = 0;
         if src.free_descriptor_set { *dst |= 0x00000001; }
-        if src.update_after_bind_ext { *dst |= 0x00000002; }
+        if src.update_after_bind { *dst |= 0x00000002; }
     }
 }
 
@@ -35,7 +35,7 @@ impl VkRawType<VkDescriptorPoolCreateFlags> for RawVkDescriptorPoolCreateFlags {
     fn vk_to_wrapped(src: &RawVkDescriptorPoolCreateFlags) -> VkDescriptorPoolCreateFlags {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: (src & 0x00000001) != 0,
-            update_after_bind_ext: (src & 0x00000002) != 0,
+            update_after_bind: (src & 0x00000002) != 0,
         }
     }
 }
@@ -44,7 +44,7 @@ impl Default for VkDescriptorPoolCreateFlags {
     fn default() -> VkDescriptorPoolCreateFlags {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: false,
-            update_after_bind_ext: false,
+            update_after_bind: false,
         }
     }
 }
@@ -55,7 +55,7 @@ impl VkDescriptorPoolCreateFlags {
     pub fn none() -> Self {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: false,
-            update_after_bind_ext: false,
+            update_after_bind: false,
         }
     }
     
@@ -63,7 +63,7 @@ impl VkDescriptorPoolCreateFlags {
     pub fn all() -> Self {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: true,
-            update_after_bind_ext: true,
+            update_after_bind: true,
         }
     }
     
@@ -71,14 +71,14 @@ impl VkDescriptorPoolCreateFlags {
     pub fn to_u32(&self) -> u32 {
         0
         + if self.free_descriptor_set { 0x00000001 } else { 0 }
-        + if self.update_after_bind_ext { 0x00000002 } else { 0 }
+        + if self.update_after_bind { 0x00000002 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
     pub fn from_u32(value: u32) -> Self {
         VkDescriptorPoolCreateFlags {
             free_descriptor_set: value & 0x00000001 > 0,
-            update_after_bind_ext: value & 0x00000002 > 0,
+            update_after_bind: value & 0x00000002 > 0,
         }
     }
 }

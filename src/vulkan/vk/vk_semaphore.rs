@@ -88,13 +88,13 @@ impl VkSemaphore {
         }
     }
     
-    /// Wrapper for [vkGetSemaphoreCounterValueKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSemaphoreCounterValueKHR.html).
+    /// Wrapper for [vkGetSemaphoreCounterValue](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSemaphoreCounterValue.html).
     pub fn get_counter_value(&self) -> LavaResult<usize> {
         unsafe {
             let mut vk_result = 0;
             let raw_value = &mut mem::zeroed() as *mut u64;
             
-            vk_result = ((&*self._fn_table).vkGetSemaphoreCounterValueKHR)((*self._fn_table).device, self._handle, raw_value);
+            vk_result = ((&*self._fn_table).vkGetSemaphoreCounterValue)((*self._fn_table).device, self._handle, raw_value);
             
             let value = new_vk_value(raw_value);
             if vk_result == 0 { Ok(value) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), value)) }

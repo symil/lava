@@ -6,20 +6,20 @@ use utils::vk_traits::*;
 ///
 /// Use the macro `VkMemoryAllocateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
-/// VkMemoryAllocateFlags!(device_mask, device_address_khr)
+/// VkMemoryAllocateFlags!(device_mask, device_address)
 /// ```
 /// ```
 /// VkMemoryAllocateFlags {
 ///     device_mask: true,
-///     device_address_khr: true,
+///     device_address: true,
 ///     ..VkMemoryAllocateFlags::none()
 /// }
 /// ```
 #[derive(Debug, Clone)]
 pub struct VkMemoryAllocateFlags {
     pub device_mask: bool,
-    pub device_address_khr: bool,
-    pub device_address_capture_replay_khr: bool,
+    pub device_address: bool,
+    pub device_address_capture_replay: bool,
 }
 
 #[doc(hidden)]
@@ -29,8 +29,8 @@ impl VkWrappedType<RawVkMemoryAllocateFlags> for VkMemoryAllocateFlags {
     fn vk_to_raw(src: &VkMemoryAllocateFlags, dst: &mut RawVkMemoryAllocateFlags) {
         *dst = 0;
         if src.device_mask { *dst |= 0x00000001; }
-        if src.device_address_khr { *dst |= 0x00000002; }
-        if src.device_address_capture_replay_khr { *dst |= 0x00000004; }
+        if src.device_address { *dst |= 0x00000002; }
+        if src.device_address_capture_replay { *dst |= 0x00000004; }
     }
 }
 
@@ -38,8 +38,8 @@ impl VkRawType<VkMemoryAllocateFlags> for RawVkMemoryAllocateFlags {
     fn vk_to_wrapped(src: &RawVkMemoryAllocateFlags) -> VkMemoryAllocateFlags {
         VkMemoryAllocateFlags {
             device_mask: (src & 0x00000001) != 0,
-            device_address_khr: (src & 0x00000002) != 0,
-            device_address_capture_replay_khr: (src & 0x00000004) != 0,
+            device_address: (src & 0x00000002) != 0,
+            device_address_capture_replay: (src & 0x00000004) != 0,
         }
     }
 }
@@ -48,8 +48,8 @@ impl Default for VkMemoryAllocateFlags {
     fn default() -> VkMemoryAllocateFlags {
         VkMemoryAllocateFlags {
             device_mask: false,
-            device_address_khr: false,
-            device_address_capture_replay_khr: false,
+            device_address: false,
+            device_address_capture_replay: false,
         }
     }
 }
@@ -60,8 +60,8 @@ impl VkMemoryAllocateFlags {
     pub fn none() -> Self {
         VkMemoryAllocateFlags {
             device_mask: false,
-            device_address_khr: false,
-            device_address_capture_replay_khr: false,
+            device_address: false,
+            device_address_capture_replay: false,
         }
     }
     
@@ -69,8 +69,8 @@ impl VkMemoryAllocateFlags {
     pub fn all() -> Self {
         VkMemoryAllocateFlags {
             device_mask: true,
-            device_address_khr: true,
-            device_address_capture_replay_khr: true,
+            device_address: true,
+            device_address_capture_replay: true,
         }
     }
     
@@ -78,16 +78,16 @@ impl VkMemoryAllocateFlags {
     pub fn to_u32(&self) -> u32 {
         0
         + if self.device_mask { 0x00000001 } else { 0 }
-        + if self.device_address_khr { 0x00000002 } else { 0 }
-        + if self.device_address_capture_replay_khr { 0x00000004 } else { 0 }
+        + if self.device_address { 0x00000002 } else { 0 }
+        + if self.device_address_capture_replay { 0x00000004 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
     pub fn from_u32(value: u32) -> Self {
         VkMemoryAllocateFlags {
             device_mask: value & 0x00000001 > 0,
-            device_address_khr: value & 0x00000002 > 0,
-            device_address_capture_replay_khr: value & 0x00000004 > 0,
+            device_address: value & 0x00000002 > 0,
+            device_address_capture_replay: value & 0x00000004 > 0,
         }
     }
 }

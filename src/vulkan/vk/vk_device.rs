@@ -762,6 +762,46 @@ impl VkDevice {
         }
     }
     
+    /// Wrapper for [vkCreateRenderPass2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass2.html).
+    pub fn create_render_pass_2(&self, create_info: VkRenderPassCreateInfo2) -> LavaResult<VkRenderPass> {
+        unsafe {
+            let raw_create_info = new_ptr_vk_value(&create_info);
+            let mut vk_result = 0;
+            let raw_render_pass = &mut mem::zeroed() as *mut RawVkRenderPass;
+            
+            vk_result = ((&*self._fn_table).vkCreateRenderPass2)(self._handle, raw_create_info, ptr::null(), raw_render_pass);
+            
+            let mut render_pass = new_vk_value(raw_render_pass);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                VkSetup::vk_setup(&mut render_pass, fn_table);
+            }
+            free_vk_ptr(raw_create_info);
+            if vk_result == 0 { Ok(render_pass) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), render_pass)) }
+        }
+    }
+    
+    /// Wrapper for [vkWaitSemaphores](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWaitSemaphores.html).
+    pub fn wait_semaphores(&self, wait_info: VkSemaphoreWaitInfo, timeout: u64) -> LavaResult<()> {
+        unsafe {
+            let raw_wait_info = new_ptr_vk_value(&wait_info);
+            let raw_timeout = timeout;
+            let vk_result = ((&*self._fn_table).vkWaitSemaphores)(self._handle, raw_wait_info, raw_timeout);
+            free_vk_ptr(raw_wait_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
+    /// Wrapper for [vkSignalSemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSignalSemaphore.html).
+    pub fn signal_semaphore(&self, signal_info: VkSemaphoreSignalInfo) -> LavaResult<()> {
+        unsafe {
+            let raw_signal_info = new_ptr_vk_value(&signal_info);
+            let vk_result = ((&*self._fn_table).vkSignalSemaphore)(self._handle, raw_signal_info);
+            free_vk_ptr(raw_signal_info);
+            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
+        }
+    }
+    
     /// Wrapper for [vkCreateSwapchainKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateSwapchainKHR.html).
     pub fn create_swapchain(&self, create_info: khr::VkSwapchainCreateInfo) -> LavaResult<khr::VkSwapchain> {
         unsafe {
@@ -906,25 +946,6 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateRenderPass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass2KHR.html).
-    pub fn create_render_pass_2(&self, create_info: khr::VkRenderPassCreateInfo2) -> LavaResult<VkRenderPass> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(&create_info);
-            let mut vk_result = 0;
-            let raw_render_pass = &mut mem::zeroed() as *mut RawVkRenderPass;
-            
-            vk_result = ((&*self._fn_table).vkCreateRenderPass2KHR)(self._handle, raw_create_info, ptr::null(), raw_render_pass);
-            
-            let mut render_pass = new_vk_value(raw_render_pass);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut render_pass, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(render_pass) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), render_pass)) }
-        }
-    }
-    
     /// Wrapper for [vkImportFenceFdKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkImportFenceFdKHR.html).
     pub fn import_fence_fd(&self, import_fence_fd_info: khr::VkImportFenceFdInfo) -> LavaResult<()> {
         unsafe {
@@ -964,27 +985,6 @@ impl VkDevice {
     pub fn release_profiling_lock(&self) {
         unsafe {
             ((&*self._fn_table).vkReleaseProfilingLockKHR)(self._handle);
-        }
-    }
-    
-    /// Wrapper for [vkWaitSemaphoresKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWaitSemaphoresKHR.html).
-    pub fn wait_semaphores(&self, wait_info: khr::VkSemaphoreWaitInfo, timeout: u64) -> LavaResult<()> {
-        unsafe {
-            let raw_wait_info = new_ptr_vk_value(&wait_info);
-            let raw_timeout = timeout;
-            let vk_result = ((&*self._fn_table).vkWaitSemaphoresKHR)(self._handle, raw_wait_info, raw_timeout);
-            free_vk_ptr(raw_wait_info);
-            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
-        }
-    }
-    
-    /// Wrapper for [vkSignalSemaphoreKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSignalSemaphoreKHR.html).
-    pub fn signal_semaphore(&self, signal_info: khr::VkSemaphoreSignalInfo) -> LavaResult<()> {
-        unsafe {
-            let raw_signal_info = new_ptr_vk_value(&signal_info);
-            let vk_result = ((&*self._fn_table).vkSignalSemaphoreKHR)(self._handle, raw_signal_info);
-            free_vk_ptr(raw_signal_info);
-            if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }
     

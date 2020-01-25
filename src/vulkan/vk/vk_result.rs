@@ -24,8 +24,11 @@ pub enum VkResult {
     ErrorTooManyObjects = -10,
     ErrorFormatNotSupported = -11,
     ErrorFragmentedPool = -12,
+    ErrorUnknown = -13,
     ErrorOutOfPoolMemory = -1000069000,
     ErrorInvalidExternalHandle = -1000072003,
+    ErrorFragmentation = -1000161000,
+    ErrorInvalidOpaqueCaptureAddress = -1000257000,
     ErrorSurfaceLostKhr = -1000000000,
     ErrorNativeWindowInUseKhr = -1000000001,
     SuboptimalKhr = 1000001003,
@@ -34,10 +37,8 @@ pub enum VkResult {
     ErrorValidationFailedExt = -1000011001,
     ErrorInvalidShaderNv = -1000012000,
     ErrorInvalidDrmFormatModifierPlaneLayoutExt = -1000158000,
-    ErrorFragmentationExt = -1000161000,
     ErrorNotPermittedExt = -1000174001,
     ErrorFullScreenExclusiveModeLostExt = -1000255000,
-    ErrorInvalidOpaqueCaptureAddressKhr = -1000244000,
 }
 
 #[doc(hidden)]

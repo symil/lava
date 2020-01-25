@@ -627,6 +627,63 @@ impl VkCommandBuffer {
         }
     }
     
+    /// Wrapper for [vkCmdDrawIndirectCount](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndirectCount.html).
+    pub fn cmd_draw_indirect_count(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+        unsafe {
+            let raw_buffer = vk_to_raw_value(&buffer);
+            let raw_offset = vk_to_raw_value(&offset);
+            let raw_count_buffer = vk_to_raw_value(&count_buffer);
+            let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
+            let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
+            let raw_stride = vk_to_raw_value(&stride);
+            ((&*self._fn_table).vkCmdDrawIndirectCount)(self._handle, raw_buffer, raw_offset, raw_count_buffer, raw_count_buffer_offset, raw_max_draw_count, raw_stride);
+        }
+    }
+    
+    /// Wrapper for [vkCmdDrawIndexedIndirectCount](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndexedIndirectCount.html).
+    pub fn cmd_draw_indexed_indirect_count(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
+        unsafe {
+            let raw_buffer = vk_to_raw_value(&buffer);
+            let raw_offset = vk_to_raw_value(&offset);
+            let raw_count_buffer = vk_to_raw_value(&count_buffer);
+            let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
+            let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
+            let raw_stride = vk_to_raw_value(&stride);
+            ((&*self._fn_table).vkCmdDrawIndexedIndirectCount)(self._handle, raw_buffer, raw_offset, raw_count_buffer, raw_count_buffer_offset, raw_max_draw_count, raw_stride);
+        }
+    }
+    
+    /// Wrapper for [vkCmdBeginRenderPass2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginRenderPass2.html).
+    pub fn cmd_begin_render_pass_2(&self, render_pass_begin: VkRenderPassBeginInfo, subpass_begin_info: VkSubpassBeginInfo) {
+        unsafe {
+            let raw_render_pass_begin = new_ptr_vk_value(&render_pass_begin);
+            let raw_subpass_begin_info = new_ptr_vk_value(&subpass_begin_info);
+            ((&*self._fn_table).vkCmdBeginRenderPass2)(self._handle, raw_render_pass_begin, raw_subpass_begin_info);
+            free_vk_ptr(raw_render_pass_begin);
+            free_vk_ptr(raw_subpass_begin_info);
+        }
+    }
+    
+    /// Wrapper for [vkCmdNextSubpass2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdNextSubpass2.html).
+    pub fn cmd_next_subpass_2(&self, subpass_begin_info: VkSubpassBeginInfo, subpass_end_info: VkSubpassEndInfo) {
+        unsafe {
+            let raw_subpass_begin_info = new_ptr_vk_value(&subpass_begin_info);
+            let raw_subpass_end_info = new_ptr_vk_value(&subpass_end_info);
+            ((&*self._fn_table).vkCmdNextSubpass2)(self._handle, raw_subpass_begin_info, raw_subpass_end_info);
+            free_vk_ptr(raw_subpass_begin_info);
+            free_vk_ptr(raw_subpass_end_info);
+        }
+    }
+    
+    /// Wrapper for [vkCmdEndRenderPass2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdEndRenderPass2.html).
+    pub fn cmd_end_render_pass_2(&self, subpass_end_info: VkSubpassEndInfo) {
+        unsafe {
+            let raw_subpass_end_info = new_ptr_vk_value(&subpass_end_info);
+            ((&*self._fn_table).vkCmdEndRenderPass2)(self._handle, raw_subpass_end_info);
+            free_vk_ptr(raw_subpass_end_info);
+        }
+    }
+    
     /// Wrapper for [vkCmdPushDescriptorSetKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdPushDescriptorSetKHR.html).
     pub fn cmd_push_descriptor_set(&self, pipeline_bind_point: VkPipelineBindPoint, layout: VkPipelineLayout, set: usize, descriptor_writes: Vec<VkWriteDescriptorSet>) {
         unsafe {
@@ -648,63 +705,6 @@ impl VkCommandBuffer {
             let raw_set = vk_to_raw_value(&set);
             let raw_data = data;
             ((&*self._fn_table).vkCmdPushDescriptorSetWithTemplateKHR)(self._handle, raw_descriptor_update_template, raw_layout, raw_set, raw_data);
-        }
-    }
-    
-    /// Wrapper for [vkCmdBeginRenderPass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginRenderPass2KHR.html).
-    pub fn cmd_begin_render_pass_2(&self, render_pass_begin: VkRenderPassBeginInfo, subpass_begin_info: khr::VkSubpassBeginInfo) {
-        unsafe {
-            let raw_render_pass_begin = new_ptr_vk_value(&render_pass_begin);
-            let raw_subpass_begin_info = new_ptr_vk_value(&subpass_begin_info);
-            ((&*self._fn_table).vkCmdBeginRenderPass2KHR)(self._handle, raw_render_pass_begin, raw_subpass_begin_info);
-            free_vk_ptr(raw_render_pass_begin);
-            free_vk_ptr(raw_subpass_begin_info);
-        }
-    }
-    
-    /// Wrapper for [vkCmdNextSubpass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdNextSubpass2KHR.html).
-    pub fn cmd_next_subpass_2(&self, subpass_begin_info: khr::VkSubpassBeginInfo, subpass_end_info: khr::VkSubpassEndInfo) {
-        unsafe {
-            let raw_subpass_begin_info = new_ptr_vk_value(&subpass_begin_info);
-            let raw_subpass_end_info = new_ptr_vk_value(&subpass_end_info);
-            ((&*self._fn_table).vkCmdNextSubpass2KHR)(self._handle, raw_subpass_begin_info, raw_subpass_end_info);
-            free_vk_ptr(raw_subpass_begin_info);
-            free_vk_ptr(raw_subpass_end_info);
-        }
-    }
-    
-    /// Wrapper for [vkCmdEndRenderPass2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdEndRenderPass2KHR.html).
-    pub fn cmd_end_render_pass_2(&self, subpass_end_info: khr::VkSubpassEndInfo) {
-        unsafe {
-            let raw_subpass_end_info = new_ptr_vk_value(&subpass_end_info);
-            ((&*self._fn_table).vkCmdEndRenderPass2KHR)(self._handle, raw_subpass_end_info);
-            free_vk_ptr(raw_subpass_end_info);
-        }
-    }
-    
-    /// Wrapper for [vkCmdDrawIndirectCountKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndirectCountKHR.html).
-    pub fn cmd_draw_indirect_count(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
-        unsafe {
-            let raw_buffer = vk_to_raw_value(&buffer);
-            let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(&count_buffer);
-            let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
-            let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
-            let raw_stride = vk_to_raw_value(&stride);
-            ((&*self._fn_table).vkCmdDrawIndirectCountKHR)(self._handle, raw_buffer, raw_offset, raw_count_buffer, raw_count_buffer_offset, raw_max_draw_count, raw_stride);
-        }
-    }
-    
-    /// Wrapper for [vkCmdDrawIndexedIndirectCountKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndexedIndirectCountKHR.html).
-    pub fn cmd_draw_indexed_indirect_count(&self, buffer: VkBuffer, offset: usize, count_buffer: VkBuffer, count_buffer_offset: usize, max_draw_count: usize, stride: usize) {
-        unsafe {
-            let raw_buffer = vk_to_raw_value(&buffer);
-            let raw_offset = vk_to_raw_value(&offset);
-            let raw_count_buffer = vk_to_raw_value(&count_buffer);
-            let raw_count_buffer_offset = vk_to_raw_value(&count_buffer_offset);
-            let raw_max_draw_count = vk_to_raw_value(&max_draw_count);
-            let raw_stride = vk_to_raw_value(&stride);
-            ((&*self._fn_table).vkCmdDrawIndexedIndirectCountKHR)(self._handle, raw_buffer, raw_offset, raw_count_buffer, raw_count_buffer_offset, raw_max_draw_count, raw_stride);
         }
     }
     

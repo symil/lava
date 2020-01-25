@@ -6,9 +6,9 @@ use utils::vk_traits::*;
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPerformanceCounterScope {
-    R = 0,
-    K = 1,
-    Khr = 2,
+    CommandBuffer = 0,
+    RenderPass = 1,
+    Command = 2,
 }
 
 #[doc(hidden)]
@@ -30,6 +30,6 @@ impl VkRawType<VkPerformanceCounterScope> for RawVkPerformanceCounterScope {
 
 impl Default for VkPerformanceCounterScope {
     fn default() -> VkPerformanceCounterScope {
-        VkPerformanceCounterScope::R
+        VkPerformanceCounterScope::CommandBuffer
     }
 }

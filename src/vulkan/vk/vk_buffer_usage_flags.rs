@@ -26,11 +26,11 @@ pub struct VkBufferUsageFlags {
     pub index_buffer: bool,
     pub vertex_buffer: bool,
     pub indirect_buffer: bool,
+    pub shader_device_address: bool,
     pub transform_feedback_buffer_ext: bool,
     pub transform_feedback_counter_buffer_ext: bool,
     pub conditional_rendering_ext: bool,
     pub ray_tracing_nv: bool,
-    pub shader_device_address_khr: bool,
 }
 
 #[doc(hidden)]
@@ -48,11 +48,11 @@ impl VkWrappedType<RawVkBufferUsageFlags> for VkBufferUsageFlags {
         if src.index_buffer { *dst |= 0x00000040; }
         if src.vertex_buffer { *dst |= 0x00000080; }
         if src.indirect_buffer { *dst |= 0x00000100; }
+        if src.shader_device_address { *dst |= 0x00020000; }
         if src.transform_feedback_buffer_ext { *dst |= 0x00000800; }
         if src.transform_feedback_counter_buffer_ext { *dst |= 0x00001000; }
         if src.conditional_rendering_ext { *dst |= 0x00000200; }
         if src.ray_tracing_nv { *dst |= 0x00000400; }
-        if src.shader_device_address_khr { *dst |= 0x00020000; }
     }
 }
 
@@ -68,11 +68,11 @@ impl VkRawType<VkBufferUsageFlags> for RawVkBufferUsageFlags {
             index_buffer: (src & 0x00000040) != 0,
             vertex_buffer: (src & 0x00000080) != 0,
             indirect_buffer: (src & 0x00000100) != 0,
+            shader_device_address: (src & 0x00020000) != 0,
             transform_feedback_buffer_ext: (src & 0x00000800) != 0,
             transform_feedback_counter_buffer_ext: (src & 0x00001000) != 0,
             conditional_rendering_ext: (src & 0x00000200) != 0,
             ray_tracing_nv: (src & 0x00000400) != 0,
-            shader_device_address_khr: (src & 0x00020000) != 0,
         }
     }
 }
@@ -89,11 +89,11 @@ impl Default for VkBufferUsageFlags {
             index_buffer: false,
             vertex_buffer: false,
             indirect_buffer: false,
+            shader_device_address: false,
             transform_feedback_buffer_ext: false,
             transform_feedback_counter_buffer_ext: false,
             conditional_rendering_ext: false,
             ray_tracing_nv: false,
-            shader_device_address_khr: false,
         }
     }
 }
@@ -112,11 +112,11 @@ impl VkBufferUsageFlags {
             index_buffer: false,
             vertex_buffer: false,
             indirect_buffer: false,
+            shader_device_address: false,
             transform_feedback_buffer_ext: false,
             transform_feedback_counter_buffer_ext: false,
             conditional_rendering_ext: false,
             ray_tracing_nv: false,
-            shader_device_address_khr: false,
         }
     }
     
@@ -132,11 +132,11 @@ impl VkBufferUsageFlags {
             index_buffer: true,
             vertex_buffer: true,
             indirect_buffer: true,
+            shader_device_address: true,
             transform_feedback_buffer_ext: true,
             transform_feedback_counter_buffer_ext: true,
             conditional_rendering_ext: true,
             ray_tracing_nv: true,
-            shader_device_address_khr: true,
         }
     }
     
@@ -152,11 +152,11 @@ impl VkBufferUsageFlags {
         + if self.index_buffer { 0x00000040 } else { 0 }
         + if self.vertex_buffer { 0x00000080 } else { 0 }
         + if self.indirect_buffer { 0x00000100 } else { 0 }
+        + if self.shader_device_address { 0x00020000 } else { 0 }
         + if self.transform_feedback_buffer_ext { 0x00000800 } else { 0 }
         + if self.transform_feedback_counter_buffer_ext { 0x00001000 } else { 0 }
         + if self.conditional_rendering_ext { 0x00000200 } else { 0 }
         + if self.ray_tracing_nv { 0x00000400 } else { 0 }
-        + if self.shader_device_address_khr { 0x00020000 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
@@ -171,11 +171,11 @@ impl VkBufferUsageFlags {
             index_buffer: value & 0x00000040 > 0,
             vertex_buffer: value & 0x00000080 > 0,
             indirect_buffer: value & 0x00000100 > 0,
+            shader_device_address: value & 0x00020000 > 0,
             transform_feedback_buffer_ext: value & 0x00000800 > 0,
             transform_feedback_counter_buffer_ext: value & 0x00001000 > 0,
             conditional_rendering_ext: value & 0x00000200 > 0,
             ray_tracing_nv: value & 0x00000400 > 0,
-            shader_device_address_khr: value & 0x00020000 > 0,
         }
     }
 }
