@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceShaderSMBuiltinsPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderSMBuiltinsPropertiesNV.html).
+/// Wrapper for [VkPhysicalDeviceShaderSMBuiltinsPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceShaderSMBuiltinsPropertiesNV.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceShaderSMBuiltinsProperties {
     pub shader_smcount: usize,

@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceCoverageReductionModeFeaturesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceCoverageReductionModeFeaturesNV.html).
+/// Wrapper for [VkPhysicalDeviceCoverageReductionModeFeaturesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceCoverageReductionModeFeaturesNV.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceCoverageReductionModeFeatures {
     pub coverage_reduction_mode: bool,

@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkPipelineLayout = u64;
 
-/// Wrapper for [VkPipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineLayout.html).
+/// Wrapper for [VkPipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineLayout.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipelineLayout {
     _handle: RawVkPipelineLayout,
@@ -81,7 +81,7 @@ impl VkPipelineLayout {
         }
     }
     
-    /// Wrapper for [vkDestroyPipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyPipelineLayout.html).
+    /// Wrapper for [vkDestroyPipelineLayout](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyPipelineLayout.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyPipelineLayout)((*self._fn_table).device, self._handle, ptr::null());

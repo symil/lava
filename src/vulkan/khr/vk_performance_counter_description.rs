@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkPerformanceCounterDescriptionFlags,RawVkPerformanceCounterDescriptionFlags};
 
-/// Wrapper for [VkPerformanceCounterDescriptionKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterDescriptionKHR.html).
+/// Wrapper for [VkPerformanceCounterDescriptionKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPerformanceCounterDescriptionKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPerformanceCounterDescription {
     pub flags: VkPerformanceCounterDescriptionFlags,

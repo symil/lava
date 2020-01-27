@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImage,RawVkImage};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
-/// Wrapper for [VkDedicatedAllocationMemoryAllocateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDedicatedAllocationMemoryAllocateInfoNV.html).
+/// Wrapper for [VkDedicatedAllocationMemoryAllocateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDedicatedAllocationMemoryAllocateInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkDedicatedAllocationMemoryAllocateInfo {
     pub image: Option<VkImage>,

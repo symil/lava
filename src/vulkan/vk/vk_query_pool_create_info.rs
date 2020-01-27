@@ -16,7 +16,7 @@ use vulkan::vk::{VkQueryPoolCreateFlags,RawVkQueryPoolCreateFlags};
 use vulkan::vk::{VkQueryType,RawVkQueryType};
 use vulkan::vk::{VkQueryPipelineStatisticFlags,RawVkQueryPipelineStatisticFlags};
 
-/// Wrapper for [VkQueryPoolCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPoolCreateInfo.html).
+/// Wrapper for [VkQueryPoolCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkQueryPoolCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkQueryPoolCreateInfo {
     pub flags: VkQueryPoolCreateFlags,

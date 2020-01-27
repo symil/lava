@@ -18,7 +18,7 @@ use vulkan::vk::{VkDescriptorImageInfo,RawVkDescriptorImageInfo};
 use vulkan::vk::{VkDescriptorBufferInfo,RawVkDescriptorBufferInfo};
 use vulkan::vk::{VkBufferView,RawVkBufferView};
 
-/// Wrapper for [VkWriteDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkWriteDescriptorSet.html).
+/// Wrapper for [VkWriteDescriptorSet](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkWriteDescriptorSet.html).
 #[derive(Debug, Clone)]
 pub struct VkWriteDescriptorSet {
     pub dst_set: VkDescriptorSet,

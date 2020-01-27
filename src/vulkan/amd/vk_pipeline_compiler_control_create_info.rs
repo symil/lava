@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::amd::{VkPipelineCompilerControlFlags,RawVkPipelineCompilerControlFlags};
 
-/// Wrapper for [VkPipelineCompilerControlCreateInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCompilerControlCreateInfoAMD.html).
+/// Wrapper for [VkPipelineCompilerControlCreateInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineCompilerControlCreateInfoAMD.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineCompilerControlCreateInfo {
     pub compiler_control_flags: VkPipelineCompilerControlFlags,

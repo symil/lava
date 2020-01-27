@@ -18,7 +18,7 @@ use vulkan::vk::{VkShaderFloatControlsIndependence,RawVkShaderFloatControlsIndep
 use vulkan::vk::{VkResolveModeFlags,RawVkResolveModeFlags};
 use vulkan::vk::{VkSampleCountFlags,RawVkSampleCountFlags};
 
-/// Wrapper for [VkPhysicalDeviceVulkan12Properties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkan12Properties.html).
+/// Wrapper for [VkPhysicalDeviceVulkan12Properties](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceVulkan12Properties.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceVulkan12Properties {
     pub driver_id: VkDriverId,

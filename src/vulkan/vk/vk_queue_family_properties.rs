@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkQueueFlags,RawVkQueueFlags};
 use vulkan::vk::{VkExtent3D,RawVkExtent3D};
 
-/// Wrapper for [VkQueueFamilyProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFamilyProperties.html).
+/// Wrapper for [VkQueueFamilyProperties](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkQueueFamilyProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkQueueFamilyProperties {
     pub queue_flags: VkQueueFlags,

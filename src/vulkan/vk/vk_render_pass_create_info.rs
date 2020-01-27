@@ -17,7 +17,7 @@ use vulkan::vk::{VkAttachmentDescription,RawVkAttachmentDescription};
 use vulkan::vk::{VkSubpassDescription,RawVkSubpassDescription};
 use vulkan::vk::{VkSubpassDependency,RawVkSubpassDependency};
 
-/// Wrapper for [VkRenderPassCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateInfo.html).
+/// Wrapper for [VkRenderPassCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkRenderPassCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkRenderPassCreateInfo {
     pub flags: VkRenderPassCreateFlags,

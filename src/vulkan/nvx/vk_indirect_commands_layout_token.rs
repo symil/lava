@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::nvx::{VkIndirectCommandsTokenType,RawVkIndirectCommandsTokenType};
 
-/// Wrapper for [VkIndirectCommandsLayoutTokenNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutTokenNVX.html).
+/// Wrapper for [VkIndirectCommandsLayoutTokenNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkIndirectCommandsLayoutTokenNVX.html).
 #[derive(Debug, Clone)]
 pub struct VkIndirectCommandsLayoutToken {
     pub token_type: VkIndirectCommandsTokenType,

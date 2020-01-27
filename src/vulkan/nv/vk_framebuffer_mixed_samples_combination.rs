@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkCoverageReductionMode,RawVkCoverageReductionMode};
 use vulkan::vk::{VkSampleCountFlags,RawVkSampleCountFlags};
 
-/// Wrapper for [VkFramebufferMixedSamplesCombinationNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferMixedSamplesCombinationNV.html).
+/// Wrapper for [VkFramebufferMixedSamplesCombinationNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkFramebufferMixedSamplesCombinationNV.html).
 #[derive(Debug, Clone)]
 pub struct VkFramebufferMixedSamplesCombination {
     pub coverage_reduction_mode: VkCoverageReductionMode,

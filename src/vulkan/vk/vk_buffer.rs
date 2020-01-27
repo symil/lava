@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkBuffer = u64;
 
-/// Wrapper for [VkBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuffer.html).
+/// Wrapper for [VkBuffer](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkBuffer.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkBuffer {
     _handle: RawVkBuffer,
@@ -81,7 +81,7 @@ impl VkBuffer {
         }
     }
     
-    /// Wrapper for [vkBindBufferMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindBufferMemory.html).
+    /// Wrapper for [vkBindBufferMemory](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkBindBufferMemory.html).
     pub fn bind_memory(&self, memory: VkDeviceMemory, memory_offset: usize) -> LavaResult<()> {
         unsafe {
             let raw_memory = vk_to_raw_value(&memory);
@@ -91,7 +91,7 @@ impl VkBuffer {
         }
     }
     
-    /// Wrapper for [vkGetBufferMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferMemoryRequirements.html).
+    /// Wrapper for [vkGetBufferMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetBufferMemoryRequirements.html).
     pub fn get_memory_requirements(&self) -> VkMemoryRequirements {
         unsafe {
             let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements;
@@ -105,7 +105,7 @@ impl VkBuffer {
         }
     }
     
-    /// Wrapper for [vkDestroyBuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyBuffer.html).
+    /// Wrapper for [vkDestroyBuffer](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyBuffer.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyBuffer)((*self._fn_table).device, self._handle, ptr::null());

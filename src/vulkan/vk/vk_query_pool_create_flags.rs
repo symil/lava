@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkQueryPoolCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPoolCreateFlags.html).
+/// Wrapper for [VkQueryPoolCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkQueryPoolCreateFlags.html).
 ///
 /// Use the macro `VkQueryPoolCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkToolPurposeFlags,RawVkToolPurposeFlags};
 
-/// Wrapper for [VkPhysicalDeviceToolPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceToolPropertiesEXT.html).
+/// Wrapper for [VkPhysicalDeviceToolPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceToolPropertiesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceToolProperties {
     pub name: String,

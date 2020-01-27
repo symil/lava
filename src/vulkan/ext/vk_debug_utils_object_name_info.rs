@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkObjectType,RawVkObjectType};
 
-/// Wrapper for [VkDebugUtilsObjectNameInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsObjectNameInfoEXT.html).
+/// Wrapper for [VkDebugUtilsObjectNameInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDebugUtilsObjectNameInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkDebugUtilsObjectNameInfo<'a> {
     pub object_type: VkObjectType,

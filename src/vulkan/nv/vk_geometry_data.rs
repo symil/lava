@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::nv::{VkGeometryTriangles,RawVkGeometryTriangles};
 use vulkan::nv::{VkGeometryAABB,RawVkGeometryAABB};
 
-/// Wrapper for [VkGeometryDataNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryDataNV.html).
+/// Wrapper for [VkGeometryDataNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkGeometryDataNV.html).
 #[derive(Debug, Clone)]
 pub struct VkGeometryData {
     pub triangles: VkGeometryTriangles,

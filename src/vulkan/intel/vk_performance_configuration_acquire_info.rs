@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::intel::{VkPerformanceConfigurationType,RawVkPerformanceConfigurationType};
 
-/// Wrapper for [VkPerformanceConfigurationAcquireInfoINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceConfigurationAcquireInfoINTEL.html).
+/// Wrapper for [VkPerformanceConfigurationAcquireInfoINTEL](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPerformanceConfigurationAcquireInfoINTEL.html).
 #[derive(Debug, Clone)]
 pub struct VkPerformanceConfigurationAcquireInfo {
     pub type_: VkPerformanceConfigurationType,

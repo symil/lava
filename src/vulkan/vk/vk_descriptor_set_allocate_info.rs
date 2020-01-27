@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDescriptorPool,RawVkDescriptorPool};
 use vulkan::vk::{VkDescriptorSetLayout,RawVkDescriptorSetLayout};
 
-/// Wrapper for [VkDescriptorSetAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetAllocateInfo.html).
+/// Wrapper for [VkDescriptorSetAllocateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDescriptorSetAllocateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetAllocateInfo {
     pub descriptor_pool: VkDescriptorPool,

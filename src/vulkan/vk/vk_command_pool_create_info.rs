@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkCommandPoolCreateFlags,RawVkCommandPoolCreateFlags};
 
-/// Wrapper for [VkCommandPoolCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPoolCreateInfo.html).
+/// Wrapper for [VkCommandPoolCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkCommandPoolCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkCommandPoolCreateInfo {
     pub flags: VkCommandPoolCreateFlags,

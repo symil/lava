@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceSubgroupSizeControlFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSubgroupSizeControlFeaturesEXT.html).
+/// Wrapper for [VkPhysicalDeviceSubgroupSizeControlFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceSubgroupSizeControlFeaturesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSubgroupSizeControlFeatures {
     pub subgroup_size_control: bool,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 
-/// Wrapper for [VkPhysicalDeviceCooperativeMatrixPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceCooperativeMatrixPropertiesNV.html).
+/// Wrapper for [VkPhysicalDeviceCooperativeMatrixPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceCooperativeMatrixPropertiesNV.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceCooperativeMatrixProperties {
     pub cooperative_matrix_supported_stages: VkShaderStageFlags,

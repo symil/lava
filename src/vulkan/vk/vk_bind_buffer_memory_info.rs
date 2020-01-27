@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 
-/// Wrapper for [VkBindBufferMemoryInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindBufferMemoryInfo.html).
+/// Wrapper for [VkBindBufferMemoryInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkBindBufferMemoryInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkBindBufferMemoryInfo {
     pub buffer: VkBuffer,

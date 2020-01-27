@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT.html).
+/// Wrapper for [VkPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceShaderDemoteToHelperInvocationFeatures {
     pub shader_demote_to_helper_invocation: bool,

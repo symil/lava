@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkDescriptorUpdateTemplate = u64;
 
-/// Wrapper for [VkDescriptorUpdateTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorUpdateTemplate.html).
+/// Wrapper for [VkDescriptorUpdateTemplate](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDescriptorUpdateTemplate.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorUpdateTemplate {
     _handle: RawVkDescriptorUpdateTemplate,
@@ -81,7 +81,7 @@ impl VkDescriptorUpdateTemplate {
         }
     }
     
-    /// Wrapper for [vkDestroyDescriptorUpdateTemplate](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDescriptorUpdateTemplate.html).
+    /// Wrapper for [vkDestroyDescriptorUpdateTemplate](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyDescriptorUpdateTemplate.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyDescriptorUpdateTemplate)((*self._fn_table).device, self._handle, ptr::null());

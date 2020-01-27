@@ -16,7 +16,7 @@ use vulkan::vk::{VkPhysicalDeviceType,RawVkPhysicalDeviceType};
 use vulkan::vk::{VkPhysicalDeviceLimits,RawVkPhysicalDeviceLimits};
 use vulkan::vk::{VkPhysicalDeviceSparseProperties,RawVkPhysicalDeviceSparseProperties};
 
-/// Wrapper for [VkPhysicalDeviceProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceProperties.html).
+/// Wrapper for [VkPhysicalDeviceProperties](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceProperties {
     pub api_version: VkVersion,

@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkImageAspectFlags,RawVkImageAspectFlags};
 
-/// Wrapper for [VkImageSubresourceLayers](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSubresourceLayers.html).
+/// Wrapper for [VkImageSubresourceLayers](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImageSubresourceLayers.html).
 #[derive(Debug, Clone)]
 pub struct VkImageSubresourceLayers {
     pub aspect_mask: VkImageAspectFlags,

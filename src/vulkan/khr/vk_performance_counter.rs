@@ -16,7 +16,7 @@ use vulkan::khr::{VkPerformanceCounterUnit,RawVkPerformanceCounterUnit};
 use vulkan::khr::{VkPerformanceCounterScope,RawVkPerformanceCounterScope};
 use vulkan::khr::{VkPerformanceCounterStorage,RawVkPerformanceCounterStorage};
 
-/// Wrapper for [VkPerformanceCounterKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterKHR.html).
+/// Wrapper for [VkPerformanceCounterKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPerformanceCounterKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPerformanceCounter {
     pub unit: VkPerformanceCounterUnit,

@@ -1,6 +1,6 @@
 {
   "name": "lava",
-  "version": "0.1.0",
+  "version": "0.4.7",
   "description": "",
   "main": "generate.js",
   "dependencies": {

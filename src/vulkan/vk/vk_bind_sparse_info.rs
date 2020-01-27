@@ -17,7 +17,7 @@ use vulkan::vk::{VkSparseBufferMemoryBindInfo,RawVkSparseBufferMemoryBindInfo};
 use vulkan::vk::{VkSparseImageOpaqueMemoryBindInfo,RawVkSparseImageOpaqueMemoryBindInfo};
 use vulkan::vk::{VkSparseImageMemoryBindInfo,RawVkSparseImageMemoryBindInfo};
 
-/// Wrapper for [VkBindSparseInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindSparseInfo.html).
+/// Wrapper for [VkBindSparseInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkBindSparseInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkBindSparseInfo {
     pub wait_semaphores: Vec<VkSemaphore>,

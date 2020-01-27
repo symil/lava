@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkSampler = u64;
 
-/// Wrapper for [VkSampler](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSampler.html).
+/// Wrapper for [VkSampler](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSampler.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkSampler {
     _handle: RawVkSampler,
@@ -81,7 +81,7 @@ impl VkSampler {
         }
     }
     
-    /// Wrapper for [vkDestroySampler](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySampler.html).
+    /// Wrapper for [vkDestroySampler](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroySampler.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroySampler)((*self._fn_table).device, self._handle, ptr::null());

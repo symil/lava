@@ -15,7 +15,7 @@ use vulkan::vk::{VkImageSubresourceLayers,RawVkImageSubresourceLayers};
 use vulkan::vk::{VkOffset3D,RawVkOffset3D};
 use vulkan::vk::{VkExtent3D,RawVkExtent3D};
 
-/// Wrapper for [VkBufferImageCopy](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferImageCopy.html).
+/// Wrapper for [VkBufferImageCopy](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkBufferImageCopy.html).
 #[derive(Debug, Clone)]
 pub struct VkBufferImageCopy {
     pub buffer_offset: usize,

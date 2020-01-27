@@ -24,7 +24,7 @@ use vulkan::khr::{VkCompositeAlphaFlags,RawVkCompositeAlphaFlags};
 use vulkan::khr::{VkPresentMode,RawVkPresentMode};
 use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 
-/// Wrapper for [VkSwapchainCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainCreateInfoKHR.html).
+/// Wrapper for [VkSwapchainCreateInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSwapchainCreateInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkSwapchainCreateInfo {
     pub flags: VkSwapchainCreateFlags,

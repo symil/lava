@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDescriptorBindingFlags,RawVkDescriptorBindingFlags};
 
-/// Wrapper for [VkDescriptorSetLayoutBindingFlagsCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBindingFlagsCreateInfo.html).
+/// Wrapper for [VkDescriptorSetLayoutBindingFlagsCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDescriptorSetLayoutBindingFlagsCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkDescriptorSetLayoutBindingFlagsCreateInfo {
     pub binding_flags: Option<Vec<VkDescriptorBindingFlags>>,

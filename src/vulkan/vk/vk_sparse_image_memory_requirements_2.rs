@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSparseImageMemoryRequirements,RawVkSparseImageMemoryRequirements};
 
-/// Wrapper for [VkSparseImageMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryRequirements2.html).
+/// Wrapper for [VkSparseImageMemoryRequirements2](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSparseImageMemoryRequirements2.html).
 #[derive(Debug, Clone)]
 pub struct VkSparseImageMemoryRequirements2 {
     pub memory_requirements: VkSparseImageMemoryRequirements,

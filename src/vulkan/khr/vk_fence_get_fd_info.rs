@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkFence,RawVkFence};
 use vulkan::vk::{VkExternalFenceHandleTypeFlags,RawVkExternalFenceHandleTypeFlags};
 
-/// Wrapper for [VkFenceGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFenceGetFdInfoKHR.html).
+/// Wrapper for [VkFenceGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkFenceGetFdInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkFenceGetFdInfo {
     pub fence: VkFence,

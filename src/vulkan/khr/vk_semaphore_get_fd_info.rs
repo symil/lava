@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSemaphore,RawVkSemaphore};
 use vulkan::vk::{VkExternalSemaphoreHandleTypeFlags,RawVkExternalSemaphoreHandleTypeFlags};
 
-/// Wrapper for [VkSemaphoreGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreGetFdInfoKHR.html).
+/// Wrapper for [VkSemaphoreGetFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSemaphoreGetFdInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkSemaphoreGetFdInfo {
     pub semaphore: VkSemaphore,

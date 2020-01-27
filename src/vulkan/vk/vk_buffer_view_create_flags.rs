@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkBufferViewCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferViewCreateFlags.html).
+/// Wrapper for [VkBufferViewCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkBufferViewCreateFlags.html).
 ///
 /// Use the macro `VkBufferViewCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

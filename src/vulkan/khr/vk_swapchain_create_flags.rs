@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkSwapchainCreateFlagsKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainCreateFlagsKHR.html).
+/// Wrapper for [VkSwapchainCreateFlagsKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSwapchainCreateFlagsKHR.html).
 ///
 /// Use the macro `VkSwapchainCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

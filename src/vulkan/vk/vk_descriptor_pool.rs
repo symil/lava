@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkDescriptorPool = u64;
 
-/// Wrapper for [VkDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPool.html).
+/// Wrapper for [VkDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDescriptorPool.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkDescriptorPool {
     _handle: RawVkDescriptorPool,
@@ -81,14 +81,14 @@ impl VkDescriptorPool {
         }
     }
     
-    /// Wrapper for [vkDestroyDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDescriptorPool.html).
+    /// Wrapper for [vkDestroyDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyDescriptorPool.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyDescriptorPool)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkResetDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetDescriptorPool.html).
+    /// Wrapper for [vkResetDescriptorPool](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkResetDescriptorPool.html).
     pub fn reset(&self, flags: VkDescriptorPoolResetFlags) -> LavaResult<()> {
         unsafe {
             let raw_flags = vk_to_raw_value(&flags);
@@ -97,7 +97,7 @@ impl VkDescriptorPool {
         }
     }
     
-    /// Wrapper for [vkFreeDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeDescriptorSets.html).
+    /// Wrapper for [vkFreeDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkFreeDescriptorSets.html).
     pub fn free_descriptor_sets(&self, descriptor_sets: Vec<VkDescriptorSet>) -> LavaResult<()> {
         unsafe {
             let raw_descriptor_set_count = descriptor_sets.len() as u32;

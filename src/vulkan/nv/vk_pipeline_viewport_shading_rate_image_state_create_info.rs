@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkShadingRatePalette,RawVkShadingRatePalette};
 
-/// Wrapper for [VkPipelineViewportShadingRateImageStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportShadingRateImageStateCreateInfoNV.html).
+/// Wrapper for [VkPipelineViewportShadingRateImageStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineViewportShadingRateImageStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineViewportShadingRateImageStateCreateInfo {
     pub shading_rate_image_enable: bool,

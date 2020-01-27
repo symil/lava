@@ -27,7 +27,7 @@ use vulkan::vk::{VkPipelineLayout,RawVkPipelineLayout};
 use vulkan::vk::{VkRenderPass,RawVkRenderPass};
 use vulkan::vk::{VkPipeline,RawVkPipeline};
 
-/// Wrapper for [VkGraphicsPipelineCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGraphicsPipelineCreateInfo.html).
+/// Wrapper for [VkGraphicsPipelineCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkGraphicsPipelineCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkGraphicsPipelineCreateInfo<'a, 'b> {
     pub flags: VkPipelineCreateFlags,

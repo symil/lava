@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceCoherentMemoryFeaturesAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceCoherentMemoryFeaturesAMD.html).
+/// Wrapper for [VkPhysicalDeviceCoherentMemoryFeaturesAMD](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceCoherentMemoryFeaturesAMD.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceCoherentMemoryFeatures {
     pub device_coherent_memory: bool,

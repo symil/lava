@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkDebugReportObjectType,RawVkDebugReportObjectType};
 
-/// Wrapper for [VkDebugMarkerObjectNameInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugMarkerObjectNameInfoEXT.html).
+/// Wrapper for [VkDebugMarkerObjectNameInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDebugMarkerObjectNameInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkDebugMarkerObjectNameInfo<'a> {
     pub object_type: VkDebugReportObjectType,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkShaderFloatControlsIndependence,RawVkShaderFloatControlsIndependence};
 
-/// Wrapper for [VkPhysicalDeviceFloatControlsProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFloatControlsProperties.html).
+/// Wrapper for [VkPhysicalDeviceFloatControlsProperties](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceFloatControlsProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceFloatControlsProperties {
     pub denorm_behavior_independence: VkShaderFloatControlsIndependence,

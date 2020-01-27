@@ -15,7 +15,7 @@ use vulkan::vk::{VkBlendFactor,RawVkBlendFactor};
 use vulkan::vk::{VkBlendOp,RawVkBlendOp};
 use vulkan::vk::{VkColorComponentFlags,RawVkColorComponentFlags};
 
-/// Wrapper for [VkPipelineColorBlendAttachmentState](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineColorBlendAttachmentState.html).
+/// Wrapper for [VkPipelineColorBlendAttachmentState](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineColorBlendAttachmentState.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineColorBlendAttachmentState {
     pub blend_enable: bool,

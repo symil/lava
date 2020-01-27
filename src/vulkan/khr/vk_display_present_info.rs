@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkRect2D,RawVkRect2D};
 
-/// Wrapper for [VkDisplayPresentInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPresentInfoKHR.html).
+/// Wrapper for [VkDisplayPresentInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDisplayPresentInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkDisplayPresentInfo {
     pub src_rect: VkRect2D,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkRect2D,RawVkRect2D};
 
-/// Wrapper for [VkBindImageMemoryDeviceGroupInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindImageMemoryDeviceGroupInfo.html).
+/// Wrapper for [VkBindImageMemoryDeviceGroupInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkBindImageMemoryDeviceGroupInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkBindImageMemoryDeviceGroupInfo {
     pub device_indices: Vec<usize>,

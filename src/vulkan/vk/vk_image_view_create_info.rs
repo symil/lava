@@ -19,7 +19,7 @@ use vulkan::vk::{VkFormat,RawVkFormat};
 use vulkan::vk::{VkComponentMapping,RawVkComponentMapping};
 use vulkan::vk::{VkImageSubresourceRange,RawVkImageSubresourceRange};
 
-/// Wrapper for [VkImageViewCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewCreateInfo.html).
+/// Wrapper for [VkImageViewCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImageViewCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkImageViewCreateInfo {
     pub flags: VkImageViewCreateFlags,

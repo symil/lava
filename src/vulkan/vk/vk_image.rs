@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkImage = u64;
 
-/// Wrapper for [VkImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImage.html).
+/// Wrapper for [VkImage](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImage.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkImage {
     _handle: RawVkImage,
@@ -81,7 +81,7 @@ impl VkImage {
         }
     }
     
-    /// Wrapper for [vkBindImageMemory](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBindImageMemory.html).
+    /// Wrapper for [vkBindImageMemory](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkBindImageMemory.html).
     pub fn bind_memory(&self, memory: VkDeviceMemory, memory_offset: usize) -> LavaResult<()> {
         unsafe {
             let raw_memory = vk_to_raw_value(&memory);
@@ -91,7 +91,7 @@ impl VkImage {
         }
     }
     
-    /// Wrapper for [vkGetImageMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageMemoryRequirements.html).
+    /// Wrapper for [vkGetImageMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetImageMemoryRequirements.html).
     pub fn get_memory_requirements(&self) -> VkMemoryRequirements {
         unsafe {
             let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements;
@@ -105,7 +105,7 @@ impl VkImage {
         }
     }
     
-    /// Wrapper for [vkGetImageSparseMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageSparseMemoryRequirements.html).
+    /// Wrapper for [vkGetImageSparseMemoryRequirements](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetImageSparseMemoryRequirements.html).
     pub fn get_sparse_memory_requirements(&self) -> Vec<VkSparseImageMemoryRequirements> {
         unsafe {
             let mut raw_sparse_memory_requirements : *mut RawVkSparseImageMemoryRequirements = ptr::null_mut();
@@ -122,14 +122,14 @@ impl VkImage {
         }
     }
     
-    /// Wrapper for [vkDestroyImage](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyImage.html).
+    /// Wrapper for [vkDestroyImage](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyImage.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyImage)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetImageSubresourceLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageSubresourceLayout.html).
+    /// Wrapper for [vkGetImageSubresourceLayout](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetImageSubresourceLayout.html).
     pub fn get_subresource_layout(&self, subresource: VkImageSubresource) -> VkSubresourceLayout {
         unsafe {
             let raw_subresource = new_ptr_vk_value(&subresource);
@@ -145,7 +145,7 @@ impl VkImage {
         }
     }
     
-    /// Wrapper for [vkGetImageDrmFormatModifierPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageDrmFormatModifierPropertiesEXT.html).
+    /// Wrapper for [vkGetImageDrmFormatModifierPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetImageDrmFormatModifierPropertiesEXT.html).
     pub fn get_drm_format_modifier_properties(&self) -> LavaResult<ext::VkImageDrmFormatModifierProperties> {
         unsafe {
             let mut vk_result = 0;

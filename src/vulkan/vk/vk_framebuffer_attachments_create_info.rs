@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkFramebufferAttachmentImageInfo,RawVkFramebufferAttachmentImageInfo};
 
-/// Wrapper for [VkFramebufferAttachmentsCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferAttachmentsCreateInfo.html).
+/// Wrapper for [VkFramebufferAttachmentsCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkFramebufferAttachmentsCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkFramebufferAttachmentsCreateInfo {
     pub attachment_image_infos: Vec<VkFramebufferAttachmentImageInfo>,

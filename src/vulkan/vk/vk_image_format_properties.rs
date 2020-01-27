@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkExtent3D,RawVkExtent3D};
 use vulkan::vk::{VkSampleCountFlags,RawVkSampleCountFlags};
 
-/// Wrapper for [VkImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatProperties.html).
+/// Wrapper for [VkImageFormatProperties](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImageFormatProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkImageFormatProperties {
     pub max_extent: VkExtent3D,

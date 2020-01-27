@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkPerformanceConfiguration = u64;
 
-/// Wrapper for [VkPerformanceConfigurationINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceConfigurationINTEL.html).
+/// Wrapper for [VkPerformanceConfigurationINTEL](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPerformanceConfigurationINTEL.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkPerformanceConfiguration {
     _handle: RawVkPerformanceConfiguration,

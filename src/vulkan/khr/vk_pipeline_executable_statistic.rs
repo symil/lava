@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkPipelineExecutableStatisticFormat,RawVkPipelineExecutableStatisticFormat};
 use vulkan::khr::{VkPipelineExecutableStatisticValue,RawVkPipelineExecutableStatisticValue};
 
-/// Wrapper for [VkPipelineExecutableStatisticKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineExecutableStatisticKHR.html).
+/// Wrapper for [VkPipelineExecutableStatisticKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineExecutableStatisticKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineExecutableStatistic {
     pub name: String,

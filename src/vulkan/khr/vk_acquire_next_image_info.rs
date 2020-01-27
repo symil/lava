@@ -16,7 +16,7 @@ use vulkan::khr::{VkSwapchain,RawVkSwapchain};
 use vulkan::vk::{VkSemaphore,RawVkSemaphore};
 use vulkan::vk::{VkFence,RawVkFence};
 
-/// Wrapper for [VkAcquireNextImageInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAcquireNextImageInfoKHR.html).
+/// Wrapper for [VkAcquireNextImageInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAcquireNextImageInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkAcquireNextImageInfo {
     pub swapchain: VkSwapchain,

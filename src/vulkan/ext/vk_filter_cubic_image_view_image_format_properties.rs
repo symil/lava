@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkFilterCubicImageViewImageFormatPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFilterCubicImageViewImageFormatPropertiesEXT.html).
+/// Wrapper for [VkFilterCubicImageViewImageFormatPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkFilterCubicImageViewImageFormatPropertiesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkFilterCubicImageViewImageFormatProperties {
     pub filter_cubic: bool,

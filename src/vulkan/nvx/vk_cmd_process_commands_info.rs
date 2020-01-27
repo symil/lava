@@ -18,7 +18,7 @@ use vulkan::nvx::{VkIndirectCommandsToken,RawVkIndirectCommandsToken};
 use vulkan::vk::{VkCommandBuffer,RawVkCommandBuffer};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
-/// Wrapper for [VkCmdProcessCommandsInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCmdProcessCommandsInfoNVX.html).
+/// Wrapper for [VkCmdProcessCommandsInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkCmdProcessCommandsInfoNVX.html).
 #[derive(Debug, Clone)]
 pub struct VkCmdProcessCommandsInfo {
     pub object_table: VkObjectTable,

@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPipelineShaderStageRequiredSubgroupSizeCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineShaderStageRequiredSubgroupSizeCreateInfoEXT.html).
+/// Wrapper for [VkPipelineShaderStageRequiredSubgroupSizeCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineShaderStageRequiredSubgroupSizeCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineShaderStageRequiredSubgroupSizeCreateInfo {
     pub required_subgroup_size: usize,

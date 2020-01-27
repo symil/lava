@@ -17,7 +17,7 @@ use vulkan::vk::{VkFramebuffer,RawVkFramebuffer};
 use vulkan::vk::{VkQueryControlFlags,RawVkQueryControlFlags};
 use vulkan::vk::{VkQueryPipelineStatisticFlags,RawVkQueryPipelineStatisticFlags};
 
-/// Wrapper for [VkCommandBufferInheritanceInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferInheritanceInfo.html).
+/// Wrapper for [VkCommandBufferInheritanceInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkCommandBufferInheritanceInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkCommandBufferInheritanceInfo {
     pub render_pass: Option<VkRenderPass>,

@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkPerformanceCounterUnitKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterUnitKHR.html).
+/// Wrapper for [VkPerformanceCounterUnitKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPerformanceCounterUnitKHR.html).
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkPerformanceCounterUnit {

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkQueueFamilyProperties,RawVkQueueFamilyProperties};
 
-/// Wrapper for [VkQueueFamilyProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFamilyProperties2.html).
+/// Wrapper for [VkQueueFamilyProperties2](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkQueueFamilyProperties2.html).
 #[derive(Debug, Clone)]
 pub struct VkQueueFamilyProperties2 {
     pub queue_family_properties: VkQueueFamilyProperties,

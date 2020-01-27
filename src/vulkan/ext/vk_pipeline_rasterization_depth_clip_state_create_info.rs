@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkPipelineRasterizationDepthClipStateCreateFlags,RawVkPipelineRasterizationDepthClipStateCreateFlags};
 
-/// Wrapper for [VkPipelineRasterizationDepthClipStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationDepthClipStateCreateInfoEXT.html).
+/// Wrapper for [VkPipelineRasterizationDepthClipStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineRasterizationDepthClipStateCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineRasterizationDepthClipStateCreateInfo {
     pub flags: VkPipelineRasterizationDepthClipStateCreateFlags,

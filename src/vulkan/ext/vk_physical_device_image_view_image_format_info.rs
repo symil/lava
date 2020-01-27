@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImageViewType,RawVkImageViewType};
 
-/// Wrapper for [VkPhysicalDeviceImageViewImageFormatInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceImageViewImageFormatInfoEXT.html).
+/// Wrapper for [VkPhysicalDeviceImageViewImageFormatInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceImageViewImageFormatInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceImageViewImageFormatInfo {
     pub image_view_type: VkImageViewType,

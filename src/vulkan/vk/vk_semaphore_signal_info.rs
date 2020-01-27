@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSemaphore,RawVkSemaphore};
 
-/// Wrapper for [VkSemaphoreSignalInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreSignalInfo.html).
+/// Wrapper for [VkSemaphoreSignalInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSemaphoreSignalInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkSemaphoreSignalInfo {
     pub semaphore: VkSemaphore,

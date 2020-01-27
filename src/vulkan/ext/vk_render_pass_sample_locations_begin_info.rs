@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkAttachmentSampleLocations,RawVkAttachmentSampleLocations};
 use vulkan::ext::{VkSubpassSampleLocations,RawVkSubpassSampleLocations};
 
-/// Wrapper for [VkRenderPassSampleLocationsBeginInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassSampleLocationsBeginInfoEXT.html).
+/// Wrapper for [VkRenderPassSampleLocationsBeginInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkRenderPassSampleLocationsBeginInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkRenderPassSampleLocationsBeginInfo {
     pub attachment_initial_sample_locations: Vec<VkAttachmentSampleLocations>,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkQueueGlobalPriority,RawVkQueueGlobalPriority};
 
-/// Wrapper for [VkDeviceQueueGlobalPriorityCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceQueueGlobalPriorityCreateInfoEXT.html).
+/// Wrapper for [VkDeviceQueueGlobalPriorityCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDeviceQueueGlobalPriorityCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkDeviceQueueGlobalPriorityCreateInfo {
     pub global_priority: VkQueueGlobalPriority,

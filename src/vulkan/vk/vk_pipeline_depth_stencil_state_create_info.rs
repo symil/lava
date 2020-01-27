@@ -16,7 +16,7 @@ use vulkan::vk::{VkPipelineDepthStencilStateCreateFlags,RawVkPipelineDepthStenci
 use vulkan::vk::{VkCompareOp,RawVkCompareOp};
 use vulkan::vk::{VkStencilOpState,RawVkStencilOpState};
 
-/// Wrapper for [VkPipelineDepthStencilStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineDepthStencilStateCreateInfo.html).
+/// Wrapper for [VkPipelineDepthStencilStateCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineDepthStencilStateCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineDepthStencilStateCreateInfo {
     pub flags: VkPipelineDepthStencilStateCreateFlags,

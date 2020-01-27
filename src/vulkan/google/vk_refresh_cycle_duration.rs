@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkRefreshCycleDurationGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRefreshCycleDurationGOOGLE.html).
+/// Wrapper for [VkRefreshCycleDurationGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkRefreshCycleDurationGOOGLE.html).
 #[derive(Debug, Clone)]
 pub struct VkRefreshCycleDuration {
     pub refresh_duration: usize,

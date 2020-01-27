@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkOffset3D](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkOffset3D.html).
+/// Wrapper for [VkOffset3D](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkOffset3D.html).
 #[derive(Debug, Clone)]
 pub struct VkOffset3D {
     pub x: isize,

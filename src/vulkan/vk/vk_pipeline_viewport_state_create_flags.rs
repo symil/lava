@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkPipelineViewportStateCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportStateCreateFlags.html).
+/// Wrapper for [VkPipelineViewportStateCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineViewportStateCreateFlags.html).
 ///
 /// Use the macro `VkPipelineViewportStateCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

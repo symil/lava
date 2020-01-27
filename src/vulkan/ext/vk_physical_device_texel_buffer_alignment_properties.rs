@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT.html).
+/// Wrapper for [VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceTexelBufferAlignmentProperties {
     pub storage_texel_buffer_offset_alignment_bytes: usize,

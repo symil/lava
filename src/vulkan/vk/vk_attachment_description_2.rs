@@ -19,7 +19,7 @@ use vulkan::vk::{VkAttachmentLoadOp,RawVkAttachmentLoadOp};
 use vulkan::vk::{VkAttachmentStoreOp,RawVkAttachmentStoreOp};
 use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 
-/// Wrapper for [VkAttachmentDescription2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentDescription2.html).
+/// Wrapper for [VkAttachmentDescription2](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAttachmentDescription2.html).
 #[derive(Debug, Clone)]
 pub struct VkAttachmentDescription2 {
     pub flags: VkAttachmentDescriptionFlags,

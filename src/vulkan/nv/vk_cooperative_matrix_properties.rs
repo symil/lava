@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkComponentType,RawVkComponentType};
 use vulkan::nv::{VkScope,RawVkScope};
 
-/// Wrapper for [VkCooperativeMatrixPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCooperativeMatrixPropertiesNV.html).
+/// Wrapper for [VkCooperativeMatrixPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkCooperativeMatrixPropertiesNV.html).
 #[derive(Debug, Clone)]
 pub struct VkCooperativeMatrixProperties {
     pub msize: usize,

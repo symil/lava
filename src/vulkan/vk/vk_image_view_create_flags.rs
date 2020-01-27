@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkImageViewCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewCreateFlags.html).
+/// Wrapper for [VkImageViewCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImageViewCreateFlags.html).
 ///
 /// Use the macro `VkImageViewCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

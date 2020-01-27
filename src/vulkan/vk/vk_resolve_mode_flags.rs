@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkResolveModeFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResolveModeFlags.html).
+/// Wrapper for [VkResolveModeFlags](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkResolveModeFlags.html).
 ///
 /// Use the macro `VkResolveModeFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

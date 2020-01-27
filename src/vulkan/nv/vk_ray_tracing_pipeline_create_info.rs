@@ -18,7 +18,7 @@ use vulkan::nv::{VkRayTracingShaderGroupCreateInfo,RawVkRayTracingShaderGroupCre
 use vulkan::vk::{VkPipelineLayout,RawVkPipelineLayout};
 use vulkan::vk::{VkPipeline,RawVkPipeline};
 
-/// Wrapper for [VkRayTracingPipelineCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingPipelineCreateInfoNV.html).
+/// Wrapper for [VkRayTracingPipelineCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkRayTracingPipelineCreateInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkRayTracingPipelineCreateInfo<'a, 'b> {
     pub flags: VkPipelineCreateFlags,

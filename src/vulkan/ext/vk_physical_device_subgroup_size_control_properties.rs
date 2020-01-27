@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 
-/// Wrapper for [VkPhysicalDeviceSubgroupSizeControlPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSubgroupSizeControlPropertiesEXT.html).
+/// Wrapper for [VkPhysicalDeviceSubgroupSizeControlPropertiesEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceSubgroupSizeControlPropertiesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceSubgroupSizeControlProperties {
     pub min_subgroup_size: usize,

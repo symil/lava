@@ -16,7 +16,7 @@ use vulkan::vk::{VkImageView,RawVkImageView};
 use vulkan::vk::{VkDescriptorType,RawVkDescriptorType};
 use vulkan::vk::{VkSampler,RawVkSampler};
 
-/// Wrapper for [VkImageViewHandleInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewHandleInfoNVX.html).
+/// Wrapper for [VkImageViewHandleInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImageViewHandleInfoNVX.html).
 #[derive(Debug, Clone)]
 pub struct VkImageViewHandleInfo {
     pub image_view: VkImageView,

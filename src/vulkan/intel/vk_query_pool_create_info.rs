@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::intel::{VkQueryPoolSamplingMode,RawVkQueryPoolSamplingMode};
 
-/// Wrapper for [VkQueryPoolCreateInfoINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPoolCreateInfoINTEL.html).
+/// Wrapper for [VkQueryPoolCreateInfoINTEL](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkQueryPoolCreateInfoINTEL.html).
 #[derive(Debug, Clone)]
 pub struct VkQueryPoolCreateInfo {
     pub performance_counters_sampling: VkQueryPoolSamplingMode,

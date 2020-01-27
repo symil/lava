@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::amd::{VkShaderCorePropertiesFlags,RawVkShaderCorePropertiesFlags};
 
-/// Wrapper for [VkPhysicalDeviceShaderCoreProperties2AMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderCoreProperties2AMD.html).
+/// Wrapper for [VkPhysicalDeviceShaderCoreProperties2AMD](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceShaderCoreProperties2AMD.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceShaderCoreProperties2 {
     pub shader_core_features: VkShaderCorePropertiesFlags,

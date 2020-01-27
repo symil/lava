@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkSemaphore = u64;
 
-/// Wrapper for [VkSemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphore.html).
+/// Wrapper for [VkSemaphore](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSemaphore.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkSemaphore {
     _handle: RawVkSemaphore,
@@ -81,14 +81,14 @@ impl VkSemaphore {
         }
     }
     
-    /// Wrapper for [vkDestroySemaphore](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySemaphore.html).
+    /// Wrapper for [vkDestroySemaphore](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroySemaphore.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroySemaphore)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetSemaphoreCounterValue](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSemaphoreCounterValue.html).
+    /// Wrapper for [vkGetSemaphoreCounterValue](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetSemaphoreCounterValue.html).
     pub fn get_counter_value(&self) -> LavaResult<usize> {
         unsafe {
             let mut vk_result = 0;

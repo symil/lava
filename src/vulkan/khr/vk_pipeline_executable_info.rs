@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkPipeline,RawVkPipeline};
 
-/// Wrapper for [VkPipelineExecutableInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineExecutableInfoKHR.html).
+/// Wrapper for [VkPipelineExecutableInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineExecutableInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineExecutableInfo {
     pub pipeline: VkPipeline,

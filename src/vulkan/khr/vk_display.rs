@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkDisplay = u64;
 
-/// Wrapper for [VkDisplayKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayKHR.html).
+/// Wrapper for [VkDisplayKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDisplayKHR.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkDisplay {
     _handle: RawVkDisplay,

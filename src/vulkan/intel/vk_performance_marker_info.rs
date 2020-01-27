@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPerformanceMarkerInfoINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceMarkerInfoINTEL.html).
+/// Wrapper for [VkPerformanceMarkerInfoINTEL](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPerformanceMarkerInfoINTEL.html).
 #[derive(Debug, Clone)]
 pub struct VkPerformanceMarkerInfo {
     pub marker: usize,

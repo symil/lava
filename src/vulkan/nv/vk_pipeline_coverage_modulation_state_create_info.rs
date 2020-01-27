@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkPipelineCoverageModulationStateCreateFlags,RawVkPipelineCoverageModulationStateCreateFlags};
 use vulkan::nv::{VkCoverageModulationMode,RawVkCoverageModulationMode};
 
-/// Wrapper for [VkPipelineCoverageModulationStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCoverageModulationStateCreateInfoNV.html).
+/// Wrapper for [VkPipelineCoverageModulationStateCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineCoverageModulationStateCreateInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineCoverageModulationStateCreateInfo {
     pub flags: VkPipelineCoverageModulationStateCreateFlags,

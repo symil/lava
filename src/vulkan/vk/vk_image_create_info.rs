@@ -22,7 +22,7 @@ use vulkan::vk::{VkImageUsageFlags,RawVkImageUsageFlags};
 use vulkan::vk::{VkSharingMode,RawVkSharingMode};
 use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 
-/// Wrapper for [VkImageCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageCreateInfo.html).
+/// Wrapper for [VkImageCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImageCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkImageCreateInfo {
     pub flags: VkImageCreateFlags,

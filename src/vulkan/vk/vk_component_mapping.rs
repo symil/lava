@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkComponentSwizzle,RawVkComponentSwizzle};
 
-/// Wrapper for [VkComponentMapping](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkComponentMapping.html).
+/// Wrapper for [VkComponentMapping](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkComponentMapping.html).
 #[derive(Debug, Clone)]
 pub struct VkComponentMapping {
     pub r: VkComponentSwizzle,

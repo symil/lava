@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkVersion};
 
-/// Wrapper for [VkApplicationInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkApplicationInfo.html).
+/// Wrapper for [VkApplicationInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkApplicationInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkApplicationInfo<'a, 'b> {
     pub application_name: Option<&'a str>,

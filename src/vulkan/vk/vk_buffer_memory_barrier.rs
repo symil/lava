@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkAccessFlags,RawVkAccessFlags};
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 
-/// Wrapper for [VkBufferMemoryBarrier](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferMemoryBarrier.html).
+/// Wrapper for [VkBufferMemoryBarrier](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkBufferMemoryBarrier.html).
 #[derive(Debug, Clone)]
 pub struct VkBufferMemoryBarrier {
     pub src_access_mask: VkAccessFlags,

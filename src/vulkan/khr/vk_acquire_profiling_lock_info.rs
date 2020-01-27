@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkAcquireProfilingLockFlags,RawVkAcquireProfilingLockFlags};
 
-/// Wrapper for [VkAcquireProfilingLockInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAcquireProfilingLockInfoKHR.html).
+/// Wrapper for [VkAcquireProfilingLockInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAcquireProfilingLockInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkAcquireProfilingLockInfo {
     pub flags: VkAcquireProfilingLockFlags,

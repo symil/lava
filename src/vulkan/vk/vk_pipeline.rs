@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkPipeline = u64;
 
-/// Wrapper for [VkPipeline](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipeline.html).
+/// Wrapper for [VkPipeline](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipeline.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkPipeline {
     _handle: RawVkPipeline,
@@ -81,14 +81,14 @@ impl VkPipeline {
         }
     }
     
-    /// Wrapper for [vkDestroyPipeline](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyPipeline.html).
+    /// Wrapper for [vkDestroyPipeline](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyPipeline.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyPipeline)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkGetShaderInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetShaderInfoAMD.html).
+    /// Wrapper for [vkGetShaderInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetShaderInfoAMD.html).
     pub fn get_shader_info(&self, shader_stage: VkShaderStageFlags, info_type: amd::VkShaderInfoType) -> LavaResult<Vec<c_void>> {
         unsafe {
             let raw_shader_stage = vk_to_raw_value(&shader_stage);
@@ -106,7 +106,7 @@ impl VkPipeline {
         }
     }
     
-    /// Wrapper for [vkGetRayTracingShaderGroupHandlesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRayTracingShaderGroupHandlesNV.html).
+    /// Wrapper for [vkGetRayTracingShaderGroupHandlesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetRayTracingShaderGroupHandlesNV.html).
     pub fn get_ray_tracing_shader_group_handles(&self, first_group: usize, group_count: usize, data: &[c_void]) -> LavaResult<()> {
         unsafe {
             let raw_first_group = vk_to_raw_value(&first_group);
@@ -118,7 +118,7 @@ impl VkPipeline {
         }
     }
     
-    /// Wrapper for [vkCompileDeferredNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCompileDeferredNV.html).
+    /// Wrapper for [vkCompileDeferredNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCompileDeferredNV.html).
     pub fn compile_deferred(&self, shader: usize) -> LavaResult<()> {
         unsafe {
             let raw_shader = vk_to_raw_value(&shader);

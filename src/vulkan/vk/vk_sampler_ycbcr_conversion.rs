@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkSamplerYcbcrConversion = u64;
 
-/// Wrapper for [VkSamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerYcbcrConversion.html).
+/// Wrapper for [VkSamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSamplerYcbcrConversion.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkSamplerYcbcrConversion {
     _handle: RawVkSamplerYcbcrConversion,
@@ -81,7 +81,7 @@ impl VkSamplerYcbcrConversion {
         }
     }
     
-    /// Wrapper for [vkDestroySamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroySamplerYcbcrConversion.html).
+    /// Wrapper for [vkDestroySamplerYcbcrConversion](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroySamplerYcbcrConversion.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroySamplerYcbcrConversion)((*self._fn_table).device, self._handle, ptr::null());

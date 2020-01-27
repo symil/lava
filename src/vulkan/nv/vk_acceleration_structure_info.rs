@@ -16,7 +16,7 @@ use vulkan::nv::{VkAccelerationStructureType,RawVkAccelerationStructureType};
 use vulkan::nv::{VkBuildAccelerationStructureFlags,RawVkBuildAccelerationStructureFlags};
 use vulkan::nv::{VkGeometry,RawVkGeometry};
 
-/// Wrapper for [VkAccelerationStructureInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureInfoNV.html).
+/// Wrapper for [VkAccelerationStructureInfoNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAccelerationStructureInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkAccelerationStructureInfo {
     pub type_: VkAccelerationStructureType,

@@ -16,7 +16,7 @@ use vulkan::vk::{VkImageCreateFlags,RawVkImageCreateFlags};
 use vulkan::vk::{VkImageUsageFlags,RawVkImageUsageFlags};
 use vulkan::vk::{VkFormat,RawVkFormat};
 
-/// Wrapper for [VkFramebufferAttachmentImageInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferAttachmentImageInfo.html).
+/// Wrapper for [VkFramebufferAttachmentImageInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkFramebufferAttachmentImageInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkFramebufferAttachmentImageInfo {
     pub flags: VkImageCreateFlags,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFlags};
 
-/// Wrapper for [VkExternalMemoryBufferCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExternalMemoryBufferCreateInfo.html).
+/// Wrapper for [VkExternalMemoryBufferCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkExternalMemoryBufferCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkExternalMemoryBufferCreateInfo {
     pub handle_types: VkExternalMemoryHandleTypeFlags,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSparseImageFormatProperties,RawVkSparseImageFormatProperties};
 
-/// Wrapper for [VkSparseImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageFormatProperties2.html).
+/// Wrapper for [VkSparseImageFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSparseImageFormatProperties2.html).
 #[derive(Debug, Clone)]
 pub struct VkSparseImageFormatProperties2 {
     pub properties: VkSparseImageFormatProperties,

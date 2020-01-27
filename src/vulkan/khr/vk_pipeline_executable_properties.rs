@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 
-/// Wrapper for [VkPipelineExecutablePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineExecutablePropertiesKHR.html).
+/// Wrapper for [VkPipelineExecutablePropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineExecutablePropertiesKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineExecutableProperties {
     pub stages: VkShaderStageFlags,

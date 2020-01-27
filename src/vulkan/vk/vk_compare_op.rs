@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkCompareOp](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCompareOp.html).
+/// Wrapper for [VkCompareOp](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkCompareOp.html).
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkCompareOp {

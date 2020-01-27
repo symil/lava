@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExternalMemoryHandleTypeFlags,RawVkExternalMemoryHandleTypeFlags};
 
-/// Wrapper for [VkImportMemoryFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImportMemoryFdInfoKHR.html).
+/// Wrapper for [VkImportMemoryFdInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkImportMemoryFdInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkImportMemoryFdInfo {
     pub handle_type: VkExternalMemoryHandleTypeFlags,

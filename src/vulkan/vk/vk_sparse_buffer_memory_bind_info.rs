@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkBuffer,RawVkBuffer};
 use vulkan::vk::{VkSparseMemoryBind,RawVkSparseMemoryBind};
 
-/// Wrapper for [VkSparseBufferMemoryBindInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseBufferMemoryBindInfo.html).
+/// Wrapper for [VkSparseBufferMemoryBindInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSparseBufferMemoryBindInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkSparseBufferMemoryBindInfo {
     pub buffer: VkBuffer,

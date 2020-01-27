@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkDisplayPlaneCapabilities,RawVkDisplayPlaneCapabilities};
 
-/// Wrapper for [VkDisplayPlaneCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneCapabilities2KHR.html).
+/// Wrapper for [VkDisplayPlaneCapabilities2KHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDisplayPlaneCapabilities2KHR.html).
 #[derive(Debug, Clone)]
 pub struct VkDisplayPlaneCapabilities2 {
     pub capabilities: VkDisplayPlaneCapabilities,

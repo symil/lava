@@ -16,7 +16,7 @@ use vulkan::vk::{VkShaderStageFlags,RawVkShaderStageFlags};
 use vulkan::vk::{VkSubgroupFeatureFlags,RawVkSubgroupFeatureFlags};
 use vulkan::vk::{VkPointClippingBehavior,RawVkPointClippingBehavior};
 
-/// Wrapper for [VkPhysicalDeviceVulkan11Properties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkan11Properties.html).
+/// Wrapper for [VkPhysicalDeviceVulkan11Properties](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceVulkan11Properties.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceVulkan11Properties {
     pub device_uuid: [u8; 16],

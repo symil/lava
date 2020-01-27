@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkPipelineCreationFeedback,RawVkPipelineCreationFeedback};
 
-/// Wrapper for [VkPipelineCreationFeedbackCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCreationFeedbackCreateInfoEXT.html).
+/// Wrapper for [VkPipelineCreationFeedbackCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineCreationFeedbackCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineCreationFeedbackCreateInfo {
     pub pipeline_creation_feedback: VkPipelineCreationFeedback,

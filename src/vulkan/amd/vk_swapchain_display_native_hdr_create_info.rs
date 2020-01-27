@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkSwapchainDisplayNativeHdrCreateInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSwapchainDisplayNativeHdrCreateInfoAMD.html).
+/// Wrapper for [VkSwapchainDisplayNativeHdrCreateInfoAMD](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSwapchainDisplayNativeHdrCreateInfoAMD.html).
 #[derive(Debug, Clone)]
 pub struct VkSwapchainDisplayNativeHdrCreateInfo {
     pub local_dimming_enable: bool,

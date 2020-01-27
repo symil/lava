@@ -17,7 +17,7 @@ use vulkan::vk::{VkPipelineShaderStageCreateInfo,RawVkPipelineShaderStageCreateI
 use vulkan::vk::{VkPipelineLayout,RawVkPipelineLayout};
 use vulkan::vk::{VkPipeline,RawVkPipeline};
 
-/// Wrapper for [VkComputePipelineCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkComputePipelineCreateInfo.html).
+/// Wrapper for [VkComputePipelineCreateInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkComputePipelineCreateInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkComputePipelineCreateInfo<'a, 'b> {
     pub flags: VkPipelineCreateFlags,

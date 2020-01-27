@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkSemaphoreWaitFlags,RawVkSemaphoreWaitFlags};
 use vulkan::vk::{VkSemaphore,RawVkSemaphore};
 
-/// Wrapper for [VkSemaphoreWaitInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreWaitInfo.html).
+/// Wrapper for [VkSemaphoreWaitInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSemaphoreWaitInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkSemaphoreWaitInfo {
     pub flags: VkSemaphoreWaitFlags,

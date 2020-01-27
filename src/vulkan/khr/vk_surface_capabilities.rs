@@ -16,7 +16,7 @@ use vulkan::khr::{VkSurfaceTransformFlags,RawVkSurfaceTransformFlags};
 use vulkan::khr::{VkCompositeAlphaFlags,RawVkCompositeAlphaFlags};
 use vulkan::vk::{VkImageUsageFlags,RawVkImageUsageFlags};
 
-/// Wrapper for [VkSurfaceCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceCapabilitiesKHR.html).
+/// Wrapper for [VkSurfaceCapabilitiesKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSurfaceCapabilitiesKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkSurfaceCapabilities {
     pub min_image_count: usize,

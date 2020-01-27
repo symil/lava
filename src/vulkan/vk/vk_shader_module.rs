@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkShaderModule = u64;
 
-/// Wrapper for [VkShaderModule](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModule.html).
+/// Wrapper for [VkShaderModule](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkShaderModule.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkShaderModule {
     _handle: RawVkShaderModule,
@@ -81,7 +81,7 @@ impl VkShaderModule {
         }
     }
     
-    /// Wrapper for [vkDestroyShaderModule](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyShaderModule.html).
+    /// Wrapper for [vkDestroyShaderModule](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyShaderModule.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyShaderModule)((*self._fn_table).device, self._handle, ptr::null());

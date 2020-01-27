@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceVulkan12Features](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkan12Features.html).
+/// Wrapper for [VkPhysicalDeviceVulkan12Features](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceVulkan12Features.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceVulkan12Features {
     pub sampler_mirror_clamp_to_edge: bool,

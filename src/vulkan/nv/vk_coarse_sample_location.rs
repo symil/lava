@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkCoarseSampleLocationNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCoarseSampleLocationNV.html).
+/// Wrapper for [VkCoarseSampleLocationNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkCoarseSampleLocationNV.html).
 #[derive(Debug, Clone)]
 pub struct VkCoarseSampleLocation {
     pub pixel_x: usize,

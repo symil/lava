@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkPipelineColorBlendStateCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineColorBlendStateCreateFlags.html).
+/// Wrapper for [VkPipelineColorBlendStateCreateFlags](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineColorBlendStateCreateFlags.html).
 ///
 /// Use the macro `VkPipelineColorBlendStateCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

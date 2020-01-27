@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkSemaphoreType](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreType.html).
+/// Wrapper for [VkSemaphoreType](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSemaphoreType.html).
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkSemaphoreType {

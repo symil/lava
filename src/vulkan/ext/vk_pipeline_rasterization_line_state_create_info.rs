@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkLineRasterizationMode,RawVkLineRasterizationMode};
 
-/// Wrapper for [VkPipelineRasterizationLineStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationLineStateCreateInfoEXT.html).
+/// Wrapper for [VkPipelineRasterizationLineStateCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineRasterizationLineStateCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineRasterizationLineStateCreateInfo {
     pub line_rasterization_mode: VkLineRasterizationMode,

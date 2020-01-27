@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImageLayout,RawVkImageLayout};
 
-/// Wrapper for [VkAttachmentReferenceStencilLayout](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentReferenceStencilLayout.html).
+/// Wrapper for [VkAttachmentReferenceStencilLayout](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAttachmentReferenceStencilLayout.html).
 #[derive(Debug, Clone)]
 pub struct VkAttachmentReferenceStencilLayout {
     pub stencil_layout: VkImageLayout,

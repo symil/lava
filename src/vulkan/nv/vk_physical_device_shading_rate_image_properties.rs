@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
-/// Wrapper for [VkPhysicalDeviceShadingRateImagePropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShadingRateImagePropertiesNV.html).
+/// Wrapper for [VkPhysicalDeviceShadingRateImagePropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceShadingRateImagePropertiesNV.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceShadingRateImageProperties {
     pub shading_rate_texel_size: VkExtent2D,

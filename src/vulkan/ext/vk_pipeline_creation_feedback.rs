@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::ext::{VkPipelineCreationFeedbackFlags,RawVkPipelineCreationFeedbackFlags};
 
-/// Wrapper for [VkPipelineCreationFeedbackEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCreationFeedbackEXT.html).
+/// Wrapper for [VkPipelineCreationFeedbackEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineCreationFeedbackEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPipelineCreationFeedback {
     pub flags: VkPipelineCreationFeedbackFlags,

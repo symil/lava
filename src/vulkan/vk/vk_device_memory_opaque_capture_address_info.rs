@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDeviceMemory,RawVkDeviceMemory};
 
-/// Wrapper for [VkDeviceMemoryOpaqueCaptureAddressInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceMemoryOpaqueCaptureAddressInfo.html).
+/// Wrapper for [VkDeviceMemoryOpaqueCaptureAddressInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDeviceMemoryOpaqueCaptureAddressInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkDeviceMemoryOpaqueCaptureAddressInfo {
     pub memory: VkDeviceMemory,

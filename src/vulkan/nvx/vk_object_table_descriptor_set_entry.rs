@@ -16,7 +16,7 @@ use vulkan::nvx::{VkObjectEntryUsageFlags,RawVkObjectEntryUsageFlags};
 use vulkan::vk::{VkPipelineLayout,RawVkPipelineLayout};
 use vulkan::vk::{VkDescriptorSet,RawVkDescriptorSet};
 
-/// Wrapper for [VkObjectTableDescriptorSetEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableDescriptorSetEntryNVX.html).
+/// Wrapper for [VkObjectTableDescriptorSetEntryNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkObjectTableDescriptorSetEntryNVX.html).
 #[derive(Debug, Clone)]
 pub struct VkObjectTableDescriptorSetEntry {
     pub type_: VkObjectEntryType,

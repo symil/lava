@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkHeadlessSurfaceCreateFlags,RawVkHeadlessSurfaceCreateFlags};
 
-/// Wrapper for [VkHeadlessSurfaceCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkHeadlessSurfaceCreateInfoEXT.html).
+/// Wrapper for [VkHeadlessSurfaceCreateInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkHeadlessSurfaceCreateInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkHeadlessSurfaceCreateInfo {
     pub flags: VkHeadlessSurfaceCreateFlags,

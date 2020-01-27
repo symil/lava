@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkFormatProperties,RawVkFormatProperties};
 
-/// Wrapper for [VkFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatProperties2.html).
+/// Wrapper for [VkFormatProperties2](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkFormatProperties2.html).
 #[derive(Debug, Clone)]
 pub struct VkFormatProperties2 {
     pub format_properties: VkFormatProperties,

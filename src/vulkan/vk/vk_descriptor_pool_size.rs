@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkDescriptorType,RawVkDescriptorType};
 
-/// Wrapper for [VkDescriptorPoolSize](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPoolSize.html).
+/// Wrapper for [VkDescriptorPoolSize](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDescriptorPoolSize.html).
 #[derive(Debug, Clone)]
 pub struct VkDescriptorPoolSize {
     pub type_: VkDescriptorType,

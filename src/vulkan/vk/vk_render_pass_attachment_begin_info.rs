@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkImageView,RawVkImageView};
 
-/// Wrapper for [VkRenderPassAttachmentBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassAttachmentBeginInfo.html).
+/// Wrapper for [VkRenderPassAttachmentBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkRenderPassAttachmentBeginInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkRenderPassAttachmentBeginInfo {
     pub attachments: Vec<VkImageView>,

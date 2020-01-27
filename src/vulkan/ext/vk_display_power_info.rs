@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::ext::{VkDisplayPowerState,RawVkDisplayPowerState};
 
-/// Wrapper for [VkDisplayPowerInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPowerInfoEXT.html).
+/// Wrapper for [VkDisplayPowerInfoEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDisplayPowerInfoEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkDisplayPowerInfo {
     pub power_state: VkDisplayPowerState,

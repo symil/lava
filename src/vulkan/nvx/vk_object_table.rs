@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkObjectTable = u64;
 
-/// Wrapper for [VkObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableNVX.html).
+/// Wrapper for [VkObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkObjectTableNVX.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkObjectTable {
     _handle: RawVkObjectTable,
@@ -81,14 +81,14 @@ impl VkObjectTable {
         }
     }
     
-    /// Wrapper for [vkDestroyObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyObjectTableNVX.html).
+    /// Wrapper for [vkDestroyObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyObjectTableNVX.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyObjectTableNVX)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
     
-    /// Wrapper for [vkRegisterObjectsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterObjectsNVX.html).
+    /// Wrapper for [vkRegisterObjectsNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkRegisterObjectsNVX.html).
     pub fn register_objects(&self, object_table_entries: Vec<nvx::VkObjectTableEntry>, object_indices: Vec<usize>) -> LavaResult<()> {
         unsafe {
             let raw_object_count = cmp::max(object_table_entries.len(), object_indices.len()) as u32;
@@ -101,7 +101,7 @@ impl VkObjectTable {
         }
     }
     
-    /// Wrapper for [vkUnregisterObjectsNVX](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUnregisterObjectsNVX.html).
+    /// Wrapper for [vkUnregisterObjectsNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkUnregisterObjectsNVX.html).
     pub fn unregister_objects(&self, object_entry_types: Vec<nvx::VkObjectEntryType>, object_indices: Vec<usize>) -> LavaResult<()> {
         unsafe {
             let raw_object_count = cmp::max(object_entry_types.len(), object_indices.len()) as u32;

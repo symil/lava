@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::khr::{VkSurfaceFormat,RawVkSurfaceFormat};
 
-/// Wrapper for [VkSurfaceFormat2KHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSurfaceFormat2KHR.html).
+/// Wrapper for [VkSurfaceFormat2KHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkSurfaceFormat2KHR.html).
 #[derive(Debug, Clone)]
 pub struct VkSurfaceFormat2 {
     pub surface_format: VkSurfaceFormat,

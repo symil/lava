@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkExtent2D,RawVkExtent2D};
 
-/// Wrapper for [VkDisplayModeParametersKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayModeParametersKHR.html).
+/// Wrapper for [VkDisplayModeParametersKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDisplayModeParametersKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkDisplayModeParameters {
     pub visible_region: VkExtent2D,

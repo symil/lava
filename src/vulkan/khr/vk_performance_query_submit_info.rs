@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPerformanceQuerySubmitInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceQuerySubmitInfoKHR.html).
+/// Wrapper for [VkPerformanceQuerySubmitInfoKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPerformanceQuerySubmitInfoKHR.html).
 #[derive(Debug, Clone)]
 pub struct VkPerformanceQuerySubmitInfo {
     pub counter_pass_index: usize,

@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkConformanceVersion](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConformanceVersion.html).
+/// Wrapper for [VkConformanceVersion](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkConformanceVersion.html).
 #[derive(Debug, Clone)]
 pub struct VkConformanceVersion {
     pub major: u8,

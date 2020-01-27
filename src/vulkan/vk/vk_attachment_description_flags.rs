@@ -2,7 +2,7 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkAttachmentDescriptionFlags](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentDescriptionFlags.html).
+/// Wrapper for [VkAttachmentDescriptionFlags](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAttachmentDescriptionFlags.html).
 ///
 /// Use the macro `VkAttachmentDescriptionFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```

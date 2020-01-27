@@ -16,7 +16,7 @@ use vulkan::vk::*;
 #[doc(hidden)]
 pub type RawVkFramebuffer = u64;
 
-/// Wrapper for [VkFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebuffer.html).
+/// Wrapper for [VkFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkFramebuffer.html).
 #[derive(Debug, Clone, Copy)]
 pub struct VkFramebuffer {
     _handle: RawVkFramebuffer,
@@ -81,7 +81,7 @@ impl VkFramebuffer {
         }
     }
     
-    /// Wrapper for [vkDestroyFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyFramebuffer.html).
+    /// Wrapper for [vkDestroyFramebuffer](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyFramebuffer.html).
     pub fn destroy(&self) {
         unsafe {
             ((&*self._fn_table).vkDestroyFramebuffer)((*self._fn_table).device, self._handle, ptr::null());

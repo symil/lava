@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
 
-/// Wrapper for [VkPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT.html).
+/// Wrapper for [VkPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceTextureCompressionASTCHDRFeatures {
     pub texture_compression_astc_hdr: bool,

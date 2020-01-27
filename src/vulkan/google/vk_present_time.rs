@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 
-/// Wrapper for [VkPresentTimeGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentTimeGOOGLE.html).
+/// Wrapper for [VkPresentTimeGOOGLE](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPresentTimeGOOGLE.html).
 #[derive(Debug, Clone)]
 pub struct VkPresentTime {
     pub present_id: usize,

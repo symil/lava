@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkDriverId,RawVkDriverId};
 use vulkan::vk::{VkConformanceVersion,RawVkConformanceVersion};
 
-/// Wrapper for [VkPhysicalDeviceDriverProperties](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDriverProperties.html).
+/// Wrapper for [VkPhysicalDeviceDriverProperties](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceDriverProperties.html).
 #[derive(Debug, Clone)]
 pub struct VkPhysicalDeviceDriverProperties {
     pub driver_id: VkDriverId,

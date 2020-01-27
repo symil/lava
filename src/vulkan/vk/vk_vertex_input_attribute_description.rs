@@ -13,7 +13,7 @@ use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkFormat,RawVkFormat};
 
-/// Wrapper for [VkVertexInputAttributeDescription](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputAttributeDescription.html).
+/// Wrapper for [VkVertexInputAttributeDescription](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkVertexInputAttributeDescription.html).
 #[derive(Debug, Clone)]
 pub struct VkVertexInputAttributeDescription {
     pub location: usize,

@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::vk::{VkImageAspectFlags,RawVkImageAspectFlags};
 use vulkan::vk::{VkClearValue,RawVkClearValue};
 
-/// Wrapper for [VkClearAttachment](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkClearAttachment.html).
+/// Wrapper for [VkClearAttachment](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkClearAttachment.html).
 #[derive(Debug, Clone)]
 pub struct VkClearAttachment {
     pub aspect_mask: VkImageAspectFlags,

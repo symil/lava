@@ -14,7 +14,7 @@ use vulkan::vk::*;
 use vulkan::intel::{VkPerformanceValueType,RawVkPerformanceValueType};
 use vulkan::intel::{VkPerformanceValueData,RawVkPerformanceValueData};
 
-/// Wrapper for [VkPerformanceValueINTEL](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceValueINTEL.html).
+/// Wrapper for [VkPerformanceValueINTEL](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPerformanceValueINTEL.html).
 #[derive(Debug, Clone)]
 pub struct VkPerformanceValue {
     pub type_: VkPerformanceValueType,

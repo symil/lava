@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::vk::{VkCommandBufferUsageFlags,RawVkCommandBufferUsageFlags};
 use vulkan::vk::{VkCommandBufferInheritanceInfo,RawVkCommandBufferInheritanceInfo};
 
-/// Wrapper for [VkCommandBufferBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferBeginInfo.html).
+/// Wrapper for [VkCommandBufferBeginInfo](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkCommandBufferBeginInfo.html).
 #[derive(Debug, Clone)]
 pub struct VkCommandBufferBeginInfo {
     pub flags: VkCommandBufferUsageFlags,

@@ -15,7 +15,7 @@ use vulkan::vk::{VkStructureType,RawVkStructureType};
 use vulkan::nv::{VkAccelerationStructureMemoryRequirementsType,RawVkAccelerationStructureMemoryRequirementsType};
 use vulkan::nv::{VkAccelerationStructure,RawVkAccelerationStructure};
 
-/// Wrapper for [VkAccelerationStructureMemoryRequirementsInfoNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureMemoryRequirementsInfoNV.html).
+/// Wrapper for [VkAccelerationStructureMemoryRequirementsInfoNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAccelerationStructureMemoryRequirementsInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkAccelerationStructureMemoryRequirementsInfo {
     pub type_: VkAccelerationStructureMemoryRequirementsType,

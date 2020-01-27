@@ -16,7 +16,7 @@ use vulkan::vk::{VkBuffer,RawVkBuffer};
 use vulkan::vk::{VkFormat,RawVkFormat};
 use vulkan::vk::{VkIndexType,RawVkIndexType};
 
-/// Wrapper for [VkGeometryTrianglesNV](https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryTrianglesNV.html).
+/// Wrapper for [VkGeometryTrianglesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkGeometryTrianglesNV.html).
 #[derive(Debug, Clone)]
 pub struct VkGeometryTriangles {
     pub vertex_data: Option<VkBuffer>,
