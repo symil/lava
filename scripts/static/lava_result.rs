@@ -2,7 +2,7 @@ use vk::VkResult;
 
 /// Wraps both the return code and the value produced by a Vulkan function.
 /// 
-/// In the C API, Vulkan functions return the code that indicates if they were successful or not. The "actuel" return value is
+/// In the C API, Vulkan functions return the code that indicates if they were successful or not. The "actual" return value is
 /// written through a user-specified pointer. Lava replaces this mechanism with the convenient `Result`: if the return code is`VK_SUCCESS`
 /// the function returns `Ok`, otherwise it returns `Err`.
 /// 

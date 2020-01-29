@@ -461,22 +461,6 @@ function prefixWithExtension(ext, name) {
     return ext ? `${ext}::${name}` : name;
 }
 
-function genDropTrait(def) {
-    const destroyFunction = def.functions.find(func => func.name.includes("Destroy"));
-
-    if (destroyFunction) {
-        return [
-            `impl Drop for ${def.wrappedTypeName}`,
-            [
-                `fn drop(&mut self)`, [
-                    `println!("${destroyFunction.name}");`,
-                    `self.destroy()`
-                ]
-            ]
-        ];
-    }
-}
-
 module.exports = {
     generateVkHandleDefinition,
     makeMethodNames,
