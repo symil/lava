@@ -44,7 +44,7 @@ function generateFiles() {
         ...generateStructs(),
         ...generateHandles(),
         ...generateTypedefs()
-    ];
+    ].filter(x => x);
 
     writeVkTypes(vkTypes);
     copyStaticFiles(STATIC_FILES_DIR_PATH, OUTPUT_DIR_PATH);
@@ -134,6 +134,10 @@ function generateExtensionNames() {
 
 function generateTypedefs() {
     return getAllTypedefs().map(({baseType, newType}) => {
+        if (baseType.name.endsWith('FlagBits')) {
+            return null;
+        }
+
         const baseTypeDef = STRUCTS.find(struct => struct.name === baseType.name && struct.extension === baseType.extension);
         const lifetimes = baseTypeDef ? baseTypeDef.lifetimes : '';
         const baseTypeExt = baseType.extension || 'vk';

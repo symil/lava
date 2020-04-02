@@ -106,7 +106,7 @@ function listToObj(array) {
 }
 
 function parseField(str) {
-    const match = str.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?\s*;?\s*$/);
+    const match = str.match(/\s*([\w* ]+)\s+(\w+)(?:\[(\w+)\])?(?:\[(\w+)\])?(:\d+)?\s*;?\s*$/);
 
     if (!match) {
         return null;
@@ -121,9 +121,23 @@ function parseField(str) {
     const isPointer = fullType.endsWith('*');
     const isDoublePointer = fullType.endsWith(' const*') || fullType.endsWith('**');
     const isConst = fullType.startsWith('const ');
-    const arraySizeIdentifier = match[3];
-    const arraySize = parseConstant(arraySizeIdentifier);
+    const arraySizeIdentifier1 = match[3];
+    const arraySizeIdentifier2 = match[4];
+    const arraySize1 = parseConstant(arraySizeIdentifier1);
+    const arraySize2 = parseConstant(arraySizeIdentifier2);
     const countFor = [];
+
+    let arraySize = null;
+
+    if (arraySize1) {
+        if (!arraySize2) {
+            arraySize = arraySize1;
+        } else {
+            arraySize = arraySize1 * arraySize2;
+        }
+    }
+
+    // TODO: take the `bits` into account in strict fields such as `int value:8;`
 
     return { name, extension, fullType, typeName, isPointer, isDoublePointer, isConst, arraySize, countFor };
 }
