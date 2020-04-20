@@ -45,7 +45,7 @@ fn main() {
             engine_version: 1,
             api_version: VkVersion(1, 0, 0),
         }),
-        enabled_layer_names: vec![VK_LAYER_LUNARG_STANDARD_VALIDATION_NAME],
+        enabled_layer_names: vec![VK_LAYER_KHRONOS_VALIDATION_NAME],
         enabled_extension_names: vec![VK_EXT_DEBUG_REPORT_EXTENSION_NAME]
     }).expect("Failed to create instance");
 

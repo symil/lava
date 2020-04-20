@@ -487,20 +487,20 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkAllocateDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkAllocateDescriptorSets.html).
-    pub fn allocate_descriptor_sets(&self, allocate_info: VkDescriptorSetAllocateInfo) -> LavaResult<VkDescriptorSet> {
+    pub fn allocate_descriptor_sets(&self, allocate_info: VkDescriptorSetAllocateInfo) -> LavaResult<Vec<VkDescriptorSet>> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(&allocate_info);
             let mut vk_result = 0;
-            let raw_descriptor_sets = &mut mem::zeroed() as *mut RawVkDescriptorSet;
+            let raw_descriptor_sets = calloc((&*raw_allocate_info).descriptor_set_count as usize, mem::size_of::<RawVkDescriptorSet>()) as *mut RawVkDescriptorSet;
             
             vk_result = ((&*self._fn_table).vkAllocateDescriptorSets)(self._handle, raw_allocate_info, raw_descriptor_sets);
             
-            let mut descriptor_sets = new_vk_value(raw_descriptor_sets);
+            let mut descriptor_sets = new_vk_array((&*raw_allocate_info).descriptor_set_count, raw_descriptor_sets);
             if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut descriptor_sets, fn_table);
+                for elt in &mut descriptor_sets { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr(raw_allocate_info);
+            free(raw_descriptor_sets as *mut u8);
             if vk_result == 0 { Ok(descriptor_sets) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), descriptor_sets)) }
         }
     }
@@ -576,20 +576,20 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkAllocateCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkAllocateCommandBuffers.html).
-    pub fn allocate_command_buffers(&self, allocate_info: VkCommandBufferAllocateInfo) -> LavaResult<VkCommandBuffer> {
+    pub fn allocate_command_buffers(&self, allocate_info: VkCommandBufferAllocateInfo) -> LavaResult<Vec<VkCommandBuffer>> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(&allocate_info);
             let mut vk_result = 0;
-            let raw_command_buffers = &mut mem::zeroed() as *mut RawVkCommandBuffer;
+            let raw_command_buffers = calloc((&*raw_allocate_info).command_buffer_count as usize, mem::size_of::<RawVkCommandBuffer>()) as *mut RawVkCommandBuffer;
             
             vk_result = ((&*self._fn_table).vkAllocateCommandBuffers)(self._handle, raw_allocate_info, raw_command_buffers);
             
-            let mut command_buffers = new_vk_value(raw_command_buffers);
+            let mut command_buffers = new_vk_array((&*raw_allocate_info).command_buffer_count, raw_command_buffers);
             if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut command_buffers, fn_table);
+                for elt in &mut command_buffers { VkSetup::vk_setup(elt, self._fn_table); }
             }
             free_vk_ptr(raw_allocate_info);
+            free(raw_command_buffers as *mut u8);
             if vk_result == 0 { Ok(command_buffers) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), command_buffers)) }
         }
     }

@@ -22,7 +22,7 @@ let BOOTSTRAP_DONE = false;
 function bootstrap() {
     if (!BOOTSTRAP_DONE) {
         VULKAN_H = fs.readFileSync(VULKAN_CORE_H_PATH, 'utf8');
-        VK_XML_STR = fs.readFileSync(VK_XML_PATH, 'utf8');
+        VK_XML_STR = fs.readFileSync(VK_XML_PATH, 'utf8').replace(/-&gt;/g, '::');
         VK_XML = XML.parse(VK_XML_STR);
         ENUMS = parseEnums();
         BIT_FLAGS = parseBitFlags();
