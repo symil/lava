@@ -61,7 +61,7 @@ impl Default for VkAccelerationStructureMemoryRequirementsInfo {
 
 impl VkSetup for VkAccelerationStructureMemoryRequirementsInfo {
     fn vk_setup(&mut self, fn_table: *mut VkFunctionTable) {
-        VkSetup::vk_setup(&mut self.acceleration_structure, fn_table);
+        
     }
 }
 

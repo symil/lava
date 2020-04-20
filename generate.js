@@ -30,13 +30,9 @@ async function main() {
         await downloadSourceFiles(tag);
     }
 
-    if (argv.includes('--delete') || argv.includes('-d')) {
-        console.log('Deleting current source files...');
-        removeFiles();
-    }
-
     if (!argv.includes('--no-generate') && !argv.includes('-ng')) {
         console.log('Generating source files...');
+        removeFiles();
         generateFiles();
     }
 }

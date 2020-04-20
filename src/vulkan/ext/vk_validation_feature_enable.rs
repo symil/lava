@@ -9,6 +9,7 @@ pub enum VkValidationFeatureEnable {
     GpuAssisted = 0,
     GpuAssistedReserveBindingSlot = 1,
     BestPractices = 2,
+    DebugPrintf = 3,
 }
 
 #[doc(hidden)]

@@ -18,7 +18,7 @@ pub enum VkDescriptorType {
     StorageBufferDynamic = 9,
     InputAttachment = 10,
     InlineUniformBlockExt = 1000138000,
-    AccelerationStructureNv = 1000165000,
+    AccelerationStructureKhr = 1000165000,
 }
 
 #[doc(hidden)]

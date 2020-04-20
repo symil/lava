@@ -174,6 +174,9 @@ pub const VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME : &str = "VK_KHR_buffer_de
 /// `"VK_KHR_pipeline_executable_properties"`
 pub const VK_KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME : &str = "VK_KHR_pipeline_executable_properties";
 
+/// `"VK_KHR_shader_non_semantic_info"`
+pub const VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME : &str = "VK_KHR_shader_non_semantic_info";
+
 /// `"VK_EXT_debug_report"`
 pub const VK_EXT_DEBUG_REPORT_EXTENSION_NAME : &str = "VK_EXT_debug_report";
 
@@ -260,9 +263,6 @@ pub const VK_EXT_ASTC_DECODE_MODE_EXTENSION_NAME : &str = "VK_EXT_astc_decode_mo
 
 /// `"VK_EXT_conditional_rendering"`
 pub const VK_EXT_CONDITIONAL_RENDERING_EXTENSION_NAME : &str = "VK_EXT_conditional_rendering";
-
-/// `"VK_NVX_device_generated_commands"`
-pub const VK_NVX_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME : &str = "VK_NVX_device_generated_commands";
 
 /// `"VK_NV_clip_space_w_scaling"`
 pub const VK_NV_CLIP_SPACE_W_SCALING_EXTENSION_NAME : &str = "VK_NV_clip_space_w_scaling";
@@ -510,8 +510,23 @@ pub const VK_EXT_INDEX_TYPE_UINT8_EXTENSION_NAME : &str = "VK_EXT_index_type_uin
 /// `"VK_EXT_shader_demote_to_helper_invocation"`
 pub const VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME : &str = "VK_EXT_shader_demote_to_helper_invocation";
 
+/// `"VK_NV_device_generated_commands"`
+pub const VK_NV_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME : &str = "VK_NV_device_generated_commands";
+
 /// `"VK_EXT_texel_buffer_alignment"`
 pub const VK_EXT_TEXEL_BUFFER_ALIGNMENT_EXTENSION_NAME : &str = "VK_EXT_texel_buffer_alignment";
 
+/// `"VK_QCOM_render_pass_transform"`
+pub const VK_QCOM_RENDER_PASS_TRANSFORM_EXTENSION_NAME : &str = "VK_QCOM_render_pass_transform";
+
 /// `"VK_GOOGLE_user_type"`
 pub const VK_GOOGLE_USER_TYPE_EXTENSION_NAME : &str = "VK_GOOGLE_user_type";
+
+/// `"VK_EXT_pipeline_creation_cache_control"`
+pub const VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME : &str = "VK_EXT_pipeline_creation_cache_control";
+
+/// `"VK_NV_device_diagnostics_config"`
+pub const VK_NV_DEVICE_DIAGNOSTICS_CONFIG_EXTENSION_NAME : &str = "VK_NV_device_diagnostics_config";
+
+/// `"VK_QCOM_render_pass_store_ops"`
+pub const VK_QCOM_RENDER_PASS_STORE_OPS_EXTENSION_NAME : &str = "VK_QCOM_render_pass_store_ops";

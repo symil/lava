@@ -87,4 +87,21 @@ impl VkImageView {
             ((&*self._fn_table).vkDestroyImageView)((*self._fn_table).device, self._handle, ptr::null());
         }
     }
+    
+    /// Wrapper for [vkGetImageViewAddressNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetImageViewAddressNVX.html).
+    pub fn get_address(&self) -> LavaResult<nvx::VkImageViewAddressProperties> {
+        unsafe {
+            let mut vk_result = 0;
+            let raw_properties = &mut mem::zeroed() as *mut nvx::RawVkImageViewAddressProperties;
+            
+            vk_result = ((&*self._fn_table).vkGetImageViewAddressNVX)((*self._fn_table).device, self._handle, raw_properties);
+            
+            let mut properties = new_vk_value(raw_properties);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                VkSetup::vk_setup(&mut properties, fn_table);
+            }
+            if vk_result == 0 { Ok(properties) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), properties)) }
+        }
+    }
 }

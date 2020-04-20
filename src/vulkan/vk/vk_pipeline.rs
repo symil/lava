@@ -106,14 +106,14 @@ impl VkPipeline {
         }
     }
     
-    /// Wrapper for [vkGetRayTracingShaderGroupHandlesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetRayTracingShaderGroupHandlesNV.html).
+    /// Wrapper for [vkGetRayTracingShaderGroupHandlesKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetRayTracingShaderGroupHandlesKHR.html).
     pub fn get_ray_tracing_shader_group_handles(&self, first_group: usize, group_count: usize, data: &[c_void]) -> LavaResult<()> {
         unsafe {
             let raw_first_group = vk_to_raw_value(&first_group);
             let raw_group_count = vk_to_raw_value(&group_count);
             let raw_data_size = data.len();
             let raw_data = get_vec_ptr(data);
-            let vk_result = ((&*self._fn_table).vkGetRayTracingShaderGroupHandlesNV)((*self._fn_table).device, self._handle, raw_first_group, raw_group_count, raw_data_size, raw_data);
+            let vk_result = ((&*self._fn_table).vkGetRayTracingShaderGroupHandlesKHR)((*self._fn_table).device, self._handle, raw_first_group, raw_group_count, raw_data_size, raw_data);
             if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
     }

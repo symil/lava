@@ -12,9 +12,9 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
-use vulkan::nv::{VkGeometryType,RawVkGeometryType};
+use vulkan::khr::{VkGeometryType,RawVkGeometryType};
 use vulkan::nv::{VkGeometryData,RawVkGeometryData};
-use vulkan::nv::{VkGeometryFlags,RawVkGeometryFlags};
+use vulkan::khr::{VkGeometryFlags,RawVkGeometryFlags};
 
 /// Wrapper for [VkGeometryNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkGeometryNV.html).
 #[derive(Debug, Clone)]

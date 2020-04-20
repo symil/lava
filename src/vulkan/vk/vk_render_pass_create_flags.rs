@@ -6,15 +6,16 @@ use utils::vk_traits::*;
 ///
 /// Use the macro `VkRenderPassCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
-/// VkRenderPassCreateFlags!()
+/// VkRenderPassCreateFlags!(transform_qcom)
 /// ```
 /// ```
 /// VkRenderPassCreateFlags {
+///     transform_qcom: true,
 /// }
 /// ```
 #[derive(Debug, Clone)]
 pub struct VkRenderPassCreateFlags {
-    
+    pub transform_qcom: bool,
 }
 
 #[doc(hidden)]
@@ -23,13 +24,14 @@ pub type RawVkRenderPassCreateFlags = u32;
 impl VkWrappedType<RawVkRenderPassCreateFlags> for VkRenderPassCreateFlags {
     fn vk_to_raw(src: &VkRenderPassCreateFlags, dst: &mut RawVkRenderPassCreateFlags) {
         *dst = 0;
+        if src.transform_qcom { *dst |= 0x00000002; }
     }
 }
 
 impl VkRawType<VkRenderPassCreateFlags> for RawVkRenderPassCreateFlags {
     fn vk_to_wrapped(src: &RawVkRenderPassCreateFlags) -> VkRenderPassCreateFlags {
         VkRenderPassCreateFlags {
-            
+            transform_qcom: (src & 0x00000002) != 0,
         }
     }
 }
@@ -37,7 +39,7 @@ impl VkRawType<VkRenderPassCreateFlags> for RawVkRenderPassCreateFlags {
 impl Default for VkRenderPassCreateFlags {
     fn default() -> VkRenderPassCreateFlags {
         VkRenderPassCreateFlags {
-            
+            transform_qcom: false,
         }
     }
 }
@@ -47,26 +49,27 @@ impl VkRenderPassCreateFlags {
     /// Return a structure with all flags to `false`.
     pub fn none() -> Self {
         VkRenderPassCreateFlags {
-            
+            transform_qcom: false,
         }
     }
     
     /// Return a structure with all flags to `true`.
     pub fn all() -> Self {
         VkRenderPassCreateFlags {
-            
+            transform_qcom: true,
         }
     }
     
     /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
+        + if self.transform_qcom { 0x00000002 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
     pub fn from_u32(value: u32) -> Self {
         VkRenderPassCreateFlags {
-            
+            transform_qcom: value & 0x00000002 > 0,
         }
     }
 }

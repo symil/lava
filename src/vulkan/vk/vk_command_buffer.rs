@@ -824,24 +824,6 @@ impl VkCommandBuffer {
         }
     }
     
-    /// Wrapper for [vkCmdProcessCommandsNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdProcessCommandsNVX.html).
-    pub fn cmd_process_commands(&self, process_commands_info: nvx::VkCmdProcessCommandsInfo) {
-        unsafe {
-            let raw_process_commands_info = new_ptr_vk_value(&process_commands_info);
-            ((&*self._fn_table).vkCmdProcessCommandsNVX)(self._handle, raw_process_commands_info);
-            free_vk_ptr(raw_process_commands_info);
-        }
-    }
-    
-    /// Wrapper for [vkCmdReserveSpaceForCommandsNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdReserveSpaceForCommandsNVX.html).
-    pub fn cmd_reserve_space_for_commands(&self, reserve_space_info: nvx::VkCmdReserveSpaceForCommandsInfo) {
-        unsafe {
-            let raw_reserve_space_info = new_ptr_vk_value(&reserve_space_info);
-            ((&*self._fn_table).vkCmdReserveSpaceForCommandsNVX)(self._handle, raw_reserve_space_info);
-            free_vk_ptr(raw_reserve_space_info);
-        }
-    }
-    
     /// Wrapper for [vkCmdSetViewportWScalingNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdSetViewportWScalingNV.html).
     pub fn cmd_set_viewport_wscaling(&self, first_viewport: usize, viewport_wscalings: Vec<nv::VkViewportWScaling>) {
         unsafe {
@@ -930,7 +912,7 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdBuildAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdBuildAccelerationStructureNV.html).
-    pub fn cmd_build_acceleration_structure(&self, info: nv::VkAccelerationStructureInfo, instance_data: Option<VkBuffer>, instance_offset: usize, update: bool, dst: nv::VkAccelerationStructure, src: Option<nv::VkAccelerationStructure>, scratch: VkBuffer, scratch_offset: usize) {
+    pub fn cmd_build_acceleration_structure(&self, info: nv::VkAccelerationStructureInfo, instance_data: Option<VkBuffer>, instance_offset: usize, update: bool, dst: khr::VkAccelerationStructure, src: Option<khr::VkAccelerationStructure>, scratch: VkBuffer, scratch_offset: usize) {
         unsafe {
             let raw_info = new_ptr_vk_value(&info);
             let raw_instance_data = vk_to_raw_value_checked(&instance_data);
@@ -946,7 +928,7 @@ impl VkCommandBuffer {
     }
     
     /// Wrapper for [vkCmdCopyAccelerationStructureNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdCopyAccelerationStructureNV.html).
-    pub fn cmd_copy_acceleration_structure(&self, dst: nv::VkAccelerationStructure, src: nv::VkAccelerationStructure, mode: nv::VkCopyAccelerationStructureMode) {
+    pub fn cmd_copy_acceleration_structure(&self, dst: khr::VkAccelerationStructure, src: khr::VkAccelerationStructure, mode: khr::VkCopyAccelerationStructureMode) {
         unsafe {
             let raw_dst = vk_to_raw_value(&dst);
             let raw_src = vk_to_raw_value(&src);
@@ -976,15 +958,15 @@ impl VkCommandBuffer {
         }
     }
     
-    /// Wrapper for [vkCmdWriteAccelerationStructuresPropertiesNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdWriteAccelerationStructuresPropertiesNV.html).
-    pub fn cmd_write_acceleration_structures_properties(&self, acceleration_structures: Vec<nv::VkAccelerationStructure>, query_type: VkQueryType, query_pool: VkQueryPool, first_query: usize) {
+    /// Wrapper for [vkCmdWriteAccelerationStructuresPropertiesKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdWriteAccelerationStructuresPropertiesKHR.html).
+    pub fn cmd_write_acceleration_structures_properties(&self, acceleration_structures: Vec<khr::VkAccelerationStructure>, query_type: VkQueryType, query_pool: VkQueryPool, first_query: usize) {
         unsafe {
             let raw_acceleration_structure_count = acceleration_structures.len() as u32;
             let raw_acceleration_structures = new_ptr_vk_array(&acceleration_structures);
             let raw_query_type = vk_to_raw_value(&query_type);
             let raw_query_pool = vk_to_raw_value(&query_pool);
             let raw_first_query = vk_to_raw_value(&first_query);
-            ((&*self._fn_table).vkCmdWriteAccelerationStructuresPropertiesNV)(self._handle, raw_acceleration_structure_count, raw_acceleration_structures, raw_query_type, raw_query_pool, raw_first_query);
+            ((&*self._fn_table).vkCmdWriteAccelerationStructuresPropertiesKHR)(self._handle, raw_acceleration_structure_count, raw_acceleration_structures, raw_query_type, raw_query_pool, raw_first_query);
             free_ptr(raw_acceleration_structures);
         }
     }
@@ -1088,6 +1070,35 @@ impl VkCommandBuffer {
             let raw_line_stipple_factor = vk_to_raw_value(&line_stipple_factor);
             let raw_line_stipple_pattern = line_stipple_pattern;
             ((&*self._fn_table).vkCmdSetLineStippleEXT)(self._handle, raw_line_stipple_factor, raw_line_stipple_pattern);
+        }
+    }
+    
+    /// Wrapper for [vkCmdPreprocessGeneratedCommandsNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdPreprocessGeneratedCommandsNV.html).
+    pub fn cmd_preprocess_generated_commands(&self, generated_commands_info: nv::VkGeneratedCommandsInfo) {
+        unsafe {
+            let raw_generated_commands_info = new_ptr_vk_value(&generated_commands_info);
+            ((&*self._fn_table).vkCmdPreprocessGeneratedCommandsNV)(self._handle, raw_generated_commands_info);
+            free_vk_ptr(raw_generated_commands_info);
+        }
+    }
+    
+    /// Wrapper for [vkCmdExecuteGeneratedCommandsNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdExecuteGeneratedCommandsNV.html).
+    pub fn cmd_execute_generated_commands(&self, is_preprocessed: bool, generated_commands_info: nv::VkGeneratedCommandsInfo) {
+        unsafe {
+            let raw_is_preprocessed = vk_to_raw_value(&is_preprocessed);
+            let raw_generated_commands_info = new_ptr_vk_value(&generated_commands_info);
+            ((&*self._fn_table).vkCmdExecuteGeneratedCommandsNV)(self._handle, raw_is_preprocessed, raw_generated_commands_info);
+            free_vk_ptr(raw_generated_commands_info);
+        }
+    }
+    
+    /// Wrapper for [vkCmdBindPipelineShaderGroupNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdBindPipelineShaderGroupNV.html).
+    pub fn cmd_bind_pipeline_shader_group(&self, pipeline_bind_point: VkPipelineBindPoint, pipeline: VkPipeline, group_index: usize) {
+        unsafe {
+            let raw_pipeline_bind_point = vk_to_raw_value(&pipeline_bind_point);
+            let raw_pipeline = vk_to_raw_value(&pipeline);
+            let raw_group_index = vk_to_raw_value(&group_index);
+            ((&*self._fn_table).vkCmdBindPipelineShaderGroupNV)(self._handle, raw_pipeline_bind_point, raw_pipeline, raw_group_index);
         }
     }
 }

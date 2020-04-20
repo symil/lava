@@ -792,22 +792,6 @@ impl VkPhysicalDevice {
         }
     }
     
-    /// Wrapper for [vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX.html).
-    pub fn get_generated_commands_properties(&self, features: nvx::VkDeviceGeneratedCommandsFeatures) -> nvx::VkDeviceGeneratedCommandsLimits {
-        unsafe {
-            let raw_features = new_ptr_vk_value(&features);
-            let raw_limits = &mut mem::zeroed() as *mut nvx::RawVkDeviceGeneratedCommandsLimits;
-            
-            ((&*self._fn_table).vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX)(self._handle, raw_features, raw_limits);
-            
-            let mut limits = new_vk_value(raw_limits);
-            let fn_table = self._fn_table;
-            VkSetup::vk_setup(&mut limits, fn_table);
-            free_vk_ptr(raw_features);
-            limits
-        }
-    }
-    
     /// Wrapper for [vkReleaseDisplayEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkReleaseDisplayEXT.html).
     pub fn release_display(&self, display: khr::VkDisplay) -> LavaResult<()> {
         unsafe {

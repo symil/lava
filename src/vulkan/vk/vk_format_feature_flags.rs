@@ -41,6 +41,7 @@ pub struct VkFormatFeatureFlags {
     pub cosited_chroma_samples: bool,
     pub sampled_image_filter_minmax: bool,
     pub sampled_image_filter_cubic_img: bool,
+    pub acceleration_structure_vertex_buffer_khr: bool,
     pub fragment_density_map_ext: bool,
 }
 
@@ -74,6 +75,7 @@ impl VkWrappedType<RawVkFormatFeatureFlags> for VkFormatFeatureFlags {
         if src.cosited_chroma_samples { *dst |= 0x00800000; }
         if src.sampled_image_filter_minmax { *dst |= 0x00010000; }
         if src.sampled_image_filter_cubic_img { *dst |= 0x00002000; }
+        if src.acceleration_structure_vertex_buffer_khr { *dst |= 0x20000000; }
         if src.fragment_density_map_ext { *dst |= 0x01000000; }
     }
 }
@@ -105,6 +107,7 @@ impl VkRawType<VkFormatFeatureFlags> for RawVkFormatFeatureFlags {
             cosited_chroma_samples: (src & 0x00800000) != 0,
             sampled_image_filter_minmax: (src & 0x00010000) != 0,
             sampled_image_filter_cubic_img: (src & 0x00002000) != 0,
+            acceleration_structure_vertex_buffer_khr: (src & 0x20000000) != 0,
             fragment_density_map_ext: (src & 0x01000000) != 0,
         }
     }
@@ -137,6 +140,7 @@ impl Default for VkFormatFeatureFlags {
             cosited_chroma_samples: false,
             sampled_image_filter_minmax: false,
             sampled_image_filter_cubic_img: false,
+            acceleration_structure_vertex_buffer_khr: false,
             fragment_density_map_ext: false,
         }
     }
@@ -171,6 +175,7 @@ impl VkFormatFeatureFlags {
             cosited_chroma_samples: false,
             sampled_image_filter_minmax: false,
             sampled_image_filter_cubic_img: false,
+            acceleration_structure_vertex_buffer_khr: false,
             fragment_density_map_ext: false,
         }
     }
@@ -202,6 +207,7 @@ impl VkFormatFeatureFlags {
             cosited_chroma_samples: true,
             sampled_image_filter_minmax: true,
             sampled_image_filter_cubic_img: true,
+            acceleration_structure_vertex_buffer_khr: true,
             fragment_density_map_ext: true,
         }
     }
@@ -233,6 +239,7 @@ impl VkFormatFeatureFlags {
         + if self.cosited_chroma_samples { 0x00800000 } else { 0 }
         + if self.sampled_image_filter_minmax { 0x00010000 } else { 0 }
         + if self.sampled_image_filter_cubic_img { 0x00002000 } else { 0 }
+        + if self.acceleration_structure_vertex_buffer_khr { 0x20000000 } else { 0 }
         + if self.fragment_density_map_ext { 0x01000000 } else { 0 }
     }
     
@@ -263,6 +270,7 @@ impl VkFormatFeatureFlags {
             cosited_chroma_samples: value & 0x00800000 > 0,
             sampled_image_filter_minmax: value & 0x00010000 > 0,
             sampled_image_filter_cubic_img: value & 0x00002000 > 0,
+            acceleration_structure_vertex_buffer_khr: value & 0x20000000 > 0,
             fragment_density_map_ext: value & 0x01000000 > 0,
         }
     }

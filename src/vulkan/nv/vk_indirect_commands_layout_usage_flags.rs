@@ -2,25 +2,24 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkIndirectCommandsLayoutUsageFlagsNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkIndirectCommandsLayoutUsageFlagsNVX.html).
+/// Wrapper for [VkIndirectCommandsLayoutUsageFlagsNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkIndirectCommandsLayoutUsageFlagsNV.html).
 ///
 /// Use the macro `VkIndirectCommandsLayoutUsageFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
-/// VkIndirectCommandsLayoutUsageFlags!(unordered_sequences, sparse_sequences)
+/// VkIndirectCommandsLayoutUsageFlags!(explicit_preprocess, indexed_sequences)
 /// ```
 /// ```
 /// VkIndirectCommandsLayoutUsageFlags {
-///     unordered_sequences: true,
-///     sparse_sequences: true,
+///     explicit_preprocess: true,
+///     indexed_sequences: true,
 ///     ..VkIndirectCommandsLayoutUsageFlags::none()
 /// }
 /// ```
 #[derive(Debug, Clone)]
 pub struct VkIndirectCommandsLayoutUsageFlags {
-    pub unordered_sequences: bool,
-    pub sparse_sequences: bool,
-    pub empty_executions: bool,
+    pub explicit_preprocess: bool,
     pub indexed_sequences: bool,
+    pub unordered_sequences: bool,
 }
 
 #[doc(hidden)]
@@ -29,20 +28,18 @@ pub type RawVkIndirectCommandsLayoutUsageFlags = u32;
 impl VkWrappedType<RawVkIndirectCommandsLayoutUsageFlags> for VkIndirectCommandsLayoutUsageFlags {
     fn vk_to_raw(src: &VkIndirectCommandsLayoutUsageFlags, dst: &mut RawVkIndirectCommandsLayoutUsageFlags) {
         *dst = 0;
-        if src.unordered_sequences { *dst |= 0x00000001; }
-        if src.sparse_sequences { *dst |= 0x00000002; }
-        if src.empty_executions { *dst |= 0x00000004; }
-        if src.indexed_sequences { *dst |= 0x00000008; }
+        if src.explicit_preprocess { *dst |= 0x00000001; }
+        if src.indexed_sequences { *dst |= 0x00000002; }
+        if src.unordered_sequences { *dst |= 0x00000004; }
     }
 }
 
 impl VkRawType<VkIndirectCommandsLayoutUsageFlags> for RawVkIndirectCommandsLayoutUsageFlags {
     fn vk_to_wrapped(src: &RawVkIndirectCommandsLayoutUsageFlags) -> VkIndirectCommandsLayoutUsageFlags {
         VkIndirectCommandsLayoutUsageFlags {
-            unordered_sequences: (src & 0x00000001) != 0,
-            sparse_sequences: (src & 0x00000002) != 0,
-            empty_executions: (src & 0x00000004) != 0,
-            indexed_sequences: (src & 0x00000008) != 0,
+            explicit_preprocess: (src & 0x00000001) != 0,
+            indexed_sequences: (src & 0x00000002) != 0,
+            unordered_sequences: (src & 0x00000004) != 0,
         }
     }
 }
@@ -50,10 +47,9 @@ impl VkRawType<VkIndirectCommandsLayoutUsageFlags> for RawVkIndirectCommandsLayo
 impl Default for VkIndirectCommandsLayoutUsageFlags {
     fn default() -> VkIndirectCommandsLayoutUsageFlags {
         VkIndirectCommandsLayoutUsageFlags {
-            unordered_sequences: false,
-            sparse_sequences: false,
-            empty_executions: false,
+            explicit_preprocess: false,
             indexed_sequences: false,
+            unordered_sequences: false,
         }
     }
 }
@@ -63,39 +59,35 @@ impl VkIndirectCommandsLayoutUsageFlags {
     /// Return a structure with all flags to `false`.
     pub fn none() -> Self {
         VkIndirectCommandsLayoutUsageFlags {
-            unordered_sequences: false,
-            sparse_sequences: false,
-            empty_executions: false,
+            explicit_preprocess: false,
             indexed_sequences: false,
+            unordered_sequences: false,
         }
     }
     
     /// Return a structure with all flags to `true`.
     pub fn all() -> Self {
         VkIndirectCommandsLayoutUsageFlags {
-            unordered_sequences: true,
-            sparse_sequences: true,
-            empty_executions: true,
+            explicit_preprocess: true,
             indexed_sequences: true,
+            unordered_sequences: true,
         }
     }
     
     /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
-        + if self.unordered_sequences { 0x00000001 } else { 0 }
-        + if self.sparse_sequences { 0x00000002 } else { 0 }
-        + if self.empty_executions { 0x00000004 } else { 0 }
-        + if self.indexed_sequences { 0x00000008 } else { 0 }
+        + if self.explicit_preprocess { 0x00000001 } else { 0 }
+        + if self.indexed_sequences { 0x00000002 } else { 0 }
+        + if self.unordered_sequences { 0x00000004 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
     pub fn from_u32(value: u32) -> Self {
         VkIndirectCommandsLayoutUsageFlags {
-            unordered_sequences: value & 0x00000001 > 0,
-            sparse_sequences: value & 0x00000002 > 0,
-            empty_executions: value & 0x00000004 > 0,
-            indexed_sequences: value & 0x00000008 > 0,
+            explicit_preprocess: value & 0x00000001 > 0,
+            indexed_sequences: value & 0x00000002 > 0,
+            unordered_sequences: value & 0x00000004 > 0,
         }
     }
 }

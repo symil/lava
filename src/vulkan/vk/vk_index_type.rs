@@ -8,7 +8,7 @@ use utils::vk_traits::*;
 pub enum VkIndexType {
     Uint16 = 0,
     Uint32 = 1,
-    NoneNv = 1000165000,
+    NoneKhr = 1000165000,
     Uint8Ext = 1000265000,
 }
 

@@ -127,7 +127,7 @@ function generateExtensionNames() {
         extension: 'constants',
         definition: getAllExtensionNames().map(({name, value}) => {
             const doc = `/// \`${value}\``;
-            return `${doc}\npub const ${name} : &str = ${value};`
+            return `${doc}\npub const ${name.toUpperCase()} : &str = ${value};`
         })
     };
 }

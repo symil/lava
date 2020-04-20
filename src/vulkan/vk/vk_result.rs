@@ -36,9 +36,15 @@ pub enum VkResult {
     ErrorIncompatibleDisplayKhr = -1000003001,
     ErrorValidationFailedExt = -1000011001,
     ErrorInvalidShaderNv = -1000012000,
+    ErrorIncompatibleVersionKhr = -1000150000,
     ErrorInvalidDrmFormatModifierPlaneLayoutExt = -1000158000,
     ErrorNotPermittedExt = -1000174001,
     ErrorFullScreenExclusiveModeLostExt = -1000255000,
+    ThreadIdleKhr = 1000268000,
+    ThreadDoneKhr = 1000268001,
+    OperationDeferredKhr = 1000268002,
+    OperationNotDeferredKhr = 1000268003,
+    PipelineCompileRequiredExt = 1000297000,
 }
 
 #[doc(hidden)]

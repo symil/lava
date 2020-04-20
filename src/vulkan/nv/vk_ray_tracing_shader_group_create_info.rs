@@ -12,7 +12,7 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
-use vulkan::nv::{VkRayTracingShaderGroupType,RawVkRayTracingShaderGroupType};
+use vulkan::khr::{VkRayTracingShaderGroupType,RawVkRayTracingShaderGroupType};
 
 /// Wrapper for [VkRayTracingShaderGroupCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkRayTracingShaderGroupCreateInfoNV.html).
 #[derive(Debug, Clone)]

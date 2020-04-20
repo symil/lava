@@ -487,20 +487,20 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkAllocateDescriptorSets](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkAllocateDescriptorSets.html).
-    pub fn allocate_descriptor_sets(&self, allocate_info: VkDescriptorSetAllocateInfo) -> LavaResult<Vec<VkDescriptorSet>> {
+    pub fn allocate_descriptor_sets(&self, allocate_info: VkDescriptorSetAllocateInfo) -> LavaResult<VkDescriptorSet> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(&allocate_info);
             let mut vk_result = 0;
-            let raw_descriptor_sets = calloc((&*raw_allocate_info).descriptor_set_count as usize, mem::size_of::<RawVkDescriptorSet>()) as *mut RawVkDescriptorSet;
+            let raw_descriptor_sets = &mut mem::zeroed() as *mut RawVkDescriptorSet;
             
             vk_result = ((&*self._fn_table).vkAllocateDescriptorSets)(self._handle, raw_allocate_info, raw_descriptor_sets);
             
-            let mut descriptor_sets = new_vk_array((&*raw_allocate_info).descriptor_set_count, raw_descriptor_sets);
+            let mut descriptor_sets = new_vk_value(raw_descriptor_sets);
             if vk_result == 0 {
-                for elt in &mut descriptor_sets { VkSetup::vk_setup(elt, self._fn_table); }
+                let fn_table = self._fn_table;
+                VkSetup::vk_setup(&mut descriptor_sets, fn_table);
             }
             free_vk_ptr(raw_allocate_info);
-            free(raw_descriptor_sets as *mut u8);
             if vk_result == 0 { Ok(descriptor_sets) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), descriptor_sets)) }
         }
     }
@@ -576,20 +576,20 @@ impl VkDevice {
     }
     
     /// Wrapper for [vkAllocateCommandBuffers](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkAllocateCommandBuffers.html).
-    pub fn allocate_command_buffers(&self, allocate_info: VkCommandBufferAllocateInfo) -> LavaResult<Vec<VkCommandBuffer>> {
+    pub fn allocate_command_buffers(&self, allocate_info: VkCommandBufferAllocateInfo) -> LavaResult<VkCommandBuffer> {
         unsafe {
             let raw_allocate_info = new_ptr_vk_value(&allocate_info);
             let mut vk_result = 0;
-            let raw_command_buffers = calloc((&*raw_allocate_info).command_buffer_count as usize, mem::size_of::<RawVkCommandBuffer>()) as *mut RawVkCommandBuffer;
+            let raw_command_buffers = &mut mem::zeroed() as *mut RawVkCommandBuffer;
             
             vk_result = ((&*self._fn_table).vkAllocateCommandBuffers)(self._handle, raw_allocate_info, raw_command_buffers);
             
-            let mut command_buffers = new_vk_array((&*raw_allocate_info).command_buffer_count, raw_command_buffers);
+            let mut command_buffers = new_vk_value(raw_command_buffers);
             if vk_result == 0 {
-                for elt in &mut command_buffers { VkSetup::vk_setup(elt, self._fn_table); }
+                let fn_table = self._fn_table;
+                VkSetup::vk_setup(&mut command_buffers, fn_table);
             }
             free_vk_ptr(raw_allocate_info);
-            free(raw_command_buffers as *mut u8);
             if vk_result == 0 { Ok(command_buffers) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), command_buffers)) }
         }
     }
@@ -1074,44 +1074,6 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkCreateIndirectCommandsLayoutNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCreateIndirectCommandsLayoutNVX.html).
-    pub fn create_indirect_commands_layout(&self, create_info: nvx::VkIndirectCommandsLayoutCreateInfo) -> LavaResult<nvx::VkIndirectCommandsLayout> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(&create_info);
-            let mut vk_result = 0;
-            let raw_indirect_commands_layout = &mut mem::zeroed() as *mut nvx::RawVkIndirectCommandsLayout;
-            
-            vk_result = ((&*self._fn_table).vkCreateIndirectCommandsLayoutNVX)(self._handle, raw_create_info, ptr::null(), raw_indirect_commands_layout);
-            
-            let mut indirect_commands_layout = new_vk_value(raw_indirect_commands_layout);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut indirect_commands_layout, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(indirect_commands_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), indirect_commands_layout)) }
-        }
-    }
-    
-    /// Wrapper for [vkCreateObjectTableNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCreateObjectTableNVX.html).
-    pub fn create_object_table(&self, create_info: nvx::VkObjectTableCreateInfo) -> LavaResult<nvx::VkObjectTable> {
-        unsafe {
-            let raw_create_info = new_ptr_vk_value(&create_info);
-            let mut vk_result = 0;
-            let raw_object_table = &mut mem::zeroed() as *mut nvx::RawVkObjectTable;
-            
-            vk_result = ((&*self._fn_table).vkCreateObjectTableNVX)(self._handle, raw_create_info, ptr::null(), raw_object_table);
-            
-            let mut object_table = new_vk_value(raw_object_table);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut object_table, fn_table);
-            }
-            free_vk_ptr(raw_create_info);
-            if vk_result == 0 { Ok(object_table) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), object_table)) }
-        }
-    }
-    
     /// Wrapper for [vkDisplayPowerControlEXT](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDisplayPowerControlEXT.html).
     pub fn display_power_control(&self, display: khr::VkDisplay, display_power_info: ext::VkDisplayPowerInfo) -> LavaResult<()> {
         unsafe {
@@ -1222,11 +1184,7 @@ impl VkDevice {
             
             vk_result = ((&*self._fn_table).vkCreateAccelerationStructureNV)(self._handle, raw_create_info, ptr::null(), raw_acceleration_structure);
             
-            let mut acceleration_structure = new_vk_value(raw_acceleration_structure);
-            if vk_result == 0 {
-                let fn_table = self._fn_table;
-                VkSetup::vk_setup(&mut acceleration_structure, fn_table);
-            }
+            let acceleration_structure = new_vk_value(raw_acceleration_structure);
             free_vk_ptr(raw_create_info);
             if vk_result == 0 { Ok(acceleration_structure) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), acceleration_structure)) }
         }
@@ -1246,12 +1204,12 @@ impl VkDevice {
         }
     }
     
-    /// Wrapper for [vkBindAccelerationStructureMemoryNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkBindAccelerationStructureMemoryNV.html).
-    pub fn bind_acceleration_structure_memory(&self, bind_infos: Vec<nv::VkBindAccelerationStructureMemoryInfo>) -> LavaResult<()> {
+    /// Wrapper for [vkBindAccelerationStructureMemoryKHR](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkBindAccelerationStructureMemoryKHR.html).
+    pub fn bind_acceleration_structure_memory(&self, bind_infos: Vec<khr::VkBindAccelerationStructureMemoryInfo>) -> LavaResult<()> {
         unsafe {
             let raw_bind_info_count = bind_infos.len() as u32;
             let raw_bind_infos = new_ptr_vk_array(&bind_infos);
-            let vk_result = ((&*self._fn_table).vkBindAccelerationStructureMemoryNV)(self._handle, raw_bind_info_count, raw_bind_infos);
+            let vk_result = ((&*self._fn_table).vkBindAccelerationStructureMemoryKHR)(self._handle, raw_bind_info_count, raw_bind_infos);
             free_vk_ptr_array(raw_bind_info_count as usize, raw_bind_infos);
             if vk_result == 0 { Ok(()) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), ())) }
         }
@@ -1375,6 +1333,41 @@ impl VkDevice {
                 VkSetup::vk_setup(&mut value, fn_table);
             }
             if vk_result == 0 { Ok(value) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), value)) }
+        }
+    }
+    
+    /// Wrapper for [vkGetGeneratedCommandsMemoryRequirementsNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetGeneratedCommandsMemoryRequirementsNV.html).
+    pub fn get_generated_commands_memory_requirements(&self, info: nv::VkGeneratedCommandsMemoryRequirementsInfo) -> VkMemoryRequirements2 {
+        unsafe {
+            let raw_info = new_ptr_vk_value(&info);
+            let raw_memory_requirements = &mut mem::zeroed() as *mut RawVkMemoryRequirements2;
+            
+            ((&*self._fn_table).vkGetGeneratedCommandsMemoryRequirementsNV)(self._handle, raw_info, raw_memory_requirements);
+            
+            let mut memory_requirements = new_vk_value(raw_memory_requirements);
+            let fn_table = self._fn_table;
+            VkSetup::vk_setup(&mut memory_requirements, fn_table);
+            free_vk_ptr(raw_info);
+            memory_requirements
+        }
+    }
+    
+    /// Wrapper for [vkCreateIndirectCommandsLayoutNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCreateIndirectCommandsLayoutNV.html).
+    pub fn create_indirect_commands_layout(&self, create_info: nv::VkIndirectCommandsLayoutCreateInfo) -> LavaResult<nv::VkIndirectCommandsLayout> {
+        unsafe {
+            let raw_create_info = new_ptr_vk_value(&create_info);
+            let mut vk_result = 0;
+            let raw_indirect_commands_layout = &mut mem::zeroed() as *mut nv::RawVkIndirectCommandsLayout;
+            
+            vk_result = ((&*self._fn_table).vkCreateIndirectCommandsLayoutNV)(self._handle, raw_create_info, ptr::null(), raw_indirect_commands_layout);
+            
+            let mut indirect_commands_layout = new_vk_value(raw_indirect_commands_layout);
+            if vk_result == 0 {
+                let fn_table = self._fn_table;
+                VkSetup::vk_setup(&mut indirect_commands_layout, fn_table);
+            }
+            free_vk_ptr(raw_create_info);
+            if vk_result == 0 { Ok(indirect_commands_layout) } else { Err((RawVkResult::vk_to_wrapped(&vk_result), indirect_commands_layout)) }
         }
     }
 }

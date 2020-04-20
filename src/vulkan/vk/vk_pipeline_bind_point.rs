@@ -8,7 +8,7 @@ use utils::vk_traits::*;
 pub enum VkPipelineBindPoint {
     Graphics = 0,
     Compute = 1,
-    RayTracingNv = 1000165000,
+    RayTracingKhr = 1000165000,
 }
 
 #[doc(hidden)]

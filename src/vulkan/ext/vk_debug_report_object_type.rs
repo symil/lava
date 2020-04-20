@@ -37,12 +37,10 @@ pub enum VkDebugReportObjectType {
     DebugReportCallbackExt = 28,
     DisplayKhr = 29,
     DisplayModeKhr = 30,
-    ObjectTableNvx = 31,
-    IndirectCommandsLayoutNvx = 32,
     ValidationCacheExt = 33,
     SamplerYcbcrConversion = 1000156000,
     DescriptorUpdateTemplate = 1000085000,
-    AccelerationStructureNv = 1000165000,
+    AccelerationStructureKhr = 1000165000,
 }
 
 #[doc(hidden)]

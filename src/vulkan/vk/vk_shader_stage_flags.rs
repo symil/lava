@@ -24,12 +24,12 @@ pub struct VkShaderStageFlags {
     pub fragment: bool,
     pub compute: bool,
     pub all_graphics: bool,
-    pub raygen_nv: bool,
-    pub any_hit_nv: bool,
-    pub closest_hit_nv: bool,
-    pub miss_nv: bool,
-    pub intersection_nv: bool,
-    pub callable_nv: bool,
+    pub raygen_khr: bool,
+    pub any_hit_khr: bool,
+    pub closest_hit_khr: bool,
+    pub miss_khr: bool,
+    pub intersection_khr: bool,
+    pub callable_khr: bool,
     pub task_nv: bool,
     pub mesh_nv: bool,
 }
@@ -47,12 +47,12 @@ impl VkWrappedType<RawVkShaderStageFlags> for VkShaderStageFlags {
         if src.fragment { *dst |= 0x00000010; }
         if src.compute { *dst |= 0x00000020; }
         if src.all_graphics { *dst |= 0x0000001F; }
-        if src.raygen_nv { *dst |= 0x00000100; }
-        if src.any_hit_nv { *dst |= 0x00000200; }
-        if src.closest_hit_nv { *dst |= 0x00000400; }
-        if src.miss_nv { *dst |= 0x00000800; }
-        if src.intersection_nv { *dst |= 0x00001000; }
-        if src.callable_nv { *dst |= 0x00002000; }
+        if src.raygen_khr { *dst |= 0x00000100; }
+        if src.any_hit_khr { *dst |= 0x00000200; }
+        if src.closest_hit_khr { *dst |= 0x00000400; }
+        if src.miss_khr { *dst |= 0x00000800; }
+        if src.intersection_khr { *dst |= 0x00001000; }
+        if src.callable_khr { *dst |= 0x00002000; }
         if src.task_nv { *dst |= 0x00000040; }
         if src.mesh_nv { *dst |= 0x00000080; }
     }
@@ -68,12 +68,12 @@ impl VkRawType<VkShaderStageFlags> for RawVkShaderStageFlags {
             fragment: (src & 0x00000010) != 0,
             compute: (src & 0x00000020) != 0,
             all_graphics: (src & 0x0000001F) != 0,
-            raygen_nv: (src & 0x00000100) != 0,
-            any_hit_nv: (src & 0x00000200) != 0,
-            closest_hit_nv: (src & 0x00000400) != 0,
-            miss_nv: (src & 0x00000800) != 0,
-            intersection_nv: (src & 0x00001000) != 0,
-            callable_nv: (src & 0x00002000) != 0,
+            raygen_khr: (src & 0x00000100) != 0,
+            any_hit_khr: (src & 0x00000200) != 0,
+            closest_hit_khr: (src & 0x00000400) != 0,
+            miss_khr: (src & 0x00000800) != 0,
+            intersection_khr: (src & 0x00001000) != 0,
+            callable_khr: (src & 0x00002000) != 0,
             task_nv: (src & 0x00000040) != 0,
             mesh_nv: (src & 0x00000080) != 0,
         }
@@ -90,12 +90,12 @@ impl Default for VkShaderStageFlags {
             fragment: false,
             compute: false,
             all_graphics: false,
-            raygen_nv: false,
-            any_hit_nv: false,
-            closest_hit_nv: false,
-            miss_nv: false,
-            intersection_nv: false,
-            callable_nv: false,
+            raygen_khr: false,
+            any_hit_khr: false,
+            closest_hit_khr: false,
+            miss_khr: false,
+            intersection_khr: false,
+            callable_khr: false,
             task_nv: false,
             mesh_nv: false,
         }
@@ -114,12 +114,12 @@ impl VkShaderStageFlags {
             fragment: false,
             compute: false,
             all_graphics: false,
-            raygen_nv: false,
-            any_hit_nv: false,
-            closest_hit_nv: false,
-            miss_nv: false,
-            intersection_nv: false,
-            callable_nv: false,
+            raygen_khr: false,
+            any_hit_khr: false,
+            closest_hit_khr: false,
+            miss_khr: false,
+            intersection_khr: false,
+            callable_khr: false,
             task_nv: false,
             mesh_nv: false,
         }
@@ -135,12 +135,12 @@ impl VkShaderStageFlags {
             fragment: true,
             compute: true,
             all_graphics: true,
-            raygen_nv: true,
-            any_hit_nv: true,
-            closest_hit_nv: true,
-            miss_nv: true,
-            intersection_nv: true,
-            callable_nv: true,
+            raygen_khr: true,
+            any_hit_khr: true,
+            closest_hit_khr: true,
+            miss_khr: true,
+            intersection_khr: true,
+            callable_khr: true,
             task_nv: true,
             mesh_nv: true,
         }
@@ -156,12 +156,12 @@ impl VkShaderStageFlags {
         + if self.fragment { 0x00000010 } else { 0 }
         + if self.compute { 0x00000020 } else { 0 }
         + if self.all_graphics { 0x0000001F } else { 0 }
-        + if self.raygen_nv { 0x00000100 } else { 0 }
-        + if self.any_hit_nv { 0x00000200 } else { 0 }
-        + if self.closest_hit_nv { 0x00000400 } else { 0 }
-        + if self.miss_nv { 0x00000800 } else { 0 }
-        + if self.intersection_nv { 0x00001000 } else { 0 }
-        + if self.callable_nv { 0x00002000 } else { 0 }
+        + if self.raygen_khr { 0x00000100 } else { 0 }
+        + if self.any_hit_khr { 0x00000200 } else { 0 }
+        + if self.closest_hit_khr { 0x00000400 } else { 0 }
+        + if self.miss_khr { 0x00000800 } else { 0 }
+        + if self.intersection_khr { 0x00001000 } else { 0 }
+        + if self.callable_khr { 0x00002000 } else { 0 }
         + if self.task_nv { 0x00000040 } else { 0 }
         + if self.mesh_nv { 0x00000080 } else { 0 }
     }
@@ -176,12 +176,12 @@ impl VkShaderStageFlags {
             fragment: value & 0x00000010 > 0,
             compute: value & 0x00000020 > 0,
             all_graphics: value & 0x0000001F > 0,
-            raygen_nv: value & 0x00000100 > 0,
-            any_hit_nv: value & 0x00000200 > 0,
-            closest_hit_nv: value & 0x00000400 > 0,
-            miss_nv: value & 0x00000800 > 0,
-            intersection_nv: value & 0x00001000 > 0,
-            callable_nv: value & 0x00002000 > 0,
+            raygen_khr: value & 0x00000100 > 0,
+            any_hit_khr: value & 0x00000200 > 0,
+            closest_hit_khr: value & 0x00000400 > 0,
+            miss_khr: value & 0x00000800 > 0,
+            intersection_khr: value & 0x00001000 > 0,
+            callable_khr: value & 0x00002000 > 0,
             task_nv: value & 0x00000040 > 0,
             mesh_nv: value & 0x00000080 > 0,
         }

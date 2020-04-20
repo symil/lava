@@ -14,6 +14,7 @@ mod vk_performance_value_data;
 mod vk_performance_value_type;
 mod vk_physical_device_shader_integer_functions_2_features;
 mod vk_query_pool_create_info;
+mod vk_query_pool_performance_query_create_info;
 mod vk_query_pool_sampling_mode;
 
 pub use self::vk_initialize_performance_api_info::*;
@@ -30,4 +31,5 @@ pub use self::vk_performance_value_data::*;
 pub use self::vk_performance_value_type::*;
 pub use self::vk_physical_device_shader_integer_functions_2_features::*;
 pub use self::vk_query_pool_create_info::*;
+pub use self::vk_query_pool_performance_query_create_info::*;
 pub use self::vk_query_pool_sampling_mode::*;

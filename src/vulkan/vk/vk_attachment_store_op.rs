@@ -8,6 +8,7 @@ use utils::vk_traits::*;
 pub enum VkAttachmentStoreOp {
     Store = 0,
     DontCare = 1,
+    NoneQcom = 1000301000,
 }
 
 #[doc(hidden)]

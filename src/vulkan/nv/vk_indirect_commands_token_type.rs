@@ -2,18 +2,18 @@
 
 use utils::vk_traits::*;
 
-/// Wrapper for [VkIndirectCommandsTokenTypeNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkIndirectCommandsTokenTypeNVX.html).
+/// Wrapper for [VkIndirectCommandsTokenTypeNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkIndirectCommandsTokenTypeNV.html).
 #[repr(i32)]
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum VkIndirectCommandsTokenType {
-    Pipeline = 0,
-    DescriptorSet = 1,
+    ShaderGroup = 0,
+    StateFlags = 1,
     IndexBuffer = 2,
     VertexBuffer = 3,
     PushConstant = 4,
     DrawIndexed = 5,
     Draw = 6,
-    Dispatch = 7,
+    DrawTasks = 7,
 }
 
 #[doc(hidden)]
@@ -35,6 +35,6 @@ impl VkRawType<VkIndirectCommandsTokenType> for RawVkIndirectCommandsTokenType {
 
 impl Default for VkIndirectCommandsTokenType {
     fn default() -> VkIndirectCommandsTokenType {
-        VkIndirectCommandsTokenType::Pipeline
+        VkIndirectCommandsTokenType::ShaderGroup
     }
 }

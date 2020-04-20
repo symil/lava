@@ -6,15 +6,16 @@ use utils::vk_traits::*;
 ///
 /// Use the macro `VkPipelineCacheCreateFlags!` as an alternative method to create a structure. For example, these two snippets return the same value:
 /// ```
-/// VkPipelineCacheCreateFlags!()
+/// VkPipelineCacheCreateFlags!(externally_synchronized_ext)
 /// ```
 /// ```
 /// VkPipelineCacheCreateFlags {
+///     externally_synchronized_ext: true,
 /// }
 /// ```
 #[derive(Debug, Clone)]
 pub struct VkPipelineCacheCreateFlags {
-    
+    pub externally_synchronized_ext: bool,
 }
 
 #[doc(hidden)]
@@ -23,13 +24,14 @@ pub type RawVkPipelineCacheCreateFlags = u32;
 impl VkWrappedType<RawVkPipelineCacheCreateFlags> for VkPipelineCacheCreateFlags {
     fn vk_to_raw(src: &VkPipelineCacheCreateFlags, dst: &mut RawVkPipelineCacheCreateFlags) {
         *dst = 0;
+        if src.externally_synchronized_ext { *dst |= 0x00000001; }
     }
 }
 
 impl VkRawType<VkPipelineCacheCreateFlags> for RawVkPipelineCacheCreateFlags {
     fn vk_to_wrapped(src: &RawVkPipelineCacheCreateFlags) -> VkPipelineCacheCreateFlags {
         VkPipelineCacheCreateFlags {
-            
+            externally_synchronized_ext: (src & 0x00000001) != 0,
         }
     }
 }
@@ -37,7 +39,7 @@ impl VkRawType<VkPipelineCacheCreateFlags> for RawVkPipelineCacheCreateFlags {
 impl Default for VkPipelineCacheCreateFlags {
     fn default() -> VkPipelineCacheCreateFlags {
         VkPipelineCacheCreateFlags {
-            
+            externally_synchronized_ext: false,
         }
     }
 }
@@ -47,26 +49,27 @@ impl VkPipelineCacheCreateFlags {
     /// Return a structure with all flags to `false`.
     pub fn none() -> Self {
         VkPipelineCacheCreateFlags {
-            
+            externally_synchronized_ext: false,
         }
     }
     
     /// Return a structure with all flags to `true`.
     pub fn all() -> Self {
         VkPipelineCacheCreateFlags {
-            
+            externally_synchronized_ext: true,
         }
     }
     
     /// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).
     pub fn to_u32(&self) -> u32 {
         0
+        + if self.externally_synchronized_ext { 0x00000001 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
     pub fn from_u32(value: u32) -> Self {
         VkPipelineCacheCreateFlags {
-            
+            externally_synchronized_ext: value & 0x00000001 > 0,
         }
     }
 }

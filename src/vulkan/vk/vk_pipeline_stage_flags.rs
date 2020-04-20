@@ -36,13 +36,13 @@ pub struct VkPipelineStageFlags {
     pub all_commands: bool,
     pub transform_feedback_ext: bool,
     pub conditional_rendering_ext: bool,
-    pub command_process_nvx: bool,
+    pub ray_tracing_shader_khr: bool,
+    pub acceleration_structure_build_khr: bool,
     pub shading_rate_image_nv: bool,
-    pub ray_tracing_shader_nv: bool,
-    pub acceleration_structure_build_nv: bool,
     pub task_shader_nv: bool,
     pub mesh_shader_nv: bool,
     pub fragment_density_process_ext: bool,
+    pub command_preprocess_nv: bool,
 }
 
 #[doc(hidden)]
@@ -70,13 +70,13 @@ impl VkWrappedType<RawVkPipelineStageFlags> for VkPipelineStageFlags {
         if src.all_commands { *dst |= 0x00010000; }
         if src.transform_feedback_ext { *dst |= 0x01000000; }
         if src.conditional_rendering_ext { *dst |= 0x00040000; }
-        if src.command_process_nvx { *dst |= 0x00020000; }
+        if src.ray_tracing_shader_khr { *dst |= 0x00200000; }
+        if src.acceleration_structure_build_khr { *dst |= 0x02000000; }
         if src.shading_rate_image_nv { *dst |= 0x00400000; }
-        if src.ray_tracing_shader_nv { *dst |= 0x00200000; }
-        if src.acceleration_structure_build_nv { *dst |= 0x02000000; }
         if src.task_shader_nv { *dst |= 0x00080000; }
         if src.mesh_shader_nv { *dst |= 0x00100000; }
         if src.fragment_density_process_ext { *dst |= 0x00800000; }
+        if src.command_preprocess_nv { *dst |= 0x00020000; }
     }
 }
 
@@ -102,13 +102,13 @@ impl VkRawType<VkPipelineStageFlags> for RawVkPipelineStageFlags {
             all_commands: (src & 0x00010000) != 0,
             transform_feedback_ext: (src & 0x01000000) != 0,
             conditional_rendering_ext: (src & 0x00040000) != 0,
-            command_process_nvx: (src & 0x00020000) != 0,
+            ray_tracing_shader_khr: (src & 0x00200000) != 0,
+            acceleration_structure_build_khr: (src & 0x02000000) != 0,
             shading_rate_image_nv: (src & 0x00400000) != 0,
-            ray_tracing_shader_nv: (src & 0x00200000) != 0,
-            acceleration_structure_build_nv: (src & 0x02000000) != 0,
             task_shader_nv: (src & 0x00080000) != 0,
             mesh_shader_nv: (src & 0x00100000) != 0,
             fragment_density_process_ext: (src & 0x00800000) != 0,
+            command_preprocess_nv: (src & 0x00020000) != 0,
         }
     }
 }
@@ -135,13 +135,13 @@ impl Default for VkPipelineStageFlags {
             all_commands: false,
             transform_feedback_ext: false,
             conditional_rendering_ext: false,
-            command_process_nvx: false,
+            ray_tracing_shader_khr: false,
+            acceleration_structure_build_khr: false,
             shading_rate_image_nv: false,
-            ray_tracing_shader_nv: false,
-            acceleration_structure_build_nv: false,
             task_shader_nv: false,
             mesh_shader_nv: false,
             fragment_density_process_ext: false,
+            command_preprocess_nv: false,
         }
     }
 }
@@ -170,13 +170,13 @@ impl VkPipelineStageFlags {
             all_commands: false,
             transform_feedback_ext: false,
             conditional_rendering_ext: false,
-            command_process_nvx: false,
+            ray_tracing_shader_khr: false,
+            acceleration_structure_build_khr: false,
             shading_rate_image_nv: false,
-            ray_tracing_shader_nv: false,
-            acceleration_structure_build_nv: false,
             task_shader_nv: false,
             mesh_shader_nv: false,
             fragment_density_process_ext: false,
+            command_preprocess_nv: false,
         }
     }
     
@@ -202,13 +202,13 @@ impl VkPipelineStageFlags {
             all_commands: true,
             transform_feedback_ext: true,
             conditional_rendering_ext: true,
-            command_process_nvx: true,
+            ray_tracing_shader_khr: true,
+            acceleration_structure_build_khr: true,
             shading_rate_image_nv: true,
-            ray_tracing_shader_nv: true,
-            acceleration_structure_build_nv: true,
             task_shader_nv: true,
             mesh_shader_nv: true,
             fragment_density_process_ext: true,
+            command_preprocess_nv: true,
         }
     }
     
@@ -234,13 +234,13 @@ impl VkPipelineStageFlags {
         + if self.all_commands { 0x00010000 } else { 0 }
         + if self.transform_feedback_ext { 0x01000000 } else { 0 }
         + if self.conditional_rendering_ext { 0x00040000 } else { 0 }
-        + if self.command_process_nvx { 0x00020000 } else { 0 }
+        + if self.ray_tracing_shader_khr { 0x00200000 } else { 0 }
+        + if self.acceleration_structure_build_khr { 0x02000000 } else { 0 }
         + if self.shading_rate_image_nv { 0x00400000 } else { 0 }
-        + if self.ray_tracing_shader_nv { 0x00200000 } else { 0 }
-        + if self.acceleration_structure_build_nv { 0x02000000 } else { 0 }
         + if self.task_shader_nv { 0x00080000 } else { 0 }
         + if self.mesh_shader_nv { 0x00100000 } else { 0 }
         + if self.fragment_density_process_ext { 0x00800000 } else { 0 }
+        + if self.command_preprocess_nv { 0x00020000 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
@@ -265,13 +265,13 @@ impl VkPipelineStageFlags {
             all_commands: value & 0x00010000 > 0,
             transform_feedback_ext: value & 0x01000000 > 0,
             conditional_rendering_ext: value & 0x00040000 > 0,
-            command_process_nvx: value & 0x00020000 > 0,
+            ray_tracing_shader_khr: value & 0x00200000 > 0,
+            acceleration_structure_build_khr: value & 0x02000000 > 0,
             shading_rate_image_nv: value & 0x00400000 > 0,
-            ray_tracing_shader_nv: value & 0x00200000 > 0,
-            acceleration_structure_build_nv: value & 0x02000000 > 0,
             task_shader_nv: value & 0x00080000 > 0,
             mesh_shader_nv: value & 0x00100000 > 0,
             fragment_density_process_ext: value & 0x00800000 > 0,
+            command_preprocess_nv: value & 0x00020000 > 0,
         }
     }
 }

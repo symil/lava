@@ -12,16 +12,17 @@ use utils::vk_ptr::*;
 use utils::vk_traits::*;
 use vulkan::vk::*;
 use vulkan::vk::{VkStructureType,RawVkStructureType};
+use vulkan::nv::{VkIndirectCommandsLayoutUsageFlags,RawVkIndirectCommandsLayoutUsageFlags};
 use vulkan::vk::{VkPipelineBindPoint,RawVkPipelineBindPoint};
-use vulkan::nvx::{VkIndirectCommandsLayoutUsageFlags,RawVkIndirectCommandsLayoutUsageFlags};
-use vulkan::nvx::{VkIndirectCommandsLayoutToken,RawVkIndirectCommandsLayoutToken};
+use vulkan::nv::{VkIndirectCommandsLayoutToken,RawVkIndirectCommandsLayoutToken};
 
-/// Wrapper for [VkIndirectCommandsLayoutCreateInfoNVX](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkIndirectCommandsLayoutCreateInfoNVX.html).
+/// Wrapper for [VkIndirectCommandsLayoutCreateInfoNV](https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkIndirectCommandsLayoutCreateInfoNV.html).
 #[derive(Debug, Clone)]
 pub struct VkIndirectCommandsLayoutCreateInfo {
-    pub pipeline_bind_point: VkPipelineBindPoint,
     pub flags: VkIndirectCommandsLayoutUsageFlags,
+    pub pipeline_bind_point: VkPipelineBindPoint,
     pub tokens: Vec<VkIndirectCommandsLayoutToken>,
+    pub stream_strides: Vec<usize>,
 }
 
 #[doc(hidden)]
@@ -30,29 +31,34 @@ pub struct VkIndirectCommandsLayoutCreateInfo {
 pub struct RawVkIndirectCommandsLayoutCreateInfo {
     pub s_type: RawVkStructureType,
     pub next: *mut c_void,
-    pub pipeline_bind_point: RawVkPipelineBindPoint,
     pub flags: RawVkIndirectCommandsLayoutUsageFlags,
+    pub pipeline_bind_point: RawVkPipelineBindPoint,
     pub token_count: u32,
     pub tokens: *mut RawVkIndirectCommandsLayoutToken,
+    pub stream_count: u32,
+    pub stream_strides: *mut u32,
 }
 
 impl VkWrappedType<RawVkIndirectCommandsLayoutCreateInfo> for VkIndirectCommandsLayoutCreateInfo {
     fn vk_to_raw(src: &VkIndirectCommandsLayoutCreateInfo, dst: &mut RawVkIndirectCommandsLayoutCreateInfo) {
-        dst.s_type = vk_to_raw_value(&VkStructureType::IndirectCommandsLayoutCreateInfoNvx);
+        dst.s_type = vk_to_raw_value(&VkStructureType::IndirectCommandsLayoutCreateInfoNv);
         dst.next = ptr::null_mut();
-        dst.pipeline_bind_point = vk_to_raw_value(&src.pipeline_bind_point);
         dst.flags = vk_to_raw_value(&src.flags);
+        dst.pipeline_bind_point = vk_to_raw_value(&src.pipeline_bind_point);
         dst.token_count = src.tokens.len() as u32;
         dst.tokens = new_ptr_vk_array(&src.tokens);
+        dst.stream_count = src.stream_strides.len() as u32;
+        dst.stream_strides = new_ptr_vk_array(&src.stream_strides);
     }
 }
 
 impl VkRawType<VkIndirectCommandsLayoutCreateInfo> for RawVkIndirectCommandsLayoutCreateInfo {
     fn vk_to_wrapped(src: &RawVkIndirectCommandsLayoutCreateInfo) -> VkIndirectCommandsLayoutCreateInfo {
         VkIndirectCommandsLayoutCreateInfo {
-            pipeline_bind_point: RawVkPipelineBindPoint::vk_to_wrapped(&src.pipeline_bind_point),
             flags: RawVkIndirectCommandsLayoutUsageFlags::vk_to_wrapped(&src.flags),
+            pipeline_bind_point: RawVkPipelineBindPoint::vk_to_wrapped(&src.pipeline_bind_point),
             tokens: new_vk_array(src.token_count, src.tokens),
+            stream_strides: new_vk_array(src.stream_count, src.stream_strides),
         }
     }
 }
@@ -60,9 +66,10 @@ impl VkRawType<VkIndirectCommandsLayoutCreateInfo> for RawVkIndirectCommandsLayo
 impl Default for VkIndirectCommandsLayoutCreateInfo {
     fn default() -> VkIndirectCommandsLayoutCreateInfo {
         VkIndirectCommandsLayoutCreateInfo {
-            pipeline_bind_point: Default::default(),
             flags: Default::default(),
+            pipeline_bind_point: Default::default(),
             tokens: Vec::new(),
+            stream_strides: Vec::new(),
         }
     }
 }
@@ -76,5 +83,6 @@ impl VkSetup for VkIndirectCommandsLayoutCreateInfo {
 impl VkFree for RawVkIndirectCommandsLayoutCreateInfo {
     fn vk_free(&self) {
         free_vk_ptr_array(self.token_count as usize, self.tokens);
+        free_ptr(self.stream_strides);
     }
 }

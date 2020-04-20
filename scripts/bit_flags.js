@@ -125,11 +125,16 @@ const ALL_DOC = '/// Return a structure with all flags to `true`.\n'
 const TO_U32_DOC = '/// Return the numerical bit flags corresponding to the structure (as described in the Vulkan specs).\n';
 const FROM_U32_DOC = '/// Create a structure corresponding to the specified numerical bit flags.\n';
 
+const MACRO_NAME_CONFLICTS = [
+    'VkExternalMemoryFeatureFlags',
+    'VkExternalMemoryHandleTypeFlags'
+];
+
 function genImplFlags(def, intType) {
     let macroSuffix = '';
 
     // Manually solve conflicts for now
-    if (def.wrappedTypeName === 'VkExternalMemoryFeatureFlags' || def.wrappedTypeName === 'VkExternalMemoryHandleTypeFlags') {
+    if (MACRO_NAME_CONFLICTS.includes(def.wrappedTypeName)) {
         macroSuffix = def.extension.capitalize();
     }
 

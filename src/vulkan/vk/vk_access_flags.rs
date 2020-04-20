@@ -38,13 +38,13 @@ pub struct VkAccessFlags {
     pub transform_feedback_counter_read_ext: bool,
     pub transform_feedback_counter_write_ext: bool,
     pub conditional_rendering_read_ext: bool,
-    pub command_process_read_nvx: bool,
-    pub command_process_write_nvx: bool,
     pub color_attachment_read_noncoherent_ext: bool,
+    pub acceleration_structure_read_khr: bool,
+    pub acceleration_structure_write_khr: bool,
     pub shading_rate_image_read_nv: bool,
-    pub acceleration_structure_read_nv: bool,
-    pub acceleration_structure_write_nv: bool,
     pub fragment_density_map_read_ext: bool,
+    pub command_preprocess_read_nv: bool,
+    pub command_preprocess_write_nv: bool,
 }
 
 #[doc(hidden)]
@@ -74,13 +74,13 @@ impl VkWrappedType<RawVkAccessFlags> for VkAccessFlags {
         if src.transform_feedback_counter_read_ext { *dst |= 0x04000000; }
         if src.transform_feedback_counter_write_ext { *dst |= 0x08000000; }
         if src.conditional_rendering_read_ext { *dst |= 0x00100000; }
-        if src.command_process_read_nvx { *dst |= 0x00020000; }
-        if src.command_process_write_nvx { *dst |= 0x00040000; }
         if src.color_attachment_read_noncoherent_ext { *dst |= 0x00080000; }
+        if src.acceleration_structure_read_khr { *dst |= 0x00200000; }
+        if src.acceleration_structure_write_khr { *dst |= 0x00400000; }
         if src.shading_rate_image_read_nv { *dst |= 0x00800000; }
-        if src.acceleration_structure_read_nv { *dst |= 0x00200000; }
-        if src.acceleration_structure_write_nv { *dst |= 0x00400000; }
         if src.fragment_density_map_read_ext { *dst |= 0x01000000; }
+        if src.command_preprocess_read_nv { *dst |= 0x00020000; }
+        if src.command_preprocess_write_nv { *dst |= 0x00040000; }
     }
 }
 
@@ -108,13 +108,13 @@ impl VkRawType<VkAccessFlags> for RawVkAccessFlags {
             transform_feedback_counter_read_ext: (src & 0x04000000) != 0,
             transform_feedback_counter_write_ext: (src & 0x08000000) != 0,
             conditional_rendering_read_ext: (src & 0x00100000) != 0,
-            command_process_read_nvx: (src & 0x00020000) != 0,
-            command_process_write_nvx: (src & 0x00040000) != 0,
             color_attachment_read_noncoherent_ext: (src & 0x00080000) != 0,
+            acceleration_structure_read_khr: (src & 0x00200000) != 0,
+            acceleration_structure_write_khr: (src & 0x00400000) != 0,
             shading_rate_image_read_nv: (src & 0x00800000) != 0,
-            acceleration_structure_read_nv: (src & 0x00200000) != 0,
-            acceleration_structure_write_nv: (src & 0x00400000) != 0,
             fragment_density_map_read_ext: (src & 0x01000000) != 0,
+            command_preprocess_read_nv: (src & 0x00020000) != 0,
+            command_preprocess_write_nv: (src & 0x00040000) != 0,
         }
     }
 }
@@ -143,13 +143,13 @@ impl Default for VkAccessFlags {
             transform_feedback_counter_read_ext: false,
             transform_feedback_counter_write_ext: false,
             conditional_rendering_read_ext: false,
-            command_process_read_nvx: false,
-            command_process_write_nvx: false,
             color_attachment_read_noncoherent_ext: false,
+            acceleration_structure_read_khr: false,
+            acceleration_structure_write_khr: false,
             shading_rate_image_read_nv: false,
-            acceleration_structure_read_nv: false,
-            acceleration_structure_write_nv: false,
             fragment_density_map_read_ext: false,
+            command_preprocess_read_nv: false,
+            command_preprocess_write_nv: false,
         }
     }
 }
@@ -180,13 +180,13 @@ impl VkAccessFlags {
             transform_feedback_counter_read_ext: false,
             transform_feedback_counter_write_ext: false,
             conditional_rendering_read_ext: false,
-            command_process_read_nvx: false,
-            command_process_write_nvx: false,
             color_attachment_read_noncoherent_ext: false,
+            acceleration_structure_read_khr: false,
+            acceleration_structure_write_khr: false,
             shading_rate_image_read_nv: false,
-            acceleration_structure_read_nv: false,
-            acceleration_structure_write_nv: false,
             fragment_density_map_read_ext: false,
+            command_preprocess_read_nv: false,
+            command_preprocess_write_nv: false,
         }
     }
     
@@ -214,13 +214,13 @@ impl VkAccessFlags {
             transform_feedback_counter_read_ext: true,
             transform_feedback_counter_write_ext: true,
             conditional_rendering_read_ext: true,
-            command_process_read_nvx: true,
-            command_process_write_nvx: true,
             color_attachment_read_noncoherent_ext: true,
+            acceleration_structure_read_khr: true,
+            acceleration_structure_write_khr: true,
             shading_rate_image_read_nv: true,
-            acceleration_structure_read_nv: true,
-            acceleration_structure_write_nv: true,
             fragment_density_map_read_ext: true,
+            command_preprocess_read_nv: true,
+            command_preprocess_write_nv: true,
         }
     }
     
@@ -248,13 +248,13 @@ impl VkAccessFlags {
         + if self.transform_feedback_counter_read_ext { 0x04000000 } else { 0 }
         + if self.transform_feedback_counter_write_ext { 0x08000000 } else { 0 }
         + if self.conditional_rendering_read_ext { 0x00100000 } else { 0 }
-        + if self.command_process_read_nvx { 0x00020000 } else { 0 }
-        + if self.command_process_write_nvx { 0x00040000 } else { 0 }
         + if self.color_attachment_read_noncoherent_ext { 0x00080000 } else { 0 }
+        + if self.acceleration_structure_read_khr { 0x00200000 } else { 0 }
+        + if self.acceleration_structure_write_khr { 0x00400000 } else { 0 }
         + if self.shading_rate_image_read_nv { 0x00800000 } else { 0 }
-        + if self.acceleration_structure_read_nv { 0x00200000 } else { 0 }
-        + if self.acceleration_structure_write_nv { 0x00400000 } else { 0 }
         + if self.fragment_density_map_read_ext { 0x01000000 } else { 0 }
+        + if self.command_preprocess_read_nv { 0x00020000 } else { 0 }
+        + if self.command_preprocess_write_nv { 0x00040000 } else { 0 }
     }
     
     /// Create a structure corresponding to the specified numerical bit flags.
@@ -281,13 +281,13 @@ impl VkAccessFlags {
             transform_feedback_counter_read_ext: value & 0x04000000 > 0,
             transform_feedback_counter_write_ext: value & 0x08000000 > 0,
             conditional_rendering_read_ext: value & 0x00100000 > 0,
-            command_process_read_nvx: value & 0x00020000 > 0,
-            command_process_write_nvx: value & 0x00040000 > 0,
             color_attachment_read_noncoherent_ext: value & 0x00080000 > 0,
+            acceleration_structure_read_khr: value & 0x00200000 > 0,
+            acceleration_structure_write_khr: value & 0x00400000 > 0,
             shading_rate_image_read_nv: value & 0x00800000 > 0,
-            acceleration_structure_read_nv: value & 0x00200000 > 0,
-            acceleration_structure_write_nv: value & 0x00400000 > 0,
             fragment_density_map_read_ext: value & 0x01000000 > 0,
+            command_preprocess_read_nv: value & 0x00020000 > 0,
+            command_preprocess_write_nv: value & 0x00040000 > 0,
         }
     }
 }

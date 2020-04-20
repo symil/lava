@@ -39,12 +39,12 @@ pub enum VkObjectType {
     DisplayKhr = 1000002000,
     DisplayModeKhr = 1000002001,
     DebugReportCallbackExt = 1000011000,
-    ObjectTableNvx = 1000086000,
-    IndirectCommandsLayoutNvx = 1000086001,
     DebugUtilsMessengerExt = 1000128000,
+    AccelerationStructureKhr = 1000165000,
     ValidationCacheExt = 1000160000,
-    AccelerationStructureNv = 1000165000,
     PerformanceConfigurationIntel = 1000210000,
+    DeferredOperationKhr = 1000268000,
+    IndirectCommandsLayoutNv = 1000277000,
 }
 
 #[doc(hidden)]
