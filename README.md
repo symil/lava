@@ -1,3 +1,5 @@
+# THIS PROJECT IS NO LONGER MAINTAINED
+
 # Lava
 
 Wrapper to manipulate the Vulkan API in Rust more conveniently than with bindings:
