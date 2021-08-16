@@ -2,7 +2,7 @@
 name = "lava"
 version = "0.4.9"
 build = "build.rs"
-authors = ["Anovs <milan.sylvain@gmail.com>"]
+authors = ["Sylvain Milan <milan.sylvain@gmail.com>"]
 description = "Rust wrapper to manipulate Vulkan more conveniently than with bindings."
 license = "MIT"
 repository = "https://github.com/Anovs/lava"
