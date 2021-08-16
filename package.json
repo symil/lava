@@ -14,12 +14,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ytawo/lava.git"
+    "url": "git+https://github.com/symil/lava.git"
   },
   "author": "Sylvain Milan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Ytawo/lava/issues"
+    "url": "https://github.com/symil/lava/issues"
   },
-  "homepage": "https://github.com/Ytawo/lava#readme"
+  "homepage": "https://github.com/symil/lava#readme"
 }
